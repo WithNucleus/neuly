@@ -1,0 +1,202 @@
+// Nav Tabs -- Discover Tabs
+ul.nav-tabs.discover-tabs {
+	border-color: $teal;
+
+	.nav-link {
+		color: $gray-900;
+		font-size: 1.1rem;
+		transition: all .1s ease-in-out;
+		background: rgba($white, .35);
+		border: 0;
+		box-shadow: 0 -.125rem .25rem rgba(0,0,0,.05);
+		margin-right: .25rem;
+	}
+
+	.nav-link:hover,
+	.nav-link:active {
+		background: rgba($white, .65);
+	}
+
+	.nav-link.active {
+		color: $primary;
+		background: $white;
+		font-weight: bold;
+		border-color: $white;
+		box-shadow: -.125rem -.125rem 3px rgba(0,0,0,.07);
+	}
+}
+
+// Form Discover Tabs (Mobile)
+form.discover-tabs {
+	padding-top: 5.5rem; // height of navbar
+}
+
+// Hide Discover Nav Tabs on Mobile
+@media (max-width: 991px) {
+	ul.nav-tabs.discover-tabs {
+		display: none;
+	}
+}
+
+// Discover Tabs Icons
+ul.nav-tabs.discover-tabs .nav-link .icon {
+	display: none;
+}
+
+// Discover Tabs Min-Width 992px
+@media (min-width: 992px) {
+
+	// Hide Discover Form on Desktop
+	form.discover-tabs {
+		display: none;
+	}
+
+	ul.nav-tabs.discover-tabs .nav-link.active .icon {
+		display: inline-block;
+	}
+
+	ul.nav-tabs.discover-tabs .nav-link {
+		font-size: .85rem;
+		padding: .5rem;
+		white-space: nowrap;
+	}
+}
+
+@media (min-width: 1200px) {
+	ul.nav-tabs.discover-tabs .nav-link {
+		font-size: .95rem;
+		padding: .5rem .65rem;
+	}
+}
+
+@media (min-width: 1280px) {
+	ul.nav-tabs.discover-tabs .nav-link {
+		font-size: 1.1rem;
+	}
+}
+
+// Nav Tabs Background
+.navbar-tabs-bg,
+.navbar-tabs-container {
+	background-color: $teal;
+	background: url('../images/hero-bg.jpg') no-repeat center center;
+	background-size: cover;
+}
+
+// Nav Tabs Container
+@media (min-width: 992px) {
+	.navbar-tabs-container {
+		padding-top: 5.5rem;
+		z-index: 101;
+		position: fixed;
+	}
+}
+
+// Discover Menu
+#discover-menu-button {
+	position: fixed;
+	bottom: .25rem;
+	right: .25rem;
+	z-index: 150;
+}
+
+#discover-menu {
+	position: fixed;
+	bottom: 3.3rem;
+	right: .25rem;
+	z-index: 150;
+	background: $dark;
+	color: $gray-100;
+	padding: 1rem;
+
+	a {
+		color: $gray-100;
+	}
+
+	.title {
+		border-bottom: 2px solid $blue;
+		font-size: 1.1rem;
+		letter-spacing: 1px;
+	}
+}
+
+@media (max-height: 730px) {
+	#discover-menu {
+		max-height: 70vh;
+		overflow-y: scroll;
+	}
+}
+
+#discover-backdrop,
+#admin-backdrop {
+	position: fixed;
+	width: 100vw;
+	height: 100vh;
+	top: 0;
+	left: 0;
+	overflow: hidden;
+	z-index: 149;
+	background: rgba($black, .5);
+}
+
+// Admin Bar
+#admin-menu-button {
+	position: fixed;
+	bottom: 3.5rem;
+	right: .25rem;
+	z-index: 150;
+}
+
+#admin-menu-button,
+#discover-menu-button {
+	.btn {
+		min-width: 45px;
+	}
+}
+
+#admin-menu {
+	position: fixed;
+	bottom: 6.55rem;
+	right: .25rem;
+	z-index: 150;
+	background: $dark;
+	color: $gray-100;
+	padding: 1rem;
+	max-height: 540px;
+	max-width: 450px;
+
+	a {
+		color: $gray-100;
+	}
+
+	.title {
+		border-bottom: 2px solid $blue;
+		font-size: 1.1rem;
+		letter-spacing: 1px;
+		white-space: nowrap;
+	}
+}
+
+@media (max-height: 620px) {
+	#admin-menu-button {
+		display: none;
+	}
+}
+
+.admin-menu-links {
+
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+
+	.nav-item {
+		padding: .5rem;
+		margin: 0;
+		width: 33%;
+		text-align: center;
+
+		a.nav-link {
+			padding: 0;
+		}
+	}
+}

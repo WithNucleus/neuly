@@ -1,0 +1,267 @@
+// Custom Colors
+.bg-darkblue {
+	background: $darkblue;
+}
+
+.bg-black-25 {
+	background: rgba($black, .1) !important;
+}
+
+// Brain Background
+.bg-brains {
+	background-color: $primary;
+	background-image: url('../images/brain-bg.png');
+	background-size: cover;
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+}
+
+.bg-brains-dark {
+	// background-color: darken($cyan, 65%);
+	background-color: $gray-900;
+	background-image: url('../images/brain-bg.png');
+	background-size: cover;
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+}
+
+// Neurons Background
+.bg-neurons {
+	background-color: darken($secondary, 5%);
+	background-image: url('../images/neurons-bg.png');
+	background-size: cover;
+	background-position: center bottom;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+}
+
+// Normal Font
+.font-normal {
+	font-family: $font-family-sans-serif;
+}
+
+// Regular Font
+.regular-font {
+	font-family: $font-family-sans-serif;
+}
+
+// Smaller Font
+.font-size-small {
+	font-size: .85rem;
+}
+
+// Larger Font
+.font-size-large {
+	font-size: 1.1rem;
+}
+
+// Smaller Lead
+.lead-smaller {
+	font-size: 1.2rem;
+}
+
+// Larger Lead
+.lead-larger {
+	font-size: 1.5rem;
+}
+
+.hero-subtitle {
+	font-size: 2rem;
+}
+
+// Hero Title
+@media (min-width: 768px) {
+	.hero-title {
+		font-size: 5rem;
+	    line-height: 5.4rem;
+	    margin: 0;
+	}
+
+	.hero-subtitle {
+		font-size: 2.75rem;
+	}
+}
+
+// Text Shadow
+.text-shadow {
+	text-shadow: .075rem .075rem .1rem rgba($gray-900, .15);
+}
+
+// No Word Wrapping
+.text-no-wrap {
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+// Dark Bottom Border
+.border-bottom-dark-heavy {
+	border-bottom: 2px solid $gray-900;
+}
+
+// Bold Underline Links
+.bold-link {
+	white-space: nowrap;
+    position: relative;
+    font-weight: 700;
+    text-shadow: .075rem .075rem .1rem rgba($gray-900, .15);
+}
+
+.bold-link:after {
+	content: "";
+    height: 2px;
+    // background: linear-gradient(90deg,$gray-800,$blue);
+    // background: linear-gradient(90deg,$cyan,$blue);
+    background: $gray-900;
+    box-shadow: 1px 1px 2px rgba($gray-900, .15);
+    width: 100%;
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    border-radius: 2px;
+    transition: background .3s ease-in-out;
+}
+
+.bold-link:hover:after {
+	background: linear-gradient(90deg,$cyan,$blue);
+}
+
+// Alerts
+.alert p:last-of-type {
+	margin-bottom: 0;
+}
+
+// Input Type Files Cursor Hover
+.custom-file-input:hover,
+.cursor-hover-pointer:hover {
+	cursor: pointer;
+}
+
+// Truncate This
+.truncate-this {
+	max-width: 300px;
+	overflow: hidden; 
+    white-space: nowrap; 
+    text-overflow: ellipsis;
+    display: block;
+}
+
+.truncate-this-small {
+	max-width: 240px;
+	overflow: hidden; 
+    white-space: nowrap; 
+    text-overflow: ellipsis;
+    display: block;
+}
+
+.truncate-this-long {
+	max-width: 450px;
+	overflow: hidden; 
+    white-space: nowrap; 
+    text-overflow: ellipsis;
+    display: block;
+}
+
+.truncate-this-xl {
+	max-width: 600px;
+	overflow: hidden; 
+    white-space: nowrap; 
+    text-overflow: ellipsis;
+    display: block;
+}
+
+// Card Header and Footer
+.card-header,
+.card-footer {
+	background-color: rgba($secondary, .38);
+}
+
+/* Unstyled Bullet List */
+ul.plain-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	width: auto;
+
+	li {
+		margin-left: 0;
+		width: auto;
+	}
+}
+
+// Default Page Title
+.page-title-default {
+	border-bottom: 2px solid $tertiary;
+}
+
+.border-bottom-secondary {
+	border-bottom: 2px solid $secondary;
+}
+
+.border-bottom-danger {
+	border-bottom: 2px solid $red;
+}
+
+// Modal Title
+.modal-title {
+	line-height: 1.25;
+}
+
+// Sort Button
+.sort-button {
+	padding-left: 0.5rem;
+	padding-right: 0.5rem;
+	padding-top: .25rem;
+	padding-bottom: .25rem;
+	color: $quaternary;
+	text-decoration: none;
+	font-weight: 700;
+	border-radius: 0.25rem;
+	font-size: 0.875rem;
+    line-height: 1.5;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.sort-button.inactive {
+	color: rgba($black, .5);
+	font-weight: normal;
+}
+
+// Pagination
+.pagination {
+	flex-wrap: wrap;
+
+	li {
+		margin-bottom: .5rem;
+	}
+}
+
+// Max Width
+.max-width-450 {
+	max-width: 450px;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+// Hiring Badge
+.hiring-badge {
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: $red;
+    padding: .25rem .5rem;
+    border-bottom-right-radius: .25rem;
+}
+
+// Events Badge
+.events-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    // background: $secondary;
+    color: $secondarydark;
+    padding: .25rem .5rem;
+    border-bottom-left-radius: .25rem;
+}

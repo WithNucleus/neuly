@@ -1,0 +1,25 @@
+/* FOOTER */
+.footer {
+	background: $gray-900;
+	color: $gray-100;
+}
+
+// Footer Description and Terms
+.footer .description,
+.footer .terms {
+	font-size: .9rem;
+}
+
+
+// Footer Links
+.footer a {
+	color: $gray-100;
+}
+
+// Footer Title
+.footer .title {
+	font-size: 1.2rem;
+	border-bottom: 2px solid $blue;
+	display: inline-block;
+	min-width: 230px;
+}

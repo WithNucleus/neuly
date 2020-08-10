@@ -1,0 +1,92 @@
+<?php
+
+namespace App\Http\Controllers\Index;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Person;
+use App\Models\Company;
+use App\Models\Location;
+use App\Repositories\BookmarkRepository;
+use Spatie\QueryBuilder\QueryBuilder;
+use Spatie\QueryBuilder\AllowedSort;
+use Spatie\QueryBuilder\AllowedFilter;
+use Illuminate\Support\Facades\DB;
+use App\Services\Metas;
+use Spatie\Activitylog\Models\Activity;
+use Auth;
+
+class PersonController extends Controller
+{
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('query_filters')->only('index');
+    }
+
+    // Public / Private Index for Homepage
+    public function index(Request $request) {
+
+        // Get People
+        $people = QueryBuilder::for(Person::class)
+            ->with('companies')
+            ->allowedFilters([
+                'name',
+                AllowedFilter::partial('locations', 'locations.name'),
+                AllowedFilter::partial('company', 'companies.name'),
+            ])
+            ->defaultSort('-created_at')
+            ->allowedSorts([
+                'name',
+                AllowedSort::field('date', 'created_at'),
+            ])
+            ->paginate(25)
+            ->appends(request()->query());
+
+        $locations = Location::has('people', '>' , 0)->with('people')->get()->pluck('country')->unique()->sort();
+
+        $metas = Metas::fromPage($request->path());
+
+        // Return View
+        return view('discover.people.index', compact('people', 'metas', 'locations'));
+
+    }
+
+    // Show More Info -- Full Layout
+    public function show(Request $request, $slug) {
+
+        // Get Person
+        $person = Person::where('slug', $slug)->first();
+
+        $metas = Metas::process(array(
+            'title'         => $person->name,
+            'description'   => $person->bio,
+            'image'         => $person->photo ? "storage/{$person->photo}" : '',
+        ));
+
+        $entity = 'people';
+        $bookmarks = BookmarkRepository::fromUser($entity, $person->id);
+
+        // Log Activity
+        activity('pageview')
+            ->causedBy(Auth::user())
+            ->withProperties([
+                'ip' => $request->ip(),
+                'entity' => 'people',
+                'slug' => $person->slug
+            ])
+            ->performedOn($person)
+            ->log($person->name);
+
+        return view('discover.people.show', compact('person', 'metas', 'entity', 'bookmarks'));
+    }
+
+    public function namesJson()
+    {
+        return response()->json(Person::all()->pluck('name'));
+    }
+}

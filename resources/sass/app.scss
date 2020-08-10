@@ -1,0 +1,85 @@
+// Variables
+@import 'variables';
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+@import 'utilities';
+@import 'navbars';
+@import 'sidebar';
+@import 'tables';
+@import 'discover-menus';
+@import 'homepage';
+@import 'footer';
+@import 'search-forms';
+@import 'trix';
+@import 'images';
+
+/*
+ * Content
+ */
+#index-main,
+#content-main {
+	padding: 1rem 2rem 2rem 2rem;
+}
+
+#content-main {
+	padding-top: 5.5rem
+}
+
+#show-main {
+	padding-top: 2rem;
+}
+
+#home-main {
+	padding-top: 3rem;
+}
+
+@media (min-width: 768px) {
+	#index-main {
+		padding-top: 2rem; /* space underneath filters */
+	}
+}
+ 
+@media (min-width: 992px) {
+	#index-main {
+		padding-top: 12rem; /* Space for fixed navbar + discovertabs + breadcrumbs */
+	}
+
+	#show-main {
+		padding-top: 12rem; /* Space for fixed navbar + discovertabs + breadcrumbs */
+	}
+}
+
+.full-width-show-view {
+	max-width: 1280px;
+}
+
+// Breadcrumbs Container
+.breadcrumbs-container {
+	padding-top: 1rem;
+	width: 100%;
+	position: relative;
+	z-index: 100;
+
+	.breadcrumb {
+		margin-bottom: 1rem;
+		width: 100%;
+	}
+}
+
+	@media (min-width: 992px) {
+		.breadcrumbs-container {
+			padding-top: 9rem;
+			font-size: .85rem;
+			position: fixed;
+			z-index: 100;
+
+			.breadcrumb {
+				margin-bottom: .5rem;
+			}
+		}
+	}
+
+.tt-menu {
+	text-align: left;
+}

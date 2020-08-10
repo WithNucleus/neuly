@@ -1,0 +1,82 @@
+/* SIDEBAR */
+.sidebar {
+	padding: 2rem 0;
+	// background: $white !important;
+	background-color: $gray-200;
+}
+
+.sidebar-sticky {
+	padding: 0 1rem;
+}
+
+.sidebar .title {
+	padding: 0 1rem .5rem 1rem;
+}
+
+@media (min-width: 992px) {
+	.sidebar-sticky {
+		display: block !important;
+	}
+}
+
+@media (min-width: 992px) {
+	.sidebar {
+		position: fixed;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		z-index: 99; /* Behind the navbar */
+		padding: 12rem 0 2rem 0; /* Height of navbar */
+		box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+	}
+
+	.sidebar-sticky {
+		position: relative;
+		top: 0;
+		height: calc(100vh - 255px);
+		padding: .5rem 1.5rem 3rem 1rem;
+		overflow-x: hidden;
+		overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+	}
+}
+
+@supports ((position:-webkit-sticky) or (position:sticky)) {
+	.sidebar-sticky {
+		position: -webkit-sticky;
+		position: sticky;
+	}
+
+}
+
+.sidebar .clear-filters {
+	font-size: .8rem;
+	line-height: 1.2rem;
+}
+
+.sidebar .clear-filters:hover {
+	text-decoration: none;
+}
+
+.sidebar .nav-link {
+	font-weight: 500;
+	color: #333;
+}
+
+.sidebar .nav-link .feather {
+	margin-right: 4px;
+	color: #999;
+}
+
+.sidebar .nav-link.active {
+	color: #007bff;
+}
+
+.sidebar .nav-link:hover .feather,
+.sidebar .nav-link.active .feather {
+	color: inherit;
+}
+
+.sidebar-heading {
+	font-size: .75rem;
+	text-transform: uppercase;
+}

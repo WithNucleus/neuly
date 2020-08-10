@@ -1,0 +1,68 @@
+/* Navbars */
+#primary-nav {
+	padding: .5rem 1rem .5rem 0;
+	// background: #758E4F;
+}
+
+	@media (min-width: 992px) {
+		#primary-nav {
+			// height: 3.6rem;
+		}
+	}
+
+.navbar-nav {
+	padding-left: 1rem;
+}
+
+// Brand
+.navbar-brand {
+
+	img {
+		height: 30px;
+		width: auto;
+	}
+}
+
+// Register Link
+.navbar-dark .navbar-nav .nav-link.register {
+	text-transform: uppercase;
+	font-weight: 700;
+	color: lighten($blue, 5%);
+}
+
+.navbar-dark .navbar-nav .nav-link.register:hover {
+	color: lighten($blue, 8%);
+}
+
+@media (min-width: 992px) {
+	
+	.navbar-dark .navbar-nav .nav-link {
+		margin-left: .5rem;
+		margin-right: .5rem;
+	}
+
+	.navbar-dark .navbar-nav .nav-link:last-of-type {
+		margin-right: 0;
+	}
+
+	.navbar-dark .navbar-nav .nav-link.register {
+		padding: .25rem .75rem;
+		margin-top: .25rem;
+		margin-left: 1rem;
+		background: $blue;
+		color: $white;
+		border-radius: 2rem;
+		transition: all .1s ease-in-out;
+	}
+
+	.navbar-dark .navbar-nav .nav-link.register:hover {
+		background: darken($blue, 5%);
+		color: $white;
+	}
+}
+
+// Anchor Drop Down Menu to the Right (default is Left)
+.dropdown-menu-anchor-right {
+	right: 0;
+	left: auto;
+}

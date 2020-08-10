@@ -1,0 +1,147 @@
+/* TABLES */
+table.auto-width {
+	width: auto;
+}
+
+// Primary Index Table
+table.primary-index-table {
+	font-size: .9rem;
+}
+
+// Primary Index Table -- Top Border on Desktop Only
+@media (min-width: 992px) {
+	.border-top-desktop-only {
+		border: 0 !important;
+		padding: 0 !important;
+	}
+}
+
+// Primary Index Table -- Less than Large Screens
+@media (max-width: 991px) {
+	table.primary-index-table {
+
+		thead {
+			display: none;
+		}
+
+		tr {
+			
+			border-bottom: 2px solid #ccc;
+			display: flex;
+			flex-wrap: wrap;
+			flex-direction: column;
+
+			td {
+				width: 100% !important;
+				border: 0;
+			}
+
+			td:first-of-type {
+				padding-top: 1.5rem;
+			}
+
+			td:last-of-type {
+				padding-bottom: 1.5rem;
+			}
+
+			td.ownership:before {
+				content: "Type: ";
+				font-weight: 700;
+			}
+
+			td.focus:before {
+				content: "Focus: ";
+				font-weight: 700;
+			}
+
+			td.location:before {
+				content: "Location: ";
+				font-weight: 700;
+			}
+
+			td.company:before {
+				content: "Organization: ";
+				font-weight: 700;
+			}
+		}
+
+		button.load-ajax-modal {
+			font-size: 1.3rem;
+		}
+	}
+}
+
+// Index Table Footer
+table#index tfoot {
+	display: none;
+}
+
+/*
+ * Data Table Customizations
+ */
+
+// Table Heading Arrows
+table.dataTable thead .sorting::before,
+table.dataTable thead .sorting_asc::before,
+table.dataTable thead .sorting_desc::before,
+table.dataTable thead .sorting_asc_disabled::before,
+table.dataTable thead .sorting_desc_disabled::before,
+table.dataTable thead .sorting::after,
+table.dataTable thead .sorting_asc::after,
+table.dataTable thead .sorting_desc::after,
+table.dataTable thead .sorting_asc_disabled::after,
+table.dataTable thead .sorting_desc_disabled::after {
+	font-weight: 400;
+}
+
+// Custom Filters Links
+.custom-filters a,
+.custom-filters a:hover {
+	text-decoration: none;
+}
+
+// Show # Entries and Search
+#index_length,
+#index_filter {
+	padding-top: .25rem;
+	padding-bottom: .5rem;
+}
+
+#index_length label,
+#index_filter label {
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	width: auto;
+	flex-wrap: wrap;
+
+	select {
+		max-width: 80px;
+		margin-left: .5rem;
+		margin-right: .5rem;
+	}
+
+	input {
+		max-width: 250px;
+		margin-left: .5rem;
+		margin-right: .5rem;
+	}
+	
+}
+
+#index_length label select {
+	max-width: 80px;
+}
+
+@media (min-width: 768px) {
+	#index_filter label {
+		justify-content: flex-end;
+
+	}
+}
+
+#index_paginate {
+	.pagination {
+		flex-wrap: wrap;
+	}
+}

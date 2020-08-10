@@ -1,0 +1,132 @@
+// Company Logo
+.company-logo {
+	width: 100%;
+	max-width: 300px;
+	height: auto;
+}
+
+.company-logo-contained {
+	width: 100px;
+	height: 100px;
+	background-size: contain;
+	background-position: center center;
+	background-repeat: no-repeat;
+}
+
+// Person Photo Large
+.person-photo-large {
+	width: 200px;
+	height: 200px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: .5rem;
+	border-radius: 100%;
+	background: $gray-100;
+	background-size: cover;
+	background-position: center center;
+	background-repeat: no-repeat;
+}
+
+// Person Photo Large
+.person-photo-small {
+	width: 100px;
+	height: 100px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: .5rem;
+	border-radius: 100%;
+	background: $gray-100;
+	background-size: cover;
+	background-position: center center;
+	background-repeat: no-repeat;
+}
+
+.event-show-logo {
+	width: 200px;
+	height: auto;
+}
+
+// Logo that's Container in a Div
+.logo-is-contained {
+	width: 150px;
+	height: 150px;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	background-size: contain;
+	background-position: center center;
+	background-repeat: no-repeat;
+	display: flex;
+	align-content: center;
+	justify-content: center;
+	flex-direction: column;
+
+	img {
+		margin: 0 auto;
+		width: 70px;
+		height: auto;
+	}
+}
+
+	@media (min-width: 576px) {
+		.logo-is-contained {
+			width: 250px;
+		}
+	}
+
+.logo-is-contained-square {
+	width: 100px;
+	height: 100px;
+	background-size: contain;
+	background-position: center center;
+	background-repeat: no-repeat;
+	display: block;
+	display: flex;
+	align-content: center;
+	justify-content: center;
+	flex-direction: column;
+
+	img {
+		margin: 0 auto;
+		width: 70px;
+		height: auto;
+	}
+}
+
+// Bookmark Image
+.bookmark-image {
+	display: block;
+	background-size: contain;
+	background-position: center center;
+	background-repeat: no-repeat;
+	width: 50px;
+	height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	img {
+		width: 32px;
+		height: 32px;
+	}
+}
+
+// Recently Viewed Image
+.recently-viewed-image {
+	display: block;
+	width: 60px;
+	height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	img {
+		width: 32px;
+		height: 32px;
+	}
+
+	img.logo {
+		width: 50px;
+		height: auto;
+	}
+}

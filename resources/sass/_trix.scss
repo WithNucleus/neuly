@@ -1,0 +1,34 @@
+trix-editor,
+trix-editor.trix-content {
+    min-height: 300px;
+    overflow-y: auto;
+    font-family:  "Roboto", sans-serif !important;
+}
+
+.trix-content h1,
+.trix-content h2,
+.trix-content h3,
+.trix-content h4,
+.trix-content h5,
+.trix-content h6 {
+    font-family:  "Roboto", sans-serif !important;
+}
+
+.trix-content h1 {
+    font-size:  28px;
+}
+
+.trix-content h2 {
+    font-size:  24px;
+}
+
+.trix-content h3,
+.trix-content h4,
+.trix-content h5,
+.trix-content h6 {
+    font-size:  20px;
+}
+
+.trix-button-group.trix-button-group--file-tools {
+	display: none;
+}
