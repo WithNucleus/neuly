@@ -12,6 +12,7 @@ use Auth;
 use App\User;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\JobApplicationNotification;
+use Illuminate\Support\Facades\Storage;
 
 class JobApplicationController extends Controller
 {
@@ -25,6 +26,7 @@ class JobApplicationController extends Controller
     {
         $this->middleware('auth');
         // $this->middleware('neuly.membership');
+        $this->middleware(['role:Admin','permission:view job applications'])->only('getResume', 'getCoverLetter');
     }
 
     // Job Application Form
@@ -93,6 +95,48 @@ class JobApplicationController extends Controller
 
 		// Return Success View
 		return view('discover.jobs.success', compact('name', 'company', 'position'));
+
+    }
+
+    // Get Resume
+    public function getResume($id) {
+
+        $job_app = JobApplication::find($id);
+
+        $applicant = $job_app->getApplicantName();
+
+        $file = storage_path() . '/app/' . $job_app->resume;
+
+        if (file_exists($file)) {
+
+            $headers = [
+                'Content-Type' => 'application/pdf'
+            ];
+
+            return response()->download($file, $job_app->job->job_title . ' - ' . $applicant . ' Resume.pdf', $headers, 'inline');
+
+        }
+
+    }
+
+    // Get Cover Letter
+    public function getCoverLetter($id) {
+
+        $job_app = JobApplication::find($id);
+
+        $applicant = $job_app->getApplicantName();
+
+        $file = storage_path() . '/app/' . $job_app->cover_letter;
+
+        if (file_exists($file)) {
+
+            $headers = [
+                'Content-Type' => 'application/pdf'
+            ];
+
+            return response()->download($file, $job_app->job->job_title . ' - ' . $applicant . ' Cover Letter.pdf', $headers, 'inline');
+
+        }
 
     }
 }

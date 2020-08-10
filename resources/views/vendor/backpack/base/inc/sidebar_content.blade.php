@@ -53,6 +53,14 @@
 	</li>
 @endcan
 
+@can('view job applications')
+	<li class='nav-item'>
+		<a class='nav-link' href='{{ backpack_url('jobapplication') }}'>
+			<i class='nav-icon la la-briefcase'></i> Job Applications
+		</a>
+	</li>
+@endcan
+
 @can('edit research')
 	<li class='nav-item'>
 		<a class='nav-link' href='{{ backpack_url('research') }}'>

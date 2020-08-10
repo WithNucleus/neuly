@@ -52,6 +52,12 @@ class Job extends Model
                     ->withTimestamps();
     }
 
+    // Each Job Can Have Multiple Job Applications
+    public function jobApplications()
+    {
+        return $this->hasMany('App\Models\JobApplication');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES

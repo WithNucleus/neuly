@@ -216,12 +216,13 @@ Route::post('/admin/import/research', 'Admin\Import\ResearchController@search')
 Route::post('/admin/import/research/save', 'Admin\Import\ResearchController@import')
     ->name('import.research.save');
 
-// Route::post('/admin/import/research/save', 'Admin\Import\ResearchController@save')
-//     ->name('import.research.save');
-
 // Import Results Show
 Route::get('/admin/import/results/{id}', 'Admin\Import\ResultsController@showResults')
     ->name('import.results');
+
+// Job Application Files
+Route::get('/admin/jobapps/{id}/resume', 'Index\JobApplicationController@getResume')->name('jobsapp.resume');
+Route::get('/admin/jobapps/{id}/coverletter', 'Index\JobApplicationController@getCoverLetter')->name('jobsapp.coverletter');
 
 /* MEMBERS - PUBLIC ROUTES */
 Route::get('/members/{member_url}/{slug}', 'Dashboard\NoteController@showPublic')->name('members.public.note');
