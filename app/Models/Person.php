@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\hasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 class Person extends Model
 {
     use CrudTrait;
+    use hasFollowers;
 
     /*
     |--------------------------------------------------------------------------
@@ -64,9 +66,9 @@ class Person extends Model
 
                 Log::error($error_message);
             }
-            
+
         }
-        
+
     }
 
     /*
@@ -148,7 +150,7 @@ class Person extends Model
     //     }
 
     // }
-    
+
     // public function setSlugAttribute($value) {
 
     // }
@@ -161,12 +163,12 @@ class Person extends Model
 
         // Attribute Name
         $attribute_name = "photo";
-        
+
         // Disk
-        $disk = 'local'; 
-        
+        $disk = 'local';
+
         // Destination Path
-        $destination_path = "public/people"; 
+        $destination_path = "public/people";
 
         // if the image was erased
         if ($value==null) {
@@ -193,7 +195,7 @@ class Person extends Model
             // 4. Save the public path to the database
             $public_destination_path = Str::replaceFirst('public/', '', $destination_path);
             $this->attributes[$attribute_name] = $public_destination_path.'/'.$filename;
-            
+
         } else {
 
             $this->attributes[$attribute_name] = $value;

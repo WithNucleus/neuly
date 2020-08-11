@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\hasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Focus;
@@ -11,6 +12,7 @@ use Intervention\Image\ImageManagerStatic as Image;
 class Company extends Model
 {
     use CrudTrait;
+    use hasFollowers;
 
     /*
     |--------------------------------------------------------------------------
@@ -142,7 +144,7 @@ class Company extends Model
         $person_relationship = json_decode($value, true);
 
         // Check if $value is empty
-        if ($value != '[{"person":"","position":""}]') {            
+        if ($value != '[{"person":"","position":""}]') {
 
             // Setup Array to Sync Relationships
             $sync_array = array();
@@ -185,12 +187,12 @@ class Company extends Model
 
         // Attribute Name
         $attribute_name = "logo";
-        
+
         // Disk
-        $disk = 'local'; 
-        
+        $disk = 'local';
+
         // Destination Path
-        $destination_path = "public/logos"; 
+        $destination_path = "public/logos";
 
         // if the image was erased
         if ($value==null) {
@@ -217,7 +219,7 @@ class Company extends Model
             // 4. Save the public path to the database
             $public_destination_path = Str::replaceFirst('public/', '', $destination_path);
             $this->attributes[$attribute_name] = $public_destination_path.'/'.$filename;
-            
+
         } else {
 
             $this->attributes[$attribute_name] = $value;

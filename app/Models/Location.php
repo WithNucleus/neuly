@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\hasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 class Location extends Model
 {
     use CrudTrait;
+    use hasFollowers;
 
     /*
     |--------------------------------------------------------------------------
@@ -64,9 +66,9 @@ class Location extends Model
 
                 Log::error($error_message);
             }
-            
+
         }
-        
+
     }
 
     public static function findOrCreateLocationNoCity($region, $country) {
@@ -78,14 +80,14 @@ class Location extends Model
 
         // Get Info or Create One
         if ($location) {
-            
+
             return $location;
 
         } else {
 
             // create location
             try {
-                
+
                 $location = Location::create([
                      'name' => $region . ', ' . $country,
                      'region' => $region,
@@ -102,7 +104,7 @@ class Location extends Model
             }
 
         }
-        
+
     }
 
     /*

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\hasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -9,6 +10,7 @@ use Illuminate\Support\Str;
 class Investor extends Model
 {
     use CrudTrait;
+    use hasFollowers;
 
     /*
     |--------------------------------------------------------------------------
@@ -99,12 +101,12 @@ class Investor extends Model
 
         // Attribute Name
         $attribute_name = "logo";
-        
+
         // Disk
-        $disk = 'local'; 
-        
+        $disk = 'local';
+
         // Destination Path
-        $destination_path = "public/logos"; 
+        $destination_path = "public/logos";
 
         // if the image was erased
         if ($value==null) {
