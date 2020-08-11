@@ -4,7 +4,7 @@ namespace App\Traits;
 
 use App\User;
 
-trait hasFollowers {
+trait HasFollowers {
     public function followers()
     {
         return $this->morphToMany(User::class, 'followable');

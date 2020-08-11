@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Traits\hasFollowers;
+use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Company;
@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 class Focus extends Model
 {
     use CrudTrait;
-    use hasFollowers;
+    use HasFollowers;
 
     /*
     |--------------------------------------------------------------------------

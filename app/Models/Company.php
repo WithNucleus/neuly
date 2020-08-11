@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Traits\hasFollowers;
+use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Focus;
@@ -12,7 +12,7 @@ use Intervention\Image\ImageManagerStatic as Image;
 class Company extends Model
 {
     use CrudTrait;
-    use hasFollowers;
+    use HasFollowers;
 
     /*
     |--------------------------------------------------------------------------
