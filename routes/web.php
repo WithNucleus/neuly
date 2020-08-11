@@ -155,6 +155,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/dashboard/edit-bookmark/{id}', 'Dashboard\BookmarkController@update')->name('member.bookmarks.update');
     Route::get('/dashboard/bookmarks/{id}/destroy', 'Dashboard\BookmarkController@destroy')->name('member.bookmarks.destroy');
 
+    // Follow / Unfollow
+    Route::post('/follow/{entity}/{id}', 'FollowController@followEntity')->name('follow');
+    Route::post('/unfollow/{entity}/{id}', 'UnfollowController@unfollowEntity')->name('unfollow');
+
     // Notes
     Route::get('/dashboard/add-note', 'Dashboard\NoteController@create')->name('member.notes.create');
     Route::post('/dashboard/add-note', 'Dashboard\NoteController@store')->name('member.notes.store');
