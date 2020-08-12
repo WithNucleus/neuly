@@ -64,6 +64,11 @@ class Investor extends Model
             ->withTimestamps();
     }
 
+    // Get the old slugs redirect records of the model
+    public function redirects() {
+        return $this->morphMany('App\Models\Redirect', 'redirectable');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES

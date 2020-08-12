@@ -43,7 +43,7 @@ class JobApplication extends Model
     public function getApplicantEmail() {
 
         $user = User::find($this->user_id);
-        
+
         return '<a href="mailto:' . $user->email . '">' . $user->email . '</a>';
 
     }
@@ -90,6 +90,12 @@ class JobApplication extends Model
     public function job()
     {
         return $this->belongsTo('App\Models\Job', 'job_id');
+    }
+
+    // Get the old slugs redirect records of the model
+    public function redirects()
+    {
+        return $this->morphMany('App\Models\Redirect', 'redirectable');
     }
 
     /*

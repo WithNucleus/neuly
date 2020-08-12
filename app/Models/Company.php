@@ -103,6 +103,11 @@ class Company extends Model
                     ->withTimestamps();
     }
 
+    // Get the old slugs redirect records of the model
+    public function redirects() {
+        return $this->morphMany('App\Models\Redirect', 'redirectable');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES
@@ -183,8 +188,8 @@ class Company extends Model
         $filename = 'logo-' . $company_name . '.png';
 
         $disk = 'local';
-        
-        $destination_path = "public/logos"; 
+
+        $destination_path = "public/logos";
 
         // if a base64 was sent, store it in the db
         if (Str::startsWith($value, 'data:image'))
@@ -202,7 +207,7 @@ class Company extends Model
             $public_destination_path = Str::replaceFirst('public/', '', $destination_path);
 
             $this->attributes['logo'] = $public_destination_path . '/' . $filename;
-            
+
         } else {
 
             // if the image was erased

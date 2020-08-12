@@ -63,6 +63,11 @@ class Event extends Model
         return $this->belongsToMany('App\Models\EventType', 'event_event_type', 'event_id', 'event_type_id')->withTimestamps();
     }
 
+    // Get the old slugs redirect records of the model
+    public function redirects() {
+        return $this->morphMany('App\Models\Redirect', 'redirectable');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES

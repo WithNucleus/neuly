@@ -83,6 +83,11 @@ class Focus extends Model
         return $this->hasMany('App\Models\ImportResult');
     }
 
+    // Get the old slugs redirect records of the model
+    public function redirects() {
+        return $this->morphMany('App\Models\Redirect', 'redirectable');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES
