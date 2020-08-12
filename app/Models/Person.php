@@ -125,36 +125,7 @@ class Person extends Model
     |--------------------------------------------------------------------------
     */
 
-    // public function setNameAttribute($value) {
-
-    //     $this->attributes['name'] = $value;
-
-    //     // Is Slug Empty?
-    //     if ($this->attributes['slug'] == '') {
-
-    //         // Get Slug
-    //         $slug = Str::slug($value);
-
-    //         // Check if this Slug Has Been Taken
-    //         $person = Person::where('slug', $slug)->first();
-
-    //         // If Person Exists, add the ID to this one
-    //         if ($person) {
-    //             $this->attributes['slug'] = $slug . '-' . $this->id;
-    //         } else {
-    //             $this->attributes['slug'] = Str::slug($value);
-    //         }
-
-    //     }
-
-    // }
-    
-    // public function setSlugAttribute($value) {
-
-    // }
-
-    public function setPhotoAttribute($value)
-    {
+    public function setPhotoAttribute($value) {
 
         // Generate Filename
         $filename = 'photo-' . $this->id . '.png';
@@ -167,16 +138,6 @@ class Person extends Model
         
         // Destination Path
         $destination_path = "public/people"; 
-
-        // if the image was erased
-        if ($value==null) {
-
-            // delete the image from disk
-            \Storage::disk($disk)->delete($this->{$attribute_name});
-
-            // set null in the database column
-            $this->attributes[$attribute_name] = null;
-        }
 
         // if a base64 was sent, store it in the db
         if (Str::startsWith($value, 'data:image'))
@@ -196,7 +157,25 @@ class Person extends Model
             
         } else {
 
-            $this->attributes[$attribute_name] = $value;
+            // if the image was erased
+            if ($value==null) {
+
+                // delete the image from disk
+                \Storage::disk($disk)->delete($this->{$attribute_name});
+
+                // set null in the database column
+                $this->attributes[$attribute_name] = null;
+
+            } elseif (Str::startsWith($value, '/storage')) {
+
+                // do nothing because image isn't updated
+
+            } else {
+
+                // moving listing request image
+                $this->attributes[$attribute_name] = $value;
+            }
+
         }
     }
 }
