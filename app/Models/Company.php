@@ -220,7 +220,24 @@ class Company extends Model
             
         } else {
 
-            $this->attributes[$attribute_name] = $value;
+            // if the image was erased
+            if ($value==null) {
+
+                // delete the image from disk
+                \Storage::disk($disk)->delete($this->{$attribute_name});
+
+                // set null in the database column
+                $this->attributes[$attribute_name] = null;
+
+            } elseif (Str::startsWith($value, '/storage')) {
+
+                // do nothing because image isn't updated
+
+            } else {
+
+                // moving listing request image
+                $this->attributes[$attribute_name] = $value;
+            }
         }
     }
 }
