@@ -61,7 +61,7 @@ class PersonController extends Controller
     public function show(Request $request, $slug) {
 
         // Get Person
-        $person = Person::where('slug', $slug)->first();
+        $person = Person::where('slug', $slug)->firstOrFail();
 
         $metas = Metas::process(array(
             'title'         => $person->name,

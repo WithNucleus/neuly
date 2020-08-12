@@ -74,7 +74,7 @@ class ClinicaltrialController extends Controller
 
     public function show(Request $request, $slug)
     {
-        $clinicaltrial = Clinicaltrial::where('slug', $slug)->first();
+        $clinicaltrial = Clinicaltrial::where('slug', $slug)->firstOrFail();
 
         $entity = 'clinicaltrials';
         $bookmarks = BookmarkRepository::fromUser($entity, $clinicaltrial->id);

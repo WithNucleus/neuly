@@ -55,7 +55,7 @@ class FocusController extends Controller
     public function show(Request $request, $slug) {
 
         // Get Focus
-        $focus = Focus::where('slug', $slug)->first();
+        $focus = Focus::where('slug', $slug)->firstOrFail();
 
         $metas = Metas::process(array(
             'title'         => $focus->name,

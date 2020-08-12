@@ -33,7 +33,7 @@ class JobApplicationController extends Controller
     public function index($slug) {
 
     	// Find Job
-    	$job = Job::where('slug', $slug)->first();
+    	$job = Job::where('slug', $slug)->firstOrFail();
 
     	// Return View
     	return view('discover.jobs.apply', compact('job'));
@@ -63,7 +63,7 @@ class JobApplicationController extends Controller
 
     	// Check if Valid
     	if ($request->file('resume')->isValid() AND $request->file('cover_letter')->isValid()) {
-			
+
 			// Store Resume
 			$resume = $request->file('resume');
 			$resume_filename = 'job-' . $job_id . '-' . $name . '-resume.pdf';
