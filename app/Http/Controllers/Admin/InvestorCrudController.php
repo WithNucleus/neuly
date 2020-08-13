@@ -276,24 +276,6 @@ class InvestorCrudController extends CrudController
              'model'     => "App\Models\Company", // foreign key model
         ]);
 
-        // Person Relationship
-        $this->crud->addField([    // Select2Multiple = n-n relationship (with pivot table)
-             'label'     => "People",
-             'type'      => 'select2_multiple',
-             'name'      => 'people', // the method that defines the relationship in your Model
-             'entity'    => 'people', // the method that defines the relationship in your Model
-             'attribute' => 'name', // foreign key attribute that is shown to user
-
-             'pivot'     => true, // on create&update, do you need to add/delete pivot table entries?
-             // 'select_all' => true, // show Select All and Clear buttons?
-             'options'   => (function ($query) {
-                return $query->orderBy('name', 'ASC')->get();
-            }),
-
-             // optional
-             'model'     => "App\Models\Person", // foreign key model
-        ]);
-
         // Logo
         $this->crud->addField([
             'label'        => "Logo",
