@@ -159,13 +159,6 @@ class Company extends Model
 
             }
 
-            // dd($sync_array);
-
-            // Sync Relationships
-            // $company->people()->sync(
-            //     $sync_array
-            // );
-
             // Attach Relationships
             $company->people()->attach(
                 $sync_array
@@ -177,8 +170,10 @@ class Company extends Model
     public function setLogoAttribute($value)
     {
 
+        $company_name = Str::slug($this->name);
+
         // Generate Filename
-        $filename = 'logo-' . $this->id . '.png';
+        $filename = 'logo-' . $company_name . '.png';
         
         // Disk
         $disk = 'local'; 
