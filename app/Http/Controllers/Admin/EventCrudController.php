@@ -16,13 +16,13 @@ class EventCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use \App\Traits\RedirectableUpdateOperation;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
-     * 
+     *
      * @return void
      */
     public function setup()
@@ -39,7 +39,7 @@ class EventCrudController extends CrudController
 
     /**
      * Define what happens when the List operation is loaded.
-     * 
+     *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
      * @return void
      */
@@ -49,15 +49,15 @@ class EventCrudController extends CrudController
 
         // Event Name
         $this->crud->addColumn([
-            'name' => 'name', 
-            'type' => 'text', 
+            'name' => 'name',
+            'type' => 'text',
             'label' => 'Event Name']
         );
 
         // Start Date
         $this->crud->addColumn([
-            'name' => 'start_date', 
-            'type' => 'text', 
+            'name' => 'start_date',
+            'type' => 'text',
             'label' => 'Start Date']
         );
 
@@ -120,13 +120,13 @@ class EventCrudController extends CrudController
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']); 
+         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
          */
     }
 
     /**
      * Define what happens when the Show operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
      * @return void
      */
@@ -136,36 +136,36 @@ class EventCrudController extends CrudController
 
         // Event Name
         $this->crud->addColumn([
-            'name' => 'name', 
-            'type' => 'text', 
+            'name' => 'name',
+            'type' => 'text',
             'label' => 'Event Name']
         );
 
         // Start Date
         $this->crud->addColumn([
-            'name' => 'start_date', 
-            'type' => 'date', 
+            'name' => 'start_date',
+            'type' => 'date',
             'label' => 'Start Date']
         );
 
         // End Date
         $this->crud->addColumn([
-            'name' => 'end_date', 
-            'type' => 'date', 
+            'name' => 'end_date',
+            'type' => 'date',
             'label' => 'End Date']
         );
 
         // Event URL
         $this->crud->addColumn([
-            'name' => 'event_url', 
-            'type' => 'text', 
+            'name' => 'event_url',
+            'type' => 'text',
             'label' => 'Event URL']
         );
 
         // Registration URL
         $this->crud->addColumn([
-            'name' => 'registration_url', 
-            'type' => 'text', 
+            'name' => 'registration_url',
+            'type' => 'text',
             'label' => 'Registration URL']
         );
 
@@ -241,8 +241,8 @@ class EventCrudController extends CrudController
 
         // Description
         $this->crud->addColumn([
-            'name' => 'description', 
-            'type' => 'text', 
+            'name' => 'description',
+            'type' => 'text',
             'label' => 'Description']
         );
 
@@ -258,7 +258,7 @@ class EventCrudController extends CrudController
 
     /**
      * Define what happens when the Create operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-create
      * @return void
      */
@@ -276,55 +276,55 @@ class EventCrudController extends CrudController
 
         // Event Name
         $this->crud->addField([
-            'name' => 'name', 
-            'type' => 'text', 
+            'name' => 'name',
+            'type' => 'text',
             'label' => 'Event Name'
         ]);
 
         // Page Slug
         $this->crud->addField([
-            'name' => 'slug', 
-            'type' => 'text', 
+            'name' => 'slug',
+            'type' => 'text',
             'label' => 'Page Slug'
         ]);
 
         // Start Date
         $this->crud->addField([
-            'name' => 'start_date', 
-            'type' => 'date', 
+            'name' => 'start_date',
+            'type' => 'date',
             'label' => 'Start Date'
         ]);
 
         // End Date
         $this->crud->addField([
-            'name' => 'end_date', 
-            'type' => 'date', 
+            'name' => 'end_date',
+            'type' => 'date',
             'label' => 'End Date'
         ]);
 
         // Event URL
         $this->crud->addField([
-            'name' => 'event_url', 
-            'type' => 'url', 
+            'name' => 'event_url',
+            'type' => 'url',
             'label' => 'Event URL'
         ]);
 
         // Registration URL
         $this->crud->addField([
-            'name' => 'registration_url', 
-            'type' => 'url', 
+            'name' => 'registration_url',
+            'type' => 'url',
             'label' => 'Registration URL'
         ]);
 
         // Event Description
         $this->crud->addField([
-            'name' => 'description', 
-            'type' => 'wysiwyg', 
+            'name' => 'description',
+            'type' => 'wysiwyg',
             'label' => 'Event Description'
         ]);
 
         // Event Type Relationship
-        $this->crud->addField([    
+        $this->crud->addField([
              'label'     => "Event Type(s)",
              'type'      => 'select2_multiple',
              'name'      => 'eventTypes',
@@ -338,7 +338,7 @@ class EventCrudController extends CrudController
         ]);
 
         // Focus Relationship
-        $this->crud->addField([    
+        $this->crud->addField([
              'label'     => "Focus",
              'type'      => 'select2_multiple',
              'name'      => 'focus',
@@ -352,7 +352,7 @@ class EventCrudController extends CrudController
         ]);
 
         // Location Relationship
-        $this->crud->addField([    
+        $this->crud->addField([
              'label'     => "Locations",
              'type'      => 'select2_multiple',
              'name'      => 'locations',
@@ -366,7 +366,7 @@ class EventCrudController extends CrudController
         ]);
 
         // People Relationship
-        $this->crud->addField([    
+        $this->crud->addField([
              'label'     => "People",
              'type'      => 'select2_multiple',
              'name'      => 'people',
@@ -380,7 +380,7 @@ class EventCrudController extends CrudController
         ]);
 
         // Company Relationship
-        $this->crud->addField([    
+        $this->crud->addField([
              'label'     => "Exhibitors",
              'type'      => 'select2_multiple',
              'name'      => 'companies',
@@ -408,13 +408,13 @@ class EventCrudController extends CrudController
         /**
          * Fields can be defined using the fluent syntax or array syntax:
          * - CRUD::field('price')->type('number');
-         * - CRUD::addField(['name' => 'price', 'type' => 'number'])); 
+         * - CRUD::addField(['name' => 'price', 'type' => 'number']));
          */
     }
 
     /**
      * Define what happens when the Update operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
      * @return void
      */
