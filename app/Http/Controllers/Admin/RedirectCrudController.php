@@ -27,6 +27,11 @@ class RedirectCrudController extends CrudController
      */
     public function setup()
     {
+        // Check Guard
+        if(!backpack_user()->can('manage redirects')) {
+            abort(404);
+        }
+
         CRUD::setModel(\App\Models\Redirect::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/redirect');
         CRUD::setEntityNameStrings('redirect', 'redirects');

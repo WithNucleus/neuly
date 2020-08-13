@@ -16,14 +16,17 @@ class RedirectOldSlugs
      */
     public function handle($request, Closure $next)
     {
-        $responseStatus = $next($request)->getStatusCode();
-        if ($request->route()->hasParameter('slug') && $responseStatus === 404) {
-            $slug = $request->route()->slug;
-            $redirect = Redirect::where('old_slug',$slug)->firstOrFail();
-            $routeName = $request->route()->getName();
-            $params = $request->route()->parameters();
-            $params['slug'] = $redirect->redirectable->slug;
-            return redirect()->route($routeName, $params, 301);
+        if ($request->route()->getPrefix() !== config('backpack.base.route_prefix', 'admin')) {
+            $responseStatus = $next($request)->getStatusCode();
+            if ($responseStatus === 404 && $request->route()->hasParameter('slug')) {
+                $slug           = $request->route()->slug;
+                $redirect       = Redirect::where('old_slug', $slug)->firstOrFail();
+                $routeName      = $request->route()->getName();
+                $params         = $request->route()->parameters();
+                $params['slug'] = $redirect->redirectable->slug;
+
+                return redirect()->route($routeName, $params, 301);
+            }
         }
         return $next($request);
     }
