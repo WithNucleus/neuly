@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Admin\Import;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\Import\ClinicalTrial\ProcessLocation;
+use App\Jobs\Import\ClinicalTrial\ProcessSponsorCollaborators;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use App\Models\Clinicaltrial;
 use App\Models\Location;
-use App\Jobs\ProcessClinicalTrialLocation;
 use Illuminate\Support\Facades\Log;
 use Auth;
 use App\Models\ImportResult;
@@ -105,11 +106,11 @@ class ClinicalTrialController extends Controller
 	    			$nct_number = $this_value;
 	    			$attributes['nct_number'] = $nct_number;
 
-	    		} elseif ($column == 'start_date' OR 
-	    			$column == 'primary_completion_date' OR 
-	    			$column == 'completion_date' OR 
+	    		} elseif ($column == 'start_date' OR
+	    			$column == 'primary_completion_date' OR
+	    			$column == 'completion_date' OR
 	    			$column == 'first_posted' OR
-	    			$column == 'results_first_posted' OR 
+	    			$column == 'results_first_posted' OR
 	    			$column == 'last_update_posted')
 	    		{
 	    			// if a date field convert format
@@ -143,7 +144,7 @@ class ClinicalTrialController extends Controller
 							$this_location = array_map('trim', $this_location);
 
 							if ($this_location[0] == 'United States') {
-								
+
 								// location[1] & location[2] will be state & city
 								$city = $this_location[2];
 								$region = $this_location[1];
@@ -199,7 +200,7 @@ class ClinicalTrialController extends Controller
 									array_push($location_name_array, $location_array);
 								}
 
-								
+
 							}
 						}
 					}
@@ -207,7 +208,8 @@ class ClinicalTrialController extends Controller
 
 	    		} elseif ($column == 'sponsorcollaborators') {
 
-	    			// if sponsorcollaborators
+                    $sponsorCollaborators         = explode('|', $value);
+                    $sponsorCollaboratorsFiltered = array_filter(array_map('trim', $sponsorCollaborators));
 
 	    		} elseif ($column == 'rank' OR $column == 'study_documents') {
 
@@ -218,7 +220,7 @@ class ClinicalTrialController extends Controller
 	    			// Push this to $attributes
 	    			$attributes[$column] = $this_value;
 	    		}
-	    		
+
 	    	}
 
 	    	// Create or Update
@@ -229,8 +231,12 @@ class ClinicalTrialController extends Controller
 
 	    	// Send Location Matching to Queue
 			if (!empty($location_name_array)) {
-				ProcessClinicalTrialLocation::dispatch($clinicaltrial, $import_result, $location_name_array);
+                ProcessLocation::dispatch($clinicaltrial, $import_result, $location_name_array);
 			}
+
+			if (!empty($sponsorCollaboratorsFiltered)) {
+                ProcessSponsorCollaborators::dispatch($clinicaltrial, $import_result, $sponsorCollaboratorsFiltered);
+            }
 
 	    	// Assign Focus Relationship
 	    	$clinicaltrial->focus()->syncWithoutDetaching($focus_id);

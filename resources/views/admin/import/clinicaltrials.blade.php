@@ -18,7 +18,7 @@
             <div class="card card-body">
 
                 <h3 class="h4">Import Clinical Trials</h3>
-                
+
                 <p class="mb-0">
                     <strong>Requirements</strong>
                 </p>
@@ -92,6 +92,7 @@
                             <th>Date</th>
                             <th>Focus</th>
                             <th>Actions</th>
+                            <th>Failures</th>
                         </tr>
                     </thead>
 
@@ -105,6 +106,13 @@
                             </td>
                             <td>
                                 <a href="{{ route('import.results', $result->id) }}" class="btn btn-sm btn-link"><i class="la la-eye"></i> Preview</a>
+                            </td>
+                            <td>
+                                @if($countFailures = $result->failures()->count())
+                                    <a href="{{ route('import.failures', $result->id) }}" class="btn btn-sm btn-link">
+                                        <i class="la la-eye"></i> {{$countFailures}} failures
+                                    </a>
+                                @endif
                             </td>
                         </tr>
                     @endforeach
@@ -147,8 +155,8 @@
         input.addEventListener( 'change', showFileName );
 
         function showFileName( event ) {
-          
-            // the change event gives us the input it occurred in 
+
+            // the change event gives us the input it occurred in
             var input = event.srcElement;
 
             // the input has an array of files in the `files` property, each one has a name that you can use. We're just using the name here.

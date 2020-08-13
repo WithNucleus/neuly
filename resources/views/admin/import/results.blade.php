@@ -19,7 +19,7 @@
     <div class="row mt-4">
         <div class="col-6 col-md-4">
             <h2 class="h3">#{{ $results->id }} {{ $results->entity }}</h2>
-                
+
             @if($results->focus->name != '')
                 <p class="h5 mt-2 mb-3">
                     Focus: {{ $results->focus->name }}
@@ -33,15 +33,25 @@
         @include('admin.import.results.api-results')
     @endif
 
+    <div class="row mt-1">
     {{-- Location Messages --}}
     @isset($location_messages)
-        @include('admin.import.results.location-messages')
+        @include('admin.import.results.messages', ['entityName' => 'location', 'messages' => $location_messages])
     @endisset
+
+    @isset($company_messages)
+        @include('admin.import.results.messages', ['entityName' => 'company', 'messages' => $company_messages])
+    @endisset
+
+    @isset($people_messages)
+        @include('admin.import.results.messages', ['entityName' => 'person', 'messages' => $people_messages])
+    @endisset
+    </div>
 
     {{-- Clinical Trial CSV Table --}}
     @if($results->entity == 'Clinical Trials')
         @include('admin.import.results.clinicaltrial-csv')
     @endif
-    
+
 
 @endsection

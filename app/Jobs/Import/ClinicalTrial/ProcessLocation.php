@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Import\ClinicalTrial;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -12,7 +12,7 @@ use App\Models\ImportResult;
 use App\Models\Location;
 use Illuminate\Support\Facades\Log;
 
-class ProcessClinicalTrialLocation implements ShouldQueue
+class ProcessLocation implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -44,7 +44,7 @@ class ProcessClinicalTrialLocation implements ShouldQueue
 
         $location_id_array = array();
 
-        $import_messages = array();       
+        $import_messages = array();
 
         // loop through array and find/create location
         foreach ($this->location_details as $location_array) {
@@ -94,7 +94,7 @@ class ProcessClinicalTrialLocation implements ShouldQueue
                 array_push($import_messages, $this_message);
             }
 
-            
+
         }
 
         // attach locations
@@ -110,7 +110,7 @@ class ProcessClinicalTrialLocation implements ShouldQueue
 
         // Get the old messages and add to it
         $old_messages = json_decode($this->import_result->location_messages, true);
-        
+
         if (!empty($old_messages)) {
             $new_messages = array_merge($old_messages, $new_messages);
         }
