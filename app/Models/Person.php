@@ -129,9 +129,6 @@ class Person extends Model
 
         // Generate Filename
         $filename = 'photo-' . $this->id . '.png';
-
-        // Attribute Name
-        $attribute_name = "photo";
         
         // Disk
         $disk = 'local'; 
@@ -146,25 +143,26 @@ class Person extends Model
             $image = \Image::make($value)->encode('png', 90);
 
             // Store the image on disk
-            \Storage::disk($disk)->put($destination_path.'/'.$filename, $image->stream());
+            \Storage::disk($disk)->put($destination_path . '/' . $filename, $image->stream());
 
-            // 3. Delete the previous image, if there was one
-            \Storage::disk($disk)->delete($this->{$attribute_name});
+            // Delete the previous image, if there was one
+            \Storage::disk($disk)->delete('public/' . $this->{'photo'});
 
-            // 4. Save the public path to the database
+            // Save the public path to the database
             $public_destination_path = Str::replaceFirst('public/', '', $destination_path);
-            $this->attributes[$attribute_name] = $public_destination_path.'/'.$filename;
+
+            $this->attributes['photo'] = $public_destination_path . '/' . $filename;
             
         } else {
 
             // if the image was erased
-            if ($value==null) {
+            if ($value == null) {
 
                 // delete the image from disk
-                \Storage::disk($disk)->delete($this->{$attribute_name});
+                \Storage::disk($disk)->delete('public/' . $this->{'photo'});
 
                 // set null in the database column
-                $this->attributes[$attribute_name] = null;
+                $this->attributes['photo'] = null;
 
             } elseif (Str::startsWith($value, '/storage')) {
 
@@ -173,7 +171,7 @@ class Person extends Model
             } else {
 
                 // moving listing request image
-                $this->attributes[$attribute_name] = $value;
+                $this->attributes['photo'] = $value;
             }
 
         }
