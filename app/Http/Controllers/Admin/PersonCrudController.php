@@ -183,18 +183,6 @@ class PersonCrudController extends CrudController
              'model'     => "App\Models\Location", // foreign key model
         ]);
 
-        // Photo
-        $this->crud->addField([
-            'label'        => "Photo",
-            'name'         => "photo",
-            'type'         => 'image',
-            'upload'       => true,
-            'crop'         => true, // set to true to allow cropping, false to disable
-            'aspect_ratio' => 1, // ommit or set to 0 to allow any aspect ratio
-            'disk'         => 'local', // in case you need to show images from a different disk
-            // 'prefix'       => 'storage/',
-        ]);
-
         /**
          * Fields can be defined using the fluent syntax or array syntax:
          * - CRUD::field('price')->type('number');
@@ -232,6 +220,19 @@ class PersonCrudController extends CrudController
      */
     protected function setupUpdateOperation()
     {
+
+        // Photo
+        $this->crud->addField([
+            'label'        => "Photo",
+            'name'         => "photo",
+            'type'         => 'image',
+            'upload'       => true,
+            'crop'         => true, // set to true to allow cropping, false to disable
+            'aspect_ratio' => 1, // ommit or set to 0 to allow any aspect ratio
+            'disk'         => 'local', // in case you need to show images from a different disk
+            // 'prefix'       => 'storage/',
+        ]);
+        
         $this->setupCreateOperation();
     }
 
