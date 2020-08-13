@@ -146,6 +146,14 @@
 	</li>
 @endcan
 
+@can('manage redirects')
+    <li class='nav-item'>
+        <a class='nav-link' href='{{ backpack_url('redirect') }}'>
+            <i class='nav-icon la la-sync'></i> <span>Redirects</span>
+        </a>
+    </li>
+@endcan
+
 @can('edit users')
 	<li class="nav-item nav-dropdown">
 		<a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon la la-users"></i> Authentication</a>
