@@ -34,16 +34,11 @@ class CompanyCrudController extends CrudController
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/company');
         $this->crud->setEntityNameStrings('organization', 'organizations');
 
-        // dump(Route::currentRouteName());
-
         // List
         $this->crud->operation('list', function() {
 
             // Name
             $this->crud->addColumn(['name' => 'name', 'type' => 'text', 'label' => 'Name']);
-
-            // Website
-            // $this->crud->addColumn(['name' => 'website', 'type' => 'text', 'label' => 'Website']);
 
             // Focus -- Relationship
             $this->crud->addColumn([
@@ -59,14 +54,8 @@ class CompanyCrudController extends CrudController
                 }),
             ]);
 
-            // Focus Description
-            // $this->crud->addColumn(['name' => 'focus_description', 'type' => 'text', 'label' => 'Focus Description']);
-
             // Type
             $this->crud->addColumn(['name' => 'ownership', 'type' => 'text', 'label' => 'Type']);
-
-            // Location
-            // $this->crud->addColumn(['name' => 'location', 'type' => 'text', 'label' => 'Location']);
 
             // Location -- Relationship
             $this->crud->addColumn([
@@ -196,23 +185,12 @@ class CompanyCrudController extends CrudController
     {
         $this->crud->setValidation(CompanyRequest::class);
 
-        // TODO: remove setFromDb() and manually define Fields
-        // $this->crud->setFromDb();
-
         // Name
         $this->crud->addField([
             'name' => 'name',
             'type' => 'text',
             'label' => 'Name'
         ]);
-
-        // Page Slug
-        // $this->crud->addField([
-        //     'name' => 'slug',
-        //     'type' => 'text',
-        //     'label' => 'Page Slug',
-        //     'hint' => 'No spaces, use - to separate words',
-        // ]);
 
         // Ownership
         $this->crud->addField([
@@ -264,50 +242,6 @@ class CompanyCrudController extends CrudController
              // optional
              'model'     => "App\Models\Location", // foreign key model
         ]);
-
-        // People
-        // $this->crud->addField([    // Select2Multiple = n-n relationship (with pivot table)
-        //      'label'     => "People",
-        //      'type'      => 'select2_multiple',
-        //      'name'      => 'people', // the method that defines the relationship in your Model
-        //      'entity'    => 'people', // the method that defines the relationship in your Model
-        //      'attribute' => 'name', // foreign key attribute that is shown to user
-
-        //      'pivot'     => true, // on create&update, do you need to add/delete pivot table entries?
-        //      // 'select_all' => true, // show Select All and Clear buttons?
-        //      'options'   => (function ($query) {
-        //         return $query->orderBy('name', 'ASC')->get();
-        //     }),
-
-        //      // optional
-        //      'model'     => "App\Models\Person", // foreign key model
-        // ]);
-
-        // $this->crud->addField([
-        //     'name' => 'people_relationship',
-        //     'label' => 'People',
-        //     'type' => 'repeatable',
-        //     'fields' => [
-        //         [
-        //             'label'     => 'People',
-        //             'type'      => 'select2',
-        //             'name'      => 'person',
-        //             'entity'    => 'people',
-        //             'attribute' => 'name',
-        //             'options'   => (function ($query) {
-        //                 return $query->orderBy('name', 'ASC')->get();
-        //             }),
-        //             'model'     => "App\Models\Person",
-        //             'wrapper' => ['class' => 'form-group col-md-6'],
-        //         ],
-        //         [
-        //             'name' => 'position',
-        //             'type' => 'text',
-        //             'label' => 'Position',
-        //             'wrapper' => ['class' => 'form-group col-md-6'],
-        //         ]
-        //     ]
-        // ]);
 
         // Investor Relationship
         $this->crud->addField([    // Select2Multiple = n-n relationship (with pivot table)

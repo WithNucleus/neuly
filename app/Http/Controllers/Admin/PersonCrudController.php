@@ -46,16 +46,58 @@ class PersonCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        // CRUD::setFromDb(); // columns
+        $this->crud->addColumn(['name' => 'name']);
 
-        $fields = $this->getFieldsOperation();
+        // Company -- Relationship
+        $this->crud->addColumn([
+           'label'     => 'Organizations',
+           'type'      => 'select_multiple',
+           'name'      => 'companies',
+           'entity'    => 'companies',
+           'attribute' => 'name',
+           'model'     => 'App\Models\Company',
+           'options'   => (function ($query) {
+                return $query->orderBy('name', 'ASC')->get();
+            }),
+        ]);
 
-        unset($fields['secondary_email']);
-        unset($fields['slug']);
+        // Investor -- Relationship
+        $this->crud->addColumn([
+           'label'     => 'Investors',
+           'type'      => 'select_multiple',
+           'name'      => 'investors',
+           'entity'    => 'investors',
+           'attribute' => 'name',
+           'model'     => 'App\Models\Investor',
+           'options'   => (function ($query) {
+                return $query->orderBy('name', 'ASC')->get();
+            }),
+        ]);
 
-        foreach($fields as $field){
-            $this->crud->addColumn($field);
-        }
+        // Location -- Relationship
+        $this->crud->addColumn([
+           'label'     => 'Locations',
+           'type'      => 'select_multiple',
+           'name'      => 'locations',
+           'entity'    => 'locations',
+           'attribute' => 'name',
+           'model'     => 'App\Models\Location',
+           'options'   => (function ($query) {
+                return $query->orderBy('name', 'ASC')->get();
+            }),
+        ]);
+
+        $this->crud->addColumn([
+            'label'    => 'Created',
+            'type'     => 'date',
+            'name'     => 'created_at',
+        ]);
+
+        $this->crud->addColumn([
+            'label'    => 'Updated',
+            'type'     => 'date',
+            'name'     => 'updated_at',
+        ]);
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -147,24 +189,6 @@ class PersonCrudController extends CrudController
             'label' => 'Bio',
         ]);
 
-        // Companies
-        // $this->crud->addField([    // Select2Multiple = n-n relationship (with pivot table)
-        //      'label'     => "Companies",
-        //      'type'      => 'select2_multiple',
-        //      'name'      => 'companies', // the method that defines the relationship in your Model
-        //      'entity'    => 'companies', // the method that defines the relationship in your Model
-        //      'attribute' => 'name', // foreign key attribute that is shown to user
-
-        //      'pivot'     => true, // on create&update, do you need to add/delete pivot table entries?
-        //      // 'select_all' => true, // show Select All and Clear buttons?
-        //      'options'   => (function ($query) {
-        //         return $query->orderBy('name', 'ASC')->get();
-        //     }),
-
-        //      // optional
-        //      'model'     => "App\Models\Company", // foreign key model
-        // ]);
-
         // Locations
         $this->crud->addField([    // Select2Multiple = n-n relationship (with pivot table)
              'label'     => "Locations",
@@ -183,18 +207,6 @@ class PersonCrudController extends CrudController
              'model'     => "App\Models\Location", // foreign key model
         ]);
 
-        // Photo
-        $this->crud->addField([
-            'label'        => "Photo",
-            'name'         => "photo",
-            'type'         => 'image',
-            'upload'       => true,
-            'crop'         => true, // set to true to allow cropping, false to disable
-            'aspect_ratio' => 1, // ommit or set to 0 to allow any aspect ratio
-            'disk'         => 'local', // in case you need to show images from a different disk
-            // 'prefix'       => 'storage/',
-        ]);
-
         /**
          * Fields can be defined using the fluent syntax or array syntax:
          * - CRUD::field('price')->type('number');
@@ -204,6 +216,7 @@ class PersonCrudController extends CrudController
 
     protected function setupShowOperation()
     {
+
         $request = \Request::getPathInfo();
         $request_array = explode('/', $request);
         $this_person_id = $request_array[3];
@@ -216,12 +229,12 @@ class PersonCrudController extends CrudController
             'person' => $person
         ])->to('before_content');
 
-
         $fields = $this->getFieldsOperation();
 
         foreach($fields as $field){
             $this->crud->addColumn($field);
         }
+
     }
 
     /**
@@ -232,6 +245,19 @@ class PersonCrudController extends CrudController
      */
     protected function setupUpdateOperation()
     {
+
+        // Photo
+        $this->crud->addField([
+            'label'        => "Photo",
+            'name'         => "photo",
+            'type'         => 'image',
+            'upload'       => true,
+            'crop'         => true, // set to true to allow cropping, false to disable
+            'aspect_ratio' => 1, // ommit or set to 0 to allow any aspect ratio
+            'disk'         => 'local', // in case you need to show images from a different disk
+            // 'prefix'       => 'storage/',
+        ]);
+        
         $this->setupCreateOperation();
     }
 
@@ -245,8 +271,8 @@ class PersonCrudController extends CrudController
         return array(
             'name' => [
                 'name' => 'name',
-                'type' => 'text',
-                'label' => 'Name'
+                'type' => 'model_function',
+                'function_name' => 'linkToShow'
             ],
             'email' => [
                 'name' => 'email',
@@ -265,13 +291,22 @@ class PersonCrudController extends CrudController
             ],
             'linkedin' => [
                 'name' => 'linkedin',
-                'type' => 'text',
-                'label' => 'Linked In',
-                'prefix'     => "https://www.linkedin.com/in/",
+                'type' => 'model_function',
+                'function_name' => 'getLinkedIn'
+            ],
+            'facebook' => [
+                'name' => 'facebook',
+                'type' => 'model_function',
+                'function_name' => 'getFacebook'
+            ],
+            'twitter' => [
+                'name' => 'twitter',
+                'type' => 'model_function',
+                'function_name' => 'getTwitter'
             ],
             // Companies -- Relationship
             'companies' => [
-               'label'     => 'Companies',
+               'label'     => 'Organizations',
                'type'      => 'select_multiple',
                'name'      => 'companies',
                'entity'    => 'companies',
@@ -313,11 +348,6 @@ class PersonCrudController extends CrudController
                 'name'         => "photo",
                 'type'         => 'image',
                 'prefix'       => 'storage/'
-            ],
-            'slug' => [
-                'name' => 'slug',
-                'type' => 'text',
-                'label' => 'Page Slug'
             ],
         );
     }
