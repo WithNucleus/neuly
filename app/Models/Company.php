@@ -191,7 +191,7 @@ class Company extends Model
             \Storage::disk($disk)->put($destination_path . '/' . $filename, $image->stream());
 
             // Delete the previous image, if there was one
-            \Storage::disk($disk)->delete('public/' . $this->{'logo'});
+            \Storage::disk($disk)->delete('public/' . $this->logo);
 
             // Save the public path to the database
             $public_destination_path = Str::replaceFirst('public/', '', $destination_path);
@@ -204,7 +204,7 @@ class Company extends Model
             if ($value == null) {
 
                 // delete the image from disk
-                \Storage::disk($disk)->delete('public/' . $this->{'logo'});
+                \Storage::disk($disk)->delete('public/' . $this->logo);
 
                 // set null in the database column
                 $this->attributes['logo'] = null;

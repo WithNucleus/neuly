@@ -69,6 +69,22 @@ class Person extends Model
         
     }
 
+    public function getLinkedIn() {
+        return '<a href="https://www.linkedin.com/in/' . $this->linkedin . '" target="_blank" rel="noopener noreferrer"><i class="lab la-linkedin-in"></i> ' . $this->linkedin . '</a>';
+    }
+
+    public function getFacebook() {
+        return '<a href="https://www.facebook.com/' . $this->facebook . '" target="_blank" rel="noopener noreferrer"><i class="lab la-facebook-f"></i> ' . $this->facebook . '</a>';
+    }
+
+    public function getTwitter() {
+        return '<a href="https://www.twitter.com/' . $this->twitter . '" target="_blank" rel="noopener noreferrer"><i class="lab la-twitter"></i> ' . $this->twitter . '</a>';
+    }
+
+    public function linkToShow() {
+        return '<a href="' . route('discover.people.show', $this->slug) . '">' . $this->name . '</a>';
+    }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
@@ -146,7 +162,7 @@ class Person extends Model
             \Storage::disk($disk)->put($destination_path . '/' . $filename, $image->stream());
 
             // Delete the previous image, if there was one
-            \Storage::disk($disk)->delete('public/' . $this->{'photo'});
+            \Storage::disk($disk)->delete('public/' . $this->photo);
 
             // Save the public path to the database
             $public_destination_path = Str::replaceFirst('public/', '', $destination_path);
@@ -159,7 +175,7 @@ class Person extends Model
             if ($value == null) {
 
                 // delete the image from disk
-                \Storage::disk($disk)->delete('public/' . $this->{'photo'});
+                \Storage::disk($disk)->delete('public/' . $this->photo);
 
                 // set null in the database column
                 $this->attributes['photo'] = null;
