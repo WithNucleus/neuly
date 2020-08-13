@@ -5,7 +5,7 @@
         <h2>
             <span class="text-capitalize">People</span>
             <small id="datatable_info_stack">related to {{ $investor->name }}</a></small>
-            <a href="/admin/investor/{{ $investor->id }}/show" class="font-sm"><i class="la la-angle-double-left"></i> Back to <span>Company</span></a>
+            <a href="/admin/investor/{{ $investor->id }}/show" class="font-sm"><i class="la la-angle-double-left"></i> Back to <span>Investor</span></a>
         </h2>
     </div>
 @endsection
@@ -26,7 +26,8 @@
                     <div class="form-group row">
                         <div class="col-12 col-md-6">
                             <label for="person" class="font-weight-bold">Person</label>
-                            <select class="form-control custom-select" name="person" required>
+
+                            <select class="form-control select2_field" name="person" required>
                                 <option value="" selected disabled="">--</option>
                                 @foreach ($people as $person)
                                     <option value="{{ $person->id }}">{{ $person->name }}</option>
@@ -59,11 +60,37 @@
                 <h3 class="h5">Current People</h3>
 
                 @foreach($investor->people as $person)
-                    <a href="/admin/person/{{ $person->id }}/show">{{ $person->name }} ({{ $person->getOriginal('pivot_role') }})</a> @if (!$loop->last) <br> @endif
+                    <div class="d-flex justify-content-between">
+                        <a href="/admin/person/{{ $person->id }}/show">{{ $person->name }} ({{ $person->getOriginal('pivot_role') }})</a>
+                        <a class="small" onclick="return confirm_action()" href="{{ route('investorperson.remove', ['investor_id' => $investor->id, 'person_id' => $person->id]) }}">
+                            <i class="la la-trash"></i> Remove
+                        </a>
+                    </div>
                 @endforeach
-
             </div>
         </div>
     </div>
+
+@endsection
+
+@section('after_scripts')
+
+    <!-- include select2 css-->
+    <link href="{{ asset('packages/select2/dist/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('packages/select2-bootstrap-theme/dist/select2-bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+
+    <!-- include select2 js-->
+    <script src="{{ asset('packages/select2/dist/js/select2.full.min.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            $('.select2_field').select2({
+                theme: "bootstrap"
+            });
+        });
+
+        function confirm_action() {
+            return confirm('are you sure?');
+        }
+    </script>
 
 @endsection
