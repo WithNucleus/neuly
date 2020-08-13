@@ -49,7 +49,7 @@ class InvestorPersonController extends Controller
             'role' => $request->input('role'),
         ]);
 
-        return redirect()->back();
+        return redirect()->route('investor.show', $id);
     }
 
     /**
@@ -58,7 +58,7 @@ class InvestorPersonController extends Controller
     public function remove(Request $request, $investor_id, $person_id)
     {
         Investor::findOrFail($investor_id)->people()->detach($person_id);
-        return redirect()->back();
+        return redirect()->route('investor.show', $investor_id);
     }
 
 }
