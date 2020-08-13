@@ -18,7 +18,7 @@
 
             <div class="card card-body">
 
-                <h3 class="h5">Add an Investor to {{ $person->name }}</h3>
+                <h3 class="h5">Attach an Investor to <strong>{{ $person->name }}</strong></h3>
 
                 <form action="" method="POST">
                     @csrf
@@ -59,9 +59,14 @@
                 <h3 class="h5">Current Investors</h3>
 
                 @foreach($person->investors as $investor)
-                    <a href="/admin/company/{{ $investor->id }}/show">
-                        {{ $investor->name }} ({{ $investor->getOriginal('pivot_role') }})
-                    </a> 
+                    <div class="d-flex justify-content-between">
+                        <a href="/admin/investor/{{ $investor->id }}/show">
+                            {{ $investor->name }} ({{ $investor->getOriginal('pivot_role') }})
+                        </a>
+                        <a class="small" onclick="return confirm_action()" href="{{ route('investorperson.remove', ['investor_id' => $investor->id, 'person_id' => $person->id]) }}">
+                            <i class="la la-trash"></i> Remove
+                        </a>
+                    </div>
                 @endforeach
 
             </div>

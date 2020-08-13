@@ -5,7 +5,7 @@
         <h2>
             <span class="text-capitalize">Companies</span>
             <small id="datatable_info_stack">related to {{ $person->name }}</a></small>
-            <a href="/admin/company/{{ $person->id }}/show" class="font-sm"><i class="la la-angle-double-left"></i> Back to <span>Company</span></a>
+            <a href="/admin/person/{{ $person->id }}/show" class="font-sm"><i class="la la-angle-double-left"></i> Back to <span>Person</span></a>
         </h2>
     </div>
 @endsection
@@ -18,7 +18,7 @@
 
             <div class="card card-body">
 
-                <h3 class="h5">Add a Company</h3>
+                <h3 class="h5">Attach a Company to <strong>{{ $person->name }}</strong></h3>
 
                 <form action="" method="POST">
                     @csrf
@@ -59,11 +59,22 @@
                 <h3 class="h5">Current Companies</h3>
 
                 @foreach($person->companies as $company)
-                    <a href="/admin/company/{{ $company->id }}/show">{{ $company->name }} ({{ $company->getOriginal('pivot_position') }})</a> @if (!$loop->last) <br> @endif
+                    <div class="d-flex justify-content-between">
+                        <a href="/admin/company/{{ $company->id }}/show">{{ $company->name }} ({{ $company->getOriginal('pivot_position') }})</a>
+                        <a class="small" onclick="return confirm_action()" href="{{ route('companyperson.remove', ['company_id' => $company->id, 'person_id' => $person->id]) }}">
+                            <i class="la la-trash"></i> Remove
+                        </a>
+                    </div>
                 @endforeach
 
             </div>
         </div>
     </div>
+
+    <script>
+        function confirm_action() {
+            return confirm('are you sure?');
+        }
+    </script>
 
 @endsection
