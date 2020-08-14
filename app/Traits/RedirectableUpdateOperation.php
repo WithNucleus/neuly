@@ -108,8 +108,9 @@ trait RedirectableUpdateOperation
             $redirect = $model->redirects()->create([
                 'old_slug'=>$model->slug
             ]);
-            $admins = User::role('admin')->get();
-            foreach ($admins as $admin) {
+
+            if(env('SEND_SLUG_UPDATED_NOTIFICATION_EMAIL', false)) {
+                $admin = new User(['email' => env('SEND_SLUG_UPDATED_NOTIFICATION_EMAIL')]);
                 $admin->notify(new SlugUpdated($model,$redirect));
             }
         }
