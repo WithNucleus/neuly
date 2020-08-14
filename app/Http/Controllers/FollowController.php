@@ -25,8 +25,8 @@ class FollowController extends Controller
         $entity = $this->getEntity($entity, $id);
 
         $pivot = [
-            'email_notification' => '',
-            'app_notification' => ''
+            'email_notification' => $request->input('email_notification'),
+            'app_notification' => $request->input('app_notification')
         ];
 
         if($entity !== null)

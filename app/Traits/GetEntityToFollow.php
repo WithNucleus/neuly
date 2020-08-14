@@ -16,22 +16,22 @@ trait GetEntityToFollow {
     {
         switch($entity)
         {
-            case 'clinicaltrial':
-                return Clinicaltrial::first($id);
-            case 'organization':
-                return Company::first($id);
-            case 'event':
-                return Event::first($id);
+            case 'clinicaltrials':
+                return Clinicaltrial::find($id);
+            case 'organizations':
+                return Company::find($id);
+            case 'events':
+                return Event::find($id);
             case 'focus':
-                return Focus::first($id);
-            case 'investor':
-                return Investor::first($id);
-            case 'location':
-                return Location::first($id);
-            case 'person':
-                return Person::first($id);
+                return Focus::find($id);
+            case 'investors':
+                return Investor::find($id);
+            case 'locations':
+                return Location::find($id);
+            case 'people':
+                return Person::find($id);
             case 'research':
-                return Research::first($id);
+                return Research::find($id);
             default:
                 return null;
         }
