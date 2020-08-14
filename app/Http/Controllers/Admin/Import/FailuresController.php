@@ -12,10 +12,10 @@ class FailuresController extends Controller
 
     public function __construct()
     {
-        // Auth and Permission Middleware
         $this->middleware('auth');
         $this->middleware(['role:Admin','permission:import']);
     }
+
     /**
      * @param int $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View

@@ -42,14 +42,14 @@ class ImportFailureCorrector
 
             if ($modelClassName === Company::class) {
                 $company = Company::updateOrCreate(['name' => $importValue]);
-                // attach companies
+
                 $clinicaltrial->companies()->syncWithoutDetaching($company->id);
                 $success = true;
             }
 
             if ($modelClassName === Person::class) {
                 $person = Person::updateOrCreate(['name' => $importValue]);
-                // attach people
+
                 $clinicaltrial->people()->syncWithoutDetaching($person->id);
                 $success = true;
             }
@@ -60,7 +60,6 @@ class ImportFailureCorrector
             );
         }
 
-        // delete current failure record
         if ($success) {
             $importFailure->delete();
         }

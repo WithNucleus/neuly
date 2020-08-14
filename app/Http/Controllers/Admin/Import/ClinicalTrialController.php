@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Import;
 
+use App\Helpers\StringHelper;
 use App\Http\Controllers\Controller;
 use App\Jobs\Import\ClinicalTrial\ProcessLocation;
 use App\Jobs\Import\ClinicalTrial\ProcessSponsorCollaborators;
@@ -122,18 +123,10 @@ class ClinicalTrialController extends Controller
 	    		} elseif ($column == 'locations') {
 
 					// process locations
-
-					$locations_list = $value;
-					$locations_array = explode('|', $locations_list);
+                    $locations_array = StringHelper::explodeAndFilterEmpty($value, '|');
 
 					// loop through array
 					foreach ($locations_array as $string) {
-
-						if ($string == '') {
-
-							// blank location so ignore this
-
-						} else {
 
 							$this_location = explode(',', $string);
 
@@ -202,14 +195,12 @@ class ClinicalTrialController extends Controller
 
 
 							}
-						}
 					}
 
 
 	    		} elseif ($column == 'sponsorcollaborators') {
 
-                    $sponsorCollaborators         = explode('|', $value);
-                    $sponsorCollaboratorsFiltered = array_filter(array_map('trim', $sponsorCollaborators));
+                    $sponsorCollaborators = StringHelper::explodeAndFilterEmpty($value, '|');
 
 	    		} elseif ($column == 'rank' OR $column == 'study_documents') {
 
@@ -234,8 +225,8 @@ class ClinicalTrialController extends Controller
                 ProcessLocation::dispatch($clinicaltrial, $import_result, $location_name_array);
 			}
 
-			if (!empty($sponsorCollaboratorsFiltered)) {
-                ProcessSponsorCollaborators::dispatch($clinicaltrial, $import_result, $sponsorCollaboratorsFiltered);
+			if (!empty($sponsorCollaborators)) {
+                ProcessSponsorCollaborators::dispatch($clinicaltrial, $import_result, $sponsorCollaborators);
             }
 
 	    	// Assign Focus Relationship

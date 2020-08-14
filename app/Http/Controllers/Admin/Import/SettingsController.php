@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Import;
 
+use App\Helpers\StringHelper;
 use App\Http\Controllers\Controller;
 use App\Models\ImportSetting;
 use Illuminate\Http\Request;
@@ -16,7 +17,6 @@ class SettingsController extends Controller
      */
     public function __construct()
     {
-        // Auth and Permission Middleware
         $this->middleware('auth');
         $this->middleware(['role:Admin', 'permission:import']);
     }
@@ -26,8 +26,8 @@ class SettingsController extends Controller
      */
     public function index()
     {
-        //there is always single record in ImportSetting
-        $importSettings = ImportSetting::where('id', 1)->first();
+        // ImportSettings always stored with ID = 1
+        $importSettings = ImportSetting::find(1);
 
         return view('admin.import.settings', compact('importSettings'));
     }
@@ -38,17 +38,15 @@ class SettingsController extends Controller
      */
     public function update(Request $request)
     {
-        //there is always single record in ImportSetting
-        $importSettings              = ImportSetting::where('id', 1)->first();
-        $mappingOrganisation         = explode(',', strtolower($request->mapping_organisation));
-        $mappingOrganisationFiltered = array_filter(array_map('trim', $mappingOrganisation));
+        // ImportSettings always stored with ID = 1
+        $importSettings              = ImportSetting::find(1);
+        $mappingOrganisation         = strtolower($request->input('mapping_organisation'));
+        $mappingOrganisationFiltered = StringHelper::explodeAndFilterEmpty($mappingOrganisation, ',');
 
         if ($importSettings) {
-            //if ImportSetting aready exist - update
             $importSettings->mapping_organisation = $mappingOrganisationFiltered;
             $importSettings->update();
         } else {
-            //if ImportSetting not exist - create
             $importSettings                       = new ImportSetting();
             $importSettings->id                   = 1;
             $importSettings->mapping_organisation = $mappingOrganisationFiltered;

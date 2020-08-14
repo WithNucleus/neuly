@@ -81,7 +81,7 @@ class ProcessSponsorCollaborators
         $this->importResult  = $importResult;
         $this->values        = $values;
 
-        $importSettings = ImportSetting::where('id', 1)->first();
+        $importSettings = ImportSetting::find(1);
 
         if (!empty($importSettings) && !empty($importSettings->mapping_organisation)) {
             $this->companyMappingSettings = $importSettings->mapping_organisation;
@@ -102,10 +102,8 @@ class ProcessSponsorCollaborators
         $personIds      = [];
         $failed         = [];
 
-        // loop through array and find/create entity
         foreach ($this->values as $value) {
 
-            // is value has word in companyMappingSettings keywords
             if ($this->checkValueInMappingOrganisationSettings($value)) {
                 $company      = Company::firstOrCreate(['name' => $value]);
                 $companyIds[] = $company->id;
@@ -113,28 +111,23 @@ class ProcessSponsorCollaborators
                 continue;
             }
 
-            // is value == name of already existed company
             if ($companyId = $this->checkValueInExistingCompanies($value)) {
                 $companyIds[] = $companyId;
                 $this->addCompanyMessage($companyId, $value);
                 continue;
             }
 
-            // is value == name of already existed person
             if ($personId = $this->checkValueInExistingPersons($value)) {
                 $personIds[] = $personId;
                 $this->addPersonMessage($personId, $value);
                 continue;
             }
 
-            // can't map value to Company or Person
             $failed[] = $value;
             $this->addFailedRecord($value);
         }
 
-        // attach companies
         $this->clinicaltrial->companies()->syncWithoutDetaching($companyIds);
-        // attach people
         $this->clinicaltrial->people()->syncWithoutDetaching($personIds);
 
         $this->saveImportMessages();
@@ -189,7 +182,7 @@ class ProcessSponsorCollaborators
      */
     private function addCompanyMessage($companyId, $value)
     {
-        $meesage = [
+        $message = [
             'nct_number' => $this->clinicaltrial->nct_number,
             'id'         => $companyId,
             'company'    => $value,
@@ -197,13 +190,12 @@ class ProcessSponsorCollaborators
         ];
 
         if (!isset($this->importCompanyMessages[$this->clinicaltrial->nct_number])) {
-            //first addition by number
             $this->importCompanyMessages[$this->clinicaltrial->nct_number] = [
                 'id' => $this->clinicaltrial->id,
-                'messages' => [$meesage],
+                'messages' => [$message],
             ];
         } else {
-            $this->importCompanyMessages[$this->clinicaltrial->nct_number]['messages'][] = $meesage;
+            $this->importCompanyMessages[$this->clinicaltrial->nct_number]['messages'][] = $message;
         }
 
     }
@@ -214,7 +206,7 @@ class ProcessSponsorCollaborators
      */
     private function addPersonMessage($personId, $value)
     {
-        $meesage = [
+        $message = [
             'nct_number' => $this->clinicaltrial->nct_number,
             'id'         => $personId,
             'person'     => $value,
@@ -222,13 +214,12 @@ class ProcessSponsorCollaborators
         ];
 
         if (!isset($this->importPersonMessages[$this->clinicaltrial->nct_number])) {
-            //first addition by number
             $this->importPersonMessages[$this->clinicaltrial->nct_number] = [
                 'id' => $this->clinicaltrial->id,
-                'messages' => [$meesage],
+                'messages' => [$message],
             ];
         } else {
-            $this->importPersonMessages[$this->clinicaltrial->nct_number]['messages'][] = $meesage;
+            $this->importPersonMessages[$this->clinicaltrial->nct_number]['messages'][] = $message;
         }
     }
 
@@ -249,7 +240,6 @@ class ProcessSponsorCollaborators
      */
     private function saveImportMessages()
     {
-        // Get the old messages and add to it
         $oldCompanyMessages = json_decode($this->importResult->company_messages, true);
         $oldPeopleMessages  = json_decode($this->importResult->people_messages, true);
 
@@ -261,7 +251,6 @@ class ProcessSponsorCollaborators
             $this->importPersonMessages = array_merge($this->importPersonMessages, $oldPeopleMessages);
         }
 
-        // Update Import Result
         $this->importResult->company_messages = json_encode($this->importCompanyMessages);
         $this->importResult->people_messages = json_encode($this->importPersonMessages);;
         $this->importResult->save();
@@ -272,7 +261,7 @@ class ProcessSponsorCollaborators
      */
     private function saveFailedRecords()
     {
-        if (empty($this->importFailedRecords)) {
+        if ($this->importFailedRecords === []) {
             return;
         }
 
