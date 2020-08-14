@@ -156,8 +156,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/dashboard/bookmarks/{id}/destroy', 'Dashboard\BookmarkController@destroy')->name('member.bookmarks.destroy');
 
     // Follow / Unfollow
-    Route::post('/follow/{entity}/{id}', 'FollowController@followEntity')->name('follow');
-    Route::post('/unfollow/{entity}/{id}', 'UnfollowController@unfollowEntity')->name('unfollow');
+    Route::get('/follow/{entity}/{id}', 'FollowController@add')->name('member.follow.add');
+    Route::post('/follow/{entity}/{id}', 'FollowController@store')->name('member.follow.store');
+    Route::get('/unfollow/{entity}/{id}', 'UnfollowController@add')->name('member.unfollow.add');
+    Route::post('/unfollow/{entity}/{id}', 'UnfollowController@store')->name('member.unfollow.store');
 
     // Notes
     Route::get('/dashboard/add-note', 'Dashboard\NoteController@create')->name('member.notes.create');
