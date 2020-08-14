@@ -91,20 +91,18 @@ class ClinicalTrialController extends Controller
 
     		$nct_number = '';
 
-    		$location_id_array = array();
-    		$location_name_array = array();
+            $newLocationNames     = [];
+            $sponsorCollaborators = [];
 
     		// Loop through columns in a record
     		foreach ($record as $key => $value) {
 
 	    		$column = $headings[$key];
 
-	    		$this_value = $value;
-
 	    		// if column name
 	    		if ($column == 'nct_number') {
 
-	    			$nct_number = $this_value;
+	    			$nct_number = $value;
 	    			$attributes['nct_number'] = $nct_number;
 
 	    		} elseif ($column == 'start_date' OR
@@ -115,90 +113,68 @@ class ClinicalTrialController extends Controller
 	    			$column == 'last_update_posted')
 	    		{
 	    			// if a date field convert format
-	    			$date = Carbon::parse($this_value)->format('Y-m-d');
+	    			$date = Carbon::parse($value)->format('Y-m-d');
 
 	    			// Push this to $attributes
 	    			$attributes[$column] = $date;
 
-	    		} elseif ($column == 'locations') {
+                } elseif ($column == 'locations') {
 
-					// process locations
-                    $locations_array = StringHelper::explodeAndFilterEmpty($value, '|');
+                    $locations = StringHelper::explodeAndFilterEmpty($value, '|');
 
-					// loop through array
-					foreach ($locations_array as $string) {
+                    foreach ($locations as $location) {
 
-							$this_location = explode(',', $string);
+                        $newLocation   = [];
+                        $locationParts = StringHelper::explodeAndFilterEmpty($location, ',');
+                        $locationParts = array_reverse($locationParts);
 
-							// Reverse so Country is first
-							$this_location = array_reverse($this_location);
+                        if ($locationParts[0] == 'United States') {
+                            $country = 'USA';
+                            $region  = $locationParts[1];
+                            $city    = $locationParts[2];
 
-							// Remove whitespace
-							$this_location = array_map('trim', $this_location);
+                            $newLocation = [
+                                'country' => $country,
+                                'region'  => $region,
+                                'city'    => $city,
+                            ];
+                        } elseif ($locationParts[0] == 'Canada') {
+                            if (array_key_exists(2, $locationParts)) {
+                                $country = 'Canada';
+                                $region  = $locationParts[1];
+                                $city    = $locationParts[2];
 
-							if ($this_location[0] == 'United States') {
+                                $newLocation = [
+                                    'country' => $country,
+                                    'region'  => $region,
+                                    'city'    => $city,
+                                ];
+                            } else {
+                                $country = 'Canada';
+                                $region  = $locationParts[1];
 
-								// location[1] & location[2] will be state & city
-								$city = $this_location[2];
-								$region = $this_location[1];
-								$country = 'USA';
+                                $newLocation = [
+                                    'country' => $country,
+                                    'region'  => $region,
+                                ];
+                            }
+                        } elseif ($locationParts[0] != '') {
+                            // Not sure on the format so take what is hopefully the country and region
+                            $country = $locationParts[0];
+                            $region  = $locationParts[1];
 
-								$location_array = [
-									'city' => $city,
-									'region' => $region,
-									'country' => $country
-								];
+                            $newLocation = [
+                                'country' => $country,
+                                'region'  => $region,
+                            ];
+                        }
 
-								// array_push($location_name_array, $city . ', ' . $region . ', ' . $country);
-								array_push($location_name_array, $location_array);
+                        if ($newLocation !== []) {
+                            array_push($newLocationNames, $newLocation);
+                        }
+                    }
 
-							} elseif ($this_location[0] == 'Canada') {
-
-								// has city?
-								if (array_key_exists(2, $this_location)) {
-									$city = $this_location[2];
-									$region = $this_location[1];
-									$country = 'Canada';
-
-									$location_array = [
-										'city' => $city,
-										'region' => $region,
-										'country' => $country
-									];
-								} else {
-									$region = $this_location[1];
-									$country = 'Canada';
-
-									$location_array = [
-										'region' => $region,
-										'country' => $country
-									];
-								}
-
-								// array_push($location_name_array, $city . ', ' . $region . ', ' . $country);
-								array_push($location_name_array, $location_array);
-
-							} else {
-
-								if ( $this_location[0] != '' ) {
-									// Not sure on the format so take what is hopefully the country and region
-									$country = $this_location[0];
-									$region = $this_location[1];
-
-									$location_array = [
-										'region' => $region,
-										'country' => $country
-									];
-
-									array_push($location_name_array, $location_array);
-								}
-
-
-							}
-					}
-
-
-	    		} elseif ($column == 'sponsorcollaborators') {
+                } elseif ($column == 'sponsorcollaborators') {
 
                     $sponsorCollaborators = StringHelper::explodeAndFilterEmpty($value, '|');
 
@@ -208,37 +184,27 @@ class ClinicalTrialController extends Controller
 
 	    		} else {
 
-	    			// Push this to $attributes
-	    			$attributes[$column] = $this_value;
+	    			$attributes[$column] = $value;
 	    		}
 
 	    	}
 
-	    	// Create or Update
 	    	$clinicaltrial = Clinicaltrial::updateOrCreate(
 	    		['nct_number' => $nct_number],
 	    		$attributes
 	    	);
 
-	    	// Send Location Matching to Queue
-			if (!empty($location_name_array)) {
-                ProcessLocation::dispatch($clinicaltrial, $import_result, $location_name_array);
+			if ($newLocationNames !== []) {
+                ProcessLocation::dispatch($clinicaltrial, $import_result, $newLocationNames);
 			}
 
-			if (!empty($sponsorCollaborators)) {
+			if ($sponsorCollaborators !== []) {
                 ProcessSponsorCollaborators::dispatch($clinicaltrial, $import_result, $sponsorCollaborators);
             }
 
-	    	// Assign Focus Relationship
 	    	$clinicaltrial->focus()->syncWithoutDetaching($focus_id);
-
-	    	// Assign Location Relationship with $location_id_array
-	    	$clinicaltrial->locations()->syncWithoutDetaching($location_id_array);
-
     	}
 
-    	// Return to Import Results
     	return redirect(route('import.clinicaltrials'));
-
     }
 }
