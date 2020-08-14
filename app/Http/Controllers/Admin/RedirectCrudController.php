@@ -49,12 +49,6 @@ class RedirectCrudController extends CrudController
         CRUD::column('redirectable_id');
         CRUD::column('redirectable_type');
         CRUD::column('created_at');
-
-        /**
-         * Columns can be defined using the fluent syntax or array syntax:
-         * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
-         */
     }
 
     protected function setupShowOperation()
@@ -65,13 +59,12 @@ class RedirectCrudController extends CrudController
         $redirect = \App\Models\Redirect::find($this_redirect_id);
         CRUD::field('old_slug');
             $this->crud->addColumn([
-                'name'         => 'redirectable', // name of relationship method in the model
-                'type'         => 'relationship',
-                'label'        => 'Redirectable (' .$redirect->redirectable->getMorphClass().')' , // Table column heading
-                // OPTIONAL
-                 'entity'    => 'redirectable', // the method that defines the relationship in your Model
-                 'attribute' => 'name', // foreign key attribute that is shown to user
-                 'model'     => Relation::getMorphedModel($redirect->redirectable->getMorphClass()), // foreign key model
+                'name'      => 'redirectable', // name of relationship method in the model
+                'type'      => 'relationship',
+                'label'     => 'Redirectable (' . $redirect->redirectable->getMorphClass() . ')', // Table column heading
+                'entity'    => 'redirectable', // the method that defines the relationship in your Model
+                'attribute' => 'name', // foreign key attribute that is shown to user
+                'model'     => Relation::getMorphedModel($redirect->redirectable->getMorphClass()), // foreign key model
             ]);
     }
 
@@ -86,11 +79,5 @@ class RedirectCrudController extends CrudController
         CRUD::setValidation(RedirectRecordRequest::class);
 
         CRUD::field('old_slug');
-
-        /**
-         * Fields can be defined using the fluent syntax or array syntax:
-         * - CRUD::field('price')->type('number');
-         * - CRUD::addField(['name' => 'price', 'type' => 'number']));
-         */
     }
 }

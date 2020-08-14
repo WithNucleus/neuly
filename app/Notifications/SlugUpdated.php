@@ -61,8 +61,6 @@ class SlugUpdated extends Notification
      */
     public function toArray($notifiable)
     {
-        return [
-            //
-        ];
+        return [];
     }
 }
