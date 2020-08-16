@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Index;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\FollowRepository;
 use Illuminate\Http\Request;
 use App\Models\Clinicaltrial;
 use App\Models\Focus;
@@ -71,12 +72,13 @@ class ClinicaltrialController extends Controller
         return view('discover.clinicaltrials.index', compact('clinicaltrials', 'status', 'focus_cats', 'locations'));
     }
 
-    public function show(Request $request, $slug) 
+    public function show(Request $request, $slug)
     {
         $clinicaltrial = Clinicaltrial::where('slug', $slug)->first();
 
         $entity = 'clinicaltrials';
         $bookmarks = BookmarkRepository::fromUser($entity, $clinicaltrial->id);
+        $isFollowed = (bool) count(FollowRepository::fromuser(Clinicaltrial::class, $clinicaltrial->id));
 
         // Log Activity
         activity('pageview')
@@ -89,6 +91,6 @@ class ClinicaltrialController extends Controller
             ->performedOn($clinicaltrial)
             ->log($clinicaltrial->title);
 
-        return view('discover.clinicaltrials.show', compact('clinicaltrial', 'entity', 'bookmarks'));
+        return view('discover.clinicaltrials.show', compact('clinicaltrial', 'entity', 'bookmarks', 'isFollowed'));
     }
 }

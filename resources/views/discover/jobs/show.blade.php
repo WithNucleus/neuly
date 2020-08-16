@@ -17,12 +17,6 @@
                 'name' => $job->job_title,
                 'bookmarks' => $bookmarks
             ])
-            
-            @include('members.follow.add-button', [
-                'entity' => 'jobs',
-                'entity_id' => $job->id,
-                'name' => $job->job_title
-            ])
         </div>
     </div>
 

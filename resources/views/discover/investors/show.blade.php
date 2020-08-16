@@ -14,6 +14,11 @@
                 'name' => $investor->name,
                 'bookmarks' => $bookmarks
             ])
+            @include('members.follow.add-button', [
+                'entity' => $entity,
+                'entity_id' => $investor->id,
+                'name' => $investor->name,
+            ])
 
         </p>
 

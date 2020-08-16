@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Index;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\FollowRepository;
 use Illuminate\Http\Request;
 use App\Models\Event;
 use App\Models\EventType;
@@ -155,6 +156,7 @@ class EventController extends Controller
 
         $entity = 'events';
         $bookmarks = BookmarkRepository::fromUser($entity, $event->id);
+        $isFollowed = (bool) count(FollowRepository::fromuser(Event::class, $event->id));
 
         // Log Activity
         activity('pageview')
@@ -166,8 +168,8 @@ class EventController extends Controller
             ])
             ->performedOn($event)
             ->log($event->name);
-        
-        return view('discover.events.show', compact('event', 'related', 'metas', 'entity', 'bookmarks'));
+
+        return view('discover.events.show', compact('event', 'related', 'metas', 'entity', 'bookmarks', 'isFollowed'));
     }
 
     private function getReltaedEntities(Event $event)

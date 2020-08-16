@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Index;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\FollowRepository;
 use Illuminate\Http\Request;
 use App\Models\Investor;
 use App\Models\Focus;
@@ -76,6 +77,7 @@ class InvestorController extends Controller
 
         $entity = 'investors';
         $bookmarks = BookmarkRepository::fromUser($entity, $investor->id);
+        $isFollowed = (bool) count(FollowRepository::fromuser(Investor::class, $investor->id));
 
         // Log Activity
         activity('pageview')
@@ -88,7 +90,7 @@ class InvestorController extends Controller
             ->performedOn($investor)
             ->log($investor->name);
 
-        return view('discover.investors.show', compact('investor', 'related', 'metas', 'entity', 'bookmarks'));
+        return view('discover.investors.show', compact('investor', 'related', 'metas', 'entity', 'bookmarks', 'isFollowed'));
     }
 
     public function namesJson()

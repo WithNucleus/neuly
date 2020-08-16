@@ -14,7 +14,13 @@
             'name' => $research->name,
             'bookmarks' => $bookmarks
         ])
-        
+
+        @include('members.follow.add-button', [
+            'entity' => $entity,
+            'entity_id' => $research->id,
+            'name' => $research->name,
+        ])
+
     </p>
 
     @include('discover.research.data')
