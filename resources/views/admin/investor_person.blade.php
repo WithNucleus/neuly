@@ -20,19 +20,16 @@
 
                 <h3 class="h5">Add a Person</h3>
 
+                @include('members.includes.status-messages')
+
                 <form action="" method="POST">
                     @csrf
 
                     <div class="form-group row">
                         <div class="col-12 col-md-6">
-                            <label for="person" class="font-weight-bold">Person</label>
+                            <label for="person" class="font-weight-bold d-block">Person</label>
 
-                            <select class="form-control select2_field" name="person" required>
-                                <option value="" selected disabled="">--</option>
-                                @foreach ($people as $person)
-                                    <option value="{{ $person->id }}">{{ $person->name }}</option>
-                                @endforeach
-                            </select>
+                            <input type="text" class="w-100 form-control findPerson" placeholder="Search for person" name="person" required>
                         </div>
 
                         <div class="col-12 col-md-6">
@@ -61,7 +58,7 @@
 
                 @foreach($investor->people as $person)
                     <div class="d-flex justify-content-between">
-                        <a href="/admin/person/{{ $person->id }}/show">{{ $person->name }} ({{ $person->getOriginal('pivot_role') }})</a>
+                        <a href="/admin/person/{{ $person->id }}/show">{{ $person->name }} - {{ $person->getOriginal('pivot_role') }}</a>
                         <a class="small" onclick="return confirm_action()" href="{{ route('investorperson.remove', ['investor_id' => $investor->id, 'person_id' => $person->id]) }}">
                             <i class="la la-trash"></i> Remove
                         </a>
@@ -75,17 +72,34 @@
 
 @section('after_scripts')
 
-    <!-- include select2 css-->
-    <link href="{{ asset('packages/select2/dist/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('packages/select2-bootstrap-theme/dist/select2-bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="{{ asset('assets/typeahead.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/bootstrap-tagsinput.css') }}"/>
 
-    <!-- include select2 js-->
-    <script src="{{ asset('packages/select2/dist/js/select2.full.min.js') }}"></script>
+    <style>
+        .twitter-typeahead {
+            width:  100%;
+        }
+    </style>
+
     <script>
-        $(document).ready(function() {
-            $('.select2_field').select2({
-                theme: "bootstrap"
-            });
+        var $input = $('.findPerson');
+
+        var people = <?php echo $people; ?>;
+
+        var peopleSearch = new Bloodhound({
+          datumTokenizer: Bloodhound.tokenizers.whitespace,
+          queryTokenizer: Bloodhound.tokenizers.whitespace,
+          local: people
+        });
+
+        $('.findPerson').typeahead({
+          hint: true,
+          highlight: true,
+          minLength: 1
+        },
+        {
+          name: 'peopleSearch',
+          source: peopleSearch
         });
 
         function confirm_action() {
