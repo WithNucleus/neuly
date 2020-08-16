@@ -11,7 +11,12 @@ class UnfollowController extends Controller
 
     public function add(Request $request, String $entity, Int $id)
     {
+        $data = [
+            'entity' => $entity,
+            'id' => $id,
+        ];
 
+        return view('members.unfollow.add', $data);
     }
 
     public function store(Request $request, String $entity, Int $id)
