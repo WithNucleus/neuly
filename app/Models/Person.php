@@ -66,9 +66,31 @@ class Person extends Model
 
                 Log::error($error_message);
             }
-
+            
         }
+        
+    }
 
+    public function getLinkedIn() {
+        if ($this->linkedin != null) {
+            return '<a href="https://www.linkedin.com/in/' . $this->linkedin . '" target="_blank" rel="noopener noreferrer"><i class="lab la-linkedin-in"></i> ' . $this->linkedin . '</a>';
+        }
+    }
+
+    public function getFacebook() {
+        if ($this->facebook != null) {
+            return '<a href="https://www.facebook.com/' . $this->facebook . '" target="_blank" rel="noopener noreferrer"><i class="lab la-facebook-f"></i> ' . $this->facebook . '</a>';
+        }
+    }
+
+    public function getTwitter() {
+        if ($this->twitter != null) {
+            return '<a href="https://www.twitter.com/' . $this->twitter . '" target="_blank" rel="noopener noreferrer"><i class="lab la-twitter"></i> ' . $this->twitter . '</a>';
+        }
+    }
+
+    public function linkToShow() {
+        return '<a href="' . route('discover.people.show', $this->slug) . '">' . $this->name . '</a>';
     }
 
     /*
@@ -127,55 +149,13 @@ class Person extends Model
     |--------------------------------------------------------------------------
     */
 
-    // public function setNameAttribute($value) {
+    public function setPhotoAttribute($value) {
 
-    //     $this->attributes['name'] = $value;
-
-    //     // Is Slug Empty?
-    //     if ($this->attributes['slug'] == '') {
-
-    //         // Get Slug
-    //         $slug = Str::slug($value);
-
-    //         // Check if this Slug Has Been Taken
-    //         $person = Person::where('slug', $slug)->first();
-
-    //         // If Person Exists, add the ID to this one
-    //         if ($person) {
-    //             $this->attributes['slug'] = $slug . '-' . $this->id;
-    //         } else {
-    //             $this->attributes['slug'] = Str::slug($value);
-    //         }
-
-    //     }
-
-    // }
-
-    // public function setSlugAttribute($value) {
-
-    // }
-
-    public function setPhotoAttribute($value)
-    {
-
-        // Generate Filename
         $filename = 'photo-' . $this->id . '.png';
-
-        // Disk
+        
         $disk = 'local';
 
-        // Destination Path
-        $destination_path = "public/people";
-
-        // if the image was erased
-        if ($value==null) {
-
-            // delete the image from disk
-            \Storage::disk($disk)->delete($this->photo);
-
-            // set null in the database column
-            $this->attributes['photo'] = null;
-        }
+        $destination_path = "public/people"; 
 
         // if a base64 was sent, store it in the db
         if (Str::startsWith($value, 'data:image'))
@@ -184,18 +164,37 @@ class Person extends Model
             $image = \Image::make($value)->encode('png', 90);
 
             // Store the image on disk
-            \Storage::disk($disk)->put($destination_path.'/'.$filename, $image->stream());
+            \Storage::disk($disk)->put($destination_path . '/' . $filename, $image->stream());
 
-            // 3. Delete the previous image, if there was one
-            \Storage::disk($disk)->delete($this->photo);
+            // Delete the previous image, if there was one
+            \Storage::disk($disk)->delete('public/' . $this->photo);
 
-            // 4. Save the public path to the database
+            // Save the public path to the database
             $public_destination_path = Str::replaceFirst('public/', '', $destination_path);
-            $this->attributes['photo'] = $public_destination_path.'/'.$filename;
 
+            $this->attributes['photo'] = $public_destination_path . '/' . $filename;
+            
         } else {
 
-            $this->attributes['photo'] = $value;
+            // if the image was erased
+            if ($value == null) {
+
+                // delete the image from disk
+                \Storage::disk($disk)->delete('public/' . $this->photo);
+
+                // set null in the database column
+                $this->attributes['photo'] = null;
+
+            } elseif (Str::startsWith($value, '/storage')) {
+
+                // do nothing because image isn't updated
+
+            } else {
+
+                // moving listing request image
+                $this->attributes['photo'] = $value;
+            }
+
         }
     }
 }

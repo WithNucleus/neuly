@@ -161,13 +161,6 @@ class Company extends Model
 
             }
 
-            // dd($sync_array);
-
-            // Sync Relationships
-            // $company->people()->sync(
-            //     $sync_array
-            // );
-
             // Attach Relationships
             $company->people()->attach(
                 $sync_array
@@ -179,27 +172,13 @@ class Company extends Model
     public function setLogoAttribute($value)
     {
 
-        // Logo Filename
         $company_name = Str::slug($this->name);
 
-        // Generate Filename
         $filename = 'logo-' . $company_name . '.png';
 
-        // Disk
         $disk = 'local';
-
-        // Destination Path
-        $destination_path = "public/logos";
-
-        // if the image was erased
-        if ($value==null) {
-
-            // delete the image from disk
-            \Storage::disk($disk)->delete($this->logo);
-
-            // set null in the database column
-            $this->attributes['logo'] = null;
-        }
+        
+        $destination_path = "public/logos"; 
 
         // if a base64 was sent, store it in the db
         if (Str::startsWith($value, 'data:image'))
@@ -208,18 +187,37 @@ class Company extends Model
             $image = \Image::make($value)->encode('png', 90);
 
             // Store the image on disk
-            \Storage::disk($disk)->put($destination_path.'/'.$filename, $image->stream());
+            \Storage::disk($disk)->put($destination_path . '/' . $filename, $image->stream());
 
-            // 3. Delete the previous image, if there was one
-            \Storage::disk($disk)->delete($this->logo);
+            // Delete the previous image, if there was one
+            \Storage::disk($disk)->delete('public/' . $this->logo);
 
-            // 4. Save the public path to the database
+            // Save the public path to the database
             $public_destination_path = Str::replaceFirst('public/', '', $destination_path);
-            $this->attributes['logo'] = $public_destination_path.'/'.$filename;
 
+            $this->attributes['logo'] = $public_destination_path . '/' . $filename;
+            
         } else {
 
-            $this->attributes['logo'] = $value;
+            // if the image was erased
+            if ($value == null) {
+
+                // delete the image from disk
+                \Storage::disk($disk)->delete('public/' . $this->logo);
+
+                // set null in the database column
+                $this->attributes['logo'] = null;
+
+            } elseif (Str::startsWith($value, '/storage')) {
+
+                // do nothing because image isn't updated
+
+            } else {
+
+                // moving listing request image
+                $this->attributes['logo'] = $value;
+            }
+
         }
     }
 }
