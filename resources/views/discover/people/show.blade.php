@@ -15,11 +15,17 @@
             'bookmarks' => $bookmarks
         ])
 
+        @include('members.follow.add-button', [
+                'entity' => $entity,
+                'entity_id' => $person->id,
+                'name' => $person->name
+            ])
+
     </p>
 
     <h1>{{ $person->name }}</h1>
 
-    @include('discover.people.data') 
+    @include('discover.people.data')
 
     <p class="mb-0">
         <small>Last updated: {{ Carbon\Carbon::parse($person->updated_at)->format('M d, Y') }}</small>

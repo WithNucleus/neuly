@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 class Person extends Model
 {
     use CrudTrait;
+    use HasFollowers;
 
     /*
     |--------------------------------------------------------------------------
@@ -149,13 +151,10 @@ class Person extends Model
 
     public function setPhotoAttribute($value) {
 
-        // Generate Filename
         $filename = 'photo-' . $this->id . '.png';
         
-        // Disk
-        $disk = 'local'; 
-        
-        // Destination Path
+        $disk = 'local';
+
         $destination_path = "public/people"; 
 
         // if a base64 was sent, store it in the db

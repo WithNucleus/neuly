@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Index;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\FollowRepository;
 use Illuminate\Http\Request;
 use App\Models\Location;
 use App\Services\Metas;
@@ -72,6 +73,7 @@ class LocationController extends Controller
 
         $entity = 'locations';
         $bookmarks = BookmarkRepository::fromUser($entity, $location->id);
+        $isFollowed = (bool) count(FollowRepository::fromuser(Location::class, $location->id));
 
         // Log Activity
         activity('pageview')
@@ -84,7 +86,7 @@ class LocationController extends Controller
             ->performedOn($location)
             ->log($location->name);
 
-        return view('discover.locations.show', compact('location', 'metas', 'entity', 'bookmarks'));
+        return view('discover.locations.show', compact('location', 'metas', 'entity', 'bookmarks', 'isFollowed'));
     }
 
     /**

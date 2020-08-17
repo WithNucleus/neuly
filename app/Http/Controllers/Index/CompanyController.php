@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Index;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\FollowRepository;
 use Illuminate\Http\Request;
 use App\Models\Company;
 use App\Models\Focus;
@@ -77,6 +78,8 @@ class CompanyController extends Controller
 
         $entity = 'organizations';
         $bookmarks = BookmarkRepository::fromUser($entity, $company->id);
+        $isFollowed = (bool) count(FollowRepository::fromuser(Company::class, $company->id));
+
 
         // Log Activity
         activity('pageview')
@@ -90,7 +93,7 @@ class CompanyController extends Controller
             ->performedOn($company)
             ->log($company->name);
 
-        return view('discover.organizations.show', compact('company', 'related', 'metas', 'entity', 'bookmarks'));
+        return view('discover.organizations.show', compact('company', 'related', 'metas', 'entity', 'bookmarks', 'isFollowed'));
     }
 
     public function namesJson()

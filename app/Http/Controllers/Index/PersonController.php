@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Index;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\FollowRepository;
 use Illuminate\Http\Request;
 use App\Models\Person;
 use App\Models\Company;
@@ -70,6 +71,7 @@ class PersonController extends Controller
 
         $entity = 'people';
         $bookmarks = BookmarkRepository::fromUser($entity, $person->id);
+        $isFollowed = (bool) count(FollowRepository::fromuser(Person::class, $person->id));
 
         // Log Activity
         activity('pageview')
@@ -82,7 +84,7 @@ class PersonController extends Controller
             ->performedOn($person)
             ->log($person->name);
 
-        return view('discover.people.show', compact('person', 'metas', 'entity', 'bookmarks'));
+        return view('discover.people.show', compact('person', 'metas', 'entity', 'bookmarks', 'isFollowed'));
     }
 
     public function namesJson()

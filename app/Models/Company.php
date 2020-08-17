@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Focus;
@@ -11,6 +12,7 @@ use Intervention\Image\ImageManagerStatic as Image;
 class Company extends Model
 {
     use CrudTrait;
+    use HasFollowers;
 
     /*
     |--------------------------------------------------------------------------
@@ -142,7 +144,7 @@ class Company extends Model
         $person_relationship = json_decode($value, true);
 
         // Check if $value is empty
-        if ($value != '[{"person":"","position":""}]') {            
+        if ($value != '[{"person":"","position":""}]') {
 
             // Setup Array to Sync Relationships
             $sync_array = array();
@@ -172,13 +174,10 @@ class Company extends Model
 
         $company_name = Str::slug($this->name);
 
-        // Generate Filename
         $filename = 'logo-' . $company_name . '.png';
+
+        $disk = 'local';
         
-        // Disk
-        $disk = 'local'; 
-        
-        // Destination Path
         $destination_path = "public/logos"; 
 
         // if a base64 was sent, store it in the db

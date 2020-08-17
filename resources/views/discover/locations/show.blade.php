@@ -14,12 +14,17 @@
                 'name' => $location->name,
                 'bookmarks' => $bookmarks
             ])
+            @include('members.follow.add-button', [
+                'entity' => $entity,
+                'entity_id' => $location->id,
+                'name' => $location->name,
+            ])
 
         </p>
 
         <h1>{{ $location->name }}</h1>
 
-        @include('discover.locations.data') 
+        @include('discover.locations.data')
 
     @include('discover.includes.show-end')
 

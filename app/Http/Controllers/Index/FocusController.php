@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Index;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\FollowRepository;
 use Illuminate\Http\Request;
 use App\Models\Focus;
 use App\Services\Metas;
@@ -64,6 +65,7 @@ class FocusController extends Controller
 
         $entity = 'focus';
         $bookmarks = BookmarkRepository::fromUser($entity, $focus->id);
+        $isFollowed = (bool) count(FollowRepository::fromuser(Focus::class, $focus->id));
 
         // Log Activity
         activity('pageview')
@@ -75,7 +77,7 @@ class FocusController extends Controller
             ])
             ->performedOn($focus)
             ->log($focus->name);
-        
-        return view('discover.focus.show', compact('focus', 'metas', 'entity', 'bookmarks'));
+
+        return view('discover.focus.show', compact('focus', 'metas', 'entity', 'bookmarks', 'isFollowed'));
     }
 }

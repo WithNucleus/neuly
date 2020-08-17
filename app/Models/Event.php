@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -9,6 +10,7 @@ use Illuminate\Support\Str;
 class Event extends Model
 {
     use CrudTrait;
+    use HasFollowers;
 
     /*
     |--------------------------------------------------------------------------
@@ -92,12 +94,12 @@ class Event extends Model
 
         // Attribute Name
         $attribute_name = "image";
-        
+
         // Disk
-        $disk = 'local'; 
-        
+        $disk = 'local';
+
         // Destination Path
-        $destination_path = "public/events"; 
+        $destination_path = "public/events";
 
         // if the image was erased
         if ($value==null) {
