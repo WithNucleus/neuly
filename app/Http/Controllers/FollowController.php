@@ -38,13 +38,13 @@ class FollowController extends Controller
         if($entity !== null)
         {
             $entity->followers()->attach($user, $pivot);
+            $request->session()->flash('success', 'Congrats - you\'re now following '.$entity->name.' !');
         }
         else
         {
             $request->session()->flash('error', 'There was a problem with following, please try again later.');
         }
-
-        $request->session()->flash('success', 'Congrats - you\'re now following {entity_name}!');
+        
         return redirect(url()->previous());
     }
 }
