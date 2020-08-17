@@ -24,9 +24,15 @@ class FollowController extends Controller
         $user = auth()->user();
         $entity = $this->getEntity($entity, $id);
 
+        if ($request->input('email_notification') === null AND $request->input('app_notification') === null)
+        {
+            $request->session()->flash('error', 'You have to choose an alert option to follow this...');
+            return redirect(url()->previous());
+        }
+
         $pivot = [
-            'email_notification' => $request->input('email_notification'),
-            'app_notification' => $request->input('app_notification')
+            'email_notification' => $request->input('email_notification') ? $request->input('email_notification') : 0,
+            'app_notification' => $request->input('app_notification') ? $request->input('app_notification') : 0
         ];
 
         if($entity !== null)
@@ -35,9 +41,10 @@ class FollowController extends Controller
         }
         else
         {
-            $request->session()->flash('There was a problem with following, please try again later.');
+            $request->session()->flash('error', 'There was a problem with following, please try again later.');
         }
 
+        $request->session()->flash('success', 'Congrats - you\'re now following {entity_name}!');
         return redirect(url()->previous());
     }
 }
