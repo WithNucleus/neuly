@@ -100,7 +100,6 @@ class ProcessSponsorCollaborators
     {
         $companyIds     = [];
         $personIds      = [];
-        $failed         = [];
 
         foreach ($this->values as $value) {
 
@@ -123,7 +122,6 @@ class ProcessSponsorCollaborators
                 continue;
             }
 
-            $failed[] = $value;
             $this->addFailedRecord($value);
         }
 
