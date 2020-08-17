@@ -161,9 +161,6 @@ class Person extends Model
         // Generate Filename
         $filename = 'photo-' . $this->id . '.png';
 
-        // Attribute Name
-        $attribute_name = "photo";
-
         // Disk
         $disk = 'local';
 
@@ -174,10 +171,10 @@ class Person extends Model
         if ($value==null) {
 
             // delete the image from disk
-            \Storage::disk($disk)->delete($this->{$attribute_name});
+            \Storage::disk($disk)->delete($this->photo);
 
             // set null in the database column
-            $this->attributes[$attribute_name] = null;
+            $this->attributes['photo'] = null;
         }
 
         // if a base64 was sent, store it in the db
@@ -190,15 +187,15 @@ class Person extends Model
             \Storage::disk($disk)->put($destination_path.'/'.$filename, $image->stream());
 
             // 3. Delete the previous image, if there was one
-            \Storage::disk($disk)->delete($this->{$attribute_name});
+            \Storage::disk($disk)->delete($this->photo);
 
             // 4. Save the public path to the database
             $public_destination_path = Str::replaceFirst('public/', '', $destination_path);
-            $this->attributes[$attribute_name] = $public_destination_path.'/'.$filename;
+            $this->attributes['photo'] = $public_destination_path.'/'.$filename;
 
         } else {
 
-            $this->attributes[$attribute_name] = $value;
+            $this->attributes['photo'] = $value;
         }
     }
 }
