@@ -16,7 +16,6 @@ class InvestorPersonController extends Controller
      */
     public function __construct()
     {
-        // Auth and Permission Middleware
         $this->middleware('auth');
         $this->middleware(['role:Admin','permission:edit companies']);
     }
@@ -24,13 +23,10 @@ class InvestorPersonController extends Controller
     // Show View for Adding People to Companies
     public function index(Request $request, $id) {
 
-        // Get Company
         $investor = Investor::with('people')->find($id);
 
-        // Get All People
-        $people = Person::orderBy('name')->get();
+        $people = Person::orderBy('name')->pluck('name')->toJson();
 
-        // Return View to Add People and Relationships
         return view('admin.investor_person', compact('investor', 'people'));
     }
 
@@ -40,14 +36,19 @@ class InvestorPersonController extends Controller
     public function add(Request $request, $id)
     {
         $investor = Investor::findOrFail($id);
-        $person = Person::findOrFail($request->input('person'));
 
-        // TODO Verify if this person is already attached? Does someone can
-        // have multiple position in a company?
+        $person = Person::where('name', $request->input('person'))->first();
+
+        if (!$person) {
+            $request->session()->flash('error', 'Uh oh - could not find the person. Try again.');
+            return redirect()->back();
+        }
 
         $investor->people()->attach($person->id, [
             'role' => $request->input('role'),
         ]);
+
+        $request->session()->flash('success', 'Successfully added ' . $person->name);
 
         return redirect()->back();
     }
@@ -57,7 +58,12 @@ class InvestorPersonController extends Controller
      */
     public function remove(Request $request, $investor_id, $person_id)
     {
+        $person = Person::findOrFail($person_id);
+
         Investor::findOrFail($investor_id)->people()->detach($person_id);
+
+        $request->session()->flash('success', 'Successfully removed ' . $person->name);
+
         return redirect()->back();
     }
 
