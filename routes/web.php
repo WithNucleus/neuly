@@ -206,6 +206,12 @@ Route::get('/admin/import/clinicaltrials', 'Admin\Import\ClinicalTrialController
 Route::post('/admin/import/clinicaltrials', 'Admin\Import\ClinicalTrialController@processClinicaltrials')
     ->name('import.clinicaltrials.process');
 
+//Import Settings
+Route::get('/admin/import/settings', 'Admin\Import\SettingsController@index')
+    ->name('import.settings.index');
+Route::post('/admin/import/settings', 'Admin\Import\SettingsController@update')
+    ->name('import.settings.update');
+
 // Import Research
 Route::get('/admin/import/research', 'Admin\Import\ResearchController@start')
     ->name('import.research');
@@ -219,6 +225,16 @@ Route::post('/admin/import/research/save', 'Admin\Import\ResearchController@impo
 // Import Results Show
 Route::get('/admin/import/results/{id}', 'Admin\Import\ResultsController@showResults')
     ->name('import.results');
+
+//Import Failures List
+Route::get('/admin/import/{id}/failures', 'Admin\Import\ResultsController@showFailures')
+    ->name('import.failures');
+Route::get('/admin/import/{id}/failures/sponsor-collaborators', 'Admin\Import\FailuresController@sponsorCollaboratorsIndex')
+    ->name('import.failures.sponsorCollaborators');
+
+//Fix Import Failure
+Route::post('/admin/import/failures/{id}/fix', 'Admin\Import\FailuresController@fix')
+    ->name('import.failures.fix');
 
 // Job Application Files
 Route::get('/admin/jobapps/{id}/resume', 'Index\JobApplicationController@getResume')->name('jobsapp.resume');

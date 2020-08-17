@@ -115,6 +115,11 @@
 					<i class='nav-icon la la-school'></i> Research
 				</a>
 			</li>
+            <li class="nav-item">
+                <a class='nav-link' href='{{ route('import.settings.index') }}'>
+                    <i class='nav-icon la la-cog'></i> Import Settings
+                </a>
+            </li>
 		</ul>
 	</li>
 
