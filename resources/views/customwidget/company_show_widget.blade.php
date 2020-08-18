@@ -1,10 +1,7 @@
 <div class="{{ $widget['class'] ?? 'well mb-2' }} mt-4">
-
 	<div class="row">
-
 		<div class="col-12 col-md-8 col-xl-4 d-flex">
 			<div class="card card-body flex-fill">
-
 				<div>
 					@if($widget['company']->logo != '')
 						<img src="/storage/{{ $widget['company']->logo }}" alt="{{ $widget['company']->name }}" class="company-logo pull-right">
@@ -16,12 +13,6 @@
 							{{ $widget['company']->website }} <i class="las la-external-link-alt"></i>
 						</a></p>
 					@endif
-
-					{{-- @if ($widget['company']->slug != '')
-						<p class="mb-2"><a href="{{ $widget['company']->slug }}" target="_blank" rel="noopener noreferrer">
-							{{ $widget['company']->slug }} <i class="las la-external-link-alt"></i>
-						</a></p>
-					@endif --}}
 			
 					<p class="mb-0">
 						<strong>Focus: </strong>
@@ -32,13 +23,11 @@
 						@endforelse
 					</p>
 				</div>
-
 			</div>
 		</div>
 
 		<div class="col-12 col-md-8 col-xl-4 d-flex">
 			<div class="card card-body flex-fill">
-		
 				<h5 class="mb-1">Location</h5>
 		
 				@forelse ($widget['company']['locations'] as $location)
@@ -46,21 +35,17 @@
 				@empty
 					-
 				@endforelse
-
 			</div>
 		</div>
 	</div>
-	<div class="row">
 
+	<div class="row">
 		<div class="col-12 col-md-8 col-xl-4 d-flex">
 			<div class="card card-body flex-fill">
-		
 				<div class="row mb-2">
 					<div class="col"><h5 class="mb-1">People</h5></div>
 					<div class="col text-right">
 						<a href="/admin/companyperson/{{ $widget['company']->id }}" class="btn btn-sm btn-primary font-weight-bold">Add <i class='nav-icon la la-user'></i></a>
-
-						{{-- <button class="btn btn-link p-0 load-ajax-modal text-left" data-title="{{ $widget['company']->name }}" data-path="/admin/companyperson/{{ $widget['company']->id }}" data-toggle="modal" data-target="#dynamic-modal">{{ $widget['company']->name }}</button> --}}
 					</div>
 				</div>
 		
@@ -76,7 +61,6 @@
 				@empty
 					-
 				@endforelse
-
 			</div>
 		</div>
 
@@ -93,8 +77,29 @@
 
 			</div>
 		</div>
-
 	</div>
+
+	<div class="row">
+        <div class="col-12 col-md-8 col-xl-4 d-flex">
+            <div class="card card-body flex-fill">
+                <div class="row mb-0">
+                    <div class="col"><h5 class="mb-1">Clinical Trials</h5></div>
+                </div>
+
+                <div class="list-group list-group-flush">
+                    @forelse ($widget['company']['clinicaltrials'] as $clinicaltrial)
+                        <div class="list-group-item d-flex justify-content-between">
+                            <a href="/admin/clinicaltrial/{{ $clinicaltrial->id }}/show">
+                                {{ $clinicaltrial->title }}
+                            </a>
+                        </div>
+                    @empty
+                        -
+                    @endforelse
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <style>

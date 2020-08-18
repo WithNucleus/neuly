@@ -97,6 +97,12 @@ class Company extends Model
                     ->withTimestamps();
     }
 
+    // Each Company Can Have Multiple Clinical Trials
+    public function clinicaltrials() {
+        return $this->belongsToMany('App\Models\Clinicaltrial', 'clinicaltrial_company', 'company_id', 'clinicaltrial_id')
+                    ->withTimestamps();
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES
