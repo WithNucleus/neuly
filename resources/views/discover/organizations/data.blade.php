@@ -86,6 +86,17 @@
 				</div>
 			@endif
 
+			@if($company->clinicaltrials->count() > 0)
+				<p class="mb-0 mt-4 h5">Clinical Trials:</p>
+				<ul class="list-group list-group-flush">
+					@foreach ($company->clinicaltrials as $clinicaltrial)
+					    <li class="list-group-item px-0 py-1">
+					    	<a class="d-block" href="{{ route('discover.clinicaltrials.show', $clinicaltrial->slug) }}">{{ $clinicaltrial->title }}</a>
+					    </li>
+					@endforeach
+				</ul>
+			@endif
+
 		@else
 
 			@include('discover.includes.register-gate', ['details' => 'organization details'])
