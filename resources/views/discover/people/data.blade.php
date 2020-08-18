@@ -61,12 +61,12 @@
 				</ul>
 			@endif
 
-			@if($person->clinicalTrials->count() > 0)
+			@if($person->clinicaltrials->count() > 0)
 				<p class="mb-0 mt-4 h5">Clinical Trials:</p>
 				<ul class="list-group list-group-flush">
-					@foreach ($person->clinicalTrials as $clinicalTrial)
+					@foreach ($person->clinicaltrials as $clinicaltrial)
 					    <li class="list-group-item px-0 py-1">
-					    	<a class="d-block" href="{{ route('discover.clinicaltrials.show', $clinicalTrial->slug) }}">{{ $clinicalTrial->title }}</a>
+					    	<a class="d-block" href="{{ route('discover.clinicaltrials.show', $clinicaltrial->slug) }}">{{ $clinicaltrial->title }}</a>
 					    </li>
 					@endforeach
 				</ul>

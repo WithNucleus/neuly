@@ -59,7 +59,6 @@
                 <div class="row mb-0">
                     <div class="col"><h5 class="mb-1">Clinical Trials</h5></div>
                     <div class="col text-right">
-                        {{-- <a href="/admin/person/{{ $widget['person']->id }}/company" class="btn btn-sm btn-primary font-weight-bold">Add <i class='nav-icon la la-user'></i></a> --}}
                     </div>
                 </div>
 
@@ -69,9 +68,6 @@
                             <a href="/admin/clinicaltrial/{{ $clinicaltrial->id }}/show">
                                 {{ $clinicaltrial->title }}
                             </a>
-                            {{-- <a class="small" onclick="return confirm_action()" href="{{ route('companyperson.remove', ['company_id' => $company->id, 'person_id' => $widget['person']->id]) }}">
-                                <i class="la la-trash"></i> Remove
-                            </a> --}}
                         </div>
                     @empty
                         -
