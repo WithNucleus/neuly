@@ -131,6 +131,12 @@ class Person extends Model
                     ->withTimestamps();
     }
 
+    // Each Person Can Have Multiple Clinical Trials
+    public function clinicalTrials() {
+        return $this->belongsToMany('App\Models\Clinicaltrial', 'clinicaltrial_person', 'person_id', 'clinicaltrial_id')
+                    ->withTimestamps();
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES
