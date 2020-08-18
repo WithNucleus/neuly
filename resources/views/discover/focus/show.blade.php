@@ -14,12 +14,17 @@
                 'name' => $focus->name,
                 'bookmarks' => $bookmarks
             ])
+            @include('members.follow.add-button', [
+                'entity' => $entity,
+                'entity_id' => $focus->id,
+                'name' => $focus->name,
+            ])
 
         </p>
 
         <h1>{{ $focus->name }}</h1>
 
-        @include('discover.focus.data') 
+        @include('discover.focus.data')
 
     @include('discover.includes.show-end')
 

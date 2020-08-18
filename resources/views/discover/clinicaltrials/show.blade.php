@@ -14,12 +14,18 @@
             'name' => $clinicaltrial->title,
             'bookmarks' => $bookmarks
         ])
-		
+
+        @include('members.follow.add-button', [
+            'entity' => $entity,
+            'entity_id' => $clinicaltrial->id,
+            'name' => $clinicaltrial->title,
+        ])
+
     </p>
 
     <h1 class="h3 font-normal mb-4">{{ $clinicaltrial->title }}</h1>
 
-    @include('discover.clinicaltrials.data') 
+    @include('discover.clinicaltrials.data')
 
     @include('discover.includes.show-end')
 

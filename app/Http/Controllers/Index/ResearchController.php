@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Index;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\FollowRepository;
 use Illuminate\Http\Request;
 use App\Models\Research;
 use App\Models\Focus;
@@ -82,6 +83,7 @@ class ResearchController extends Controller
 
         $entity = 'research';
         $bookmarks = BookmarkRepository::fromUser($entity, $research->id);
+        $isFollowed = (bool) count(FollowRepository::fromuser(Research::class, $research->id));
 
         $resources = json_decode($research->resources);
 
@@ -96,7 +98,7 @@ class ResearchController extends Controller
             ->performedOn($research)
             ->log($research->name);
 
-        return view('discover.research.show', compact('research','related', 'metas', 'entity', 'bookmarks', 'resources'));
+        return view('discover.research.show', compact('research','related', 'metas', 'entity', 'bookmarks', 'resources', 'isFollowed'));
     }
 
     public function namesJson()

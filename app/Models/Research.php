@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -9,6 +10,7 @@ use Illuminate\Support\Str;
 class Research extends Model
 {
     use CrudTrait;
+    use HasFollowers;
 
     /*
     |--------------------------------------------------------------------------

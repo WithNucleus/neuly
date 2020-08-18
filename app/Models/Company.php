@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Focus;
@@ -11,6 +12,7 @@ use Intervention\Image\ImageManagerStatic as Image;
 class Company extends Model
 {
     use CrudTrait;
+    use HasFollowers;
 
     /*
     |--------------------------------------------------------------------------
@@ -142,7 +144,7 @@ class Company extends Model
         $person_relationship = json_decode($value, true);
 
         // Check if $value is empty
-        if ($value != '[{"person":"","position":""}]') {            
+        if ($value != '[{"person":"","position":""}]') {
 
             // Setup Array to Sync Relationships
             $sync_array = array();
@@ -174,12 +176,22 @@ class Company extends Model
 
         // Generate Filename
         $filename = 'logo-' . $company_name . '.png';
-        
+
         // Disk
-        $disk = 'local'; 
-        
+        $disk = 'local';
+
         // Destination Path
-        $destination_path = "public/logos"; 
+        $destination_path = "public/logos";
+
+        // if the image was erased
+        if ($value==null) {
+
+            // delete the image from disk
+            \Storage::disk($disk)->delete($this->logo);
+
+            // set null in the database column
+            $this->attributes['logo'] = null;
+        }
 
         // if a base64 was sent, store it in the db
         if (Str::startsWith($value, 'data:image'))
@@ -190,35 +202,16 @@ class Company extends Model
             // Store the image on disk
             \Storage::disk($disk)->put($destination_path . '/' . $filename, $image->stream());
 
-            // Delete the previous image, if there was one
-            \Storage::disk($disk)->delete('public/' . $this->logo);
+            // 3. Delete the previous image, if there was one
+            \Storage::disk($disk)->delete($this->logo);
 
             // Save the public path to the database
             $public_destination_path = Str::replaceFirst('public/', '', $destination_path);
+            $this->attributes['logo'] = $public_destination_path.'/'.$filename;
 
-            $this->attributes['logo'] = $public_destination_path . '/' . $filename;
-            
         } else {
 
-            // if the image was erased
-            if ($value == null) {
-
-                // delete the image from disk
-                \Storage::disk($disk)->delete('public/' . $this->logo);
-
-                // set null in the database column
-                $this->attributes['logo'] = null;
-
-            } elseif (Str::startsWith($value, '/storage')) {
-
-                // do nothing because image isn't updated
-
-            } else {
-
-                // moving listing request image
-                $this->attributes['logo'] = $value;
-            }
-
+            $this->attributes['logo'] = $value;
         }
     }
 }

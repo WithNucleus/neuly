@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -9,6 +10,7 @@ use Illuminate\Support\Str;
 class Clinicaltrial extends Model
 {
     use CrudTrait;
+    use HasFollowers;
 
     /*
     |--------------------------------------------------------------------------
@@ -62,8 +64,8 @@ class Clinicaltrial extends Model
 
     /**
      * Get all Sponsors and Collaborators combined together.
-     * 
-     * @return Collection 
+     *
+     * @return Collection
      */
     public function sponsorsAndCollaborators()
     {
@@ -100,7 +102,7 @@ class Clinicaltrial extends Model
         // Get NCT Number
         $nct_number = $this->attributes['nct_number'];
 
-        // Assign Slug 
+        // Assign Slug
         $this->attributes['slug'] = $nct_number . '-' . Str::slug($value);
 
     }

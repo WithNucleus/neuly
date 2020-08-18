@@ -14,6 +14,11 @@
             'name' => $event->name,
             'bookmarks' => $bookmarks
         ])
+        @include('members.follow.add-button', [
+            'entity' => $entity,
+            'entity_id' => $event->id,
+            'name' => $event->name,
+        ])
     </p>
 
     <h1>{{ $event->name }}</h1>
