@@ -25,6 +25,8 @@
 
     <h1>{{ $person->name }}</h1>
 
+    @include('discover.includes.status-messages')
+
     @include('discover.people.data')
 
     <p class="mb-0">

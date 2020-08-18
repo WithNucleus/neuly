@@ -6,6 +6,8 @@
 
     @include('discover.includes.show-begin', ['full_width' => false])
 
+    @include('discover.includes.status-messages')
+
     <p class="dashboard-actions-container m-2 float-right">
 
         @include('members.bookmarks.add-button', [

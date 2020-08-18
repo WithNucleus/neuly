@@ -24,6 +24,8 @@
 
         <h1>{{ $focus->name }}</h1>
 
+        @include('discover.includes.status-messages')
+
         @include('discover.focus.data')
 
     @include('discover.includes.show-end')
