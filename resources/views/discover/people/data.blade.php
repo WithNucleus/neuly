@@ -72,6 +72,17 @@
 				</ul>
 			@endif
 
+			@if($person->events->count() > 0)
+				<p class="mb-0 mt-4 h5">Events:</p>
+				<ul class="list-group list-group-flush">
+					@foreach ($person->events as $event)
+					    <li class="list-group-item px-0 py-1">
+					    	<a class="d-block" href="{{ route('discover.events.show', $event->slug) }}">{{ $event->name }}</a>
+					    </li>
+					@endforeach
+				</ul>
+			@endif
+
 			@if($person->bio != '')
 				<p class="mb-0">
 					<strong>Bio:</strong>
