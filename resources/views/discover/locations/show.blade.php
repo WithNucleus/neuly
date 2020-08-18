@@ -24,6 +24,8 @@
 
         <h1>{{ $location->name }}</h1>
 
+        @include('discover.includes.status-messages')
+
         @include('discover.locations.data')
 
     @include('discover.includes.show-end')

@@ -25,6 +25,8 @@
 
     <h1 class="h3 font-normal mb-4">{{ $clinicaltrial->title }}</h1>
 
+    @include('discover.includes.status-messages')
+
     @include('discover.clinicaltrials.data')
 
     @include('discover.includes.show-end')
