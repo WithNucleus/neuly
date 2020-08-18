@@ -36,17 +36,5 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         QueryBuilderRequest::setArrayValueDelimiter('|');
-        Relation::morphMap([
-            'organization'   => Company::class,
-            'person'         => Person::class,
-            'research'       => Research::class,
-            'investor'       => Investor::class,
-            'location'       => Location::class,
-            'focus'          => Focus::class,
-            'event'          => Event::class,
-            'job'            => Job::class,
-            'apply'          => JobApplication::class,
-            'clinical-trial' => Clinicaltrial::class,
-        ]);
     }
 }

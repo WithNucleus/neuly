@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\OldSlugRedirectable;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -11,6 +12,7 @@ class Clinicaltrial extends Model
 {
     use CrudTrait;
     use HasFollowers;
+    use OldSlugRedirectable;
 
     /*
     |--------------------------------------------------------------------------
@@ -60,11 +62,6 @@ class Clinicaltrial extends Model
     public function focus() {
         return $this->belongsToMany('App\Models\Focus', 'clinicaltrial_focus', 'clinicaltrial_id', 'focus_id')
                     ->withTimestamps();
-    }
-
-    // Get the old slugs redirect records of the model
-    public function redirects() {
-        return $this->morphMany('App\Models\Redirect', 'redirectable');
     }
 
     /**

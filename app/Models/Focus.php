@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\OldSlugRedirectable;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -12,6 +13,7 @@ class Focus extends Model
 {
     use CrudTrait;
     use HasFollowers;
+    use OldSlugRedirectable;
 
     /*
     |--------------------------------------------------------------------------
@@ -81,11 +83,6 @@ class Focus extends Model
     // Each Focus Can Have Multiple Import Results
     public function importResults() {
         return $this->hasMany('App\Models\ImportResult');
-    }
-
-    // Get the old slugs redirect records of the model
-    public function redirects() {
-        return $this->morphMany('App\Models\Redirect', 'redirectable');
     }
 
     /*

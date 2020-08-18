@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\OldSlugRedirectable;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -11,6 +12,7 @@ class Investor extends Model
 {
     use CrudTrait;
     use HasFollowers;
+    use OldSlugRedirectable;
 
     /*
     |--------------------------------------------------------------------------
@@ -62,11 +64,6 @@ class Investor extends Model
         return $this->belongsToMany('App\Models\Person', 'investor_person', 'investor_id', 'person_id')
             ->withPivot(['role'])
             ->withTimestamps();
-    }
-
-    // Get the old slugs redirect records of the model
-    public function redirects() {
-        return $this->morphMany('App\Models\Redirect', 'redirectable');
     }
 
     /*

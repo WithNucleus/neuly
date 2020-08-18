@@ -16,9 +16,9 @@ class PersonCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
-    use \App\Traits\RedirectableUpdateOperation;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -257,7 +257,7 @@ class PersonCrudController extends CrudController
             'disk'         => 'local', // in case you need to show images from a different disk
             // 'prefix'       => 'storage/',
         ]);
-        
+
         $this->setupCreateOperation();
     }
 

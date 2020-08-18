@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Traits\OldSlugRedirectable;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 
 class Job extends Model
 {
     use CrudTrait;
+    use OldSlugRedirectable;
 
     /*
     |--------------------------------------------------------------------------
@@ -55,11 +57,6 @@ class Job extends Model
     // Each Job Can Have Multiple Job Applications
     public function jobApplications() {
         return $this->hasMany('App\Models\JobApplication');
-    }
-
-    // Get the old slugs redirect records of the model
-    public function redirects() {
-        return $this->morphMany('App\Models\Redirect', 'redirectable');
     }
 
     /*

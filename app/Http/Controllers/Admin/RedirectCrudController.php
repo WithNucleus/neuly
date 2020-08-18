@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\RedirectRecordRequest;
+use App\Models\Redirect;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Backpack\CRUD\app\Library\Widget;
@@ -18,7 +19,7 @@ class RedirectCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation { show as traitShow; }
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -32,7 +33,7 @@ class RedirectCrudController extends CrudController
             abort(404);
         }
 
-        CRUD::setModel(\App\Models\Redirect::class);
+        CRUD::setModel(Redirect::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/redirect');
         CRUD::setEntityNameStrings('redirect', 'redirects');
     }
@@ -51,21 +52,22 @@ class RedirectCrudController extends CrudController
         CRUD::column('created_at');
     }
 
-    protected function setupShowOperation()
+    public function show($id)
     {
-        $request = \Request::getPathInfo();
-        $request_array = explode('/', $request);
-        $this_redirect_id = $request_array[3];
-        $redirect = \App\Models\Redirect::find($this_redirect_id);
-        CRUD::field('old_slug');
-            $this->crud->addColumn([
-                'name'      => 'redirectable', // name of relationship method in the model
-                'type'      => 'relationship',
-                'label'     => 'Redirectable (' . $redirect->redirectable->getMorphClass() . ')', // Table column heading
-                'entity'    => 'redirectable', // the method that defines the relationship in your Model
-                'attribute' => 'name', // foreign key attribute that is shown to user
-                'model'     => Relation::getMorphedModel($redirect->redirectable->getMorphClass()), // foreign key model
-            ]);
+        $redirect = Redirect::findOrFail($id);
+
+        $this->crud->addColumn([
+            'name'      => 'redirectable', // name of relationship method in the model
+            'type'      => 'relationship',
+            'label'     => 'Redirectable (' . $redirect->redirectable->getMorphClass() . ')', // Table column heading
+            'entity'    => 'redirectable', // the method that defines the relationship in your Model
+            'attribute' => 'name', // foreign key attribute that is shown to user
+            'model'     => $redirect->redirectable->getMorphClass(), // foreign key model
+        ]);
+
+        $content = $this->traitShow($id);
+
+        return $content;
     }
 
     /**

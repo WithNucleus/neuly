@@ -18,17 +18,20 @@ class RedirectOldSlugs
     public function handle($request, Closure $next)
     {
         $response = $next($request);
+
         if ($this->needsRedirect($request, $response)) {
             $slug      = $request->route()->slug;
             $redirect  = Redirect::where('old_slug', $slug)->firstOrFail();
             $newSlug   = $redirect->redirectable->slug;
             $routeName = $request->route()->getName();
+
             if ($routeName) {
                 $params         = $request->route()->parameters();
                 $params['slug'] = $newSlug;
 
                 return redirect()->route($routeName, $params, 301);
             }
+
             $routePath = $request->getPathInfo();
             $newRoute  = str_replace($slug, $newSlug, $routePath);
 
