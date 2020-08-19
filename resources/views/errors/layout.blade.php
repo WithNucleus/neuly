@@ -49,7 +49,11 @@
     </div>
     <div class="error_description text-muted">
       <small>
-        @yield('description')
+          @hasrole('Admin')
+              @yield('description')
+          @else
+              {!! "Please <a href='javascript:history.back()''>go back</a> or return to <a href='".url('')."'>our homepage</a>." !!}
+          @endhasrole
      </small>
     </div>
   </div>
