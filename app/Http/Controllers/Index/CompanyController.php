@@ -66,7 +66,7 @@ class CompanyController extends Controller
     public function show(Request $request, $slug) {
 
         // Get Company
-        $company = Company::where('slug', $slug)->first();
+        $company = Company::where('slug', $slug)->firstOrFail();
 
         $metas = Metas::process(array(
             'title'         => $company->name,
@@ -123,7 +123,7 @@ class CompanyController extends Controller
     public function jobs($slug) {
 
         // Get Company
-        $company = Company::where('slug', $slug)->first();
+        $company = Company::where('slug', $slug)->firstOrFail();
 
         // Get Jobs
         $jobs = Job::where('company_id', $company->id)->orderBy('posted_date', 'desc')->get();
@@ -139,7 +139,7 @@ class CompanyController extends Controller
     public function events($slug) {
 
         // Get Company
-        $company = Company::where('slug', $slug)->first();
+        $company = Company::where('slug', $slug)->firstOrFail();
 
         $entity = 'organizations';
         $bookmarks = BookmarkRepository::fromUser($entity, $company->id);

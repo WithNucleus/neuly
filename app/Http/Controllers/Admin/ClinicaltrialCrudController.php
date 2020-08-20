@@ -21,7 +21,7 @@ class ClinicaltrialCrudController extends CrudController
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
-     * 
+     *
      * @return void
      */
     public function setup()
@@ -103,7 +103,7 @@ class ClinicaltrialCrudController extends CrudController
 
     /**
      * Define what happens when the Show operation is loaded.
-     * 
+     *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
      * @return void
      */
@@ -171,13 +171,13 @@ class ClinicaltrialCrudController extends CrudController
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']); 
+         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
          */
     }
 
     /**
      * Define what happens when the List operation is loaded.
-     * 
+     *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
      * @return void
      */
@@ -188,13 +188,13 @@ class ClinicaltrialCrudController extends CrudController
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']); 
+         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
          */
     }
 
     /**
      * Define what happens when the Create operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-create
      * @return void
      */
@@ -228,7 +228,7 @@ class ClinicaltrialCrudController extends CrudController
         $this->crud->addField(['name' => 'first_posted', 'type' => 'date', 'label' => 'First posted']);
         $this->crud->addField(['name' => 'results_first_posted', 'type' => 'date', 'label' => 'Results first posted']);
         $this->crud->addField(['name' => 'last_update_posted', 'type' => 'date', 'label' => 'Last update posted']);
-        
+
         // Location -- Relationship
         $this->crud->addField([    // Select2Multiple = n-n relationship (with pivot table)
              'label'     => "Locations",
@@ -248,7 +248,7 @@ class ClinicaltrialCrudController extends CrudController
         ]);
 
         // People Relationship
-        $this->crud->addField([    
+        $this->crud->addField([
              'label'     => "People",
              'type'      => 'select2_multiple',
              'name'      => 'people',
@@ -262,7 +262,7 @@ class ClinicaltrialCrudController extends CrudController
         ]);
 
         // Company Relationship
-        $this->crud->addField([    
+        $this->crud->addField([
              'label'     => "Organizations",
              'type'      => 'select2_multiple',
              'name'      => 'companies',
@@ -276,7 +276,7 @@ class ClinicaltrialCrudController extends CrudController
         ]);
 
         // Focus Relationship
-        $this->crud->addField([    
+        $this->crud->addField([
              'label'     => "Focus",
              'type'      => 'select2_multiple',
              'name'      => 'focus',
@@ -292,13 +292,13 @@ class ClinicaltrialCrudController extends CrudController
         /**
          * Fields can be defined using the fluent syntax or array syntax:
          * - CRUD::field('price')->type('number');
-         * - CRUD::addField(['name' => 'price', 'type' => 'number'])); 
+         * - CRUD::addField(['name' => 'price', 'type' => 'number']));
          */
     }
 
     /**
      * Define what happens when the Update operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
      * @return void
      */

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\OldSlugRedirectable;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -14,6 +15,7 @@ class Person extends Model
 {
     use CrudTrait;
     use HasFollowers;
+    use OldSlugRedirectable;
 
     /*
     |--------------------------------------------------------------------------
@@ -66,9 +68,9 @@ class Person extends Model
 
                 Log::error($error_message);
             }
-            
+
         }
-        
+
     }
 
     public function getLinkedIn() {
@@ -158,10 +160,10 @@ class Person extends Model
     public function setPhotoAttribute($value) {
 
         $filename = 'photo-' . $this->id . '.png';
-        
+
         $disk = 'local';
 
-        $destination_path = "public/people"; 
+        $destination_path = "public/people";
 
         // if a base64 was sent, store it in the db
         if (Str::startsWith($value, 'data:image'))
@@ -179,7 +181,7 @@ class Person extends Model
             $public_destination_path = Str::replaceFirst('public/', '', $destination_path);
 
             $this->attributes['photo'] = $public_destination_path . '/' . $filename;
-            
+
         } else {
 
             // if the image was erased

@@ -22,7 +22,7 @@ class JobCrudController extends CrudController
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
-     * 
+     *
      * @return void
      */
     public function setup()
@@ -40,7 +40,7 @@ class JobCrudController extends CrudController
 
     /**
      * Define what happens when the List operation is loaded.
-     * 
+     *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
      * @return void
      */
@@ -60,7 +60,7 @@ class JobCrudController extends CrudController
 
     /**
      * Define what happens when the Show operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
      * @return void
      */
@@ -71,15 +71,15 @@ class JobCrudController extends CrudController
 
         // Job Title
         $this->crud->addColumn(
-            ['name' => 'job_title', 
-            'type' => 'text', 
+            ['name' => 'job_title',
+            'type' => 'text',
             'label' => 'Job Title'
         ]);
 
         // Posted Date
         $this->crud->addColumn([
-            'name' => 'posted_date', 
-            'type' => 'date', 
+            'name' => 'posted_date',
+            'type' => 'date',
             'label' => 'Posted Date'
         ]);
 
@@ -132,7 +132,7 @@ class JobCrudController extends CrudController
 
     /**
      * Define what happens when the Create operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-create
      * @return void
      */
@@ -151,22 +151,22 @@ class JobCrudController extends CrudController
 
         // Job Title
         $this->crud->addField([
-            'name' => 'job_title', 
-            'type' => 'text', 
+            'name' => 'job_title',
+            'type' => 'text',
             'label' => 'Job Title'
         ]);
 
         // Page Slug
         $this->crud->addField([
-            'name' => 'slug', 
-            'type' => 'text', 
+            'name' => 'slug',
+            'type' => 'text',
             'label' => 'Page Slug'
         ]);
 
         // Posted Date
         $this->crud->addField([
-            'name' => 'posted_date', 
-            'type' => 'date', 
+            'name' => 'posted_date',
+            'type' => 'date',
             'label' => 'Posted Date'
         ]);
 
@@ -185,11 +185,11 @@ class JobCrudController extends CrudController
 
         // Employment Type
         $this->crud->addField([
-            'name' => 'employment_type', 
-            'type' => 'radio', 
+            'name' => 'employment_type',
+            'type' => 'radio',
             'label' => 'Employment Type',
             'options'     => [
-                'Full Time' => 'Full Time', 
+                'Full Time' => 'Full Time',
                 'Part Time' => 'Part Time',
                 'One Time' => 'One Time',
             ],
@@ -197,7 +197,7 @@ class JobCrudController extends CrudController
         ]);
 
         // Location Relationship
-        $this->crud->addField([    
+        $this->crud->addField([
              'label'     => "Locations",
              'type'      => 'select2_multiple',
              'name'      => 'locations',
@@ -211,7 +211,7 @@ class JobCrudController extends CrudController
         ]);
 
         // Focus
-        $this->crud->addField([  
+        $this->crud->addField([
              'label'     => "Focus",
              'type'      => 'select2_multiple',
              'name'      => 'focus',
@@ -226,21 +226,21 @@ class JobCrudController extends CrudController
 
         // Job Description
         $this->crud->addField([
-            'name' => 'job_description', 
-            'type' => 'wysiwyg', 
+            'name' => 'job_description',
+            'type' => 'wysiwyg',
             'label' => 'Job Description'
         ]);
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:
          * - CRUD::field('price')->type('number');
-         * - CRUD::addField(['name' => 'price', 'type' => 'number'])); 
+         * - CRUD::addField(['name' => 'price', 'type' => 'number']));
          */
     }
 
     /**
      * Define what happens when the Update operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
      * @return void
      */

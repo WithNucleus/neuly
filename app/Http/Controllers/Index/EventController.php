@@ -144,7 +144,7 @@ class EventController extends Controller
     public function show(Request $request, $slug) {
 
         // Get Event
-        $event = Event::where('slug', $slug)->first();
+        $event = Event::where('slug', $slug)->firstOrFail();
 
         $metas = Metas::process(array(
             'title'         => $event->name,

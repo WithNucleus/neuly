@@ -257,7 +257,7 @@ class PersonCrudController extends CrudController
             'disk'         => 'local', // in case you need to show images from a different disk
             // 'prefix'       => 'storage/',
         ]);
-        
+
         $this->setupCreateOperation();
     }
 

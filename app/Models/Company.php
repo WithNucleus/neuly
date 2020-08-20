@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\OldSlugRedirectable;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -13,6 +14,7 @@ class Company extends Model
 {
     use CrudTrait;
     use HasFollowers;
+    use OldSlugRedirectable;
 
     /*
     |--------------------------------------------------------------------------
@@ -183,8 +185,8 @@ class Company extends Model
         $filename = 'logo-' . $company_name . '.png';
 
         $disk = 'local';
-        
-        $destination_path = "public/logos"; 
+
+        $destination_path = "public/logos";
 
         // if a base64 was sent, store it in the db
         if (Str::startsWith($value, 'data:image'))
@@ -202,7 +204,7 @@ class Company extends Model
             $public_destination_path = Str::replaceFirst('public/', '', $destination_path);
 
             $this->attributes['logo'] = $public_destination_path . '/' . $filename;
-            
+
         } else {
 
             // if the image was erased

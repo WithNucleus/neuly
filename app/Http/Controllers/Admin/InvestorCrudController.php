@@ -56,7 +56,7 @@ class InvestorCrudController extends CrudController
             'name' => 'created_at',
             'type' => 'date'
         ]);
-        
+
         $this->crud->addColumn([
             'name' => 'updated_at',
             'type' => 'date'

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\OldSlugRedirectable;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -12,6 +13,7 @@ class Focus extends Model
 {
     use CrudTrait;
     use HasFollowers;
+    use OldSlugRedirectable;
 
     /*
     |--------------------------------------------------------------------------

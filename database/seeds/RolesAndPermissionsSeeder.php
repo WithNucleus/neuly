@@ -37,7 +37,8 @@ class RolesAndPermissionsSeeder extends Seeder
           'edit clinical trials',
           'edit listing requests',
           'import',
-          'view job applications'
+          'view job applications',
+          'manage redirects',
 		);
 
 		foreach($permissions as $permission){
