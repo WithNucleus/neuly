@@ -23,7 +23,7 @@
             <div class="col-12 col-md-6 col-xl-4 offset-xl-1 mt-4 mt-md-0">
                 <h2 class="lead font-normal mb-"><i class="fad fa-edit text-secondary"></i> Create a List</h2>
                 <div class="p-3 bg-white shadow-sm">
-                    @include('members.bookmarks.create-list')
+                    @include('members.bookmarks.create-list', ['sidebar' => true])
                 </div>
             </div>
         </div>
