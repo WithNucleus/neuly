@@ -13,8 +13,7 @@
                 <i class="fad fa-clipboard-list text-info"></i> {{ $note->title }}
             </h1>
 
-            <div class="mb-0 font-size-small d-inline-block ml-2">
-
+            <div class="mb-0 d-inline-block ml-2">
                 @include('members.bookmarks.add-button', [
                     'entity' => $entity,
                     'entity_id' => $note->id,
@@ -22,18 +21,19 @@
                     'bookmarks' => $bookmarks
                 ])
 
-                @if($note->visibility == 'public')
-
-                    @if($member->member_url == '')
-                        <a href="{{ route('user.settings') }}" class="btn btn-link p-0 ml-2 text-secondary" data-toggle="tooltip" data-placement="top" title="Set your Neuly member URL before sharing">
-                            <i class="fad fa-share-square fa-lg"></i>
-                        </a>
+                @if($member->member_url == '')
+                    <a href="{{ route('user.settings') }}" class="btn btn-link p-0 ml-2 text-secondary" data-toggle="tooltip" data-placement="top" title="Set your Neuly member URL before sharing">
+                        <i class="fad fa-share-square fa-lg"></i>
+                    </a>
+                @else
+                    @if($note->visibility == 'public')
+                        <button data-toggle="modal" data-target="#share-note" class="btn btn-link lead-smaller p-0 ml-2 text-secondary font-weight-bold text-decoration-none">
+                            <i class="fad fa-share-square"></i> SHARE
+                        </button>
                     @else
-                        <span data-toggle="tooltip" data-placement="top" title="Share">
-                            <button data-toggle="modal" data-target="#share-note" href="" class="btn btn-link p-0 ml-2 text-secondary" data-toggle="tooltip" data-placement="top" title="Share Note">
-                                <i class="fad fa-share-square fa-lg"></i>
-                            </button>
-                        </span>
+                        <a href="{{ route('member.notes.edit', $note->slug) }}" class="btn btn-link lead-smaller p-0 ml-2 text-secondary font-weight-bold text-decoration-none" data-toggle="tooltip" data-placement="top" title="Make this note public to share it">
+                            <i class="fad fa-share-square"></i> SHARE
+                        </a>
                     @endif
                 @endif
             </div>
