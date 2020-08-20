@@ -34,10 +34,19 @@
 
         <div class="col-12 col-md-6 col-xl-4 mt-5 mt-md-0">
             <h1 class="h2">
-                <span class="text-dark"><i class="fad fa-file-edit text-secondary"></i> Recently Viewed</span>
+                <span class="text-dark"><i class="fad fa-eye text-secondary"></i> Recently Viewed</span>
             </h1>
             <div class="p-4 bg-white shadow-sm">
                 @include('members.data.recently-viewed', ['shadow' => false, 'show_more' => false])
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-xl-4 mt-5">
+            <h1 class="h2">
+                <a href="{{ route('member.follow.index') }}" class="text-dark"><i class="fad fa-network-wired text-secondary"></i> Follows List</a>
+            </h1>
+            <div class="p-4 bg-white shadow-sm">
+                @include('members.data.follows-list', ['shadow' => false, 'show_more' => true])
             </div>
         </div>
     </div>

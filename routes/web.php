@@ -137,23 +137,42 @@ Route::get('/dashboard', 'Dashboard\DashboardController@index')->name('member.da
 
 Route::group(['middleware' => 'auth'], function () {
 
-    // Bookmark Lists
-	Route::get('/dashboard/bookmarks', 'Dashboard\BookmarkListController@index')->name('member.bookmarks.index');
-    Route::get('/dashboard/create-bookmark-list', 'Dashboard\BookmarkListController@create')->name('member.bookmarks.create-form');
-    Route::post('/dashboard/save-bookmark-list', 'Dashboard\BookmarkListController@quickSave')->name('member.bookmarks.quick-save');
-	Route::post('/dashboard/bookmarks', 'Dashboard\BookmarkListController@store')->name('member.bookmarks.store-list');
-	Route::get('/dashboard/bookmarks/{slug}', 'Dashboard\BookmarkListController@show')->name('member.bookmarks.show-list');
-    Route::get('/dashboard/edit-list/{slug}', 'Dashboard\BookmarkListController@edit')->name('member.bookmarks.edit-list');
-    Route::get('/dashboard/lists/{id}/destroy', 'Dashboard\BookmarkListController@destroy')->name('member.bookmarks.destroy-list');
-    Route::post('/dashboard/edit-list/{id}', 'Dashboard\BookmarkListController@update')->name('member.bookmarks.update-list');
+    /* MEMBER DASHBOARD PAGES */
+    Route::group(['prefix' => '/dashboard'], function () {
+        // Bookmark Lists
+        Route::get('/bookmarks', 'Dashboard\BookmarkListController@index')->name('member.bookmarks.index');
+        Route::get('/create-bookmark-list', 'Dashboard\BookmarkListController@create')->name('member.bookmarks.create-form');
+        Route::post('/save-bookmark-list', 'Dashboard\BookmarkListController@quickSave')->name('member.bookmarks.quick-save');
+        Route::post('/bookmarks', 'Dashboard\BookmarkListController@store')->name('member.bookmarks.store-list');
+        Route::get('/bookmarks/{slug}', 'Dashboard\BookmarkListController@show')->name('member.bookmarks.show-list');
+        Route::get('/edit-list/{slug}', 'Dashboard\BookmarkListController@edit')->name('member.bookmarks.edit-list');
+        Route::get('/lists/{id}/destroy', 'Dashboard\BookmarkListController@destroy')->name('member.bookmarks.destroy-list');
+        Route::post('/edit-list/{id}', 'Dashboard\BookmarkListController@update')->name('member.bookmarks.update-list');
 
-    // Bookmarks
-    Route::get('/dashboard/all-bookmarks', 'Dashboard\BookmarkController@index')->name('member.bookmarks.all');
-	Route::get('/dashboard/bookmark/{entity}/{entity_id}-{name}', 'Dashboard\BookmarkController@add')->name('member.bookmarks.add');
-    Route::post('/dashboard/bookmark/{entity}/{entity_id}', 'Dashboard\BookmarkController@store')->name('member.bookmarks.store');
-    Route::get('/dashboard/edit-bookmark/{id}', 'Dashboard\BookmarkController@edit')->name('member.bookmarks.edit');
-    Route::post('/dashboard/edit-bookmark/{id}', 'Dashboard\BookmarkController@update')->name('member.bookmarks.update');
-    Route::get('/dashboard/bookmarks/{id}/destroy', 'Dashboard\BookmarkController@destroy')->name('member.bookmarks.destroy');
+        // Bookmarks
+        Route::get('/all-bookmarks', 'Dashboard\BookmarkController@index')->name('member.bookmarks.all');
+        Route::get('/bookmark/{entity}/{entity_id}-{name}', 'Dashboard\BookmarkController@add')->name('member.bookmarks.add');
+        Route::post('/bookmark/{entity}/{entity_id}', 'Dashboard\BookmarkController@store')->name('member.bookmarks.store');
+        Route::get('/edit-bookmark/{id}', 'Dashboard\BookmarkController@edit')->name('member.bookmarks.edit');
+        Route::post('/edit-bookmark/{id}', 'Dashboard\BookmarkController@update')->name('member.bookmarks.update');
+        Route::get('/bookmarks/{id}/destroy', 'Dashboard\BookmarkController@destroy')->name('member.bookmarks.destroy');
+
+        // Notes
+        Route::get('/add-note', 'Dashboard\NoteController@create')->name('member.notes.create');
+        Route::post('/add-note', 'Dashboard\NoteController@store')->name('member.notes.store');
+        Route::post('/validate-note', 'Dashboard\NoteController@checkSlug')->name('member.notes.validate');
+        Route::get('/edit-note/{slug}', 'Dashboard\NoteController@edit')->name('member.notes.edit');
+        Route::get('/notes/{id}/destroy', 'Dashboard\NoteController@destroy')->name('member.notes.destroy');
+        Route::post('/edit-note/{id}', 'Dashboard\NoteController@update')->name('member.notes.update');
+        Route::get('/notes', 'Dashboard\NoteController@index')->name('member.notes.index');
+        Route::get('/notes/{slug}', 'Dashboard\NoteController@show')->name('member.notes.show');
+
+        // Follow
+        Route::resource('/follow', 'Dashboard\FollowController', [
+            'as' => 'member',
+            'except' => ['create', 'store']
+        ]);
+    });
 
     // Follow / Unfollow
     Route::get('/follow/{entity}/{id}', 'FollowController@add')->name('member.follow.add');
@@ -161,21 +180,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/unfollow/{entity}/{id}', 'UnfollowController@add')->name('member.unfollow.add');
     Route::post('/unfollow/{entity}/{id}', 'UnfollowController@store')->name('member.unfollow.store');
 
-    // Notes
-    Route::get('/dashboard/add-note', 'Dashboard\NoteController@create')->name('member.notes.create');
-    Route::post('/dashboard/add-note', 'Dashboard\NoteController@store')->name('member.notes.store');
-    Route::post('/dashboard/validate-note', 'Dashboard\NoteController@checkSlug')->name('member.notes.validate');
-    Route::get('/dashboard/edit-note/{slug}', 'Dashboard\NoteController@edit')->name('member.notes.edit');
-    Route::get('/dashboard/notes/{id}/destroy', 'Dashboard\NoteController@destroy')->name('member.notes.destroy');
-    Route::post('/dashboard/edit-note/{id}', 'Dashboard\NoteController@update')->name('member.notes.update');
-    Route::get('/dashboard/notes', 'Dashboard\NoteController@index')->name('member.notes.index');
-    Route::get('/dashboard/notes/{slug}', 'Dashboard\NoteController@show')->name('member.notes.show');
-});
-
-// User Settings Page
-Route::get('/user/retake/{token}', 'Index\UserRetakeController@index')->name('user.retake');
-
-Route::group(['middleware' => 'auth'], function () {
+    // User Settings Page
     Route::get('/user/settings', 'Index\UserProfileController@index')->name('user.settings');
     Route::post('/user/settings', 'Index\UserProfileController@update');
     Route::get('/user/settings/email', 'Index\UserEmailController@index')->name('user.settings.email');
@@ -184,6 +189,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/user/settings/password', 'Index\UserPasswordController@update');
     Route::post('/user/settings/validateurl', 'Index\UserProfileController@checkMemberUrl')->name('user.validate.member_url');
 });
+
+// User Email Reset
+Route::get('/user/retake/{token}', 'Index\UserRetakeController@index')->name('user.retake');
 
 // Charts
 Route::get('/charts/companyFocus.json', 'Index\ChartController@companyFocus')->name('charts.company_focus');
