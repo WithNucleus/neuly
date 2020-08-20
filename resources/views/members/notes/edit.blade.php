@@ -12,8 +12,9 @@
                 <h1 class="h2 float-left">
                     <i class="fad fa-clipboard-list text-info"></i> Editing: {{ $note->title }}
                 </h1>
-                <p class="mb-0 font-size-small float-right d-inline-block ml-2">
-                    <a href="{{ route('member.notes.show', $note->slug) }}" class="btn btn-primary">View Note</a>
+                <p class="mb-2 font-size-small float-right d-inline-block ml-2">
+                    <button type="submit" class="submit btn btn-primary mr-2">Save Note</button>
+                    <a href="{{ route('member.notes.show', $note->slug) }}" class="btn btn-secondary">View without Saving</a>
                 </p>
             </div>
         </div>
