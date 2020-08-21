@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\index;
+namespace App\Http\Controllers\Index;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ChangePasswordRequest;
