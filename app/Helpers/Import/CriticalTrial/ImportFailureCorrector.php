@@ -7,6 +7,7 @@ use App\Models\Company;
 use App\Models\ImportFailure;
 use App\Models\Location;
 use App\Models\Person;
+use Illuminate\Support\Str;
 
 class ImportFailureCorrector
 {
@@ -18,19 +19,22 @@ class ImportFailureCorrector
      */
     public static function correctFailure($importFailure, $requestArray)
     {
+        $isSuccess = false;
+
         switch ($importFailure->type) {
             case ImportFailure::TYPE_SPONSOR_COLLABORATORS:
                 $isSuccess = self::correctSponsorCollaborators($importFailure, $requestArray);
+                break;
             case ImportFailure::TYPE_LOCATIONS:
                 $isSuccess = self::correctLocations($importFailure, $requestArray);
+                break;
         }
 
         if ($isSuccess === true) {
             $importFailure->delete();
-            return true;
         }
 
-        return false;
+        return $isSuccess;
     }
 
     /**
@@ -48,16 +52,23 @@ class ImportFailureCorrector
 
         try {
             $clinicaltrial = Clinicaltrial::where('nct_number', $nctNumber)->firstOrFail();
+            $slug          = Str::slug($importValue);
 
             if ($modelClassName === Company::class) {
-                $company = Company::updateOrCreate(['name' => $importValue]);
+                $company = Company::updateOrCreate([
+                    'name' => $importValue,
+                    'slug' => $slug,
+                ]);
 
                 $clinicaltrial->companies()->syncWithoutDetaching($company->id);
                 $isSuccess = true;
             }
 
             if ($modelClassName === Person::class) {
-                $person = Person::updateOrCreate(['name' => $importValue]);
+                $person = Person::updateOrCreate([
+                    'name' => $importValue,
+                    'slug' => $slug,
+                ]);
 
                 $clinicaltrial->people()->syncWithoutDetaching($person->id);
                 $isSuccess = true;
