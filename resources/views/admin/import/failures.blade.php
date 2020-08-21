@@ -17,11 +17,9 @@
                 <h3 class="h5">Import Failures by type</h3>
                 <ul class="list-group">
                 @forelse($failuresTotalByType as $type => $total)
-                    @if($type == \App\Models\ImportFailure::TYPE_SPONSOR_COLLABORATORS)
-                        <li class="list-group-item">
-                            <a href="{{ route('import.failures.sponsorCollaborators', $result->id) }}">{{ $type }} failures ({{ $total }})</a>
-                        </li>
-                    @endif
+                    <li class="list-group-item">
+                        <a href="{{ route('import.failures.showByType', [$result->id, $type]) }}">{{ ucfirst($type) }} failures ({{ $total }})</a>
+                    </li>
                 @empty
                     <li class="list-group-item">No records.</li>
                 @endforelse

@@ -20,14 +20,22 @@ class FailuresController extends Controller
      * @param int $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function sponsorCollaboratorsIndex($importResultId)
+    public function showByType($importResultId, $type)
     {
-        $type     = ImportFailure::TYPE_SPONSOR_COLLABORATORS;
+        $allowedTypes = [
+            ImportFailure::TYPE_LOCATIONS,
+            ImportFailure::TYPE_SPONSOR_COLLABORATORS
+        ];
+
+        if (!in_array($type, $allowedTypes)) {
+            abort(404);
+        }
+
         $failures = ImportFailure::where('import_result_id', $importResultId)
             ->where('type', $type)
             ->get();
 
-        return view('admin.import.failures.sponsorcollaborators', compact('importResultId', 'failures'));
+        return view('admin.import.failures.' . $type, compact('importResultId', 'failures'));
     }
 
     /**
@@ -39,10 +47,8 @@ class FailuresController extends Controller
      */
     public function fix(Request $request, $id)
     {
-        $failure   = ImportFailure::findOrFail($id);
-        $modelName = $request->get('model');
-
-        $result = ImportFailureCorrector::correctFailure($failure, $modelName);
+        $failure = ImportFailure::findOrFail($id);
+        $result  = ImportFailureCorrector::correctFailure($failure, $request->all());
 
         return response()->json([
             'status' => ($result === true) ? 'success' : 'failed',

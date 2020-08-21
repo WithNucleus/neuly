@@ -22,11 +22,11 @@
                             @foreach ($failure->details as $key => $detail)
                                 <p>{{ strtoupper($key) }} : {{ $detail }}</p>
                             @endforeach
-                            <button class="btn btn-primary js-fix-failure-button"
+                            <button class="btn btn-primary js-fix-sponsor-failure-button"
                                     data-model="{{ \App\Models\Company::class }}"
                                     data-action="{{ route('import.failures.fix', $failure->id) }}">Add to Organisation
                             </button>
-                            <button class="btn btn-primary js-fix-failure-button"
+                            <button class="btn btn-primary js-fix-sponsor-failure-button"
                                     data-model="{{ \App\Models\Person::class }}"
                                     data-action="{{ route('import.failures.fix', $failure->id) }}">Add to People
                             </button>
@@ -42,17 +42,17 @@
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
     <script>
-        $(".js-fix-failure-button").on('click', function () {
+        $(".js-fix-sponsor-failure-button").on('click', function () {
             let button = $(this),
                 itemBlock = button.parent(),
                 model = button.data('model'),
                 action = button.data('action');
 
             $.post(action, {'model' : model}, function (response){
-                if (response.status = 'success') {
+                if (response.status == 'success') {
                     itemBlock.slideUp();
                 } else {
-                    itemBlock.find('alert').removeClass('d-none');
+                    itemBlock.find('.alert').removeClass('d-none');
                 }
             });
         });

@@ -2,6 +2,9 @@
 
 namespace App\Jobs\Import\ClinicalTrial;
 
+use App\Helpers\StringHelper;
+use App\Models\ImportFailure;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -16,20 +19,42 @@ class ProcessLocation implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    /**
+     * @var \App\Models\Clinicaltrial
+     */
     private $clinicaltrial;
-    private $import_result;
-    private $location_details;
 
     /**
-     * Create a new job instance.
-     *
-     * @return void
+     * @var \App\Models\ImportResult
      */
-    public function __construct(Clinicaltrial $clinicaltrial, ImportResult $import_result, $location_details)
+    private $importResult;
+
+    /**
+     * @var array
+     */
+    private $locations;
+
+    /**
+     * @var array
+     */
+    private $importMessages = [];
+
+    /**
+     * @var array
+     */
+    private $importFailedRecords = [];
+
+    /**
+     * ProcessLocation constructor.
+     * @param \App\Models\Clinicaltrial $clinicaltrial
+     * @param \App\Models\ImportResult $importResult
+     * @param array $locations
+     */
+    public function __construct(Clinicaltrial $clinicaltrial, ImportResult $importResult, $locations)
     {
         $this->clinicaltrial = $clinicaltrial;
-        $this->import_result = $import_result;
-        $this->location_details = $location_details;
+        $this->importResult  = $importResult;
+        $this->locations     = $this->mapLocationParts($locations);
     }
 
     /**
@@ -39,88 +64,151 @@ class ProcessLocation implements ShouldQueue
      */
     public function handle()
     {
+        $locationIds = [];
 
-        $debug_location_details = print_r($this->location_details, true);
+        foreach ($this->locations as $locationData) {
+            $location = Location::findOrCreateLocation(
+                $locationData['country'], $locationData['region'], $locationData['city']
+            );
 
-        $location_id_array = array();
-
-        $import_messages = array();
-
-        // loop through array and find/create location
-        foreach ($this->location_details as $location_array) {
-
-            // has city?
-            if (array_key_exists('city', $location_array)) {
-
-                $location = Location::findOrCreateLocation(
-                    $location_array['city'], $location_array['region'], $location_array['country']
-                );
-
-            } else {
-
-                $location = Location::findOrCreateLocationNoCity($location_array['region'], $location_array['country']);
-            }
-
-            // If Location
             if ($location) {
-
-                // Found Location
-                $this_message = array(
-                    'nct_number' => $this->clinicaltrial->nct_number,
-                    'location' => $location->name,
-                    'info' => 'Success',
-                    // 'id' => $this->clinicaltrial->id
-                );
-
-                array_push($import_messages, $this_message);
-
-                array_push($location_id_array, $location->id);
-
+                $locationIds[] = $location->id;
+                $this->addImportMessage($location);
             } else {
-
-                // Didn't find or create Location
-
-                $debug_location_string = implode(', ', $location_array);
-
-                Log::error($this->clinicaltrial->nct_number . ' ' . $this->clinicaltrial->title . "\n" . 'Did not create or find a location' . "\n" . $debug_location_string);
-
-                $this_message = array(
-                    'nct_number' => $this->clinicaltrial->nct_number,
-                    'location' => $debug_location_string,
-                    'info' => 'Error',
-                    // 'id' => $this->clinicaltrial->id
-                );
-
-                array_push($import_messages, $this_message);
+                $this->addFailedRecord($locationData);
             }
-
-
         }
 
-        // attach locations
-        $this->clinicaltrial->locations()->syncWithoutDetaching($location_id_array);
+        $this->clinicaltrial->locations()->syncWithoutDetaching($locationIds);
 
-        // New Messages
-        $new_messages = array(
-            $this->clinicaltrial->nct_number => array(
-                'id' => $this->clinicaltrial->id,
-                'messages' => $import_messages
-            )
-        );
-
-        // Get the old messages and add to it
-        $old_messages = json_decode($this->import_result->location_messages, true);
-
-        if (!empty($old_messages)) {
-            $new_messages = array_merge($old_messages, $new_messages);
-        }
-
-        $messages_json = json_encode($new_messages);
-
-        // Update Import Result
-        $importResult = ImportResult::find($this->import_result->id);
-        $importResult->location_messages = $messages_json;
-        $importResult->save();
-
+        $this->saveImportMessages();
+        $this->saveFailedRecords();
     }
+
+    /**
+     * @param array $locations
+     * @return array
+     */
+    private function mapLocationParts($locations)
+    {
+        $mappedLocations = [];
+
+        foreach ($locations as $location) {
+            $locationParts = StringHelper::explodeAndFilterEmpty($location, ',');
+            $locationParts = array_reverse($locationParts);
+
+            if ($locationParts !== []) {
+
+                if ($locationParts[0] == 'United States') {
+                    $newLocation = [
+                        'country' => 'USA',
+                        'region'  => $locationParts[1],
+                        'city'    => $locationParts[2],
+                    ];
+                } else {
+                    // Not sure on the format so take what is hopefully the country and region
+                    // Same logic works for Canada's location
+                    $newLocation = [
+                        'country' => $locationParts[0],
+                        'region'  => $locationParts[1],
+                        'city'    => isset($locationParts[2]) ? $locationParts[2] : '',
+                    ];
+                }
+
+                $mappedLocations[] = $newLocation;
+            }
+        }
+
+        return $mappedLocations;
+    }
+
+    /**
+     * @param \App\Models\Location $location
+     */
+    private function addImportMessage($location)
+    {
+        $nctNumber = $this->clinicaltrial->nct_number;
+
+        $message = [
+            'nct_number' => $nctNumber,
+            'id'         => $location->id,
+            'location'   => $location->name,
+            'info'       => 'Success',
+        ];
+
+        if (!isset($this->importMessages[$nctNumber])) {
+            $this->importMessages[$nctNumber] = [
+                'id' => $nctNumber,
+                'messages' => [$message],
+            ];
+        } else {
+            $this->importCompanyMessages[$nctNumber]['messages'][] = $message;
+        }
+    }
+
+    /**
+     * @param array $locationArray
+     */
+    private function addFailedRecord($locationData)
+    {
+        $this->importFailedRecords[] = [
+            'nct_number' => $this->clinicaltrial->nct_number,
+            'value'      => implode(', ', $locationData),
+            'info'       => 'Failed',
+        ];
+    }
+
+    /**
+     * @return void
+     */
+    private function saveImportMessages()
+    {
+        $oldMessages = json_decode($this->importResult->location_messages, true);
+
+        if (!empty($oldMessages)) {
+            $this->importMessages = array_merge($this->importMessages, $oldMessages);
+        }
+
+        $this->importResult->location_messages = json_encode($this->importMessages);
+        $this->importResult->save();
+    }
+
+    /**
+     * @return void
+     */
+    private function saveFailedRecords()
+    {
+        if ($this->importFailedRecords === []) {
+            return;
+        }
+
+        $failedRecords = [];
+        $datetime      = Carbon::now();
+
+        foreach ($this->importFailedRecords as $record) {
+            $this->logError($record);
+
+            $failedRecords[] = [
+                'import_result_id' => $this->importResult->id,
+                'type'             => ImportFailure::TYPE_LOCATIONS,
+                'details'          => json_encode($record),
+                'created_at'       => $datetime,
+                'updated_at'       => $datetime,
+            ];
+        }
+
+        ImportFailure::insert($failedRecords);
+    }
+
+    /**
+     * @param array $record
+     */
+    private function logError($record)
+    {
+        Log::error(
+            $this->clinicaltrial->nct_number . ' ' . $this->clinicaltrial->title . ':\n' .
+            'Did not create or find a location.' . '\n' . json_encode($record)
+        );
+    }
+
 }

@@ -19,7 +19,7 @@ trait OldSlugRedirectable
             $oldSlug = $model->getOriginal('slug');
             $newSlug = $model->slug ?? Str::slug($model->name);
 
-            if ($newSlug !== $oldSlug) {
+            if (!empty($oldSlug) && $newSlug !== $oldSlug) {
                 $model->redirects()->delete();
                 $redirect = $model->redirects()->create(['old_slug' => $oldSlug]);
 

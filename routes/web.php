@@ -243,8 +243,8 @@ Route::get('/admin/import/results/{id}', 'Admin\Import\ResultsController@showRes
 //Import Failures List
 Route::get('/admin/import/{id}/failures', 'Admin\Import\ResultsController@showFailures')
     ->name('import.failures');
-Route::get('/admin/import/{id}/failures/sponsor-collaborators', 'Admin\Import\FailuresController@sponsorCollaboratorsIndex')
-    ->name('import.failures.sponsorCollaborators');
+Route::get('/admin/import/{id}/failures/{type}', 'Admin\Import\FailuresController@showByType')
+    ->name('import.failures.showByType');
 
 //Fix Import Failure
 Route::post('/admin/import/failures/{id}/fix', 'Admin\Import\FailuresController@fix')

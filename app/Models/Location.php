@@ -36,78 +36,54 @@ class Location extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
-    public static function findOrCreateLocation($city, $region, $country) {
 
-        // Find Location
-        $location = Location::where('city', $city)
-                         ->where('region', $region)
-                         ->where('country', $country)
-                         ->first();
+    /**
+     * @param string $country
+     * @param string $region
+     * @param string $city
+     * @return \App\Models\Location
+     */
+    public static function findOrCreateLocation($country, $region, $city = '')
+    {
+        if ($city) {
+            $name = $city . ', ' . $region . ', ' . $country;
+            $slug = Str::slug($name);
 
-        // Get Info or Create One
+            $location = Location::where('slug', $slug)
+                ->orWhere(function ($query) use ($region, $city, $country) {
+                    $query->where('country', $country)
+                        ->where('region', $region)
+                        ->where('city', $city);
+                })
+                ->first();
+        } else {
+            $name = $region . ', ' . $country;
+            $slug = Str::slug($name);
+
+            $location = Location::where('slug', $slug)
+                ->orWhere('name', $name)
+                ->first();
+        }
+
         if ($location) {
+            return $location;
+        }
+
+        try {
+            $location = Location::create([
+                'name'    => $name,
+                'slug'    => $slug,
+                'city'    => $city,
+                'region'  => $region,
+                'country' => $country
+            ]);
 
             return $location;
 
-        } else {
-
-            // create location
-            try {
-
-                $location = Location::create([
-                     'name' => $city . ', ' . $region . ', ' . $country,
-                     'city' => $city,
-                     'region' => $region,
-                     'country' => $country
-                ]);
-
-                return $location;
-
-            } catch (QueryException $e) {
-
-                $error_message = 'Error on findOrCreateLocation()' . "\n" . $e;
-
-                Log::error($error_message);
-            }
-
+        } catch (QueryException $e) {
+            $error_message = 'Error on findOrCreateLocation()' . "\n" . $e;
+            Log::error($error_message);
         }
-
-    }
-
-    public static function findOrCreateLocationNoCity($region, $country) {
-
-        $name = $region . ', ' . $country;
-
-        // Find Location
-        $location = Location::where('name', $name)->first();
-
-        // Get Info or Create One
-        if ($location) {
-
-            return $location;
-
-        } else {
-
-            // create location
-            try {
-
-                $location = Location::create([
-                     'name' => $region . ', ' . $country,
-                     'region' => $region,
-                     'country' => $country
-                ]);
-
-                return $location;
-
-            } catch (QueryException $e) {
-
-                $error_message = 'Error on findOrCreateLocationNoCity()' . "\n" . $e;
-
-                Log::error($error_message);
-            }
-
-        }
-
     }
 
     /*

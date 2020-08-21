@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class ImportFailure extends Model
 {
-    const TYPE_SPONSOR_COLLABORATORS = 'Sponsor/Collaborators';
+    const TYPE_LOCATIONS             = 'locations';
+    const TYPE_SPONSOR_COLLABORATORS = 'sponsorcollaborators';
 
     protected $table = 'import_failures';
 
