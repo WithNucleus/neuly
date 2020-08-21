@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Traits\OldSlugRedirectable;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Job extends Model
 {
@@ -18,12 +19,11 @@ class Job extends Model
     */
 
     protected $table = 'jobs';
-    // protected $primaryKey = 'id';
-    // public $timestamps = false;
     protected $guarded = ['id'];
-    // protected $fillable = [];
-    // protected $hidden = [];
-    // protected $dates = [];
+
+    // log activity for all attributes, which not listed in $guarded array
+    protected static $logUnguarded = true;
+    protected static $logName = 'entities';
 
     /*
     |--------------------------------------------------------------------------

@@ -7,12 +7,14 @@ use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Clinicaltrial extends Model
 {
     use CrudTrait;
     use HasFollowers;
     use OldSlugRedirectable;
+    use LogsActivity;
 
     /*
     |--------------------------------------------------------------------------
@@ -21,12 +23,11 @@ class Clinicaltrial extends Model
     */
 
     protected $table = 'clinicaltrials';
-    // protected $primaryKey = 'id';
-    // public $timestamps = false;
     protected $guarded = ['id'];
-    // protected $fillable = [];
-    // protected $hidden = [];
-    // protected $dates = [];
+
+    // log activity for all attributes, which not listed in $guarded array
+    protected static $logUnguarded = true;
+    protected static $logName = 'entities';
 
     /*
     |--------------------------------------------------------------------------

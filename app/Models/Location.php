@@ -9,12 +9,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Log;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Location extends Model
 {
     use CrudTrait;
     use HasFollowers;
     use OldSlugRedirectable;
+    use LogsActivity;
 
     /*
     |--------------------------------------------------------------------------
@@ -23,12 +25,11 @@ class Location extends Model
     */
 
     protected $table = 'locations';
-    // protected $primaryKey = 'id';
-    // public $timestamps = false;
     protected $guarded = ['id'];
-    // protected $fillable = [];
-    // protected $hidden = [];
-    // protected $dates = [];
+
+    // log activity for all attributes, which not listed in $guarded array
+    protected static $logUnguarded = true;
+    protected static $logName = 'entities';
 
     /*
     |--------------------------------------------------------------------------
