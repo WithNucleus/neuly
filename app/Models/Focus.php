@@ -8,12 +8,14 @@ use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Company;
 use Illuminate\Support\Str;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Focus extends Model
 {
     use CrudTrait;
     use HasFollowers;
     use OldSlugRedirectable;
+    use LogsActivity;
 
     /*
     |--------------------------------------------------------------------------
@@ -32,6 +34,9 @@ class Focus extends Model
 
     // protected $hidden = [];
     // protected $dates = [];
+
+    // log activity for all attributes, which not listed in $guarded array
+    protected static $logUnguarded = true;
 
     /*
     |--------------------------------------------------------------------------

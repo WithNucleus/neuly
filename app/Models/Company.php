@@ -9,12 +9,14 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Focus;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManagerStatic as Image;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Company extends Model
 {
     use CrudTrait;
     use HasFollowers;
     use OldSlugRedirectable;
+    use LogsActivity;
 
     /*
     |--------------------------------------------------------------------------
@@ -43,6 +45,9 @@ class Company extends Model
     // ];
     // protected $hidden = [];
     // protected $dates = [];
+
+    // log activity for all attributes, which not listed in $guarded array
+    protected static $logUnguarded = true;
 
     /*
     |--------------------------------------------------------------------------
