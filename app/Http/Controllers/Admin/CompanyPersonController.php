@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Company;
 use App\Models\Person;
+use App\Events\SendNotification;
 
 class CompanyPersonController extends Controller
 {
@@ -42,8 +43,11 @@ class CompanyPersonController extends Controller
         $company = Company::findOrFail($id);
         $person = Person::findOrFail($request->input('person'));
 
-        // TODO Verify if this person is already attached? Does someone can 
+        // TODO Verify if this person is already attached? Does someone can
         // have multiple position in a company?
+
+        SendNotification::dispatch($company, 'Company has added person.', 'some long description');
+        SendNotification::dispatch($person, 'Person has added to company.', 'some long description');
 
         $company->people()->attach($person->id, [
             'position' => $request->input('position'),
@@ -56,6 +60,9 @@ class CompanyPersonController extends Controller
      */
     public function remove(Request $request, $company_id, $person_id)
     {
+        SendNotification::dispatch(Company::find($company_id), 'Company has removed person.', 'some long description');
+        SendNotification::dispatch(Person::find($person_id), 'Person was removed from company.', 'some long description');
+
         Company::findOrFail($company_id)->people()->detach($person_id);
         return redirect()->back();
     }

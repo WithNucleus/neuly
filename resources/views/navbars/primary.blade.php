@@ -58,6 +58,11 @@
                         </form>
                     </div>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('dashboard.notifications.index') }}" class="nav-link">
+                        <i class="fad fa-bell"></i> <span class="badge notification-badge badge-pill badge-info"></span>
+                    </a>
+                </li>
             @endguest
         </ul>
     </div>

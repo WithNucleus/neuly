@@ -1,10 +1,11 @@
 require('./bootstrap');
 require('./search');
+require('./notifications');
 
 $(document).ready(function() {
 
 	// Confirm Action
-	$(document).on('click', '.confirm-action', function() { 
+	$(document).on('click', '.confirm-action', function() {
 		return confirm("Are you sure?");
 	});
 

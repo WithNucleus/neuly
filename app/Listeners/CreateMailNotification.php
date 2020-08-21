@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\EmailNotification;
+use App\Models\EmailNotification;
 use App\Events\SendNotification;
 use App\Models\Follow;
 use App\Notification;
@@ -37,7 +37,7 @@ class CreateMailNotification
         foreach($users as $user)
         {
             $notification = new EmailNotification();
-            $notification->user_id = $user;
+            $notification->user_id = $user->user_id;
             $notification->notifier_id = $event->id;
             $notification->notifier_type = $event->type;
             $notification->title = $event->title;

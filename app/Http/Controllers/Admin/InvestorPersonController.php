@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\SendNotification;
 use App\Http\Controllers\Controller;
 use App\Models\Investor;
 use Illuminate\Http\Request;
@@ -49,6 +50,9 @@ class InvestorPersonController extends Controller
             'role' => $request->input('role'),
         ]);
 
+        SendNotification::dispatch($investor, 'investor has added a person.', 'some long description');
+        SendNotification::dispatch($person, 'Person has added to a company.', 'some long description');
+
         return redirect()->back();
     }
 
@@ -57,6 +61,9 @@ class InvestorPersonController extends Controller
      */
     public function remove(Request $request, $investor_id, $person_id)
     {
+        SendNotification::dispatch(Investor::find($investor_id), 'Investor has removed person.', 'some long description');
+        SendNotification::dispatch(Person::find($person_id), 'Person was removed from investor.', 'some long description');
+
         Investor::findOrFail($investor_id)->people()->detach($person_id);
         return redirect()->back();
     }

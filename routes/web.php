@@ -170,6 +170,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/dashboard/edit-note/{id}', 'Dashboard\NoteController@update')->name('member.notes.update');
     Route::get('/dashboard/notes', 'Dashboard\NoteController@index')->name('member.notes.index');
     Route::get('/dashboard/notes/{slug}', 'Dashboard\NoteController@show')->name('member.notes.show');
+
+    Route::get('/dashboard/notifications', 'NotificationController@index')->name('dashboard.notifications.index');
+    Route::get('/dashboard/notifications/{notification}', 'NotificationController@show')->name('dashboard.notifications.show');
+
+    Route::get('/user/notifications', 'NotificationController@getNotificationsByAuthedUser');
+    Route::get('/user/notifications/unread', 'NotificationController@getUnreadNotificationsCountByAuthedUser');
 });
 
 // User Settings Page

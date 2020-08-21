@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\SendNotification;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Company;
@@ -48,6 +49,10 @@ class PersonCompanyController extends Controller
         $person->companies()->attach($company->id, [
             'position' => $request->input('position'),
         ]);
+
+
+        SendNotification::dispatch($company, 'Company has added person.', 'some long description');
+        SendNotification::dispatch($person, 'Person has added to company.', 'some long description');
 
         return redirect()->back();
     }

@@ -4,9 +4,10 @@ namespace App\Listeners;
 
 use App\Events\SendNotification;
 use App\Models\Follow;
-use App\Notification;
+use App\Models\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\DB;
 
 class CreateAppNotification
 {
@@ -36,7 +37,7 @@ class CreateAppNotification
         foreach($users as $user)
         {
             $notification = new Notification();
-            $notification->user_id = $user;
+            $notification->user_id = $user->user_id;
             $notification->notifier_id = $event->id;
             $notification->notifier_type = $event->type;
             $notification->title = $event->title;
