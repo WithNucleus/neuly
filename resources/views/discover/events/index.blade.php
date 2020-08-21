@@ -25,7 +25,7 @@
                 @include('navbars.breadcrumb', [
                     'items' => [
                         'Events' => false
-                    ]           
+                    ]
                 ])
             </div>
         </div>
@@ -36,6 +36,8 @@
             @include('sidebars.primary')
 
             <main id="index-main" role="main" class="col-lg-9 col-xl-10 ml-auto">
+                @include('discover.includes.status-messages')
+
                 <div class="row">
 
                     <div class="col-12">
@@ -122,13 +124,13 @@
                                             @endif
 
                                         </div>
-                                    
+
                                     </li>
 
                                 @empty
                                     <li class="list-group-item">
                                         <p class="lead mb-0">
-                                            No events match your search criteria. 
+                                            No events match your search criteria.
                                         </p>
                                     </li>
                                 @endforelse

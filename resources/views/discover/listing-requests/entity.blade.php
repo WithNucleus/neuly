@@ -15,9 +15,8 @@
                         <div class="card mt-3 shadow-sm">
                             <div class="card-body">
                                 <h1 class="text-center text-primary">Neuly Listing Request</h1>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
+                                @include('discover.includes.status-messages')
+
                                 <form method="post" action="/listing/request/finish" enctype="multipart/form-data" class="max-width-450">
 
                                     @include('discover.listing-requests.entity-forms.'.strtolower($general['type']))

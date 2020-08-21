@@ -1,10 +1,4 @@
-@if($errors->any())
-    @foreach ($errors->all() as $error)
-        <div class="alert alert-danger mb-0" role="alert">
-            {{ $error }}
-        </div>
-    @endforeach
-@endif
+@include('members.includes.status-messages')
 
 <form action="{{ route('member.bookmarks.store-list') }}" method="post" class="needs-validation" novalidate enctype="multipart/form-data">
     @csrf
@@ -18,7 +12,7 @@
         <label for="name" class="sr-only">Description</label>
         <textarea class="form-control" name="description" placeholder="Description"></textarea>
     </div>
-    
+
     <div class="form-group mb-0">
         <button type="submit" class="mt-2 btn btn-primary">Save</button>
     </div>

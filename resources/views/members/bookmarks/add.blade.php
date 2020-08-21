@@ -4,26 +4,7 @@
 
     <div class="row">
         <div class="col-12">
-
-            @if(Session::has('error'))
-                <div class="alert alert-danger" role="alert">
-                    {{ Session::get('error') }}
-                </div>
-            @endif
-
-            @if($errors->any())
-                @foreach ($errors->all() as $error)
-                    <div class="alert alert-danger mb-0" role="alert">
-                        {{ $error }}
-                    </div>
-                @endforeach
-            @endif
-
-            @if(Session::has('success'))
-                <div class="alert alert-success" role="alert">
-                    {{ Session::get('success') }}
-                </div>
-            @endif
+            @include('members.includes.status-messages')
         </div>
         <div class="col-12 col-md-6">
 
@@ -57,7 +38,7 @@
                         <label for="notes" class="font-weight-bold">Notes</label>
                         <textarea name="notes" class="form-control"></textarea>
                     </div>
-                    
+
                     <div class="form-group">
                         <button type="submit" class="mt-2 btn btn-primary" {{ $lists->count() == count($lists_to_remove) ? 'disabled' : ''}}>Save</button>
                     </div>

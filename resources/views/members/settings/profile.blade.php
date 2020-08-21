@@ -17,15 +17,6 @@
 
                     <div class="py-4 col-12 col-lg-8">
 
-                        @if(Session::has('error'))
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                {{ Session::get('error') }}
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                        @endif
-
                         <div class="alert alert-danger errors alert-dismissible fade show" style="display:none">
                             <ul class="plain-list mb-0 font-small"></ul>
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -33,25 +24,7 @@
                             </button>
                         </div>
 
-                        @if($errors->any())
-                            @foreach ($errors->all() as $error)
-                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                    {{ $error }}
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                            @endforeach
-                        @endif
-
-                        @if(Session::has('success'))
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                {{ Session::get('success') }}
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                        @endif
+                        @include('members.includes.status-messages')
 
                         <form id="user-profile" action="{{ route('user.settings') }}" method="post" class="needs-validation" novalidate>
                             @csrf
@@ -139,7 +112,7 @@
                                     });
                                 }
 
-                            }); 
+                            });
                         </script>
 
                     </div>

@@ -25,7 +25,7 @@
                 @include('navbars.breadcrumb', [
                     'items' => [
                         'Companies' => false
-                    ]           
+                    ]
                 ])
             </div>
         </div>
@@ -36,6 +36,8 @@
             @include('sidebars.primary')
 
             <main id="index-main" role="main" class="col-lg-9 col-xl-10 ml-auto">
+                @include('discover.includes.status-messages')
+
                 <div class="row">
 
                     <div class="col-12">
@@ -65,7 +67,7 @@
                                             'asc' => 'name',
                                             'desc' => '-name',
                                             'label' => 'Name'
-                                        ])                                    
+                                        ])
 
                                     </div>
                                 </div>
@@ -73,8 +75,8 @@
 
                             {{-- Filters --}}
                             <?php if (
-                                isset($filters_location) && $filters_location OR 
-                                isset($filters_company_name) && $filters_company_name OR 
+                                isset($filters_location) && $filters_location OR
+                                isset($filters_company_name) && $filters_company_name OR
                                 isset($filters_type) && $filters_type
                                 ) : ?>
                             <div class="current-filter-list font-size-small align-self-end border-bottom mb-3 pb-1">
@@ -119,7 +121,7 @@
                                     <li class="list-group-item p-4 d-md-flex">
 
                                         <div class="image mr-3">
-                                                
+
                                             @if($company->logo != '')
                                                 <div class="company-logo-contained" style="background-image: url('/storage/{{ $company->logo }}');">
                                                 </div>
@@ -172,13 +174,13 @@
                                             @endif
 
                                         </div>
-                                    
+
                                     </li>
 
                                 @empty
                                     <li class="list-group-item">
                                         <p class="lead mb-0">
-                                            No companies match your search criteria. 
+                                            No companies match your search criteria.
                                         </p>
                                     </li>
                                 @endforelse
