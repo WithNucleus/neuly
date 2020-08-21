@@ -22,7 +22,7 @@
 
                     <div class="right-side font-size-small">
                         <a href="{{ route('member.follow.edit', $follow->id) }}" class="text-primary text-decoration-none mr-2"><i class="fad fa-edit"></i> Edit</a>
-                        <a href="#" class="confirm-action text-danger text-decoration-none js-unfollow-button"><i class="fad fa-trash-alt"></i> Unfollow</a>
+                        <a href="#" class="text-danger text-decoration-none js-unfollow-button"><i class="fad fa-trash-alt"></i> Unfollow</a>
                         <form method="post" action="{{ route('member.follow.destroy', $follow->id) }}" style="display: none;">
                             @csrf
                             @method('delete')
@@ -46,10 +46,7 @@
     $(function(){
         $('.js-unfollow-button').on('click', function (e) {
             e.preventDefault();
-
-            var delete = confirm("Are you sure?");
-
-            if (delete) {
+            if (confirm("Are you sure?")) {
                 $(this).siblings('form').submit();
             }
         })
