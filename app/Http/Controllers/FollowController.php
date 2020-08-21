@@ -38,7 +38,7 @@ class FollowController extends Controller
         if($entity !== null)
         {
             $entity->followers()->attach($user, $pivot);
-            $request->session()->flash('success', 'Congrats - you\'re now following '.$entity->name.' !');
+            $request->session()->flash('success', 'Congrats - you\'re now following ' . $entity->name . '!');
         }
         else
         {

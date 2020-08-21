@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\Follow;
 use Illuminate\Http\Request;
 use App\Models\BookmarkList;
 use App\Models\Bookmark;
@@ -15,12 +16,11 @@ class DashboardController extends Controller
 	// Member Dashboard Page
     public function index() {
 
-        // If Not Logged In
+        // If Not Logged In - Show Dashboard Benefits
         if (!Auth::check()) {
             return view('members.dashboard-loggedout');
         }
 
-        // Recently Viewed Items
         $recently_viewed = Activity::where('causer_id', Auth::id())
                 ->where('causer_type', 'App\User')
                 ->where('log_name', 'pageview')
@@ -28,28 +28,28 @@ class DashboardController extends Controller
                 ->take(10)
                 ->get();
 
-        // dump($recently_viewed);
-
-    	// Get Lists
     	$lists = BookmarkList::where('user_id', Auth::id())
     			->orderBy('name', 'asc')
     			->take(3)
     			->get();
 
-    	// Get Latest Bookmarks
     	$bookmarks = Bookmark::where('user_id', Auth::id())
 				->orderBy('created_at', 'desc')
 				->take(3)
 				->get();
 
-        // Get Latest Notes
         $notes = MemberNote::where('user_id', Auth::id())
                 ->orderBy('updated_at', 'desc')
                 ->take(5)
                 ->get();
 
-    	// Return View
-    	return view('members.dashboard', compact('lists', 'bookmarks', 'notes', 'recently_viewed'));
+        $follows = Follow::with('followable')
+            ->where('user_id', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get();
+
+    	return view('members.dashboard', compact('lists', 'bookmarks', 'notes', 'recently_viewed', 'follows'));
 
     }
 }

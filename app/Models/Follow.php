@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Follow extends Model
 {
@@ -13,5 +14,11 @@ class Follow extends Model
     */
 
     protected $table = 'followables';
+
     protected $guarded = ['id'];
+
+    public function followable() :MorphTo
+    {
+        return $this->morphTo();
+    }
 }
