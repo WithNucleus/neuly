@@ -13,7 +13,6 @@ use App\Models\Investor;
 use App\Models\Location;
 use App\Models\Person;
 use App\Models\Research;
-use App\Traits\GetEntityToFollow;
 use Illuminate\Http\Request;
 use Auth;
 
@@ -73,22 +72,23 @@ class FollowController extends Controller
     }
 
     /**
+     * @param \Illuminate\Http\Request $request
      * @param int $id
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Exception
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $follow = Follow::with('followable')
             ->where('user_id', Auth::id())
             ->findOrFail($id);
 
-        $name = $follow->followable->name ?? $follow->followable->title;
+        $name        = $follow->followable->name ?? $follow->followable->title;
+        $redirectUrl = $request->input('previous_url') ?? route('member.follow.index');
 
         $follow->delete();
 
-        return redirect()
-            ->route('member.follow.index')
+        return redirect($redirectUrl)
             ->with('success', '"' . $name . '" was deleted from your follows list.');
     }
 
