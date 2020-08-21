@@ -5,6 +5,7 @@
 @section('content')
 
     @include('members.includes.dashboard-begin')
+    @include('members.includes.status-messages')
 
     <div class="container">
         <div class="d-flex justify-content-between">
@@ -25,8 +26,6 @@
                             {{ $list->description }}
                         </p>
                     @endif
-
-                    @include('members.includes.status-messages')
 
                     @include('members.data.bookmarks', ['show_more_bookmarks' => false, 'shadow' => false, 'show_action_items' => true])
                 </div>

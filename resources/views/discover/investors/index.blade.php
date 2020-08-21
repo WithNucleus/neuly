@@ -25,7 +25,7 @@
                 @include('navbars.breadcrumb', [
                     'items' => [
                         'Investors' => false
-                    ]           
+                    ]
                 ])
             </div>
         </div>
@@ -36,6 +36,8 @@
             @include('sidebars.primary')
 
             <main id="index-main" role="main" class="col-lg-9 col-xl-10 ml-auto">
+                @include('discover.includes.status-messages')
+
                 <div class="row">
 
                     <div class="col-12">
@@ -73,8 +75,8 @@
 
                             {{-- Filters --}}
                             <?php if (
-                                isset($filters_location) && $filters_location OR 
-                                isset($filters_company_name) && $filters_company_name OR 
+                                isset($filters_location) && $filters_location OR
+                                isset($filters_company_name) && $filters_company_name OR
                                 isset($filters_employment_type) && $filters_employment_type
                                 ) : ?>
                             <div class="current-filter-list font-size-small align-self-end border-bottom mb-3 pb-1">
@@ -163,7 +165,7 @@
                                 @empty
                                     <div class="w-100">
                                         <p class="lead mb-0">
-                                            No investors match your search criteria. 
+                                            No investors match your search criteria.
                                         </p>
                                     </div>
                                 @endforelse

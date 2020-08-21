@@ -25,7 +25,7 @@
                 @include('navbars.breadcrumb', [
                     'items' => [
                         'Jobs' => false
-                    ]           
+                    ]
                 ])
             </div>
         </div>
@@ -36,6 +36,8 @@
             @include('sidebars.primary')
 
             <main id="index-main" role="main" class="col-lg-9 col-xl-10 ml-auto">
+                @include('discover.includes.status-messages')
+
                 <div class="row">
 
                     <div class="col-12">
@@ -65,7 +67,7 @@
                                             'asc' => 'title',
                                             'desc' => '-title',
                                             'label' => 'Job Title'
-                                        ])                                    
+                                        ])
 
                                     </div>
                                 </div>
@@ -73,8 +75,8 @@
 
                             {{-- Filters --}}
                             <?php if (
-                                isset($filters_location) && $filters_location OR 
-                                isset($filters_company_name) && $filters_company_name OR 
+                                isset($filters_location) && $filters_location OR
+                                isset($filters_company_name) && $filters_company_name OR
                                 isset($filters_type) && $filters_type
                                 ) : ?>
                             <div class="current-filter-list font-size-small align-self-end border-bottom mb-3 pb-1">
@@ -123,8 +125,8 @@
                                                 <div class="job-org-logo" style="background-image: url('/storage/{{ $job->company->logo }}');"></div>
                                             </a>
                                         </div>
-                                        
-                                        <div class="text flex-grow-1">  
+
+                                        <div class="text flex-grow-1">
                                             <div class="row">
                                                 <div class="col-12 col-md-6 col-lg-7">
                                                     <p class="lead-smaller mb-0">
@@ -164,13 +166,13 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    
+
                                     </li>
 
                                 @empty
                                     <li class="list-group-item">
                                         <p class="lead mb-0">
-                                            No jobs match your search criteria. 
+                                            No jobs match your search criteria.
                                         </p>
                                     </li>
                                 @endforelse

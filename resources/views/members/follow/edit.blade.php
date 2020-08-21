@@ -13,11 +13,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="p-4 bg-white shadow-sm">
-                    @if($errors->any())
-                        <div class="alert alert-danger mb-0" role="alert">
-                            {{ $errors->first()  }}
-                        </div>
-                    @endif
+                    @include('members.includes.status-messages')
 
                     <div class="action-items" style="display: none;">
                         <a href="{{ route('member.follow.index') }}" class="btn btn-dark">Follows List</a>

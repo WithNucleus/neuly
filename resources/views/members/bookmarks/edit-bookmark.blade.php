@@ -12,13 +12,7 @@
                 <h1 class="h2"><i class="fad fa-clipboard-list text-info"></i> Edit Bookmark</h1>
                 <div class="p-4 bg-white shadow-sm">
 
-                    @if($errors->any())
-                        @foreach ($errors->all() as $error)
-                            <div class="alert alert-danger mb-0" role="alert">
-                                {{ $error }}
-                            </div>
-                        @endforeach
-                    @endif
+                    @include('members.includes.status-messages')
 
                     <div class="col-lg-6 p-0">
 
@@ -57,9 +51,9 @@
                                         @endforeach
                                     </select>
                                 @endif
-                                
+
                             </div>
-                            
+
                             <div class="form-group mb-0">
                                 <button type="submit" class="mt-2 btn btn-primary">Save</button>
                             </div>
