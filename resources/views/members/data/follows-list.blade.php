@@ -8,12 +8,12 @@
     <ul class="list-group @if($shadow == true)shadow-sm @endif">
         @foreach ($follows as $follow)
             <li class="list-group-item">
-                <p class="lead font-weight-bold mb-0">
+                <p class="font-weight-bold mb-0">
                     <a href="{{ route('member.follow.show', ['follow' => $follow]) }}">{{ $follow->followable->name ?? $follow->followable->title }}</a>
                 </p>
 
                 <div class="d-flex flex-wrap justify-content-between">
-                    <div class="left-side font-size-small">
+                    <div class="left-side font-size-small @if($show_more == true) mt-1 mb-1 @endif">
                         <i class="fad fa-clock"></i> Added {{ \Carbon\Carbon::parse($follow->created_at)->diffForHumans() }}
 
                         <span class="ml-3 {{ $follow->email_notification ? 'text-success' : 'text-muted' }}"><i class="fad fa-bell"></i> Email notifications</span>
@@ -22,7 +22,7 @@
 
                     <div class="right-side font-size-small">
                         <a href="{{ route('member.follow.edit', $follow->id) }}" class="text-primary text-decoration-none mr-2"><i class="fad fa-edit"></i> Edit</a>
-                        <a href="#" class="text-danger text-decoration-none js-unfollow-button"><i class="fad fa-trash-alt"></i> Unfollow</a>
+                        <a href="#" class="confirm-action text-danger text-decoration-none js-unfollow-button"><i class="fad fa-trash-alt"></i> Unfollow</a>
                         <form method="post" action="{{ route('member.follow.destroy', $follow->id) }}" style="display: none;">
                             @csrf
                             @method('delete')
@@ -40,13 +40,18 @@
         @endif
     </ul>
 @else
-    <p>You don't follow anyone yet.</p>
+    <p>You aren't following anything yet.</p>
 @endif
 <script>
     $(function(){
         $('.js-unfollow-button').on('click', function (e) {
             e.preventDefault();
-            $(this).siblings('form').submit();
+
+            var delete = confirm("Are you sure?");
+
+            if (delete) {
+                $(this).siblings('form').submit();
+            }
         })
     });
 </script>

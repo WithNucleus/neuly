@@ -10,7 +10,7 @@
         <div class="row">
             <div class="col-12 clearfix">
                 <h1 class="h2 float-left">
-                    <i class="fad fa-network-wired text-info"></i> Follows List
+                    <i class="fad fa-network-wired text-info"></i> Following
                 </h1>
             </div>
         </div>
