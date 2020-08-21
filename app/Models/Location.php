@@ -25,15 +25,11 @@ class Location extends Model
     */
 
     protected $table = 'locations';
-    // protected $primaryKey = 'id';
-    // public $timestamps = false;
     protected $guarded = ['id'];
-    // protected $fillable = [];
-    // protected $hidden = [];
-    // protected $dates = [];
 
     // log activity for all attributes, which not listed in $guarded array
     protected static $logUnguarded = true;
+    protected static $logName = 'entities';
 
     /*
     |--------------------------------------------------------------------------

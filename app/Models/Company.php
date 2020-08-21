@@ -25,29 +25,11 @@ class Company extends Model
     */
 
     protected $table = 'companies';
-    // protected $primaryKey = 'id';
-    // public $timestamps = false;
     protected $guarded = ['id'];
-    // protected $fillable = [
-    //     'name',
-    //     'ownership',
-    //     'focus_description',
-    //     'location',
-    //     'website',
-    //     'ticker_symbol',
-    //     'logo',
-    //     'notes',
-    //     'summary',
-    //     'founded_date',
-    //     'valuation',
-    //     'total_funding_amount',
-    //     'number_employees'
-    // ];
-    // protected $hidden = [];
-    // protected $dates = [];
 
     // log activity for all attributes, which not listed in $guarded array
     protected static $logUnguarded = true;
+    protected static $logName = 'entities';
 
     /*
     |--------------------------------------------------------------------------
