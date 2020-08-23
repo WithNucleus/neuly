@@ -50,6 +50,8 @@ class InvestorPersonController extends Controller
             'role' => $request->input('role'),
         ]);
 
+        $request->session()->flash('success', 'Successfully added ' . $person->name);
+
         SendNotification::dispatch($investor, 'investor has added a person.', 'some long description');
         SendNotification::dispatch($person, 'Person has added to a company.', 'some long description');
 
