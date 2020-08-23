@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\SendNotification;
 use App\Http\Requests\InvestorRequest;
+use App\Models\Company;
+use App\Models\Investor;
+use App\Models\Location;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Backpack\CRUD\app\Library\Widget;
@@ -15,8 +19,8 @@ use Backpack\CRUD\app\Library\Widget;
 class InvestorCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation { store as traitStore; }
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation { update as traitUpdate; }
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 
@@ -313,6 +317,101 @@ class InvestorCrudController extends CrudController
          */
     }
 
+    public function store()
+    {
+        $response = $this->traitStore();
+        $request = $response->getRequest();
+
+        $investor = $this->data['entry'];
+
+        if($request->has('locations') && $request->input('locations') !== null) {
+            foreach($request->input('locations') as $locationId) {
+                $location = Location::find($locationId);
+                SendNotification::dispatch($location, 'A new investor has been added to location.', 'some long description');
+            }
+        }
+
+        if($request->has('companies') && $request->input('companies') !== null) {
+            foreach($request->input('companies') as $companyId) {
+                $company = Company::find($companyId);
+                SendNotification::dispatch($company, 'A new investor has been added to company.', 'some long description');
+            }
+        }
+
+        return $response;
+    }
+
+    public function update()
+    {
+
+        $originalInvestor = $this->getOriginalModel($this->crud);
+        $oldCompanies= $this->getCompanyIds($originalInvestor);
+        $oldLocations = $this->getLocationIds($originalInvestor);
+
+
+        $response = $this->traitUpdate();
+        $request = $response->getRequest();
+
+        $investor = $this->data['entry'];
+        $newCompanies = $this->getCompanyIds($investor);
+        $newLocations = $this->getLocationIds($investor);
+
+        $addedCompanies = array_diff($newCompanies, $oldCompanies);
+        $removedCompanies = array_diff($oldCompanies, $newCompanies);
+        $addedLocations = array_diff($newLocations, $oldLocations);
+        $removedLocations = array_diff($oldLocations, $newLocations);
+
+        if($removedCompanies !== [])
+        {
+            foreach($removedCompanies as $key => $companyId)
+            {
+                $title = 'Investor was removed from company';
+
+                $company= Company::find($companyId);
+                SendNotification::dispatch($investor, $title, 'some long description');
+                SendNotification::dispatch($company, $title, 'some long description');
+            }
+        }
+
+        if($addedCompanies !== [])
+        {
+            foreach($addedCompanies as $key => $companyId)
+            {
+                $title = 'Investor was added to company';
+
+                $company= Company::find($companyId);
+                SendNotification::dispatch($investor, $title, 'some long description');
+                SendNotification::dispatch($company, $title, 'some long description');
+            }
+        }
+
+        if($removedLocations !== [])
+        {
+            foreach($removedLocations as $key => $locationId)
+            {
+                $title = 'Location was removed from investor';
+
+                $location = Location::find($locationId);
+                SendNotification::dispatch($location, $title, 'some long description');
+                SendNotification::dispatch($company, $title, 'some long description');
+            }
+        }
+
+        if($addedLocations !== [])
+        {
+            foreach($addedLocations as $key => $locationId)
+            {
+                $title = 'Location was added to investor';
+
+                $location = Location::find($locationId);
+                SendNotification::dispatch($location, $title, 'some long description');
+                SendNotification::dispatch($company, $title, 'some long description');
+            }
+        }
+
+        return $response;
+    }
+
     /**
      * Define what happens when the Update operation is loaded.
      *
@@ -322,5 +421,21 @@ class InvestorCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+
+    private function getCompanyIds($model)
+    {
+        return $model->companies()->pluck('company_id')->toArray();
+    }
+
+    private function getLocationIds($model)
+    {
+        return $model->locations()->pluck('location_id')->toArray();
+    }
+
+    private function getOriginalModel($crud)
+    {
+        $request = $crud->validateRequest();
+        return Investor::find($request->get($crud->model->getKeyName()));
     }
 }

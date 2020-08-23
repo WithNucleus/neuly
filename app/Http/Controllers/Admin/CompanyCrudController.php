@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\SendNotification;
 use App\Http\Requests\CompanyRequest;
+use App\Models\Company;
+use App\Models\Investor;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use App\Models\Focus;
@@ -17,10 +20,11 @@ use Illuminate\Support\Facades\Route;
 class CompanyCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation { store as traitStore; }
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation { update as traitUpdate; }
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+
 
     public function setup()
     {
@@ -339,8 +343,119 @@ class CompanyCrudController extends CrudController
         ]);
     }
 
+    public function store()
+    {
+        $response = $this->traitStore();
+        $request = $response->getRequest();
+
+        $company = $this->data['entry'];
+
+        if($request->has('focus') && $request->input('focus') !== null) {
+            foreach($request->input('focus') as $focusId) {
+                $focus = Focus::find($focusId);
+                SendNotification::dispatch($focus, 'A new company has been added to focus.', 'some long description');
+            }
+        }
+
+        if($request->has('investors') && $request->input('investors') !== null) {
+            foreach($request->input('investors') as $investorId) {
+                $investor = Investor::find($investorId);
+                SendNotification::dispatch($investor, 'A new company has been added to investor.', 'some long description');
+            }
+        }
+
+        return $response;
+    }
+
+    public function update()
+    {
+
+        $originalCompany = $this->getOriginalModel($this->crud);
+        $oldInvestors = $this->getInvestorIds($originalCompany);
+        $oldFocus = $this->getFocusIds($originalCompany);
+
+
+        $response = $this->traitUpdate();
+        $request = $response->getRequest();
+
+        $company = $this->data['entry'];
+        $newInvestors = $this->getInvestorIds($company);
+        $newFocus = $this->getFocusIds($company);
+
+        $addedInvestors = array_diff($newInvestors, $oldInvestors);
+        $removedInvestors = array_diff($oldInvestors, $newInvestors);
+        $addedFocus = array_diff($newFocus, $oldFocus);
+        $removedFocus = array_diff($oldFocus, $newFocus);
+
+        if($addedInvestors !== [])
+        {
+            foreach($addedInvestors as $key => $investorId)
+            {
+                $title = 'Investor was added to company';
+
+                $investor = Investor::find($investorId);
+                SendNotification::dispatch($investor, $title, 'some long description');
+                SendNotification::dispatch($company, $title, 'some long description');
+            }
+        }
+
+        if($removedInvestors !== [])
+        {
+            foreach($removedInvestors as $key => $investorId)
+            {
+                $title = 'Investor was removed from company';
+
+                $investor = Investor::find($investorId);
+                SendNotification::dispatch($investor, $title, 'some long description');
+                SendNotification::dispatch($company, $title, 'some long description');
+            }
+        }
+
+        if($addedFocus !== [])
+        {
+            foreach($addedFocus as $key => $focusId)
+            {
+                $title = 'Focus was added to company';
+
+                $focus = Focus::find($focusId);
+                SendNotification::dispatch($focus, $title, 'some long description');
+                SendNotification::dispatch($company, $title, 'some long description');
+            }
+        }
+
+        if($removedFocus !== [])
+        {
+            foreach($removedFocus as $key => $focusId)
+            {
+                $title = 'Focus was removed from company';
+
+                $focus = Focus::find($focusId);
+                SendNotification::dispatch($focus, $title, 'some long description');
+                SendNotification::dispatch($company, $title, 'some long description');
+            }
+        }
+
+        return $response;
+    }
+
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+
+    private function getInvestorIds($model)
+    {
+        return $model->investors()->pluck('investor_id')->toArray();
+    }
+
+    private function getFocusIds($model)
+    {
+        return $model->focus()->pluck('focus_id')->toArray();
+    }
+
+    private function getOriginalModel($crud)
+    {
+        $request = $crud->validateRequest();
+        return Company::find($request->get($crud->model->getKeyName()));
     }
 }

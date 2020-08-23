@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\SendNotification;
 use App\Http\Requests\JobRequest;
+use App\Models\Company;
+use App\Models\Focus;
+use App\Models\Job;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Backpack\CRUD\app\Library\Widget;
@@ -15,14 +19,14 @@ use Backpack\CRUD\app\Library\Widget;
 class JobCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation { store as traitStore; }
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation { update as traitUpdate; }
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
-     * 
+     *
      * @return void
      */
     public function setup()
@@ -40,7 +44,7 @@ class JobCrudController extends CrudController
 
     /**
      * Define what happens when the List operation is loaded.
-     * 
+     *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
      * @return void
      */
@@ -60,7 +64,7 @@ class JobCrudController extends CrudController
 
     /**
      * Define what happens when the Show operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
      * @return void
      */
@@ -71,15 +75,15 @@ class JobCrudController extends CrudController
 
         // Job Title
         $this->crud->addColumn(
-            ['name' => 'job_title', 
-            'type' => 'text', 
+            ['name' => 'job_title',
+            'type' => 'text',
             'label' => 'Job Title'
         ]);
 
         // Posted Date
         $this->crud->addColumn([
-            'name' => 'posted_date', 
-            'type' => 'date', 
+            'name' => 'posted_date',
+            'type' => 'date',
             'label' => 'Posted Date'
         ]);
 
@@ -132,7 +136,7 @@ class JobCrudController extends CrudController
 
     /**
      * Define what happens when the Create operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-create
      * @return void
      */
@@ -151,22 +155,22 @@ class JobCrudController extends CrudController
 
         // Job Title
         $this->crud->addField([
-            'name' => 'job_title', 
-            'type' => 'text', 
+            'name' => 'job_title',
+            'type' => 'text',
             'label' => 'Job Title'
         ]);
 
         // Page Slug
         $this->crud->addField([
-            'name' => 'slug', 
-            'type' => 'text', 
+            'name' => 'slug',
+            'type' => 'text',
             'label' => 'Page Slug'
         ]);
 
         // Posted Date
         $this->crud->addField([
-            'name' => 'posted_date', 
-            'type' => 'date', 
+            'name' => 'posted_date',
+            'type' => 'date',
             'label' => 'Posted Date'
         ]);
 
@@ -185,11 +189,11 @@ class JobCrudController extends CrudController
 
         // Employment Type
         $this->crud->addField([
-            'name' => 'employment_type', 
-            'type' => 'radio', 
+            'name' => 'employment_type',
+            'type' => 'radio',
             'label' => 'Employment Type',
             'options'     => [
-                'Full Time' => 'Full Time', 
+                'Full Time' => 'Full Time',
                 'Part Time' => 'Part Time',
                 'One Time' => 'One Time',
             ],
@@ -197,7 +201,7 @@ class JobCrudController extends CrudController
         ]);
 
         // Location Relationship
-        $this->crud->addField([    
+        $this->crud->addField([
              'label'     => "Locations",
              'type'      => 'select2_multiple',
              'name'      => 'locations',
@@ -211,7 +215,7 @@ class JobCrudController extends CrudController
         ]);
 
         // Focus
-        $this->crud->addField([  
+        $this->crud->addField([
              'label'     => "Focus",
              'type'      => 'select2_multiple',
              'name'      => 'focus',
@@ -226,26 +230,102 @@ class JobCrudController extends CrudController
 
         // Job Description
         $this->crud->addField([
-            'name' => 'job_description', 
-            'type' => 'wysiwyg', 
+            'name' => 'job_description',
+            'type' => 'wysiwyg',
             'label' => 'Job Description'
         ]);
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:
          * - CRUD::field('price')->type('number');
-         * - CRUD::addField(['name' => 'price', 'type' => 'number'])); 
+         * - CRUD::addField(['name' => 'price', 'type' => 'number']));
          */
+    }
+
+    public function store()
+    {
+        $response = $this->traitStore();
+        $request = $response->getRequest();
+
+        $investor = $this->data['entry'];
+
+        if($request->has('company_id') && $request->input('company_id') !== null) {
+            $company = Company::find($request->input('company_id'));
+            SendNotification::dispatch($company, 'A new job has been announced by company.', 'some long description');
+        }
+
+        if($request->has('focus') && $request->input('focus') !== null) {
+            foreach($request->input('focus') as $focusId) {
+                $focus = Focus::find($focusId);
+                SendNotification::dispatch($focus, 'A new job has been added to focus.', 'some long description');
+            }
+        }
+
+        return $response;
+    }
+
+    public function update()
+    {
+        $originalJob = $this->getOriginalModel($this->crud);
+        $oldFocus = $this->getFocusIds($originalJob);
+
+        $response = $this->traitUpdate();
+        $request = $response->getRequest();
+
+        $job = $this->data['entry'];
+
+        $company = Company::find($job->company_id);
+        SendNotification::dispatch($company, 'A job of company has been updated .', 'some long description');
+
+        $newFocus = $this->getFocusIds($job);
+
+        $addedFocus = array_diff($newFocus, $oldFocus);
+        $removedFocus = array_diff($oldFocus, $newFocus);
+
+        if($addedFocus !== [])
+        {
+            foreach($addedFocus as $key => $focusId)
+            {
+                $title = 'Focus was added to job';
+
+                $focus = Focus::find($focusId);
+                SendNotification::dispatch($focus, $title, 'some long description');
+            }
+        }
+
+        if($removedFocus !== [])
+        {
+            foreach($removedFocus as $key => $focusId)
+            {
+                $title = 'Focus was removed from job';
+
+                $focus = Focus::find($focusId);
+                SendNotification::dispatch($focus, $title, 'some long description');
+            }
+        }
+
+        return $response;
     }
 
     /**
      * Define what happens when the Update operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
      * @return void
      */
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+
+    private function getFocusIds($model)
+    {
+        return $model->focus()->pluck('focus_id')->toArray();
+    }
+
+    private function getOriginalModel($crud)
+    {
+        $request = $crud->validateRequest();
+        return Job::find($request->get($crud->model->getKeyName()));
     }
 }
