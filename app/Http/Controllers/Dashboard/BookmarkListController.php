@@ -48,7 +48,7 @@ class BookmarkListController extends Controller
         $list->user_id     = Auth::id();
         $list->name        = $request->input('name');
         $list->description = $request->input('description');
-        $list->is_public   = $request->input('is_public') ?? 0;
+        $list->is_public   = $request->input('is_public', 0);
         $list->save();
 
         session()->flash('success', $list->name . ' was created!');
@@ -114,7 +114,7 @@ class BookmarkListController extends Controller
         $list->name        = $request->input('name');
         $list->slug        = $request->input('slug');
         $list->description = $request->input('description');
-        $list->is_public   = $request->input('is_public') ?? 0;
+        $list->is_public   = $request->input('is_public', 0);
         $list->save();
 
         return redirect()
