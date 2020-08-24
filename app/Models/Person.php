@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\OldSlugRedirectable;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -9,11 +10,14 @@ use Illuminate\Support\Str;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Log;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Person extends Model
 {
     use CrudTrait;
     use HasFollowers;
+    use OldSlugRedirectable;
+    use LogsActivity;
 
     /*
     |--------------------------------------------------------------------------
@@ -28,6 +32,9 @@ class Person extends Model
     // protected $fillable = [];
     // protected $hidden = [];
     // protected $dates = [];
+
+    // log activity for all attributes, which not listed in $guarded array
+    protected static $logUnguarded = true;
 
     /*
     |--------------------------------------------------------------------------
@@ -72,15 +79,21 @@ class Person extends Model
     }
 
     public function getLinkedIn() {
-        return '<a href="https://www.linkedin.com/in/' . $this->linkedin . '" target="_blank" rel="noopener noreferrer"><i class="lab la-linkedin-in"></i> ' . $this->linkedin . '</a>';
+        if ($this->linkedin != null) {
+            return '<a href="https://www.linkedin.com/in/' . $this->linkedin . '" target="_blank" rel="noopener noreferrer"><i class="lab la-linkedin-in"></i> ' . $this->linkedin . '</a>';
+        }
     }
 
     public function getFacebook() {
-        return '<a href="https://www.facebook.com/' . $this->facebook . '" target="_blank" rel="noopener noreferrer"><i class="lab la-facebook-f"></i> ' . $this->facebook . '</a>';
+        if ($this->facebook != null) {
+            return '<a href="https://www.facebook.com/' . $this->facebook . '" target="_blank" rel="noopener noreferrer"><i class="lab la-facebook-f"></i> ' . $this->facebook . '</a>';
+        }
     }
 
     public function getTwitter() {
-        return '<a href="https://www.twitter.com/' . $this->twitter . '" target="_blank" rel="noopener noreferrer"><i class="lab la-twitter"></i> ' . $this->twitter . '</a>';
+        if ($this->twitter != null) {
+            return '<a href="https://www.twitter.com/' . $this->twitter . '" target="_blank" rel="noopener noreferrer"><i class="lab la-twitter"></i> ' . $this->twitter . '</a>';
+        }
     }
 
     public function linkToShow() {
@@ -125,6 +138,12 @@ class Person extends Model
                     ->withTimestamps();
     }
 
+    // Each Person Can Have Multiple Clinical Trials
+    public function clinicaltrials() {
+        return $this->belongsToMany('App\Models\Clinicaltrial', 'clinicaltrial_person', 'person_id', 'clinicaltrial_id')
+                    ->withTimestamps();
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES
@@ -143,27 +162,13 @@ class Person extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function setPhotoAttribute($value)
-    {
+    public function setPhotoAttribute($value) {
 
-        // Generate Filename
         $filename = 'photo-' . $this->id . '.png';
 
-        // Disk
         $disk = 'local';
 
-        // Destination Path
         $destination_path = "public/people";
-
-        // if the image was erased
-        if ($value==null) {
-
-            // delete the image from disk
-            \Storage::disk($disk)->delete($this->photo);
-
-            // set null in the database column
-            $this->attributes['photo'] = null;
-        }
 
         // if a base64 was sent, store it in the db
         if (Str::startsWith($value, 'data:image'))
@@ -174,16 +179,35 @@ class Person extends Model
             // Store the image on disk
             \Storage::disk($disk)->put($destination_path . '/' . $filename, $image->stream());
 
-            // 3. Delete the previous image, if there was one
-            \Storage::disk($disk)->delete($this->photo);
+            // Delete the previous image, if there was one
+            \Storage::disk($disk)->delete('public/' . $this->photo);
 
             // Save the public path to the database
             $public_destination_path = Str::replaceFirst('public/', '', $destination_path);
-            $this->attributes['photo'] = $public_destination_path.'/'.$filename;
+
+            $this->attributes['photo'] = $public_destination_path . '/' . $filename;
 
         } else {
 
-            $this->attributes['photo'] = $value;
+            // if the image was erased
+            if ($value == null) {
+
+                // delete the image from disk
+                \Storage::disk($disk)->delete('public/' . $this->photo);
+
+                // set null in the database column
+                $this->attributes['photo'] = null;
+
+            } elseif (Str::startsWith($value, '/storage')) {
+
+                // do nothing because image isn't updated
+
+            } else {
+
+                // moving listing request image
+                $this->attributes['photo'] = $value;
+            }
+
         }
     }
 }

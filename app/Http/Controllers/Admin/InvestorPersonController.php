@@ -51,8 +51,8 @@ class InvestorPersonController extends Controller
 
         $request->session()->flash('success', 'Successfully added ' . $person->name);
 
-        SendNotification::dispatch($investor, 'investor has added a person.', 'some long description');
-        SendNotification::dispatch($person, 'Person has added to a company.', 'some long description');
+        SendNotification::dispatch($investor, 'Investor has added a person.', 'some long description');
+        SendNotification::dispatch($person, 'Person was added to an investor.', 'some long description');
 
         return redirect()->back();
     }
@@ -64,12 +64,12 @@ class InvestorPersonController extends Controller
     {
         $person = Person::findOrFail($person_id);
 
-        SendNotification::dispatch(Investor::find($investor_id), 'Investor has removed person.', 'some long description');
-        SendNotification::dispatch(Person::find($person_id), 'Person was removed from investor.', 'some long description');
-
         Investor::findOrFail($investor_id)->people()->detach($person_id);
 
         $request->session()->flash('success', 'Successfully removed ' . $person->name);
+
+        SendNotification::dispatch(Investor::find($investor_id), 'Investor has removed a person.', 'some long description');
+        SendNotification::dispatch(Person::find($person_id), 'Person was removed from an investor.', 'some long description');
 
         return redirect()->back();
     }
