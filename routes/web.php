@@ -256,6 +256,7 @@ Route::get('/admin/jobapps/{id}/coverletter', 'Index\JobApplicationController@ge
 
 /* MEMBERS - PUBLIC ROUTES */
 Route::get('/members/{member_url}/{slug}', 'Dashboard\NoteController@showPublic')->name('members.public.note');
+Route::get('/members/{member_url}/lists/{slug}', 'Dashboard\BookmarkListController@showPublic')->name('members.public.bookmark-list');
 
 /** CATCH-ALL ROUTE for Backpack/PageManager - needs to be at the end of your routes.php file  **/
 Route::get('{page}/{subs?}', ['uses' => '\App\Http\Controllers\PageController@index'])

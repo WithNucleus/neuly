@@ -19,11 +19,24 @@
 	        <input type="text" class="form-control mr-2 mt-2" name="name" placeholder="List Name" required>
 	    </div>
 
+        <div class="form-group">
+            <div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="is_public" id="private" value="0" checked>
+                    <label class="form-check-label" for="private">Private</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="is_public" id="public" value="1">
+                    <label class="form-check-label" for="public">Public</label>
+                </div>
+            </div>
+        </div>
+
 	    <div class="form-group">
 	        <label for="name" class="sr-only">Description</label>
 	        <textarea class="form-control" name="description" placeholder="Description"></textarea>
 	    </div>
-	    
+
 	    <div class="form-group mb-0">
 	        <button type="submit" class="submit mt-2 btn btn-primary">Save</button>
 	    </div>
@@ -54,7 +67,7 @@
                         }
                     }
                 });
-            }); 
+            });
 
             function printSuccessMessage (message) {
                 $(".success").find("p").html(message);
@@ -110,7 +123,7 @@
 		<h1 class="h2"><i class="fad fa-clipboard-list text-info"></i> New Bookmark List</h1>
 	    <div class="p-4 bg-white shadow-sm">
 			<div class="col-12 col-md-8 col-lg-6">
-				@include('members.bookmarks.create-list') 
+				@include('members.bookmarks.create-list')
 			</div>
 		</div>
 	</div>

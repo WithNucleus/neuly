@@ -1,6 +1,6 @@
 @isset($list)
 <!-- Modal -->
-<div class="modal fade" id="delete-list" tabindex="-1" role="dialog" aria-labelledby="delete-list-label" aria-hidden="true">
+<div class="modal fade" id="delete-list-{{$list->id}}" tabindex="-1" role="dialog" aria-labelledby="delete-list-label" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
