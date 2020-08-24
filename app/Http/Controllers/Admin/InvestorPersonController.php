@@ -49,10 +49,10 @@ class InvestorPersonController extends Controller
             'role' => $request->input('role'),
         ]);
 
+        $request->session()->flash('success', 'Successfully added ' . $person->name);
+
         SendNotification::dispatch($investor, 'Investor has added a person.', 'some long description');
         SendNotification::dispatch($person, 'Person was added to an investor.', 'some long description');
-
-        $request->session()->flash('success', 'Successfully added ' . $person->name);
 
         return redirect()->back();
     }
@@ -63,12 +63,13 @@ class InvestorPersonController extends Controller
     public function remove(Request $request, $investor_id, $person_id)
     {
         $person = Person::findOrFail($person_id);
+
         Investor::findOrFail($investor_id)->people()->detach($person_id);
+
+        $request->session()->flash('success', 'Successfully removed ' . $person->name);
 
         SendNotification::dispatch(Investor::find($investor_id), 'Investor has removed a person.', 'some long description');
         SendNotification::dispatch(Person::find($person_id), 'Person was removed from an investor.', 'some long description');
-
-        $request->session()->flash('success', 'Successfully removed ' . $person->name);
 
         return redirect()->back();
     }
