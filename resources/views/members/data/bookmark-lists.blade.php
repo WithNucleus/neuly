@@ -33,11 +33,13 @@
                 <div class="right-side font-size-small align-self-end">
                     <a href="{{ route('member.bookmarks.edit-list', $list->slug) }}" class="text-primary text-decoration-none mr-2"><i class="fad fa-edit"></i> Edit</a>
 
-                    <button type="button" class="btn btn-link btn-sm p-0 text-danger text-decoration-none" data-toggle="modal" data-target="#delete-list">
+                    <button type="button" class="btn btn-link btn-sm p-0 text-danger text-decoration-none" data-toggle="modal" data-target="#delete-list-{{$list->id}}">
                         <i class="fad fa-trash-alt"></i> Delete
                     </button>
                 </div>
                 @endif
+
+                @include('members.bookmarks.delete-list-modal')
             </li>
         @endforeach
         @if($show_more == true)
@@ -51,5 +53,3 @@
 @else
     <p>You don't have any lists yet.</p>
 @endif
-
-@include('members.bookmarks.delete-list-modal')

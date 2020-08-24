@@ -36,6 +36,6 @@ class BookmarkList extends Model
 
         $this->attributes['name'] = $value;
 
-        $this->attributes['slug'] = $this->attributes['slug'] ? $this->attributes['slug'] : Str::slug($value);
+        $this->attributes['slug'] = isset($this->attributes['slug']) ? $this->attributes['slug'] : Str::slug($value);
     }
 }

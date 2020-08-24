@@ -49,7 +49,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="p-4 bg-white shadow-sm">
-                    @include('members.data.bookmarks', ['show_more_bookmarks' => false, 'shadow' => false, 'show_action_items' => false])
+                    @include('members.data.bookmarks', ['show_more_bookmarks' => false, 'shadow' => false, 'show_action_items' => false, 'public_view' => true])
                 </div>
             </div>
         </div>

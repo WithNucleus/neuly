@@ -1,5 +1,3 @@
-@include('members.includes.status-messages')
-
 <form action="{{ route('member.bookmarks.store-list') }}" method="post" class="needs-validation" novalidate enctype="multipart/form-data">
     @csrf
     <div class="form-group row">
