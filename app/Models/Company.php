@@ -5,8 +5,8 @@ namespace App\Models;
 use App\Models\Traits\OldSlugRedirectable;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Focus;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManagerStatic as Image;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -104,6 +104,16 @@ class Company extends Model
      */
     public function scopeHasJobs($query) {
         return $query->whereHas('jobs');
+    }
+
+    /**
+     * @param \Illuminate\Database\Query\Builder $query
+     * @return \Illuminate\Database\Query\Builder
+     */
+    public function scopeHasUpcomingEvents($query) {
+        return $query->whereHas('events', function($subquery){
+            $subquery->where('start_date', '>=', Carbon::now()->toDateString());
+        });
     }
 
     /*

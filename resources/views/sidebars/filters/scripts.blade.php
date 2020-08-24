@@ -38,7 +38,8 @@
             'people',
             'region',
             'countries',
-            'hiring'
+            'hiring',
+            'upcoming_events'
         ];
 
         allowedFilters.forEach(function (filterName) {

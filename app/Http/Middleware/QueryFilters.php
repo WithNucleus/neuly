@@ -89,6 +89,12 @@ class QueryFilters
             $filter_hiring = 0;
         }
 
+        if (isset($request->query('filter')['upcoming_events'])) {
+            $filter_upcoming_events = $request->query('filter')['upcoming_events'];
+        } else {
+            $filter_upcoming_events = 0;
+        }
+
         // Share with Blade
         view()->share('filters', $filters);
         view()->share('sort', $sort_string);
@@ -101,6 +107,7 @@ class QueryFilters
         view()->share('filters_status', $status_array);
         view()->share('filters_type', $type_array);
         view()->share('filter_hiring', $filter_hiring);
+        view()->share('filter_upcoming_events', $filter_upcoming_events);
         view()->share('path', $path);
 
         // Return Next Request
