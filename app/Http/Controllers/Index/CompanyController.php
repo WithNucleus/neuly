@@ -42,6 +42,7 @@ class CompanyController extends Controller
                 AllowedFilter::partial('locations', 'locations.name'),
                 AllowedFilter::partial('focus', 'focus.name'),
                 AllowedFilter::exact('type', 'ownership'),
+                AllowedFilter::scope('hiring', 'hasJobs'),
             ])
             ->defaultSort('name')
             ->allowedSorts([

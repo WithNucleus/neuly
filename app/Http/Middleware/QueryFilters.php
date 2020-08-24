@@ -83,6 +83,12 @@ class QueryFilters
             $person_name_array = array();
         }
 
+        if (isset($request->query('filter')['hiring'])) {
+            $filter_hiring = $request->query('filter')['hiring'];
+        } else {
+            $filter_hiring = 0;
+        }
+
         // Share with Blade
         view()->share('filters', $filters);
         view()->share('sort', $sort_string);
@@ -94,6 +100,7 @@ class QueryFilters
         view()->share('filters_person_name', $person_name_array);
         view()->share('filters_status', $status_array);
         view()->share('filters_type', $type_array);
+        view()->share('filter_hiring', $filter_hiring);
         view()->share('path', $path);
 
         // Return Next Request
