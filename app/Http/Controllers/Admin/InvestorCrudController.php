@@ -51,81 +51,21 @@ class InvestorCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        // CRUD::setFromDb(); // columns
 
-        // Name
         $this->crud->addColumn(['name' => 'name']);
-
-        // Type
         $this->crud->addColumn(['name' => 'type']);
-
-        // Website
         $this->crud->addColumn(['name' => 'website']);
 
-        // Website
-        // $this->crud->addColumn(['name' => 'website', 'type' => 'text', 'label' => 'Website']);
+        $this->crud->addColumn([
+            'name' => 'created_at',
+            'type' => 'date'
+        ]);
 
-        // // Location -- Relationship
-        // $this->crud->addColumn([
-        //    'label'     => 'Location',
-        //    'type'      => 'select_multiple',
-        //    'name'      => 'locations',
-        //    'entity'    => 'locations',
-        //    'attribute' => 'name',
-        //    'model'     => 'App\Models\Location',
-        //    // 'orderable' => true,
-        //    'options'   => (function ($query) {
-        //         return $query->orderBy('name', 'ASC')->get();
-        //     }),
-        // ]);
+        $this->crud->addColumn([
+            'name' => 'updated_at',
+            'type' => 'date'
+        ]);
 
-        // Focus -- Relationship
-        // $this->crud->addColumn([
-        //    'label'     => 'Focus',
-        //    'type'      => 'select_multiple',
-        //    'name'      => 'focus',
-        //    'entity'    => 'focus',
-        //    'attribute' => 'name',
-        //    'model'     => 'App\Models\Focus',
-        //    // 'orderable' => true,
-        //    'options'   => (function ($query) {
-        //         return $query->orderBy('name', 'ASC')->get();
-        //     }),
-        // ]);
-
-        // Companies -- Relationship
-        // $this->crud->addColumn([
-        //    'label'     => 'Companies',
-        //    'type'      => 'select_multiple',
-        //    'name'      => 'companies',
-        //    'entity'    => 'companies',
-        //    'attribute' => 'name',
-        //    'model'     => 'App\Models\Company',
-        //    // 'orderable' => true,
-        //    'options'   => (function ($query) {
-        //         return $query->orderBy('name', 'ASC')->get();
-        //     }),
-        // ]);
-
-        // People -- Relationship
-        // $this->crud->addColumn([
-        //    'label'     => 'People',
-        //    'type'      => 'select_multiple',
-        //    'name'      => 'people',
-        //    'entity'    => 'people',
-        //    'attribute' => 'name',
-        //    'model'     => 'App\Models\Person',
-        //    // 'orderable' => true,
-        //    'options'   => (function ($query) {
-        //         return $query->orderBy('name', 'ASC')->get();
-        //     }),
-        // ]);
-
-        /**
-         * Columns can be defined using the fluent syntax or array syntax:
-         * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
-         */
     }
 
     /**
@@ -146,55 +86,9 @@ class InvestorCrudController extends CrudController
             'type' => 'view',
             'view' => 'customwidget.investor_show_widget',
             'investor' => $investor
-        ])->to('after_content');
+        ])->to('before_content');
 
         $this->setupListOperation();
-
-        // Companies -- Relationship
-        $this->crud->addColumn([
-           'label'     => 'Companies',
-           'type'      => 'select_multiple',
-           'name'      => 'companies',
-           'entity'    => 'companies',
-           'attribute' => 'name',
-           'model'     => 'App\Models\Company',
-           // 'orderable' => true,
-           'options'   => (function ($query) {
-                return $query->orderBy('name', 'ASC')->get();
-            }),
-        ]);
-
-        // Location Relationship
-        $this->crud->addField([    // Select2Multiple = n-n relationship (with pivot table)
-             'label'     => "Locations",
-             'type'      => 'select2_multiple',
-             'name'      => 'locations', // the method that defines the relationship in your Model
-             'entity'    => 'locations', // the method that defines the relationship in your Model
-             'attribute' => 'name', // foreign key attribute that is shown to user
-
-             'pivot'     => true, // on create&update, do you need to add/delete pivot table entries?
-             // 'select_all' => true, // show Select All and Clear buttons?
-             'options'   => (function ($query) {
-                return $query->orderBy('name', 'ASC')->get();
-            }),
-
-             // optional
-             'model'     => "App\Models\Location", // foreign key model
-        ]);
-
-        // People -- Relationship
-        $this->crud->addColumn([
-           'label'     => 'People',
-           'type'      => 'select_multiple',
-           'name'      => 'people',
-           'entity'    => 'people',
-           'attribute' => 'name',
-           'model'     => 'App\Models\Person',
-           // 'orderable' => true,
-           'options'   => (function ($query) {
-                return $query->orderBy('name', 'ASC')->get();
-            }),
-        ]);
 
         // Logo
         $this->crud->addColumn([
@@ -214,8 +108,6 @@ class InvestorCrudController extends CrudController
     protected function setupCreateOperation()
     {
         CRUD::setValidation(InvestorRequest::class);
-
-        // CRUD::setFromDb(); // fields
 
         // Name
         $this->crud->addField([
@@ -245,57 +137,31 @@ class InvestorCrudController extends CrudController
         ]);
 
         // Location Relationship
-        $this->crud->addField([    // Select2Multiple = n-n relationship (with pivot table)
+        $this->crud->addField([
              'label'     => "Locations",
              'type'      => 'select2_multiple',
-             'name'      => 'locations', // the method that defines the relationship in your Model
-             'entity'    => 'locations', // the method that defines the relationship in your Model
-             'attribute' => 'name', // foreign key attribute that is shown to user
-
-             'pivot'     => true, // on create&update, do you need to add/delete pivot table entries?
-             // 'select_all' => true, // show Select All and Clear buttons?
+             'name'      => 'locations',
+             'entity'    => 'locations',
+             'attribute' => 'name',
+             'pivot'     => true,
              'options'   => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
-
-             // optional
-             'model'     => "App\Models\Location", // foreign key model
+            'model'     => "App\Models\Location", // foreign key model
         ]);
 
         // Company Relationship
-        $this->crud->addField([    // Select2Multiple = n-n relationship (with pivot table)
+        $this->crud->addField([
              'label'     => "Companies",
              'type'      => 'select2_multiple',
-             'name'      => 'companies', // the method that defines the relationship in your Model
-             'entity'    => 'companies', // the method that defines the relationship in your Model
-             'attribute' => 'name', // foreign key attribute that is shown to user
-
-             'pivot'     => true, // on create&update, do you need to add/delete pivot table entries?
-             // 'select_all' => true, // show Select All and Clear buttons?
+             'name'      => 'companies',
+             'entity'    => 'companies',
+             'attribute' => 'name',
+             'pivot'     => true,
              'options'   => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
-
-             // optional
-             'model'     => "App\Models\Company", // foreign key model
-        ]);
-
-        // Person Relationship
-        $this->crud->addField([    // Select2Multiple = n-n relationship (with pivot table)
-             'label'     => "People",
-             'type'      => 'select2_multiple',
-             'name'      => 'people', // the method that defines the relationship in your Model
-             'entity'    => 'people', // the method that defines the relationship in your Model
-             'attribute' => 'name', // foreign key attribute that is shown to user
-
-             'pivot'     => true, // on create&update, do you need to add/delete pivot table entries?
-             // 'select_all' => true, // show Select All and Clear buttons?
-             'options'   => (function ($query) {
-                return $query->orderBy('name', 'ASC')->get();
-            }),
-
-             // optional
-             'model'     => "App\Models\Person", // foreign key model
+            'model'     => "App\Models\Company",
         ]);
 
         // Logo
@@ -304,17 +170,22 @@ class InvestorCrudController extends CrudController
             'name'         => "logo",
             'type'         => 'image',
             'upload'       => true,
-            'crop'         => true, // set to true to allow cropping, false to disable
-            'aspect_ratio' => 0, // ommit or set to 0 to allow any aspect ratio
-            'disk'      => 'local', // in case you need to show images from a different disk
-            // 'prefix'    => 'storage/' // in case your db value is only the file name (no path), you can use this to prepend your path to the image src (in HTML), before it's shown to the user;
+            'crop'         => true,
+            'aspect_ratio' => 0,
+            'disk'      => 'local',
         ]);
 
-        /**
-         * Fields can be defined using the fluent syntax or array syntax:
-         * - CRUD::field('price')->type('number');
-         * - CRUD::addField(['name' => 'price', 'type' => 'number']));
-         */
+    }
+
+    /**
+     * Define what happens when the Update operation is loaded.
+     *
+     * @see https://backpackforlaravel.com/docs/crud-operation-update
+     * @return void
+     */
+    protected function setupUpdateOperation()
+    {
+        $this->setupCreateOperation();
     }
 
     public function store()
@@ -410,17 +281,6 @@ class InvestorCrudController extends CrudController
         }
 
         return $response;
-    }
-
-    /**
-     * Define what happens when the Update operation is loaded.
-     *
-     * @see https://backpackforlaravel.com/docs/crud-operation-update
-     * @return void
-     */
-    protected function setupUpdateOperation()
-    {
-        $this->setupCreateOperation();
     }
 
     private function getCompanyIds($model)
