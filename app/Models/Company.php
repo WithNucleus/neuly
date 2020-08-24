@@ -98,6 +98,14 @@ class Company extends Model
     |--------------------------------------------------------------------------
     */
 
+    /**
+     * @param \Illuminate\Database\Query\Builder $query
+     * @return \Illuminate\Database\Query\Builder
+     */
+    public function scopeHasJobs($query) {
+        return $query->whereHas('jobs');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | ACCESSORS
