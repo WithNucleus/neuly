@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Traits\OldSlugRedirectable;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Job extends Model
 {
     use CrudTrait;
+    use OldSlugRedirectable;
 
     /*
     |--------------------------------------------------------------------------
@@ -16,12 +19,11 @@ class Job extends Model
     */
 
     protected $table = 'jobs';
-    // protected $primaryKey = 'id';
-    // public $timestamps = false;
     protected $guarded = ['id'];
-    // protected $fillable = [];
-    // protected $hidden = [];
-    // protected $dates = [];
+
+    // log activity for all attributes, which not listed in $guarded array
+    protected static $logUnguarded = true;
+    protected static $logName = 'entities';
 
     /*
     |--------------------------------------------------------------------------
@@ -53,8 +55,7 @@ class Job extends Model
     }
 
     // Each Job Can Have Multiple Job Applications
-    public function jobApplications()
-    {
+    public function jobApplications() {
         return $this->hasMany('App\Models\JobApplication');
     }
 

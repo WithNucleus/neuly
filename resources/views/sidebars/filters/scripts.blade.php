@@ -8,14 +8,14 @@
 
         var filters = [];
 
-        $.each($("input[name='" + filterName + "']:checked"), function(){            
+        $.each($("input[name='" + filterName + "']:checked"), function(){
             filters.push($(this).val());
         });
 
         return filters.join("|");
     }
 
-    function build_url(type, locations, companies, status, focus, people, regions, countries) {
+    function build_url(type, locations, companies, status, focus, people, regions, countries, hiring) {
 
         // Build URL
         var url = '{{ $path }}';
@@ -124,6 +124,20 @@
 
         }
 
+        if (hiring != '') {
+
+            // Add & or ?
+            if (type == '' && locations == '' && companies == '' && status == '' && focus == '' && people == '' && regions == '' && countries == '') {
+
+                url = url + '?filter[hiring]=' + hiring;
+
+            } else {
+
+                url = url + '&filter[hiring]=' + hiring;
+            }
+
+        }
+
         // console.log(url);
 
         // document.location.href=url;
@@ -141,9 +155,10 @@
         var people = get_filters('people');
         var regions = get_filters('region');
         var countries = get_filters('countries');
+        var hiring = get_filters('hiring');
 
         // Build URL
-        var url = build_url(type, locations, companies, status, focus, people, regions, countries);
+        var url = build_url(type, locations, companies, status, focus, people, regions, countries, hiring);
 
         // console.log("URL with filters: " + url);
 
@@ -153,7 +168,7 @@
         if (new_sort != '') {
 
             // use new_sort
-            if (type == '' && locations == '' && companies == '' && status == '' && focus == '' && people == '') {
+            if (type == '' && locations == '' && companies == '' && status == '' && focus == '' && people == '' && hiring == '') {
                 url = url + '?sort=' + new_sort;
             } else {
                 url = url + '&sort=' + new_sort;
@@ -164,7 +179,7 @@
             // new_sort is blank so check current_sort
             if (current_sort != '') {
 
-                if (type == '' && locations == '' && companies == '' && status == '' && focus == '' && people == '') {
+                if (type == '' && locations == '' && companies == '' && status == '' && focus == '' && people == '' && hiring == '') {
                     url = url + '?sort=' + current_sort;
                 } else {
                     url = url + '&sort=' + current_sort;
@@ -203,7 +218,7 @@
 
             get_filters_and_go();
 
-            
+
         });
 
         // Organization Search
@@ -220,7 +235,7 @@
 
             get_filters_and_go();
 
-            
+
         });
 
         // Organization Search
@@ -237,7 +252,7 @@
 
             get_filters_and_go();
 
-            
+
         });
 
         // Region Search
@@ -254,7 +269,7 @@
 
             get_filters_and_go();
 
-            
+
         });
 
         // Radio Buttons

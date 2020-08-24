@@ -18,7 +18,7 @@
 
             <div class="card card-body">
 
-                <h3 class="h5">Add a Person</h3>
+                <h3 class="h5">Atach a Person to <strong>{{ $company->name }}</strong></h3>
 
                 <form action="" method="POST">
                     @csrf
@@ -59,11 +59,22 @@
                 <h3 class="h5">Current People</h3>
 
                 @foreach($company->people as $person)
-                    <a href="/admin/person/{{ $person->id }}/show">{{ $person->name }} ({{ $person->getOriginal('pivot_position') }})</a> @if (!$loop->last) <br> @endif
+                    <div class="d-flex justify-content-between">
+                      <a href="/admin/person/{{ $person->id }}/show">{{ $person->name }} ({{ $person->getOriginal('pivot_position') }})</a>
+                      <a class="small" onclick="return confirm_action()" href="{{ route('companyperson.remove', ['company_id' => $company->id, 'person_id' => $person->id]) }}">
+                        <i class="la la-trash"></i> Remove
+                      </a>
+                    </div>
                 @endforeach
                 
             </div>
        </div>
 </div>
+
+<script>
+    function confirm_action() {
+        return confirm('are you sure?');
+    }
+</script>
 
 @endsection

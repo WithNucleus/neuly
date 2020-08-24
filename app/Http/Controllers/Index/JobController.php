@@ -68,7 +68,7 @@ class JobController extends Controller
     public function show(Request $request, $slug) {
 
         // Get Job
-        $job = Job::where('slug', $slug)->first();
+        $job = Job::where('slug', $slug)->firstOrFail();
 
         $metas = Metas::process(array(
             'title'         => $job->job_title,

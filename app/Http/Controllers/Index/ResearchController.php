@@ -71,7 +71,7 @@ class ResearchController extends Controller
     public function show(Request $request, $slug) {
 
         // Get Research
-        $research = Research::where('slug', $slug)->first();
+        $research = Research::where('slug', $slug)->firstOrFail();
 
         $metas = Metas::process(array(
             'title'         => $research->name,

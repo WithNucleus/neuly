@@ -25,7 +25,7 @@
                 @include('navbars.breadcrumb', [
                     'items' => [
                         'Clinical Trials' => false
-                    ]           
+                    ]
                 ])
             </div>
         </div>
@@ -36,6 +36,8 @@
             @include('sidebars.primary')
 
             <main id="index-main" role="main" class="col-lg-9 col-xl-10 ml-auto">
+                @include('discover.includes.status-messages')
+
                 <div class="row">
 
                     <div class="col-12">
@@ -76,11 +78,11 @@
                                     </div>
                                 </div>
                             @endisset
-    
+
                             <?php if (
-                                isset($filters_location) && $filters_location OR 
-                                isset($filters_company_name) && $filters_company_name OR 
-                                isset($filters_focus) && $filters_focus OR 
+                                isset($filters_location) && $filters_location OR
+                                isset($filters_company_name) && $filters_company_name OR
+                                isset($filters_focus) && $filters_focus OR
                                 isset($filters_status) && $filters_status
                                 ) : ?>
                             <div class="current-filter-list font-size-small align-self-end mt-3 mb-3 border-bottom pb-1">
@@ -175,7 +177,7 @@
 
                                                                 @if($count == 4)
                                                                     <button class="toggle-more btn btn-sm font-weight-bold text-uppercase btn-link text-info p-0 text-decoration-none" type="button" data-toggle="collapse" data-target="#location-more-{{ $location->id }}" aria-expanded="false" aria-controls="location-more-{{ $location->id }}">
-                                                                        <span>Show More</span><i class="fad fa-arrow-square-down text-info ml-2"></i> 
+                                                                        <span>Show More</span><i class="fad fa-arrow-square-down text-info ml-2"></i>
                                                                     </button>
                                                                     <div id="location-more-{{ $location->id }}" class="collapse">
                                                                 @endif
@@ -228,7 +230,7 @@
                                 @empty
                                     <li class="list-group-item">
                                         <p class="lead mb-0">
-                                            No clinical trials match your search criteria. 
+                                            No clinical trials match your search criteria.
                                         </p>
                                     </li>
                                 @endforelse

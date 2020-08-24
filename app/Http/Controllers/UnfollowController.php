@@ -27,7 +27,7 @@ class UnfollowController extends Controller
         if($entity !== null)
         {
             $entity->followers()->detach($user);
-            $request->session()->flash('success', 'Congrats - you unfollowed '.$entity->name.' !');
+            $request->session()->flash('success', 'Congrats - you unfollowed ' . $entity->name . '!');
         }
         else
         {

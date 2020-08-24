@@ -37,7 +37,7 @@
                             <p class="mb-1"><small>{{ $bookmark->notes }}</small></p>
                         @endif
                     </div>
-                    
+
                     <div class="d-flex flex-wrap justify-content-between w-100">
 
                         <span class="font-size-small mr-5">
@@ -61,7 +61,7 @@
                     </div>
 
                 </div>
-            
+
             </li>
         @endforeach
         @if($show_more_bookmarks == true)
@@ -73,5 +73,9 @@
         @endif
     </ul>
 @else
-    <p>You don't have any bookmarks yet. You can save everything in Neuly to your bookmarks - watch out for this icon <i class="fad fa-bookmark text-primary"></i> to add items to your lists.</p>
+    @if(isset($public_view) && $public_view == true)
+        <p>This list don't have any bookmarks yet.</p>
+    @else
+        <p>You don't have any bookmarks yet. You can save everything in Neuly to your bookmarks - watch out for this icon <i class="fad fa-bookmark text-primary"></i> to add items to your lists.</p>
+    @endif
 @endif

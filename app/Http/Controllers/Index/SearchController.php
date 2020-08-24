@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\index;
+namespace App\Http\Controllers\Index;
 
 use App\Models\Company;
 use App\Models\Event;

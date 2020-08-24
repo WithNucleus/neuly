@@ -63,7 +63,7 @@ class LocationController extends Controller
     public function show(Request $request, $slug) {
 
         // Get Location
-        $location = Location::where('slug', $slug)->first();
+        $location = Location::where('slug', $slug)->firstOrFail();
 
         $metas = Metas::process(array(
             'title'         => $location->name,

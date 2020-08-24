@@ -22,7 +22,7 @@ class LocationCrudController extends CrudController
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
-     * 
+     *
      * @return void
      */
     public function setup()
@@ -40,7 +40,7 @@ class LocationCrudController extends CrudController
 
     /**
      * Define what happens when the List operation is loaded.
-     * 
+     *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
      * @return void
      */
@@ -50,42 +50,42 @@ class LocationCrudController extends CrudController
 
         // Location Name
         $this->crud->addColumn([
-            'name' => 'name', 
-            'type' => 'text', 
+            'name' => 'name',
+            'type' => 'text',
             'label' => 'Location'
         ]);
 
         // City
         $this->crud->addColumn([
-            'name' => 'city', 
-            'type' => 'text', 
+            'name' => 'city',
+            'type' => 'text',
             'label' => 'City'
         ]);
 
         // Region
         $this->crud->addColumn([
-            'name' => 'region', 
-            'type' => 'text', 
+            'name' => 'region',
+            'type' => 'text',
             'label' => 'Region'
         ]);
 
         // Country
         $this->crud->addColumn([
-            'name' => 'country', 
-            'type' => 'text', 
+            'name' => 'country',
+            'type' => 'text',
             'label' => 'Country'
         ]);
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']); 
+         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
          */
     }
 
     /**
      * Define what happens when the Create operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-create
      * @return void
      */
@@ -97,29 +97,29 @@ class LocationCrudController extends CrudController
 
         // City
         $this->crud->addField([
-            'name' => 'city', 
-            'type' => 'text', 
+            'name' => 'city',
+            'type' => 'text',
             'label' => 'City'
         ]);
 
         // Region
         $this->crud->addField([
-            'name' => 'region', 
-            'type' => 'text', 
+            'name' => 'region',
+            'type' => 'text',
             'label' => 'Region'
         ]);
 
         // Country
         $this->crud->addField([
-            'name' => 'country', 
-            'type' => 'text', 
+            'name' => 'country',
+            'type' => 'text',
             'label' => 'Country'
         ]);
 
         // Location Name
         $this->crud->addField([
-            'name' => 'name', 
-            'type' => 'text', 
+            'name' => 'name',
+            'type' => 'text',
             'label' => 'Location (auto-populated)'
         ]);
 
@@ -131,13 +131,13 @@ class LocationCrudController extends CrudController
         /**
          * Fields can be defined using the fluent syntax or array syntax:
          * - CRUD::field('price')->type('number');
-         * - CRUD::addField(['name' => 'price', 'type' => 'number'])); 
+         * - CRUD::addField(['name' => 'price', 'type' => 'number']));
          */
     }
 
     /**
      * Define what happens when the Update operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
      * @return void
      */

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\OldSlugRedirectable;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use App\User;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Storage;
 class JobApplication extends Model
 {
     use CrudTrait;
+    use OldSlugRedirectable;
 
     /*
     |--------------------------------------------------------------------------
@@ -43,7 +45,7 @@ class JobApplication extends Model
     public function getApplicantEmail() {
 
         $user = User::find($this->user_id);
-        
+
         return '<a href="mailto:' . $user->email . '">' . $user->email . '</a>';
 
     }

@@ -115,6 +115,11 @@
 					<i class='nav-icon la la-school'></i> Research
 				</a>
 			</li>
+            <li class="nav-item">
+                <a class='nav-link' href='{{ route('import.settings.index') }}'>
+                    <i class='nav-icon la la-cog'></i> Import Settings
+                </a>
+            </li>
 		</ul>
 	</li>
 
@@ -139,6 +144,14 @@
 			<i class='nav-icon la la-terminal'></i> Logs
 		</a>
 	</li>
+@endcan
+
+@can('manage redirects')
+    <li class='nav-item'>
+        <a class='nav-link' href='{{ backpack_url('redirect') }}'>
+            <i class='nav-icon la la-sync'></i> <span>Redirects</span>
+        </a>
+    </li>
 @endcan
 
 @can('edit users')

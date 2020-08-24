@@ -23,6 +23,8 @@
 
     <h1>{{ $event->name }}</h1>
 
+    @include('discover.includes.status-messages')
+
     @include('discover.events.data')
 
     <p class="mb-0">

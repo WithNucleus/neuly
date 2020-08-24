@@ -42,6 +42,7 @@ class CompanyController extends Controller
                 AllowedFilter::partial('locations', 'locations.name'),
                 AllowedFilter::partial('focus', 'focus.name'),
                 AllowedFilter::exact('type', 'ownership'),
+                AllowedFilter::scope('hiring', 'hasJobs'),
             ])
             ->defaultSort('name')
             ->allowedSorts([
@@ -66,7 +67,7 @@ class CompanyController extends Controller
     public function show(Request $request, $slug) {
 
         // Get Company
-        $company = Company::where('slug', $slug)->first();
+        $company = Company::where('slug', $slug)->firstOrFail();
 
         $metas = Metas::process(array(
             'title'         => $company->name,
@@ -123,7 +124,7 @@ class CompanyController extends Controller
     public function jobs($slug) {
 
         // Get Company
-        $company = Company::where('slug', $slug)->first();
+        $company = Company::where('slug', $slug)->firstOrFail();
 
         // Get Jobs
         $jobs = Job::where('company_id', $company->id)->orderBy('posted_date', 'desc')->get();
@@ -139,7 +140,7 @@ class CompanyController extends Controller
     public function events($slug) {
 
         // Get Company
-        $company = Company::where('slug', $slug)->first();
+        $company = Company::where('slug', $slug)->firstOrFail();
 
         $entity = 'organizations';
         $bookmarks = BookmarkRepository::fromUser($entity, $company->id);

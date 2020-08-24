@@ -65,7 +65,7 @@ class InvestorController extends Controller
     public function show(Request $request, $slug) {
 
         // Get Investor
-        $investor = Investor::where('slug', $slug)->first();
+        $investor = Investor::where('slug', $slug)->firstOrFail();
 
         $metas = Metas::process(array(
             'title'         => $investor->name,

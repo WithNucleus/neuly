@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\index;
+namespace App\Http\Controllers\Index;
 
 use App\Http\Controllers\Controller;
 use App\Mail\RetakeAccountMail;
@@ -17,7 +17,7 @@ class UserRetakeController extends Controller
         $emailReset = EmailReset::where('token', '=', $token)
                                 ->whereNotNull('valid_till')
                                 ->first();
-        
+
         if($emailReset === null)
         {
             return 'Oops - it looks like this link has already been used. If you are still having trouble, please email support@neuly.com.';
