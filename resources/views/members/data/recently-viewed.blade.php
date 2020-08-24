@@ -22,7 +22,7 @@
 
                 {{-- Image --}}
                 <div class="recently-viewed-image mr-3">
-                    @if ($item->properties['entity'] == 'organizations' && !empty($item->properties['image']) && file_exists('storage/' . $item->properties['image']))
+                    @if (!empty($item->properties['image']) && file_exists('storage/' . $item->properties['image']))
                         <img src="storage/{{ $item->properties['image'] }}" alt="{{ $item->description }}" class="logo">
                     @else
                         <img src="{{ asset('images/icons/' . $item->properties['entity'] . '.svg') }}" alt="{{ $item->description }}">
