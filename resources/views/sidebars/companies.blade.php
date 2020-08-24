@@ -25,7 +25,7 @@
         @isset($filters_location)
             @foreach ($filters_location as $location)
                 <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" name="location" id="{{ $location }}" value="{{ $location }}" checked>
+                    <input type="checkbox" class="custom-control-input" name="locations" id="{{ $location }}" value="{{ $location }}" checked>
                     <label class="custom-control-label" for="{{ $location }}">{{ $location }}</label>
                 </div>
             @endforeach
