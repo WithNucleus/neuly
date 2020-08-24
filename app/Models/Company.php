@@ -2,17 +2,21 @@
 
 namespace App\Models;
 
+use App\Models\Traits\OldSlugRedirectable;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Focus;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManagerStatic as Image;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Company extends Model
 {
     use CrudTrait;
     use HasFollowers;
+    use OldSlugRedirectable;
+    use LogsActivity;
 
     /*
     |--------------------------------------------------------------------------
@@ -21,26 +25,11 @@ class Company extends Model
     */
 
     protected $table = 'companies';
-    // protected $primaryKey = 'id';
-    // public $timestamps = false;
     protected $guarded = ['id'];
-    // protected $fillable = [
-    //     'name',
-    //     'ownership',
-    //     'focus_description',
-    //     'location',
-    //     'website',
-    //     'ticker_symbol',
-    //     'logo',
-    //     'notes',
-    //     'summary',
-    //     'founded_date',
-    //     'valuation',
-    //     'total_funding_amount',
-    //     'number_employees'
-    // ];
-    // protected $hidden = [];
-    // protected $dates = [];
+
+    // log activity for all attributes, which not listed in $guarded array
+    protected static $logUnguarded = true;
+    protected static $logName = 'entities';
 
     /*
     |--------------------------------------------------------------------------
@@ -97,11 +86,25 @@ class Company extends Model
                     ->withTimestamps();
     }
 
+    // Each Company Can Have Multiple Clinical Trials
+    public function clinicaltrials() {
+        return $this->belongsToMany('App\Models\Clinicaltrial', 'clinicaltrial_company', 'company_id', 'clinicaltrial_id')
+                    ->withTimestamps();
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES
     |--------------------------------------------------------------------------
     */
+
+    /**
+     * @param \Illuminate\Database\Query\Builder $query
+     * @return \Illuminate\Database\Query\Builder
+     */
+    public function scopeHasJobs($query) {
+        return $query->whereHas('jobs');
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -174,24 +177,11 @@ class Company extends Model
 
         $company_name = Str::slug($this->name);
 
-        // Generate Filename
         $filename = 'logo-' . $company_name . '.png';
 
-        // Disk
         $disk = 'local';
 
-        // Destination Path
         $destination_path = "public/logos";
-
-        // if the image was erased
-        if ($value==null) {
-
-            // delete the image from disk
-            \Storage::disk($disk)->delete($this->logo);
-
-            // set null in the database column
-            $this->attributes['logo'] = null;
-        }
 
         // if a base64 was sent, store it in the db
         if (Str::startsWith($value, 'data:image'))
@@ -202,16 +192,35 @@ class Company extends Model
             // Store the image on disk
             \Storage::disk($disk)->put($destination_path . '/' . $filename, $image->stream());
 
-            // 3. Delete the previous image, if there was one
-            \Storage::disk($disk)->delete($this->logo);
+            // Delete the previous image, if there was one
+            \Storage::disk($disk)->delete('public/' . $this->logo);
 
             // Save the public path to the database
             $public_destination_path = Str::replaceFirst('public/', '', $destination_path);
-            $this->attributes['logo'] = $public_destination_path.'/'.$filename;
+
+            $this->attributes['logo'] = $public_destination_path . '/' . $filename;
 
         } else {
 
-            $this->attributes['logo'] = $value;
+            // if the image was erased
+            if ($value == null) {
+
+                // delete the image from disk
+                \Storage::disk($disk)->delete('public/' . $this->logo);
+
+                // set null in the database column
+                $this->attributes['logo'] = null;
+
+            } elseif (Str::startsWith($value, '/storage')) {
+
+                // do nothing because image isn't updated
+
+            } else {
+
+                // moving listing request image
+                $this->attributes['logo'] = $value;
+            }
+
         }
     }
 }
