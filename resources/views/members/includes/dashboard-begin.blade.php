@@ -51,6 +51,10 @@
 
                 @include('discover.includes.breadcrumbs.notes-public')
 
+            @elseif (Route::is('members.public.bookmark-list'))
+
+                @include('discover.includes.breadcrumbs.bookmarks-public')
+
             @elseif (Route::is('member.follow.index') OR Route::is('member.follow.edit'))
 
                 @include('discover.includes.breadcrumbs.follows')
