@@ -25,7 +25,7 @@ class NotificationController extends Controller
 
     public function index(Request $request)
     {
-        $notifications = Notification::ofUser(Auth::id())->paginate(50);
+        $notifications = Notification::ofUser(Auth::id())->orderBy('created_at', 'desc')->paginate(50);
         $unread = Notification::ofUser(Auth::id())->unseen()->get();
 
         return view('discover.notifications.index', compact('notifications', 'unread'));
