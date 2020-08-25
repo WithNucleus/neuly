@@ -60,15 +60,15 @@ class FollowController extends Controller
             ->where('user_id', Auth::id())
             ->findOrFail($id);
 
-        $follow->app_notification   = $request->input('app_notification') ?? 0;
-        $follow->email_notification = $request->input('email_notification') ?? 0;
+        $follow->app_notification   = $request->input('app_notification', 0);
+        $follow->email_notification = $request->input('email_notification', 0);
         $follow->save();
 
-        $name = $follow->followable->name ?? $follow->followable->title;
+        $name        = $follow->followable->name ? $follow->followable->name : $follow->followable->title;
+        $redirectUrl = $request->input('previous_url', url()->previous());
 
-        $redirectUrl = $request->input('previous_url') ?? route('member.follow.index');
-
-        return redirect($redirectUrl)->with('success', '"' . $name . '" subscription was updated.');
+        return redirect($redirectUrl)
+            ->with('success', '"' . $name . '" subscription was updated.');
     }
 
     /**
@@ -83,8 +83,8 @@ class FollowController extends Controller
             ->where('user_id', Auth::id())
             ->findOrFail($id);
 
-        $name        = $follow->followable->name ?? $follow->followable->title;
-        $redirectUrl = $request->input('previous_url') ?? route('member.follow.index');
+        $name        = $follow->followable->name ? $follow->followable->name : $follow->followable->title;
+        $redirectUrl = $request->input('previous_url', url()->previous());
 
         $follow->delete();
 
