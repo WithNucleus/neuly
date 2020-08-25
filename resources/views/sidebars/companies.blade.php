@@ -3,6 +3,10 @@
         <input type="checkbox" class="custom-control-input" name="hiring" id="hiring" value="1" @if ($filter_hiring && $filter_hiring == 1) checked @endif>
         <label class="custom-control-label lead-smaller" for="hiring">Now Hiring</label>
     </div>
+    <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" name="upcoming_events" id="upcoming_events" value="1" @if ($filter_upcoming_events && $filter_upcoming_events == 1) checked @endif>
+        <label class="custom-control-label lead-smaller" for="upcoming_events">Upcoming Events</label>
+    </div>
 </div>
 
 @include('sidebars.filters.checkboxes-new', [
