@@ -24,15 +24,15 @@
             <div class="col-12 breadcrumbs-container bg-white shadow-sm">
                 @include('navbars.breadcrumb', [
                 'items' => [
-                'Notifications' => false
-                ]
-                ])
+                    'Dashboard' => route('member.dashboard'),
+                    'Notifications' => route('dashboard.notifications.index')
+                ]])
             </div>
         </div>
+    </div>
 
-        {{-- Sidebar and Content Area --}}
+    <div class="container">
         <div class="row">
-
             <main id="index-main" role="main" class="col-lg-12 col-xl-12 ml-auto">
                 <div class="row">
 
@@ -50,15 +50,12 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
 
-                @include('discover.includes.discover-footer-content')
+                @include('footers.mini')
 
             </main>
-
         </div>
-
     </div>
 
 @endsection
