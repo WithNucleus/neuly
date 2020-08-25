@@ -164,7 +164,8 @@ class EventController extends Controller
             ->withProperties([
                 'ip' => $request->ip(),
                 'entity' => 'events',
-                'slug' => $event->slug
+                'slug' => $event->slug,
+                'image' => $event->image
             ])
             ->performedOn($event)
             ->log($event->name);
