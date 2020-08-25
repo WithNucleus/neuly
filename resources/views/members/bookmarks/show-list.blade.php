@@ -48,10 +48,10 @@
 
                         <div class="align-self-end pb-1 font-size-small">
                             @if($list->is_public && $member->member_url)
-                                <a href="{{ route('members.public.bookmark-list', [$member->member_url , $list->slug]) }}" class="text-primary text-decoration-none mr-2"><i class="fad fa-link"></i> Show</a>
+                                <a href="{{ route('members.public.bookmark-list', [$member->member_url , $list->slug]) }}" class="text-secondarydark text-decoration-none mr-2"><i class="fad fa-link"></i> Public URL</a>
                             @endif
-                            <a href="{{ route('member.bookmarks.edit-list', $list->slug) }}" class="text-primary text-decoration-none mr-2"><i class="fad fa-edit"></i> Edit</a>
-                            <button type="button" class="btn btn-link btn-sm p-0 text-danger text-decoration-none" data-toggle="modal" data-target="#delete-list"><i class="fad fa-trash-alt"></i> Delete</button>
+                            <a href="{{ route('member.bookmarks.edit-list', $list->slug) }}" class="text-primary text-decoration-none mr-2"><i class="fad fa-edit"></i> Edit List</a>
+                            <button type="button" class="btn btn-link btn-sm p-0 text-danger text-decoration-none" data-toggle="modal" data-target="#delete-list"><i class="fad fa-trash-alt"></i> Delete List</button>
                         </div>
                     </div>
 
