@@ -22,11 +22,12 @@ class DashboardController extends Controller
             return view('members.dashboard-loggedout');
         }
 
-        $lastActivityIdsByType = Activity::select(DB::raw('MAX(id) AS id'))
+        $lastActivityIdsByType = Activity::select(DB::raw('MAX(id) AS id, MAX(created_at) AS created_at'))
             ->where('causer_id', Auth::id())
             ->where('causer_type', 'App\User')
             ->where('log_name', 'pageview')
             ->groupBy(['subject_id', 'subject_type'])
+            ->orderBy('created_at', 'desc')
             ->take(10)
             ->get()
             ->pluck('id')
