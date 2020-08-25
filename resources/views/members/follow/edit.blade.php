@@ -44,12 +44,13 @@
 
                         <div class="form-group">
                             <button type="submit" class="submit btn btn-primary">Save</button>
+                            <button class="btn btn-danger js-unfollow-button"><i class="fad fa-trash"></i> Unfollow</button>
                         </div>
                     </form>
-                    <form method="post" action="{{ route('member.follow.destroy', $follow->id) }}">
-                        <button type="submit" class="btn confirm-action btn-sm btn-danger"><i class="fad fa-trash"></i> Unfollow</button>
+                    <form method="post" action="{{ route('member.follow.destroy', $follow->id) }}" class="js-unfollow-form" style="display: none;">
                         @csrf
                         @method('delete')
+                        <input type="hidden" name="previous_url" value="{{ $previousUrl }}">
                     </form>
                 </div>
             </div>
@@ -57,5 +58,17 @@
     </div>
 
     @include('members.includes.dashboard-end')
+
+    <script>
+        $(function(){
+            $('.js-unfollow-button').on('click', function (e) {
+                e.preventDefault();
+
+                if (confirm("Are you sure?")) {
+                    $('.js-unfollow-form').submit();
+                }
+            })
+        });
+    </script>
 
 @endsection

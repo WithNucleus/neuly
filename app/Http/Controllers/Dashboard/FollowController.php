@@ -13,7 +13,6 @@ use App\Models\Investor;
 use App\Models\Location;
 use App\Models\Person;
 use App\Models\Research;
-use App\Traits\GetEntityToFollow;
 use Illuminate\Http\Request;
 use Auth;
 
@@ -61,34 +60,35 @@ class FollowController extends Controller
             ->where('user_id', Auth::id())
             ->findOrFail($id);
 
-        $follow->app_notification   = $request->input('app_notification') ?? 0;
-        $follow->email_notification = $request->input('email_notification') ?? 0;
+        $follow->app_notification   = $request->input('app_notification', 0);
+        $follow->email_notification = $request->input('email_notification', 0);
         $follow->save();
 
-        $name = $follow->followable->name ?? $follow->followable->title;
+        $name        = $follow->followable->name ? $follow->followable->name : $follow->followable->title;
+        $redirectUrl = $request->input('previous_url', url()->previous());
 
-        $redirectUrl = $request->input('previous_url') ?? route('member.follow.index');
-
-        return redirect($redirectUrl)->with('success', '"' . $name . '" subscription was updated.');
+        return redirect($redirectUrl)
+            ->with('success', '"' . $name . '" subscription was updated.');
     }
 
     /**
+     * @param \Illuminate\Http\Request $request
      * @param int $id
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Exception
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $follow = Follow::with('followable')
             ->where('user_id', Auth::id())
             ->findOrFail($id);
 
-        $name = $follow->followable->name ?? $follow->followable->title;
+        $name        = $follow->followable->name ? $follow->followable->name : $follow->followable->title;
+        $redirectUrl = $request->input('previous_url', url()->previous());
 
         $follow->delete();
 
-        return redirect()
-            ->route('member.follow.index')
+        return redirect($redirectUrl)
             ->with('success', '"' . $name . '" was deleted from your follows list.');
     }
 
