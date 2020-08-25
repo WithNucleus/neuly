@@ -14,7 +14,7 @@
 
 @include('sidebars.filters.checkboxes-new', [
     'label'     => 'Locations',
-    'name'      => 'location',
+    'name'      => 'locations',
     'items'     => $locations,
     'item_filters' => $filters_location
 ])
@@ -22,15 +22,15 @@
 {{-- @include('sidebars.filters.location', ['column' => '3']) --}}
 
 {{-- @include('sidebars.filters.textsearch', [
-	'title' 		=> 'Organization', 
-	'placeholder' 	=> 'e.g. 920 Coalition', 
+	'title' 		=> 'Organization',
+	'placeholder' 	=> 'e.g. 920 Coalition',
 	'prefetch' 		=> 'organization/names.json',
 	'column' 		=> 4
 ]) --}}
 
 {{-- @include('sidebars.filters.textsearch', [
-	'title' 		=> 'Collaborator', 
-	'placeholder' 	=> 'e.g. Allergan', 
+	'title' 		=> 'Collaborator',
+	'placeholder' 	=> 'e.g. Allergan',
 	'prefetch' 		=> 'people/names.json',
 	'column' 		=> 4
 ]) --}}
