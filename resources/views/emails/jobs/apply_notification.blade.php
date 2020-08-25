@@ -6,7 +6,7 @@
 
 **Position:** {{ $position }}
 
-**Name:** {{ $name }}
+**Name:** {{ $fullName }}
 
 Resume and cover letter are attached.
 

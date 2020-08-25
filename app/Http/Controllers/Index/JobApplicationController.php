@@ -43,27 +43,16 @@ class JobApplicationController extends Controller
     // Process Job Application
     public function apply(JobApplicationRequest $request) {
 
-    	// Get Job ID
-    	$job_id = $request->input('job_id');
+        $user       = Auth::user();
+        $name       = $user->name;
+        $fullName   = $user->name . ' ' . $user->last_name;
+        $job_id     = $request->input('job_id');
+        $company_id = $request->input('company_id');
 
-    	// Get User ID
-    	$user_id = Auth::id();
-
-    	// Get User's Name
-    	$name = User::find($user_id)->name;
-
-    	// Get Company ID
-    	$company_id = $request->input('company_id');
-
-    	// Get Company Name
-    	$company = Company::find($company_id)->name;
-
-    	// Get Job Position
+    	$company  = Company::find($company_id)->name;
     	$position = Job::find($job_id)->job_title;
 
-    	// Check if Valid
     	if ($request->file('resume')->isValid() AND $request->file('cover_letter')->isValid()) {
-
 			// Store Resume
 			$resume = $request->file('resume');
 			$resume_filename = 'job-' . $job_id . '-' . $name . '-resume.pdf';
@@ -73,29 +62,24 @@ class JobApplicationController extends Controller
 			$cover_letter = $request->file('cover_letter');
 			$cover_letter_filename = 'job-' . $job_id . '-' . $name . '-cover-letter.pdf';
 			$cover_letter_path = $request->cover_letter->storeAs('jobsapps' , $cover_letter_filename);
-
 		}
 
-		// Job Application Attributes
-		$attributes = array(
-			'user_id' => $user_id,
-			'job_id' => $job_id,
-			'company_id' => $company_id,
-			'resume' => $resume_path,
-			'cover_letter' => $cover_letter_path
-		);
+        $attributes = array(
+            'user_id'      => $user->id,
+            'job_id'       => $job_id,
+            'company_id'   => $company_id,
+            'resume'       => $resume_path,
+            'cover_letter' => $cover_letter_path
+        );
 
-		// Create Job Application Record
 		$job_application = JobApplication::create($attributes);
 
 		// Send Mail to Cody
 		Mail::to('support@neuly.com')
 				->bcc('sydney@gotsmith.com')
-				->send(new JobApplicationNotification($job_id, $name, $company, $position, $resume_path, $cover_letter_path));
+				->send(new JobApplicationNotification($job_id, $fullName, $company, $position, $resume_path, $cover_letter_path));
 
-		// Return Success View
 		return view('discover.jobs.success', compact('name', 'company', 'position'));
-
     }
 
     // Get Resume
