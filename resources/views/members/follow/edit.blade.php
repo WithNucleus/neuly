@@ -20,13 +20,13 @@
                     </div>
 
                     <p class="lead">
-                        <a href="{{ route('member.follow.show', $follow->id) }}">{{ $follow->followable->name ?? $follow->followable->title }}</a>
+                        <a href="{{ route('member.follow.show', $follow->id) }}">{{ $follow->followable->name }}</a>
                     </p>
 
                     <form method="POST" action="{{ route('member.follow.update', $follow->id) }}">
                         @csrf
                         @method('put')
-                        <input type="hidden" name="previous_url" value="{{ $previousUrl }}">
+                        <input type="hidden" name="previous_url" value="{{ old('previous_url', $previousUrl) }}">
 
                         <div class="form-group">
                             <div>
@@ -44,31 +44,20 @@
 
                         <div class="form-group">
                             <button type="submit" class="submit btn btn-primary">Save</button>
-                            <button class="btn btn-danger js-unfollow-button"><i class="fad fa-trash"></i> Unfollow</button>
+                            <a class="btn btn-danger text-white" data-toggle="modal"
+                                    data-target="#unfollow-modal-{{$follow->followable_id}}"><i class="fad fa-trash"></i> Unfollow</a>
                         </div>
-                    </form>
-                    <form method="post" action="{{ route('member.follow.destroy', $follow->id) }}" class="js-unfollow-form" style="display: none;">
-                        @csrf
-                        @method('delete')
-                        <input type="hidden" name="previous_url" value="{{ $previousUrl }}">
                     </form>
                 </div>
             </div>
         </div>
     </div>
 
+    @include('members.follow.modals.unfollow', [
+        'followable_type' => $follow->followable_type,
+        'followable_id' => $follow->followable_id,
+        'name' => $follow->followable->name,
+        'previous_url' => old('previous_url', $previousUrl)
+    ])
     @include('members.includes.dashboard-end')
-
-    <script>
-        $(function(){
-            $('.js-unfollow-button').on('click', function (e) {
-                e.preventDefault();
-
-                if (confirm("Are you sure?")) {
-                    $('.js-unfollow-form').submit();
-                }
-            })
-        });
-    </script>
-
 @endsection

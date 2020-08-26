@@ -96,6 +96,12 @@ class Clinicaltrial extends Model
     |--------------------------------------------------------------------------
     */
 
+    //alias for title
+    public function getNameAttribute()
+    {
+        return $this->attributes['title'];
+    }
+
     // Set Slug Attribute When Setting Title
     public function setTitleAttribute($value) {
 
