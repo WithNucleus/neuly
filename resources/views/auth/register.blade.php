@@ -1,11 +1,13 @@
 @extends('layouts.plain')
 
+@section('body-class', 'home-hero')
+
 @section('content')
 
 @include('navbars.auth')
 
 <div class="container">
-    <div class="bg-white shadow-sm p-3 p-md-4 p-lg-5">
+    <div class="bg-light shadow-sm p-3 p-md-4 p-lg-5">
         <div class="row">
             <div class="col-12 col-lg-6 mb-4 mb-lg-0 pr-lg-5">
 
