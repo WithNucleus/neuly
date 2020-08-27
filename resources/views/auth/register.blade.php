@@ -13,7 +13,7 @@
 
                 <h1 class="h2 text-center text-primary page-title-default mb-4 mt-2">Join {{ config('app.name', 'Neuly') }}</h1>
 
-                <ul class="plain-list d-none d-md-block">
+                <ul class="plain-list">
                     <li class="mb-4">
                         <i class="fas fa-check-circle text-secondarydark"></i> <strong class="lead-smaller">Explore the entire Neuly database</strong><br>
                         Our database is updated daily with the latest information about the psychedelics industry.
