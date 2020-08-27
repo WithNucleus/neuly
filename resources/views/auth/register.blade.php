@@ -11,24 +11,20 @@
         <div class="row">
             <div class="col-12 col-lg-6 mb-4 mb-lg-0 pr-lg-5">
 
-                <h1 class="h2 text-center text-primary page-title-default mb-4">Join {{ config('app.name', 'Neuly') }}</h1>
-
-                <p class="lead-smaller">
-                    By having a Neuly account, you'll get access to our extensive psychedelic database + your dashboard to follow & save info, take notes, and more.
-                </p>
+                <h1 class="h2 text-center text-primary page-title-default mb-4 mt-2">Join {{ config('app.name', 'Neuly') }}</h1>
 
                 <ul class="plain-list d-none d-md-block">
-                    <li class="mb-3">
-                        <i class="fas fa-check-circle text-secondarydark"></i> <strong class="font-size-large">Browse our entire database</strong><br>
-                        Neuly is updated daily with the latest information in the psychedelics industry.
+                    <li class="mb-4">
+                        <i class="fas fa-check-circle text-secondarydark"></i> <strong class="lead-smaller">Explore the entire Neuly database</strong><br>
+                        Our database is updated daily with the latest information about the psychedelics industry.
                     </li>
-                    <li class="mb-3">
-                        <i class="fas fa-check-circle text-secondarydark"></i> <strong class="font-size-large">Collect &amp; organize your info</strong><br>
-                        Document your findings, make connections, and keep all your data together in one place.
+                    <li class="mb-4">
+                        <i class="fas fa-check-circle text-secondarydark"></i> <strong class="lead-smaller">Collect &amp; organize your info</strong><br>
+                        Keep track of your research, organize your findings, and get alerts so you can stay on the cutting edge of psychedelics.
                     </li>
                     <li>
-                        <i class="fas fa-check-circle text-secondarydark"></i> <strong class="font-size-large">Neuly's tools to help you</strong><br>
-                        Bookmark, follow, and take notes - plus insights coming soon!
+                        <i class="fas fa-check-circle text-secondarydark"></i> <strong class="lead-smaller">Custom Neuly member dashboard</strong><br>
+                        Bookmark, follow, and take notes. Then, share your work via email, social, or create a custom public URL.
                     </li>
                 </ul>
             </div>
