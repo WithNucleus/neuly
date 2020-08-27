@@ -43,15 +43,7 @@ class updatePersonSlugs extends Command
         $people = Person::whereNull('slug')->take(10)->get();
 
         foreach ($people as $person) {
-
-            // Get Name
-            $name = $person->name;
-
-            // Generate Slug
-            $slug = Str::slug($name);
-
-            // Update Slug
-            $person->slug = $slug;
+            $person->slug = Person::generateUniqueSlug($person->name);
             $person->update();
 
             // Print Info
