@@ -32,15 +32,14 @@
     </div>
 
     <div class="container">
-        <main id="index-main" role="main" class="col-lg-12 col-xl-12 ml-auto">
-            <div class="page-title-default d-md-flex justify-content-between">
+        <main id="index-main" role="main" class="col-12">
+            <div class="d-md-flex justify-content-between mb-1">
                 <h1 class="mb-0 mr-5">Notifications</h1>
 
                 <span class="lead-smaller align-self-end pb-1">
                     Showing {{ $notifications->total() }} Notifications ({{$unread->count()}} new)
                 </span>
             </div>
-
 
             {{-- Notifications --}}
             <ul class="list-group list-group-flush mb-4 shadow-sm">

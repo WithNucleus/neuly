@@ -385,7 +385,6 @@ class CompanyCrudController extends CrudController
         $oldInvestors = $this->getInvestorIds($originalCompany);
         $oldFocus = $this->getFocusIds($originalCompany);
 
-
         $response = $this->traitUpdate();
         $request = $response->getRequest();
 
@@ -402,11 +401,15 @@ class CompanyCrudController extends CrudController
         {
             foreach($addedInvestors as $key => $investorId)
             {
-                $title = 'Investor was added to company';
-
                 $investor = Investor::find($investorId);
-                SendNotification::dispatch($investor, $title, 'some long description');
-                SendNotification::dispatch($company, $title, 'some long description');
+
+                $title_investor = $investor->name . ' was added to an organization';
+                $title_organization = $company->name . ' has a new investor';
+
+                $description = $investor->name . ' is an investor in ' . $company->name . ', a ' . $company->ownership . ' organization.';
+
+                SendNotification::dispatch($investor, $title_investor, $description);
+                SendNotification::dispatch($company, $title_organization, $description);
             }
         }
 
@@ -414,11 +417,13 @@ class CompanyCrudController extends CrudController
         {
             foreach($removedInvestors as $key => $investorId)
             {
-                $title = 'Investor was removed from company';
-
                 $investor = Investor::find($investorId);
-                SendNotification::dispatch($investor, $title, 'some long description');
-                SendNotification::dispatch($company, $title, 'some long description');
+
+                $title = $investor->name . ' was removed as an investor for ' . $company->name;
+                $description = '';
+
+                SendNotification::dispatch($investor, $title, $description);
+                SendNotification::dispatch($company, $title, $description);
             }
         }
 
@@ -426,11 +431,14 @@ class CompanyCrudController extends CrudController
         {
             foreach($addedFocus as $key => $focusId)
             {
-                $title = 'Focus was added to company';
-
                 $focus = Focus::find($focusId);
-                SendNotification::dispatch($focus, $title, 'some long description');
-                SendNotification::dispatch($company, $title, 'some long description');
+
+                $title_focus = $focus->name . ' was added to an organization';
+                $title_company = $company->name . ' has a new focus';
+                $description = $company->name . ' is a ' . $company->ownership . '  organization with a focus on ' . $focus->name;
+
+                SendNotification::dispatch($focus, $title_focus, $description);
+                SendNotification::dispatch($company, $title_company, $description);
             }
         }
 
@@ -438,11 +446,13 @@ class CompanyCrudController extends CrudController
         {
             foreach($removedFocus as $key => $focusId)
             {
-                $title = 'Focus was removed from company';
-
                 $focus = Focus::find($focusId);
-                SendNotification::dispatch($focus, $title, 'some long description');
-                SendNotification::dispatch($company, $title, 'some long description');
+
+                $title = $focus->name . ' was removed from ' . $company->name;
+                $description = '';
+
+                SendNotification::dispatch($focus, $title, $description);
+                SendNotification::dispatch($company, $title, $description);
             }
         }
 
