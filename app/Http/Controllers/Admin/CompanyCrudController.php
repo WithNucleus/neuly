@@ -352,15 +352,26 @@ class CompanyCrudController extends CrudController
 
         if($request->has('focus') && $request->input('focus') !== null) {
             foreach($request->input('focus') as $focusId) {
+
                 $focus = Focus::find($focusId);
-                SendNotification::dispatch($focus, 'A new company has been added to focus.', 'some long description');
+
+                $title = $focus->name . ' has a new organization';
+                $description = $company->name . ' is a ' . $company->ownership . '  organization with a focus on ' . $focus->name;
+
+                SendNotification::dispatch($focus, $title, $description);
             }
         }
 
         if($request->has('investors') && $request->input('investors') !== null) {
             foreach($request->input('investors') as $investorId) {
+
                 $investor = Investor::find($investorId);
-                SendNotification::dispatch($investor, 'A new company has been added to investor.', 'some long description');
+
+                $title = 'A new organization has been added to ' . $investor->name;
+
+                $description = $company->name . ' was recently added as a ' . $company->ownership . ' organization and ' . $investor->name . ' is an investor';
+
+                SendNotification::dispatch($investor, $title, $description);
             }
         }
 
