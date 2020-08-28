@@ -53,23 +53,11 @@
                                 @endif
                             </div>
                             <p class="my-0">
-                                {{-- <a data-toggle="collapse" href="#notification-{{ $notification->id }}" role="button" aria-expanded="false" aria-controls="notification-{{ $notification->id }}" class="{{ $notification->was_read === 0 ? 'text-secondarydark lead font-weight-bold' : 'text-dark lead-smaller'}}">
+                                <button class="load-ajax-modal btn btn-link p-0 {{ $notification->was_read === 0 ? 'text-secondarydark btn-lg font-weight-bold' : 'text-dark lead-smaller'}}" data-title="{{ $notification->title}}" data-path="{{ route('dashboard.notifications.show', $notification->id) }}" data-toggle="modal" data-target="#dynamic-modal">
                                     {{ $notification->title}}
-                                </a> --}}
-
-                                <a href="{{ route('dashboard.notifications.show', $notification->id) }}" class="{{ $notification->was_read === 0 ? 'text-secondarydark lead font-weight-bold' : 'text-dark lead-smaller'}}">
-                                    {{ $notification->title}}
-                                </a>
+                                </button>
                             </p>
                         </div>
-
-                        {{-- <div class="collapse" id="notification-{{ $notification->id }}">
-                            <div class="d-flex">
-                                <div class="bookmark-image mr-2 flex-shrink-0"></div>
-                                <div>{!! $notification->message !!}</div>
-                            </div>
-                        </div> --}}
-
                     </li>
                 @empty
                 <li class="list-group-item">
@@ -82,6 +70,15 @@
         </main>
 
     </div>
+
+    @include('discover.notifications.modal')
+
+    <script>
+        $('.load-ajax-modal').click(function() {
+            $(this).removeClass('text-secondarydark btn-lg font-weight-bold');
+            $(this).addClass('text-dark lead-smaller');
+        });
+    </script>
 
     @include('footers.mini')
 
