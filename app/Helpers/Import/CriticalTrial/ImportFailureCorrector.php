@@ -52,12 +52,13 @@ class ImportFailureCorrector
 
         try {
             $clinicaltrial = Clinicaltrial::where('nct_number', $nctNumber)->firstOrFail();
-            $slug          = Str::slug($importValue);
+
 
             if ($modelClassName === Company::class) {
                 $company = Company::updateOrCreate([
                     'name' => $importValue,
-                    'slug' => $slug,
+                ], [
+                    'slug' => Str::slug($importValue)
                 ]);
 
                 $clinicaltrial->companies()->syncWithoutDetaching($company->id);
@@ -66,8 +67,9 @@ class ImportFailureCorrector
 
             if ($modelClassName === Person::class) {
                 $person = Person::updateOrCreate([
-                    'name' => $importValue,
-                    'slug' => $slug,
+                    'name' => $importValue
+                ], [
+                    'slug' => Person::generateUniqueSlug($importValue)
                 ]);
 
                 $clinicaltrial->people()->syncWithoutDetaching($person->id);
