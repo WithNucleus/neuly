@@ -198,14 +198,24 @@ class InvestorCrudController extends CrudController
         if($request->has('locations') && $request->input('locations') !== null) {
             foreach($request->input('locations') as $locationId) {
                 $location = Location::find($locationId);
-                SendNotification::dispatch($location, 'A new investor has been added to location.', 'some long description');
+
+                $title = 'New investor in ' . $location->name;
+
+                $description = $investor->getShowLink() . ' is a new investor located in ' . $location->getShowLink();
+
+                SendNotification::dispatch($location, $title, $description, 'locations');
             }
         }
 
         if($request->has('companies') && $request->input('companies') !== null) {
             foreach($request->input('companies') as $companyId) {
                 $company = Company::find($companyId);
-                SendNotification::dispatch($company, 'A new investor has been added to company.', 'some long description');
+
+                $title = 'New investor for ' . $company->name;
+                
+                $description = $investor->getShowLink() . ' is a recently added investor in ' . $company->getShowLink() . ', ' . $company->getTypeDescription() . '.';
+
+                SendNotification::dispatch($company, $title, $description, 'organizations');
             }
         }
 
@@ -218,7 +228,6 @@ class InvestorCrudController extends CrudController
         $originalInvestor = $this->getOriginalModel($this->crud);
         $oldCompanies= $this->getCompanyIds($originalInvestor);
         $oldLocations = $this->getLocationIds($originalInvestor);
-
 
         $response = $this->traitUpdate();
         $request = $response->getRequest();
@@ -236,11 +245,15 @@ class InvestorCrudController extends CrudController
         {
             foreach($removedCompanies as $key => $companyId)
             {
-                $title = 'Investor was removed from company';
+                $company = Company::find($companyId);
 
-                $company= Company::find($companyId);
-                SendNotification::dispatch($investor, $title, 'some long description');
-                SendNotification::dispatch($company, $title, 'some long description');
+                $title_investor = $investor->name . ' was removed from an organization';
+                $title_company = $company->name . ' removed an investor';
+
+                $description = $investor->getShowLink() . ' is no longer an investor in ' . $company->getShowLink();
+
+                SendNotification::dispatch($investor, $title_investor, $description, 'investors');
+                SendNotification::dispatch($company, $title_company, $description, 'organizations');
             }
         }
 
@@ -248,11 +261,15 @@ class InvestorCrudController extends CrudController
         {
             foreach($addedCompanies as $key => $companyId)
             {
-                $title = 'Investor was added to company';
+                $company = Company::find($companyId);
 
-                $company= Company::find($companyId);
-                SendNotification::dispatch($investor, $title, 'some long description');
-                SendNotification::dispatch($company, $title, 'some long description');
+                $title_investor = $investor->name . ' was added to an organization';
+                $title_company = $company->name . ' has a new investor';
+
+                $description = $investor->getShowLink() . ' is now an investor in ' . $company->getShowLink();
+
+                SendNotification::dispatch($investor, $title_investor, $description, 'investors');
+                SendNotification::dispatch($company, $title_company, $description, 'organizations');
             }
         }
 
@@ -260,11 +277,15 @@ class InvestorCrudController extends CrudController
         {
             foreach($removedLocations as $key => $locationId)
             {
-                $title = 'Location was removed from investor';
-
                 $location = Location::find($locationId);
-                SendNotification::dispatch($location, $title, 'some long description');
-                SendNotification::dispatch($company, $title, 'some long description');
+
+                $title_investor = $investor->name . ' removed a location';
+                $title_location = $location->name . ' lost an investor';
+
+                $description = $investor->getShowLink() . ' is no longer located in ' . $location->getShowLink();
+
+                SendNotification::dispatch($location, $title_location, $description, 'locations');
+                SendNotification::dispatch($investor, $title_investor, $description, 'investors');
             }
         }
 
@@ -272,11 +293,15 @@ class InvestorCrudController extends CrudController
         {
             foreach($addedLocations as $key => $locationId)
             {
-                $title = 'Location was added to investor';
-
                 $location = Location::find($locationId);
-                SendNotification::dispatch($location, $title, 'some long description');
-                SendNotification::dispatch($company, $title, 'some long description');
+
+                $title_investor = $investor->name . ' added a location';
+                $title_location = 'Investor is located in ' . $location->name;
+
+                $description = $investor->getShowLink() . ' is now located in ' . $location->getShowLink();
+
+                SendNotification::dispatch($location, $title_location, $description, 'locations');
+                SendNotification::dispatch($investor, $title_investor, $description, 'investors');
             }
         }
 

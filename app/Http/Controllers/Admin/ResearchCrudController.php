@@ -239,11 +239,16 @@ class ResearchCrudController extends CrudController
     {
         $response = $this->traitStore();
         $request = $response->getRequest();
+        $research = $this->data['entry'];
 
         if($request->has('focus') && $request->input('focus') !== null) {
             foreach($request->input('focus') as $focusId) {
                 $focus = Focus::find($focusId);
-                SendNotification::dispatch($focus, 'A new research has been added to focus.', 'some long description');
+
+                $title = 'New research related to ' . $focus->name;
+                $description = $research->getShowLink() . ' has been added to ' . $focus->getShowLink() . '.';
+
+                SendNotification::dispatch($focus, $title, $description, 'focus');
             }
         }
 
@@ -269,21 +274,12 @@ class ResearchCrudController extends CrudController
         {
             foreach($addedFocus as $key => $focusId)
             {
-                $title = 'Focus was added to research';
-
                 $focus = Focus::find($focusId);
-                SendNotification::dispatch($focus, $title, 'some long description');
-            }
-        }
 
-        if($removedFocus !== [])
-        {
-            foreach($removedFocus as $key => $focusId)
-            {
-                $title = 'Focus was removed from research';
+                $title = 'Research updated related to ' . $focus->name;
+                $description = $research->getShowLink() . ' has been updated with a focus on ' . $focus->getShowLink() . '.';
 
-                $focus = Focus::find($focusId);
-                SendNotification::dispatch($focus, $title, 'some long description');
+                SendNotification::dispatch($focus, $title, $description, 'focus');
             }
         }
 

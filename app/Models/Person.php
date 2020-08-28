@@ -96,7 +96,7 @@ class Person extends Model
         }
     }
 
-    public function linkToShow() {
+    public function getShowLink() {
         return '<a href="' . route('discover.people.show', $this->slug) . '">' . $this->name . '</a>';
     }
 

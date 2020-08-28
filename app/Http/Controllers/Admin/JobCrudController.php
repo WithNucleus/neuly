@@ -256,9 +256,9 @@ class JobCrudController extends CrudController
             $company = Company::find($request->input('company_id'));
             
             $title = 'New job posting for ' . $company->name;
-            $description = $company->name . ' is hiring for a ' . $job->employment_type . ' ' . $job->job_title;
+            $description = $company->getShowLink() . ' is hiring for a ' . $job->employment_type . ' position: ' . $job->getShowLink();
 
-            SendNotification::dispatch($company, $title, $description);
+            SendNotification::dispatch($company, $title, $description, 'jobs');
         }
 
         if($request->has('focus') && $request->input('focus') !== null) {
@@ -267,9 +267,9 @@ class JobCrudController extends CrudController
                 $focus = Focus::find($focusId);
 
                 $title = 'New job posting related to ' . $focus->name;
-                $description = $company->name . ' is hiring for a ' . $job->employment_type . ' ' . $job->job_title;
+                $description = $company->getShowLink() . ' is hiring for a ' . $job->employment_type . ' position: ' . $job->getShowLink();
 
-                SendNotification::dispatch($focus, $title, $description);
+                SendNotification::dispatch($focus, $title, $description, 'jobs');
             }
         }
 
@@ -287,36 +287,39 @@ class JobCrudController extends CrudController
         $job = $this->data['entry'];
         $company = Company::find($job->company_id);
 
-        $title = 'Updated job posting for ' . $job->job_title . ' at ' . $company->name;
+        $title = 'Updated job posting for ' . $company->name;
+        $description = 'The job posting for ' . $job->getShowLink() . ' at ' . $company->getShowLink() . ' has been updated.';
 
-        SendNotification::dispatch($company, $title, '');
+        SendNotification::dispatch($company, $title, $description, 'jobs');
 
         $newFocus = $this->getFocusIds($job);
 
         $addedFocus = array_diff($newFocus, $oldFocus);
         $removedFocus = array_diff($oldFocus, $newFocus);
 
-        if($addedFocus !== [])
-        {
-            foreach($addedFocus as $key => $focusId)
-            {
-                $title = 'Focus was added to job';
+        // Waiting til later to implement
+        // if($addedFocus !== [])
+        // {
+        //     foreach($addedFocus as $key => $focusId)
+        //     {
+        //         $title = 'Focus was added to job';
 
-                $focus = Focus::find($focusId);
-                SendNotification::dispatch($focus, $title, 'some long description');
-            }
-        }
+        //         $focus = Focus::find($focusId);
+        //         SendNotification::dispatch($focus, $title, 'some long description', 'jobs');
+        //     }
+        // }
 
-        if($removedFocus !== [])
-        {
-            foreach($removedFocus as $key => $focusId)
-            {
-                $title = 'Focus was removed from job';
+        // Waiting til later to implement
+        // if($removedFocus !== [])
+        // {
+        //     foreach($removedFocus as $key => $focusId)
+        //     {
+        //         $title = 'Focus was removed from job';
 
-                $focus = Focus::find($focusId);
-                SendNotification::dispatch($focus, $title, 'some long description');
-            }
-        }
+        //         $focus = Focus::find($focusId);
+        //         SendNotification::dispatch($focus, $title, 'some long description', 'jobs');
+        //     }
+        // }
 
         return $response;
     }

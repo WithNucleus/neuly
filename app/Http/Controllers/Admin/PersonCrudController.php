@@ -272,7 +272,7 @@ class PersonCrudController extends CrudController
             'name' => [
                 'name' => 'name',
                 'type' => 'model_function',
-                'function_name' => 'linkToShow'
+                'function_name' => 'getShowLink'
             ],
             'email' => [
                 'name' => 'email',

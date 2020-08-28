@@ -31,6 +31,10 @@ class Job extends Model
     |--------------------------------------------------------------------------
     */
 
+    public function getShowLink() {
+        return '<a href="' . route('discover.jobs.show', $this->slug) . '">' . $this->job_title . '</a>';
+    }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS

@@ -357,7 +357,7 @@ class CompanyCrudController extends CrudController
 
                 $title = $focus->name . ' has a new organization';
 
-                $description = '<a href="' . route('discover.organizations.show', $company->slug) . '">' . $company->name . '</a> is a ' . $company->ownership . ' with a focus on <a href="' . route('discover.focus.show', $focus->slug) . '">' . $focus->name . '</a>';
+                $description = $company->getShowLink() . ' is ' . $company->getTypeDescription() . ' with a focus on ' . $focus->getShowLink() . '.';
 
                 SendNotification::dispatch($focus, $title, $description, 'focus');
             }
@@ -370,7 +370,7 @@ class CompanyCrudController extends CrudController
 
                 $title = 'A new organization has been added to ' . $investor->name;
 
-                $description = '<a href="' . route('discover.investors.show', $investor->slug) . '">' . $investor->name . '</a> is investing in recently added ' . $company->ownership  . ' <a href="' . route('discover.organizations.show', $company->slug) . '">' . $company->name . '</a>';
+                $description = $investor->getShowLink() . ' is investing in ' . $company->getShowLink() . ', ' . $company->getTypeDescription() . '.';
 
                 SendNotification::dispatch($investor, $title, $description, 'investors');
             }
@@ -407,7 +407,7 @@ class CompanyCrudController extends CrudController
                 $title_investor = $investor->name . ' was added to an organization';
                 $title_organization = $company->name . ' has a new investor';
 
-                $description = '<a href="' . route('discover.investors.show', $investor->slug) . '">' . $investor->name . '</a> is an investor in <a href="' . route('discover.organizations.show', $company->slug) . '">' . $company->name . '</a>, a ' . $company->ownership . '.';
+                $description = $investor->getShowLink() . ' is an investor in ' . $company->getShowLink() . ', ' . $company->getTypeDescription() . '.';
 
                 SendNotification::dispatch($investor, $title_investor, $description, 'investors');
                 SendNotification::dispatch($company, $title_organization, $description, 'organizations');
@@ -421,7 +421,8 @@ class CompanyCrudController extends CrudController
                 $investor = Investor::find($investorId);
 
                 $title = $investor->name . ' was removed as an investor for ' . $company->name;
-                $description = '<a href="' . route('discover.investors.show', $investor->slug) . '">' . $investor->name . '</a> is no longer an investor in <a href="' . route('discover.organizations.show', $company->slug) . '">' . $company->name . '</a>, a ' . $company->ownership . '.';
+                
+                $description = $investor->getShowLink() . ' was removed as an investor in ' . $company->getShowLink() . ', ' . $company->getTypeDescription() . '.';
 
                 SendNotification::dispatch($investor, $title, $description, 'investors');
                 SendNotification::dispatch($company, $title, $description, 'organizations');
@@ -437,7 +438,7 @@ class CompanyCrudController extends CrudController
                 $title_focus = $focus->name . ' was added to an organization';
                 $title_company = $company->name . ' has a new focus';
 
-                $description = '<a href="' . route('discover.organizations.show', $company->slug) . '">' . $company->name . '</a> is a ' . $company->ownership . '  with a focus on <a href="' . route('discover.focus.show', $focus->slug) . '">' . $focus->name . '</a>';
+                $description = $company->getShowLink() . ' is ' . $company->getTypeDescription() . ' with a focus on ' . $focus->getShowLink() . '.';
 
                 SendNotification::dispatch($focus, $title_focus, $description, 'focus');
                 SendNotification::dispatch($company, $title_company, $description, 'organizations');
@@ -451,8 +452,16 @@ class CompanyCrudController extends CrudController
                 $focus = Focus::find($focusId);
 
                 $title = $focus->name . ' was removed from ' . $company->name;
+
+                if ($company->ownership === 'Privately Held') {
+                    $company_ownership = 'a privately held organization';
+                } elseif ($company->ownership === 'Educational Institution') {
+                    $company_ownership = 'an ' . $company->ownership;
+                } else {
+                    $company_ownership = 'a ' . $company->ownership;
+                }
                 
-                $description = '<a href="' . route('discover.organizations.show', $company->slug) . '">' . $company->name . '</a> is a ' . $company->ownership . '  with a previous focus on <a href="' . route('discover.focus.show', $focus->slug) . '">' . $focus->name . '</a>';
+                $description = $company->getShowLink() . ', ' . $company->getTypeDescription() . ' is no longer focusing on ' . $focus->getShowLink() . '.';
 
                 SendNotification::dispatch($focus, $title, $description, 'focus');
                 SendNotification::dispatch($company, $title, $description, 'organizations');

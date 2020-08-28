@@ -51,8 +51,13 @@ class PersonInvestorController extends Controller
             'role' => $request->input('role'),
         ]);
 
-        SendNotification::dispatch($investor, 'investor has added person.', 'some long description');
-        SendNotification::dispatch($person, 'Person has added to company.', 'some long description');
+        $title_investor = $investor->name . ' added a person';
+        $title_person = $person->name . ' was added an investor';
+
+        $description = $person->getShowLink() . ' has the role of ' . $request->input('role') . ' at ' . $investor->getShowLink() . ', ' . $investor->getTypeDescription() . '.';
+        
+        SendNotification::dispatch($investor, $title_investor, $description, 'investors');
+        SendNotification::dispatch($person, $title_person, $description, 'people');
 
         return redirect()->back();
     }

@@ -35,6 +35,10 @@ class Research extends Model
     |--------------------------------------------------------------------------
     */
 
+    public function getShowLink() {
+        return '<a href="' . route('discover.research.show', $this->slug) . '">' . $this->name . '</a>';
+    }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS

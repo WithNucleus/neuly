@@ -53,7 +53,7 @@ class PersonCompanyController extends Controller
         $title_company = $company->name . ' added a new person';
         $title_person = $person->name . ' added to an organization';
 
-        $description = '<a href="' . route('discover.people.show', $person->slug) . '">' . $person->name . '</a> is ' . $request->input('position') . ' at ' . '<a href="' . route('discover.organizations.show', $company->slug) . '">' . $company->name . '</a>';
+        $description = $person->getShowLink() . ' has the position of ' . $request->input('position') . ' at ' . $company->getShowLink() . ', ' . $company->getTypeDescription() . '.';
 
         SendNotification::dispatch($company, $title_company, $description, 'organizations');
         SendNotification::dispatch($person, $title_person, $description, 'people');
