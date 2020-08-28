@@ -15,9 +15,9 @@
             'bookmarks' => $bookmarks
         ])
 
-        @include('members.follow.add-button', [
-            'entity' => $entity,
-            'entity_id' => $clinicaltrial->id,
+        @include('members.follow.button', [
+            'followable_type' => get_class($clinicaltrial),
+            'followable_id' => $clinicaltrial->id,
             'name' => $clinicaltrial->title,
         ])
 

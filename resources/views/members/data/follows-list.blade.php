@@ -9,7 +9,7 @@
         @foreach ($follows as $follow)
             <li class="list-group-item">
                 <p class="font-weight-bold mb-0">
-                    <a href="{{ route('member.follow.show', ['follow' => $follow]) }}">{{ $follow->followable->name ?? $follow->followable->title }}</a>
+                    <a href="{{ route('member.follow.show', ['follow' => $follow]) }}">{{ $follow->followable->name }}</a>
                 </p>
 
                 <div class="d-flex flex-wrap justify-content-between">
@@ -22,11 +22,14 @@
 
                     <div class="right-side font-size-small">
                         <a href="{{ route('member.follow.edit', $follow->id) }}" class="text-primary text-decoration-none mr-2"><i class="fad fa-edit"></i> Edit</a>
-                        <a href="#" class="text-danger text-decoration-none js-unfollow-button"><i class="fad fa-trash-alt"></i> Unfollow</a>
-                        <form method="post" action="{{ route('member.follow.destroy', $follow->id) }}" style="display: none;">
-                            @csrf
-                            @method('delete')
-                        </form>
+                        <a href="#" class="text-danger text-decoration-none" data-toggle="modal"
+                           data-target="#unfollow-modal-{{$follow->followable_id}}"><i class="fad fa-trash-alt"></i> Unfollow</a>
+
+                        @include('members.follow.modals.unfollow', [
+                            'followable_type' => $follow->followable_type,
+                            'followable_id' => $follow->followable_id,
+                            'name' => $follow->followable->name
+                        ])
                     </div>
                 </div>
             </li>
@@ -42,13 +45,3 @@
 @else
     <p>You aren't following anything yet.</p>
 @endif
-<script>
-    $(function(){
-        $('.js-unfollow-button').on('click', function (e) {
-            e.preventDefault();
-            if (confirm("Are you sure?")) {
-                $(this).siblings('form').submit();
-            }
-        })
-    });
-</script>
