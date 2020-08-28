@@ -19,53 +19,54 @@ class RolesAndPermissionsSeeder extends Seeder
         // Create permissions
 
         $permissions = array(
-        	'edit companies',
-        	'edit users',
-        	'admin login',
-        	'edit focus categories',
-			    'view backups',
-			    'view logs',
-			    'edit content',
-			    'edit investors',
-			    'edit people',
-			    'edit locations',
-			    'edit research',
-          'edit jobs',
-          'edit events',
-          'edit event types',
-          'edit news articles',
-          'edit clinical trials',
-          'edit listing requests',
-          'import',
-          'view job applications',
-          'manage redirects',
-		);
+            'edit companies',
+            'edit users',
+            'admin login',
+            'edit focus categories',
+            'view backups',
+            'view logs',
+            'edit content',
+            'edit investors',
+            'edit people',
+            'edit locations',
+            'edit research',
+            'edit jobs',
+            'edit events',
+            'edit event types',
+            'edit news articles',
+            'edit clinical trials',
+            'edit listing requests',
+            'import',
+            'view job applications',
+            'manage redirects',
+            'edit feedback',
+        );
 
-		foreach($permissions as $permission){
-			Permission::create(['name' => $permission]);
-		}
+        foreach ($permissions as $permission) {
+            Permission::create(['name' => $permission]);
+        }
 
         // Create admin role
 
-		Role::create(['name' => 'Admin'])
-			->givePermissionTo(Permission::all());
+        Role::create(['name' => 'Admin'])
+            ->givePermissionTo(Permission::all());
 
-		// Create roles and assign permissions
+        // Create roles and assign permissions
 
         $roles = array(
-        	'Subscriber' 	=> [],
-        	'Premium' 		=> [],
-        	'Editor' 		=> ['edit companies', 'admin login', 'edit investors', 'edit people'],
-        	'Professional' 	=> [],
-        	'Enterprise' 	=> [],
+            'Subscriber' => [],
+            'Premium' => [],
+            'Editor' => ['edit companies', 'admin login', 'edit investors', 'edit people'],
+            'Professional' => [],
+            'Enterprise' => [],
         );
 
-        foreach($roles as $roleName => $permissions){
-        	$role = Role::create(['name' => $roleName]);
+        foreach ($roles as $roleName => $permissions) {
+            $role = Role::create(['name' => $roleName]);
 
-        	if(count($permissions) > 0){
-        		$role->givePermissionTo($permissions);
-        	}
+            if (count($permissions) > 0) {
+                $role->givePermissionTo($permissions);
+            }
         }
     }
 }

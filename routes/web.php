@@ -129,6 +129,11 @@ Route::post('/search/jobs', 'index\SearchController@showJobResults')->name('sear
 Route::post('/search/jobs/{term}', 'Index\SearchController@showJobResults');
 Route::get('/search/jobs/{term}', 'Index\SearchController@showJobResults');
 
+// Feedback
+
+Route::get('/feedback', 'FeedbackController@create')->name('feedback.create');
+Route::post('/feedback', 'FeedbackController@store')->name('feedback.store');
+
 // Thanks for Registering Page
 Route::get('/register/success', 'Auth\SuccessController@thanks')->name('register.success');
 
