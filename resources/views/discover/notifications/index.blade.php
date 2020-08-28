@@ -44,13 +44,31 @@
             {{-- Notifications --}}
             <ul class="list-group list-group-flush mb-4 shadow-sm">
                 @forelse($notifications as $notification)
-                    <li class="list-group-item p-4 d-md-flex">
+                    <li class="list-group-item p-3">
 
-                        <div class="text">
-                            <p class="lead-smaller mb-1 mt-1">
-                                <a href="{{ route('dashboard.notifications.show', $notification->id) }}">{{ $notification->title}}</a>
+                        <div class="d-flex align-items-center">
+                            <div class="bookmark-image mr-2 flex-shrink-0">
+                                @if ($notification->icon !== '')
+                                    <img src="{{ asset('images/icons/' . $notification->icon . '.svg') }}" alt="{{ $notification->title}}">
+                                @endif
+                            </div>
+                            <p class="my-0">
+                                {{-- <a data-toggle="collapse" href="#notification-{{ $notification->id }}" role="button" aria-expanded="false" aria-controls="notification-{{ $notification->id }}" class="{{ $notification->was_read === 0 ? 'text-secondarydark lead font-weight-bold' : 'text-dark lead-smaller'}}">
+                                    {{ $notification->title}}
+                                </a> --}}
+
+                                <a href="{{ route('dashboard.notifications.show', $notification->id) }}" class="{{ $notification->was_read === 0 ? 'text-secondarydark lead font-weight-bold' : 'text-dark lead-smaller'}}">
+                                    {{ $notification->title}}
+                                </a>
                             </p>
                         </div>
+
+                        {{-- <div class="collapse" id="notification-{{ $notification->id }}">
+                            <div class="d-flex">
+                                <div class="bookmark-image mr-2 flex-shrink-0"></div>
+                                <div>{!! $notification->message !!}</div>
+                            </div>
+                        </div> --}}
 
                     </li>
                 @empty

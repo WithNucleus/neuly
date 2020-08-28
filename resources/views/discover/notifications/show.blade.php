@@ -39,8 +39,7 @@
                 <div class="row">
                     <div class="col-12">
                         <p class="lead-smaller">
-                            {{ $notification->message }}
-                            {{ $notification->$notifier->name }}
+                            {!! $notification->message !!}
                         </p>
                     </div>
                 </div>

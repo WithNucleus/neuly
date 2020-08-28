@@ -42,6 +42,7 @@ class CreateAppNotification
             $notification->notifier_type = $event->type;
             $notification->title = $event->title;
             $notification->message = $event->message;
+            $notification->icon = $event->icon;
             $notification->save();
         }
     }

@@ -249,15 +249,27 @@ class JobCrudController extends CrudController
 
         $investor = $this->data['entry'];
 
+        $job = $this->data['entry'];
+
         if($request->has('company_id') && $request->input('company_id') !== null) {
+
             $company = Company::find($request->input('company_id'));
-            SendNotification::dispatch($company, 'A new job has been announced by company.', 'some long description');
+            
+            $title = 'New job posting for ' . $company->name;
+            $description = $company->name . ' is hiring for a ' . $job->employment_type . ' ' . $job->job_title;
+
+            SendNotification::dispatch($company, $title, $description);
         }
 
         if($request->has('focus') && $request->input('focus') !== null) {
             foreach($request->input('focus') as $focusId) {
+
                 $focus = Focus::find($focusId);
-                SendNotification::dispatch($focus, 'A new job has been added to focus.', 'some long description');
+
+                $title = 'New job posting related to ' . $focus->name;
+                $description = $company->name . ' is hiring for a ' . $job->employment_type . ' ' . $job->job_title;
+
+                SendNotification::dispatch($focus, $title, $description);
             }
         }
 
@@ -273,9 +285,11 @@ class JobCrudController extends CrudController
         $request = $response->getRequest();
 
         $job = $this->data['entry'];
-
         $company = Company::find($job->company_id);
-        SendNotification::dispatch($company, 'A job of company has been updated .', 'some long description');
+
+        $title = 'Updated job posting for ' . $job->job_title . ' at ' . $company->name;
+
+        SendNotification::dispatch($company, $title, '');
 
         $newFocus = $this->getFocusIds($job);
 

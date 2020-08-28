@@ -21,17 +21,19 @@ class SendNotification
     public $type;
     public $title;
     public $message;
+    public $icon;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(Model $model, String $title, String $message)
+    public function __construct(Model $model, String $title, String $message, String $icon)
     {
         $this->id = $model->id;
         $this->type = NotificationHelper::getType($model);
         $this->title = $title;
         $this->message = $message;
+        $this->icon = $icon;
     }
 }

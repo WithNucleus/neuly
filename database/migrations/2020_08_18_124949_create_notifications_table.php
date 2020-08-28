@@ -21,6 +21,7 @@ class CreateNotificationsTable extends Migration
             $table->bigInteger('notifier_id')->nullable(false);
             $table->string('notifier_type')->nullable(false);
             $table->boolean('was_read')->default(0);
+            $table->string('icon')->nullable();
             $table->timestamps();
         });
     }

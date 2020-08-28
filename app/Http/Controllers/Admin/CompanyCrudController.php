@@ -356,9 +356,10 @@ class CompanyCrudController extends CrudController
                 $focus = Focus::find($focusId);
 
                 $title = $focus->name . ' has a new organization';
-                $description = $company->name . ' is a ' . $company->ownership . '  organization with a focus on ' . $focus->name;
 
-                SendNotification::dispatch($focus, $title, $description);
+                $description = '<a href="' . route('discover.organizations.show', $company->slug) . '">' . $company->name . '</a> is a ' . $company->ownership . ' with a focus on <a href="' . route('discover.focus.show', $focus->slug) . '">' . $focus->name . '</a>';
+
+                SendNotification::dispatch($focus, $title, $description, 'focus');
             }
         }
 
@@ -369,9 +370,9 @@ class CompanyCrudController extends CrudController
 
                 $title = 'A new organization has been added to ' . $investor->name;
 
-                $description = $company->name . ' was recently added as a ' . $company->ownership . ' organization and ' . $investor->name . ' is an investor';
+                $description = '<a href="' . route('discover.investors.show', $investor->slug) . '">' . $investor->name . '</a> is investing in recently added ' . $company->ownership  . ' <a href="' . route('discover.organizations.show', $company->slug) . '">' . $company->name . '</a>';
 
-                SendNotification::dispatch($investor, $title, $description);
+                SendNotification::dispatch($investor, $title, $description, 'investors');
             }
         }
 
