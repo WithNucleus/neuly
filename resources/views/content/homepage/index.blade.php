@@ -16,8 +16,7 @@
 
         <div class="position-relative p-3 p-md-5 text-center home-hero shadow-sm">
             <div class="col-md-10 col-lg-8 mx-auto my-5 text-center">
-                <h1 class="hero-title font-weight-normal mt-2">Neuly is changing the way to build an industry.</h1>
-                <p class="lead-larger font-weight-normal">Clear data to build the future of psychedelics.</p>
+                <h1 class="hero-title font-weight-normal mt-2 col-lg-8 mx-auto mb-2">Clear data to build the future of psychedelics.</h1>
                 <form id="homepage-discover" class="search-form form-inline mx-auto justify-content-center" method="post" action="/search">
                     @csrf
                     <input class="typeahead form-control hero-search-input shadow-sm search-field" name="search" type="search" placeholder="Discover organizations, people, research..." aria-label="Search">
@@ -33,7 +32,7 @@
 
             <div class="row mb-3">
                 <div class="col">
-                    <h2 class="text-center font-normal h1 text-uppercase hero-subtitle text-quaternary">Neuly <em class="page-title-default text-dark">knows</em> psychedelics</h2>
+                    <h2 class="text-center font-normal h1 text-uppercase hero-subtitle text-quaternary">Neuly <em>knows</em> psychedelics</h2>
                 </div>
             </div>
 
@@ -101,48 +100,13 @@
             </div>
         </div>
 
-        <div class="container-full bg-brains-dark text-white mt-5 mb-5 p-5">
+        <div class="container-full bg-brains-dark text-white mt-5 p-5">
             <p class="lead-larger text-center mb-0">
                 Transparent data and insights, to make better informed decisions.
             </p>
         </div>
 
-        <div class="container pt-2">
-
-            <div class="row">
-
-                {{-- Left Column --}}
-                <div class="col-12 col-md-6">
-                    
-                    {{-- Top 3 Trending News --}}
-                    @include('content.homepage.news')
-
-                    {{-- Organizations by Type --}}
-                    @include('content.homepage.organization-type-chart')
-
-                    {{-- Most Recent Job Postings --}}
-                    @include('content.homepage.recent-jobs')
-
-                </div>
-
-                {{-- Right Column --}}
-                <div class="col-12 col-md-6">
-
-                    {{-- Organization Focus Chart --}}
-                    @include('content.homepage.organization-focus-chart')
-                    
-                    {{-- Upcoming Events --}}
-                    @include('content.homepage.upcoming-events')
-
-                    {{-- Top 10 Locations --}}
-                    @include('content.homepage.top-locations')
-
-                </div>
-            </div>
-
-        </div>
-
-        <div class="bg-brains py-5 mt-5 shadow-sm">
+        <div class="bg-brains py-5 mb-5 shadow-sm">
             <div class="container mt-4 mb-5">
                 <div class="row">
                     <div class="col-12 text-center">
@@ -182,22 +146,54 @@
             </div>
         </div>
 
+        <div class="container pt-2">
+
+            <div class="row">
+
+                {{-- Left Column --}}
+                <div class="col-12 col-md-6">
+                    
+                    {{-- Top 3 Trending News --}}
+                    @include('content.homepage.news')
+
+                    {{-- Organizations by Type --}}
+                    @include('content.homepage.organization-type-chart')
+
+                    {{-- Most Recent Job Postings --}}
+                    @include('content.homepage.recent-jobs')
+
+                </div>
+
+                {{-- Right Column --}}
+                <div class="col-12 col-md-6">
+
+                    {{-- Organization Focus Chart --}}
+                    @include('content.homepage.organization-focus-chart')
+                    
+                    {{-- Upcoming Events --}}
+                    @include('content.homepage.upcoming-events')
+
+                    {{-- Top 10 Locations --}}
+                    @include('content.homepage.top-locations')
+
+                </div>
+            </div>
+
+        </div>
+
         @include('footers.full')
 
     </main>
 
-<!-- Chartings -->
 <script type="text/javascript" src="{{ asset('assets/chart.js') }}"></script>
 <script type="text/javascript" src="{{ asset('assets/chartisan.js') }}"></script>
 
 <script>
 
-    // Company Focus Chart
     const chartCompanyFocus = new Chartisan({
         el: '#chartCompanyFocus',
         url: "{{ route('charts.company_focus') }}",
         hooks: new ChartisanHooks()
-            // .colors(['#D81E5B'])
             .colors(['rgba(63, 69, 49, 1)'])
             .responsive()
             .beginAtZero()
@@ -205,20 +201,6 @@
             .datasets(['bar']),
     });
 
-    // Top 10 Locations Chart
-    // const chartTopLocations = new Chartisan({
-    //     el: '#chartTopLocations',
-    //     url: "{{-- {{ route('charts.top_locations') }} --}}",
-    //     hooks: new ChartisanHooks()
-    //         // .colors(['rgba(63, 69, 49, .9)'])
-    //         .colors(['#D81E5B'])
-    //         .responsive()
-    //         .beginAtZero()
-    //         .legend(false)
-    //         .datasets([{ type: 'line', fill: false }]),
-    // });
-
-    // Global Chart Settings
     Chart.defaults.global.defaultFontColor = '#111';
     Chart.defaults.global.defaultFontFamily = '"Roboto", Avenir, "Helvetica", Arial, sans-serif';
 
@@ -228,7 +210,6 @@
         data: {
             labels: [<?php echo $company_type_chart['labels']; ?>],
             datasets: [{
-                // label: '# of Votes',
                 data: [{{ $company_type_chart['counts'] }}],
                 backgroundColor: [
                     '#A7ABDD',
@@ -258,7 +239,6 @@
             }
         }
     });
-
     </script>
 
 @endsection
