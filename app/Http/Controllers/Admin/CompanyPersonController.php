@@ -45,9 +45,13 @@ class CompanyPersonController extends Controller
 
         // TODO Verify if this person is already attached? Does someone can
         // have multiple position in a company?
+        $title_company = $company->name . ' added a new person';
+        $title_person = $person->name . ' added to an organization';
 
-        SendNotification::dispatch($company, 'Company has added person.', 'some long description');
-        SendNotification::dispatch($person, 'Person has added to company.', 'some long description');
+        $description = '<a href="' . route('discover.people.show', $person->slug) . '">' . $person->name . '</a> is ' . $request->input('position') . ' at ' . '<a href="' . route('discover.organizations.show', $company->slug) . '">' . $company->name . '</a>';
+
+        SendNotification::dispatch($company, $title_company, $description, 'organizations');
+        SendNotification::dispatch($person, $title_person, $description, 'people');
 
         $company->people()->attach($person->id, [
             'position' => $request->input('position'),
@@ -60,8 +64,15 @@ class CompanyPersonController extends Controller
      */
     public function remove(Request $request, $company_id, $person_id)
     {
-        SendNotification::dispatch(Company::find($company_id), 'Company has removed person.', 'some long description');
-        SendNotification::dispatch(Person::find($person_id), 'Person was removed from company.', 'some long description');
+
+        $company = Company::findOrFail($company_id);
+        $person = Person::findOrFail($person_id);
+
+        $title = $person->name . ' left ' . $company->name;
+        $description = '<a href="' . route('discover.people.show', $person->slug) . '">' . $person->name . '</a> previously worked at ' . '<a href="' . route('discover.organizations.show', $company->slug) . '">' . $company->name . '</a>';
+
+        SendNotification::dispatch($company, $title, $description, 'organizations');
+        SendNotification::dispatch($person, $title, $description, 'people');
 
         Company::findOrFail($company_id)->people()->detach($person_id);
         return redirect()->back();

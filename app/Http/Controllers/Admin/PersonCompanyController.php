@@ -50,9 +50,13 @@ class PersonCompanyController extends Controller
             'position' => $request->input('position'),
         ]);
 
+        $title_company = $company->name . ' added a new person';
+        $title_person = $person->name . ' added to an organization';
 
-        SendNotification::dispatch($company, 'Company has added person.', 'some long description');
-        SendNotification::dispatch($person, 'Person has added to company.', 'some long description');
+        $description = '<a href="' . route('discover.people.show', $person->slug) . '">' . $person->name . '</a> is ' . $request->input('position') . ' at ' . '<a href="' . route('discover.organizations.show', $company->slug) . '">' . $company->name . '</a>';
+
+        SendNotification::dispatch($company, $title_company, $description, 'organizations');
+        SendNotification::dispatch($person, $title_person, $description, 'people');
 
         return redirect()->back();
     }

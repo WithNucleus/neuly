@@ -407,10 +407,10 @@ class CompanyCrudController extends CrudController
                 $title_investor = $investor->name . ' was added to an organization';
                 $title_organization = $company->name . ' has a new investor';
 
-                $description = $investor->name . ' is an investor in ' . $company->name . ', a ' . $company->ownership . ' organization.';
+                $description = '<a href="' . route('discover.investors.show', $investor->slug) . '">' . $investor->name . '</a> is an investor in <a href="' . route('discover.organizations.show', $company->slug) . '">' . $company->name . '</a>, a ' . $company->ownership . '.';
 
-                SendNotification::dispatch($investor, $title_investor, $description);
-                SendNotification::dispatch($company, $title_organization, $description);
+                SendNotification::dispatch($investor, $title_investor, $description, 'investors');
+                SendNotification::dispatch($company, $title_organization, $description, 'organizations');
             }
         }
 
@@ -421,10 +421,10 @@ class CompanyCrudController extends CrudController
                 $investor = Investor::find($investorId);
 
                 $title = $investor->name . ' was removed as an investor for ' . $company->name;
-                $description = '';
+                $description = '<a href="' . route('discover.investors.show', $investor->slug) . '">' . $investor->name . '</a> is no longer an investor in <a href="' . route('discover.organizations.show', $company->slug) . '">' . $company->name . '</a>, a ' . $company->ownership . '.';
 
-                SendNotification::dispatch($investor, $title, $description);
-                SendNotification::dispatch($company, $title, $description);
+                SendNotification::dispatch($investor, $title, $description, 'investors');
+                SendNotification::dispatch($company, $title, $description, 'organizations');
             }
         }
 
@@ -436,10 +436,11 @@ class CompanyCrudController extends CrudController
 
                 $title_focus = $focus->name . ' was added to an organization';
                 $title_company = $company->name . ' has a new focus';
-                $description = $company->name . ' is a ' . $company->ownership . '  organization with a focus on ' . $focus->name;
 
-                SendNotification::dispatch($focus, $title_focus, $description);
-                SendNotification::dispatch($company, $title_company, $description);
+                $description = '<a href="' . route('discover.organizations.show', $company->slug) . '">' . $company->name . '</a> is a ' . $company->ownership . '  with a focus on <a href="' . route('discover.focus.show', $focus->slug) . '">' . $focus->name . '</a>';
+
+                SendNotification::dispatch($focus, $title_focus, $description, 'focus');
+                SendNotification::dispatch($company, $title_company, $description, 'organizations');
             }
         }
 
@@ -450,10 +451,11 @@ class CompanyCrudController extends CrudController
                 $focus = Focus::find($focusId);
 
                 $title = $focus->name . ' was removed from ' . $company->name;
-                $description = '';
+                
+                $description = '<a href="' . route('discover.organizations.show', $company->slug) . '">' . $company->name . '</a> is a ' . $company->ownership . '  with a previous focus on <a href="' . route('discover.focus.show', $focus->slug) . '">' . $focus->name . '</a>';
 
-                SendNotification::dispatch($focus, $title, $description);
-                SendNotification::dispatch($company, $title, $description);
+                SendNotification::dispatch($focus, $title, $description, 'focus');
+                SendNotification::dispatch($company, $title, $description, 'organizations');
             }
         }
 
