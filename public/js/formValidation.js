@@ -123,7 +123,7 @@
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/syd/sites/neuly/resources/js/formValidation.js */"./resources/js/formValidation.js");
+module.exports = __webpack_require__(/*! /Users/sydney/sites/neuly/resources/js/formValidation.js */"./resources/js/formValidation.js");
 
 
 /***/ })

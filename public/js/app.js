@@ -342,10 +342,10 @@ $('.search-form .btn').on('click', function (event) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/syd/sites/neuly/resources/js/app.js */"./resources/js/app.js");
-__webpack_require__(/*! /Users/syd/sites/neuly/resources/sass/app.scss */"./resources/sass/app.scss");
-__webpack_require__(/*! /Users/syd/sites/neuly/resources/sass/index-qm.scss */"./resources/sass/index-qm.scss");
-module.exports = __webpack_require__(/*! /Users/syd/sites/neuly/resources/sass/datatables.scss */"./resources/sass/datatables.scss");
+__webpack_require__(/*! /Users/sydney/sites/neuly/resources/js/app.js */"./resources/js/app.js");
+__webpack_require__(/*! /Users/sydney/sites/neuly/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /Users/sydney/sites/neuly/resources/sass/index-qm.scss */"./resources/sass/index-qm.scss");
+module.exports = __webpack_require__(/*! /Users/sydney/sites/neuly/resources/sass/datatables.scss */"./resources/sass/datatables.scss");
 
 
 /***/ })

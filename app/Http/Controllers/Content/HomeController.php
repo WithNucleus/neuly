@@ -39,6 +39,7 @@ class HomeController extends Controller
         $count_investors = Investor::all()->count();
         $count_locations = Location::all()->count();
         $count_clinicaltrials = Clinicaltrial::all()->count();
+        $count_jobs = Job::all()->count();
 
         // Get 3 Latest Events
         $latest_events = Event::where('start_date', '>=', Carbon::now('America/Chicago'))
@@ -68,6 +69,7 @@ class HomeController extends Controller
         	'count_investors', 
         	'count_locations',
             'count_clinicaltrials',
+            'count_jobs',
         	'latest_events',
         	'jobs',
             'news_articles',

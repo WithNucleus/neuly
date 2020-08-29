@@ -1,5 +1,7 @@
 @extends('layouts.plain')
 
+@section('body-class', 'home-hero')
+
 @section('content')
 
 @include('navbars.auth')
@@ -84,4 +86,5 @@
     </div>
 </div>
 
+@include('footers.mini')
 @endsection
