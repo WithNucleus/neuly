@@ -44,7 +44,7 @@
             {{-- Notifications --}}
             <ul class="list-group list-group-flush mb-4 shadow-sm">
                 @forelse($notifications as $notification)
-                    <li class="list-group-item p-3">
+                    <li class="list-group-item single-notification p-3" data-notification-id="{{ $notification->id }}">
 
                         <div class="d-flex align-items-center">
                             <div class="bookmark-image mr-2 flex-shrink-0">

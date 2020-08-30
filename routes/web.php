@@ -175,6 +175,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('/notifications', 'NotificationController@index')->name('dashboard.notifications.index');
         Route::get('/notifications/{notification}', 'NotificationController@show')->name('dashboard.notifications.show');
+        Route::get('/notifications/{notification}/read', 'NotificationController@setRead');
     });
 
     // Follow / Unfollow

@@ -192,4 +192,17 @@ $(document).ready(function() {
 	  limit: 10,
 	});
 
+	$('.single-notification').on('mouseenter', function() {
+	    let id = $(this).data('notification-id');
+
+	    $.get('/dashboard/notifications/'+id+'/read');
+
+        let button = $(this).find('.load-ajax-modal');
+        console.log(button);
+        button.removeClass('font-weight-bold');
+        button.removeClass('btn-lg');
+        button.removeClass('text-secondarydark');
+        button.addClass('text-dark');
+        button.addClass('lead-smaller');
+    });
 });
