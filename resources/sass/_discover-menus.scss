@@ -100,6 +100,17 @@ ul.nav-tabs.discover-tabs .nav-link .icon {
 	z-index: 150;
 }
 
+#discover-feedback-button {
+    position: fixed;
+    bottom: 3.5rem;
+    right: .25rem;
+    z-index: 150;
+
+    .btn {
+        min-width: 45px;
+    }
+}
+
 #discover-menu {
 	position: fixed;
 	bottom: 3.3rem;
@@ -118,6 +129,27 @@ ul.nav-tabs.discover-tabs .nav-link .icon {
 		font-size: 1.1rem;
 		letter-spacing: 1px;
 	}
+}
+
+#discover-feedback {
+    position: fixed;
+    bottom: 3.3rem;
+    right: .25rem;
+    z-index: 200;
+    background: $dark;
+    color: $gray-100;
+    padding: 1rem;
+    width: 400px;
+
+    a {
+        color: $gray-100;
+    }
+
+    .title {
+        border-bottom: 2px solid $blue;
+        font-size: 1.1rem;
+        letter-spacing: 1px;
+    }
 }
 
 @media (max-height: 730px) {
@@ -142,7 +174,7 @@ ul.nav-tabs.discover-tabs .nav-link .icon {
 // Admin Bar
 #admin-menu-button {
 	position: fixed;
-	bottom: 3.5rem;
+	bottom: 6.75rem;
 	right: .25rem;
 	z-index: 150;
 }

@@ -12054,6 +12054,17 @@ ul.nav-tabs.discover-tabs .nav-link .icon {
   z-index: 150;
 }
 
+#discover-feedback-button {
+  position: fixed;
+  bottom: 3.5rem;
+  right: 0.25rem;
+  z-index: 150;
+}
+
+#discover-feedback-button .btn {
+  min-width: 45px;
+}
+
 #discover-menu {
   position: fixed;
   bottom: 3.3rem;
@@ -12069,6 +12080,27 @@ ul.nav-tabs.discover-tabs .nav-link .icon {
 }
 
 #discover-menu .title {
+  border-bottom: 2px solid #275DAD;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+}
+
+#discover-feedback {
+  position: fixed;
+  bottom: 3.3rem;
+  right: 0.25rem;
+  z-index: 200;
+  background: #212529;
+  color: #f8f9fa;
+  padding: 1rem;
+  width: 400px;
+}
+
+#discover-feedback a {
+  color: #f8f9fa;
+}
+
+#discover-feedback .title {
   border-bottom: 2px solid #275DAD;
   font-size: 1.1rem;
   letter-spacing: 1px;
@@ -12095,7 +12127,7 @@ ul.nav-tabs.discover-tabs .nav-link .icon {
 
 #admin-menu-button {
   position: fixed;
-  bottom: 3.5rem;
+  bottom: 6.75rem;
   right: 0.25rem;
   z-index: 150;
 }
