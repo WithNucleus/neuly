@@ -54,4 +54,16 @@ class NotificationController extends Controller
 
         return response('', Response::HTTP_OK);
     }
+
+    public function setReadAll(Request $request)
+    {
+        $unread = Notification::ofUser(Auth::id())->unseen()->get();
+        foreach($unread as $notification)
+        {
+            $notification->was_read = 1;
+            $notification->save();
+        }
+
+        return response('', Response::HTTP_OK);
+    }
 }

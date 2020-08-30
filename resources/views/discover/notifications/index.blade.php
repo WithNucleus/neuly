@@ -37,7 +37,7 @@
                 <h1 class="mb-0 mr-5">Notifications</h1>
 
                 <span class="lead-smaller align-self-end pb-1">
-                    Showing {{ $notifications->total() }} Notifications ({{$unread->count()}} new)
+                    Showing {{ $notifications->total() }} Notifications ({{$unread->count()}} new) <a href="#" class="btn read-all-button">mark all as read</a>
                 </span>
             </div>
 
