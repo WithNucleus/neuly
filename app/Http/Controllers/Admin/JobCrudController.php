@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\SendNotification;
 use App\Http\Requests\JobRequest;
+use App\Models\Company;
+use App\Models\Focus;
+use App\Models\Job;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Backpack\CRUD\app\Library\Widget;
@@ -15,8 +19,8 @@ use Backpack\CRUD\app\Library\Widget;
 class JobCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation { store as traitStore; }
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation { update as traitUpdate; }
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 
@@ -238,6 +242,88 @@ class JobCrudController extends CrudController
          */
     }
 
+    public function store()
+    {
+        $response = $this->traitStore();
+        $request = $response->getRequest();
+
+        $investor = $this->data['entry'];
+
+        $job = $this->data['entry'];
+
+        if($request->has('company_id') && $request->input('company_id') !== null) {
+
+            $company = Company::find($request->input('company_id'));
+            
+            $title = 'New job posting for ' . $company->name;
+            $description = $company->getShowLink() . ' is hiring for a ' . $job->employment_type . ' position: ' . $job->getShowLink();
+
+            SendNotification::dispatch($company, $title, $description, 'jobs');
+        }
+
+        if($request->has('focus') && $request->input('focus') !== null) {
+            foreach($request->input('focus') as $focusId) {
+
+                $focus = Focus::find($focusId);
+
+                $title = 'New job posting related to ' . $focus->name;
+                $description = $company->getShowLink() . ' is hiring for a ' . $job->employment_type . ' position: ' . $job->getShowLink();
+
+                SendNotification::dispatch($focus, $title, $description, 'jobs');
+            }
+        }
+
+        return $response;
+    }
+
+    public function update()
+    {
+        $originalJob = $this->getOriginalModel($this->crud);
+        $oldFocus = $this->getFocusIds($originalJob);
+
+        $response = $this->traitUpdate();
+        $request = $response->getRequest();
+
+        $job = $this->data['entry'];
+        $company = Company::find($job->company_id);
+
+        $title = 'Updated job posting for ' . $company->name;
+        $description = 'The job posting for ' . $job->getShowLink() . ' at ' . $company->getShowLink() . ' has been updated.';
+
+        SendNotification::dispatch($company, $title, $description, 'jobs');
+
+        $newFocus = $this->getFocusIds($job);
+
+        $addedFocus = array_diff($newFocus, $oldFocus);
+        $removedFocus = array_diff($oldFocus, $newFocus);
+
+        // Waiting til later to implement
+        // if($addedFocus !== [])
+        // {
+        //     foreach($addedFocus as $key => $focusId)
+        //     {
+        //         $title = 'Focus was added to job';
+
+        //         $focus = Focus::find($focusId);
+        //         SendNotification::dispatch($focus, $title, 'some long description', 'jobs');
+        //     }
+        // }
+
+        // Waiting til later to implement
+        // if($removedFocus !== [])
+        // {
+        //     foreach($removedFocus as $key => $focusId)
+        //     {
+        //         $title = 'Focus was removed from job';
+
+        //         $focus = Focus::find($focusId);
+        //         SendNotification::dispatch($focus, $title, 'some long description', 'jobs');
+        //     }
+        // }
+
+        return $response;
+    }
+
     /**
      * Define what happens when the Update operation is loaded.
      *
@@ -247,5 +333,16 @@ class JobCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+
+    private function getFocusIds($model)
+    {
+        return $model->focus()->pluck('focus_id')->toArray();
+    }
+
+    private function getOriginalModel($crud)
+    {
+        $request = $crud->validateRequest();
+        return Job::find($request->get($crud->model->getKeyName()));
     }
 }

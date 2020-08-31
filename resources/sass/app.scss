@@ -39,7 +39,7 @@
 		padding-top: 2rem; /* space underneath filters */
 	}
 }
- 
+
 @media (min-width: 992px) {
 	#index-main {
 		padding-top: 12rem; /* Space for fixed navbar + discovertabs + breadcrumbs */
@@ -82,4 +82,12 @@
 
 .tt-menu {
 	text-align: left;
+}
+
+.notification-badge {
+    display: none;
+
+    &.has-content {
+        display: inline-block;
+    }
 }

@@ -30,11 +30,6 @@
                         <div class="left-side mb-0 mr-3">
                             <i class="fad fa-at text-primary"></i> {{ $member->name }} {{ $member->last_name }}
                         </div>
-
-                        <div class="right-side mb-0 font-size-small">
-                            <i class="fad fa-clock"></i> Created {{ \Carbon\Carbon::parse($list->created_at)->format('M d, Y') }}
-                            and last updated {{ \Carbon\Carbon::parse($list->updated_at)->diffForHumans() }}
-                        </div>
                     </div>
 
                     @if ($list->description != '')
@@ -43,7 +38,13 @@
                         </p>
                     @endif
 
-                    @include('members.data.bookmarks', ['show_more_bookmarks' => false, 'shadow' => false, 'show_action_items' => false, 'public_view' => true])
+                    @include('members.data.bookmarks', [
+                        'show_more_bookmarks' => false,
+                        'shadow'              => false,
+                        'show_action_items'   => false,
+                        'public_view'         => true,
+                        'hide_list_name'      => true,
+                    ])
                 </div>
             </div>
         </div>

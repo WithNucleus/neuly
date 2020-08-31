@@ -43,6 +43,7 @@ class CompanyController extends Controller
                 AllowedFilter::partial('focus', 'focus.name'),
                 AllowedFilter::exact('type', 'ownership'),
                 AllowedFilter::scope('hiring', 'hasJobs'),
+                AllowedFilter::scope('upcoming_events', 'hasUpcomingEvents'),
             ])
             ->defaultSort('name')
             ->allowedSorts([

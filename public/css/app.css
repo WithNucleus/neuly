@@ -12664,3 +12664,11 @@ trix-editor.trix-content {
   text-align: left;
 }
 
+.notification-badge {
+  display: none;
+}
+
+.notification-badge.has-content {
+  display: inline-block;
+}
+

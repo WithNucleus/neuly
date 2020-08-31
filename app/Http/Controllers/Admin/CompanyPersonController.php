@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Company;
 use App\Models\Person;
+use App\Events\SendNotification;
 
 class CompanyPersonController extends Controller
 {
@@ -42,8 +43,15 @@ class CompanyPersonController extends Controller
         $company = Company::findOrFail($id);
         $person = Person::findOrFail($request->input('person'));
 
-        // TODO Verify if this person is already attached? Does someone can 
+        // TODO Verify if this person is already attached? Does someone can
         // have multiple position in a company?
+        $title_company = $company->name . ' added a new person';
+        $title_person = $person->name . ' added to an organization';
+
+        $description = $person->getShowLink() . ' has the position of ' . $request->input('position') . ' at ' . $company->getShowLink() . ', ' . $company->getTypeDescription() . '.';
+
+        SendNotification::dispatch($company, $title_company, $description, 'organizations');
+        SendNotification::dispatch($person, $title_person, $description, 'people');
 
         $company->people()->attach($person->id, [
             'position' => $request->input('position'),
@@ -56,6 +64,16 @@ class CompanyPersonController extends Controller
      */
     public function remove(Request $request, $company_id, $person_id)
     {
+        $company = Company::findOrFail($company_id);
+        $person = Person::findOrFail($person_id);
+
+        $title = $person->name . ' left ' . $company->name;
+        
+        $description = $person->getShowLink() . ' no longer works at ' . $company->getShowLink() . ', ' . $company->getTypeDescription() . '.';
+
+        SendNotification::dispatch($company, $title, $description, 'organizations');
+        SendNotification::dispatch($person, $title, $description, 'people');
+
         Company::findOrFail($company_id)->people()->detach($person_id);
         return redirect()->back();
     }

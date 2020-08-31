@@ -1,5 +1,6 @@
 require('./bootstrap');
 require('./search');
+require('./notifications');
 
 import Cookies from 'js-cookie';
 
@@ -232,4 +233,33 @@ $(document).ready(function() {
 	  limit: 10,
 	});
 
+	$('.single-notification').on('mouseenter', function() {
+	    let id = $(this).data('notification-id');
+
+	    $.get('/dashboard/notifications/'+id+'/read');
+
+        let button = $(this).find('.load-ajax-modal');
+
+        button.removeClass('font-weight-bold');
+        button.removeClass('btn-lg');
+        button.removeClass('text-secondarydark');
+        button.addClass('text-dark');
+        button.addClass('lead-smaller');
+    });
+
+	$('.read-all-button').on('click', function(event) {
+	    event.preventDefault();
+
+        console.log($.get('/dashboard/notifications/read'));
+
+        $('.single-notification').each(function() {
+            let button = $(this).find('.load-ajax-modal');
+
+            button.removeClass('font-weight-bold');
+            button.removeClass('btn-lg');
+            button.removeClass('text-secondarydark');
+            button.addClass('text-dark');
+            button.addClass('lead-smaller');
+        })
+    })
 });

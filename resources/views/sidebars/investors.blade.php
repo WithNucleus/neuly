@@ -10,7 +10,7 @@
 
 @include('sidebars.filters.checkboxes-new', [
     'label'     => 'Locations',
-    'name'      => 'location',
+    'name'      => 'locations',
     'items'     => $locations,
     'item_filters' => $filters_location
 ])

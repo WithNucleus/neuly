@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\SendNotification;
 use App\Http\Requests\NewsArticleRequest;
+use App\Models\Focus;
+use App\Models\NewsArticle;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -14,14 +17,14 @@ use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 class NewsArticleCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation { store as traitStore; }
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation { update as traitUpdate; }
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
-     * 
+     *
      * @return void
      */
     public function setup()
@@ -39,7 +42,7 @@ class NewsArticleCrudController extends CrudController
 
     /**
      * Define what happens when the List operation is loaded.
-     * 
+     *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
      * @return void
      */
@@ -85,13 +88,13 @@ class NewsArticleCrudController extends CrudController
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']); 
+         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
          */
     }
 
     /**
      * Define what happens when the Create operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-create
      * @return void
      */
@@ -128,7 +131,7 @@ class NewsArticleCrudController extends CrudController
         ]);
 
         // Focus
-        $this->crud->addField([  
+        $this->crud->addField([
              'label'     => "Focus",
              'type'      => 'select2_multiple',
              'name'      => 'focus',
@@ -156,13 +159,13 @@ class NewsArticleCrudController extends CrudController
         /**
          * Fields can be defined using the fluent syntax or array syntax:
          * - CRUD::field('price')->type('number');
-         * - CRUD::addField(['name' => 'price', 'type' => 'number'])); 
+         * - CRUD::addField(['name' => 'price', 'type' => 'number']));
          */
     }
 
     /**
      * Define what happens when the Update operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
      * @return void
      */
@@ -186,14 +189,81 @@ class NewsArticleCrudController extends CrudController
 
     }
 
+    public function store()
+    {
+        $response = $this->traitStore();
+        $request = $response->getRequest();
+
+        if($request->has('focus') && $request->input('focus') !== null) {
+            foreach($request->input('focus') as $focusId) {
+                $focus = Focus::find($focusId);
+                SendNotification::dispatch($focus, 'A new article has been added to focus.', 'some long description');
+            }
+        }
+
+        return $response;
+    }
+
+    public function update()
+    {
+        $originalArticle = $this->getOriginalModel($this->crud);
+        $oldFocus = $this->getFocusIds($originalArticle);
+
+        $response = $this->traitUpdate();
+        $request = $response->getRequest();
+
+        $article = $this->data['entry'];
+
+        $newFocus = $this->getFocusIds($article);
+
+        $addedFocus = array_diff($newFocus, $oldFocus);
+        $removedFocus = array_diff($oldFocus, $newFocus);
+
+        if($addedFocus !== [])
+        {
+            foreach($addedFocus as $key => $focusId)
+            {
+                $title = 'Focus was added to article';
+
+                $focus = Focus::find($focusId);
+                SendNotification::dispatch($focus, $title, 'some long description');
+            }
+        }
+
+        if($removedFocus !== [])
+        {
+            foreach($removedFocus as $key => $focusId)
+            {
+                $title = 'Focus was removed from article';
+
+                $focus = Focus::find($focusId);
+                SendNotification::dispatch($focus, $title, 'some long description');
+            }
+        }
+
+        return $response;
+    }
+
+
     /**
      * Define what happens when the Update operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
      * @return void
      */
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+
+    private function getFocusIds($model)
+    {
+        return $model->focus()->pluck('focus_id')->toArray();
+    }
+
+    private function getOriginalModel($crud)
+    {
+        $request = $crud->validateRequest();
+        return NewsArticle::find($request->get($crud->model->getKeyName()));
     }
 }

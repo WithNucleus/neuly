@@ -279,6 +279,7 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 __webpack_require__(/*! ./search */ "./resources/js/search.js");
 
+__webpack_require__(/*! ./notifications */ "./resources/js/notifications.js");
 
 $(document).ready(function () {
   // Confirm Action
@@ -466,6 +467,28 @@ $(document).ready(function () {
     source: focusOrganizations,
     limit: 10
   });
+  $('.single-notification').on('mouseenter', function () {
+    var id = $(this).data('notification-id');
+    $.get('/dashboard/notifications/' + id + '/read');
+    var button = $(this).find('.load-ajax-modal');
+    button.removeClass('font-weight-bold');
+    button.removeClass('btn-lg');
+    button.removeClass('text-secondarydark');
+    button.addClass('text-dark');
+    button.addClass('lead-smaller');
+  });
+  $('.read-all-button').on('click', function (event) {
+    event.preventDefault();
+    console.log($.get('/dashboard/notifications/read'));
+    $('.single-notification').each(function () {
+      var button = $(this).find('.load-ajax-modal');
+      button.removeClass('font-weight-bold');
+      button.removeClass('btn-lg');
+      button.removeClass('text-secondarydark');
+      button.addClass('text-dark');
+      button.addClass('lead-smaller');
+    });
+  });
 });
 
 /***/ }),
@@ -500,6 +523,28 @@ $(document).ready(function () {
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
+
+/***/ }),
+
+/***/ "./resources/js/notifications.js":
+/*!***************************************!*\
+  !*** ./resources/js/notifications.js ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+$(function () {
+  var response = '';
+  $.ajax({
+    'method': 'get',
+    'url': '/user/notifications/unread'
+  }).done(function (data) {
+    if (data > 0) {
+      $('.notification-badge').text(data);
+      $('.notification-badge').addClass('has-content');
+    }
+  });
+});
 
 /***/ }),
 

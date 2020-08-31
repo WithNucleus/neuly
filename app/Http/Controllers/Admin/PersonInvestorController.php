@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\SendNotification;
 use App\Http\Controllers\Controller;
 use App\Models\Investor;
 use Illuminate\Http\Request;
@@ -49,6 +50,14 @@ class PersonInvestorController extends Controller
         $person->investors()->attach($investor->id, [
             'role' => $request->input('role'),
         ]);
+
+        $title_investor = $investor->name . ' added a person';
+        $title_person = $person->name . ' was added an investor';
+
+        $description = $person->getShowLink() . ' has the role of ' . $request->input('role') . ' at ' . $investor->getShowLink() . ', ' . $investor->getTypeDescription() . '.';
+        
+        SendNotification::dispatch($investor, $title_investor, $description, 'investors');
+        SendNotification::dispatch($person, $title_person, $description, 'people');
 
         return redirect()->back();
     }

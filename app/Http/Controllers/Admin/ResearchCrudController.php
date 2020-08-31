@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\SendNotification;
 use App\Http\Requests\ResearchRequest;
+use App\Models\Focus;
+use App\Models\Research;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -14,8 +17,8 @@ use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 class ResearchCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation { store as traitStore; }
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation { update as traitUpdate; }
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 
@@ -232,6 +235,57 @@ class ResearchCrudController extends CrudController
          */
     }
 
+    public function store()
+    {
+        $response = $this->traitStore();
+        $request = $response->getRequest();
+        $research = $this->data['entry'];
+
+        if($request->has('focus') && $request->input('focus') !== null) {
+            foreach($request->input('focus') as $focusId) {
+                $focus = Focus::find($focusId);
+
+                $title = 'New research related to ' . $focus->name;
+                $description = $research->getShowLink() . ' has been added to ' . $focus->getShowLink() . '.';
+
+                SendNotification::dispatch($focus, $title, $description, 'focus');
+            }
+        }
+
+        return $response;
+    }
+
+    public function update()
+    {
+        $originalResearch = $this->getOriginalModel($this->crud);
+        $oldFocus = $this->getFocusIds($originalResearch);
+
+        $response = $this->traitUpdate();
+        $request = $response->getRequest();
+
+        $research = $this->data['entry'];
+
+        $newFocus = $this->getFocusIds($research);
+
+        $addedFocus = array_diff($newFocus, $oldFocus);
+        $removedFocus = array_diff($oldFocus, $newFocus);
+
+        if($addedFocus !== [])
+        {
+            foreach($addedFocus as $key => $focusId)
+            {
+                $focus = Focus::find($focusId);
+
+                $title = 'Research updated related to ' . $focus->name;
+                $description = $research->getShowLink() . ' has been updated with a focus on ' . $focus->getShowLink() . '.';
+
+                SendNotification::dispatch($focus, $title, $description, 'focus');
+            }
+        }
+
+        return $response;
+    }
+
     /**
      * Define what happens when the Update operation is loaded.
      *
@@ -241,5 +295,16 @@ class ResearchCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+
+    private function getFocusIds($model)
+    {
+        return $model->focus()->pluck('focus_id')->toArray();
+    }
+
+    private function getOriginalModel($crud)
+    {
+        $request = $crud->validateRequest();
+        return Research::find($request->get($crud->model->getKeyName()));
     }
 }

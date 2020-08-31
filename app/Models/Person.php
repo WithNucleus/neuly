@@ -42,40 +42,42 @@ class Person extends Model
     |--------------------------------------------------------------------------
     */
 
+    public static function generateUniqueSlug($name)
+    {
+        $slug      = Str::slug($name);
+        $slugCount = Person::where('slug', $slug)->count();
+
+        if ($slugCount > 0) {
+            $slug = $slug . '-' . uniqid();
+        }
+
+        return $slug;
+    }
+
     public static function findOrCreatePerson($name, $google_scholar) {
 
-        // Find Person
         $person = Person::where('name', $name)
-                         ->orWhere('google_scholar', $google_scholar)
-                         ->first();
+            ->orWhere('google_scholar', $google_scholar)
+            ->first();
 
-        // Get Info or Create One
         if ($person) {
+            return $person;
+        }
+
+        try {
+            $person = Person::create([
+                'name'           => $name,
+                'slug'           => self::generateUniqueSlug($name),
+                'google_scholar' => $google_scholar,
+            ]);
 
             return $person;
 
-        } else {
+        } catch (QueryException $e) {
+            $error_message = 'Error on findOrCreatePerson()' . "\n" . $e;
 
-            // create person
-            try {
-
-                $person = Person::create([
-                     'name' => $name,
-                     'google_scholar' => $google_scholar,
-                     'slug' => Str::slug($name)
-                ]);
-
-                return $person;
-
-            } catch (QueryException $e) {
-
-                $error_message = 'Error on findOrCreatePerson()' . "\n" . $e;
-
-                Log::error($error_message);
-            }
-
+            Log::error($error_message);
         }
-
     }
 
     public function getLinkedIn() {
@@ -96,7 +98,7 @@ class Person extends Model
         }
     }
 
-    public function linkToShow() {
+    public function getShowLink() {
         return '<a href="' . route('discover.people.show', $this->slug) . '">' . $this->name . '</a>';
     }
 

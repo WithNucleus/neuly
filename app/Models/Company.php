@@ -5,8 +5,8 @@ namespace App\Models;
 use App\Models\Traits\OldSlugRedirectable;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Focus;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManagerStatic as Image;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -36,6 +36,26 @@ class Company extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
+    
+    public function getShowLink() {
+        return '<a href="' . route('discover.organizations.show', $this->slug) . '">' . $this->name . '</a>';
+    }
+
+    public function getTypeDescription() {
+
+        if ($this->ownership === 'Privately Held' OR $this->ownership === 'Non-Profit') {
+            
+            return 'a ' . strtolower($this->ownership) . ' organization';
+
+        } elseif ($this->ownership === 'Educational Institution') {
+            
+            return 'an ' . strtolower($this->ownership);
+
+        } else {
+            
+            return 'a ' . strtolower($this->ownership);
+        }
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -106,20 +126,21 @@ class Company extends Model
         return $query->whereHas('jobs');
     }
 
+    /**
+     * @param \Illuminate\Database\Query\Builder $query
+     * @return \Illuminate\Database\Query\Builder
+     */
+    public function scopeHasUpcomingEvents($query) {
+        return $query->whereHas('events', function($subquery){
+            $subquery->where('start_date', '>=', Carbon::now()->toDateString());
+        });
+    }
+
     /*
     |--------------------------------------------------------------------------
     | ACCESSORS
     |--------------------------------------------------------------------------
     */
-
-    // public function getPeopleAttribute($value) {
-    //     // fetch it any way you want
-    //     // but it'll have to be a JSON or PHP array when you return it
-
-    //     // return ucfirst('test ' . $value);
-    //     return 'bananas';
-    //     // return $value;
-    // }
 
     /*
     |--------------------------------------------------------------------------

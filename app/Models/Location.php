@@ -37,6 +37,10 @@ class Location extends Model
     |--------------------------------------------------------------------------
     */
 
+    public function getShowLink() {
+        return '<a href="' . route('discover.locations.show', $this->slug) . '">' . $this->name . '</a>';
+    }
+
     /**
      * @param string $country
      * @param string $region

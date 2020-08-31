@@ -5,7 +5,7 @@
 @include('navbars.auth')
 
 <div class="container">
-    <div class="row justify-content-center mt-5">
+    <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card shadow-sm">
                 {{-- <div class="card-header">{{ __('Confirm Password') }}</div> --}}
