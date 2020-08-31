@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Helpers\EntityMergeHelper;
+use App\Models\Contracts\EntityContract;
 use App\Models\Traits\OldSlugRedirectable;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
@@ -9,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class Event extends Model
+class Event extends Model implements EntityContract
 {
     use CrudTrait;
     use HasFollowers;
@@ -130,5 +132,63 @@ class Event extends Model
             $public_destination_path = Str::replaceFirst('public/', '', $destination_path);
             $this->attributes[$attribute_name] = $public_destination_path.'/'.$filename;
         }
+    }
+
+    /**
+     * @return array
+     */
+    public static function getMergeMapping()
+    {
+        return [
+            //attributes
+            'name'             => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'slug'             => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'start_date'       => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'end_date'         => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'event_url'        => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'registration_url' => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'description'      => [
+                'type'  => EntityMergeHelper::TYPE_TEXT,
+                'label' => 'Type',
+            ],
+            'image'            => [
+                'type'  => EntityMergeHelper::TYPE_IMAGE,
+                'label' => 'Type',
+            ],
+            //relations
+            'eventTypes'       => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'name',
+            ],
+            'focus'            => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'name',
+            ],
+            'locations'        => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'name',
+            ],
+            'people'           => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'name',
+            ],
+            'companies'        => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'name',
+                'label'         => 'Exhibitors'
+            ],
+        ];
     }
 }

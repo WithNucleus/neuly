@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Helpers\EntityMergeHelper;
+use App\Models\Contracts\EntityContract;
 use App\Models\Traits\OldSlugRedirectable;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
@@ -9,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class Investor extends Model
+class Investor extends Model implements EntityContract
 {
     use CrudTrait;
     use HasFollowers;
@@ -107,30 +109,17 @@ class Investor extends Model
 
     public function setLogoAttribute($value)
     {
-
-        // Logo Filename
-        $investor_name = Str::slug($this->name);
-
-        // Generate Filename
-        $filename = 'investor-' . $investor_name . '.png';
-
-        // Attribute Name
-        $attribute_name = "logo";
-
-        // Disk
-        $disk = 'local';
-
-        // Destination Path
-        $destination_path = "public/logos";
+        $investor_name    = Str::slug($this->name);
+        $filename         = 'investor-' . $investor_name . '.png';
+        $attribute_name   = "logo";
+        $disk             = 'local';
+        $public_path      = "public/";
+        $destination_path = $public_path . "logos";
 
         // if the image was erased
-        if ($value==null) {
-
-            // delete the image from disk
+        if ($value === null) {
             \Storage::disk($disk)->delete($this->{$attribute_name});
-
-            // set null in the database column
-            $this->attributes[$attribute_name] = null;
+            return $this->attributes[$attribute_name] = null;
         }
 
         // if a base64 was sent, store it in the db
@@ -147,7 +136,61 @@ class Investor extends Model
 
             // 4. Save the public path to the database
             $public_destination_path = Str::replaceFirst('public/', '', $destination_path);
-            $this->attributes[$attribute_name] = $public_destination_path.'/'.$filename;
+            return $this->attributes[$attribute_name] = $public_destination_path.'/'.$filename;
         }
+
+        if ($value !== null && $this->{$attribute_name} != $value) {
+            //if another already uploaded image was assigned (e.g. after Entity Merge)
+
+            $oldImagePath = $public_path . $this->{$attribute_name};
+            // delete old image from disk
+            \Storage::disk($disk)->delete($oldImagePath);
+            //replace old image with new
+            \Storage::disk($disk)->move($public_path . $value, $oldImagePath);
+            //assign back correct old image value
+            return $this->attributes[$attribute_name] = $this->{$attribute_name};
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public static function getMergeMapping()
+    {
+        return [
+            //attributes
+            'name'      => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'slug'      => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'website'   => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'type'      => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'logo'      => [
+                'type' => EntityMergeHelper::TYPE_IMAGE,
+            ],
+            //relations
+            'locations' => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'name',
+            ],
+            'focus'     => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'name',
+            ],
+            'companies' => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'name',
+            ],
+            'people'    => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'name',
+            ],
+        ];
     }
 }

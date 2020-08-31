@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Helpers\EntityMergeHelper;
+use App\Models\Contracts\EntityContract;
 use App\Models\Traits\OldSlugRedirectable;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
@@ -9,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class Clinicaltrial extends Model
+class Clinicaltrial extends Model implements EntityContract
 {
     use CrudTrait;
     use HasFollowers;
@@ -114,5 +116,105 @@ class Clinicaltrial extends Model
         // Assign Slug
         $this->attributes['slug'] = $nct_number . '-' . Str::slug($value);
 
+    }
+
+    /**
+     * @return array
+     */
+    public static function getMergeMapping()
+    {
+        return [
+            //attributes
+            'title'                   => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'slug'                    => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'nct_number'              => [
+                'type'  => EntityMergeHelper::TYPE_STRING,
+                'label' => 'NCT Number',
+            ],
+            'acronym'                 => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'status'                  => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'study_results'           => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'conditions'              => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'interventions'           => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'outcome_measures'        => [
+                'type' => EntityMergeHelper::TYPE_TEXT,
+            ],
+            'gender'                  => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'age'                     => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'phases'                  => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'enrollment'              => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'funded_bys'              => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'study_type'              => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'study_designs'           => [
+                'type' => EntityMergeHelper::TYPE_TEXT,
+            ],
+            'other_ids'               => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'start_date'              => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'primary_completion_date' => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'completion_date'         => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'first_posted'            => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'results_first_posted'    => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'last_update_posted'      => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'study_url'               => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            //relations
+            'companies'               => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'name',
+            ],
+            'locations'               => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'name',
+            ],
+            'people'                  => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'name',
+            ],
+            'focus'                   => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'name',
+            ],
+        ];
     }
 }
