@@ -85,7 +85,8 @@ class InvestorController extends Controller
             ->withProperties([
                 'ip' => $request->ip(),
                 'entity' => 'investors',
-                'slug' => $investor->slug
+                'slug' => $investor->slug,
+                'image' => $investor->logo
             ])
             ->performedOn($investor)
             ->log($investor->name);

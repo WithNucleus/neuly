@@ -9,6 +9,7 @@ use App\Models\BookmarkList;
 use App\Models\Bookmark;
 use App\Models\MemberNote;
 use Auth;
+use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Models\Activity;
 
 class DashboardController extends Controller
@@ -21,12 +22,20 @@ class DashboardController extends Controller
             return view('members.dashboard-loggedout');
         }
 
-        $recently_viewed = Activity::where('causer_id', Auth::id())
-                ->where('causer_type', 'App\User')
-                ->where('log_name', 'pageview')
-                ->orderBy('created_at', 'desc')
-                ->take(10)
-                ->get();
+        $lastActivityIdsByType = Activity::select(DB::raw('MAX(id) AS id, MAX(created_at) AS created_at'))
+            ->where('causer_id', Auth::id())
+            ->where('causer_type', 'App\User')
+            ->where('log_name', 'pageview')
+            ->groupBy(['subject_id', 'subject_type'])
+            ->orderBy('created_at', 'desc')
+            ->take(10)
+            ->get()
+            ->pluck('id')
+            ->all();
+
+        $recently_viewed = Activity::whereIn('id', $lastActivityIdsByType)
+            ->orderBy('created_at', 'desc')
+            ->get();
 
     	$lists = BookmarkList::where('user_id', Auth::id())
     			->orderBy('name', 'asc')

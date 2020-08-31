@@ -45,9 +45,11 @@
                                 <i class="fad fa-clock"></i> {{ Carbon\Carbon::parse($bookmark->created_at)->format('M, d, Y') }}
                             </span>
 
+                            @if(!isset($hide_list_name) || $hide_list_name == false)
                             <a href="{{ route('member.bookmarks.show-list', $bookmark->list->slug) }}" class="text-decoration-none text-dark font-weight-bold">
                                 <i class="fad fa-list-alt"></i> {{ $bookmark->list->name }}
                             </a>
+                            @endif
                         </span>
 
                         @if($show_action_items == true)

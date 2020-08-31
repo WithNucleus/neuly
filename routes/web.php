@@ -170,7 +170,7 @@ Route::group(['middleware' => 'auth'], function () {
         // Follow
         Route::resource('/follow', 'Dashboard\FollowController', [
             'as' => 'member',
-            'except' => ['create', 'store']
+            'except' => ['create', 'store', 'destroy']
         ]);
 
         Route::get('/notifications', 'NotificationController@index')->name('dashboard.notifications.index');
@@ -179,11 +179,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/notifications/{notification}/read', 'NotificationController@setRead');
     });
 
-    // Follow / Unfollow
-    Route::get('/follow/{entity}/{id}', 'FollowController@add')->name('member.follow.add');
-    Route::post('/follow/{entity}/{id}', 'FollowController@store')->name('member.follow.store');
-    Route::get('/unfollow/{entity}/{id}', 'UnfollowController@add')->name('member.unfollow.add');
-    Route::post('/unfollow/{entity}/{id}', 'UnfollowController@store')->name('member.unfollow.store');
+    // Follow / Unfollow actions
+    Route::post('/follow/attach', 'Dashboard\FollowController@attach')->name('member.follow.attach');
+    Route::post('/follow/detach', 'Dashboard\FollowController@detach')->name('member.follow.detach');
 
     // Notifications
 

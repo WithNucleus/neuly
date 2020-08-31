@@ -14,9 +14,10 @@
                 'name' => $focus->name,
                 'bookmarks' => $bookmarks
             ])
-            @include('members.follow.add-button', [
-                'entity' => $entity,
-                'entity_id' => $focus->id,
+
+            @include('members.follow.button', [
+                'followable_type' => get_class($focus),
+                'followable_id' => $focus->id,
                 'name' => $focus->name,
             ])
 
