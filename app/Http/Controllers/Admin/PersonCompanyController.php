@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\SendNotification;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Company;
@@ -48,6 +49,14 @@ class PersonCompanyController extends Controller
         $person->companies()->attach($company->id, [
             'position' => $request->input('position'),
         ]);
+
+        $title_company = $company->name . ' added a new person';
+        $title_person = $person->name . ' added to an organization';
+
+        $description = $person->getShowLink() . ' has the position of ' . $request->input('position') . ' at ' . $company->getShowLink() . ', ' . $company->getTypeDescription() . '.';
+
+        SendNotification::dispatch($company, $title_company, $description, 'organizations');
+        SendNotification::dispatch($person, $title_person, $description, 'people');
 
         return redirect()->back();
     }

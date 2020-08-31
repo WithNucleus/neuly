@@ -172,11 +172,21 @@ Route::group(['middleware' => 'auth'], function () {
             'as' => 'member',
             'except' => ['create', 'store', 'destroy']
         ]);
+
+        Route::get('/notifications', 'NotificationController@index')->name('dashboard.notifications.index');
+        Route::get('/notifications/read', 'NotificationController@setReadAll');
+        Route::get('/notifications/{notification}', 'NotificationController@show')->name('dashboard.notifications.show');
+        Route::get('/notifications/{notification}/read', 'NotificationController@setRead');
     });
 
     // Follow / Unfollow actions
     Route::post('/follow/attach', 'Dashboard\FollowController@attach')->name('member.follow.attach');
     Route::post('/follow/detach', 'Dashboard\FollowController@detach')->name('member.follow.detach');
+
+    // Notifications
+
+    Route::get('/user/notifications', 'NotificationController@getNotificationsByAuthedUser');
+    Route::get('/user/notifications/unread', 'NotificationController@getUnreadNotificationsCountByAuthedUser');
 
     // User Settings Page
     Route::get('/user/settings', 'Index\UserProfileController@index')->name('user.settings');

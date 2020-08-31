@@ -94,6 +94,10 @@ class Focus extends Model
     |--------------------------------------------------------------------------
     */
 
+    public function getShowLink() {
+        return '<a href="' . route('discover.focus.show', $this->slug) . '">' . $this->name . '</a>';
+    }
+
     /*
     |--------------------------------------------------------------------------
     | MUTATORS

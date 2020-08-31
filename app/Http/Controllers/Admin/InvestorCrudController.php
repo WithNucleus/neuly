@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\SendNotification;
 use App\Http\Requests\InvestorRequest;
+use App\Models\Company;
+use App\Models\Investor;
+use App\Models\Location;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Backpack\CRUD\app\Library\Widget;
@@ -15,8 +19,8 @@ use Backpack\CRUD\app\Library\Widget;
 class InvestorCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation { store as traitStore; }
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation { update as traitUpdate; }
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 
@@ -182,5 +186,141 @@ class InvestorCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+
+    public function store()
+    {
+        $response = $this->traitStore();
+        $request = $response->getRequest();
+
+        $investor = $this->data['entry'];
+
+        if($request->has('locations') && $request->input('locations') !== null) {
+            foreach($request->input('locations') as $locationId) {
+                $location = Location::find($locationId);
+
+                $title = 'New investor in ' . $location->name;
+
+                $description = $investor->getShowLink() . ' is a new investor located in ' . $location->getShowLink();
+
+                SendNotification::dispatch($location, $title, $description, 'locations');
+            }
+        }
+
+        if($request->has('companies') && $request->input('companies') !== null) {
+            foreach($request->input('companies') as $companyId) {
+                $company = Company::find($companyId);
+
+                $title = 'New investor for ' . $company->name;
+                
+                $description = $investor->getShowLink() . ' is a recently added investor in ' . $company->getShowLink() . ', ' . $company->getTypeDescription() . '.';
+
+                SendNotification::dispatch($company, $title, $description, 'organizations');
+            }
+        }
+
+        return $response;
+    }
+
+    public function update()
+    {
+
+        $originalInvestor = $this->getOriginalModel($this->crud);
+        $oldCompanies= $this->getCompanyIds($originalInvestor);
+        $oldLocations = $this->getLocationIds($originalInvestor);
+
+        $response = $this->traitUpdate();
+        $request = $response->getRequest();
+
+        $investor = $this->data['entry'];
+        $newCompanies = $this->getCompanyIds($investor);
+        $newLocations = $this->getLocationIds($investor);
+
+        $addedCompanies = array_diff($newCompanies, $oldCompanies);
+        $removedCompanies = array_diff($oldCompanies, $newCompanies);
+        $addedLocations = array_diff($newLocations, $oldLocations);
+        $removedLocations = array_diff($oldLocations, $newLocations);
+
+        if($removedCompanies !== [])
+        {
+            foreach($removedCompanies as $key => $companyId)
+            {
+                $company = Company::find($companyId);
+
+                $title_investor = $investor->name . ' was removed from an organization';
+                $title_company = $company->name . ' removed an investor';
+
+                $description = $investor->getShowLink() . ' is no longer an investor in ' . $company->getShowLink();
+
+                SendNotification::dispatch($investor, $title_investor, $description, 'investors');
+                SendNotification::dispatch($company, $title_company, $description, 'organizations');
+            }
+        }
+
+        if($addedCompanies !== [])
+        {
+            foreach($addedCompanies as $key => $companyId)
+            {
+                $company = Company::find($companyId);
+
+                $title_investor = $investor->name . ' was added to an organization';
+                $title_company = $company->name . ' has a new investor';
+
+                $description = $investor->getShowLink() . ' is now an investor in ' . $company->getShowLink();
+
+                SendNotification::dispatch($investor, $title_investor, $description, 'investors');
+                SendNotification::dispatch($company, $title_company, $description, 'organizations');
+            }
+        }
+
+        if($removedLocations !== [])
+        {
+            foreach($removedLocations as $key => $locationId)
+            {
+                $location = Location::find($locationId);
+
+                $title_investor = $investor->name . ' removed a location';
+                $title_location = $location->name . ' lost an investor';
+
+                $description = $investor->getShowLink() . ' is no longer located in ' . $location->getShowLink();
+
+                SendNotification::dispatch($location, $title_location, $description, 'locations');
+                SendNotification::dispatch($investor, $title_investor, $description, 'investors');
+            }
+        }
+
+        if($addedLocations !== [])
+        {
+            foreach($addedLocations as $key => $locationId)
+            {
+                $location = Location::find($locationId);
+
+                $title_investor = $investor->name . ' added a location';
+                $title_location = 'Investor is located in ' . $location->name;
+
+                $description = $investor->getShowLink() . ' is now located in ' . $location->getShowLink();
+
+                SendNotification::dispatch($location, $title_location, $description, 'locations');
+                SendNotification::dispatch($investor, $title_investor, $description, 'investors');
+            }
+        }
+
+        return $response;
+    }
+
+    private function getCompanyIds($model)
+    {
+        return $model->companies()->pluck('company_id')->toArray();
+    }
+
+    private function getLocationIds($model)
+    {
+        return $model->locations()->pluck('location_id')->toArray();
+    }
+
+    private function getOriginalModel($crud)
+    {
+        $request = $crud->validateRequest();
+        return Investor::find($request->get($crud->model->getKeyName()));
     }
 }

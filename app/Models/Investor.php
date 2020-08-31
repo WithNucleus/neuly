@@ -35,6 +35,18 @@ class Investor extends Model
     |--------------------------------------------------------------------------
     */
 
+    public function getShowLink() {
+        return '<a href="' . route('discover.investors.show', $this->slug) . '">' . $this->name . '</a>';
+    }
+
+    public function getTypeDescription() {
+        if ($this->type === 'Private Individual') {
+            return 'a ' . strtolower($this->type);
+        } else {
+            return 'a ' . strtolower($this->type) . ' firm';
+        }
+    }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
