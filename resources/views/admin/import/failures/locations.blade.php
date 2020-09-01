@@ -38,7 +38,10 @@
                                     data-model="{{ \App\Models\Location::class }}"
                                     data-action="{{ route('import.failures.fix', $failure->id) }}">Add to Locations
                             </button>
-                            <p class="alert alert-danger mt-2 d-none">Unknown Error</p>
+                            <button class="btn btn-danger js-delete-failure-button"
+                                    data-action="{{ route('import.failures.delete', $failure->id) }}">Delete
+                            </button>
+                            <p class="alert alert-danger mt-2 d-none">Action Error</p>
                         </li>
                     @empty
                         <li class="list-group-item">No failures for this type.</li>
@@ -47,54 +50,8 @@
             </div>
         </div>
     </div>
+@endsection
 
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-    <script>
-        $(".js-fix-location-failure-button").on('click', function () {
-            let errors = false,
-                button = $(this),
-                itemBlock = button.parent(),
-                action = button.data('action'),
-                model = button.data('model'),
-                countryInput = itemBlock.find('input[name=country]'),
-                regionInput = itemBlock.find('input[name=region]'),
-                cityInput = itemBlock.find('input[name=city]'),
-                country = countryInput.val().trim(),
-                region = regionInput.val().trim(),
-                city = cityInput.val().trim();
-
-            countryInput.removeClass('is-invalid');
-            regionInput.removeClass('is-invalid');
-
-            if (country === '') {
-                errors = true;
-                countryInput.addClass('is-invalid');
-            }
-
-            if (region === '') {
-                errors = true;
-                regionInput.addClass('is-invalid');
-            }
-
-            if (errors === true) {
-                return false;
-            }
-
-            let data = {
-                'model'  : model,
-                'country': country,
-                'region' : region,
-                'city'   : city
-            };
-
-            $.post(action, data, function (response){
-                if (response.status == 'success') {
-                    itemBlock.slideUp();
-                } else {
-                    itemBlock.find('.alert').removeClass('d-none');
-                }
-            });
-        });
-    </script>
-
+@section('after_scripts')
+    @include('admin.import.failures.includes.scripts')
 @endsection

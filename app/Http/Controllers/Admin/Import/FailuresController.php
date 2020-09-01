@@ -54,4 +54,18 @@ class FailuresController extends Controller
             'status' => ($result === true) ? 'success' : 'failed',
         ]);
     }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function delete(Request $request, $id)
+    {
+        ImportFailure::destroy($id);
+
+        return response()->json([
+            'status' => 'success',
+        ]);
+    }
 }

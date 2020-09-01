@@ -30,7 +30,10 @@
                                     data-model="{{ \App\Models\Person::class }}"
                                     data-action="{{ route('import.failures.fix', $failure->id) }}">Add to People
                             </button>
-                            <p class="alert alert-danger mt-2 d-none">Unknown Error</p>
+                            <button class="btn btn-danger js-delete-failure-button"
+                                    data-action="{{ route('import.failures.delete', $failure->id) }}">Delete
+                            </button>
+                            <p class="alert alert-danger mt-2 d-none">Action Error</p>
                         </li>
                     @empty
                         <li class="list-group-item">No failures for this type.</li>
@@ -39,23 +42,8 @@
             </div>
         </div>
     </div>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-    <script>
-        $(".js-fix-sponsor-failure-button").on('click', function () {
-            let button = $(this),
-                itemBlock = button.parent(),
-                model = button.data('model'),
-                action = button.data('action');
-
-            $.post(action, {'model' : model}, function (response){
-                if (response.status == 'success') {
-                    itemBlock.slideUp();
-                } else {
-                    itemBlock.find('.alert').removeClass('d-none');
-                }
-            });
-        });
-    </script>
 @endsection
 
+@section('after_scripts')
+    @include('admin.import.failures.includes.scripts')
+@endsection
