@@ -269,6 +269,25 @@ Route::post('/admin/import/failures/{id}/delete', 'Admin\Import\FailuresControll
 Route::get('/admin/jobapps/{id}/resume', 'Index\JobApplicationController@getResume')->name('jobsapp.resume');
 Route::get('/admin/jobapps/{id}/coverletter', 'Index\JobApplicationController@getCoverLetter')->name('jobsapp.coverletter');
 
+// Admin Routes
+Route::group([
+    'prefix'     => 'admin',
+    'middleware' => ['role:Admin'],
+    'namespace'  => 'Admin',
+], function () {
+    // Entity Merge
+    Route::group(['prefix' => 'entity-merge'], function () {
+        Route::get('/', 'EntityMergeController@index')
+            ->name('admin.entityMerge');
+        Route::get('/get-list', 'EntityMergeController@getEntityListJson')
+            ->name('admin.entityMerge.getEntityListJson');
+        Route::get('/get-entity-form', 'EntityMergeController@getEntityForm')
+            ->name('admin.entityMerge.getEntityForm');
+        Route::post('/merge', 'EntityMergeController@merge')
+            ->name('admin.entityMerge.merge');
+    });
+});
+
 /* MEMBERS - PUBLIC ROUTES */
 Route::get('/members/{member_url}/{slug}', 'Dashboard\NoteController@showPublic')->name('members.public.note');
 Route::get('/members/{member_url}/lists/{slug}', 'Dashboard\BookmarkListController@showPublic')->name('members.public.bookmark-list');

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Helpers\EntityMergeHelper;
+use App\Models\Contracts\EntityContract;
 use App\Models\Traits\OldSlugRedirectable;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
@@ -11,7 +13,7 @@ use Illuminate\Support\Str;
 use Intervention\Image\ImageManagerStatic as Image;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class Company extends Model
+class Company extends Model implements EntityContract
 {
     use CrudTrait;
     use HasFollowers;
@@ -36,7 +38,7 @@ class Company extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
-    
+
     public function getShowLink() {
         return '<a href="' . route('discover.organizations.show', $this->slug) . '">' . $this->name . '</a>';
     }
@@ -44,15 +46,15 @@ class Company extends Model
     public function getTypeDescription() {
 
         if ($this->ownership === 'Privately Held' OR $this->ownership === 'Non-Profit') {
-            
+
             return 'a ' . strtolower($this->ownership) . ' organization';
 
         } elseif ($this->ownership === 'Educational Institution') {
-            
+
             return 'an ' . strtolower($this->ownership);
 
         } else {
-            
+
             return 'a ' . strtolower($this->ownership);
         }
     }
@@ -243,5 +245,89 @@ class Company extends Model
             }
 
         }
+    }
+
+    /**
+     * @return array
+     */
+    public static function getMergeMapping()
+    {
+        return [
+            //attributes
+            'name'                 => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'slug'                 => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'ownership'            => [
+                'type'  => EntityMergeHelper::TYPE_STRING,
+                'label' => 'Type',
+            ],
+            'ticker_symbol'        => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'website'              => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'founded_date'         => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'valuation'            => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'total_funding_amount' => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'last_funding_date'    => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'number_employees'     => [
+                'type'  => EntityMergeHelper::TYPE_STRING,
+                'label' => '# of Employees',
+            ],
+            'notes'                => [
+                'type' => EntityMergeHelper::TYPE_TEXT,
+            ],
+            'summary'              => [
+                'type' => EntityMergeHelper::TYPE_TEXT,
+            ],
+            'logo'                 => [
+                'type' => EntityMergeHelper::TYPE_IMAGE,
+            ],
+            //relations
+            'focus'                => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'name',
+            ],
+            'locations'            => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'name',
+            ],
+            'people'               => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'name',
+            ],
+            'investors'            => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'name',
+            ],
+            'research'             => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'name',
+            ],
+            'jobs'                 => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'job_title',
+            ],
+            'events'               => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'name',
+            ],
+            'clinicaltrials'       => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'title',
+            ],
+        ];
     }
 }

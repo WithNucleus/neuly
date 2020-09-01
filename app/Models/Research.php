@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Helpers\EntityMergeHelper;
+use App\Models\Contracts\EntityContract;
 use App\Models\Traits\OldSlugRedirectable;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
@@ -9,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class Research extends Model
+class Research extends Model implements EntityContract
 {
     use CrudTrait;
     use HasFollowers;
@@ -92,5 +94,52 @@ class Research extends Model
         }
         $this->attributes['slug'] = $slug;
 
+    }
+
+    /**
+     * @return array
+     */
+    public static function getMergeMapping()
+    {
+        return [
+            //attributes
+            'name'             => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'slug'             => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'abstract'         => [
+                'type' => EntityMergeHelper::TYPE_TEXT,
+            ],
+            'link'             => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'publish_date'     => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'publication_info' => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'api_identifier'   => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'resources'        => [
+                'type' => EntityMergeHelper::TYPE_TEXT,
+            ],
+            //relations
+            'focus'            => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'name',
+            ],
+            'companies'        => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'name',
+            ],
+            'people'           => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'name',
+            ],
+        ];
     }
 }

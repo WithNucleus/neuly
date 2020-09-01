@@ -122,12 +122,22 @@
             </li>
 		</ul>
 	</li>
+@endcan
 
-	<li class='nav-item'>
-		<a class='nav-link' href='{{ backpack_url('listingrequest') }}'>
-			<i class='nav-icon la la-business-time'></i> Listing Requests
-		</a>
-	</li>
+@can('manage listing requests')
+    <li class='nav-item'>
+        <a class='nav-link' href='{{ backpack_url('listingrequest') }}'>
+            <i class='nav-icon la la-business-time'></i> Listing Requests
+        </a>
+    </li>
+@endcan
+
+@can('manage entity merge')
+    <li class='nav-item'>
+        <a class='nav-link' href='{{ route('admin.entityMerge') }}'>
+            <i class='nav-icon la la-sync'></i> Entity Merge
+        </a>
+    </li>
 @endcan
 
 @can('view backups')
@@ -149,7 +159,7 @@
 @can('manage redirects')
     <li class='nav-item'>
         <a class='nav-link' href='{{ backpack_url('redirect') }}'>
-            <i class='nav-icon la la-sync'></i> <span>Redirects</span>
+            <i class='nav-icon la la-step-forward'></i> <span>Redirects</span>
         </a>
     </li>
 @endcan
@@ -171,14 +181,6 @@
 			<i class='nav-icon la la-pen-fancy'></i> <span>Pages</span>
 		</a>
 	</li>
-@endcan
-
-@can('edit listing requests')
-    <li class='nav-item'>
-        <a class='nav-link' href='{{ backpack_url('listingrequest') }}'>
-            <i class='nav-icon la la-pen-fancy'></i> <span>Listing Requests</span>
-        </a>
-    </li>
 @endcan
 
 @can('edit feedback')

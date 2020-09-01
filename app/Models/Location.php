@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Helpers\EntityMergeHelper;
+use App\Models\Contracts\EntityContract;
 use App\Models\Traits\OldSlugRedirectable;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
@@ -11,7 +13,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Log;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class Location extends Model
+class Location extends Model implements EntityContract
 {
     use CrudTrait;
     use HasFollowers;
@@ -156,5 +158,55 @@ class Location extends Model
 
         $this->attributes['slug'] = Str::slug($value);
 
+    }
+
+    /**
+     * @return array
+     */
+    public static function getMergeMapping()
+    {
+        return [
+            //attributes
+            'name'           => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'slug'           => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'city'           => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'region'         => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'country'        => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            //relations
+            'companies'      => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'name',
+            ],
+            'people'         => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'name',
+            ],
+            'investors'      => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'name',
+            ],
+            'jobs'           => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'job_title',
+            ],
+            'events'         => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'name',
+            ],
+            'clinicaltrials' => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'title',
+            ],
+        ];
     }
 }

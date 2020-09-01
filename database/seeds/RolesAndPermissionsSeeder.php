@@ -35,11 +35,12 @@ class RolesAndPermissionsSeeder extends Seeder
             'edit event types',
             'edit news articles',
             'edit clinical trials',
-            'edit listing requests',
+            'edit feedback',
+            'manage listing requests',
+            'manage entity merge',
             'import',
             'view job applications',
             'manage redirects',
-            'edit feedback',
         );
 
         foreach ($permissions as $permission) {

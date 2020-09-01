@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Helpers\EntityMergeHelper;
+use App\Models\Contracts\EntityContract;
 use App\Models\Traits\OldSlugRedirectable;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
@@ -12,7 +14,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Log;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class Person extends Model
+class Person extends Model implements EntityContract
 {
     use CrudTrait;
     use HasFollowers;
@@ -211,5 +213,73 @@ class Person extends Model
             }
 
         }
+    }
+
+    /**
+     * @return array
+     */
+    public static function getMergeMapping()
+    {
+        return [
+            //attributes
+            'name'            => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'slug'            => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'email'           => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'secondary_email' => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'website'         => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'photo'           => [
+                'type' => EntityMergeHelper::TYPE_IMAGE,
+            ],
+            'linkedin'        => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'facebook'        => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'twitter'         => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'google_scholar'  => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'bio'             => [
+                'type' => EntityMergeHelper::TYPE_TEXT,
+            ],
+            //relations
+            'locations'       => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'name',
+            ],
+            'companies'       => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'name',
+            ],
+            'investors'       => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'name',
+            ],
+            'research'        => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'name',
+            ],
+            'events'          => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'name',
+            ],
+            'clinicaltrials'  => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'title',
+            ],
+        ];
     }
 }
