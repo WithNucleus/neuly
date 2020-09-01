@@ -92,12 +92,23 @@ ul.nav-tabs.discover-tabs .nav-link .icon {
 	}
 }
 
-// Discover Menu
+// Global Buttons - Bottom Right Corner
 #discover-menu-button {
 	position: fixed;
 	bottom: .25rem;
 	right: .25rem;
-	z-index: 150;
+	z-index: 149;
+}
+
+#discover-feedback-button {
+    position: fixed;
+    bottom: 3.5rem;
+    right: .25rem;
+    z-index: 149;
+
+    .btn {
+        min-width: 45px;
+    }
 }
 
 #discover-menu {
@@ -120,6 +131,36 @@ ul.nav-tabs.discover-tabs .nav-link .icon {
 	}
 }
 
+#discover-feedback {
+    position: fixed;
+    bottom: 6.55rem;
+    right: .25rem;
+    z-index: 150;
+    background: $dark;
+    color: $gray-100;
+    padding: 1rem;
+    width: 100%;
+    max-width: 400px;
+
+    a {
+        color: $gray-100;
+    }
+
+    .title {
+        border-bottom: 2px solid $blue;
+        font-size: 1.1rem;
+        letter-spacing: 1px;
+    }
+}
+
+@media (max-height: 800px) {
+    #feedback-form {
+        max-height: 410px;
+        padding: .5rem;
+        overflow-y: scroll;
+    }
+}
+
 @media (max-height: 730px) {
 	#discover-menu {
 		max-height: 70vh;
@@ -135,16 +176,16 @@ ul.nav-tabs.discover-tabs .nav-link .icon {
 	top: 0;
 	left: 0;
 	overflow: hidden;
-	z-index: 149;
+	z-index: 148;
 	background: rgba($black, .5);
 }
 
 // Admin Bar
 #admin-menu-button {
 	position: fixed;
-	bottom: 3.5rem;
+	bottom: 6.75rem;
 	right: .25rem;
-	z-index: 150;
+	z-index: 149;
 }
 
 #admin-menu-button,
@@ -156,7 +197,7 @@ ul.nav-tabs.discover-tabs .nav-link .icon {
 
 #admin-menu {
 	position: fixed;
-	bottom: 6.55rem;
+	bottom: 9.75rem;
 	right: .25rem;
 	z-index: 150;
 	background: $dark;
@@ -177,8 +218,9 @@ ul.nav-tabs.discover-tabs .nav-link .icon {
 	}
 }
 
-@media (max-height: 620px) {
-	#admin-menu-button {
+@media (max-height: 650px) {
+	#admin-menu-button,
+    #discover-feedback-button{
 		display: none;
 	}
 }

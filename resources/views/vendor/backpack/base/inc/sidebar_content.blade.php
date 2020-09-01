@@ -180,3 +180,11 @@
         </a>
     </li>
 @endcan
+
+@can('edit feedback')
+    <li class='nav-item'>
+        <a class='nav-link' href='{{ backpack_url('feedback') }}'>
+            <i class='nav-icon la la-comment'></i> <span>Feedback</span>
+        </a>
+    </li>
+@endcan

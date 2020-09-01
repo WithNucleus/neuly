@@ -28,4 +28,5 @@ Route::group([
     Route::crud('listingrequest', 'ListingRequestCrudController');
     Route::crud('jobapplication', 'JobApplicationCrudController');
     Route::crud('redirect', 'RedirectCrudController');
+    Route::crud('feedback', 'FeedbackCrudController');
 }); // this should be the absolute last line of this file

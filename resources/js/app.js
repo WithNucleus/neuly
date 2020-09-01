@@ -2,6 +2,8 @@ require('./bootstrap');
 require('./search');
 require('./notifications');
 
+import Cookies from 'js-cookie';
+
 $(document).ready(function() {
 
 	// Confirm Action
@@ -49,8 +51,47 @@ $(document).ready(function() {
         $('#discover-backdrop').toggle();
     });
 
+    // Discover feedback -- Navigate Neuly
+    $("#toggle-feedback-modal").on('click', function() {
+        $('#discover-feedback').slideToggle();
+        $('#discover-backdrop').toggle();
+    });
+
+    $('#submit-feedback').on('click', function(event) {
+        event.preventDefault();
+        let requestData = {
+            'title': $('#feedback-form input[name="title"]').val(),
+            'type': $('#feedback-form select[name="type"] option:selected').val(),
+            'content': $('#feedback-form textarea[name="content"]').val(),
+            'user_name': $('#feedback-form input[name="user_name"]').val(),
+            'user_email': $('#feedback-form input[name="user_email"]').val()
+        };
+
+        $.post("/api/feedback",requestData, function(data) {
+            $('#feedback-form .alert-danger').hide();
+            $('#feedback-form')[0].reset();
+            $('#feedback-form .alert-success').show();
+        }).fail(function (data) {
+            let content  = '';
+
+            Object.keys(data.responseJSON).forEach(function(key) {
+                content = content + data.responseJSON[key] + '<br />';
+            });
+
+            $('#feedback-form .alert-danger').html(content);
+
+            $('#feedback-form .alert-success').hide();
+            $('#feedback-form .alert-danger').show();
+        });
+    })
+
     $("#discover-backdrop").on('click', function() {
-        $('#discover-menu').slideToggle();
+        if($('#discover-menu').is(':visible')) {
+            $('#discover-menu').slideToggle();
+        }
+        if($('#discover-feedback').is(':visible')) {
+            $('#discover-feedback').slideToggle();
+        }
         $('#discover-backdrop').toggle();
     });
 

@@ -136,7 +136,7 @@ $("select.discover").change(function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Applications/MAMP/htdocs/neuly/resources/js/discovertabs.js */"./resources/js/discovertabs.js");
+module.exports = __webpack_require__(/*! /Users/sydney/sites/neuly/resources/js/discovertabs.js */"./resources/js/discovertabs.js");
 
 
 /***/ })
