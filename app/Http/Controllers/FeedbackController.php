@@ -31,6 +31,10 @@ class FeedbackController extends Controller
             $feedback->user_id = Auth::user()->id;
         }
 
+        if($data['url'] !== null) {
+            $feedback->url = $data['url'];
+        }
+
         $feedback->save();
         return view('feedback.finish');
     }
@@ -51,8 +55,12 @@ class FeedbackController extends Controller
             $feedback->user_id = Auth::user()->id;
         }
 
+        if($data['url'] !== null) {
+            $feedback->url = $data['url'];
+        }
+
         $feedback->save();
 
-        return response('test', 200);
+        return response($feedback, 200);
     }
 }

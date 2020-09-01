@@ -334,6 +334,7 @@ $(document).ready(function () {
       'title': $('#feedback-form input[name="title"]').val(),
       'type': $('#feedback-form select[name="type"] option:selected').val(),
       'content': $('#feedback-form textarea[name="content"]').val(),
+      'url': $(location).attr('href'),
       'user_name': $('#feedback-form input[name="user_name"]').val(),
       'user_email': $('#feedback-form input[name="user_email"]').val()
     };
@@ -606,10 +607,10 @@ $('.search-form .btn').on('click', function (event) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/sydney/sites/neuly/resources/js/app.js */"./resources/js/app.js");
-__webpack_require__(/*! /Users/sydney/sites/neuly/resources/sass/app.scss */"./resources/sass/app.scss");
-__webpack_require__(/*! /Users/sydney/sites/neuly/resources/sass/index-qm.scss */"./resources/sass/index-qm.scss");
-module.exports = __webpack_require__(/*! /Users/sydney/sites/neuly/resources/sass/datatables.scss */"./resources/sass/datatables.scss");
+__webpack_require__(/*! /Applications/MAMP/htdocs/neuly/resources/js/app.js */"./resources/js/app.js");
+__webpack_require__(/*! /Applications/MAMP/htdocs/neuly/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /Applications/MAMP/htdocs/neuly/resources/sass/index-qm.scss */"./resources/sass/index-qm.scss");
+module.exports = __webpack_require__(/*! /Applications/MAMP/htdocs/neuly/resources/sass/datatables.scss */"./resources/sass/datatables.scss");
 
 
 /***/ })
