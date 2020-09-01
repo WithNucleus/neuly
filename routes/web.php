@@ -262,6 +262,8 @@ Route::get('/admin/import/{id}/failures/{type}', 'Admin\Import\FailuresControlle
 //Fix Import Failure
 Route::post('/admin/import/failures/{id}/fix', 'Admin\Import\FailuresController@fix')
     ->name('import.failures.fix');
+Route::post('/admin/import/failures/{id}/delete', 'Admin\Import\FailuresController@delete')
+    ->name('import.failures.delete');
 
 // Job Application Files
 Route::get('/admin/jobapps/{id}/resume', 'Index\JobApplicationController@getResume')->name('jobsapp.resume');
