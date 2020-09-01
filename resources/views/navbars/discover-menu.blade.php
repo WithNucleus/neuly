@@ -1,6 +1,6 @@
 <div id="discover-feedback-button">
-    <button class="btn btn-dark p-2" id="toggle-feedback-modal" tabindex="1" data-toggle="tooltip" data-placement="left" title="Feedback Neuly">
-        <i class="fad fa-comment fa-lg text-tertiary"></i> <span class="sr-only">Neuly Feedback</span></button>
+    <button class="btn btn-dark p-2" id="toggle-feedback-modal" tabindex="1" data-toggle="tooltip" data-placement="left" title="Neuly Feedback">
+        <i class="fas fa-comment fa-lg text-tertiary"></i> <span class="sr-only">Neuly Feedback</span></button>
 </div>
 
 <div id="discover-menu-button">
@@ -43,50 +43,45 @@
 <div id="discover-feedback" class="rounded shadow-sm" style="display: none;">
     <p class="title mb-1 font-weight-bold text-uppercase text-tertiary pr-4">Give Feedback</p>
     <form id="feedback-form" class="max-width-450">
-        <div class="alert alert-success" style="display: none;">
-            Your feedback successfully reached us. Thank you.
+        @csrf
+        <div class="alert alert-success mt-3" style="display: none;">
+            We got it - thanks so much for your feedback!
         </div>
-        <div class="alert alert-danger" style="display: none;"></div>
-        <div class="form-group">
-            <label for="title" class="font-weight-bold">Title:</label>
-            <input type="text" class="form-control" name="title">
-        </div>
-        <div class="form-group">
-            <label for="type" class="font-weight-bold">Type:</label>
-            <select class="custom-select" name="type">
-                <option selected></option>
-                <option value="feedback">Feedback</option>
-                <option value="problem">Problem</option>
-                <option value="bug">Bug</option>
-                <option value="suggestion">Suggestion</option>
-                <otion value="feature request">Feature Request</otion>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="content" class="font-weight-bold">Message:</label>
-            <textarea class="form-control" name="content" rows="5"></textarea>
-        </div>
-
-        @if (Auth::check())
+        <div class="alert alert-danger mt-3" style="display: none;"></div>
+        @auth
             <div class="form-group">
                 <input type="hidden" class="form-control" name="user_name" value="{{ Auth::user()->name }}">
             </div>
             <div class="form-group">
                 <input type="hidden" class="form-control" name="user_email" value="{{ Auth::user()->email  }}">
             </div>
-        @endif
-
-        @unless (Auth::check())
+        @else
             <div class="form-group">
                 <label for="user_name" class="font-weight-bold">Your Name:</label>
                 <input type="text" class="form-control" name="user_name">
             </div>
             <div class="form-group">
-                <label for="user_email" class="font-weight-bold">Your e-mail:</label>
+                <label for="user_email" class="font-weight-bold">Your Email:</label>
                 <input type="text" class="form-control" name="user_email">
             </div>
-        @endunless
-        @csrf
+        @endauth
+        <div class="form-group">
+            <label for="title" class="font-weight-bold">Title:</label>
+            <input type="text" class="form-control" name="title" required>
+        </div>
+        <div class="form-group">
+            <label for="type" class="font-weight-bold">Type:</label>
+            <select class="custom-select" name="type">
+                <option value="feedback" selected>General Feedback</option>
+                <option value="bug">Bug / Problem</option>
+                <option value="suggestion">Suggestion</option>
+                <option value="feature request">Feature Request</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="content" class="font-weight-bold">Message:</label>
+            <textarea class="form-control" name="content" rows="5" required></textarea>
+        </div>
         <div class="form-group">
             <button id="submit-feedback" class="btn btn-primary float-right" type="submit">submit</button>
         </div>

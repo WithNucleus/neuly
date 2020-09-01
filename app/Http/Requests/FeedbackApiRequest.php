@@ -28,8 +28,8 @@ class FeedbackApiRequest extends FormRequest
     public function rules()
     {
         $generalRules = [
-            'title' => 'string|required',
-            'content' => 'string|required',
+            'title' => 'required|string',
+            'content' => 'required|string',
             'type' => [
                 'required',
                 Rule::in(['problem', 'feedback', 'bug', 'suggestion', 'feature request'])
@@ -37,17 +37,36 @@ class FeedbackApiRequest extends FormRequest
         ];
 
         $unauthedUserRules = [
-            'user_name' => 'string|required',
-            'user_email' => 'email|required'
+            'user_name' => 'required|string',
+            'user_email' => 'required|email'
         ];
 
         $rules = $generalRules;
 
         if(!Auth::user()) {
-            $rules = array_merge($generalRules, $unauthedUserRules);
+            $rules = array_merge($unauthedUserRules, $generalRules);
         }
 
         return $rules;
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'user_name.required' => 'Name is required',
+            'user_email.required' => 'Email is required',
+            'user_name.string' => 'Your name must be a string',
+            'user_email.email' => 'Your email must be a valid email address',
+            'title.required' => 'Title is required',
+            'content.required' => 'Message is required',
+            'title.string' => 'Your title is not formatted correctly',
+            'content.string' => 'Your message is not formatted correctly',
+        ];
     }
 
     protected function failedValidation(Validator $validator)
