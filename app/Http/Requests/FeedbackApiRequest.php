@@ -30,6 +30,7 @@ class FeedbackApiRequest extends FormRequest
         $generalRules = [
             'title' => 'required|string',
             'content' => 'required|string',
+            'url' => 'sometimes|nullable|url',
             'type' => [
                 'required',
                 Rule::in(['problem', 'feedback', 'bug', 'suggestion', 'feature request'])

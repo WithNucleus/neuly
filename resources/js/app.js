@@ -63,6 +63,7 @@ $(document).ready(function() {
             'title': $('#feedback-form input[name="title"]').val(),
             'type': $('#feedback-form select[name="type"] option:selected').val(),
             'content': $('#feedback-form textarea[name="content"]').val(),
+            'url': $(location).attr('href'),
             'user_name': $('#feedback-form input[name="user_name"]').val(),
             'user_email': $('#feedback-form input[name="user_email"]').val()
         };
