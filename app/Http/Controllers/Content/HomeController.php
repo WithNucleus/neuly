@@ -15,7 +15,6 @@ use App\Models\NewsArticle;
 use App\Services\Metas;
 use Carbon\Carbon;
 use DB;
-use App\ChartWidgets;
 
 class HomeController extends Controller
 {
@@ -56,26 +55,18 @@ class HomeController extends Controller
         // Metas
         $metas = Metas::fromPage($request->path());
 
-        // Company Type Chart
-        $company_type_chart = ChartWidgets::companyTypeChart();
-
-        // Top 10 Locations
-        $top_ten_locations_list = ChartWidgets::topTenLocations();
-
         // Return View
         return view('content.homepage.index', compact(
-        	'count_companies', 
-        	'count_people', 
-        	'count_investors', 
+        	'count_companies',
+        	'count_people',
+        	'count_investors',
         	'count_locations',
             'count_clinicaltrials',
             'count_jobs',
         	'latest_events',
         	'jobs',
             'news_articles',
-            'metas',
-            'company_type_chart',
-            'top_ten_locations_list'
+            'metas'
         ));
 
     }

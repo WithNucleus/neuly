@@ -27,6 +27,18 @@ Route::get('/about', 'Content\AboutController@index')->name('about');
 Route::get('/insights', 'Content\InsightsController@index')->name('discover.insights');
 Route::get('/psychedelic-index', 'Content\IndexController@index')->name('discover.index');
 
+//Insights Widgets
+Route::group([
+    'prefix' => '/insights',
+    'namespace' => 'Insights',
+    'as' => 'discover.insights.',
+], function () {
+    Route::get('/companies-by-type', 'CompaniesByTypeController@index')->name('companies-by-type');
+    Route::get('/jobs-by-focus', 'JobsByFocusController@index')->name('jobs-by-focus');
+    Route::get('/jobs-by-type', 'JobsByTypeController@index')->name('jobs-by-type');
+    Route::get('/top-ten-locations', 'TopTenLocationsController@index')->name('top-ten-locations');
+});
+
 // Search Suggestions
 Route::get('/searchassets/everything.json', 'Index\SearchSuggestionsController@everything');
 Route::get('/searchassets/researchAuthors.json', 'Index\SearchSuggestionsController@researchAuthors');

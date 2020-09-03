@@ -20,12 +20,12 @@
 
         <div class="row">
             <div class="col-12 breadcrumbs-container bg-white shadow-sm">
-                    
+
                 @include('navbars.breadcrumb', [
                     'items' => [
                         'Insights' => false,
-                    ]           
-                ])                
+                    ]
+                ])
 
             </div>
         </div>
@@ -45,7 +45,7 @@
             <div class="row">
                 <div class="col-12 col-lg-4">
                     {{-- Organizations by Type --}}
-                    @include('content.homepage.organization-type-chart')
+                    @include('discover.insights.charts.organizations-by-type')
                 </div>
                 <div class="col-12 col-lg-4">
                     {{-- Organization Focus Chart --}}
@@ -53,7 +53,13 @@
                 </div>
                 <div class="col-12 col-lg-4">
                     {{-- Top 10 Locations --}}
-                    @include('content.homepage.top-locations')
+                    @include('discover.insights.charts.top-ten-locations')
+                </div>
+                <div class="col-12 col-lg-4">
+                    @include('discover.insights.charts.jobs-total-by-focus')
+                </div>
+                <div class="col-12 col-lg-4">
+                    @include('discover.insights.charts.jobs-total-by-type')
                 </div>
             </div>
             {{-- <div class="row">
@@ -81,10 +87,6 @@
 
     @include('footers.mini')
 
-    <!-- Chartings -->
-    <script type="text/javascript" src="{{ asset('assets/chart.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('assets/chartisan.js') }}"></script>
-
     <script>
 
         // Company Focus Chart
@@ -99,48 +101,6 @@
                 .legend(false)
                 .datasets(['bar']),
         });
-
-        // Global Chart Settings
-        Chart.defaults.global.defaultFontColor = '#111';
-        Chart.defaults.global.defaultFontFamily = '"Roboto", Avenir, "Helvetica", Arial, sans-serif';
-
-        var ctx = document.getElementById('chartCompanyType');
-        let chartCompanyType = new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: [<?php echo $company_type_chart['labels']; ?>],
-                datasets: [{
-                    // label: '# of Votes',
-                    data: [{{ $company_type_chart['counts'] }}],
-                    backgroundColor: [
-                        '#A7ABDD',
-                        '#6bbca4',
-                        '#275DAD',
-                    ],
-                    borderColor: [
-                        'rgba(255, 255, 255, 1)',
-                        'rgba(255, 255, 255, 1)',
-                        'rgba(255, 255, 255, 1)',
-                    ],
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                scales: {
-                    xAxes: [{
-                        display: false,
-                    }],
-                    yAxes: [{
-                        display: false,
-
-                    }],
-                },
-                legend: {
-                    position: 'bottom'
-                }
-            }
-        });
-
     </script>
 
 @endsection

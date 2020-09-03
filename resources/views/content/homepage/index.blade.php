@@ -164,7 +164,7 @@
                     @include('content.homepage.news')
 
                     {{-- Organizations by Type --}}
-                    @include('content.homepage.organization-type-chart')
+                    @include('discover.insights.charts.organizations-by-type')
 
                     {{-- Most Recent Job Postings --}}
                     @include('content.homepage.recent-jobs')
@@ -181,7 +181,7 @@
                     @include('content.homepage.upcoming-events')
 
                     {{-- Top 10 Locations --}}
-                    @include('content.homepage.top-locations')
+                    @include('discover.insights.charts.top-ten-locations')
 
                 </div>
             </div>
@@ -191,9 +191,6 @@
         @include('footers.full')
 
     </main>
-
-<script type="text/javascript" src="{{ asset('assets/chart.js') }}"></script>
-<script type="text/javascript" src="{{ asset('assets/chartisan.js') }}"></script>
 
 <script>
 
@@ -208,44 +205,6 @@
             .datasets(['bar']),
     });
 
-    Chart.defaults.global.defaultFontColor = '#111';
-    Chart.defaults.global.defaultFontFamily = '"Roboto", Avenir, "Helvetica", Arial, sans-serif';
-
-    var ctx = document.getElementById('chartCompanyType');
-    let chartCompanyType = new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: [<?php echo $company_type_chart['labels']; ?>],
-            datasets: [{
-                data: [{{ $company_type_chart['counts'] }}],
-                backgroundColor: [
-                    '#A7ABDD',
-                    '#6bbca4',
-                    '#275DAD',
-                ],
-                borderColor: [
-                    'rgba(255, 255, 255, 1)',
-                    'rgba(255, 255, 255, 1)',
-                    'rgba(255, 255, 255, 1)',
-                ],
-                borderWidth: 2
-            }]
-        },
-        options: {
-            scales: {
-                xAxes: [{
-                    display: false,
-                }],
-                yAxes: [{
-                    display: false,
-
-                }],
-            },
-            legend: {
-                position: 'bottom'
-            }
-        }
-    });
-    </script>
+</script>
 
 @endsection
