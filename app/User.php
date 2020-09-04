@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\FollowList;
 use App\Traits\CanFollow;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -9,7 +10,6 @@ use Illuminate\Notifications\Notifiable;
 use Yadahan\AuthenticationLog\AuthenticationLogable;
 use Spatie\Permission\Traits\HasRoles;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
-use App\Models\BookmarkList;
 
 class User extends Authenticatable
 {
@@ -49,8 +49,7 @@ class User extends Authenticatable
     protected static function booted()
     {
         static::created(function ($user) {
-            // Create a Bookmark List
-            $bookmark_list = BookmarkList::create([
+            FollowList::create([
                 'name' => 'Favorites',
                 'slug' => 'favorites',
                 'user_id' => $user->id

@@ -26,11 +26,11 @@
                             <i class="fab fa-facebook fa-3x"></i>
                         </a>
 
-                        <a href="https://twitter.com/intent/tweet?text={{ $list->name }} by {{ $member->name }} {{ $member->last_name }} on Neuly {{ $shareUrl }} " target="_blank" rel="noopener noreferrer" class="mx-2 text-info">
+                        <a href="https://twitter.com/intent/tweet?text={{ $list->name }} by {{ $user->name }} {{ $user->last_name }} on Neuly {{ $shareUrl }} " target="_blank" rel="noopener noreferrer" class="mx-2 text-info">
                             <i class="fab fa-twitter fa-3x"></i>
                         </a>
 
-                        <a href="https://pinterest.com/pin/create/button/?url={{ $shareUrl }}&media=&description={{ $list->name }} by {{ $member->name }} {{ $member->last_name }} on Neuly" target="_blank" rel="noopener noreferrer" class="mx-2 text-info">
+                        <a href="https://pinterest.com/pin/create/button/?url={{ $shareUrl }}&media=&description={{ $list->name }} by {{ $user->name }} {{ $user->last_name }} on Neuly" target="_blank" rel="noopener noreferrer" class="mx-2 text-info">
                             <i class="fab fa-pinterest fa-3x"></i>
                         </a>
 
@@ -41,11 +41,8 @@
 
                     <div class="email-container">
                         <p class="mb-1 p-0 font-weight-bold">Email a Friend:</p>
-                        <a href="mailto:?&subject={{ $list->name }}&body=I saw this on Neuly and thought you'd be interested: {{ $shareUrl }}">Open your mail app <i class="fad fa-external-link"></i></a>
-                        {{-- <div class="col-10 mx-auto mt-0 pt-0 d-flex align-items-center justify-content-center">
-                            <input type="email" class="form-control" name="email" placeholder="sherlock@holmes.com">
-                            <button id="trigger-email-friend" class="ml-1 btn btn-primary">Send</button>
-                        </div> --}}
+                        <a href="mailto:?&subject={{ $list->name }}&body=I saw this on Neuly and thought you'd be interested: {{ $shareUrl }}">
+                            Open your mail app <i class="fad fa-external-link"></i></a>
                     </div>
 
                 </div>
@@ -56,10 +53,9 @@
 
 <script type="text/javascript" src="{{ asset('assets/clipboard.min.js') }}"></script>
 <script>
-    var clipboard = new ClipboardJS('#copy-url');
+    let clipboard = new ClipboardJS('#copy-url');
 
     clipboard.on('success', function(e) {
         $('#copy-url').tooltip('show');
     });
-
 </script>

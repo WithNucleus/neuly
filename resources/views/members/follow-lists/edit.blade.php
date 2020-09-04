@@ -9,13 +9,14 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <h1 class="h2"><i class="fad fa-clipboard-list text-info"></i> Edit List</h1>
+                <h1 class="h2"><i class="fad fa-clipboard-list text-info"></i> Edit {{ $list->name }}</h1>
                 <div class="p-4 bg-white shadow-sm">
 
                     @include('members.includes.status-messages')
 
-                    <form action="{{ route('member.bookmarks.update-list', $list->id) }}" method="post" class="needs-validation" novalidate enctype="multipart/form-data">
+                    <form action="{{ route('member.follow-lists.update', $list->id) }}" method="post">
                         @csrf
+                        @method('put')
 
                         <div class="form-group row">
                             <div class="col-12 col-md-6">
@@ -28,10 +29,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">neuly.com/member/{{ Auth::user()->member_url ? Auth::user()->member_url : 'you' }}/lists/</span>
                                     </div>
-                                    <input type="text" class="form-control rounded-right" name="slug" value="{{ $list->slug }}">
-                                    <div class="valid-feedback text-success" style="display: none">
-                                        Looks good!
-                                    </div>
+                                    <input type="text" class="form-control rounded-right" name="slug" value="{{ $list->slug }}" required>
                                 </div>
                             </div>
                         </div>
@@ -66,7 +64,4 @@
     </div>
 
     @include('members.includes.dashboard-end')
-
-    <script src="{{ asset('js/formValidation.js') }}"></script>
-
 @endsection

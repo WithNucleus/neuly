@@ -58,16 +58,8 @@
                 @include('discover.includes.breadcrumbs.clinicaltrial')
 
             @elseif (Route::is('member.dashboard'))
-                
-                @include('discover.includes.breadcrumbs.member-dashboard')                
 
-            @elseif (Route::is('member.bookmarks.index'))
-
-                @include('discover.includes.breadcrumbs.bookmarks')
-
-            @elseif (Route::is('member.bookmarks.index'))
-
-                @include('discover.includes.breadcrumbs.bookmark-show')
+                @include('discover.includes.breadcrumbs.member-dashboard')
 
             @elseif (Route::is('discover.organizations.jobs'))
 
@@ -89,7 +81,7 @@
     <main id="show-main" role="main" class="full-width-show-view mx-auto">
         <div class="p-4">
 
-@else 
+@else
     <main id="show-main" role="main" class="col-md-11 col-xl-8 mx-auto">
         <div class="p-4 bg-white shadow-sm">
 @endif

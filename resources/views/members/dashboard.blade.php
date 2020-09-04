@@ -11,17 +11,24 @@
     <div class="row">
         <div class="col-12 col-md-6 col-xl-4">
             <h1 class="h2">
-                <a href="{{ route('member.bookmarks.index') }}" class="text-dark"><i class="fad fa-clipboard-list text-secondary mr-2"></i>Bookmarks</a>
+                <a href="{{ route('member.follow-lists.index') }}" class="text-dark"><i class="fad fa-star text-secondary mr-2"></i>Following</a>
             </h1>
             <div class="p-4 bg-white shadow-sm">
                 <p class="lead mb-1">Lists</p>
-                @include('members.data.bookmark-lists', ['show_more' => true, 'shadow' => false])
+                @include('members.data.follow-lists', ['lists' => $followLists, 'show_more' => true, 'shadow' => false])
 
                 <p class="lead mt-4 mb-1">Recently Added</p>
-                @include('members.data.bookmarks', ['show_more_bookmarks' => true, 'shadow' => false, 'show_action_items' => false])
+                @include('members.data.follows', [
+                    'show_more' => true,
+                    'shadow' => false,
+                    'show_action_items' => false,
+                    'show_list_name' => false
+                ])
             </div>
+        </div>
 
-            <h1 class="h2 mt-5">
+        <div class="col-12 col-md-6 col-xl-4">
+            <h1 class="h2">
                 <a href="{{ route('member.notes.index') }}" class="text-dark"><i class="fad fa-file-edit text-secondary mr-2"></i>Notes</a>
             </h1>
             <div class="p-4 bg-white shadow-sm">
@@ -30,16 +37,7 @@
             </div>
         </div>
 
-        <div class="col-12 col-md-6 col-xl-4 mt-5 mt-md-0">
-            <h1 class="h2">
-                <a href="{{ route('member.follow.index') }}" class="text-dark"><i class="fad fa-network-wired text-secondary mr-2"></i>Following</a>
-            </h1>
-            <div class="p-4 bg-white shadow-sm">
-                @include('members.data.follows-list', ['shadow' => false, 'show_more' => true])
-            </div>
-        </div>
-
-        <div class="col-12 col-md-6 col-xl-4 mt-5 mt-md-0">
+        <div class="col-12 col-md-6 col-xl-4">
             <h1 class="h2">
                 <span class="text-dark"><i class="fad fa-clock text-secondary"></i> Recently Viewed</span>
             </h1>

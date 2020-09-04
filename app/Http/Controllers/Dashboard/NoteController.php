@@ -9,7 +9,6 @@ use Auth;
 use Validator;
 use DB;
 use App\User;
-use App\Repositories\BookmarkRepository;
 
 class NoteController extends Controller
 {
@@ -55,7 +54,7 @@ class NoteController extends Controller
                 ]);
 
             } else {
-                
+
                 return response()->json(['success' => 'Looks good!']);
 
             }
@@ -78,7 +77,7 @@ class NoteController extends Controller
     		'slug' => 'required|max:255|unique:member_notes,slug,NULL,id,user_id,' . Auth::user()->id,
 	        'description' => 'nullable|max:255',
 	        'visibility' => 'required'
-	    ]);	  
+	    ]);
 
 	    // If Title is Blank
 	    if ($request->input('title') == '') {
@@ -114,9 +113,8 @@ class NoteController extends Controller
         if ($note) {
 
             $entity = 'member-notes';
-            $bookmarks = BookmarkRepository::fromUser($entity, $note->id);
 
-            return view('members.notes.show', compact('note', 'entity', 'bookmarks', 'member'));
+            return view('members.notes.show', compact('note', 'entity', 'member'));
         } else {
             abort('404');
         }

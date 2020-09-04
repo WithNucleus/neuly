@@ -2,23 +2,26 @@
 
 namespace App\Models;
 
+use App\FollowList;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Follow extends Model
 {
-    /*
-    |--------------------------------------------------------------------------
-    | GLOBAL VARIABLES
-    |--------------------------------------------------------------------------
-    */
-
     protected $table = 'followables';
 
     protected $guarded = ['id'];
 
+    /**
+     * RELATIONS
+     */
+
     public function followable() :MorphTo
     {
         return $this->morphTo();
+    }
+
+    public function list() {
+        return $this->belongsTo(\App\Models\FollowList::class, 'follow_list_id');
     }
 }

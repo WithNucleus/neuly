@@ -13,7 +13,7 @@
 
             <div class="mb-0 font-size-small d-inline-block ml-2">
             @if($list->is_public)
-                @if($member->member_url == '')
+                @if($list->user->member_url == '')
                     <a href="{{ route('user.settings') }}" class="btn btn-link p-0 ml-2 text-secondary" data-toggle="tooltip" data-placement="top" title="Set your Neuly member URL before sharing">
                         <i class="fad fa-share-square fa-lg"></i>
                     </a>
@@ -38,7 +38,7 @@
 
                             @if($list->is_public)
                                 <span class="text-success ml-3"><i class="fad fa-eye"></i> Public</span>
-                                @if($member->member_url == '')
+                                @if($list->user->member_url == '')
                                     <a href="{{ route('user.settings') }}"><span class="ml-1 font-size-small badge badge-warning">Set your Neuly URL</span></a>
                                 @endif
                             @else
@@ -47,11 +47,13 @@
                         </div>
 
                         <div class="align-self-end pb-1 font-size-small">
-                            @if($list->is_public && $member->member_url)
-                                <a href="{{ route('members.public.bookmark-list', [$member->member_url , $list->slug]) }}" class="text-secondarydark text-decoration-none mr-2"><i class="fad fa-link"></i> Public URL</a>
+                            @if($list->is_public && $list->user->member_url)
+                                <a href="{{ route('members.follow-lists.public', [$list->user->member_url , $list->slug]) }}" class="text-secondarydark text-decoration-none mr-2"><i class="fad fa-link"></i> Public URL</a>
                             @endif
-                            <a href="{{ route('member.bookmarks.edit-list', $list->slug) }}" class="text-primary text-decoration-none mr-2"><i class="fad fa-edit"></i> Edit List</a>
-                            <button type="button" class="btn btn-link btn-sm p-0 text-danger text-decoration-none" data-toggle="modal" data-target="#delete-list-{{$list->id}}"><i class="fad fa-trash-alt"></i> Delete List</button>
+                            <a href="{{ route('member.follow-lists.edit', $list->slug) }}" class="text-primary text-decoration-none mr-2"><i class="fad fa-edit"></i> Edit List</a>
+                            <button type="button" class="btn btn-link btn-sm p-0 text-danger text-decoration-none"
+                                    data-toggle="modal" data-target="#delete-list-{{$list->id}}">
+                                <i class="fad fa-trash-alt"></i> Delete List</button>
                         </div>
                     </div>
 
@@ -61,11 +63,12 @@
                         </p>
                     @endif
 
-                    @include('members.data.bookmarks', [
-                        'show_more_bookmarks' => false,
+                    @include('members.data.follows', [
+                        'follows'             => $list->followItems,
+                        'show_more'           => false,
                         'shadow'              => false,
                         'show_action_items'   => true,
-                        'hide_list_name'      => true,
+                        'show_list_name'      => false,
                     ])
                 </div>
             </div>
@@ -73,8 +76,9 @@
     </div>
 
     @include('members.includes.dashboard-end')
-    @include('members.bookmarks.share-modal', ['shareUrl' => route('members.public.bookmark-list', [$member->member_url , $list->slug])])
-    @include('members.bookmarks.delete-list-modal')
-
-    <script src="{{ asset('js/formValidation.js') }}"></script>
+    @include('members.follow-lists.modals.share', [
+        'shareUrl' => route('members.follow-lists.public', [$list->user->member_url , $list->slug]),
+        'user' => $list->user,
+    ])
+    @include('members.follow-lists.modals.delete')
 @endsection

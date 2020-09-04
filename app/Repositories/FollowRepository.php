@@ -8,7 +8,7 @@ use App\Models\Follow;
 class FollowRepository {
 
     /**
-     * Get current user bookmarks for a specific entity.
+     * Get current user follows for a specific entity.
      *
      * @param string Entity
      * @return collection

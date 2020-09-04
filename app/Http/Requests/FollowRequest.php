@@ -15,7 +15,7 @@ class FollowRequest extends FormRequest
     public function authorize()
     {
         // only allow updates if the user is logged in
-        return backpack_auth()->check();
+        return auth()->check();
     }
 
     /**
@@ -26,32 +26,7 @@ class FollowRequest extends FormRequest
     public function rules()
     {
         return [
-            'app_notification' => 'required_without_all:email_notification',
-            'email_notification' => 'required_without_all:app_notification',
-        ];
-    }
-
-    /**
-     * Get the validation attributes that apply to the request.
-     *
-     * @return array
-     */
-    public function attributes()
-    {
-        return [
-            //
-        ];
-    }
-
-    /**
-     * Get the validation messages that apply to the request.
-     *
-     * @return array
-     */
-    public function messages()
-    {
-        return [
-            'required_without_all' => 'One of the field must be enabled.'
+            'follow_list_id' => 'required',
         ];
     }
 }

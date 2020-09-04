@@ -1,6 +1,6 @@
 @include('navbars.breadcrumb', [
     'items' => [
-        $member->name . ' ' . $member->last_name => false,
+        $user->name . ' ' . $user->last_name => false,
         $list->name => false
-    ]           
+    ]
 ])

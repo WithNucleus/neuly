@@ -4,9 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Follow;
-use Illuminate\Http\Request;
-use App\Models\BookmarkList;
-use App\Models\Bookmark;
+use App\Models\FollowList;
 use App\Models\MemberNote;
 use Auth;
 use Illuminate\Support\Facades\DB;
@@ -37,28 +35,24 @@ class DashboardController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-    	$lists = BookmarkList::where('user_id', Auth::id())
-    			->orderBy('name', 'asc')
-    			->take(3)
-    			->get();
+        $followLists = FollowList::with('followItems')
+            ->where('user_id', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->take(3)
+            ->get();
 
-    	$bookmarks = Bookmark::where('user_id', Auth::id())
-				->orderBy('created_at', 'desc')
-				->take(3)
-				->get();
+        $follows = Follow::with('followable')
+            ->where('user_id', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->take(3)
+            ->get();
 
         $notes = MemberNote::where('user_id', Auth::id())
                 ->orderBy('updated_at', 'desc')
                 ->take(5)
                 ->get();
 
-        $follows = Follow::with('followable')
-            ->where('user_id', Auth::id())
-            ->orderBy('created_at', 'desc')
-            ->take(5)
-            ->get();
-
-    	return view('members.dashboard', compact('lists', 'bookmarks', 'notes', 'recently_viewed', 'follows'));
+    	return view('members.dashboard', compact('notes', 'recently_viewed', 'followLists', 'follows'));
 
     }
 }

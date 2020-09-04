@@ -14,13 +14,6 @@
             </h1>
 
             <div class="mb-0 d-inline-block ml-2">
-                @include('members.bookmarks.add-button', [
-                    'entity' => $entity,
-                    'entity_id' => $note->id,
-                    'name' => $note->title,
-                    'bookmarks' => $bookmarks
-                ])
-
                 @if($member->member_url == '')
                     <a href="{{ route('user.settings') }}" class="btn btn-link p-0 ml-2 text-secondary" data-toggle="tooltip" data-placement="top" title="Set your Neuly member URL before sharing">
                         <i class="fad fa-share-square fa-lg"></i>
@@ -47,7 +40,7 @@
                     <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 pb-2 border-bottom border-tertiary">
 
                         <div class="left-side mb-0 font-size-small mr-3">
-                            <i class="fad fa-clock"></i> Created {{ \Carbon\Carbon::parse($note->created_at)->format('M d, Y') }} 
+                            <i class="fad fa-clock"></i> Created {{ \Carbon\Carbon::parse($note->created_at)->format('M d, Y') }}
                                 and last updated {{ \Carbon\Carbon::parse($note->updated_at)->diffForHumans() }}
 
                             @if($note->visibility == 'private')
@@ -70,7 +63,7 @@
                     <div class="trix-content">
                         {!! $note->trixRender("content") !!}
                     </div>
-                                    
+
                 </div>
             </div>
         </div>

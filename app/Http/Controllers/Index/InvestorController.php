@@ -10,7 +10,6 @@ use App\Models\Focus;
 use App\Models\Location;
 use App\Services\Metas;
 use Illuminate\Support\Facades\DB;
-use App\Repositories\BookmarkRepository;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -76,7 +75,6 @@ class InvestorController extends Controller
         $related = $this->getReltaedEntities($investor);
 
         $entity = 'investors';
-        $bookmarks = BookmarkRepository::fromUser($entity, $investor->id);
         $isFollowed = (bool) count(FollowRepository::fromuser(Investor::class, $investor->id));
 
         // Log Activity
@@ -91,7 +89,7 @@ class InvestorController extends Controller
             ->performedOn($investor)
             ->log($investor->name);
 
-        return view('discover.investors.show', compact('investor', 'related', 'metas', 'entity', 'bookmarks', 'isFollowed'));
+        return view('discover.investors.show', compact('investor', 'related', 'metas', 'entity', 'isFollowed'));
     }
 
     public function namesJson()
