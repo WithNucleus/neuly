@@ -1,3 +1,4 @@
+require('./insights/collaborators-list');
 require('./insights/topTenLocations');
 
 /* Global Chart Settings */

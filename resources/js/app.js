@@ -262,5 +262,4 @@ $(document).ready(function() {
             button.addClass('lead-smaller');
         })
     })
-
 });

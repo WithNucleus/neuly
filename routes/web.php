@@ -200,6 +200,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/notifications/{notification}/read', 'NotificationController@setRead');
     });
 
+    //insights
+
+    Route::get('/insights/test', 'Dashboard\InsightController@index');
+    Route::post('/insights/collaborators/list', 'Insights\ClinicalTrialCollaboratorsListController@index');
+
     // Follow / Unfollow actions
     Route::get('/follow//get-modal/{id}/{type}', 'Dashboard\FollowController@getModal')->name('member.follow.getModal');
     Route::post('/follow/attach', 'Dashboard\FollowController@attach')->name('member.follow.attach');
