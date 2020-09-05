@@ -16,7 +16,15 @@ $(document).ready(function() {
         });
 
         $.post("/insights/collaborators/list",[], function(data) {
-            //set data for collaborators list
+            var resultHtml = "";
+
+            data.forEach(function(value, index) {
+                var position = index + 1;
+                var item = "<tr><td>"+position+"</td><td>"+value.name+"</td><td>"+value.trials+"</td></tr>";
+                resultHtml = resultHtml + item;
+            });
+
+            $('.collaborators-body').html(resultHtml);
         }).fail(function (data) {
             // set fail behaviour
         });

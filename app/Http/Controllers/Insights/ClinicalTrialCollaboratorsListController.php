@@ -3,14 +3,13 @@
 namespace App\Http\Controllers\Insights;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\InsightApiRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
 class ClinicalTrialCollaboratorsListController extends Controller
 {
-    public function index(InsightApiRequest $request)
+    public function index(Request $request)
     {
         $orderBy = $request->has('orderBy') ? $request->input('orderBy') : 'desc';
 
@@ -22,6 +21,8 @@ class ClinicalTrialCollaboratorsListController extends Controller
 
         $query = $query->groupBy('clinicaltrial_company.company_id')
             ->orderBy('trials', $orderBy);
+
+        $query = $this->limitRequest($query, 10);
 
         $collaboratorList = $query->get();
 
@@ -47,5 +48,10 @@ class ClinicalTrialCollaboratorsListController extends Controller
             ->get()->pluck('clinicaltrial_id');
 
         return $query->whereIn('clinicaltrial_company.clinicaltrial_id', $trialIds);
+    }
+
+    private function limitRequest($query, $limit)
+    {
+        return $query->take($limit);
     }
 }
