@@ -8,7 +8,9 @@ use App\Models\Traits\OldSlugRedirectable;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Investor extends Model implements EntityContract
@@ -118,7 +120,7 @@ class Investor extends Model implements EntityContract
 
         // if the image was erased
         if ($value === null) {
-            \Storage::disk($disk)->delete($this->{$attribute_name});
+            Storage::disk($disk)->delete($this->{$attribute_name});
             return $this->attributes[$attribute_name] = null;
         }
 
@@ -126,27 +128,29 @@ class Investor extends Model implements EntityContract
         if (Str::startsWith($value, 'data:image'))
         {
             // Make the image
-            $image = \Image::make($value)->encode('png', 90);
+            $image = Image::make($value)->encode('png', 90);
 
             // Store the image on disk
-            \Storage::disk($disk)->put($destination_path.'/'.$filename, $image->stream());
+            Storage::disk($disk)->put($destination_path.'/'.$filename, $image->stream());
 
             // 3. Delete the previous image, if there was one
-            \Storage::disk($disk)->delete($this->{$attribute_name});
+            Storage::disk($disk)->delete($this->{$attribute_name});
 
             // 4. Save the public path to the database
-            $public_destination_path = Str::replaceFirst('public/', '', $destination_path);
+            $public_destination_path = Str::replaceFirst($public_path, '', $destination_path);
             return $this->attributes[$attribute_name] = $public_destination_path.'/'.$filename;
         }
 
-        if ($value !== null && $this->{$attribute_name} != $value) {
-            //if another already uploaded image was assigned (e.g. after Entity Merge)
+        $oldValue = Storage::disk($disk)->url($this->{$attribute_name});
 
+        //if another already uploaded image was assigned (e.g. after Entity Merge)
+        if ($value !== null && $oldValue != $value) {
             $oldImagePath = $public_path . $this->{$attribute_name};
-            // delete old image from disk
-            \Storage::disk($disk)->delete($oldImagePath);
+            $newImagePath = $public_path . $value;
+            //delete old image from disk
+            Storage::disk($disk)->delete($oldImagePath);
             //replace old image with new
-            \Storage::disk($disk)->move($public_path . $value, $oldImagePath);
+            Storage::disk($disk)->move($newImagePath, $oldImagePath);
             //assign back correct old image value
             return $this->attributes[$attribute_name] = $this->{$attribute_name};
         }
