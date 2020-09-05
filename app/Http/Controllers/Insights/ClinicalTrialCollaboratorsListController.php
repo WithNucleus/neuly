@@ -13,9 +13,7 @@ class ClinicalTrialCollaboratorsListController extends Controller
     {
         $orderBy = $request->has('orderBy') ? $request->input('orderBy') : 'desc';
 
-        $query = DB::table('companies')
-            ->join('clinicaltrial_company', 'companies.id', 'clinicaltrial_company.company_id')
-            ->select('companies.id as id', 'name', 'slug', DB::raw('count(clinicaltrial_company.company_id) as trials'));
+        $query = $this->getQuery();
 
         $query = $this->filterQuery($query, $request);
 
@@ -27,6 +25,31 @@ class ClinicalTrialCollaboratorsListController extends Controller
         $collaboratorList = $query->get();
 
         return response($collaboratorList, Response::HTTP_OK);
+    }
+
+    public function show(Request $request)
+    {
+        $orderBy = $request->has('orderBy') ? $request->input('orderBy') : 'desc';
+
+        $query = $this->getQuery();
+
+        $query = $this->filterQuery($query, $request);
+
+        $query = $query->groupBy('clinicaltrial_company.company_id')
+            ->orderBy('trials', $orderBy);;
+
+        $collaborators = $query->paginate(15);
+
+        $data = ['collaborators' => $collaborators];
+
+        return view('insights.collaborators.show', $data);
+    }
+
+    private function getQuery()
+    {
+        return DB::table('companies')
+            ->join('clinicaltrial_company', 'companies.id', 'clinicaltrial_company.company_id')
+            ->select('companies.id as id', 'name', 'slug', DB::raw('count(clinicaltrial_company.company_id) as trials'));
     }
 
     private function filterQuery($query, $request)

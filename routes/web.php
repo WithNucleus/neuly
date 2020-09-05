@@ -203,6 +203,7 @@ Route::group(['middleware' => 'auth'], function () {
     //insights
 
     Route::get('/insights/test', 'Dashboard\InsightController@index');
+    Route::get('/insights/collaborators', 'Insights\ClinicalTrialCollaboratorsListController@show')->name('insights.collaborators.show');
     Route::post('/insights/collaborators/list', 'Insights\ClinicalTrialCollaboratorsListController@index');
 
     // Follow / Unfollow actions

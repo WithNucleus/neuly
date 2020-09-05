@@ -18,9 +18,8 @@ $(document).ready(function() {
         $.post("/insights/collaborators/list",[], function(data) {
             var resultHtml = "";
 
-            data.forEach(function(value, index) {
-                var position = index + 1;
-                var item = "<tr><td>"+position+"</td><td>"+value.name+"</td><td>"+value.trials+"</td></tr>";
+            data.forEach(function(value) {
+                var item = "<tr><td><a href='/organization/"+value.slug+"'>"+value.name+"</a></td><td>"+value.trials+"</td></tr>";
                 resultHtml = resultHtml + item;
             });
 

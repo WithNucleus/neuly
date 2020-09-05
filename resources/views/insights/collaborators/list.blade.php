@@ -5,7 +5,6 @@
             <div class="collaborators-list">
                 <table class="table table-striped">
                     <thead>
-                        <th scope="col">#</th>
                         <th scope="col">Name</th>
                         <th scope="col">Clinical Trials</th>
                     </thead>
@@ -14,6 +13,7 @@
                     </tbody>
                 </table>
             </div>
+            <a href="{{ route('insights.collaborators.show') }}">Show all Collaborators</a>
         </div>
     </div>
 </div>
