@@ -17,7 +17,7 @@
         <div class="position-relative p-3 p-md-5 text-center home-hero shadow-sm">
             <div class="col-md-10 col-lg-8 mx-auto my-5 text-center">
                 <h1 class="hero-title font-weight-normal mt-2 col-lg-8 mx-auto mb-2">Clear data to build the future of psychedelics.</h1>
-                <form id="homepage-discover" class="search-form form-inline mx-auto justify-content-center" method="post" action="/search">
+                <form id="homepage-discover" class="search-form form-inline mx-auto justify-content-center" method="post" action="{{ route('search') }}">
                     @csrf
                     <input class="typeahead form-control hero-search-input shadow-sm search-field" name="search" type="search" placeholder="Discover organizations, people, research..." aria-label="Search">
                     <button class="btn hero-search-button ml-2 my-2 my-sm-0 shadow-sm" type="submit">Search</button>
@@ -159,7 +159,7 @@
 
                 {{-- Left Column --}}
                 <div class="col-12 col-md-6">
-                    
+
                     {{-- Top 3 Trending News --}}
                     @include('content.homepage.news')
 
@@ -176,7 +176,7 @@
 
                     {{-- Organization Focus Chart --}}
                     @include('content.homepage.organization-focus-chart')
-                    
+
                     {{-- Upcoming Events --}}
                     @include('content.homepage.upcoming-events')
 

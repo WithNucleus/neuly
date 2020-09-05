@@ -1,5 +1,4 @@
 require('./bootstrap');
-require('./search');
 require('./notifications');
 
 import Cookies from 'js-cookie';

@@ -71,7 +71,7 @@
                         @endif
                             >Insights</option>
 
-            @if(Route::is('search') OR Route::is('search.term.results') OR Route::is('search.term'))
+            @if(Route::is('search.term'))
                 <option value="search" selected>Search</option>
             @endif
         </select>

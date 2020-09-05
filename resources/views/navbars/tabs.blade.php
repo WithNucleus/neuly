@@ -63,9 +63,9 @@
         </a>
     </li>
 
-    @if(Route::is('search') OR Route::is('search.term.results') OR Route::is('search.term'))
+    @if(Route::is('search.term'))
         <li class="nav-item">
-            <a href="/search/{{ $term ?? '' }}" class="nav-link active">
+            <a href="{{ $term ? route('search.term', $term) : '#' }}" class="nav-link active">
                 <span class="icon"><i class="fad fa-search"></i></span><span class="sr-only">Search</span>
             </a>
         </li>

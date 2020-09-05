@@ -277,8 +277,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(js_cookie__WEBPACK_IMPORTED_MODULE_0__);
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
-__webpack_require__(/*! ./search */ "./resources/js/search.js");
-
 __webpack_require__(/*! ./notifications */ "./resources/js/notifications.js");
 
 
@@ -550,23 +548,6 @@ $(function () {
 
 /***/ }),
 
-/***/ "./resources/js/search.js":
-/*!********************************!*\
-  !*** ./resources/js/search.js ***!
-  \********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-$('.search-form .btn').on('click', function (event) {
-  event.preventDefault();
-  event.stopPropagation();
-  var value = $('.search-field').val();
-  $('.search-form').attr('action', '/search/' + value);
-  $('.search-form').trigger('submit');
-});
-
-/***/ }),
-
 /***/ "./resources/sass/app.scss":
 /*!*********************************!*\
   !*** ./resources/sass/app.scss ***!
@@ -607,10 +588,10 @@ $('.search-form .btn').on('click', function (event) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Applications/MAMP/htdocs/neuly/resources/js/app.js */"./resources/js/app.js");
-__webpack_require__(/*! /Applications/MAMP/htdocs/neuly/resources/sass/app.scss */"./resources/sass/app.scss");
-__webpack_require__(/*! /Applications/MAMP/htdocs/neuly/resources/sass/index-qm.scss */"./resources/sass/index-qm.scss");
-module.exports = __webpack_require__(/*! /Applications/MAMP/htdocs/neuly/resources/sass/datatables.scss */"./resources/sass/datatables.scss");
+__webpack_require__(/*! /var/www/neuly/resources/js/app.js */"./resources/js/app.js");
+__webpack_require__(/*! /var/www/neuly/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /var/www/neuly/resources/sass/index-qm.scss */"./resources/sass/index-qm.scss");
+module.exports = __webpack_require__(/*! /var/www/neuly/resources/sass/datatables.scss */"./resources/sass/datatables.scss");
 
 
 /***/ })
