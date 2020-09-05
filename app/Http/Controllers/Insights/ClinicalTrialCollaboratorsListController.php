@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Insights;
 
 use App\Http\Controllers\Controller;
+use App\Models\Focus;
+use App\Services\Metas;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -14,8 +16,6 @@ class ClinicalTrialCollaboratorsListController extends Controller
         $orderBy = $request->has('orderBy') ? $request->input('orderBy') : 'desc';
 
         $query = $this->getQuery();
-
-        $query = $this->filterQuery($query, $request);
 
         $query = $query->groupBy('clinicaltrial_company.company_id')
             ->orderBy('trials', $orderBy);
@@ -29,20 +29,34 @@ class ClinicalTrialCollaboratorsListController extends Controller
 
     public function show(Request $request)
     {
-        $orderBy = $request->has('orderBy') ? $request->input('orderBy') : 'desc';
+        $sort = $request->has('sort') ? $request->input('sort') : 'desc';
 
         $query = $this->getQuery();
+        $filters_focus = [];
 
-        $query = $this->filterQuery($query, $request);
+        if ($request->has('filter'))
+        {
+            $filter = $request->input('filter');
+            $query = $this->filterQuery($query, $filter);
+
+            if(isset($filter['focus'])) {
+                $filters_focus = $this->getFocusNameArray($filter['focus']);
+            }
+        }
 
         $query = $query->groupBy('clinicaltrial_company.company_id')
-            ->orderBy('trials', $orderBy);;
+            ->orderBy('trials', $sort);
 
         $collaborators = $query->paginate(15);
 
-        $data = ['collaborators' => $collaborators];
+        $metas = Metas::fromPage($request->path());
 
-        return view('insights.collaborators.show', $data);
+        $path = route('insights.collaborators.show');
+
+        // Get All Focus Values
+        $focus_cats = Focus::has('clinicaltrials', '>' , 0)->with('clinicaltrials')->get()->pluck('name')->unique()->sort();
+
+        return view('insights.collaborators.show', compact('collaborators', 'sort', 'metas', 'path', 'focus_cats', 'filters_focus'));
     }
 
     private function getQuery()
@@ -52,11 +66,11 @@ class ClinicalTrialCollaboratorsListController extends Controller
             ->select('companies.id as id', 'name', 'slug', DB::raw('count(clinicaltrial_company.company_id) as trials'));
     }
 
-    private function filterQuery($query, $request)
+    private function filterQuery($query, $filter)
     {
-        if($request->has('focus'))
+        if(isset($filter['focus']))
         {
-            $query = $this->filterByFocus($query, $request->input('focus'));
+            $query = $this->filterByFocus($query, $filter['focus']);
         }
 
         return $query;
@@ -64,9 +78,10 @@ class ClinicalTrialCollaboratorsListController extends Controller
 
     private function filterByFocus($query, $focus)
     {
+
         $trialIds = DB::table('clinicaltrial_focus')
             ->select('clinicaltrial_id')
-            ->whereIn('focus_id', $focus)
+            ->whereIn('focus_id', $this->getFocusIds($this->getFocusNameArray($focus)))
             ->groupBy('clinicaltrial_id')
             ->get()->pluck('clinicaltrial_id');
 
@@ -76,5 +91,13 @@ class ClinicalTrialCollaboratorsListController extends Controller
     private function limitRequest($query, $limit)
     {
         return $query->take($limit);
+    }
+
+    private function getFocusNameArray($focus) {
+        return explode('|', $focus);
+    }
+
+    private function getFocusIds($focus) {
+        return Focus::whereIn('name', $focus)->get()->pluck('id');
     }
 }

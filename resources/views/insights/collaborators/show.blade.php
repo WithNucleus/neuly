@@ -32,6 +32,9 @@
     </div>
 
     <div class="row">
+
+        @include('sidebars.primary')
+
         <main id="index-main" role="main" class="col-lg-9 col-xl-10 ml-auto">
             @include('discover.includes.status-messages')
 
@@ -47,6 +50,41 @@
                                     Showing {{ $collaborators->total() }} Organizations
                                 </span>
                         </div>
+
+                        {{-- Sorting --}}
+                        @isset($sort)
+                            <div class="sort-container font-size-small mt-3 mb-3">
+                                <strong class="text-uppercase mr-3 text-black-50">Sort by:</strong>
+                                <div class="d-inline sort-name text-uppercase">
+
+                                    @include('discover.includes.filters.sort-button-default', [
+                                        'asc' => 'asc',
+                                        'desc' => 'desc',
+                                        'label' => 'Clinical Trials'
+                                    ])
+                                </div>
+                            </div>
+                        @endisset
+
+                        {{-- Filters --}}
+                        <?php if (
+                        isset($filters_focus) && $filters_focus
+                        ) : ?>
+                        <div class="current-filter-list font-size-small align-self-end border-bottom mb-3 pb-1">
+                            <strong class="text-uppercase mr-3 text-black-50">Current Filters:</strong>
+
+                            <?php if (isset($filters_focus) && $filters_focus) : ?>
+                            <span class="mr-3">
+                                        <i class="fad fa-map-marker-alt text-info"></i>
+                                        @foreach ($filters_focus as $focus)
+                                    {{ $focus }}
+                                    @if (!$loop->last) <strong class="text-info">/</strong> @endif
+                                @endforeach
+                                    </span>
+                            <?php endif; ?>
+                        </div>
+                        <?php endif; ?>
+
                         <div class="d-flex flex-wrap">
                             <table class="table table-striped">
                                 <thead>
@@ -71,3 +109,4 @@
         </main>
     </div>
 @endsection
+
