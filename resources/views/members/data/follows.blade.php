@@ -59,7 +59,7 @@
     </ul>
 @else
     @if(isset($public_list) && $public_list == true)
-        <p>This list don't have any items yet.</p>
+        <p>This list doesn't have anything in it yet.</p>
     @else
         <p>You aren't following anything yet. You can save everything in Neuly to your follow lists - watch out for this icon <i class="far fa-star text-primary"></i> to follow items.</p>
     @endif

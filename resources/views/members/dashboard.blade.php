@@ -9,7 +9,7 @@
     @include('members.includes.status-messages')
 
     <div class="row">
-        <div class="col-12 col-md-6 col-xl-4">
+        <div class="col-12 col-md-6 col-xl-4 mb-5">
             <h1 class="h2">
                 <a href="{{ route('member.follow-lists.index') }}" class="text-dark"><i class="fad fa-star text-secondary mr-2"></i>Following</a>
             </h1>
@@ -27,7 +27,7 @@
             </div>
         </div>
 
-        <div class="col-12 col-md-6 col-xl-4">
+        <div class="col-12 col-md-6 col-xl-4 mb-5">
             <h1 class="h2">
                 <a href="{{ route('member.notes.index') }}" class="text-dark"><i class="fad fa-file-edit text-secondary mr-2"></i>Notes</a>
             </h1>
@@ -37,7 +37,7 @@
             </div>
         </div>
 
-        <div class="col-12 col-md-6 col-xl-4">
+        <div class="col-12 col-md-6 col-xl-4 mb-5">
             <h1 class="h2">
                 <span class="text-dark"><i class="fad fa-clock text-secondary"></i> Recently Viewed</span>
             </h1>

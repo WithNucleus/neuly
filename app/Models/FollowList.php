@@ -9,6 +9,8 @@ class FollowList extends Model
 {
     protected $table = 'follow_lists';
 
+    protected $guarded = ['id'];
+
     /**
      * RELATIONS
      */

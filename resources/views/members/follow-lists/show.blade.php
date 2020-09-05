@@ -14,8 +14,8 @@
             <div class="mb-0 font-size-small d-inline-block ml-2">
             @if($list->is_public)
                 @if($list->user->member_url == '')
-                    <a href="{{ route('user.settings') }}" class="btn btn-link p-0 ml-2 text-secondary" data-toggle="tooltip" data-placement="top" title="Set your Neuly member URL before sharing">
-                        <i class="fad fa-share-square fa-lg"></i>
+                    <a href="{{ route('user.settings') }}" class="btn btn-link lead-smaller p-0 ml-2 text-secondary font-weight-bold text-decoration-none" data-toggle="tooltip" data-placement="top" title="Set your Neuly member URL before sharing">
+                        <i class="fad fa-share-square fa-lg"></i> SHARE
                     </a>
                 @else
                     <span data-toggle="tooltip" data-placement="top" title="Share">
@@ -24,6 +24,10 @@
                         </button>
                     </span>
                 @endif
+            @else
+                <a href="{{ route('member.follow-lists.edit', $list->slug) }}" class="btn btn-link lead-smaller p-0 ml-2 text-secondary font-weight-bold text-decoration-none" data-toggle="tooltip" data-placement="top" title="This list must be public to share it">
+                    <i class="fad fa-share-square fa-lg"></i> SHARE
+                </a>
             @endif
             </div>
         </div>
@@ -39,7 +43,7 @@
                             @if($list->is_public)
                                 <span class="text-success ml-3"><i class="fad fa-eye"></i> Public</span>
                                 @if($list->user->member_url == '')
-                                    <a href="{{ route('user.settings') }}"><span class="ml-1 font-size-small badge badge-warning">Set your Neuly URL</span></a>
+                                    <a href="{{ route('user.settings') }}" data-toggle="tooltip" data-placement="top" title="Set your Neuly member URL before sharing"><span class="ml-3 font-size-small badge badge-warning">Set your Neuly URL</span></a>
                                 @endif
                             @else
                                 <span class="text-muted ml-3"><i class="fad fa-lock-alt"></i> Private</span>
@@ -76,9 +80,11 @@
     </div>
 
     @include('members.includes.dashboard-end')
-    @include('members.follow-lists.modals.share', [
-        'shareUrl' => route('members.follow-lists.public', [$list->user->member_url , $list->slug]),
-        'user' => $list->user,
-    ])
+    @if($list->user->member_url != '')
+        @include('members.follow-lists.modals.share', [
+            'shareUrl' => route('members.follow-lists.public', [$list->user->member_url , $list->slug]),
+            'user' => $list->user,
+        ])
+    @endif
     @include('members.follow-lists.modals.delete')
 @endsection
