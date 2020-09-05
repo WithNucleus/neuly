@@ -10,12 +10,10 @@
         <h1 class="mr-4 flex-shrink-1">{{ $job->job_title }}</h1>
 
         <div class="dashboard-actions-container flex-shrink-0 m-2 float-right">
-
-            @include('members.bookmarks.add-button', [
-                'entity' => $entity,
-                'entity_id' => $job->id,
+            @include('members.follow.button', [
+                'followable_type' => get_class($job),
+                'followable_id' => $job->id,
                 'name' => $job->job_title,
-                'bookmarks' => $bookmarks
             ])
         </div>
     </div>

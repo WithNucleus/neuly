@@ -10,7 +10,6 @@ use App\Models\Focus;
 use App\Models\Job;
 use App\Models\Event;
 use App\Models\Location;
-use App\Repositories\BookmarkRepository;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -79,7 +78,6 @@ class CompanyController extends Controller
         $related = $this->getReltaedEntities($company);
 
         $entity = 'organizations';
-        $bookmarks = BookmarkRepository::fromUser($entity, $company->id);
         $isFollowed = (bool) count(FollowRepository::fromuser(Company::class, $company->id));
 
 
@@ -95,7 +93,7 @@ class CompanyController extends Controller
             ->performedOn($company)
             ->log($company->name);
 
-        return view('discover.organizations.show', compact('company', 'related', 'metas', 'entity', 'bookmarks', 'isFollowed'));
+        return view('discover.organizations.show', compact('company', 'related', 'metas', 'entity', 'isFollowed'));
     }
 
     public function namesJson()
@@ -131,10 +129,9 @@ class CompanyController extends Controller
         $jobs = Job::where('company_id', $company->id)->orderBy('posted_date', 'desc')->get();
 
         $entity = 'organizations';
-        $bookmarks = BookmarkRepository::fromUser($entity, $company->id);
 
         // Return View
-        return view('discover.organizations.jobs', compact('company', 'jobs', 'entity', 'bookmarks'));
+        return view('discover.organizations.jobs', compact('company', 'jobs', 'entity'));
     }
 
     // Show Events for this Company
@@ -144,9 +141,8 @@ class CompanyController extends Controller
         $company = Company::where('slug', $slug)->firstOrFail();
 
         $entity = 'organizations';
-        $bookmarks = BookmarkRepository::fromUser($entity, $company->id);
 
         // Return View
-        return view('discover.organizations.events', compact('company', 'entity', 'bookmarks'));
+        return view('discover.organizations.events', compact('company', 'entity'));
     }
 }

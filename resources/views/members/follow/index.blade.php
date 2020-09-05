@@ -10,26 +10,21 @@
         <div class="row">
             <div class="col-12 clearfix">
                 <h1 class="h2 float-left">
-                    <i class="fad fa-network-wired text-info"></i> Following
+                    <i class="fad fa-star text-info"></i> Following
                 </h1>
             </div>
         </div>
         <div class="row">
             <div class="col-12">
+                @include('members.includes.status-messages')
+
                 <div class="p-4 bg-white shadow-sm">
-                    @if(Session::has('error'))
-                        <div class="alert alert-danger" role="alert">
-                            {{ Session::get('error') }}
-                        </div>
-                    @endif
-
-                    @if(Session::has('success'))
-                        <div class="alert alert-success" role="alert">
-                            {{ Session::get('success') }}
-                        </div>
-                    @endif
-
-                    @include('members.data.follows-list', ['shadow' => false, 'show_more' => false])
+                    @include('members.data.follows', [
+                        'shadow' => false,
+                        'show_more' => false,
+                        'show_list_name' => true,
+                        'show_action_items' => true
+                    ])
                 </div>
             </div>
         </div>

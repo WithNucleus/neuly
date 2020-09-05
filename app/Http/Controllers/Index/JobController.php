@@ -9,7 +9,6 @@ use App\Models\Location;
 use App\Models\Company;
 use App\Services\Metas;
 use Illuminate\Support\Facades\DB;
-use App\Repositories\BookmarkRepository;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -79,7 +78,6 @@ class JobController extends Controller
         $related = $this->getReltaedEntities($job);
 
         $entity = 'jobs';
-        $bookmarks = BookmarkRepository::fromUser($entity, $job->id);
 
         // Log Activity
         activity('pageview')
@@ -92,7 +90,7 @@ class JobController extends Controller
             ->performedOn($job)
             ->log($job->job_title);
 
-        return view('discover.jobs.show', compact('job', 'related', 'metas', 'entity', 'bookmarks'));
+        return view('discover.jobs.show', compact('job', 'related', 'metas', 'entity'));
     }
 
     private function getReltaedEntities(Job $job)

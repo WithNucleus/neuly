@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use App\Models\Location;
 use App\Services\Metas;
 use Illuminate\Support\Facades\DB;
-use App\Repositories\BookmarkRepository;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -72,7 +71,6 @@ class LocationController extends Controller
         ));
 
         $entity = 'locations';
-        $bookmarks = BookmarkRepository::fromUser($entity, $location->id);
         $isFollowed = (bool) count(FollowRepository::fromuser(Location::class, $location->id));
 
         // Log Activity
@@ -86,7 +84,7 @@ class LocationController extends Controller
             ->performedOn($location)
             ->log($location->name);
 
-        return view('discover.locations.show', compact('location', 'metas', 'entity', 'bookmarks', 'isFollowed'));
+        return view('discover.locations.show', compact('location', 'metas', 'entity', 'isFollowed'));
     }
 
     /**

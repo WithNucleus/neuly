@@ -7,7 +7,6 @@ use App\Repositories\FollowRepository;
 use Illuminate\Http\Request;
 use App\Models\Focus;
 use App\Services\Metas;
-use App\Repositories\BookmarkRepository;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -64,7 +63,6 @@ class FocusController extends Controller
         ));
 
         $entity = 'focus';
-        $bookmarks = BookmarkRepository::fromUser($entity, $focus->id);
         $isFollowed = (bool) count(FollowRepository::fromuser(Focus::class, $focus->id));
 
         // Log Activity
@@ -78,6 +76,6 @@ class FocusController extends Controller
             ->performedOn($focus)
             ->log($focus->name);
 
-        return view('discover.focus.show', compact('focus', 'metas', 'entity', 'bookmarks', 'isFollowed'));
+        return view('discover.focus.show', compact('focus', 'metas', 'entity', 'isFollowed'));
     }
 }

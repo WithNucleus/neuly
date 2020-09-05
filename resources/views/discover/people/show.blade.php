@@ -7,20 +7,11 @@
     @include('discover.includes.show-begin', ['full_width' => false])
 
     <p class="dashboard-actions-container m-2 float-right">
-
-        @include('members.bookmarks.add-button', [
-            'entity' => $entity,
-            'entity_id' => $person->id,
-            'name' => $person->name,
-            'bookmarks' => $bookmarks
-        ])
-
         @include('members.follow.button', [
             'followable_type' => get_class($person),
             'followable_id' => $person->id,
             'name' => $person->name
         ])
-
     </p>
 
     <h1>{{ $person->name }}</h1>

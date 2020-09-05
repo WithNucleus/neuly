@@ -28,7 +28,7 @@
                     <div class="d-flex flex-wrap justify-content-between align-items-baseline mb-3 pb-2 border-bottom border-tertiary">
 
                         <div class="left-side mb-0 mr-3">
-                            <i class="fad fa-at text-primary"></i> {{ $member->name }} {{ $member->last_name }}
+                            <i class="fad fa-at text-primary"></i> {{ $user->name }} {{ $user->last_name }}
                         </div>
                     </div>
 
@@ -38,12 +38,13 @@
                         </p>
                     @endif
 
-                    @include('members.data.bookmarks', [
-                        'show_more_bookmarks' => false,
+                    @include('members.data.follows', [
+                        'follows'             => $list->followItems,
                         'shadow'              => false,
+                        'show_more'           => false,
                         'show_action_items'   => false,
-                        'public_view'         => true,
-                        'hide_list_name'      => true,
+                        'show_list_name'      => false,
+                        'public_list'         => true,
                     ])
                 </div>
             </div>
@@ -51,5 +52,8 @@
     </div>
 
     @include('members.includes.dashboard-end')
-    @include('members.bookmarks.share-modal', ['shareUrl' => route('members.public.bookmark-list', [$member->member_url , $list->slug])])
+    @include('members.follow-lists.modals.share', [
+        'shareUrl' => route('members.follow-lists.public', [$user->member_url , $list->slug]),
+        'user'     => $user
+    ])
 @endsection

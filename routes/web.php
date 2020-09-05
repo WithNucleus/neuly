@@ -144,23 +144,6 @@ Route::group(['middleware' => 'auth'], function () {
 
     /* MEMBER DASHBOARD PAGES */
     Route::group(['prefix' => '/dashboard'], function () {
-        // Bookmark Lists
-        Route::get('/bookmarks', 'Dashboard\BookmarkListController@index')->name('member.bookmarks.index');
-        Route::get('/create-bookmark-list', 'Dashboard\BookmarkListController@create')->name('member.bookmarks.create-form');
-        Route::post('/save-bookmark-list', 'Dashboard\BookmarkListController@quickSave')->name('member.bookmarks.quick-save');
-        Route::post('/bookmarks', 'Dashboard\BookmarkListController@store')->name('member.bookmarks.store-list');
-        Route::get('/bookmarks/{slug}', 'Dashboard\BookmarkListController@show')->name('member.bookmarks.show-list');
-        Route::get('/edit-list/{slug}', 'Dashboard\BookmarkListController@edit')->name('member.bookmarks.edit-list');
-        Route::get('/lists/{id}/destroy', 'Dashboard\BookmarkListController@destroy')->name('member.bookmarks.destroy-list');
-        Route::post('/edit-list/{id}', 'Dashboard\BookmarkListController@update')->name('member.bookmarks.update-list');
-
-        // Bookmarks
-        Route::get('/all-bookmarks', 'Dashboard\BookmarkController@index')->name('member.bookmarks.all');
-        Route::get('/bookmark/{entity}/{entity_id}-{name}', 'Dashboard\BookmarkController@add')->name('member.bookmarks.add');
-        Route::post('/bookmark/{entity}/{entity_id}', 'Dashboard\BookmarkController@store')->name('member.bookmarks.store');
-        Route::get('/edit-bookmark/{id}', 'Dashboard\BookmarkController@edit')->name('member.bookmarks.edit');
-        Route::post('/edit-bookmark/{id}', 'Dashboard\BookmarkController@update')->name('member.bookmarks.update');
-        Route::get('/bookmarks/{id}/destroy', 'Dashboard\BookmarkController@destroy')->name('member.bookmarks.destroy');
 
         // Notes
         Route::get('/add-note', 'Dashboard\NoteController@create')->name('member.notes.create');
@@ -171,6 +154,14 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/edit-note/{id}', 'Dashboard\NoteController@update')->name('member.notes.update');
         Route::get('/notes', 'Dashboard\NoteController@index')->name('member.notes.index');
         Route::get('/notes/{slug}', 'Dashboard\NoteController@show')->name('member.notes.show');
+
+        // Follow lists
+        Route::post('/follow-lists/ajax-store', 'Dashboard\FollowListsController@ajaxStore')->name('member.follow-lists.ajaxStore');
+        Route::post('/follow-lists/validate-name', 'Dashboard\FollowListsController@validateName')->name('member.follow-lists.validateName');
+        Route::resource('/follow-lists', 'Dashboard\FollowListsController', [
+            'as' => 'member',
+            'except' => ['create']
+        ]);
 
         // Follow
         Route::resource('/follow', 'Dashboard\FollowController', [
@@ -185,6 +176,7 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     // Follow / Unfollow actions
+    Route::get('/follow//get-modal/{id}/{type}', 'Dashboard\FollowController@getModal')->name('member.follow.getModal');
     Route::post('/follow/attach', 'Dashboard\FollowController@attach')->name('member.follow.attach');
     Route::post('/follow/detach', 'Dashboard\FollowController@detach')->name('member.follow.detach');
 
@@ -289,8 +281,8 @@ Route::group([
 });
 
 /* MEMBERS - PUBLIC ROUTES */
+Route::get('/members/{member_url}/lists/{slug}', 'Dashboard\FollowListsController@showPublic')->name('members.follow-lists.public');
 Route::get('/members/{member_url}/{slug}', 'Dashboard\NoteController@showPublic')->name('members.public.note');
-Route::get('/members/{member_url}/lists/{slug}', 'Dashboard\BookmarkListController@showPublic')->name('members.public.bookmark-list');
 
 /** CATCH-ALL ROUTE for Backpack/PageManager - needs to be at the end of your routes.php file  **/
 Route::get('{page}/{subs?}', ['uses' => '\App\Http\Controllers\PageController@index'])

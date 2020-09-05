@@ -7,6 +7,7 @@ use App\Models\Company;
 use App\Models\Event;
 use App\Models\Focus;
 use App\Models\Investor;
+use App\Models\Job;
 use App\Models\Location;
 use App\Models\Person;
 use App\Models\Research;
@@ -50,5 +51,10 @@ trait CanFollow {
     public function followedInvestors()
     {
         return $this->morphToMany(Investor::class, 'followable');
+    }
+
+    public function followedJobs()
+    {
+        return $this->morphToMany(Job::class, 'followable');
     }
 }

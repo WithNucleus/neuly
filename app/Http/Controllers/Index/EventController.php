@@ -13,7 +13,6 @@ use App\Models\Company;
 use Carbon\Carbon;
 use App\Services\Metas;
 use Illuminate\Support\Facades\DB;
-use App\Repositories\BookmarkRepository;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -155,7 +154,6 @@ class EventController extends Controller
         $related = $this->getReltaedEntities($event);
 
         $entity = 'events';
-        $bookmarks = BookmarkRepository::fromUser($entity, $event->id);
         $isFollowed = (bool) count(FollowRepository::fromuser(Event::class, $event->id));
 
         // Log Activity
@@ -170,7 +168,7 @@ class EventController extends Controller
             ->performedOn($event)
             ->log($event->name);
 
-        return view('discover.events.show', compact('event', 'related', 'metas', 'entity', 'bookmarks', 'isFollowed'));
+        return view('discover.events.show', compact('event', 'related', 'metas', 'entity', 'isFollowed'));
     }
 
     private function getReltaedEntities(Event $event)

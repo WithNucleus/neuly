@@ -10,7 +10,6 @@ use App\Models\Focus;
 use App\Models\Person;
 use App\Services\Metas;
 use Illuminate\Support\Facades\DB;
-use App\Repositories\BookmarkRepository;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -82,7 +81,6 @@ class ResearchController extends Controller
         $related = $this->getReltaedEntities($research);
 
         $entity = 'research';
-        $bookmarks = BookmarkRepository::fromUser($entity, $research->id);
         $isFollowed = (bool) count(FollowRepository::fromuser(Research::class, $research->id));
 
         $resources = json_decode($research->resources);
@@ -98,7 +96,7 @@ class ResearchController extends Controller
             ->performedOn($research)
             ->log($research->name);
 
-        return view('discover.research.show', compact('research','related', 'metas', 'entity', 'bookmarks', 'resources', 'isFollowed'));
+        return view('discover.research.show', compact('research','related', 'metas', 'entity', 'resources', 'isFollowed'));
     }
 
     public function namesJson()

@@ -1,7 +1,7 @@
 @include('navbars.breadcrumb', [
     'items' => [
         'Dashboard' => route('member.dashboard'),
-        'Bookmarks'  => route('member.bookmarks.index'),
+        'Follow Lists'  => route('member.follow-lists.index'),
         $list->name => false
-    ]           
+    ]
 ])

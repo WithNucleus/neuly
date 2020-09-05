@@ -20,8 +20,8 @@
 
         <div class="row">
             <div class="col-12 breadcrumbs-container bg-white shadow-sm">
-                    
-                @include('discover.includes.breadcrumbs.member-dashboard')                
+
+                @include('discover.includes.breadcrumbs.member-dashboard')
 
             </div>
         </div>

@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use App\Models\Person;
 use App\Models\Company;
 use App\Models\Location;
-use App\Repositories\BookmarkRepository;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -70,7 +69,6 @@ class PersonController extends Controller
         ));
 
         $entity = 'people';
-        $bookmarks = BookmarkRepository::fromUser($entity, $person->id);
         $isFollowed = (bool) count(FollowRepository::fromuser(Person::class, $person->id));
 
         // Log Activity
@@ -84,7 +82,7 @@ class PersonController extends Controller
             ->performedOn($person)
             ->log($person->name);
 
-        return view('discover.people.show', compact('person', 'metas', 'entity', 'bookmarks', 'isFollowed'));
+        return view('discover.people.show', compact('person', 'metas', 'entity', 'isFollowed'));
     }
 
     public function namesJson()

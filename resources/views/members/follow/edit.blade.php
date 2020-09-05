@@ -8,7 +8,7 @@
 
     <div class="container">
         <h1 class="h2">
-            <i class="fad fa-network-wired text-info"></i> Follow Settings
+            <i class="fad fa-star text-info"></i> Follow Settings
         </h1>
         <div class="row">
             <div class="col-12">
@@ -27,6 +27,20 @@
                         @csrf
                         @method('put')
                         <input type="hidden" name="previous_url" value="{{ old('previous_url', $previousUrl) }}">
+
+                        <div class="form-group">
+                            <label class="font-weight-bold">List</label>
+                            <select name="follow_list_id" class="form-control">
+                                @foreach($lists as $list)
+                                    <option value="{{ $list->id }}" {{ $list->id == $follow->follow_list_id ? 'checked' : '' }}>{{ $list->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="notes" class="font-weight-bold">Notes</label>
+                            <textarea name="notes" class="form-control">{{ $follow->notes }}</textarea>
+                        </div>
 
                         <div class="form-group">
                             <div>

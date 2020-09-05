@@ -7,7 +7,6 @@ use App\Repositories\FollowRepository;
 use Illuminate\Http\Request;
 use App\Models\Clinicaltrial;
 use App\Models\Focus;
-use App\Repositories\BookmarkRepository;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
@@ -77,7 +76,6 @@ class ClinicaltrialController extends Controller
         $clinicaltrial = Clinicaltrial::where('slug', $slug)->firstOrFail();
 
         $entity = 'clinicaltrials';
-        $bookmarks = BookmarkRepository::fromUser($entity, $clinicaltrial->id);
         $isFollowed = (bool) count(FollowRepository::fromuser(Clinicaltrial::class, $clinicaltrial->id));
 
         // Log Activity
@@ -91,6 +89,6 @@ class ClinicaltrialController extends Controller
             ->performedOn($clinicaltrial)
             ->log($clinicaltrial->title);
 
-        return view('discover.clinicaltrials.show', compact('clinicaltrial', 'entity', 'bookmarks', 'isFollowed'));
+        return view('discover.clinicaltrials.show', compact('clinicaltrial', 'entity', 'isFollowed'));
     }
 }

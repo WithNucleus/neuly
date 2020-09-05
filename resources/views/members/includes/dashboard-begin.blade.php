@@ -16,24 +16,24 @@
         <div class="col-12 breadcrumbs-container bg-white shadow-sm">
 
             @if (Route::is('member.dashboard'))
-                
-                @include('discover.includes.breadcrumbs.member-dashboard')                
 
-            @elseif (Route::is('member.bookmarks.index'))
+                @include('discover.includes.breadcrumbs.member-dashboard')
 
-                @include('discover.includes.breadcrumbs.bookmarks')
+            @elseif (Route::is('member.follow-lists.index'))
 
-            @elseif (Route::is('member.bookmarks.show-list') OR Route::is('member.bookmarks.edit-list'))
+                @include('discover.includes.breadcrumbs.follow-lists')
 
-                @include('discover.includes.breadcrumbs.bookmark-show')
+            @elseif (Route::is('member.follow-lists.show') OR Route::is('member.follow-lists.edit'))
 
-            @elseif (Route::is('member.bookmarks.all'))
+                @include('discover.includes.breadcrumbs.follow-lists-show-edit')
 
-                @include('discover.includes.breadcrumbs.bookmarks')
+            @elseif (Route::is('member.follow.index'))
 
-            @elseif (Route::is('member.bookmarks.edit'))
+                @include('discover.includes.breadcrumbs.follows')
 
-                @include('discover.includes.breadcrumbs.edit-bookmark')
+            @elseif (Route::is('member.follow.edit'))
+
+                @include('discover.includes.breadcrumbs.follows-edit')
 
             @elseif (Route::is('member.notes.index'))
 
@@ -51,13 +51,9 @@
 
                 @include('discover.includes.breadcrumbs.notes-public')
 
-            @elseif (Route::is('members.public.bookmark-list'))
+            @elseif (Route::is('members.follow-lists.public'))
 
-                @include('discover.includes.breadcrumbs.bookmarks-public')
-
-            @elseif (Route::is('member.follow.index') OR Route::is('member.follow.edit'))
-
-                @include('discover.includes.breadcrumbs.follows')
+                @include('discover.includes.breadcrumbs.follow-lists-public')
 
             @endif
 
