@@ -5,21 +5,19 @@
             <span class="icon mr-1"><i class="fad fa-home"></i></span>Dashboard
         </a>
     </li>
-
     <li class="nav-item">
         <a class="nav-link @if(Route::is('discover.organizations') OR Route::is('discover.organizations.show')) active @endif" href="{{ route('discover.organizations') }}">
             <span class="icon mr-1"><i class="fad fa-building"></i></span>Organizations
         </a>
     </li>
-
     <li class="nav-item">
         <a class="nav-link @if(Route::is('discover.people') OR Route::is('discover.people.show')) active @endif" href="{{ route('discover.people') }}">
             <span class="icon mr-1"><i class="fad fa-users"></i></span>People
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link @if(Route::is('discover.research') OR Route::is('discover.research.show')) active @endif "href="/research">
-            <span class="icon mr-1"><i class="fad fa-microscope"></i></span>Research
+        <a class="nav-link @if(Route::is('discover.investors') OR Route::is('discover.investors.show')) active @endif "href="{{ route('discover.investors') }}">
+            <span class="icon mr-1"><i class="fad fa-hands-usd"></i></span>Investors
         </a>
     </li>
     <li class="nav-item">
@@ -33,13 +31,8 @@
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link @if(Route::is('discover.events') OR Route::is('discover.events.show') OR Route::is('discover.events.past')) active @endif " href="{{ route('discover.events') }}">
-            <span class="icon mr-1"><i class="fad fa-calendar"></i></span>Events
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link @if(Route::is('discover.jobs') OR Route::is('discover.jobs.show')) active @endif "href="{{ route('discover.jobs') }}">
-            <span class="icon mr-1"><i class="fad fa-briefcase"></i></span>Jobs
+        <a class="nav-link @if(Route::is('discover.research') OR Route::is('discover.research.show')) active @endif "href="/research">
+            <span class="icon mr-1"><i class="fad fa-microscope"></i></span>Research
         </a>
     </li>
     <li class="nav-item">
@@ -53,8 +46,13 @@
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link @if(Route::is('discover.investors') OR Route::is('discover.investors.show')) active @endif "href="{{ route('discover.investors') }}">
-            <span class="icon mr-1"><i class="fad fa-hands-usd"></i></span>Investors
+        <a class="nav-link @if(Route::is('discover.events') OR Route::is('discover.events.show') OR Route::is('discover.events.past')) active @endif " href="{{ route('discover.events') }}">
+            <span class="icon mr-1"><i class="fad fa-calendar"></i></span>Events
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @if(Route::is('discover.jobs') OR Route::is('discover.jobs.show')) active @endif "href="{{ route('discover.jobs') }}">
+            <span class="icon mr-1"><i class="fad fa-briefcase"></i></span>Jobs
         </a>
     </li>
     <li class="nav-item">
