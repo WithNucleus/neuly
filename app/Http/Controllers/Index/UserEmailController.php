@@ -19,7 +19,8 @@ use Illuminate\Support\Facades\Session;
 {
     public function index(Request $request)
     {
-        return view('members.settings.email');
+        $currentEmail = Auth::user()->email;
+        return view('members.settings.email', compact('currentEmail'));
     }
 
     public function update(ChangeMailRequest $request, ValidateUserHandler $validateUserHandler)
