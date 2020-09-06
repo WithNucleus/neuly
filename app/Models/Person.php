@@ -168,10 +168,8 @@ class Person extends Model implements EntityContract
 
     public function setPhotoAttribute($value) {
 
-        $filename = 'photo-' . $this->id . '.png';
-
-        $disk = 'local';
-
+        $filename         = 'photo-' . $this->id . '.png';
+        $disk             = 'local';
         $destination_path = "public/people";
 
         // if a base64 was sent, store it in the db
@@ -179,13 +177,10 @@ class Person extends Model implements EntityContract
         {
             // Make the image
             $image = \Image::make($value)->encode('png', 90);
-
-            // Store the image on disk
-            \Storage::disk($disk)->put($destination_path . '/' . $filename, $image->stream());
-
             // Delete the previous image, if there was one
             \Storage::disk($disk)->delete('public/' . $this->photo);
-
+            // Store the image on disk
+            \Storage::disk($disk)->put($destination_path . '/' . $filename, $image->stream());
             // Save the public path to the database
             $public_destination_path = Str::replaceFirst('public/', '', $destination_path);
 
