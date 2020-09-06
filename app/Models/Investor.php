@@ -129,13 +129,10 @@ class Investor extends Model implements EntityContract
         {
             // Make the image
             $image = Image::make($value)->encode('png', 90);
-
-            // Store the image on disk
-            Storage::disk($disk)->put($destination_path.'/'.$filename, $image->stream());
-
             // 3. Delete the previous image, if there was one
             Storage::disk($disk)->delete($this->{$attribute_name});
-
+            // Store the image on disk
+            Storage::disk($disk)->put($destination_path.'/'.$filename, $image->stream());
             // 4. Save the public path to the database
             $public_destination_path = Str::replaceFirst($public_path, '', $destination_path);
             return $this->attributes[$attribute_name] = $public_destination_path.'/'.$filename;

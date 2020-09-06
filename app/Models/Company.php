@@ -198,12 +198,9 @@ class Company extends Model implements EntityContract
     public function setLogoAttribute($value)
     {
 
-        $company_name = Str::slug($this->name);
-
-        $filename = 'logo-' . $company_name . '.png';
-
-        $disk = 'local';
-
+        $company_name     = Str::slug($this->name);
+        $filename         = 'logo-' . $company_name . '.png';
+        $disk             = 'local';
         $destination_path = "public/logos";
 
         // if a base64 was sent, store it in the db
@@ -211,13 +208,10 @@ class Company extends Model implements EntityContract
         {
             // Make the image
             $image = \Image::make($value)->encode('png', 90);
-
-            // Store the image on disk
-            \Storage::disk($disk)->put($destination_path . '/' . $filename, $image->stream());
-
             // Delete the previous image, if there was one
             \Storage::disk($disk)->delete('public/' . $this->logo);
-
+            // Store the image on disk
+            \Storage::disk($disk)->put($destination_path . '/' . $filename, $image->stream());
             // Save the public path to the database
             $public_destination_path = Str::replaceFirst('public/', '', $destination_path);
 
