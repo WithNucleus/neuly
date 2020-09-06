@@ -20,6 +20,10 @@
                         <form action="{{ route('user.settings.email') }}" method="post" class="needs-validation" novalidate>
                             @csrf
                             <div class="form-group">
+                                <label for="new_email" class="font-weight-bold">Current Email</label>
+                                <p>{{ $currentEmail }}</p>
+                            </div>
+                            <div class="form-group">
                                 <label for="new_email" class="font-weight-bold">New Email</label>
                                 <input type="email" class="form-control" name="new_email" placeholder="Enter your new email" required>
                                 <div class="invalid-feedback">
