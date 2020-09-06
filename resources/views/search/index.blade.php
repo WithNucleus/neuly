@@ -79,7 +79,7 @@
                                 <p class="text-center mt-3 mb-0">
                                     @if ($organizations->count() > 2 AND $term != '')
                                         <a href="{{ route('search.organizations').'/'.$term }}" class="btn btn-sm btn-dark shadow-sm mr-1">Show more...</a>
-                                    @endif 
+                                    @endif
                                     <a href="{{ route('discover.organizations') }}" class="btn btn-sm btn-outline-dark shadow-sm">See all organizations</a>
                                 </p>
                             @else
@@ -89,7 +89,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="row">
                 <div class="col-12">
                     <div class="card mb-4 shadow-sm">
@@ -135,7 +135,7 @@
                                     @endforeach
                                     <li class="list-group-item text-center">
                                         @if ($people->count() > 2 AND $term != '')
-                                            <a href="{{ route('search.people').'/'.$term }}" class="btn btn-sm btn-dark shadow-sm mr-1">Show more...</a> 
+                                            <a href="{{ route('search.people').'/'.$term }}" class="btn btn-sm btn-dark shadow-sm mr-1">Show more...</a>
                                         @endif
                                         <a href="{{ route('discover.people') }}" class="btn btn-sm btn-outline-dark shadow-sm">See all people</a>
                                     </li>
@@ -287,6 +287,35 @@
                                 </ul>
                             @else
                                 No jobs matched your search criteria.
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-header lead lead">
+                            <span class="text-danger"><i class="fad fa-stethoscope"></i></span> Clinical Trials
+                        </div>
+                        <div class="card-body">
+                            @if ($clinicalTrials->count() > 0)
+                                <ul class="list-group list-group-flush">
+                                    @foreach($clinicalTrials as $clinicalTrial)
+                                        <li class="list-group-item @if ($loop->last)border-bottom-0 @endif">
+                                            <a href="{{ route('discover.clinicaltrials.show', ['slug' => $clinicalTrial->slug]) }}">{{ $clinicalTrial->title }}</a>
+                                        </li>
+                                    @endforeach
+                                    <li class="list-group-item text-center">
+                                        @if ($clinicalTrials->count() > 2 AND $term != '')
+                                            <a href="{{ route('search.clinicaltrials').'/'.$term }}" class="btn btn-sm btn-dark shadow-sm mr-1">Show more...</a>
+                                        @endif
+                                        <a href="{{ route('discover.clinicaltrials') }}" class="btn btn-sm btn-outline-dark shadow-sm">See all clinical trials</a>
+                                    </li>
+                                </ul>
+                            @else
+                                No clinical trials matched your search criteria.
                             @endif
                         </div>
                     </div>

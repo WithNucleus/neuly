@@ -93,8 +93,7 @@ Route::post('/listing/request/finish', 'Index\ListingRequestController@processDa
 Route::post('/listing/request/{type}', 'Index\ListingRequestController@entityForm')->name('listing.request.investor');
 
 // Search
-Route::post('/search', 'Index\SearchController@index')->name('search');
-Route::post('/search/{term}', 'Index\SearchController@index')->name('search.term.results');
+Route::post('/search', 'Index\SearchController@search')->name('search');
 Route::get('/search/{term}', 'Index\SearchController@index')->name('search.term');
 
 Route::post('/search/organizations', 'index\SearchController@showOrganizationResults')->name('search.organizations');
@@ -128,6 +127,9 @@ Route::get('/search/events/{term}', 'Index\SearchController@showEventResults');
 Route::post('/search/jobs', 'index\SearchController@showJobResults')->name('search.jobs');
 Route::post('/search/jobs/{term}', 'Index\SearchController@showJobResults');
 Route::get('/search/jobs/{term}', 'Index\SearchController@showJobResults');
+
+Route::post('/search/clinicaltrials', 'index\SearchController@showClinicalTrialsResults')->name('search.clinicaltrials');
+Route::get('/search/clinicaltrials/{term}', 'Index\SearchController@showClinicalTrialsResults')->name('search.clinicaltrials.term');
 
 // Feedback
 

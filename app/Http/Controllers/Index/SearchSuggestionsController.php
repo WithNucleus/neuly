@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Index;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Models\Clinicaltrial;
 use App\Models\Company;
 use App\Models\Person;
 use App\Models\Location;
@@ -13,7 +13,7 @@ use DB;
 class SearchSuggestionsController extends Controller
 {
 
-    /* 
+    /*
      * @param $relationship_table
      * @param $model_id_field
      * @param $model
@@ -37,31 +37,28 @@ class SearchSuggestionsController extends Controller
         return json_encode($results);
     }
 
-	public function everything() {
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function everything() {
 
-        $companies = Company::all()->pluck('slug', 'name');
-        $people = Person::all()->pluck('slug', 'name');
-        $locations = Location::all()->pluck('slug', 'name');
-        $focus = Focus::all()->pluck('slug', 'name');
+        $companies      = Company::all()->pluck('slug', 'name')->toArray();
+        $people         = Person::all()->pluck('slug', 'name')->toArray();
+        $locations      = Location::all()->pluck('slug', 'name')->toArray();
+        $focus          = Focus::all()->pluck('slug', 'name')->toArray();
+        $clinicalTrials = Clinicaltrial::all()->pluck('slug', 'title')->toArray();
 
-        $everything = $focus
-        			->merge($companies)
-        			->merge($people)
-        			->merge($locations);
+        $everything = array_merge($companies, $people, $locations, $focus, $clinicalTrials);
+        $results    = [];
 
-        $results = array();
-
-        foreach($everything as $key => $value) {
-            $this_result = array(
-                'name' => $key,
-                'slug' => $value
-            );
-
-            array_push($results, $this_result);
+        foreach ($everything as $name => $slug) {
+            $results[] = [
+                'name' => $name,
+                'slug' => $slug
+            ];
         }
 
-        return json_encode($results);
-
+        return response()->json($results);
     }
 
     /* Get Authors (People) of Research Items */
@@ -118,7 +115,7 @@ class SearchSuggestionsController extends Controller
             );
 
             array_push($locations, $this_result);
-            
+
         }
 
         foreach ($locations_with_regions as $key => $value) {
@@ -128,9 +125,9 @@ class SearchSuggestionsController extends Controller
             );
 
             array_push($locations, $this_result);
-            
+
         }
-        
+
         return json_encode($locations);
     }
 

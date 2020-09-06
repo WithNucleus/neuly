@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Index;
 
+use App\Models\Clinicaltrial;
 use App\Models\Company;
 use App\Models\Event;
 use App\Models\Focus;
@@ -17,26 +18,44 @@ class SearchController extends Controller
 {
     private $limit = 3;
 
-    public function index(Request $request, string $term = null)
+    /**
+     * General search handler
+     *
+     * @param string $term
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function index(string $term)
     {
-        if($term === null)
-        {
-            $term = $request->input('search');
-        }
-
         $searchTerm = '%' . $term . '%';
 
-        $organizations = $this->searchorganizations($searchTerm, true);
-        $people = $this->searchPeople($searchTerm, true);
-        $investors = $this->searchInvestors($searchTerm, true);
-        $research = $this->searchResarch($searchTerm, true);
-        $locations = $this->searchLocations($searchTerm, true);
-        $focus = $this->searchFocus($searchTerm, true);
-        $events = $this->searchEvents($searchTerm, true);
-        $jobs = $this->searchJobs($searchTerm, true);
+        $organizations  = $this->searchOrganizations($searchTerm, true);
+        $people         = $this->searchPeople($searchTerm, true);
+        $investors      = $this->searchInvestors($searchTerm, true);
+        $research       = $this->searchResarch($searchTerm, true);
+        $locations      = $this->searchLocations($searchTerm, true);
+        $focus          = $this->searchFocus($searchTerm, true);
+        $events         = $this->searchEvents($searchTerm, true);
+        $jobs           = $this->searchJobs($searchTerm, true);
+        $clinicalTrials = $this->searchClinicalTrials($searchTerm, true);
 
         //return view
-        return view('search.index', compact('organizations', 'people', 'investors', 'research', 'locations', 'focus', 'events', 'jobs', 'term'));
+        return view('search.index', compact('organizations', 'people', 'investors', 'research', 'locations', 'focus', 'events', 'jobs', 'term', 'clinicalTrials'));
+    }
+
+    /**
+     * Handler for POST request
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function search(Request $request) {
+        $term = $request->input('search');
+
+        if (empty($term)) {
+            return redirect()->back()->with('error', "Search term can't be empty!");
+        }
+
+        return redirect()->route('search.term', $term);
     }
 
     public function showOrganizationResults(Request $request, string $term = null)
@@ -48,7 +67,7 @@ class SearchController extends Controller
 
         $searchTerm = '%' . $term . '%';
 
-        $organizations = $this->searchorganizations($searchTerm);
+        $organizations = $this->searchOrganizations($searchTerm);
 
         $data  = [
           'term' => $term,
@@ -207,7 +226,28 @@ class SearchController extends Controller
         return view('search.entity-result', $data);
     }
 
-    private function searchorganizations(string $term, bool $limitResults = false)
+    public function showClinicalTrialsResults(Request $request, string $term = null)
+    {
+        if($term === null)
+        {
+            $term = $request->input('search');
+        }
+
+        $searchTerm = '%' . $term . '%';
+
+        $clinicalTrials = $this->searchClinicalTrials($searchTerm);
+
+        $data  = [
+            'term' => $term,
+            'type' => 'Clinical Trials',
+            'route' => 'discover.clinicaltrials.show',
+            'result' => $clinicalTrials,
+        ];
+
+        return view('search.entity-result', $data);
+    }
+
+    private function searchOrganizations(string $term, bool $limitResults = false)
     {
         $searchQuery = Company::where('name', 'like', $term);
 
@@ -303,7 +343,19 @@ class SearchController extends Controller
         return $searchQuery->get();
     }
 
-    private function limitQueryResult($query, bool $limitResults = false)
+    private function searchClinicalTrials(string $term, bool $limitResults = false)
+    {
+        $searchQuery = Clinicaltrial::where('title', 'like', $term);
+
+        if($limitResults)
+        {
+            $searchQuery = $this->limitQueryResult($searchQuery);
+        }
+
+        return $searchQuery->get();
+    }
+
+    private function limitQueryResult($query)
     {
         return $query->limit($this->limit);
     }
