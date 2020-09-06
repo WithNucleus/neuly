@@ -22,8 +22,8 @@
                     <input class="typeahead form-control hero-search-input shadow-sm search-field" name="search" type="search" placeholder="Discover organizations, people, research..." aria-label="Search">
                     <button class="btn hero-search-button ml-2 my-2 my-sm-0 shadow-sm" type="submit">Search</button>
                 </form>
-                <p class="mt-2" style="font-size: 1.2rem;font-weight: 600">
-                    <a href="{{ route('discover.organizations') }}" class="text-dark text-decoration-none border-bottom-dark-heavy {{-- bold-link --}}">Or start exploring...</a>
+                <p class="mt-2" style="font-size: 1.5rem;font-weight: 600">
+                    <a href="{{ route('discover.organizations') }}" class="text-dark text-decoration-none border-bottom-dark-heavy {{-- bold-link --}}">Or start exploring our database...</a>
                 </p>
             </div>
         </div>
@@ -159,7 +159,7 @@
 
                 {{-- Left Column --}}
                 <div class="col-12 col-md-6">
-                    
+
                     {{-- Top 3 Trending News --}}
                     @include('content.homepage.news')
 
@@ -176,7 +176,7 @@
 
                     {{-- Organization Focus Chart --}}
                     @include('content.homepage.organization-focus-chart')
-                    
+
                     {{-- Upcoming Events --}}
                     @include('content.homepage.upcoming-events')
 
