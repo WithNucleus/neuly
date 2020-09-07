@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Insights;
 use App\Helpers\InsightsHelper;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
 class JobsByFocusController extends Controller
@@ -17,20 +18,18 @@ class JobsByFocusController extends Controller
     {
         $query = DB::table('focus_job')
             ->select('focus.name', DB::raw('COUNT(focus_job.job_id) as total'))
-            ->join('focus', 'focus.id', '=','focus_job.focus_id')
+            ->join('focus', 'focus.id', '=', 'focus_job.focus_id')
             ->groupBy('focus_job.focus_id');
-
         $query = $this->filterQuery($query, $request);
-
-        $data = $query->get()->toArray();
+        $data  = $query->get();
 
         $response = [
-            'labels' => array_column($data,'name'),
-            'values' => array_column($data,'total'),
-            'colors' => InsightsHelper::getChartColors(count($data)),
+            'labels' => $data->pluck('name'),
+            'values' => $data->pluck('total'),
+            'colors' => InsightsHelper::getChartColors($data->count()),
         ];
 
-        return response()->json($response);
+        return response()->json($response, Response::HTTP_OK);
     }
 
     /**
@@ -40,8 +39,7 @@ class JobsByFocusController extends Controller
      */
     private function filterQuery($query, $request)
     {
-        if($request->has('focus'))
-        {
+        if ($request->has('focus')) {
             $query = $this->filterByFocus($query, $request->input('focus'));
         }
 

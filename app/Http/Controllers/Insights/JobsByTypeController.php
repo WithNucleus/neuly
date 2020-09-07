@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Insights;
 use App\Helpers\InsightsHelper;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
 class JobsByTypeController extends Controller
@@ -18,18 +19,16 @@ class JobsByTypeController extends Controller
         $query = DB::table('jobs')
             ->select('employment_type', DB::raw('COUNT(id) as total'))
             ->groupBy('employment_type');
-
         $query = $this->filterQuery($query, $request);
-
-        $data = $query->get()->toArray();
+        $data  = $query->get();
 
         $response = [
-            'labels' => array_column($data,'employment_type'),
-            'values' => array_column($data,'total'),
-            'colors' => InsightsHelper::getChartColors(count($data)),
+            'labels' => $data->pluck('employment_type'),
+            'values' => $data->pluck('total'),
+            'colors' => InsightsHelper::getChartColors($data->count()),
         ];
 
-        return response()->json($response);
+        return response()->json($response, Response::HTTP_OK);
     }
 
     /**
@@ -39,7 +38,7 @@ class JobsByTypeController extends Controller
      */
     private function filterQuery($query, $request)
     {
-        if($request->has('type')) {
+        if ($request->has('type')) {
             $query = $this->filterByType($query, $request->input('type'));
         }
 

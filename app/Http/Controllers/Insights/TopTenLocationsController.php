@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Insights;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
 class TopTenLocationsController extends Controller
@@ -33,6 +34,6 @@ class TopTenLocationsController extends Controller
             }
         }
 
-        return response()->json($data);
+        return response()->json($data, Response::HTTP_OK);
     }
 }

@@ -29,9 +29,10 @@ Route::get('/psychedelic-index', 'Content\IndexController@index')->name('discove
 
 //Insights Widgets
 Route::group([
-    'prefix' => '/insights',
-    'namespace' => 'Insights',
-    'as' => 'discover.insights.',
+    'middleware' => 'auth',
+    'prefix'     => '/insights',
+    'namespace'  => 'Insights',
+    'as'         => 'discover.insights.',
 ], function () {
     Route::get('/companies-by-type', 'CompaniesByTypeController@index')->name('companies-by-type');
     Route::get('/jobs-by-focus', 'JobsByFocusController@index')->name('jobs-by-focus');
