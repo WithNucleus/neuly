@@ -45,7 +45,7 @@
             <div class="row">
                 <div class="col-12 col-lg-4">
                     {{-- Organizations by Type --}}
-                    @include('discover.insights.charts.organizations-by-type')
+                    @include('discover.insights.widgets.organizations-by-type')
                 </div>
                 <div class="col-12 col-lg-4">
                     {{-- Organization Focus Chart --}}
@@ -53,24 +53,41 @@
                 </div>
                 <div class="col-12 col-lg-4">
                     {{-- Top 10 Locations --}}
-                    @include('discover.insights.charts.top-ten-locations')
+                    @include('discover.insights.widgets.top-ten-locations')
                 </div>
-                <div class="col-12 col-lg-4">
-                    @include('discover.insights.charts.jobs-total-by-focus')
-                </div>
-                <div class="col-12 col-lg-4">
-                    @include('discover.insights.charts.jobs-total-by-type')
+
+                @auth
+                    <div class="col-12 col-lg-4">
+                        @include('discover.insights.widgets.jobs-total-by-focus')
+                    </div>
+                    <div class="col-12 col-lg-4">
+                        @include('discover.insights.widgets.jobs-total-by-type')
+                    </div>
+                @endauth
+            </div>
+
+            @guest
+            <div class="row">
+                <div class="col-12 col-xl-10 mx-auto bg-white p-4 shadow-sm text-center">
+                    <h1 class="page-title-default text-primary">Neuly Insights</h1>
+                    <p class="lead mt-4">Register for your free account to get access to all Neuly Insights.</p>
+                    <p class="mt-4 text-center">
+                        <a href="{{ route('register') }}" class="btn btn-lg btn-dark">Join Neuly</a>
+                    </p>
                 </div>
             </div>
-            {{-- <div class="row">
+            @endguest
+
+            {{--
+            <div class="row">
                 <div class="col-12 col-lg-8 col-xl-6 mx-auto">
                     <p class="lead-smaller text-center">
                         Join Neuly today because members get early access to Insights when available. Plus you'll get other cool stuff, like our entire database and a Neuly dashboard to save bookmarks, notes, and get alerts on your favorite topics.
-                        Neuly members get early access to Insights when ready, so <a href="/register">join us today</a>.
+                        Neuly members get early access to Insights when ready, so <a href="{{ route('register') }}">join us today</a>.
                     </p>
                 </div>
-            </div> --}}
-            {{-- <div class="row">
+            </div>
+            <div class="row">
                 <div class="col-12 col-xl-10 mx-auto bg-white p-4 shadow-sm text-center">
 
                     <h1>Insights, by Neuly.</h1>
@@ -80,7 +97,8 @@
                     </p>
 
                 </div>
-            </div> --}}
+            </div>
+            --}}
 
         </main>
     </div>

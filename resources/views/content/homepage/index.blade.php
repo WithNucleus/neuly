@@ -164,7 +164,7 @@
                     @include('content.homepage.news')
 
                     {{-- Organizations by Type --}}
-                    @include('discover.insights.charts.organizations-by-type')
+                    @include('discover.insights.widgets.organizations-by-type')
 
                     {{-- Most Recent Job Postings --}}
                     @include('content.homepage.recent-jobs')
@@ -181,7 +181,7 @@
                     @include('content.homepage.upcoming-events')
 
                     {{-- Top 10 Locations --}}
-                    @include('discover.insights.charts.top-ten-locations')
+                    @include('discover.insights.widgets.top-ten-locations')
 
                 </div>
             </div>

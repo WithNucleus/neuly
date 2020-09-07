@@ -29,15 +29,22 @@ Route::get('/psychedelic-index', 'Content\IndexController@index')->name('discove
 
 //Insights Widgets
 Route::group([
-    'middleware' => 'auth',
     'prefix'     => '/insights',
     'namespace'  => 'Insights',
     'as'         => 'discover.insights.',
 ], function () {
+
+    //demo insights
     Route::get('/companies-by-type', 'CompaniesByTypeController@index')->name('companies-by-type');
-    Route::get('/jobs-by-focus', 'JobsByFocusController@index')->name('jobs-by-focus');
-    Route::get('/jobs-by-type', 'JobsByTypeController@index')->name('jobs-by-type');
     Route::get('/top-ten-locations', 'TopTenLocationsController@index')->name('top-ten-locations');
+
+    //insights only for registered users
+    Route::group([
+        'middleware' => 'auth',
+    ], function () {
+        Route::get('/jobs-by-focus', 'JobsByFocusController@index')->name('jobs-by-focus');
+        Route::get('/jobs-by-type', 'JobsByTypeController@index')->name('jobs-by-type');
+    });
 });
 
 // Search Suggestions

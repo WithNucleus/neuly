@@ -116,7 +116,7 @@
                 <div class="row">
                     <div class="col-12 col-md-6">
                         {{-- Organizations by Type --}}
-                        @include('discover.insights.charts.organizations-by-type')
+                        @include('discover.insights.widgets.organizations-by-type')
                     </div>
                     <div class="col-12 col-md-6">
                         {{-- Organization Focus Chart --}}
