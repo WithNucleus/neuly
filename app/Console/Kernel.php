@@ -25,13 +25,24 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        
+
         // Schedule Backups
         $schedule
             ->command('backup:run')
             ->twiceDaily(9, 17)
             ->onFailure(function () {
                 // Log Warning
+                Log::critical('Backup Failed!');
+            })
+            ->onSuccess(function () {
+                Log::info('Backup Succeeded!');
+            });
+
+        // DB backup every 30 minutes
+        $schedule
+            ->command('backup:run --only-db --filename=db_' . date('Y-m-d_H-i-s') . '.zip')
+            ->everyThirtyMinutes()
+            ->onFailure(function () {
                 Log::critical('Backup Failed!');
             })
             ->onSuccess(function () {
