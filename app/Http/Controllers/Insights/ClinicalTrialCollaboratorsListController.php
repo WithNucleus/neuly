@@ -56,7 +56,7 @@ class ClinicalTrialCollaboratorsListController extends Controller
         // Get All Focus Values
         $focus_cats = Focus::has('clinicaltrials', '>' , 0)->with('clinicaltrials')->get()->pluck('name')->unique()->sort();
 
-        return view('insights.collaborators.show', compact('collaborators', 'sort', 'metas', 'path', 'focus_cats', 'filters_focus'));
+        return view('discover.insights.collaborators.show', compact('collaborators', 'sort', 'metas', 'path', 'focus_cats', 'filters_focus'));
     }
 
     private function getQuery()

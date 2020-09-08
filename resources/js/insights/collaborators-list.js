@@ -9,12 +9,6 @@ $(document).ready(function() {
             'focus': focusFilter,
         };
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
         $.post("/insights/collaborators/list",[], function(data) {
             var resultHtml = "";
 

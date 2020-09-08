@@ -63,6 +63,9 @@
                     <div class="col-12 col-lg-4">
                         @include('discover.insights.widgets.jobs-total-by-type')
                     </div>
+                    <div class="col-12 col-lg-4">
+                        @include('discover.insights.collaborators.list')
+                    </div>
                 @endauth
             </div>
 
