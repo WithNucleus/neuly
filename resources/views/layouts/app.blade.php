@@ -66,13 +66,17 @@
 
     {{-- Popper --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    
+
     {{-- Bootstrap Javascript --}}
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
     {{-- Typeahead --}}
     <script type="text/javascript" src="{{ asset('assets/typeahead.js') }}"></script>
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/bootstrap-tagsinput.css') }}"/>
+
+    <!-- Chartings -->
+    <script type="text/javascript" src="{{ asset('assets/chart.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/chartisan.js') }}"></script>
 
     {{-- Google Analytics --}}
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-171437771-1"></script>
@@ -89,7 +93,7 @@
     <div id="app">
         @yield('content')
     </div>
-    
+
     <script type="text/javascript" src="{{ mix('js/app.js') }}"></script>
 
     @include('navbars.discover-menu')

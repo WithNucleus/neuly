@@ -1,6 +1,6 @@
 require('./bootstrap');
 require('./notifications');
-
+require('./insights');
 import Cookies from 'js-cookie';
 
 $(document).ready(function() {
@@ -262,4 +262,5 @@ $(document).ready(function() {
             button.addClass('lead-smaller');
         })
     })
+
 });

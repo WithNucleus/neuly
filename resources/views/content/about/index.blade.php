@@ -22,7 +22,7 @@
                         Neuly was created to provide transparent information for entrepreneurs, investors, researchers, scientists, educators, policy makers, and anyone interested in the psychedelics industry.
                     </p>
                     <p class="lead mb-0">
-                        By presenting data in a non-biased manner, members of Neuly may utilize information to drive forward the projects that they are working on and make data based decisions. 
+                        By presenting data in a non-biased manner, members of Neuly may utilize information to drive forward the projects that they are working on and make data based decisions.
                     </p>
                 </div>
                 <div class="col-12 col-md-6">
@@ -116,7 +116,7 @@
                 <div class="row">
                     <div class="col-12 col-md-6">
                         {{-- Organizations by Type --}}
-                        @include('content.homepage.organization-type-chart')
+                        @include('discover.insights.widgets.organizations-by-type')
                     </div>
                     <div class="col-12 col-md-6">
                         {{-- Organization Focus Chart --}}
@@ -131,9 +131,6 @@
     </main>
 
     <!-- Chartings -->
-    <script type="text/javascript" src="{{ asset('assets/chart.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('assets/chartisan.js') }}"></script>
-
     <script>
 
         // Company Focus Chart
@@ -148,48 +145,6 @@
                 .legend(false)
                 .datasets(['bar']),
         });
-
-        // Global Chart Settings
-        Chart.defaults.global.defaultFontColor = '#111';
-        Chart.defaults.global.defaultFontFamily = '"Roboto", Avenir, "Helvetica", Arial, sans-serif';
-
-        var ctx = document.getElementById('chartCompanyType');
-        let chartCompanyType = new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: [<?php echo $company_type_chart['labels']; ?>],
-                datasets: [{
-                    // label: '# of Votes',
-                    data: [{{ $company_type_chart['counts'] }}],
-                    backgroundColor: [
-                        '#A7ABDD',
-                        '#6bbca4',
-                        '#275DAD',
-                    ],
-                    borderColor: [
-                        'rgba(255, 255, 255, 1)',
-                        'rgba(255, 255, 255, 1)',
-                        'rgba(255, 255, 255, 1)',
-                    ],
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                scales: {
-                    xAxes: [{
-                        display: false,
-                    }],
-                    yAxes: [{
-                        display: false,
-
-                    }],
-                },
-                legend: {
-                    position: 'bottom'
-                }
-            }
-        });
-
     </script>
 
 @endsection
