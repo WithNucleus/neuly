@@ -114,16 +114,22 @@
                     </div>
 
                     <div class="form-group mb-0 mt-4">
-                        <button type="submit" class="btn btn-primary mr-2">
+                        <button type="submit" class="btn btn-dark mr-2">
                             {{ __('Register') }}
                         </button>
                         <small>Already a member? <a href="{{ route('login') }}">Login here.</a></small>
                     </div>
                 </form>
 
-                <div class="row mt-4">
-                    <div class="col-12">
-                        <p>Or register with</p>
+                <div class="row">
+                    <div class="py-2 col-7 text-center mx-auto">
+                        <hr>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <p class="mb-1">Or signup with</p>
                         @include('auth.includes.social-auth-buttons')
                     </div>
                 </div>

@@ -67,7 +67,7 @@
 
                         <div class="form-group row mb-0">
                             <div class="col-md-8 offset-md-4 pb-3">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-dark">
                                     {{ __('Login') }}
                                 </button>
 
@@ -80,14 +80,20 @@
                         </div>
 
                         <div class="row">
+                            <div class="py-2 col-7 text-center mx-auto">
+                                <hr>
+                            </div>
+                        </div>
+
+                        <div class="row">
                             <div class="col-12 text-center">
-                                <p>Or login with</p>
+                                <p class="mb-1">Or login with</p>
                                 @include('auth.includes.social-auth-buttons')
                             </div>
                         </div>
 
-                        <p class="text-center mt-4" >
-                            Don't have an account? Signup <a href="{{ route('register') }}">here</a>
+                        <p class="text-center mt-3 font-weight-bold mb-0">
+                            Don't have an account? <a href="{{ route('register') }}">Signup here.</a>
                         </p>
                     </form>
 
