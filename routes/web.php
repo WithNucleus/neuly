@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Route;
 // Auth Routes for Front-End
 Auth::routes();
 
+Route::get('login/{provider}', 'Auth\LoginController@redirectToProvider')->name('login.social');
+Route::get('login/{provider}/callback', 'Auth\LoginController@handleProviderCallback');
+
 // Homepage
 Route::get('/', 'Content\HomeController@index')->name('index');
 Route::get('/home', 'Content\HomeController@index')->name('home');

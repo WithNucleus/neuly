@@ -21,7 +21,7 @@
                             {{ session()->get('message') }}
                         </div>
                     @endif
-   
+
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
 
@@ -78,6 +78,17 @@
                                 @endif
                             </div>
                         </div>
+
+                        <div class="row">
+                            <div class="col-12 text-center">
+                                <p>Or login with</p>
+                                @include('auth.includes.social-auth-buttons')
+                            </div>
+                        </div>
+
+                        <p class="text-center mt-4" >
+                            Don't have an account? Signup <a href="{{ route('register') }}">here</a>
+                        </p>
                     </form>
 
                 </div>

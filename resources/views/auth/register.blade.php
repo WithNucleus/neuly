@@ -120,6 +120,13 @@
                         <small>Already a member? <a href="{{ route('login') }}">Login here.</a></small>
                     </div>
                 </form>
+
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <p>Or register with</p>
+                        @include('auth.includes.social-auth-buttons')
+                    </div>
+                </div>
             </div>
         </div>
     </div>
