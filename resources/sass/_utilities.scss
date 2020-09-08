@@ -141,32 +141,32 @@
 // Truncate This
 .truncate-this {
 	max-width: 300px;
-	overflow: hidden; 
-    white-space: nowrap; 
+	overflow: hidden;
+    white-space: nowrap;
     text-overflow: ellipsis;
     display: block;
 }
 
 .truncate-this-small {
 	max-width: 240px;
-	overflow: hidden; 
-    white-space: nowrap; 
+	overflow: hidden;
+    white-space: nowrap;
     text-overflow: ellipsis;
     display: block;
 }
 
 .truncate-this-long {
 	max-width: 450px;
-	overflow: hidden; 
-    white-space: nowrap; 
+	overflow: hidden;
+    white-space: nowrap;
     text-overflow: ellipsis;
     display: block;
 }
 
 .truncate-this-xl {
 	max-width: 600px;
-	overflow: hidden; 
-    white-space: nowrap; 
+	overflow: hidden;
+    white-space: nowrap;
     text-overflow: ellipsis;
     display: block;
 }
@@ -264,4 +264,13 @@ ul.plain-list {
     color: $secondarydark;
     padding: .25rem .5rem;
     border-bottom-left-radius: .25rem;
+}
+
+// Twitter Button
+.btn-twitter {
+    background-color: #1DA1F2;
+}
+
+.btn-twitter:hover {
+    background-color: darken(#1DA1F2, 5%);
 }
