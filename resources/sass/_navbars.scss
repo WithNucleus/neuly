@@ -1,14 +1,13 @@
 /* Navbars */
 #primary-nav {
 	padding: .5rem 1rem .5rem 0;
-	// background: #758E4F;
 }
 
-	@media (min-width: 992px) {
-		#primary-nav {
-			// height: 3.6rem;
-		}
-	}
+    @media (min-width: 576px) and (max-width: 1200px) {
+        #primary-nav .nav-item {
+            font-size: 0.9rem;
+        }
+    }
 
 .navbar-nav {
 	padding-left: 1rem;
@@ -35,7 +34,7 @@
 }
 
 @media (min-width: 992px) {
-	
+
 	.navbar-dark .navbar-nav .nav-link {
 		margin-left: .5rem;
 		margin-right: .5rem;
@@ -65,4 +64,24 @@
 .dropdown-menu-anchor-right {
 	right: 0;
 	left: auto;
+}
+
+// User Name
+.nav-user-dropdown {
+    display: flex;
+    align-items: center;
+}
+
+.nav-user-name {
+    max-width: 120px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    display: block;
+}
+
+@media (min-width: 1201px) {
+    .nav-user-name {
+        max-width: 200px;
+    }
 }

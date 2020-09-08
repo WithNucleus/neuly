@@ -10,7 +10,7 @@
             <form class="global-search-form form-inline mt-3 mt-lg-0" method="post" action="{{ route('search') }}">
                 @csrf
                 <input class="form-control typeahead global-search-input mr-sm-2 search-field" name="search" type="search" placeholder="Discover organizations, people, research..." aria-label="Search">
-                <button class="btn global-search-button my-2 my-sm-0" type="submit">Search</button>
+                <button class="btn global-search-button my-2 my-sm-0" type="submit" title="Search Neuly"><i class="far fa-search"></i></button>
             </form>
         </div>
 
@@ -35,10 +35,6 @@
                     <a class="dropdown-item" href="{{ route('discover.insights') }}"><i class="fad fa-head-side-brain fa-fw"></i> Insights</a>
                 </div>
 
-            <li class="nav-item">
-                <a class="nav-link" href="/about">About</a>
-            </li>
-
             @guest
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('login') }}">Login</a>
@@ -47,30 +43,27 @@
                     <a class="nav-link register" href="{{ route('register') }}">Register</a>
                 </li>
             @else
-                @can('admin login')
-                    <li class="nav-item">
-                        <a class="nav-link" href="/admin">Admin</a>
-                    </li>
-                @endcan
-                @auth
-                    <li class="nav-item">
-                        <a href="{{ route('member.dashboard') }}" class="nav-link">Dashboard</a>
-                    </li>
-                @endauth
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('member.dashboard') }}">Dashboard</a>
+                </li>
                 <li class="nav-item dropdown">
-                    <a id="navbarDropdown" class="nav-link dropdown-toggle has-profile-pic" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                        {{ Auth::user()->name }} <span class="caret"></span>
+                    <a id="navbarDropdown" class="nav-link dropdown-toggle nav-user-dropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                        <span class="nav-user-name">{{ Auth::user()->name }}</span> <span class="caret"></span>
                     </a>
 
                     <div class="dropdown-menu dropdown-menu-anchor-right" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{{ route('user.settings') }}">Settings</a>
 
-                        <a class="dropdown-item" href="{{ route('logout') }}"
+                        <a class="dropdown-item" href="{{ route('user.settings') }}" title="Settings">Settings</a>
+
+                        @can('admin login')
+                            <a href="/admin" class="dropdown-item">Admin</a>
+                        @endcan
+
+                        <a class="dropdown-item" href="{{ route('logout') }}" title="Logout"
                            onclick="event.preventDefault();
                                          document.getElementById('logout-form').submit();">
                             {{ __('Logout') }}
                         </a>
-
 
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
