@@ -3,7 +3,7 @@
 namespace App\Models\Traits;
 
 use App\Notifications\SlugUpdated;
-use App\User;
+use Illuminate\Support\Facades\Notification;
 
 trait OldSlugRedirectable
 {
@@ -14,8 +14,7 @@ trait OldSlugRedirectable
 
     public static function bootOldSlugRedirectable()
     {
-        static::updating(function($model)
-        {
+        static::updating(function ($model) {
             $oldSlug = $model->getOriginal('slug');
             $newSlug = $model->slug ?? Str::slug($model->name);
 
@@ -23,11 +22,14 @@ trait OldSlugRedirectable
                 $model->redirects()->delete();
                 $redirect = $model->redirects()->create(['old_slug' => $oldSlug]);
 
-                $adminEmail = env('SEND_SLUG_UPDATED_NOTIFICATION_EMAIL', null);
-                $admin      = $adminEmail ? User::where('email', $adminEmail)->first() : null;
+                $emailToSettings = env('SEND_SLUG_UPDATED_NOTIFICATION_EMAIL');
+                $emailToArray    = array_map('trim', explode(',', $emailToSettings));
+                $notification    = new SlugUpdated($model, $redirect);
 
-                if ($admin) {
-                    $admin->notify(new SlugUpdated($model, $redirect));
+                foreach ($emailToArray as $email) {
+                    if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                        Notification::route('mail', $email)->notify($notification);
+                    }
                 }
             }
         });

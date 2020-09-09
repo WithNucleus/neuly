@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Notifications\ListingRequestCreated;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Notification;
 
 class ListingRequest extends Model
 {
@@ -28,6 +30,21 @@ class ListingRequest extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
+
+    protected static function booted()
+    {
+        static::created(function ($model) {
+            $emailToSettings = env('SEND_LISTING_REQUEST_CREATED_EMAIL');
+            $emailToArray    = array_map('trim', explode(',', $emailToSettings));
+            $notification    = new ListingRequestCreated($model);
+
+            foreach ($emailToArray as $email) {
+                if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    Notification::route('mail', $email)->notify($notification);
+                }
+            }
+        });
+    }
 
     /*
     |--------------------------------------------------------------------------
