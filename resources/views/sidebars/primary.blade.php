@@ -58,6 +58,10 @@
                 @include('sidebars.events')
             @endif
 
+                @if(Route::is('insights.collaborators.show'))
+                    @include('sidebars.collaborators')
+                @endif
+
         </div>
     </div>
 </nav>

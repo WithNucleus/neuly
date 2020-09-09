@@ -26,17 +26,18 @@ Route::get('/home', 'Content\HomeController@index')->name('home');
 // Content
 Route::get('/about', 'Content\AboutController@index')->name('about');
 
-// Insights & Index
-Route::get('/insights', 'Content\InsightsController@index')->name('discover.insights');
+// Discover Index
 Route::get('/psychedelic-index', 'Content\IndexController@index')->name('discover.index');
+
+//Insights
+Route::get('/insights', 'Index\InsightsController@index')->name('discover.insights');
 
 //Insights Widgets
 Route::group([
     'prefix'     => '/insights',
     'namespace'  => 'Insights',
-    'as'         => 'discover.insights.',
+    'as'         => 'insights.',
 ], function () {
-
     //demo insights
     Route::get('/companies-by-type', 'CompaniesByTypeController@index')->name('companies-by-type');
     Route::get('/top-ten-locations', 'TopTenLocationsController@index')->name('top-ten-locations');
@@ -47,6 +48,8 @@ Route::group([
     ], function () {
         Route::get('/jobs-by-focus', 'JobsByFocusController@index')->name('jobs-by-focus');
         Route::get('/jobs-by-type', 'JobsByTypeController@index')->name('jobs-by-type');
+        Route::get('/collaborators', 'ClinicalTrialCollaboratorsListController@show')->name('collaborators.show');
+        Route::post('/collaborators/list', 'ClinicalTrialCollaboratorsListController@index')->name('collaborators');
     });
 });
 

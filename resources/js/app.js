@@ -1,7 +1,8 @@
-require('./bootstrap');
-require('./notifications');
-require('./insights');
-import Cookies from 'js-cookie';
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
 
 $(document).ready(function() {
 
@@ -262,5 +263,9 @@ $(document).ready(function() {
             button.addClass('lead-smaller');
         })
     })
-
 });
+
+require('./bootstrap');
+require('./notifications');
+require('./insights');
+import Cookies from 'js-cookie';
