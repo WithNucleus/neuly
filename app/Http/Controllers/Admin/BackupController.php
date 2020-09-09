@@ -57,8 +57,6 @@ class BackupController extends Controller
 
     public function create()
     {
-        $message = 'success';
-
         try {
             ini_set('max_execution_time', 600);
 
@@ -67,14 +65,25 @@ class BackupController extends Controller
             Artisan::call('backup:run');
 
             $output = Artisan::output();
-            if (strpos($output, 'Backup failed because')) {
-                preg_match('/Backup failed because(.*?)$/ms', $output, $match);
-                $message = "Backpack\BackupManager -- backup process failed because ";
-                $message .= isset($match[1]) ? $match[1] : '';
-                Log::error($message.PHP_EOL.$output);
-            } else {
-                Log::info("Backpack\BackupManager -- backup process has started");
-            }
+            $message = $this->getResultMessage($output);
+        } catch (Exception $e) {
+            Log::error($e);
+
+            return Response::make($e->getMessage(), 500);
+        }
+
+        return $message;
+    }
+
+    public function createDatabase()
+    {
+        try {
+            Log::info('Backpack\BackupManager -- Called backup:run --only-db from admin interface');
+
+            Artisan::call('backup:run --only-db --filename=db_' . date('Y-m-d_H-i-s') . '.zip');
+
+            $output  = Artisan::output();
+            $message = $this->getResultMessage($output);
         } catch (Exception $e) {
             Log::error($e);
 
@@ -120,5 +129,24 @@ class BackupController extends Controller
         } else {
             abort(404, trans('backpack::backup.backup_doesnt_exist'));
         }
+    }
+
+    /**
+     * @param string $output
+     * @return string
+     */
+    private function getResultMessage($output)
+    {
+        if (strpos($output, 'Backup failed because') !== false) {
+            preg_match('/Backup failed because(.*?)$/ms', $output, $match);
+            $message = "Backpack\BackupManager -- backup process failed because ";
+            $message .= isset($match[1]) ? $match[1] : '';
+            Log::error($message . PHP_EOL . $output);
+        } else {
+            $message = 'success';
+            Log::info("Backpack\BackupManager -- backup process has started");
+        }
+
+        return $message;
     }
 }
