@@ -22,7 +22,7 @@ trait OldSlugRedirectable
                 $model->redirects()->delete();
                 $redirect = $model->redirects()->create(['old_slug' => $oldSlug]);
 
-                $emailToSettings = env('SEND_SLUG_UPDATED_NOTIFICATION_EMAIL');
+                $emailToSettings = config('mail.custom.send_slug_updated_email');
                 $emailToArray    = array_map('trim', explode(',', $emailToSettings));
                 $notification    = new SlugUpdated($model, $redirect);
 

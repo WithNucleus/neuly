@@ -107,4 +107,9 @@ return [
         ],
     ],
 
+    'custom' => [
+        'send_slug_updated_email' => env('SEND_SLUG_UPDATED_NOTIFICATION_EMAIL'),
+        'send_listing_request_created_email' => env('SEND_LISTING_REQUEST_CREATED_EMAIL'),
+    ],
+
 ];

@@ -34,7 +34,7 @@ class ListingRequest extends Model
     protected static function booted()
     {
         static::created(function ($model) {
-            $emailToSettings = env('SEND_LISTING_REQUEST_CREATED_EMAIL');
+            $emailToSettings = config('mail.custom.send_listing_request_created_email');
             $emailToArray    = array_map('trim', explode(',', $emailToSettings));
             $notification    = new ListingRequestCreated($model);
 
