@@ -4,7 +4,7 @@
     <div class="container-fluid mt-5">
         <h2>
             <span class="text-capitalize">Import Failures</span>
-            <a href="{{ route('import.clinicaltrials') }}" class="font-sm"><i class="la la-angle-double-left"></i> Back to <span>Clinical Trials</span></a>
+            <a href="{{ route('import.related-entities.index') }}" class="font-sm"><i class="la la-angle-double-left"></i> Back to <span>Import Related Entities</span></a>
         </h2>
     </div>
 @endsection

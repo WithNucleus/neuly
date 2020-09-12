@@ -3,8 +3,8 @@
 @section('header')
     <div class="container-fluid mt-5">
         <h2>
-            <span class="text-capitalize">Import</span>
-            <a href="{{ route('import.failures', $importResultId) }}" class="font-sm"><i
+            <span class="text-capitalize">Import Failures by type</span>
+            <a href="{{ url()->previous() }}" class="font-sm"><i
                     class="la la-angle-double-left"></i> Back to
                 <span>Import failures</span></a>
         </h2>

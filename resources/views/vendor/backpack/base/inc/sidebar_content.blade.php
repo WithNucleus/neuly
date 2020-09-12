@@ -110,6 +110,11 @@
 					<i class="nav-icon la la-stethoscope"></i> <span>Clinical Trials</span>
 				</a>
 			</li>
+            <li class="nav-item">
+                <a class='nav-link' href='{{ route('import.related-entities.index') }}'>
+                    <i class='nav-icon la la-link'></i> Related Entities
+                </a>
+            </li>
 			<li class="nav-item">
 				<a class='nav-link' href='{{ route('import.research') }}'>
 					<i class='nav-icon la la-school'></i> Research

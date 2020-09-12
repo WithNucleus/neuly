@@ -274,9 +274,9 @@ Route::get('/admin/import/results/{id}', 'Admin\Import\ResultsController@showRes
     ->name('import.results');
 
 //Import Failures List
-Route::get('/admin/import/{id}/failures', 'Admin\Import\ResultsController@showFailures')
+Route::get('/admin/import/failures/{id}', 'Admin\Import\ResultsController@showFailures')
     ->name('import.failures');
-Route::get('/admin/import/{id}/failures/{type}', 'Admin\Import\FailuresController@showByType')
+Route::get('/admin/import/failures/{id}/{type}', 'Admin\Import\FailuresController@showByType')
     ->name('import.failures.showByType');
 
 //Fix Import Failure
@@ -284,6 +284,24 @@ Route::post('/admin/import/failures/{id}/fix', 'Admin\Import\FailuresController@
     ->name('import.failures.fix');
 Route::post('/admin/import/failures/{id}/delete', 'Admin\Import\FailuresController@delete')
     ->name('import.failures.delete');
+
+Route::group([
+    'middleware' => ['auth', 'role:Admin','permission:import'],
+    'prefix'     => '/admin/import',
+    'namespace'  => 'Admin\Import',
+    'as'         => 'import.',
+], function () {
+    Route::group([
+        'prefix' => '/related-entities',
+        'as'     => 'related-entities.'
+    ], function () {
+        Route::get('/', 'RelatedEntitiesController@index')->name('index');
+        Route::post('/import', 'RelatedEntitiesController@import')->name('import');
+        Route::get('/results/{id}', 'RelatedEntitiesController@results')->name('results');
+        Route::get('/failures/{id}', 'RelatedEntitiesController@failures')->name('failures');
+    });
+});
+
 
 // Job Application Files
 Route::get('/admin/jobapps/{id}/resume', 'Index\JobApplicationController@getResume')->name('jobsapp.resume');

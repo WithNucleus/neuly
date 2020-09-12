@@ -28,8 +28,8 @@ class ClinicalTrialController extends Controller
 
     public function importClinicaltrials()
     {
-    	$import_results = ImportResult::where('entity', 'Clinical Trials')
-    		->orderBy('created_at', 'desc')
+    	$import_results = ImportResult::clinicalTrials()
+    		->latest()
     		->take(20)
     		->get();
 
@@ -56,6 +56,7 @@ class ClinicalTrialController extends Controller
 
         $records          = array_map('str_getcsv', file($request->file('csv')));
         $importAttributes = [
+            'type'     => ImportResult::TYPE_CLINICAL_TRIALS,
             'entity'   => 'Clinical Trials',
             'csv'      => json_encode($records),
             'user_id'  => Auth::id(),
@@ -112,7 +113,7 @@ class ClinicalTrialController extends Controller
                 $clinicaltrialCache[$nctNumber] = Clinicaltrial::updateOrCreate(
                     ['nct_number' => $nctNumber],
                     $attributes
-                );;
+                );
             }
 
             $clinicaltrial = $clinicaltrialCache[$nctNumber];

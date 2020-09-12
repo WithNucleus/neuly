@@ -142,7 +142,7 @@ class ProcessLocation implements ShouldQueue
                 'messages' => [$message],
             ];
         } else {
-            $this->importCompanyMessages[$nctNumber]['messages'][] = $message;
+            $this->importMessages[$nctNumber]['messages'][] = $message;
         }
     }
 

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Admin\Import;
 
-use App\Helpers\Import\CriticalTrial\ImportFailureCorrector;
+use App\Helpers\Import\CriticalTrial\ImportFailureCorrector as ClinicalTrialCorrector;
+use App\Helpers\Import\RelatedEntities\ImportFailureCorrector as RelatedEntitiesCorrector;
 use App\Http\Controllers\Controller;
 use App\Models\ImportFailure;
+use App\Models\ImportResult;
 use Illuminate\Http\Request;
 
 class FailuresController extends Controller
@@ -47,8 +49,16 @@ class FailuresController extends Controller
      */
     public function fix(Request $request, $id)
     {
-        $failure = ImportFailure::findOrFail($id);
-        $result  = ImportFailureCorrector::correctFailure($failure, $request->all());
+        $failure = ImportFailure::with('result')->findOrFail($id);
+
+        switch ($failure->result->type) {
+            case ImportResult::TYPE_CLINICAL_TRIALS:
+                $result = ClinicalTrialCorrector::correctFailure($failure, $request->all());
+                break;
+            case ImportResult::TYPE_RELATED_ENTITIES:
+                $result = RelatedEntitiesCorrector::correctFailure($failure, $request->all());
+                break;
+        }
 
         return response()->json([
             'status' => ($result === true) ? 'success' : 'failed',
