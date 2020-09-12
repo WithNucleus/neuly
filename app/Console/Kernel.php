@@ -52,7 +52,7 @@ class Kernel extends ConsoleKernel
 
         // Send E-Mail Notifications
 
-        $schedule->job(new SendEmailNotifications())->everyMinute();
+        $schedule->job(new SendEmailNotifications())->weeklyOn(3, '12:00');
     }
 
     /**
