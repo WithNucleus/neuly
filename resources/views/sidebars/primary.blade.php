@@ -58,9 +58,13 @@
                 @include('sidebars.events')
             @endif
 
-                @if(Route::is('insights.collaborators.show'))
-                    @include('sidebars.collaborators')
-                @endif
+            @if(Route::is('insights.collaborators.show'))
+                @include('sidebars.collaborators')
+            @endif
+
+            @if(Route::is('insights.clinicaltrials.pipeline'))
+                @include('sidebars.insights.clinicaltrials-pipeline')
+            @endif
 
         </div>
     </div>
