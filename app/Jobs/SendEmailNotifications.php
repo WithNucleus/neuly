@@ -51,12 +51,6 @@ class SendEmailNotifications implements ShouldQueue
                 ->to($user)
                 ->send(new NotificationMail($notifications, $user->name));
 
-            foreach($notifications as $notification)
-            {
-                $notification->was_send = 1;
-                $notification->save();
-            }
-
             $sentNotificationIds[] = $notifications->pluck('id');
         }
 
