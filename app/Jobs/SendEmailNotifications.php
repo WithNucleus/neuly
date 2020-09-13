@@ -10,6 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
@@ -34,9 +35,7 @@ class SendEmailNotifications implements ShouldQueue
      */
     public function handle()
     {
-
-
-
+        $sentNotificationIds = [];
 
         $notificationsByUser = EmailNotification::where('was_send', '=', 0)
             ->get()
@@ -57,6 +56,12 @@ class SendEmailNotifications implements ShouldQueue
                 $notification->was_send = 1;
                 $notification->save();
             }
+
+            $sentNotificationIds[] = $notifications->pluck('id');
         }
+
+        $sentNotificationIds = array_merge(...$sentNotificationIds);
+
+        EmailNotification::whereIn('id', $sentNotificationIds)->update(['was_send' => 1]);
     }
 }
