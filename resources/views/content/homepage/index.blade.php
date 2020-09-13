@@ -38,9 +38,9 @@
             </div>
 
             <div class="neuly-knows row d-flex align-items-start justify-content-center flex-wrap flex-column flex-md-row">
-                <div class="text-center col-12 col-md">
+                <div class="nk-item text-center col-12 col-md">
                     <a href="{{ route('discover.organizations') }}" class="text-decoration-none">
-                        <span class="d-block text-primary title mb-0">
+                        <span class="counters d-block text-primary title mb-0">
                             @isset($count_companies)
                                 {{ $count_companies }}
                             @else
@@ -50,9 +50,9 @@
                         <span class="d-block lead">Organizations</span>
                     </a>
                 </div>
-                <div class="text-center col-12 col-md">
+                <div class="nk-item text-center col-12 col-md">
                     <a href="{{ route('discover.people') }}" class="text-decoration-none">
-                        <span class="d-block text-primary title mb-0">
+                        <span class="counters d-block text-primary title mb-0">
                             @isset($count_people)
                                 {{ $count_people }}
                             @else
@@ -62,9 +62,9 @@
                         <span class="d-block lead">People</span>
                     </a>
                 </div>
-                <div class="text-center col-12 col-md">
+                <div class="nk-item text-center col-12 col-md">
                     <a href="{{ route('discover.investors') }}" class="text-decoration-none">
-                        <span class="d-block text-primary title mb-0">
+                        <span class="counters d-block text-primary title mb-0">
                             @isset($count_investors)
                                 {{ $count_investors }}
                             @else
@@ -74,9 +74,9 @@
                         <span class="d-block lead">Investors</span>
                     </a>
                 </div>
-                <div class="text-center col-12 col-md">
+                <div class="nk-item text-center col-12 col-md">
                     <a href="{{ route('discover.locations') }}" class="text-decoration-none">
-                        <span class="d-block text-primary title mb-0">
+                        <span class="counters d-block text-primary title mb-0">
                             @isset($count_locations)
                                 {{ $count_locations }}
                             @else
@@ -86,9 +86,9 @@
                         <span class="d-block lead">Locations</span>
                     </a>
                 </div>
-                <div class="text-center col-12 col-md">
+                <div class="nk-item text-center col-12 col-md">
                     <a href="{{ route('discover.clinicaltrials') }}" class="text-decoration-none">
-                        <span class="d-block text-primary title mb-0">
+                        <span class="counters d-block text-primary title mb-0">
                             @isset($count_clinicaltrials)
                                 {{ $count_clinicaltrials }}
                             @else

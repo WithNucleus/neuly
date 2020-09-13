@@ -12271,6 +12271,18 @@ ul.nav-tabs.discover-tabs .nav-link .icon {
   text-transform: uppercase;
 }
 
+.neuly-knows .nk-item {
+  transition: transform 0.2s;
+}
+
+.neuly-knows .nk-item:hover {
+  transform: scale(1.2);
+}
+
+.neuly-knows .nk-item:hover .counters {
+  color: #73FBD3 !important;
+}
+
 @media (min-width: 768px) {
   .neuly-knows .title {
     font-size: 2.8rem;
