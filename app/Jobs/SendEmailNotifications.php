@@ -51,7 +51,7 @@ class SendEmailNotifications implements ShouldQueue
                 ->to($user)
                 ->send(new NotificationMail($notifications, $user->name));
 
-            $sentNotificationIds[] = $notifications->pluck('id');
+            $sentNotificationIds[] = $notifications->pluck('id')->toArray();
         }
 
         $sentNotificationIds = array_merge(...$sentNotificationIds);
