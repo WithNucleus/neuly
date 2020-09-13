@@ -19,7 +19,7 @@ class updateClinicalTrialPhases extends Command
      *
      * @var string
      */
-    protected $description = 'Change Early Phase 1 to Phase 0';
+    protected $description = 'Update Phase Integer Field Value from Phases Field';
 
     /**
      * Create a new command instance.
@@ -38,13 +38,36 @@ class updateClinicalTrialPhases extends Command
      */
     public function handle()
     {
-        $clinicaltrials = Clinicaltrial::where('phases', 'Early Phase 1')
-            ->take(10)
+        $clinicaltrials = Clinicaltrial::whereNull('phase_integer')
+            ->take(100)
             ->get();
 
         foreach ($clinicaltrials as $clinicaltrial) {
+
             $this->info($clinicaltrial->title);
-            $clinicaltrial->phases = 'Phase 0';
+
+            switch ($clinicaltrial->phases) {
+                case "Early Phase 1":
+                    $clinicaltrial->phase_integer = 1;
+                    break;
+                case "Phase 1":
+                    $clinicaltrial->phase_integer = 2;
+                    break;
+                case "Phase 2":
+                case "Phase 1|Phase 2":
+                    $clinicaltrial->phase_integer = 3;
+                    break;
+                case "Phase 2|Phase 3":
+                case "Phase 3":
+                    $clinicaltrial->phase_integer = 4;
+                    break;
+                case "Phase 4":
+                    $clinicaltrial->phase_integer = 5;
+                    break;
+                default:
+                    $clinicaltrial->phase_integer = 0;
+            }
+
             $clinicaltrial->save();
         }
     }

@@ -39,7 +39,8 @@
             'region',
             'countries',
             'hiring',
-            'upcoming_events'
+            'upcoming_events',
+            'phase'
         ];
 
         allowedFilters.forEach(function (filterName) {
@@ -67,8 +68,6 @@
             url += getUrlParamPrefix() + 'sort=' + current_sort;
         }
 
-        console.log("URL: " + url);
-
         // Redirect
         document.location.href = url;
     }
@@ -87,10 +86,6 @@
 
         // People Search
         $("input[name=people-search]").on('change', function() {
-            console.log("people-search");
-            console.log(this);
-            console.log($(this).val());
-
             var name = $(this).val();
 
             var this_item = '<div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" name="people" id="' + name + '" value="' + name + '"checked><label class="custom-control-label" for="' + name + '">' + name + '</label></div>';
@@ -98,16 +93,10 @@
             $(this_item).insertAfter("#people-filter .title");
 
             get_filters_and_go();
-
-
         });
 
         // Organization Search
         $("input[name=organizations-search]").on('change', function() {
-            console.log("organizations-search");
-            console.log(this);
-            console.log($(this).val());
-
             var name = $(this).val();
 
             var this_item = '<div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" name="company" id="' + name + '" value="' + name + '"checked><label class="custom-control-label" for="' + name + '">' + name + '</label></div>';
@@ -115,16 +104,10 @@
             $(this_item).insertAfter("#organizations-filter .title");
 
             get_filters_and_go();
-
-
         });
 
-        // Organization Search
+        // Location Search
         $("input[name=locations-search]").on('change', function() {
-            console.log("locations-search");
-            console.log(this);
-            console.log($(this).val());
-
             var name = $(this).val();
 
             var this_item = '<div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" name="locations" id="' + name + '" value="' + name + '"checked><label class="custom-control-label" for="' + name + '">' + name + '</label></div>';
@@ -132,16 +115,10 @@
             $(this_item).insertAfter("#locations-filter .title");
 
             get_filters_and_go();
-
-
         });
 
         // Region Search
         $("input[name=regions-search]").on('change', function() {
-            console.log("regions-search");
-            console.log(this);
-            console.log($(this).val());
-
             var name = $(this).val();
 
             var this_item = '<div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" name="region" id="' + name + '" value="' + name + '"checked><label class="custom-control-label" for="' + name + '">' + name + '</label></div>';
@@ -149,8 +126,6 @@
             $(this_item).insertAfter("#regions-filter .title");
 
             get_filters_and_go();
-
-
         });
 
         // Sort Buttons

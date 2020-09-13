@@ -1,18 +1,4 @@
-@include('sidebars.filters.checkboxes-new', [
-    'label'     => 'Focus',
-    'name'      => 'focus',
-    'items'     => $focus_cats,
-    'item_filters' => $filters_focus
-])
-
-@include('sidebars.filters.checkboxes-new', [
-    'label'     => 'Status',
-    'name'      => 'status',
-    'items'     => $status,
-    'item_filters' => $filters_status
-])
-
-<div class="clinicaltrial-collaborators">
+<div class="clinicaltrial-collaborators mb-3">
     <label for="organizations" class="h4">Organizations</label>
     <div class="d-flex">
         <input type="text" class="typeahead form-control" name="organizations-search" placeholder="Search organizations">
@@ -32,6 +18,27 @@
         @endisset
     </div>
 </div>
+
+@include('sidebars.filters.checkboxes-new', [
+    'label'     => 'Focus',
+    'name'      => 'focus',
+    'items'     => $focus_cats,
+    'item_filters' => $filters_focus
+])
+
+@include('sidebars.filters.checkboxes-new', [
+    'label'     => 'Status',
+    'name'      => 'status',
+    'items'     => $status,
+    'item_filters' => $filters_status
+])
+
+@include('sidebars.filters.checkboxes-new', [
+    'label'     => 'Phase',
+    'name'      => 'phase',
+    'items'     => $phases,
+    'item_filters' => $filters_phases
+])
 
 @include('sidebars.filters.scripts')
 

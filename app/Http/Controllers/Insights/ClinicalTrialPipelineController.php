@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Insights;
 use App\Helpers\InsightsHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Clinicaltrial;
+use App\Models\ClinicaltrialPhase;
 use App\Models\Company;
 use App\Models\Focus;
 use Backpack\CRUD\app\Library\CrudPanel\Traits\Query;
@@ -35,6 +36,7 @@ class ClinicalTrialPipelineController extends Controller
         $filters_focus = [];
         $filters_organizations = [];
         $filters_status = [];
+        $filters_phases = [];
 
         $sort = $request->has('sort') ? $request->input('sort') : 'organizations';
         $sortBy = 'company_name';
@@ -60,10 +62,10 @@ class ClinicalTrialPipelineController extends Controller
 
             if ($request->input('sort') == 'phase') {
                 $order = 'asc';
-                $sortBy = 'phase';
+                $sortBy = 'phase_integer';
             } elseif($request->input('sort') == '-phase') {
                 $order = 'desc';
-                $sortBy = 'phase';
+                $sortBy = 'phase_integer';
             }
 
         }
@@ -84,6 +86,10 @@ class ClinicalTrialPipelineController extends Controller
             if(isset($filter['status'])) {
                 $filters_status = $this->getEntityNameArray($filter['status']);
             }
+
+            if(isset($filter['phase'])) {
+                $filters_phases = $this->getEntityNameArray($filter['phase']);
+            }
         }
 
         if ($order === 'asc') {
@@ -96,6 +102,8 @@ class ClinicalTrialPipelineController extends Controller
 
         $status = Clinicaltrial::pluck('status')->unique()->sort();
 
+        $phases = ClinicaltrialPhase::orderBy('integer')->pluck('pretty_name')->unique();
+
         return view('discover.insights.clinicaltrials.show', compact(
             'companies',
             'focus_cats',
@@ -103,8 +111,10 @@ class ClinicalTrialPipelineController extends Controller
             'filters_focus',
             'filters_organizations',
             'filters_status',
+            'filters_phases',
             'sort',
-            'status'
+            'status',
+            'phases'
         ));
     }
 
@@ -118,7 +128,7 @@ class ClinicalTrialPipelineController extends Controller
             ->join('focus', 'focus.id', 'clinicaltrial_focus.focus_id')
             ->select('companies.id as company_id', 'companies.name as company_name', 'companies.slug as company_slug',
                 'clinicaltrials.id as clinicaltrial_id', 'clinicaltrials.title as title', 'clinicaltrials.slug as slug',
-                'clinicaltrials.phases as phase', 'clinicaltrials.status as status',
+                'clinicaltrials.phases as phase_value', 'clinicaltrials.phase_integer as phase_integer', 'clinicaltrials.status as status',
                 'clinicaltrials.conditions as conditions',
                 'focus.id as focus_id', 'focus.name as focus_name', 'focus.slug as focus_slug');
     }
@@ -140,6 +150,11 @@ class ClinicalTrialPipelineController extends Controller
             $query = $this->filterByStatus($query, $filter['status']);
         }
 
+        if(isset($filter['phase']))
+        {
+            $query = $this->filterByPhase($query, $filter['phase']);
+        }
+
         return $query;
     }
 
@@ -158,16 +173,12 @@ class ClinicalTrialPipelineController extends Controller
         return $query->whereIn('clinicaltrials.status', $this->getEntityNameArray($status));
     }
 
-    private function limitRequest($query, $limit)
+    private function filterByPhase($query, $phase)
     {
-        return $query->take($limit);
+        return $query->whereIn('clinicaltrials.phases', $this->getEntityNameArray($phase));
     }
 
     private function getEntityNameArray($entity) {
         return explode('|', $entity);
-    }
-
-    private function getFocusIds($focus) {
-        return Focus::whereIn('name', $focus)->get()->pluck('id');
     }
 }
