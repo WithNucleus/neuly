@@ -2,33 +2,27 @@
 
 namespace App\Notifications;
 
-use App\Models\Redirect;
+use App\Models\ListingRequest;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class SlugUpdated extends Notification implements ShouldQueue
+class ListingRequestCreated extends Notification implements ShouldQueue
 {
     use Queueable;
 
     /**
-     * @var mixed
+     * @var \App\Models\ListingRequest
      */
-    public $sluggable;
-
-    /** @var Redirect */
-    public $redirect;
+    public $listingRequest;
 
     /**
-     * Create a new notification instance.
-     *
-     * @return void
+     * @param \App\Models\ListingRequest $listingRequest
      */
-    public function __construct($sluggable, Redirect $redirect)
+    public function __construct(ListingRequest $listingRequest)
     {
-        $this->sluggable = $sluggable;
-        $this->redirect = $redirect;
+        $this->listingRequest = $listingRequest;
     }
 
     /**
@@ -51,8 +45,8 @@ class SlugUpdated extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('Updated the slug of '.ucfirst($this->sluggable->getMorphClass()).' sluggable model.')
-                    ->action('See More', backpack_url('redirect/'.$this->redirect->id.'/show'))
-                    ->line('Thank you for using our application!');
+            ->line('Listing request created for entity "' . $this->listingRequest->entity_name . '", entity type "' . $this->listingRequest->type . '"')
+            ->action('Show Listing Request', route('listingrequest.show', $this->listingRequest->id))
+            ->line('Thank you for using our application!');
     }
 }
