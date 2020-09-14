@@ -9,6 +9,18 @@
     }
 ?>
 
+<style>
+    .table-scroll-container {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .table-scroll-container table th,
+    .table-scroll-container table td {
+        min-width: 100px;
+    }
+</style>
+
 <div class="table-scroll-container">
     <table class="table table-bordered bg-white shadow-sm">
         <thead class="thead-dark">
