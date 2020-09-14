@@ -47,7 +47,7 @@ class SendEmailNotifications implements ShouldQueue
         {
             $user = User::find($userId);
 
-            Mail::mailer(env('NOTIFICATION_MAILER'))
+            Mail::mailer(config('mail.notification'))
                 ->to($user)
                 ->send(new NotificationMail($notifications, $user->name));
 
