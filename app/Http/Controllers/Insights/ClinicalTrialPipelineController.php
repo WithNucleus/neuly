@@ -19,15 +19,9 @@ use Spatie\QueryBuilder\QueryBuilder;
 class ClinicalTrialPipelineController extends Controller
 {
     /**
-     * Create a new controller instance.
-     *
-     * @return void
+     * @param \Illuminate\Http\Request $request
+     * @return view
      */
-    public function __construct()
-    {
-//        $this->middleware('query_filters')->only(['show', 'show2']);
-    }
-
     public function show(Request $request) {
 
         $query = $this->getQuery();
@@ -118,7 +112,6 @@ class ClinicalTrialPipelineController extends Controller
         ));
     }
 
-    // Marcel's Functions
     private function getQuery()
     {
         return DB::table('companies')
