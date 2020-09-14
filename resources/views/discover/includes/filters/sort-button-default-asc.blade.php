@@ -29,8 +29,8 @@ Default Sort Button - Ascending
 
     @else
 
-        <button data-sort="{{ $desc }}" class="sort-records btn sort-button inactive">
-            {{ $label }} <i class="fad fa-arrow-square-down ml-1"></i>
+        <button data-sort="{{ $asc }}" class="sort-records btn sort-button inactive">
+            {{ $label }} <i class="fad fa-arrow-square-up ml-1"></i>
         </button>
 
     @endif
