@@ -68,7 +68,8 @@
 
                         {{-- Filters --}}
                         <?php if (
-                        isset($filters_focus) && $filters_focus
+                        isset($filters_focus) && $filters_focus &&
+                        isset($filters_locations) && $filters_locations
                         ) : ?>
                         <div class="current-filter-list font-size-small align-self-end border-bottom mb-3 pb-1">
                             <strong class="text-uppercase mr-3 text-black-50">Current Filters:</strong>
@@ -82,8 +83,22 @@
                                 @endforeach
                                     </span>
                             <?php endif; ?>
+                            <?php if (isset($filters_focus) && $filters_focus) : ?>
+                            <strong class="text-info">/</strong>
+                            <?php endif; ?>
+                            isset($filters_locations) && $filters_locations
+                            <?php if (isset($filters_locations) && $filters_locations) : ?>
+                            <span class="mr-3">
+                                        <i class="fad fa-map-marker-alt text-info"></i>
+                                        @foreach ($filters_locations as $locations)
+                                    {{ $location }}
+                                    @if (!$loop->last) <strong class="text-info">/</strong> @endif
+                                @endforeach
+                                    </span>
+                            <?php endif; ?>
                         </div>
                         <?php endif; ?>
+
 
                         <div class="d-flex flex-wrap">
                             <table class="table table-striped">
