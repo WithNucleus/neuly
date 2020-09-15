@@ -66,6 +66,9 @@
                     <div class="col-12 col-lg-4">
                         @include('discover.insights.collaborators.list')
                     </div>
+                    <div class="col-12 col-lg-4">
+                        @include('discover.insights.most-interest.list')
+                    </div>
                 @endauth
             </div>
 

@@ -44,10 +44,10 @@
                     <div class="full-width-show-view">
 
                         <div class="page-title-default d-md-flex justify-content-between">
-                            <h1 class="mb-0 mr-5">Collaborators</h1>
+                            <h1 class="mb-0 mr-5">Focus</h1>
 
                             <span class="lead-smaller align-self-end pb-1">
-                                    Showing {{ $collaborators->total() }} Organizations
+                                    Showing {{ $focus->total() }} Focus
                                 </span>
                         </div>
 
@@ -68,17 +68,17 @@
 
                         {{-- Filters --}}
                         <?php if (
-                        (isset($filters_focus) && $filters_focus) ||
+                        (isset($filters_companies) && $filters_companies) ||
                         (isset($filters_locations) && $filters_locations)
                         ) : ?>
                         <div class="current-filter-list font-size-small align-self-end border-bottom mb-3 pb-1">
                             <strong class="text-uppercase mr-3 text-black-50">Current Filters:</strong>
 
-                            <?php if (isset($filters_focus) && $filters_focus) : ?>
+                            <?php if (isset($filters_companies) && $filters_companies) : ?>
                             <span class="mr-3">
                                         <i class="fad fa-map-marker-alt text-info"></i>
-                                        @foreach ($filters_focus as $focus)
-                                    {{ $focus }}
+                                        @foreach ($filters_companies as $company)
+                                    {{ $company }}
                                     @if (!$loop->last) <strong class="text-info">/</strong> @endif
                                 @endforeach
                                     </span>
@@ -86,11 +86,10 @@
                             <?php if (isset($filters_focus) && $filters_focus) : ?>
                             <strong class="text-info">/</strong>
                             <?php endif; ?>
-                            isset($filters_locations) && $filters_locations
                             <?php if (isset($filters_locations) && $filters_locations) : ?>
                             <span class="mr-3">
                                         <i class="fad fa-map-marker-alt text-info"></i>
-                                        @foreach ($filters_locations as $locations)
+                                        @foreach ($filters_locations as $location)
                                     {{ $location }}
                                     @if (!$loop->last) <strong class="text-info">/</strong> @endif
                                 @endforeach
@@ -99,25 +98,24 @@
                         </div>
                         <?php endif; ?>
 
-
                         <div class="d-flex flex-wrap">
                             <table class="table table-striped">
                                 <thead>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Clinical Trials</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Clinical Trials</th>
                                 </thead>
                                 <tbody>
-                                @foreach($collaborators as $collaborator)
+                                @foreach($focus as $item)
                                     <tr>
-                                        <td><a href="{{ route('discover.organizations.show', $collaborator->slug) }}">{{ $collaborator->name }}</a></td>
-                                        <td>{{ $collaborator->trials }}</td>
+                                        <td><a href="{{ route('discover.focus.show', $item->slug) }}">{{ $item->name }}</a></td>
+                                        <td>{{ $item->trials }}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>
                             </table>
                         </div>
 
-                        {{ $collaborators->links() }}
+                        {{ $focus->links() }}
                     </div>
                 </div>
             </div>

@@ -544,6 +544,8 @@ __webpack_require__(/*! ./insights */ "./resources/js/insights.js");
 __webpack_require__(/*! ./insights/collaborators-list */ "./resources/js/insights/collaborators-list.js");
 
 __webpack_require__(/*! ./insights/topTenLocations */ "./resources/js/insights/topTenLocations.js");
+
+__webpack_require__(/*! ./insights/most-interest-list */ "./resources/js/insights/most-interest-list.js");
 /* Global Chart Settings */
 
 
@@ -603,6 +605,33 @@ $(document).ready(function () {
         resultHtml = resultHtml + item;
       });
       $('.collaborators-body').html(resultHtml);
+    }).fail(function (data) {// set fail behaviour
+    });
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/insights/most-interest-list.js":
+/*!*****************************************************!*\
+  !*** ./resources/js/insights/most-interest-list.js ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+$(document).ready(function () {
+  if ($('.focus-list') !== undefined) {
+    var order = 'DESC';
+    var requestData = {
+      'orderBy': order
+    };
+    $.post("/insights/most-interest/list", [], function (data) {
+      var resultHtml = "";
+      data.forEach(function (value) {
+        var item = "<tr><td><a href='/focus/" + value.slug + "'>" + value.name + "</a></td><td>" + value.trials + "</td></tr>";
+        resultHtml = resultHtml + item;
+      });
+      $('.focus-body').html(resultHtml);
     }).fail(function (data) {// set fail behaviour
     });
   }
@@ -712,10 +741,10 @@ $(function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /var/www/neuly/resources/js/app.js */"./resources/js/app.js");
-__webpack_require__(/*! /var/www/neuly/resources/sass/app.scss */"./resources/sass/app.scss");
-__webpack_require__(/*! /var/www/neuly/resources/sass/index-qm.scss */"./resources/sass/index-qm.scss");
-module.exports = __webpack_require__(/*! /var/www/neuly/resources/sass/datatables.scss */"./resources/sass/datatables.scss");
+__webpack_require__(/*! /Applications/MAMP/htdocs/neuly/resources/js/app.js */"./resources/js/app.js");
+__webpack_require__(/*! /Applications/MAMP/htdocs/neuly/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /Applications/MAMP/htdocs/neuly/resources/sass/index-qm.scss */"./resources/sass/index-qm.scss");
+module.exports = __webpack_require__(/*! /Applications/MAMP/htdocs/neuly/resources/sass/datatables.scss */"./resources/sass/datatables.scss");
 
 
 /***/ })

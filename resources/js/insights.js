@@ -1,5 +1,6 @@
 require('./insights/collaborators-list');
 require('./insights/topTenLocations');
+require('./insights/most-interest-list');
 
 /* Global Chart Settings */
 Chart.defaults.global.defaultFontColor = '#111';
