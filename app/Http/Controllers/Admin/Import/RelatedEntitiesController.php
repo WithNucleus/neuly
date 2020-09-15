@@ -88,7 +88,6 @@ class RelatedEntitiesController extends Controller
         $companyMessages  = json_decode($result->company_messages);
         $csv = json_decode($result->csv);
 
-        // Return View to Add People and Relationships
         return view('admin.import.related-entities.results', compact(
             'result',
             'locationMessages',

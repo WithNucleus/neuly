@@ -43,15 +43,28 @@ class ImportFailureCorrector
         $targetId    = $importFailure->details['target_id'];
         $targetClass = $importFailure->details['target_class'];
         $modelClass  = $requestArray['model'];
-        $country     = $requestArray['country'];
-        $region      = $requestArray['region'];
-        $city        = $requestArray['city'];
+        $country     = null;
+        $region      = null;
+        $city        = null;
+        $locationId  = null;
+
+        if (isset($requestArray['location_id'])) {
+            $locationId = $requestArray['location_id'];
+        } else {
+            $country = $requestArray['country'];
+            $region  = $requestArray['region'];
+            $city    = $requestArray['city'];
+        }
 
         try {
             $targetEntity = $targetClass::findOrFail($targetId);
 
             if ($modelClass === Location::class) {
-                $location = Location::findOrCreateLocation($country, $region, $city);
+                if ($locationId) {
+                    $location = Location::findOrFail($locationId);
+                } else {
+                    $location = Location::findOrCreateLocation($country, $region, $city);
+                }
 
                 $targetEntity->locations()->syncWithoutDetaching($location->id);
                 $isSuccess = true;

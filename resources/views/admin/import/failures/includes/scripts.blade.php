@@ -1,8 +1,72 @@
+<link rel="stylesheet" href="{{ asset('assets/bootstrap-tagsinput.css') }}"/>
+<script type="text/javascript" src="{{ asset('assets/typeahead.js') }}"></script>
 <script>
+    if ($('.js-fix-location-search-input') !== undefined) {
+
+        let searchInputs = $('.js-fix-location-search-input'),
+            getListAction =  searchInputs.first().data('action'),
+            entityType = searchInputs.first().data('entity-type'),
+            entityIdsByName = [],
+            entityNames = [];
+
+        $.getJSON(getListAction, {'entity_type': entityType }, function(response) {
+            if (response.status === 'ok') {
+                $.each(response.data, function (i, item) {
+                    entityNames.push(item.name);
+                    entityIdsByName[item.name] = item.id;
+                });
+
+                let entitiesList = new Bloodhound({
+                    datumTokenizer: Bloodhound.tokenizers.whitespace,
+                    queryTokenizer: Bloodhound.tokenizers.whitespace,
+                    local: entityNames
+                });
+
+                searchInputs.each(function (){
+                    let input = $(this),
+                        locationIdInput = input.siblings('.js-location-id-input');
+
+                    input.typeahead(null, {
+                        name: 'master',
+                        source: entitiesList
+                    });
+                    input.attr('disabled', false);
+
+                    input.bind('typeahead:select', function (event, item) {
+                        input.removeClass('is-invalid')
+                        locationIdInput.val(entityIdsByName[item]);
+                    });
+                });
+            }
+        });
+    }
+
+    $('.js-fix-location-failure-attach-button').on('click', function () {
+        let button = $(this),
+            itemBlock = button.parents('.js-failure-item-container'),
+            searchInput = itemBlock.find('.js-fix-location-search-input'),
+            locationId = itemBlock.find('.js-location-id-input').val(),
+            action = button.data('action'),
+            model = button.data('model');
+
+        if (!locationId) {
+            searchInput.addClass('is-invalid');
+            return false;
+        }
+
+        let data = {
+            'model'      : model,
+            'location_id': locationId,
+        };
+
+        $.post(action, data, function (response){
+            processRequestResponse(itemBlock, response.status);
+        });
+    });
+
     $(".js-fix-location-failure-button").on('click', function () {
-        let errors = false,
-            button = $(this),
-            itemBlock = button.parent(),
+        let button = $(this),
+            itemBlock = button.parents('.js-failure-item-container'),
             action = button.data('action'),
             model = button.data('model'),
             countryInput = itemBlock.find('input[name=country]'),
@@ -13,19 +77,9 @@
             city = cityInput.val().trim();
 
         countryInput.removeClass('is-invalid');
-        regionInput.removeClass('is-invalid');
 
         if (country === '') {
-            errors = true;
             countryInput.addClass('is-invalid');
-        }
-
-        if (region === '') {
-            errors = true;
-            regionInput.addClass('is-invalid');
-        }
-
-        if (errors === true) {
             return false;
         }
 
@@ -43,7 +97,7 @@
 
     $(".js-fix-sponsor-failure-button").on('click', function () {
         let button = $(this),
-            itemBlock = button.parent(),
+            itemBlock = button.parents('.js-failure-item-container'),
             model = button.data('model'),
             action = button.data('action');
 
@@ -54,7 +108,7 @@
 
     $(".js-delete-failure-button").on('click', function () {
         let button = $(this),
-            itemBlock = button.parent(),
+            itemBlock = button.parents('.js-failure-item-container'),
             action = button.data('action');
 
         $.post(action, {}, function (response){
@@ -66,7 +120,7 @@
         if (status === 'success') {
             itemBlock.slideUp();
         } else {
-            itemBlock.find('.alert').removeClass('d-none');
+            itemBlock.find('.js-fix-action-error').show();
         }
     }
 </script>
