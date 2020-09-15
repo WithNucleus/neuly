@@ -98,22 +98,10 @@ class ProcessLocation implements ShouldQueue
             $locationParts = array_reverse($locationParts);
 
             if ($locationParts !== []) {
-
-                if ($locationParts[0] == 'United States') {
-                    $newLocation = [
-                        'country' => 'USA',
-                        'region'  => $locationParts[1],
-                        'city'    => $locationParts[2],
-                    ];
-                } else {
-                    // Not sure on the format so take what is hopefully the country and region
-                    // Same logic works for Canada's location
-                    $newLocation = [
-                        'country' => $locationParts[0],
-                        'region'  => $locationParts[1],
-                        'city'    => isset($locationParts[2]) ? $locationParts[2] : '',
-                    ];
-                }
+                $newLocation['country'] = ($locationParts[0] == 'United States') ? 'USA' : $locationParts[0];
+                // Not sure on the format so take what is hopefully the country and region
+                $newLocation['region']  = isset($locationParts[1]) ? $locationParts[1] : '';
+                $newLocation['city']  = isset($locationParts[2]) ? $locationParts[2] : '';
 
                 $mappedLocations[] = $newLocation;
             }
@@ -130,10 +118,9 @@ class ProcessLocation implements ShouldQueue
         $nctNumber = $this->clinicaltrial->nct_number;
 
         $message = [
-            'nct_number' => $nctNumber,
-            'id'         => $location->id,
-            'location'   => $location->name,
-            'info'       => 'Success',
+            'nct_number'   => $nctNumber,
+            'import_id'    => $location->id,
+            'import_value' => $location->name,
         ];
 
         if (!isset($this->importMessages[$nctNumber])) {
@@ -142,7 +129,7 @@ class ProcessLocation implements ShouldQueue
                 'messages' => [$message],
             ];
         } else {
-            $this->importCompanyMessages[$nctNumber]['messages'][] = $message;
+            $this->importMessages[$nctNumber]['messages'][] = $message;
         }
     }
 
@@ -153,8 +140,9 @@ class ProcessLocation implements ShouldQueue
     {
         $this->importFailedRecords[] = [
             'nct_number' => $this->clinicaltrial->nct_number,
-            'value'      => implode(', ', $locationData),
-            'info'       => 'Failed',
+            'target_id'    => $this->clinicaltrial->id,
+            'target_class' => get_class($this->clinicaltrial),
+            'import_value' => implode(', ', $locationData),
         ];
     }
 

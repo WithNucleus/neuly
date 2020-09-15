@@ -3,8 +3,8 @@
 @section('header')
     <div class="container-fluid mt-5">
         <h2>
-            <span class="text-capitalize">Import</span>
-            <a href="{{ route('import.failures', $importResultId) }}" class="font-sm"><i
+            <span class="text-capitalize">Import Failures by type</span>
+            <a href="{{ url()->previous() }}" class="font-sm"><i
                     class="la la-angle-double-left"></i> Back to
                 <span>Import failures</span></a>
         </h2>
@@ -18,7 +18,7 @@
                 <h3 class="h4">Failures of Sponsor/Collaborators</h3>
                 <ul class="list-group">
                     @forelse($failures as $failure)
-                        <li class="list-group-item">
+                        <li class="list-group-item js-failure-item-container">
                             @foreach ($failure->details as $key => $detail)
                                 <p>{{ strtoupper($key) }} : {{ $detail }}</p>
                             @endforeach
@@ -33,7 +33,7 @@
                             <button class="btn btn-danger js-delete-failure-button"
                                     data-action="{{ route('import.failures.delete', $failure->id) }}">Delete
                             </button>
-                            <p class="alert alert-danger mt-2 d-none">Action Error</p>
+                            <p class="alert alert-danger mt-2 js-fix-action-error" style="display: none;">Action Error</p>
                         </li>
                     @empty
                         <li class="list-group-item">No failures for this type.</li>
