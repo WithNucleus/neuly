@@ -106,6 +106,8 @@ Route::get('/events/{slug}', 'Index\EventController@show')->name('discover.event
 
 // Jobs
 Route::get('/jobs', 'Index\JobController@index')->name('discover.jobs');
+Route::get('/jobs/embed-widget', 'Index\JobController@embedWidget')->name('discover.jobs.embedWidget');
+Route::get('/jobs/embed', 'Index\JobController@embedIndex')->name('discover.jobs.embedIndex');
 Route::get('/jobs/citynames.json', 'Index\JobController@citynames');
 Route::get('/jobs/{slug}', 'Index\JobController@show')->name('discover.jobs.show');
 Route::get('/jobs/apply/{slug}', 'Index\JobApplicationController@index')->name('discover.jobs.apply');

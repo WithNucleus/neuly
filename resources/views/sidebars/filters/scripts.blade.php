@@ -22,6 +22,10 @@
             filters.push($(this).val());
         });
 
+        $("#filterSidebar select[name='" + filterName + "'] option:selected").each(function(){
+            filters.push($(this).val());
+        });
+
         return filters.join("|");
     }
 
@@ -76,6 +80,10 @@
 
         // Checkboxes
         $("#filterSidebar input[type=checkbox]").on('change', function() {
+            get_filters_and_go();
+        });
+
+        $("#filterSidebar select").on('change', function() {
             get_filters_and_go();
         });
 

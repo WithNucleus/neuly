@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\Activitylog\Models\Activity;
 use Auth;
 
 class JobController extends Controller
@@ -26,41 +25,14 @@ class JobController extends Controller
     {
         // $this->middleware('auth');
         // $this->middleware('neuly.membership');
-        $this->middleware('query_filters')->only('index');
+        $this->middleware('query_filters')->only('index', 'embedIndex');
     }
 
-    // Index
     public function index(Request $request) {
+        $data = $this->getIndexData($request);
+        $data['metas'] = Metas::fromPage($request->path());
 
-        $jobs = QueryBuilder::for(Job::class)
-            ->with('company')
-            ->allowedFilters([
-                AllowedFilter::exact('type', 'employment_type'),
-                AllowedFilter::exact('title', 'job_title'),
-                AllowedFilter::exact('locations', 'locations.name'),
-                AllowedFilter::exact('company', 'company.name'),
-            ])
-            ->defaultSort('-posted_date')
-            ->allowedSorts([
-                AllowedSort::field('title', 'job_title'),
-                AllowedSort::field('date', 'posted_date'),
-                AllowedSort::field('type', 'employment_type'),
-            ])
-            ->paginate(10)
-            ->appends(request()->query());
-
-        $locations = Location::has('jobs', '>' , 0)->with('jobs')->get()->pluck('name')->unique()->sort();
-
-        $companies = Company::has('jobs', '>' , 0)->with('jobs')->get()->pluck('name')->unique()->sort();
-
-        // Get All Focus Values
-        // $focus_cats = Focus::pluck('name')->unique()->sort();
-
-        $metas = Metas::fromPage($request->path());
-
-        // Return View
-        return view('discover.jobs.index', compact('jobs', 'metas', 'locations', 'companies'));
-
+        return view('discover.jobs.index', $data);
     }
 
     // Show
@@ -91,6 +63,47 @@ class JobController extends Controller
             ->log($job->job_title);
 
         return view('discover.jobs.show', compact('job', 'related', 'metas', 'entity'));
+    }
+
+    public function embedWidget()
+    {
+        return view('discover.jobs.embed.widget');
+    }
+
+    public function embedIndex(Request $request)
+    {
+        $data = $this->getIndexData($request);
+
+        return view('discover.jobs.embed.index', $data);
+    }
+
+    private function getIndexData(Request $request)
+    {
+        $jobs = QueryBuilder::for(Job::class)
+            ->with('company')
+            ->allowedFilters([
+                AllowedFilter::exact('type', 'employment_type'),
+                AllowedFilter::exact('title', 'job_title'),
+                AllowedFilter::exact('locations', 'locations.name'),
+                AllowedFilter::exact('company', 'company.name'),
+            ])
+            ->defaultSort('-posted_date')
+            ->allowedSorts([
+                AllowedSort::field('title', 'job_title'),
+                AllowedSort::field('date', 'posted_date'),
+                AllowedSort::field('type', 'employment_type'),
+            ])
+            ->paginate(10)
+            ->appends(request()->query());
+
+        $locations = Location::has('jobs', '>' , 0)->with('jobs')->get()->pluck('name')->unique()->sort();
+        $companies = Company::has('jobs', '>' , 0)->with('jobs')->get()->pluck('name')->unique()->sort();
+
+        return [
+            'jobs' => $jobs,
+            'locations' => $locations,
+            'companies' => $companies,
+        ];
     }
 
     private function getReltaedEntities(Job $job)
