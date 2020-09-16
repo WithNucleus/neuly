@@ -1,15 +1,15 @@
+@component('mail::message')
+**Hi {{$name}}!**
 
-    **Hello {{$name}}!**
+Here are your updates for this week:
 
-    Here are this weeks changes:
+@foreach($notifications as $notification)
+**{{ $notification->title }}**\
+{!! $notification->message !!}
 
-    @foreach($notifications as $notification)
-        {!! $notification->message !!}
+@endforeach
 
-    @endforeach
+Have a great week!
 
-    You will receive your next update next week.
-
-    Have a great week.
-
-    Your Neuly-Team
+Neuly
+@endcomponent

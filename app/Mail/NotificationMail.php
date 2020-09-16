@@ -32,11 +32,11 @@ class NotificationMail extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.users.notifications')
+        return $this->markdown('emails.users.notifications')
             ->with([
                 'name' => $this->name,
                 'notifications' => $this->notifications,
             ])
-            ->subject('Neulys weekly update');
+            ->subject('Your Weekly Update from Neuly');
     }
 }
