@@ -14,6 +14,7 @@ return [
     */
 
     'default' => env('MAIL_MAILER', 'mailgun'),
+    'notification' => env('NOTIFICATION_MAILER', 'log'),
 
     /*
     |--------------------------------------------------------------------------

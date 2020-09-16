@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Jobs\SendEmailNotifications;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\Log;
@@ -48,6 +49,10 @@ class Kernel extends ConsoleKernel
             ->onSuccess(function () {
                 Log::info('Backup Succeeded!');
             });
+
+        // Send E-Mail Notifications
+
+        $schedule->job(new SendEmailNotifications())->weeklyOn(3, '12:00');
     }
 
     /**
