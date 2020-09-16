@@ -96,6 +96,15 @@
                         @endforeach
                         </span>
                     <?php endif;
+                    if (isset($filters_phases) && $filters_phases) : ?>
+                    <span class="mr-3">
+                            <i class="fad fa-stream text-secondarydark"></i>
+                            @foreach ($filters_phases as $phase)
+                            {{ $phase }}
+                            @if (!$loop->last) <strong class="text-black-50">/</strong> @endif
+                        @endforeach
+                        </span>
+                    <?php endif;
                     ?>
                 </div>
 

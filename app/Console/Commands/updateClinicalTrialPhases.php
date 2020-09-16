@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Clinicaltrial;
+use App\Models\ClinicaltrialPhase;
 use Illuminate\Console\Command;
 
 class updateClinicalTrialPhases extends Command
@@ -19,7 +20,7 @@ class updateClinicalTrialPhases extends Command
      *
      * @var string
      */
-    protected $description = 'Update Phase Integer Field Value from Phases Field';
+    protected $description = 'Update Phase Integer Field Value from Phases Field based on Clinical Trial Phases model records';
 
     /**
      * Create a new command instance.
@@ -38,37 +39,24 @@ class updateClinicalTrialPhases extends Command
      */
     public function handle()
     {
+        $phases = ClinicaltrialPhase::all()->pluck('integer', 'name')->toArray();
+
         $clinicaltrials = Clinicaltrial::whereNull('phase_integer')
             ->take(100)
             ->get();
 
         foreach ($clinicaltrials as $clinicaltrial) {
 
-            $this->info($clinicaltrial->title);
-
-            switch ($clinicaltrial->phases) {
-                case "Early Phase 1":
-                    $clinicaltrial->phase_integer = 1;
-                    break;
-                case "Phase 1":
-                    $clinicaltrial->phase_integer = 2;
-                    break;
-                case "Phase 2":
-                case "Phase 1|Phase 2":
-                    $clinicaltrial->phase_integer = 3;
-                    break;
-                case "Phase 2|Phase 3":
-                case "Phase 3":
-                    $clinicaltrial->phase_integer = 4;
-                    break;
-                case "Phase 4":
-                    $clinicaltrial->phase_integer = 5;
-                    break;
-                default:
-                    $clinicaltrial->phase_integer = 0;
+            if (array_key_exists($clinicaltrial->phases, $phases)) {
+                $phase_name = $clinicaltrial->phases;
+                $integer = $phases[$phase_name];
+            }else {
+                $integer = 0;
             }
 
+            $clinicaltrial->phase_integer = $integer;
             $clinicaltrial->save();
+            $this->info($clinicaltrial->title);
         }
     }
 }

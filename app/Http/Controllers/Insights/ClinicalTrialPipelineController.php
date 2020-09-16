@@ -86,11 +86,8 @@ class ClinicalTrialPipelineController extends Controller
             }
         }
 
-        if ($order === 'asc') {
-            $companies = $query->get()->sortBy($sortBy)->groupBy('company_id');
-        } else {
-            $companies = $query->get()->sortByDesc($sortBy)->groupBy('company_id');
-        }
+        $sort  = $request->has('sort') ? $request->input('sort') : 'organizations';
+        $companies = $this->sortQuery($query, $sort)->get()->groupBy('company_id');
 
         $focus_cats = Focus::has('clinicaltrials', '>' , 0)->get()->pluck('name')->unique()->sort();
 
@@ -124,6 +121,31 @@ class ClinicalTrialPipelineController extends Controller
                 'clinicaltrials.phases as phase_value', 'clinicaltrials.phase_integer as phase_integer', 'clinicaltrials.status as status',
                 'clinicaltrials.conditions as conditions',
                 'focus.id as focus_id', 'focus.name as focus_name', 'focus.slug as focus_slug');
+    }
+
+    private function sortQuery($query, $sort)
+    {
+        $direction = strpos($sort, '-') !== false ? 'desc' : 'asc';
+        $sortType = str_replace('-', '', $sort);
+
+        switch ($sortType) {
+            case 'status':
+                $orderField = 'status';
+                break;
+            case 'phase':
+                $orderField = 'phase_integer';
+                break;
+            case 'organizations':
+            default:
+                $orderField = 'company_name';
+                break;
+        }
+
+        if ($sortType === 'organizations') {
+            return $query->orderBy($orderField, $direction)->orderBy('phase_integer', 'desc');
+        } else {
+            return $query->orderBy('company_name', 'asc')->orderBy($orderField, $direction);
+        }
     }
 
     private function filterQuery($query, $filter)
