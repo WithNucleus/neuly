@@ -288,6 +288,24 @@ Route::post('/admin/import/failures/{id}/fix', 'Admin\Import\FailuresController@
 Route::post('/admin/import/failures/{id}/delete', 'Admin\Import\FailuresController@delete')
     ->name('import.failures.delete');
 
+// Related Entities
+Route::group([
+    'middleware' => ['auth', 'role:Admin','permission:import'],
+    'prefix'     => '/admin/import',
+    'namespace'  => 'Admin\Import',
+    'as'         => 'import.',
+], function () {
+    Route::group([
+        'prefix' => '/related-entities',
+        'as'     => 'related-entities.'
+    ], function () {
+        Route::get('/', 'RelatedEntitiesController@index')->name('index');
+        Route::post('/import', 'RelatedEntitiesController@import')->name('import');
+        Route::get('/results/{id}', 'RelatedEntitiesController@results')->name('results');
+        Route::get('/failures/{id}', 'RelatedEntitiesController@failures')->name('failures');
+    });
+});
+
 // Job Application Files
 Route::get('/admin/jobapps/{id}/resume', 'Index\JobApplicationController@getResume')->name('jobsapp.resume');
 Route::get('/admin/jobapps/{id}/coverletter', 'Index\JobApplicationController@getCoverLetter')->name('jobsapp.coverletter');
