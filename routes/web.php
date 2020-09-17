@@ -99,6 +99,8 @@ Route::get('/focus/{slug}', 'Index\FocusController@show')->name('discover.focus.
 
 // Events
 Route::get('/events', 'Index\EventController@index')->name('discover.events');
+Route::get('/events/embed-widget', 'Index\EventController@embedWidget')->name('discover.events.embedWidget');
+Route::get('/events/embed', 'Index\EventController@embedIndex')->name('discover.events.embedIndex');
 Route::get('/past-events', 'Index\EventController@past')->name('discover.events.past');
 Route::get('/events/citynames.json', 'Index\EventController@citynames');
 Route::get('/events/names.json', 'Index\EventController@namesJson');

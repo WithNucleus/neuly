@@ -67,14 +67,18 @@ class JobController extends Controller
 
     public function embedWidget()
     {
-        return view('discover.jobs.embed.widget');
+        $title = 'Jobs';
+        $previousUrl = route('discover.jobs');
+        $embedUrl = route('discover.jobs.embedIndex');
+
+        return view('discover.embed-widget', compact('title', 'previousUrl', 'embedUrl'));
     }
 
     public function embedIndex(Request $request)
     {
         $data = $this->getIndexData($request);
 
-        return view('discover.jobs.embed.index', $data);
+        return view('discover.jobs.embed-index', $data);
     }
 
     private function getIndexData(Request $request)

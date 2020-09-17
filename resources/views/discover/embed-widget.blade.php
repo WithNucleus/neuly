@@ -24,7 +24,7 @@
             <div class="col-12 breadcrumbs-container bg-white shadow-sm">
                 @include('navbars.breadcrumb', [
                     'items' => [
-                        'Jobs' => route('discover.jobs'),
+                        $title => $previousUrl,
                         'Embed Widget' => false,
                     ]
                 ])
@@ -40,17 +40,17 @@
                         <div class="full-width-show-view">
 
                             <div class="page-title-default d-md-flex justify-content-between">
-                                <h1 class="mb-0 mr-5">Jobs embed widget</h1>
+                                <h1 class="mb-0 mr-5">{{ $title }} embed widget</h1>
                             </div>
 
                             <div class="row mt-4">
                                 <div class="col-12 col-md-6">
-                                    <iframe src=" {{ route('discover.jobs.embedIndex') }}" width="100%" height="100%" style="min-width: 480px; min-height: 480px"></iframe>
+                                    <iframe src="{{ $embedUrl }}" width="100%" height="100%" style="min-width: 480px; min-height: 480px"></iframe>
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <div class="form-group">
                                         <label>Embed widget code:</label>
-                                        <textarea class="form-control" readonly><iframe src=" {{ route('discover.jobs.embedIndex') }}" width="100%" height="100%" style="min-width: 480px; min-height: 480px"></iframe></textarea>
+                                        <textarea class="form-control" readonly><iframe src="{{ $embedUrl }}" width="100%" height="100%" style="min-width: 480px; min-height: 480px"></iframe></textarea>
                                         <p><small>Copy and paste to your webpage</small></p>
                                     </div>
                                 </div>

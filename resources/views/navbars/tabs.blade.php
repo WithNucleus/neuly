@@ -45,12 +45,12 @@
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link @if(Route::is('discover.events') OR Route::is('discover.events.show') OR Route::is('discover.events.past')) active @endif " href="{{ route('discover.events') }}">
+        <a class="nav-link {{ stripos(Route::currentRouteName(), 'discover.events') !== false ? 'active' : '' }}" href="{{ route('discover.events') }}">
             <span class="icon mr-1"><i class="fad fa-calendar"></i></span>Events
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link @if(Route::is('discover.jobs') OR Route::is('discover.jobs.show')) active @endif "href="{{ route('discover.jobs') }}">
+        <a class="nav-link {{ stripos(Route::currentRouteName(), 'discover.jobs') !== false ? 'active' : '' }}" href="{{ route('discover.jobs') }}">
             <span class="icon mr-1"><i class="fad fa-briefcase"></i></span>Jobs
         </a>
     </li>

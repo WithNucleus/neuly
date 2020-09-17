@@ -54,7 +54,8 @@
                 @include('sidebars.clinicaltrial')
             @endif
 
-            @if(Route::is('discover.events') OR Route::is('discover.events.show') OR Route::is('discover.events.past'))
+            @if(Route::is('discover.events') OR Route::is('discover.events.show') OR Route::is('discover.events.past')
+                OR Route::is('discover.events.embedIndex'))
                 @include('sidebars.events')
             @endif
 

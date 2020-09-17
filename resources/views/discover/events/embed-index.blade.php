@@ -6,10 +6,10 @@
     <div class="container-fluid">
         <div class="row mt-2">
 
-            @include('sidebars.primary', ['embed' => true])
+            @include('sidebars.primary')
 
             <main role="main" class="col-lg-9 col-xl-10 ml-auto">
-                @include('discover.jobs.includes.items-list')
+                @include('discover.events.includes.items-list')
             </main>
         </div>
     </div>
