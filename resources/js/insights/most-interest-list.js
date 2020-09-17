@@ -11,7 +11,7 @@ $(document).ready(function() {
             var resultHtml = "";
 
             data.forEach(function(value) {
-                var item = "<tr><td><a href='/focus/"+value.slug+"'>"+value.name+"</a></td><td>"+value.trials+"</td></tr>";
+                var item = "<tr><td><a href='clinical-trials?filter[focus]="+value.name+"'>"+value.name+"</a></td><td>"+value.trials+"</td></tr>";
                 resultHtml = resultHtml + item;
             });
 

@@ -35,7 +35,6 @@ class ClinicalTrialCollaboratorsListController extends Controller
 
         $query = $this->getQuery();
         $filters_focus = [];
-        $filters_locations = [];
 
         if ($request->has('filter'))
         {
@@ -63,16 +62,14 @@ class ClinicalTrialCollaboratorsListController extends Controller
         // Get All Focus Values
         $focus_cats = Focus::has('clinicaltrials', '>' , 0)->with('clinicaltrials')->get()->pluck('name')->unique()->sort();
 
-        $location_cats = Location::has('clinicaltrials', '>', 0)->with('clinicaltrials')->get()->pluck('name')->unique()->sort();
-
-        return view('discover.insights.collaborators.show', compact('collaborators', 'sort', 'metas', 'path', 'focus_cats', 'filters_focus', 'location_cats', 'filters_locations'));
+        return view('discover.insights.collaborators.show', compact('collaborators', 'sort', 'metas', 'path', 'focus_cats', 'filters_focus'));
     }
 
     private function getQuery()
     {
         return DB::table('companies')
             ->join('clinicaltrial_company', 'companies.id', 'clinicaltrial_company.company_id')
-            ->select('companies.id as id', 'name', 'slug', DB::raw('count(clinicaltrial_company.company_id) as trials'));
+            ->select('companies.id as id', 'ownership as type', 'name', 'slug', DB::raw('count(clinicaltrial_company.company_id) as trials'));
     }
 
     private function filterQuery($query, $filter)

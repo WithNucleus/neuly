@@ -62,9 +62,13 @@
                 @include('sidebars.collaborators')
             @endif
 
-                @if(Route::is('insights.most-interest.show'))
-                    @include('sidebars.most-interest')
-                @endif
+
+
+
+
+            @if(Route::is('insights.most-interest.show'))
+                @include('sidebars.most-interest')
+            @endif
 
         </div>
     </div>
