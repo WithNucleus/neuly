@@ -1,5 +1,4 @@
 <ul class="nav nav-tabs discover-tabs">
-
     <li class="nav-item">
         <a class="nav-link @if(Request::is('dashboard') OR Request::is('dashboard/*')) active @endif "href="{{ route('member.dashboard') }}">
             <span class="icon mr-1"><i class="fad fa-home"></i></span>Dashboard
@@ -56,11 +55,10 @@
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link @if(Route::is('discover.insights')) active @endif "href="{{ route('discover.insights') }}">
+        <a class="nav-link @if(Request::is('insights/*') OR Route::is('discover.insights')) active @endif "href="{{ route('discover.insights') }}">
             <span class="icon mr-1"><i class="fad fa-head-side-brain"></i></span>Insights
         </a>
     </li>
-
     @if(Route::is('search.term'))
         <li class="nav-item">
             <a href="{{ $term ? route('search.term', $term) : '#' }}" class="nav-link active">
@@ -68,5 +66,4 @@
             </a>
         </li>
     @endif
-
 </ul>

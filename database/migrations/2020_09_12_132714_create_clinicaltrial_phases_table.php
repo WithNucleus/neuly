@@ -1,0 +1,34 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateClinicaltrialPhasesTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('clinicaltrial_phases', function (Blueprint $table) {
+            $table->string('name')->unique();
+            $table->string('pretty_name');
+            $table->integer('integer');
+            $table->timestamps();
+            $table->primary('name');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('clinicaltrial_phases');
+    }
+}

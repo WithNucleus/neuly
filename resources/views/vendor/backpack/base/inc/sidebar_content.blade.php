@@ -99,6 +99,11 @@
 			<i class="nav-icon la la-stethoscope"></i> <span>Clinical Trials</span>
 		</a>
 	</li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ backpack_url('clinicaltrialphase') }}">
+            <i class="nav-icon la la-stopwatch"></i> Clinical Trial Phases
+        </a>
+    </li>
 @endcan
 
 @can('import')

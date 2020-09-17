@@ -50,6 +50,7 @@ Route::group([
         Route::get('/jobs-by-type', 'JobsByTypeController@index')->name('jobs-by-type');
         Route::get('/collaborators', 'ClinicalTrialCollaboratorsListController@show')->name('collaborators.show');
         Route::post('/collaborators/list', 'ClinicalTrialCollaboratorsListController@index')->name('collaborators');
+        Route::get('/clinical-trials-pipeline', 'ClinicalTrialPipelineController@show')->name('clinicaltrials.pipeline');
     });
 });
 
@@ -61,6 +62,7 @@ Route::get('/searchassets/investorsOrganizations.json', 'Index\SearchSuggestions
 Route::get('/searchassets/companiesLocations.json', 'Index\SearchSuggestionsController@companiesLocations');
 Route::get('/searchassets/locationsRegions.json', 'Index\SearchSuggestionsController@locationsRegions');
 Route::get('/searchassets/focusOrganizations.json', 'Index\SearchSuggestionsController@focusOrganizations');
+Route::get('/searchassets/clinicalTrialCollaborators.json', 'Index\SearchSuggestionsController@clinicalTrialCollaborators');
 
 // Companies
 Route::get('/organizations', 'Index\CompanyController@index')->name('discover.organizations');

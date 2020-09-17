@@ -80,6 +80,11 @@ class Clinicaltrial extends Model implements EntityContract
             ->sortBy('name');
     }
 
+    // Each Clinical Trial has 1 Phase
+    public function phase() {
+        return $this->hasMany('App\Models\ClinicaltrialPhase', 'phases');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES

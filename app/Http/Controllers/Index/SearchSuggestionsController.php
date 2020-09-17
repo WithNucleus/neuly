@@ -63,38 +63,32 @@ class SearchSuggestionsController extends Controller
 
     /* Get Authors (People) of Research Items */
     public function researchAuthors() {
-
         $researchAuthors = self::getPivotRelationships('person_research', 'person_id', 'App\Models\Person');
-
         return $researchAuthors;
-
     }
 
     /* Get People Related to Investors */
     public function investorsPeople() {
-
         $investorsPeople = self::getPivotRelationships('investor_person', 'person_id', 'App\Models\Person');
-
         return $investorsPeople;
-
     }
 
     /* Get Organizations of Investors */
     public function investorsOrganizations() {
-
         $investorsOrganizations = self::getPivotRelationships('company_investor', 'company_id', 'App\Models\Company');
-
         return $investorsOrganizations;
-
     }
 
     /* Get Organizations of Focus Categories */
     public function focusOrganizations() {
-
         $focusOrganizations = self::getPivotRelationships('company_focus', 'company_id', 'App\Models\Company');
-
         return $focusOrganizations;
+    }
 
+    /* Get Organizations of Clinical Trials */
+    public function clinicalTrialCollaborators() {
+        $collaborators = self::getPivotRelationships('clinicaltrial_company', 'company_id', 'App\Models\Company');
+        return $collaborators;
     }
 
     /* Get All Regions */
@@ -104,28 +98,20 @@ class SearchSuggestionsController extends Controller
 
         $locations_with_cities = Location::where('city', '!=', '')->get()->pluck('city')->unique()->sort();
 
-        // dd($locations_with_cities);
-
         $locations = array();
 
         foreach ($locations_with_cities as $key => $value) {
-
             $this_result = array(
                 'name' => $value
             );
-
             array_push($locations, $this_result);
-
         }
 
         foreach ($locations_with_regions as $key => $value) {
-
             $this_result = array(
                 'name' => $value
             );
-
             array_push($locations, $this_result);
-
         }
 
         return json_encode($locations);
