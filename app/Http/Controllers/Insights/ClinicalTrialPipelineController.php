@@ -33,36 +33,6 @@ class ClinicalTrialPipelineController extends Controller
         $filters_phases = [];
 
         $sort = $request->has('sort') ? $request->input('sort') : 'organizations';
-        $sortBy = 'company_name';
-        $order = 'asc';
-
-        if ($request->has('sort')) {
-
-            if ($request->input('sort') == 'organizations') {
-                $order = 'asc';
-                $sortBy = 'company_name';
-            } elseif($request->input('sort') == '-organizations') {
-                $order = 'desc';
-                $sortBy = 'company_name';
-            }
-
-            if ($request->input('sort') == 'status') {
-                $order = 'asc';
-                $sortBy = 'status';
-            } elseif($request->input('sort') == '-status') {
-                $order = 'desc';
-                $sortBy = 'status';
-            }
-
-            if ($request->input('sort') == 'phase') {
-                $order = 'asc';
-                $sortBy = 'phase_integer';
-            } elseif($request->input('sort') == '-phase') {
-                $order = 'desc';
-                $sortBy = 'phase_integer';
-            }
-
-        }
 
         if ($request->has('filter'))
         {
@@ -86,7 +56,6 @@ class ClinicalTrialPipelineController extends Controller
             }
         }
 
-        $sort  = $request->has('sort') ? $request->input('sort') : 'organizations';
         $companies = $this->sortQuery($query, $sort)->get()->groupBy('company_id');
 
         $focus_cats = Focus::has('clinicaltrials', '>' , 0)->get()->pluck('name')->unique()->sort();
@@ -144,7 +113,7 @@ class ClinicalTrialPipelineController extends Controller
         if ($sortType === 'organizations') {
             return $query->orderBy($orderField, $direction)->orderBy('phase_integer', 'desc');
         } else {
-            return $query->orderBy('company_name', 'asc')->orderBy($orderField, $direction);
+            return $query->orderBy($orderField, $direction);
         }
     }
 
