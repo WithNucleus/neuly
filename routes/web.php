@@ -52,6 +52,7 @@ Route::group([
         Route::post('/collaborators/list', 'ClinicalTrialCollaboratorsListController@index')->name('collaborators');
         Route::get('/most-interest', 'ClinicalTrialFocusListController@show')->name('most-interest.show');
         Route::post('/most-interest/list', 'ClinicalTrialFocusListController@index')->name('most-interest');
+        Route::get('/clinical-trials-pipeline', 'ClinicalTrialPipelineController@show')->name('clinicaltrials.pipeline');
     });
 });
 
