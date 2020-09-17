@@ -66,6 +66,10 @@
                 @include('sidebars.insights.clinicaltrials-pipeline')
             @endif
 
+            @if(Route::is('insights.most-interest.show'))
+                @include('sidebars.most-interest')
+            @endif
+
         </div>
     </div>
 </nav>

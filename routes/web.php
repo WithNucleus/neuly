@@ -50,6 +50,8 @@ Route::group([
         Route::get('/jobs-by-type', 'JobsByTypeController@index')->name('jobs-by-type');
         Route::get('/collaborators', 'ClinicalTrialCollaboratorsListController@show')->name('collaborators.show');
         Route::post('/collaborators/list', 'ClinicalTrialCollaboratorsListController@index')->name('collaborators');
+        Route::get('/most-interest', 'ClinicalTrialFocusListController@show')->name('most-interest.show');
+        Route::post('/most-interest/list', 'ClinicalTrialFocusListController@index')->name('most-interest');
         Route::get('/clinical-trials-pipeline', 'ClinicalTrialPipelineController@show')->name('clinicaltrials.pipeline');
     });
 });
@@ -62,7 +64,6 @@ Route::get('/searchassets/investorsOrganizations.json', 'Index\SearchSuggestions
 Route::get('/searchassets/companiesLocations.json', 'Index\SearchSuggestionsController@companiesLocations');
 Route::get('/searchassets/locationsRegions.json', 'Index\SearchSuggestionsController@locationsRegions');
 Route::get('/searchassets/focusOrganizations.json', 'Index\SearchSuggestionsController@focusOrganizations');
-Route::get('/searchassets/clinicalTrialCollaborators.json', 'Index\SearchSuggestionsController@clinicalTrialCollaborators');
 
 // Companies
 Route::get('/organizations', 'Index\CompanyController@index')->name('discover.organizations');
@@ -276,9 +277,9 @@ Route::get('/admin/import/results/{id}', 'Admin\Import\ResultsController@showRes
     ->name('import.results');
 
 //Import Failures List
-Route::get('/admin/import/failures/{id}', 'Admin\Import\ResultsController@showFailures')
+Route::get('/admin/import/{id}/failures', 'Admin\Import\ResultsController@showFailures')
     ->name('import.failures');
-Route::get('/admin/import/failures/{id}/{type}', 'Admin\Import\FailuresController@showByType')
+Route::get('/admin/import/{id}/failures/{type}', 'Admin\Import\FailuresController@showByType')
     ->name('import.failures.showByType');
 
 //Fix Import Failure
@@ -286,24 +287,6 @@ Route::post('/admin/import/failures/{id}/fix', 'Admin\Import\FailuresController@
     ->name('import.failures.fix');
 Route::post('/admin/import/failures/{id}/delete', 'Admin\Import\FailuresController@delete')
     ->name('import.failures.delete');
-
-Route::group([
-    'middleware' => ['auth', 'role:Admin','permission:import'],
-    'prefix'     => '/admin/import',
-    'namespace'  => 'Admin\Import',
-    'as'         => 'import.',
-], function () {
-    Route::group([
-        'prefix' => '/related-entities',
-        'as'     => 'related-entities.'
-    ], function () {
-        Route::get('/', 'RelatedEntitiesController@index')->name('index');
-        Route::post('/import', 'RelatedEntitiesController@import')->name('import');
-        Route::get('/results/{id}', 'RelatedEntitiesController@results')->name('results');
-        Route::get('/failures/{id}', 'RelatedEntitiesController@failures')->name('failures');
-    });
-});
-
 
 // Job Application Files
 Route::get('/admin/jobapps/{id}/resume', 'Index\JobApplicationController@getResume')->name('jobsapp.resume');
