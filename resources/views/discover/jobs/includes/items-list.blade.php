@@ -80,7 +80,7 @@
                     <li class="list-group-item d-md-flex">
 
                         <div class="image mr-5 flex-shrink-0">
-                            <a href="{{ route('discover.jobs.show', $job->slug) }}">
+                            <a href="{{ route('discover.jobs.show', $job->slug) }}" {{ (isset($embed) && $embed) ? 'target="_blank"' : '' }}>
                                 <div class="job-org-logo" style="background-image: url('/storage/{{ $job->company->logo }}');"></div>
                             </a>
                         </div>
@@ -89,7 +89,7 @@
                             <div class="row">
                                 <div class="col-12 col-md-6 col-lg-7">
                                     <p class="lead-smaller mb-0">
-                                        <a href="{{ route('discover.jobs.show', $job->slug) }}">{{ $job->job_title }}</a>
+                                        <a href="{{ route('discover.jobs.show', $job->slug) }}" {{ (isset($embed) && $embed) ? 'target="_blank"' : '' }}>{{ $job->job_title }}</a>
                                     </p>
 
                                     @if($job->locations->count() > 0)

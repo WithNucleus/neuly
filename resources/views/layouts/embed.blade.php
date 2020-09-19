@@ -27,7 +27,7 @@
 <body class="@yield('body-class', '') embed">
 <div id="app">
     <nav id="primary-nav" class="navbar navbar-dark bg-dark flex-xl-nowrap shadow navbar-expand-lg">
-        <a class="navbar-brand ml-3" href="/"><img src="{{ asset('images/neuly-logo-dark.png') }}" alt="Neuly"></a>
+        <a class="navbar-brand ml-3" href="{{ url('/') }}" target="_blank"><img src="{{ asset('images/neuly-logo-dark.png') }}" alt="Neuly"></a>
     </nav>
 
     @yield('content')

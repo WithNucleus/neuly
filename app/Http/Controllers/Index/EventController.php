@@ -140,7 +140,7 @@ class EventController extends Controller
 
     private function getIndexData(Request $request)
     {
-        $now = Carbon::now('America/Chicago');
+        $now = Carbon::now(config('app.timezone'));
 
         $events = QueryBuilder::for(Event::class)
             ->where('start_date', '>=', $now)

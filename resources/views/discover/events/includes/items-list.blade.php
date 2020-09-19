@@ -25,7 +25,7 @@
                     <li class="list-group-item p-4 d-md-flex">
 
                         <div class="image mr-3 mt-1">
-                            <a href="{{ route('discover.events.show', $event->slug) }}">
+                            <a href="{{ route('discover.events.show', $event->slug) }}" {{ (isset($embed) && $embed) ? 'target="_blank"' : '' }}>
                                 @if ($event->image == '')
                                     <div class="logo-is-contained bg-brains rounded">
                                         <img src="{{ asset('images/icons/events.svg') }}" alt="{{ $event->name }}">
@@ -39,7 +39,7 @@
 
                         <div class="text">
                             <p class="lead mb-1">
-                                <a href="{{ route('discover.events.show', $event->slug) }}">{{ $event->name }}</a>
+                                <a href="{{ route('discover.events.show', $event->slug) }}" {{ (isset($embed) && $embed) ? 'target="_blank"' : '' }}>{{ $event->name }}</a>
                             </p>
 
                             <p class="font-size-large mb-1">
