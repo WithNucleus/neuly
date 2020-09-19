@@ -44,15 +44,12 @@
             </div>
             <div class="row">
                 <div class="col-12 col-lg-4">
-                    {{-- Organizations by Type --}}
                     @include('discover.insights.widgets.organizations-by-type')
                 </div>
                 <div class="col-12 col-lg-4">
-                    {{-- Organization Focus Chart --}}
                     @include('content.homepage.organization-focus-chart')
                 </div>
                 <div class="col-12 col-lg-4">
-                    {{-- Top 10 Locations --}}
                     @include('discover.insights.widgets.top-ten-locations')
                 </div>
 
@@ -62,6 +59,9 @@
                     </div>
                     <div class="col-12 col-lg-4">
                         @include('discover.insights.widgets.jobs-total-by-type')
+                    </div>
+                    <div class="col-12 col-lg-4">
+                        @include('discover.insights.widgets.organistaions-by-type-involved-clinical-trials')
                     </div>
                     <div class="col-12 col-lg-4">
                         @include('discover.insights.collaborators.list')

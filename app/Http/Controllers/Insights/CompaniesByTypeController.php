@@ -47,6 +47,10 @@ class CompaniesByTypeController extends Controller
 
         $query = $this->filterByOwnership($query, $ownershipFilter);
 
+        if ($request->has('clinicalTrialInvolved') && $request->input('clinicalTrialInvolved')) {
+            $query = $this->filterByClinicalTrialInvolved($query);
+        }
+
         return $query;
     }
 
@@ -57,7 +61,22 @@ class CompaniesByTypeController extends Controller
      */
     private function filterByOwnership($query, $values)
     {
-
         return $query->whereIn('ownership', $values);
     }
+
+    /**
+     * @param \Illuminate\Database\Query\Builder $query
+     * @return \Illuminate\Database\Query\Builder
+     */
+    private function filterByClinicalTrialInvolved($query)
+    {
+        $involvedCompanyIds = DB::table('clinicaltrial_company')
+            ->distinct('company_id')
+            ->get()
+            ->pluck('company_id')
+            ->toArray();
+
+        return $query->whereIn('id', $involvedCompanyIds);
+    }
+
 }
