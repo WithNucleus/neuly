@@ -130,6 +130,12 @@ class Location extends Model implements EntityContract
             ->withTimestamps();
     }
 
+    // Each Location can have exactly one country
+    public function country()
+    {
+        return $this->belongsTo('App\Models\Country', 'country', 'name');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES

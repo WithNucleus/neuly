@@ -17,6 +17,14 @@ class ClinicalTrialDistributionController extends Controller
         return response($result, Response::HTTP_OK);
     }
 
+    public function show()
+    {
+        $query = $this->buildCountryByFocusQuery();
+        $countries = $this->getMappedFocusByCountry($query->get());
+
+        return view('discover.insights.distribution.countries', compact('countries'));
+    }
+
     private function buildCountryQuery()
     {
         $query = $this->getQuery();

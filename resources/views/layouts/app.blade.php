@@ -73,6 +73,10 @@
     <script type="text/javascript" src="{{ asset('assets/chart.js') }}"></script>
     <script type="text/javascript" src="{{ asset('assets/chartisan.js') }}"></script>
 
+    <!-- SVG Map -->
+    <script type="text/javascript" src="{{ asset('assets/jquery-jvectormap.min.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/jquery-jvectormap.css') }}"/>
+
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-171437771-1"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
