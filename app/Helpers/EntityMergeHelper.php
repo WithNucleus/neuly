@@ -6,6 +6,7 @@ class EntityMergeHelper
 {
     const SOURCE_MASTER    = 'master';
     const SOURCE_SECONDARY = 'secondary';
+    const SOURCE_MERGE     = 'merge';
 
     const TYPE_STRING   = 'string';
     const TYPE_TEXT     = 'text';
