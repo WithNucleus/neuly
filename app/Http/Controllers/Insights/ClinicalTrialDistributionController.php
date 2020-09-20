@@ -21,12 +21,21 @@ class ClinicalTrialDistributionController extends Controller
 
     public function show()
     {
+        $query = $this->buildCountryQuery();
+        $items = $query->get();
+        $countriesByCode = $this->getMappedCountries($items);
+
+        return view('discover.insights.distribution.show', compact('countriesByCode'));
+    }
+
+    public function showWithFocus()
+    {
         $query = $this->buildCountryByFocusQuery();
         $items = $query->get();
         $countries = $this->getMappedFocusByCountry($items);
         $countriesByCode = $this->getMappedFocusByCountryCode($items, $countries);
 
-        return view('discover.insights.distribution.countries', compact('countriesByCode'));
+        return view('discover.insights.distribution.show', compact('countriesByCode'));
     }
 
     private function buildCountryQuery()
@@ -81,6 +90,20 @@ class ClinicalTrialDistributionController extends Controller
     private function groupByCountriesAndFocus($query)
     {
         return $query->groupBy('focus.name', 'locations.country');
+    }
+
+    private function getMappedCountries($items)
+    {
+        $mappedArray = [];
+
+        foreach($items as $item) {
+            $mappedArray[$item->alpha2code] = [
+                'country' => $item->country,
+                'total' => $item->trials
+            ];
+        }
+
+        return $mappedArray;
     }
 
     private function getMappedFocusByCountry($items)
