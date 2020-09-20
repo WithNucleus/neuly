@@ -19,8 +19,6 @@ Auth::routes(['verify' => true]);
 Route::get('login/{provider}', 'Auth\LoginController@redirectToProvider')->name('login.social');
 Route::get('login/{provider}/callback', 'Auth\LoginController@handleProviderCallback');
 
-Route::get('/test', 'Insights\ClinicalTrialDistributionController@index');
-
 // Homepage
 Route::get('/', 'Content\HomeController@index')->name('index');
 Route::get('/home', 'Content\HomeController@index')->name('home');

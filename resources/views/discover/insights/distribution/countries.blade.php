@@ -54,13 +54,13 @@
                         </div>
 
                         <div class="d-flex flex-wrap mt-4">
-                            @foreach($countries as $country => $focuses)
+                            @foreach($countriesByCode as $alpha2code => $item)
                                 <div class="col-4 col-md-2 col-xl-2 mb-5">
                                     <div class="card shadow-sm">
                                         <div class="card-body">
-                                            <h5 class="card-title">{{ $country }}</h5>
+                                            <h5 class="card-title">{{ $item['country'] }}</h5>
                                             <table>
-                                                @foreach($focuses as $focus)
+                                                @foreach($item['focus'] as $focus)
                                                     <tr>
                                                         <td>{{ $focus['name'] }}</td>
                                                         <td>{{ $focus['trials'] }}</td>
@@ -78,9 +78,20 @@
         </main>
         <script type="text/javascript" src="{{ asset('assets/maps/world.js') }}"></script>
         <script>
+            var countries = {!! json_encode($countriesByCode) !!}
             $(function(){
                 $('#world-distribution-map').vectorMap({
-                    map: 'world_merc'
+                    map: 'world_merc',
+                    onRegionTipShow: function(e, el, code){
+                        var total = 0;
+
+                        if(countries[code] !== undefined)
+                        {
+                            total = countries[code].total;
+                        }
+
+                        el.html(el.html()+' (Total Trials - '+total+')');
+                    }
                 });
             });
         </script>

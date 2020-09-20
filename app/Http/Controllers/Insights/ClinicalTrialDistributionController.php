@@ -12,17 +12,21 @@ class ClinicalTrialDistributionController extends Controller
     public function index()
     {
         $query = $this->buildCountryByFocusQuery();
-        $result = $this->getMappedFocusByCountry($query->get());
+        $items = $query->get();
+        $countries = $this->getMappedFocusByCountry($items);
+        $countriesByCode = $this->getMappedFocusByCountryCode($items, $countries);
 
-        return response($result, Response::HTTP_OK);
+        return response($countriesByCode, Response::HTTP_OK);
     }
 
     public function show()
     {
         $query = $this->buildCountryByFocusQuery();
-        $countries = $this->getMappedFocusByCountry($query->get());
+        $items = $query->get();
+        $countries = $this->getMappedFocusByCountry($items);
+        $countriesByCode = $this->getMappedFocusByCountryCode($items, $countries);
 
-        return view('discover.insights.distribution.countries', compact('countries'));
+        return view('discover.insights.distribution.countries', compact('countriesByCode'));
     }
 
     private function buildCountryQuery()
@@ -47,7 +51,8 @@ class ClinicalTrialDistributionController extends Controller
     private function getQuery()
     {
         return DB::table('locations')
-            ->join('clinicaltrial_location', 'locations.id', 'clinicaltrial_location.location_id');
+            ->join('clinicaltrial_location', 'locations.id', 'clinicaltrial_location.location_id')
+            ->join('countries', 'locations.country', 'countries.name');
     }
 
     private function joinFocus($query)
@@ -58,13 +63,13 @@ class ClinicalTrialDistributionController extends Controller
 
     private function selectByCountries($query)
     {
-        return $query->select('country',
+        return $query->select('country', 'alpha2code',
             DB::raw('count(clinicaltrial_location.clinicaltrial_id) as trials'));
     }
 
     private function selectByCountriesAndFocus($query)
     {
-        return $query->select('country', 'focus.name',
+        return $query->select('country', 'focus.name', 'alpha2code',
             DB::raw('count(clinicaltrial_location.clinicaltrial_id) as trials'));
     }
 
@@ -88,7 +93,32 @@ class ClinicalTrialDistributionController extends Controller
         });
     }
 
+    private function getMappedFocusByCountryCode($items, $countries)
+    {
+        $mappedArray = [];
 
+        foreach($items as $item)
+        {
+            $mappedArray[$item->alpha2code] = [
+                'country' => $item->country,
+                'focus' => $countries[$item->country],
+                'total' => $this->getTotalTrialsOfCountry($countries[$item->country]),
+            ];
+        }
+
+        return $mappedArray;
+    }
+
+    private function getTotalTrialsOfCountry($items)
+    {
+        $total = 0;
+        foreach($items as $item)
+        {
+            $total += $item['trials'];
+        }
+
+        return $total;
+    }
 
 
 
