@@ -340,3 +340,10 @@ Route::get('/members/{member_url}/{slug}', 'Dashboard\NoteController@showPublic'
 /** CATCH-ALL ROUTE for Backpack/PageManager - needs to be at the end of your routes.php file  **/
 Route::get('{page}/{subs?}', ['uses' => '\App\Http\Controllers\PageController@index'])
     ->where(['page' => '^(((?=(?!admin))(?=(?!\/)).))*$', 'subs' => '.*']);
+
+Route::group([
+    'prefix' => 'embeds',
+    'middleware' => ['x-frame-options'],
+], function() {
+
+});
