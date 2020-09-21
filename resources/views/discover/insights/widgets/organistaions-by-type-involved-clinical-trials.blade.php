@@ -1,0 +1,9 @@
+<div class="card shadow-sm mb-5">
+    <div class="card-body">
+        <h3 class="text-center">Collaborator Organizations in Clinical Trials <br>by type</h3>
+        <div class="mx-auto" style="max-width: 320px;">
+            <canvas class="js-chart-pie-with-action" width="300" height="300" data-action="{{ route('insights.companies-by-type') . '?clinicalTrialInvolved=true' }}"></canvas>
+        </div>
+        <p class="mb-0 text-center"><a href="{{ route('discover.organizations') }}" class="btn btn-sm btn-dark">Explore Organizations</a></p>
+    </div>
+</div>
