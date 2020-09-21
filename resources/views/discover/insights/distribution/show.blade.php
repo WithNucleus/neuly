@@ -66,8 +66,21 @@
         <script>
             var countries = {!! json_encode($countriesByCode) !!}
             $(function(){
+                var values = [];
+
+                for(var index in countries) {
+                    values[index] = countries[index].total;
+                }
+
                 $('#world-distribution-map').vectorMap({
                     map: 'world_merc',
+                    series: {
+                        regions: [{
+                            values: values,
+                            scale: ['#60c6a9', '#265dad'],
+                            normalizeFunction: 'polynomial'
+                        }]
+                    },
                     onRegionTipShow: function(e, el, code){
                         var total = 0;
 

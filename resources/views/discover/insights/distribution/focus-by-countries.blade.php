@@ -7,7 +7,7 @@
                     <table>
                         @foreach($item['focus'] as $focus)
                             <tr>
-                                <td>{{ $focus['name'] }}</td>
+                                <td>{{ $focus['name'] }}:</td>
                                 <td>{{ $focus['trials'] }}</td>
                             </tr>
                         @endforeach
