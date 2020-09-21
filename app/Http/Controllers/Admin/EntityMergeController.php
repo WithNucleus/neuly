@@ -120,14 +120,20 @@ class EntityMergeController extends Controller
         }
 
         foreach ($relations as $relationName => $source) {
-            if ($source === EntityMergeHelper::SOURCE_SECONDARY) {
-                // clear master entity relation's data
-                $masterEntity->{$relationName}()->detach();
+            if ($source === EntityMergeHelper::SOURCE_SECONDARY || $source === EntityMergeHelper::SOURCE_MERGE) {
 
-                // add relataion's data from secondary entity
-                foreach ($secondaryEntity->{$relationName} as $relation) {
-                    $masterEntity->{$relationName}()->attach($relation);
+                if ($source === EntityMergeHelper::SOURCE_SECONDARY) {
+                    // clear master entity relation's data to save only secondary entity relations
+                    $masterEntity->{$relationName}()->detach();
                 }
+
+                $relationKeys = [];
+                // add relation's data from secondary entity to master entity
+                foreach ($secondaryEntity->{$relationName} as $relation) {
+                    $relationKeys[] = $relation->getKey();
+                }
+
+                $masterEntity->{$relationName}()->syncWithoutDetaching($relationKeys);
             }
         }
 

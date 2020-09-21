@@ -25,10 +25,15 @@ use App\Helpers\EntityMergeHelper;
         <div class="col-2 d-flex align-items-center justify-content-center merge-buttons-column">
             <div class="btn-group btn-group-toggle" data-toggle="buttons">
                 <label class="btn btn-secondary active">
-                    <input type="radio" name="{{ $fieldGroup . '[' . $name . ']' }}" value="{{ EntityMergeHelper::SOURCE_MASTER }}" checked/> Master
+                    <input type="radio" name="{{ $fieldGroup . '[' . $name . ']' }}" value="{{ EntityMergeHelper::SOURCE_MASTER }}" checked/> {{ ucfirst(EntityMergeHelper::SOURCE_MASTER) }}
                 </label>
+                @if($options['type'] === EntityMergeHelper::TYPE_RELATION)
+                    <label class="btn btn-secondary">
+                        <input type="radio" name="{{ $fieldGroup . '[' . $name . ']' }}" value="{{ EntityMergeHelper::SOURCE_MERGE }}"/> {{ ucfirst(EntityMergeHelper::SOURCE_MERGE) }}
+                    </label>
+                @endif
                 <label class="btn btn-secondary">
-                    <input type="radio" name="{{ $fieldGroup . '[' . $name . ']' }}" value="{{ EntityMergeHelper::SOURCE_SECONDARY }}"/> Secondary
+                    <input type="radio" name="{{ $fieldGroup . '[' . $name . ']' }}" value="{{ EntityMergeHelper::SOURCE_SECONDARY }}"/> {{ ucfirst(EntityMergeHelper::SOURCE_SECONDARY) }}
                 </label>
             </div>
         </div>
