@@ -9,8 +9,10 @@
 <div class="container">
     <div class="bg-light shadow-sm p-3 p-md-4 p-lg-5">
         <div class="row">
-            <div class="col-12 col-lg-6">
+            <div class="col-12">
                 <h1 class="h2 text-center text-primary page-title-default mb-4">Join {{ config('app.name', 'Neuly') }}</h1>
+            </div>
+            <div class="col-12 col-lg-6">
                 <form method="POST" action="{{ route('register') }}">
                     @csrf
 
@@ -89,8 +91,8 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6 mt-5 pl-lg-5">
-                <ul class="plain-list mt-lg-3">
+            <div class="col-lg-6 mt-5 mt-lg-3 pl-lg-5">
+                <ul class="plain-list">
                     <li class="mb-4">
                         <i class="fas fa-check-circle text-secondarydark"></i> <strong class="lead-smaller">Explore the entire Neuly database</strong><br>
                         Our database is updated daily with the latest information about the psychedelics industry.
@@ -104,18 +106,17 @@
                         Bookmark, follow, and take notes. Then, share your work via email, social, or create a custom public URL.
                     </li>
                 </ul>
-                <p class="lead-smaller">
-                    <a class="font-weight-bold" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">Still not convinced?</a>
-                </p>
             </div>
         </div>
 
-        <div class="mt-5 collapse "id="collapseExample">
-            <div class="row d-flex flex-wrap">
-                <div class="col-12 col-sm-6 col-lg-8 mb-5">
+        <div class="mt-5">
+            <div class="row">
+                <div class="mt-3 col-12 text-center">
                     <strong class="d-block h3 text-primary mb-0">How Neuly Can Help You</strong>
-                    <p class="lead mb-0">We've made complicated data and information easy to understand. <span class="d-xl-block">Here is how Neuly can help you:</span></p>
+                    <p class="lead mb-4">We've made complicated data and information easy to understand.</p>
                 </div>
+            </div>
+            <div class="row d-flex flex-wrap">
                 <div class="col-12 col-sm-6 col-lg-4 mb-5">
                     <strong class="d-block h4 mb-1">Entrepreneurs <span class="float-right"><i class="fad fa-business-time text-secondarydark"></i></span></strong>
                     <p class="mb-0">Find high-quality, low-cost solutions for your start up.</p>
