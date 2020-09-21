@@ -40,7 +40,7 @@
                         <div class="full-width-show-view">
 
                             <div class="page-title-default d-md-flex justify-content-between">
-                                <h1 class="mb-0 mr-5">{{ $title }} embed widget</h1>
+                                <h1 class="mb-0 mr-5">Neuly {{ $title }} Embed Widget</h1>
                             </div>
 
                             <div class="row mt-4">
@@ -48,8 +48,15 @@
                                     <iframe src="{{ $embedUrl }}" width="100%" height="100%" style="min-width: 480px; min-height: 480px"></iframe>
                                 </div>
                                 <div class="col-12 col-md-6">
+                                    <p class="lead">
+                                        @if($title === 'Events')
+                                            Embed our free events widget to display upcoming events related to the psychedelics industry on your website.
+                                        @elseif ($title === 'Jobs')
+                                            Embed our free jobs widget to display job listings for the psychedelic industry on your website.
+                                        @endif
+                                    </p>
                                     <div class="form-group">
-                                        <label>Embed widget code:</label>
+                                        <label class="font-weight-bold">Embed widget code:</label>
                                         <textarea class="form-control" readonly><iframe src="{{ $embedUrl }}" width="100%" height="100%" style="min-width: 480px; min-height: 480px"></iframe></textarea>
                                         <p><small>Copy and paste to your webpage</small></p>
                                     </div>
