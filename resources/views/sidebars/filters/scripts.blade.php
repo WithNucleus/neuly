@@ -22,6 +22,10 @@
             filters.push($(this).val());
         });
 
+        $("#filterSidebar select[name='" + filterName + "'] option:selected").each(function(){
+            filters.push($(this).val());
+        });
+
         return filters.join("|");
     }
 
@@ -76,6 +80,10 @@
 
         // Checkboxes
         $("#filterSidebar input[type=checkbox]").on('change', function() {
+            get_filters_and_go();
+        });
+
+        $("#filterSidebar select").on('change', function() {
             get_filters_and_go();
         });
 
@@ -135,6 +143,16 @@
 
             get_filters_and_go(new_sort);
         });
+
+        $(".js-collapse-filter")
+            .on('show.bs.collapse', function(){
+                $(this).prev(".toggle-more").find(".fad").removeClass("fa-arrow-square-down").addClass("fa-arrow-square-up");
+                $(this).prev(".toggle-more").find("span").html("Show Less");
+            })
+            .on('hide.bs.collapse', function(){
+                $(this).prev(".toggle-more").find(".fad").removeClass("fa-arrow-square-up").addClass("fa-arrow-square-down");
+                $(this).prev(".toggle-more").find("span").html("Show More");
+            });
     });
 
 </script>

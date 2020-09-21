@@ -99,6 +99,8 @@ Route::get('/focus/{slug}', 'Index\FocusController@show')->name('discover.focus.
 
 // Events
 Route::get('/events', 'Index\EventController@index')->name('discover.events');
+Route::get('/events/embed-widget', 'Index\EventController@embedWidget')->name('discover.events.embedWidget');
+Route::get('/events/embed', 'Index\EventController@embedIndex')->name('discover.events.embedIndex');
 Route::get('/past-events', 'Index\EventController@past')->name('discover.events.past');
 Route::get('/events/citynames.json', 'Index\EventController@citynames');
 Route::get('/events/names.json', 'Index\EventController@namesJson');
@@ -106,6 +108,8 @@ Route::get('/events/{slug}', 'Index\EventController@show')->name('discover.event
 
 // Jobs
 Route::get('/jobs', 'Index\JobController@index')->name('discover.jobs');
+Route::get('/jobs/embed-widget', 'Index\JobController@embedWidget')->name('discover.jobs.embedWidget');
+Route::get('/jobs/embed', 'Index\JobController@embedIndex')->name('discover.jobs.embedIndex');
 Route::get('/jobs/citynames.json', 'Index\JobController@citynames');
 Route::get('/jobs/{slug}', 'Index\JobController@show')->name('discover.jobs.show');
 Route::get('/jobs/apply/{slug}', 'Index\JobApplicationController@index')->name('discover.jobs.apply');

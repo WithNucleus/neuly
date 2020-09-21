@@ -46,7 +46,7 @@
                 @include('sidebars.people')
             @endif
 
-            @if(Route::is('discover.jobs') OR Route::is('discover.jobs.show'))
+            @if(Route::is('discover.jobs') OR Route::is('discover.jobs.show') OR Route::is('discover.jobs.embedIndex'))
                 @include('sidebars.jobs')
             @endif
 
@@ -54,7 +54,8 @@
                 @include('sidebars.clinicaltrial')
             @endif
 
-            @if(Route::is('discover.events') OR Route::is('discover.events.show') OR Route::is('discover.events.past'))
+            @if(Route::is('discover.events') OR Route::is('discover.events.show') OR Route::is('discover.events.past')
+                OR Route::is('discover.events.embedIndex'))
                 @include('sidebars.events')
             @endif
 
