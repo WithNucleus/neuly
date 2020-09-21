@@ -1,3 +1,12 @@
+@php
+    $showUrlSuffix = '';
+    $attrTarget = '';
+
+    if (isset($embed) && $embed == true) {
+        $showUrlSuffix = '?embedded=1';
+        $attrTarget = 'target="_blank"';
+    }
+@endphp
 <div class="row">
     <div class="col-12">
         <div class="full-width-show-view">
@@ -25,7 +34,7 @@
                     <li class="list-group-item p-4 d-md-flex">
 
                         <div class="image mr-3 mt-1">
-                            <a href="{{ route('discover.events.show', $event->slug) }}" {{ (isset($embed) && $embed) ? 'target="_blank"' : '' }}>
+                            <a href="{{ route('discover.events.show', $event->slug) . $showUrlSuffix }}" {!! $attrTarget !!}>
                                 @if ($event->image == '')
                                     <div class="logo-is-contained bg-brains rounded">
                                         <img src="{{ asset('images/icons/events.svg') }}" alt="{{ $event->name }}">
@@ -39,7 +48,9 @@
 
                         <div class="text">
                             <p class="lead mb-1">
-                                <a href="{{ route('discover.events.show', $event->slug) }}" {{ (isset($embed) && $embed) ? 'target="_blank"' : '' }}>{{ $event->name }}</a>
+                                <a href="{{ route('discover.events.show', $event->slug) . $showUrlSuffix }}" {!! $attrTarget !!}>
+                                    {{ $event->name }}
+                                </a>
                             </p>
 
                             <p class="font-size-large mb-1">

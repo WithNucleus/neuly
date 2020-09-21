@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Index;
 
+use App\Helpers\EmbedLogHelper;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Job;
@@ -40,6 +41,8 @@ class JobController extends Controller
 
         // Get Job
         $job = Job::where('slug', $slug)->firstOrFail();
+
+        EmbedLogHelper::add($request, $job);
 
         $metas = Metas::process(array(
             'title'         => $job->job_title,
