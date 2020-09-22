@@ -342,8 +342,7 @@ Route::get('{page}/{subs?}', ['uses' => '\App\Http\Controllers\PageController@in
     ->where(['page' => '^(((?=(?!admin))(?=(?!\/)).))*$', 'subs' => '.*']);
 
 Route::group([
-    'prefix' => 'embeds',
-    'middleware' => ['x-frame-options'],
+    'prefix' => 'embeds'
 ], function() {
 
 });
