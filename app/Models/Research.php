@@ -84,16 +84,8 @@ class Research extends Model implements EntityContract
     */
 
     public function setNameAttribute($value) {
-
         $this->attributes['name'] = $value;
-
-        // $this->attributes['slug'] = Str::slug($value);
-
-        if (static::whereSlug($slug = Str::slug($value))->exists()) {
-            $slug = "{$slug}-" . uniqid();
-        }
-        $this->attributes['slug'] = $slug;
-
+        $this->attributes['slug'] = isset($this->attributes['slug']) ? $this->attributes['slug'] : Str::slug($value);
     }
 
     /**
