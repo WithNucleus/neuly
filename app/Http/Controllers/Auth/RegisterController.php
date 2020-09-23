@@ -54,7 +54,6 @@ class RegisterController extends Controller
             'last_name' => ['required', 'string', 'min:2', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'member_url' => ['nullable', 'string', 'max:25', 'unique:users', 'alpha_dash'],
         ]);
     }
 
@@ -72,7 +71,6 @@ class RegisterController extends Controller
             'last_name' => $data['last_name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'member_url' => $data['member_url'],
         ])->assignRole('Subscriber');
     }
 }
