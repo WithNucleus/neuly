@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Index;
 
+use App\Helpers\EmbedLogHelper;
 use App\Http\Controllers\Controller;
 use App\Repositories\FollowRepository;
 use Illuminate\Http\Request;
@@ -96,6 +97,8 @@ class EventController extends Controller
 
     public function show(Request $request, $slug) {
         $event = Event::where('slug', $slug)->firstOrFail();
+
+        EmbedLogHelper::add($request, $event);
 
         $metas = Metas::process(array(
             'title'         => $event->name,

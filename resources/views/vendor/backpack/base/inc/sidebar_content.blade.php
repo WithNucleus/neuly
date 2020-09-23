@@ -159,11 +159,21 @@
 @endcan
 
 @can('view logs')
-	<li class='nav-item'>
-		<a class='nav-link' href='{{ backpack_url('log') }}'>
-			<i class='nav-icon la la-terminal'></i> Logs
-		</a>
-	</li>
+    <li class="nav-item nav-dropdown">
+        <a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon la la-archive"></i> Logs</a>
+        <ul class="nav-dropdown-items">
+            <li class=nav-item">
+                <a class="nav-link" href="{{ backpack_url('log') }}">
+                    <i class="nav-icon la la-terminal"></i> Laravel Log
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ backpack_url('log-embed') }}">
+                    <i class="nav-icon la la-window-maximize"></i> Embed Log
+                </a>
+            </li>
+        </ul>
+    </li>
 @endcan
 
 @can('manage redirects')
