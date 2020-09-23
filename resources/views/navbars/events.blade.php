@@ -5,7 +5,7 @@
             <strong class="text-uppercase mr-3 text-black-50">Sort by:</strong>
             <div class="d-inline sort-name text-uppercase">
 
-                @if(Route::is('discover.events') || Route::is('discover.events.embedIndex'))
+                @if(Route::is('discover.events') || Route::is('embeds.events.index'))
                     @include('discover.includes.filters.sort-button-default', [
                         'asc' => '-date',
                         'desc' => 'date',
@@ -28,7 +28,7 @@
             </div>
         </div>
     @endisset
-    @if(Route::is('discover.events.embedIndex') === false)
+    @if(Route::is('embeds.events.index') === false)
     <nav class="events-nav lead mb-3 mb-md-0">
         @if(Route::is('discover.events'))
             <a href="{{ route('discover.events.past') }}" class="text-uppercase">Past Events <i class="fad fa-chevron-double-right"></i></a>

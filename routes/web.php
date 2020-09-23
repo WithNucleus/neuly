@@ -100,7 +100,6 @@ Route::get('/focus/{slug}', 'Index\FocusController@show')->name('discover.focus.
 // Events
 Route::get('/events', 'Index\EventController@index')->name('discover.events');
 Route::get('/events/embed-widget', 'Index\EventController@embedWidget')->name('discover.events.embedWidget');
-Route::get('/events/embed', 'Index\EventController@embedIndex')->name('discover.events.embedIndex');
 Route::get('/past-events', 'Index\EventController@past')->name('discover.events.past');
 Route::get('/events/citynames.json', 'Index\EventController@citynames');
 Route::get('/events/names.json', 'Index\EventController@namesJson');
@@ -109,7 +108,6 @@ Route::get('/events/{slug}', 'Index\EventController@show')->name('discover.event
 // Jobs
 Route::get('/jobs', 'Index\JobController@index')->name('discover.jobs');
 Route::get('/jobs/embed-widget', 'Index\JobController@embedWidget')->name('discover.jobs.embedWidget');
-Route::get('/jobs/embed', 'Index\JobController@embedIndex')->name('discover.jobs.embedIndex');
 Route::get('/jobs/citynames.json', 'Index\JobController@citynames');
 Route::get('/jobs/{slug}', 'Index\JobController@show')->name('discover.jobs.show');
 Route::get('/jobs/apply/{slug}', 'Index\JobApplicationController@index')->name('discover.jobs.apply');
@@ -337,12 +335,14 @@ Route::group([
 Route::get('/members/{member_url}/lists/{slug}', 'Dashboard\FollowListsController@showPublic')->name('members.follow-lists.public');
 Route::get('/members/{member_url}/{slug}', 'Dashboard\NoteController@showPublic')->name('members.public.note');
 
+Route::group([
+    'prefix' => 'embeds',
+    'as' => 'embeds.'
+], function() {
+    Route::get('/jobs', 'Index\JobController@embedIndex')->name('jobs.index');
+    Route::get('/events', 'Index\EventController@embedIndex')->name('events.index');
+});
+
 /** CATCH-ALL ROUTE for Backpack/PageManager - needs to be at the end of your routes.php file  **/
 Route::get('{page}/{subs?}', ['uses' => '\App\Http\Controllers\PageController@index'])
     ->where(['page' => '^(((?=(?!admin))(?=(?!\/)).))*$', 'subs' => '.*']);
-
-Route::group([
-    'prefix' => 'embeds'
-], function() {
-
-});

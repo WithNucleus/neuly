@@ -4,7 +4,7 @@
 
             <div class="page-title-default d-md-flex justify-content-between">
                 <h1 class="mb-0 mr-5">
-                    @if(Route::is('discover.events') || Route::is('discover.events.embedIndex'))
+                    @if(Route::is('discover.events') || Route::is('embeds.events.index'))
                         Upcoming Events
                     @else
                         Past Events
