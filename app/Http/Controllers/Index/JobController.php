@@ -72,7 +72,7 @@ class JobController extends Controller
     {
         $title = 'Jobs';
         $previousUrl = route('discover.jobs');
-        $embedUrl = route('discover.jobs.embedIndex');
+        $embedUrl = route('embeds.jobs.index');
 
         return view('discover.embed-widget', compact('title', 'previousUrl', 'embedUrl'));
     }

@@ -129,7 +129,7 @@ class EventController extends Controller
     {
         $title = 'Events';
         $previousUrl = route('discover.events');
-        $embedUrl = route('discover.events.embedIndex');
+        $embedUrl = route('embeds.events.index');
 
         return view('discover.embed-widget', compact('title', 'previousUrl', 'embedUrl'));
     }
