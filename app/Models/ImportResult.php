@@ -8,6 +8,7 @@ class ImportResult extends Model
 {
     const TYPE_CLINICAL_TRIALS = 'clinical_trials';
     const TYPE_RELATED_ENTITIES = 'related_entities';
+    const TYPE_BATCH_IMAGES_UPLOAD = 'batch_images_upload';
 
 	protected $table = 'import_results';
     protected $guarded = ['id'];
@@ -29,5 +30,10 @@ class ImportResult extends Model
     public function scopeRelatedEntities($query)
     {
         return $query->where('type', self::TYPE_RELATED_ENTITIES);
+    }
+
+    public function scopeBatchImagesUpload($query)
+    {
+        return $query->where('type', self::TYPE_BATCH_IMAGES_UPLOAD);
     }
 }

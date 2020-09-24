@@ -306,6 +306,16 @@ Route::group([
         Route::get('/results/{id}', 'RelatedEntitiesController@results')->name('results');
         Route::get('/failures/{id}', 'RelatedEntitiesController@failures')->name('failures');
     });
+
+    Route::group([
+        'prefix' => '/batch-images-upload',
+        'as'     => 'batch-images-upload.'
+    ], function () {
+        Route::get('/', 'BatchImagesUploadController@index')->name('index');
+        Route::post('/import', 'BatchImagesUploadController@import')->name('import');
+        Route::get('/results/{id}', 'RelatedEntitiesController@results')->name('results');
+        Route::get('/failures/{id}', 'RelatedEntitiesController@failures')->name('failures');
+    });
 });
 
 // Job Application Files

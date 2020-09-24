@@ -17,7 +17,6 @@ class RelatedEntitiesController extends Controller
     public function index()
     {
         $importResults = ImportResult::relatedEntities()->latest()->take(20)->get();
-        $entityTypes   = EntityHelper::getEntities();
 
         //TODO: for now skip entities without "locations" relation, because in first version script will import only Locations
         $skipEntities = [
@@ -25,12 +24,7 @@ class RelatedEntitiesController extends Controller
             Location::class,
             Research::class,
         ];
-
-        foreach ($entityTypes as $key => $entity) {
-            if (in_array($entity, $skipEntities)) {
-                unset($entityTypes[$key]);
-            }
-        }
+        $entityTypes = array_diff(EntityHelper::getEntities(), $skipEntities);
 
         return view('admin.import.related-entities.index', compact('entityTypes', 'importResults'));
     }
@@ -62,7 +56,7 @@ class RelatedEntitiesController extends Controller
             if (in_array($lowerColumn, $allowedColumns) === false) {
                 return redirect()
                     ->back()
-                    ->with('error', "Column '$column' is not allowed! Allowed columns are: " . explode(', ', $allowedColumns) . ".");
+                    ->with('error', "Column '$column' is not allowed! Allowed columns are: " . implode(', ', $allowedColumns) . ".");
             }
 
             $columnIndexes[$lowerColumn] = $index;
