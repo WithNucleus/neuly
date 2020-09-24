@@ -337,7 +337,8 @@ Route::get('/members/{member_url}/{slug}', 'Dashboard\NoteController@showPublic'
 
 Route::group([
     'prefix' => 'embeds',
-    'as' => 'embeds.'
+    'as' => 'embeds.',
+    'middleware' => ['allow-frame']
 ], function() {
     Route::get('/jobs', 'Index\JobController@embedIndex')->name('jobs.index');
     Route::get('/events', 'Index\EventController@embedIndex')->name('events.index');
