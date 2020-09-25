@@ -16,8 +16,15 @@ class XFrameOptions
     public function handle($request, Closure $next)
     {
         $response = $next($request);
+        
+        if(\Route::current()->action['prefix'] === 'embeds' ||
+            \Route::current()->action['prefix'] === 'api/embeds') {
+            $response->headers->set('X-Frame-Options', 'ALLOW FROM '.$request->fullUrl(), false);
+        } else {
+            $response->headers->set('X-Frame-Options', 'DENY', false);
+        }
 
-        $response = $response->header('X-Frame-Options', 'ALLOW-FROM '+$request->fullUrl());
 
+        return $response;
     }
 }
