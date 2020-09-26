@@ -76,7 +76,7 @@ class RelatedEntitiesController extends Controller
 
     public function results($id)
     {
-        $result = ImportResult::findOrFail($id);
+        $result = ImportResult::relatedEntities()->findOrFail($id);
         $peopleMessages   = json_decode($result->people_messages);
         $locationMessages = json_decode($result->location_messages);
         $companyMessages  = json_decode($result->company_messages);
@@ -93,7 +93,9 @@ class RelatedEntitiesController extends Controller
 
     public function failures($id)
     {
-        $result              = ImportResult::with('failures')->findorFail($id);
+        $result = ImportResult::with('failures')
+            ->relatedEntities()
+            ->findorFail($id);
         $failuresTotalByType = [];
 
         foreach ($result->failures as $failure) {

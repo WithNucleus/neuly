@@ -17,7 +17,7 @@ use ZipArchive;
 
 class BatchImagesUploadController extends Controller
 {
-    private $allowedColumns = [
+    private $allowedCsvColumns = [
         'id',
         'name',
         'image'
@@ -34,7 +34,7 @@ class BatchImagesUploadController extends Controller
             Event::class,
         ];
         $entityTypes    = array_intersect(EntityHelper::getEntities(), $entitiesWithImages);
-        $allowedColumns = implode(', ', $this->allowedColumns);
+        $allowedColumns = implode(', ', $this->allowedCsvColumns);
 
         return view('admin.import.batch-images-upload.index',
             compact('entityTypes', 'importResults', 'allowedColumns'));
@@ -53,10 +53,10 @@ class BatchImagesUploadController extends Controller
         foreach ($headings as $index => $column) {
             $lowerColumn = strtolower($column);
 
-            if (in_array($lowerColumn, $this->allowedColumns) === false) {
+            if (in_array($lowerColumn, $this->allowedCsvColumns) === false) {
                 return redirect()
                     ->back()
-                    ->with('error', "Column '$column' is not allowed! Allowed columns are: " . implode(', ', $this->allowedColumns) . ".");
+                    ->with('error', "Column '$column' is not allowed! Allowed columns are: " . implode(', ', $this->allowedCsvColumns) . ".");
             }
 
             $columnIndexes[$lowerColumn] = $index;

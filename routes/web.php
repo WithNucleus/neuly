@@ -278,12 +278,6 @@ Route::post('/admin/import/research/save', 'Admin\Import\ResearchController@impo
 Route::get('/admin/import/results/{id}', 'Admin\Import\ResultsController@showResults')
     ->name('import.results');
 
-//Import Failures List
-Route::get('/admin/import/{id}/failures', 'Admin\Import\ResultsController@showFailures')
-    ->name('import.failures');
-Route::get('/admin/import/{id}/failures/{type}', 'Admin\Import\FailuresController@showByType')
-    ->name('import.failures.showByType');
-
 //Fix Import Failure
 Route::post('/admin/import/failures/{id}/fix', 'Admin\Import\FailuresController@fix')
     ->name('import.failures.fix');
@@ -313,10 +307,16 @@ Route::group([
     ], function () {
         Route::get('/', 'BatchImagesUploadController@index')->name('index');
         Route::post('/import', 'BatchImagesUploadController@import')->name('import');
-        Route::get('/results/{id}', 'RelatedEntitiesController@results')->name('results');
-        Route::get('/failures/{id}', 'RelatedEntitiesController@failures')->name('failures');
+        Route::get('/results/{id}', 'BatchImagesUploadController@results')->name('results');
+        Route::get('/failures/{id}', 'BatchImagesUploadController@failures')->name('failures');
     });
 });
+
+//Import Failures List
+Route::get('/admin/import/{id}/failures', 'Admin\Import\ResultsController@showFailures')
+    ->name('import.failures');
+Route::get('/admin/import/{id}/failures/{type}', 'Admin\Import\FailuresController@showByType')
+    ->name('import.failures.showByType');
 
 // Job Application Files
 Route::get('/admin/jobapps/{id}/resume', 'Index\JobApplicationController@getResume')->name('jobsapp.resume');

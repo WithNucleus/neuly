@@ -6,6 +6,7 @@ use App\Helpers\EntityHelper;
 use App\Models\ImportFailure;
 use App\Models\ImportResult;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -90,11 +91,11 @@ class BatchImageUpload implements ShouldQueue
         $diskUpload = Storage::disk('batch-images-upload');
         $diskPublic = Storage::disk('public');
 
-        $imageContent = $diskUpload->get($this->imageFilename);
-
-        if (empty($imageContent)) {
+        try {
+            $imageContent = $diskUpload->get($this->imageFilename);
+        } catch (FileNotFoundException $e) {
             $this->addFailedRecord();
-            return;
+            return false;
         }
 
         $entityImageField  = $this->imageSettings['field'];
@@ -128,7 +129,7 @@ class BatchImageUpload implements ShouldQueue
         ImportFailure::create([
             'import_result_id' => $this->importResult->id,
             'type'             => ImportFailure::TYPE_IMAGE,
-            'details'          => json_encode($record),
+            'details'          => $record,
         ]);
     }
 

@@ -118,12 +118,10 @@
 
 @section('after_scripts')
     <script>
-        $('.js-custom-file-input').on('change', showFileName);
-
-        function showFileName(event) {
+        $('.js-custom-file-input').on('change', function (event) {
             let input = event.target;
             let fileName = input.files[0].name;
             $(input).siblings('label').text(fileName);
-        }
+        });
     </script>
 @endsection
