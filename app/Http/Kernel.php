@@ -21,8 +21,11 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
-        \Bepsvpt\SecureHeaders\SecureHeadersMiddleware::class,
-
+        \App\Http\Middleware\HSTSGuard::class,
+        \App\Http\Middleware\ExpectCTGuard::class,
+        \App\Http\Middleware\FeaturePolicyGuard::class,
+        \App\Http\Middleware\ContentSecurityPolicyGuard::class,
+        \App\Http\Middleware\IFrameGuard::class,
     ];
 
     /**
@@ -40,7 +43,6 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\RedirectOldSlugs::class,
-            \App\Http\Middleware\XFrameOptions::class,
         ],
 
         'api' => [
@@ -72,6 +74,6 @@ class Kernel extends HttpKernel
         'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
         'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
         'neuly.membership' => \App\Http\Middleware\NeulyMembershipCheck::class,
-        'allow-frame' => \App\Http\Middleware\XFrameOptions::class,
+        'allow-frame' => \App\Http\Middleware\FrameGuard::class,
     ];
 }

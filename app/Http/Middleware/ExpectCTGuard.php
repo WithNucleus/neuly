@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-class XFrameOptions
+class ExpectCTGuard
 {
     /**
      * Handle an incoming request.
@@ -16,15 +16,10 @@ class XFrameOptions
     public function handle($request, Closure $next)
     {
         $response = $next($request);
-        
-        if(\Route::current()->action['prefix'] === 'embeds' ||
-            \Route::current()->action['prefix'] === 'api/embeds') {
-            $response->headers->set('X-Frame-Options', 'ALLOW FROM '.$request->fullUrl(), false);
-        } else {
-            $response->headers->set('X-Frame-Options', 'DENY', false);
+        if(config('http.enable_except_ct'))
+        {
+            $response->header('Expect-CT', config('http.except_ct_value'));
         }
-
-
         return $response;
     }
 }
