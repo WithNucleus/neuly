@@ -53,6 +53,12 @@ Route::group([
         Route::get('/most-interest', 'ClinicalTrialFocusListController@show')->name('most-interest.show');
         Route::post('/most-interest/list', 'ClinicalTrialFocusListController@index')->name('most-interest');
         Route::get('/clinical-trials-pipeline', 'ClinicalTrialPipelineController@show')->name('clinicaltrials.pipeline');
+        Route::get('/research-authors', 'ResearchAuthorsController@index')->name('research-authors');
+        Route::get('/research-authors/widget', 'ResearchAuthorsController@widget')->name('research-authors.widget');
+        Route::get('/research-organizations', 'ResearchOrganizationsController@index')->name('research-organizations');
+        Route::get('/research-organizations/widget', 'ResearchOrganizationsController@widget')->name('research-organizations.widget');
+        Route::get('/research-by-focus', 'ResearchByFocus@index')->name('research-by-focus');
+
     });
 });
 

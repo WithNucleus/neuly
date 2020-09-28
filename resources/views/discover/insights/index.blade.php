@@ -69,6 +69,15 @@
                     <div class="col-12 col-lg-4">
                         @include('discover.insights.most-interest.list')
                     </div>
+                    <div class="col-12 col-lg-4">
+                        @include('discover.insights.research-authors.widget')
+                    </div>
+                    <div class="col-12 col-lg-4">
+                        @include('discover.insights.research-organizations.widget')
+                    </div>
+                    <div class="col-12 col-lg-4">
+                        @include('discover.insights.widgets.research-by-focus')
+                    </div>
                 @endauth
             </div>
 
