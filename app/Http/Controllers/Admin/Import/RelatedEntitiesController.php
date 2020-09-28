@@ -17,7 +17,6 @@ class RelatedEntitiesController extends Controller
     public function index()
     {
         $importResults = ImportResult::relatedEntities()->latest()->take(20)->get();
-        $entityTypes   = EntityHelper::getEntities();
 
         //TODO: for now skip entities without "locations" relation, because in first version script will import only Locations
         $skipEntities = [
@@ -25,12 +24,7 @@ class RelatedEntitiesController extends Controller
             Location::class,
             Research::class,
         ];
-
-        foreach ($entityTypes as $key => $entity) {
-            if (in_array($entity, $skipEntities)) {
-                unset($entityTypes[$key]);
-            }
-        }
+        $entityTypes = array_diff(EntityHelper::getEntities(), $skipEntities);
 
         return view('admin.import.related-entities.index', compact('entityTypes', 'importResults'));
     }
@@ -62,7 +56,7 @@ class RelatedEntitiesController extends Controller
             if (in_array($lowerColumn, $allowedColumns) === false) {
                 return redirect()
                     ->back()
-                    ->with('error', "Column '$column' is not allowed! Allowed columns are: " . explode(', ', $allowedColumns) . ".");
+                    ->with('error', "Column '$column' is not allowed! Allowed columns are: " . implode(', ', $allowedColumns) . ".");
             }
 
             $columnIndexes[$lowerColumn] = $index;
@@ -82,7 +76,7 @@ class RelatedEntitiesController extends Controller
 
     public function results($id)
     {
-        $result = ImportResult::findOrFail($id);
+        $result = ImportResult::relatedEntities()->findOrFail($id);
         $peopleMessages   = json_decode($result->people_messages);
         $locationMessages = json_decode($result->location_messages);
         $companyMessages  = json_decode($result->company_messages);
@@ -99,7 +93,9 @@ class RelatedEntitiesController extends Controller
 
     public function failures($id)
     {
-        $result              = ImportResult::with('failures')->findorFail($id);
+        $result = ImportResult::with('failures')
+            ->relatedEntities()
+            ->findorFail($id);
         $failuresTotalByType = [];
 
         foreach ($result->failures as $failure) {

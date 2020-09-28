@@ -126,6 +126,11 @@
 				</a>
 			</li>
             <li class="nav-item">
+                <a class='nav-link' href='{{ route('import.batch-images-upload.index') }}'>
+                    <i class='nav-icon la la-images'></i> Batch Images Upload
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class='nav-link' href='{{ route('import.settings.index') }}'>
                     <i class='nav-icon la la-cog'></i> Import Settings
                 </a>
