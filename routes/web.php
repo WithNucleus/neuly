@@ -58,7 +58,7 @@ Route::group([
         Route::get('/research-organizations', 'ResearchOrganizationsController@index')->name('research-organizations');
         Route::get('/research-organizations/widget', 'ResearchOrganizationsController@widget')->name('research-organizations.widget');
         Route::get('/research-by-focus', 'ResearchByFocus@index')->name('research-by-focus');
-
+        Route::get('/companies-by-focus', 'CompaniesByFocus@index')->name('companies-by-focus');
     });
 });
 
@@ -236,12 +236,6 @@ Route::group(['middleware' => 'auth'], function () {
 
 // User Email Reset
 Route::get('/user/retake/{token}', 'Index\UserRetakeController@index')->name('user.retake');
-
-// Charts
-Route::get('/charts/companyFocus.json', 'Index\ChartController@companyFocus')->name('charts.company_focus');
-// Route::get('/charts/companyType.json', 'Index\ChartController@companyType')->name('charts.company_type');
-// Route::get('/charts/topLocations', 'Index\ChartController@topLocations')->name('charts.top_locations');
-
 
 /* SPECIAL ADMIN CONTROLLERS */
 Route::get('/admin/companyperson/{id}', 'Admin\CompanyPersonController@index');

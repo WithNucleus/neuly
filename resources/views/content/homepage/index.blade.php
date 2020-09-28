@@ -175,7 +175,7 @@
                 <div class="col-12 col-md-6">
 
                     {{-- Organization Focus Chart --}}
-                    @include('content.homepage.organization-focus-chart')
+                    @include('discover.insights.widgets.companies-by-focus')
 
                     {{-- Upcoming Events --}}
                     @include('content.homepage.upcoming-events')
@@ -191,20 +191,4 @@
         @include('footers.full')
 
     </main>
-
-<script>
-
-    const chartCompanyFocus = new Chartisan({
-        el: '#chartCompanyFocus',
-        url: "{{ route('charts.company_focus') }}",
-        hooks: new ChartisanHooks()
-            .colors(['rgba(63, 69, 49, 1)'])
-            .responsive()
-            .beginAtZero()
-            .legend(false)
-            .datasets(['bar']),
-    });
-
-</script>
-
 @endsection
