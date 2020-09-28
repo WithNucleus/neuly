@@ -1,7 +1,7 @@
 <div class="card shadow-sm mb-5">
     <div class="card-body">
-        <h3 class="text-center">Organization Focus</h3>
-        <div class="js-bar-chart" style="height: 300px;" data-action="{{ route('insights.companies-by-focus') }}"></div>
+        <h3 class="text-center">Orgs By Industry Focus</h3>
+        <div class="js-bar-chart" style="height: 300px;" data-action="{{ route('insights.companies-by-focus-industry') }}"></div>
 
         <p class="mb-0 text-center"><a href="{{ route('discover.focus') }}" class="btn btn-sm btn-dark">Explore by Focus</a></p>
     </div>

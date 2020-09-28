@@ -32,11 +32,27 @@ class Focus extends Model implements EntityContract
     protected static $logUnguarded = true;
     protected static $logName = 'entities';
 
+    private static $drugFocusNames = [
+        'Psilocybin',
+        'MDMA',
+        'LSD',
+        'DMT',
+        'Tryptamine',
+        'Ketamine',
+        'Ibogaine',
+        'GHB',
+    ];
+
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
+
+    public static function getDrugFocusNames()
+    {
+        return self::$drugFocusNames;
+    }
 
     /*
     |--------------------------------------------------------------------------

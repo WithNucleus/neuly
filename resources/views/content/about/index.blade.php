@@ -120,7 +120,7 @@
                     </div>
                     <div class="col-12 col-md-6">
                         {{-- Organization Focus Chart --}}
-                        @include('discover.insights.widgets.companies-by-focus')
+                        @include('discover.insights.widgets.companies-by-focus-drug')
                     </div>
                 </div>
             </div>

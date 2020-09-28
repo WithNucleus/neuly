@@ -175,7 +175,7 @@
                 <div class="col-12 col-md-6">
 
                     {{-- Organization Focus Chart --}}
-                    @include('discover.insights.widgets.companies-by-focus')
+                    @include('discover.insights.widgets.companies-by-focus-drug')
 
                     {{-- Upcoming Events --}}
                     @include('content.homepage.upcoming-events')

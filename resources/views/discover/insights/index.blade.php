@@ -47,7 +47,7 @@
                     @include('discover.insights.widgets.organizations-by-type')
                 </div>
                 <div class="col-12 col-lg-4">
-                    @include('discover.insights.widgets.companies-by-focus')
+                    @include('discover.insights.widgets.companies-by-focus-drug')
                 </div>
                 <div class="col-12 col-lg-4">
                     @include('discover.insights.widgets.top-ten-locations')
@@ -77,6 +77,9 @@
                     </div>
                     <div class="col-12 col-lg-4">
                         @include('discover.insights.widgets.research-by-focus')
+                    </div>
+                    <div class="col-12 col-lg-4">
+                        @include('discover.insights.widgets.companies-by-focus-industry')
                     </div>
                 @endauth
             </div>

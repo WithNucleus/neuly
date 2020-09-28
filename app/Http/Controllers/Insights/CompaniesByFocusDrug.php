@@ -3,19 +3,23 @@
 namespace App\Http\Controllers\Insights;
 
 use App\Http\Controllers\Controller;
+use App\Models\Focus;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
-class CompaniesByFocus extends Controller
+class CompaniesByFocusDrug extends Controller
 {
     /**
      * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
+        $onlyFocusNames = Focus::getDrugFocusNames();
+
         $data = DB::table('company_focus')
             ->select('focus.name', DB::raw('COUNT(company_focus.company_id) as total'))
             ->join('focus', 'focus.id', '=', 'company_focus.focus_id')
+            ->whereIn('focus.name', $onlyFocusNames)
             ->groupBy('company_focus.focus_id')
             ->get();
 
