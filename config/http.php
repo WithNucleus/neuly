@@ -48,8 +48,8 @@ return [
 
     'enable_x_frame_options' => true,
     'enable_x_frame_options_prefix' => [
-        'embeds',
-        'api/embeds'
+        '/embeds',
+        '/api/embeds'
     ],
 
     /*
