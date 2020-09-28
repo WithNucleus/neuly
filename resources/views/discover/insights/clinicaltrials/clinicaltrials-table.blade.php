@@ -39,7 +39,7 @@
         @forelse ($companies as $companyWithTrials)
             <tr>
                 <th colspan="8" class="border-info bg-info text-uppercase">
-                    <a href="{{ route('discover.organizations.show', $companyWithTrials[0]->company_slug) }}">{{ $companyWithTrials[0]->company_name }}</a>
+                    <a href="{{ route('discover.organizations.show', $companyWithTrials[0]->company_slug) }}" class="text-dark">{{ $companyWithTrials[0]->company_name }}</a>
                 </th>
             </tr>
             @foreach ($companyWithTrials as $clinicaltrial)
