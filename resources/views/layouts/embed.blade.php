@@ -23,6 +23,27 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
             integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
             crossorigin="anonymous"></script>
+    <script>
+        function getParentUrl() {
+            return (window.location != window.parent.location)
+                ? document.referrer
+                : document.location.href;
+        }
+
+        $(document).ready(function () {
+            let iframeUrl = '{!! url('/') !!}',
+                parentUrl = getParentUrl();
+
+            //if iframe doesn't located on app domain
+            if (parentUrl.includes(iframeUrl) === false && parentUrl) {
+                $('.js-items-list a').each(function () {
+                    let href = $(this).attr('href');
+
+                    $(this).attr('href', href + '?referer=' + encodeURI(parentUrl));
+                });
+            }
+        });
+    </script>
 </head>
 <body class="@yield('body-class', '') embed">
 <div id="app">

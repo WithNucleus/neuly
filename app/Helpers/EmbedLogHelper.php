@@ -14,14 +14,14 @@ class EmbedLogHelper
      */
     public static function add(Request $request, $entity)
     {
-        if ($request->has('embedded') === false) {
+        if ($request->has('referer') === false) {
             return;
         }
 
         $log = new LogEmbed();
         $log->entity_id   = $entity->getKey();
         $log->entity_type = get_class($entity);
-        $log->referer_url = $request->headers->get('referer');
+        $log->referer_url = $request->get('referer');
         $log->save();
     }
 }
