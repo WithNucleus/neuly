@@ -47,7 +47,7 @@
                     @include('discover.insights.widgets.organizations-by-type')
                 </div>
                 <div class="col-12 col-lg-4">
-                    @include('content.homepage.organization-focus-chart')
+                    @include('discover.insights.widgets.companies-by-focus-drug')
                 </div>
                 <div class="col-12 col-lg-4">
                     @include('discover.insights.widgets.top-ten-locations')
@@ -68,6 +68,18 @@
                     </div>
                     <div class="col-12 col-lg-4">
                         @include('discover.insights.most-interest.list')
+                    </div>
+                    <div class="col-12 col-lg-4">
+                        @include('discover.insights.research-authors.widget')
+                    </div>
+                    <div class="col-12 col-lg-4">
+                        @include('discover.insights.research-organizations.widget')
+                    </div>
+                    <div class="col-12 col-lg-4">
+                        @include('discover.insights.widgets.research-by-focus')
+                    </div>
+                    <div class="col-12 col-lg-4">
+                        @include('discover.insights.widgets.companies-by-focus-industry')
                     </div>
                 @endauth
             </div>
@@ -110,21 +122,4 @@
     </div>
 
     @include('footers.mini')
-
-    <script>
-
-        // Company Focus Chart
-        const chartCompanyFocus = new Chartisan({
-            el: '#chartCompanyFocus',
-            url: "{{ route('charts.company_focus') }}",
-            hooks: new ChartisanHooks()
-                // .colors(['#D81E5B'])
-                .colors(['rgba(63, 69, 49, 1)'])
-                .responsive()
-                .beginAtZero()
-                .legend(false)
-                .datasets(['bar']),
-        });
-    </script>
-
 @endsection

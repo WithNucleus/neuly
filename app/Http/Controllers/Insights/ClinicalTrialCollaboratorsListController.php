@@ -53,7 +53,9 @@ class ClinicalTrialCollaboratorsListController extends Controller
         $query = $query->groupBy('clinicaltrial_company.company_id')
             ->orderBy('trials', $sort);
 
-        $collaborators = $query->paginate(15);
+        $collaborators = $query
+            ->paginate(15)
+            ->appends($request->only(['sort', 'filter']));
 
         $metas = Metas::fromPage($request->path());
 

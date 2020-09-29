@@ -543,8 +543,6 @@ __webpack_require__(/*! ./insights */ "./resources/js/insights.js");
 
 __webpack_require__(/*! ./insights/collaborators-list */ "./resources/js/insights/collaborators-list.js");
 
-__webpack_require__(/*! ./insights/topTenLocations */ "./resources/js/insights/topTenLocations.js");
-
 __webpack_require__(/*! ./insights/most-interest-list */ "./resources/js/insights/most-interest-list.js");
 /* Global Chart Settings */
 
@@ -578,6 +576,43 @@ $('.js-chart-pie-with-action').each(function () {
         }
       }
     });
+  });
+});
+$('.js-top-ten-list-chart').each(function () {
+  var itemsHtml = '',
+      itemsList = $(this),
+      action = itemsList.data('action'),
+      itemTemplate = itemsList.find('.js-item-template').clone(),
+      icon = '<i class="' + itemsList.data('icon-class') + '"></i> ';
+  $.getJSON(action, {}, function (response) {
+    if (response !== '') {
+      response.forEach(function (item, i) {
+        var bar = '',
+            link = '<a href="' + item.link + '">' + item.name + '</a>';
+
+        for (j = 0; j < item.percent; j++) {
+          bar += icon;
+        }
+
+        itemTemplate.find('.js-item-link').html(link);
+        itemTemplate.find('.js-item-bar').html(bar);
+        itemTemplate.removeClass('js-item-template', 'd-none');
+
+        if (i === response.length - 1) {
+          itemTemplate.addClass('border-bottom-0');
+        }
+
+        itemsHtml += itemTemplate.get(0).outerHTML;
+      });
+      itemsList.html(itemsHtml).slideDown();
+    }
+  });
+});
+$('.js-bar-chart').each(function (i, item) {
+  new Chartisan({
+    el: item,
+    url: $(this).data('action'),
+    hooks: new ChartisanHooks().colors(['rgba(63, 69, 49, 1)']).responsive().beginAtZero().legend(false).datasets(['bar'])
   });
 });
 
@@ -635,46 +670,6 @@ $(document).ready(function () {
     }).fail(function (data) {// set fail behaviour
     });
   }
-});
-
-/***/ }),
-
-/***/ "./resources/js/insights/topTenLocations.js":
-/*!**************************************************!*\
-  !*** ./resources/js/insights/topTenLocations.js ***!
-  \**************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-$('.js-top-ten-locations-list').each(function () {
-  var itemsHtml = '',
-      itemsList = $(this),
-      action = itemsList.data('action'),
-      itemTemplate = itemsList.find('.js-item-template').clone(),
-      icon = '<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-person-fill" fill="#D81E5B" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>';
-  $.getJSON(action, {}, function (response) {
-    if (response !== '') {
-      response.forEach(function (item, i) {
-        var bar = '',
-            link = '<a href="' + item.link + '">' + item.name + '</a>';
-
-        for (i = 0; i < item.percent; i++) {
-          bar += icon;
-        }
-
-        itemTemplate.find('.js-item-link').html(link);
-        itemTemplate.find('.js-item-bar').html(bar);
-        itemTemplate.removeClass('js-item-template', 'd-none');
-
-        if (i === response.length - 1) {
-          itemTemplate.addClass('border-bottom-0');
-        }
-
-        itemsHtml += itemTemplate.get(0).outerHTML;
-      });
-      itemsList.html(itemsHtml).slideDown();
-    }
-  });
 });
 
 /***/ }),

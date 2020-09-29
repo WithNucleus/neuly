@@ -29,10 +29,10 @@ Route::get('/about', 'Content\AboutController@index')->name('about');
 // Discover Index
 Route::get('/psychedelic-index', 'Content\IndexController@index')->name('discover.index');
 
-//Insights
+//Insights main page
 Route::get('/insights', 'Index\InsightsController@index')->name('discover.insights');
 
-//Insights Widgets
+//Insights
 Route::group([
     'prefix'     => '/insights',
     'namespace'  => 'Insights',
@@ -53,6 +53,13 @@ Route::group([
         Route::get('/most-interest', 'ClinicalTrialFocusListController@show')->name('most-interest.show');
         Route::post('/most-interest/list', 'ClinicalTrialFocusListController@index')->name('most-interest');
         Route::get('/clinical-trials-pipeline', 'ClinicalTrialPipelineController@show')->name('clinicaltrials.pipeline');
+        Route::get('/research-authors', 'ResearchAuthorsController@index')->name('research-authors');
+        Route::get('/research-authors/widget', 'ResearchAuthorsController@widget')->name('research-authors.widget');
+        Route::get('/research-organizations', 'ResearchOrganizationsController@index')->name('research-organizations');
+        Route::get('/research-organizations/widget', 'ResearchOrganizationsController@widget')->name('research-organizations.widget');
+        Route::get('/research-by-focus', 'ResearchByFocus@index')->name('research-by-focus');
+        Route::get('/companies-by-focus-drug', 'CompaniesByFocusDrug@index')->name('companies-by-focus-drug');
+        Route::get('/companies-by-focus-industry', 'CompaniesByFocusIndustry@index')->name('companies-by-focus-industry');
     });
 });
 
@@ -230,12 +237,6 @@ Route::group(['middleware' => 'auth'], function () {
 
 // User Email Reset
 Route::get('/user/retake/{token}', 'Index\UserRetakeController@index')->name('user.retake');
-
-// Charts
-Route::get('/charts/companyFocus.json', 'Index\ChartController@companyFocus')->name('charts.company_focus');
-// Route::get('/charts/companyType.json', 'Index\ChartController@companyType')->name('charts.company_type');
-// Route::get('/charts/topLocations', 'Index\ChartController@topLocations')->name('charts.top_locations');
-
 
 /* SPECIAL ADMIN CONTROLLERS */
 Route::get('/admin/companyperson/{id}', 'Admin\CompanyPersonController@index');
