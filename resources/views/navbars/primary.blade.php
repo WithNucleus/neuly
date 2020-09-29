@@ -33,9 +33,7 @@
                     <a class="dropdown-item" href="{{ route('discover.index') }}"><i class="fad fa-chart-area fa-fw"></i> Pubco Index</a>
                     <a class="dropdown-item" href="{{ route('discover.investors') }}"><i class="fad fa-hands-usd fa-fw"></i> Investors</a>
                     <a class="dropdown-item" href="{{ route('discover.insights') }}"><i class="fad fa-head-side-brain fa-fw"></i> Insights</a>
-                    @can('admin login')
-                        <a class="dropdown-item" href="{{ route('insights.clinicaltrials.pipeline') }}"><i class="fad fa-stream fa-fw"></i> Clinical Trial Pipeline</a>
-                    @endcan
+                    <a class="dropdown-item" href="{{ route('insights.clinicaltrials.pipeline') }}"><i class="fad fa-stream fa-fw"></i> Clinical Trial Pipeline</a>
                 </div>
 
             @guest
