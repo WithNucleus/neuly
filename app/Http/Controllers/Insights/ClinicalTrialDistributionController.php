@@ -40,7 +40,8 @@ class ClinicalTrialDistributionController extends Controller
 
     private function buildCountryQuery()
     {
-        $query = $this->getQuery();
+
+        $query = $this->getQuery($this->getSubQuery());
         $query = $this->selectByCountries($query);
         $query = $this->groupByCountries($query);
 
@@ -49,47 +50,59 @@ class ClinicalTrialDistributionController extends Controller
 
     private function buildCountryByFocusQuery()
     {
-        $query = $this->getQuery();
-        $query = $this->joinFocus($query);
+        $query = $this->getQuery($this->getSubByFocusQuery());
         $query = $this->selectByCountriesAndFocus($query);
         $query = $this->groupByCountriesAndFocus($query);
 
         return $query;
     }
 
-    private function getQuery()
+    private function getQuery($sub)
+    {
+        return DB::table(DB::raw("({$sub->toSql()}) as sub"))
+            ->select('sub.country', 'sub.alpha2code', DB::raw('count(sub.country)'));
+    }
+
+    private function getSubQuery()
     {
         return DB::table('locations')
             ->join('clinicaltrial_location', 'locations.id', 'clinicaltrial_location.location_id')
-            ->join('countries', 'locations.country', 'countries.name');
+            ->join('countries', 'locations.country', 'countries.name')
+            ->select('country', 'alpha2code', DB::raw('count(country)'), DB::raw('concat(clinicaltrial_location.clinicaltrial_id, locations.country) AS identifier'))
+            ->groupBy('identifier', 'country');
     }
 
-    private function joinFocus($query)
+    private function getSubByFocusQuery()
     {
-        return $query->join('clinicaltrial_focus', 'clinicaltrial_location.clinicaltrial_id', 'clinicaltrial_focus.clinicaltrial_id')
-                    ->join('focus', 'focus.id', 'clinicaltrial_focus.focus_id');
+        return DB::table('locations')
+            ->join('clinicaltrial_location', 'locations.id', 'clinicaltrial_location.location_id')
+            ->join('countries', 'locations.country', 'countries.name')
+            ->join('clinicaltrial_focus', 'clinicaltrial_location.clinicaltrial_id', 'clinicaltrial_focus.clinicaltrial_id')
+            ->join('focus', 'focus.id', 'clinicaltrial_focus.focus_id')
+            ->select('focus.name', 'country', 'alpha2code', DB::raw('count(country)'), DB::raw('concat(clinicaltrial_location.clinicaltrial_id, locations.country, focus.name) AS identifier'))
+            ->groupBy('focus.name', 'identifier', 'country');
     }
 
     private function selectByCountries($query)
     {
-        return $query->select('country', 'alpha2code',
-            DB::raw('count(clinicaltrial_location.clinicaltrial_id) as trials'));
+        return $query->select(DB::raw('sub.country as country'), DB::raw('sub.alpha2code as alpha2code'),
+            DB::raw('count(sub.country) as trials'));
     }
 
     private function selectByCountriesAndFocus($query)
     {
-        return $query->select('country', 'focus.name', 'alpha2code',
-            DB::raw('count(clinicaltrial_location.clinicaltrial_id) as trials'));
+        return $query->select('sub.country', 'sub.name', 'sub.alpha2code',
+            DB::raw('count(sub.country) as trials'));
     }
 
     private function groupByCountries($query)
     {
-        return $query->groupBy('locations.country');
+        return $query->groupBy('country');
     }
 
     private function groupByCountriesAndFocus($query)
     {
-        return $query->groupBy('focus.name', 'locations.country');
+        return $query->groupBy('name', 'country');
     }
 
     private function getMappedCountries($items)
