@@ -41,6 +41,7 @@ Route::group([
     //demo insights
     Route::get('/companies-by-type', 'CompaniesByTypeController@index')->name('companies-by-type');
     Route::get('/top-ten-locations', 'TopTenLocationsController@index')->name('top-ten-locations');
+    Route::get('/companies-by-focus-drug', 'CompaniesByFocusDrug@index')->name('companies-by-focus-drug');
 
     //insights only for registered users
     Route::group([
@@ -58,7 +59,6 @@ Route::group([
         Route::get('/research-organizations', 'ResearchOrganizationsController@index')->name('research-organizations');
         Route::get('/research-organizations/widget', 'ResearchOrganizationsController@widget')->name('research-organizations.widget');
         Route::get('/research-by-focus', 'ResearchByFocus@index')->name('research-by-focus');
-        Route::get('/companies-by-focus-drug', 'CompaniesByFocusDrug@index')->name('companies-by-focus-drug');
         Route::get('/companies-by-focus-industry', 'CompaniesByFocusIndustry@index')->name('companies-by-focus-industry');
     });
 });
