@@ -41,6 +41,11 @@ class Focus extends Model implements EntityContract
         'Ketamine',
         'Ibogaine',
         'GHB',
+        'Iboga',
+        'Ayahuasca',
+        'Arketamine',
+        'Mescaline',
+        'Noribogaine'
     ];
 
     /*
