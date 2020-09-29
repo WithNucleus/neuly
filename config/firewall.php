@@ -27,9 +27,9 @@ return [
 
         'mail' => [
             'enabled' => env('FIREWALL_EMAIL_ENABLED', false),
-            'name' => env('FIREWALL_EMAIL_NAME', 'Laravel Firewall'),
-            'from' => env('FIREWALL_EMAIL_FROM', 'firewall@mydomain.com'),
-            'to' => [env('FIREWALL_EMAIL_TO', 'admin@mydomain.com')],
+            'name' => env('FIREWALL_EMAIL_NAME', 'Neuly Firewall'),
+            'from' => env('FIREWALL_EMAIL_FROM', 'website@neuly.com'),
+            'to' => [env('FIREWALL_EMAIL_TO', 'sydney@gotsmith.com')],
         ],
 
         'slack' => [
