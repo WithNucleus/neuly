@@ -71,6 +71,7 @@ Route::get('/searchassets/investorsOrganizations.json', 'Index\SearchSuggestions
 Route::get('/searchassets/companiesLocations.json', 'Index\SearchSuggestionsController@companiesLocations');
 Route::get('/searchassets/locationsRegions.json', 'Index\SearchSuggestionsController@locationsRegions');
 Route::get('/searchassets/focusOrganizations.json', 'Index\SearchSuggestionsController@focusOrganizations');
+Route::get('/searchassets/clinicalTrialCollaborators.json', 'Index\SearchSuggestionsController@clinicalTrialCollaborators');
 
 // Companies
 Route::get('/organizations', 'Index\CompanyController@index')->name('discover.organizations');
