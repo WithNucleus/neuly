@@ -8,6 +8,7 @@ class ImportFailure extends Model
 {
     const TYPE_LOCATIONS             = 'locations';
     const TYPE_SPONSOR_COLLABORATORS = 'sponsorcollaborators';
+    const TYPE_IMAGE                 = 'image';
 
     protected $table = 'import_failures';
 

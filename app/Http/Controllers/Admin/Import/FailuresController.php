@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Import;
 
+use App\Helpers\Import\BatchImageUpload\ImportFailureCorrector as BatchImageUploadCorrector;
 use App\Helpers\Import\CriticalTrial\ImportFailureCorrector as ClinicalTrialCorrector;
 use App\Helpers\Import\RelatedEntities\ImportFailureCorrector as RelatedEntitiesCorrector;
 use App\Helpers\StringHelper;
@@ -27,7 +28,8 @@ class FailuresController extends Controller
     {
         $allowedTypes = [
             ImportFailure::TYPE_LOCATIONS,
-            ImportFailure::TYPE_SPONSOR_COLLABORATORS
+            ImportFailure::TYPE_SPONSOR_COLLABORATORS,
+            ImportFailure::TYPE_IMAGE,
         ];
 
         if (!in_array($type, $allowedTypes)) {
@@ -73,6 +75,9 @@ class FailuresController extends Controller
                 break;
             case ImportResult::TYPE_RELATED_ENTITIES:
                 $result = RelatedEntitiesCorrector::correctFailure($failure, $request->all());
+                break;
+            case ImportResult::TYPE_BATCH_IMAGES_UPLOAD:
+                $result = BatchImageUploadCorrector::correctFailure($failure, $request->file('image'));
                 break;
         }
 

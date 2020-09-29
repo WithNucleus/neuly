@@ -106,6 +106,28 @@
         });
     });
 
+    $(".js-fix-image-failure-button").on('click', function () {
+        let button = $(this),
+            itemBlock = button.parents('.js-failure-item-container'),
+            action = button.data('action'),
+            image = itemBlock.find('input[type=file]').prop("files")[0],
+            formData = new FormData();
+
+        formData.append("image", image);
+
+        $.ajax({
+            url: action,
+            method: 'post',
+            data: formData,
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                processRequestResponse(itemBlock, response.status);
+            }
+        });
+    });
+
     $(".js-delete-failure-button").on('click', function () {
         let button = $(this),
             itemBlock = button.parents('.js-failure-item-container'),
@@ -114,6 +136,12 @@
         $.post(action, {}, function (response){
             processRequestResponse(itemBlock, response.status);
         });
+    });
+
+    $('.js-custom-file-input').on('change', function (event) {
+        let input = event.target;
+        let fileName = input.files[0].name;
+        $(input).siblings('label').text(fileName);
     });
 
     function processRequestResponse(itemBlock, status) {

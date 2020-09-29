@@ -1,11 +1,5 @@
 @php
-    $showUrlSuffix = '';
-    $attrTarget = '';
-
-    if (isset($embed) && $embed == true) {
-        $showUrlSuffix = '?embedded=1';
-        $attrTarget = 'target="_blank"';
-    }
+    $attrTarget = (isset($embed) && $embed == true) ? 'target="_blank"' : '';
 @endphp
 <div class="row">
     <div class="col-12">
@@ -29,12 +23,12 @@
             @include('navbars.events')
 
             {{-- Events --}}
-            <ul class="list-group list-group-flush mb-4 shadow-sm">
+            <ul class="list-group list-group-flush mb-4 shadow-sm js-items-list">
                 @forelse($events as $event)
                     <li class="list-group-item p-4 d-md-flex">
 
                         <div class="image mr-3 mt-1">
-                            <a href="{{ route('discover.events.show', $event->slug) . $showUrlSuffix }}" {!! $attrTarget !!}>
+                            <a href="{{ route('discover.events.show', $event->slug) }}" {!! $attrTarget !!}>
                                 @if ($event->image == '')
                                     <div class="logo-is-contained bg-brains rounded">
                                         <img src="{{ asset('images/icons/events.svg') }}" alt="{{ $event->name }}">
@@ -48,7 +42,7 @@
 
                         <div class="text">
                             <p class="lead mb-1">
-                                <a href="{{ route('discover.events.show', $event->slug) . $showUrlSuffix }}" {!! $attrTarget !!}>
+                                <a href="{{ route('discover.events.show', $event->slug) }}" {!! $attrTarget !!}>
                                     {{ $event->name }}
                                 </a>
                             </p>

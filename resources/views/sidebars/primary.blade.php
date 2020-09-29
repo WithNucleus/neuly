@@ -71,6 +71,14 @@
                 @include('sidebars.most-interest')
             @endif
 
+            @if(Route::is('insights.research-authors'))
+                @include('sidebars.insights.research-authors')
+            @endif
+
+            @if(Route::is('insights.research-organizations'))
+                @include('sidebars.insights.research-organizations')
+            @endif
+
         </div>
     </div>
 </nav>

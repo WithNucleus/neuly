@@ -1,11 +1,5 @@
 @php
-    $showUrlSuffix = '';
-    $attrTarget = '';
-
-    if (isset($embed) && $embed == true) {
-        $showUrlSuffix = '?embedded=1';
-        $attrTarget = 'target="_blank"';
-    }
+    $attrTarget = (isset($embed) && $embed == true) ? 'target="_blank"' : '';
 @endphp
 <div class="row">
     <div class="col-12">
@@ -84,12 +78,12 @@
             <?php endif; ?>
 
             {{-- Jobs --}}
-            <ul class="list-group list-group-flush mb-4 shadow-sm">
+            <ul class="list-group list-group-flush mb-4 shadow-sm js-items-list">
                 @forelse($jobs as $job)
                     <li class="list-group-item d-md-flex">
 
                         <div class="image mr-5 flex-shrink-0">
-                            <a href="{{ route('discover.jobs.show', $job->slug) . $showUrlSuffix }}" {!! $attrTarget !!}>
+                            <a href="{{ route('discover.jobs.show', $job->slug) }}" {!! $attrTarget !!}>
                                 <div class="job-org-logo" style="background-image: url('/storage/{{ $job->company->logo }}');"></div>
                             </a>
                         </div>
@@ -98,7 +92,7 @@
                             <div class="row">
                                 <div class="col-12 col-md-6 col-lg-7">
                                     <p class="lead-smaller mb-0">
-                                        <a href="{{ route('discover.jobs.show', $job->slug) . $showUrlSuffix }}" {!! $attrTarget !!}>
+                                        <a href="{{ route('discover.jobs.show', $job->slug) }}" {!! $attrTarget !!}>
                                             {{ $job->job_title }}
                                         </a>
                                     </p>

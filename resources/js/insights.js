@@ -1,5 +1,4 @@
 require('./insights/collaborators-list');
-require('./insights/topTenLocations');
 require('./insights/most-interest-list');
 
 /* Global Chart Settings */
@@ -36,4 +35,51 @@ $('.js-chart-pie-with-action').each(function () {
             }
         });
     });
+});
+
+$('.js-top-ten-list-chart').each(function () {
+    let itemsHtml    = '',
+        itemsList    = $(this),
+        action       = itemsList.data('action'),
+        itemTemplate = itemsList.find('.js-item-template').clone(),
+        icon = '<i class="' + itemsList.data('icon-class') + '"></i> ';
+
+    $.getJSON(action, {}, function (response) {
+        if (response !== '') {
+            response.forEach(function (item, i) {
+                let bar = '',
+                    link = '<a href="' + item.link + '">' + item.name + '</a>';
+
+                for (j = 0; j < item.percent; j++) {
+                    bar += icon;
+                }
+
+                itemTemplate.find('.js-item-link').html(link);
+                itemTemplate.find('.js-item-bar').html(bar);
+                itemTemplate.removeClass('js-item-template', 'd-none');
+
+                if (i === response.length - 1){
+                    itemTemplate.addClass('border-bottom-0');
+                }
+
+                itemsHtml += itemTemplate.get(0).outerHTML;
+            });
+
+            itemsList.html(itemsHtml).slideDown();
+        }
+    });
+});
+
+$('.js-bar-chart').each(function (i, item) {
+    new Chartisan({
+        el: item,
+        url: $(this).data('action'),
+        hooks: new ChartisanHooks()
+            .colors(['rgba(63, 69, 49, 1)'])
+            .responsive()
+            .beginAtZero()
+            .legend(false)
+            .datasets(['bar']),
+    });
+
 });

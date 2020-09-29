@@ -54,7 +54,9 @@ class ClinicalTrialFocusListController extends Controller
         $query = $query->groupBy('clinicaltrial_focus.focus_id')
             ->orderBy('trials', $sort);
 
-        $focus = $query->paginate(15);
+        $focus = $query
+            ->paginate(15)
+            ->appends($request->only(['sort', 'filter']));
 
         $metas = Metas::fromPage($request->path());
 

@@ -79,6 +79,11 @@ return [
             'visibility' => 'public',
         ],
 
+        'batch-images-upload' => [
+            'driver' => 'local',
+            'root'   => storage_path('app/batch-images-upload'),
+        ],
+
     ],
 
     /*
