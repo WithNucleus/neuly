@@ -42,6 +42,7 @@ Route::group([
     Route::get('/companies-by-type', 'CompaniesByTypeController@index')->name('companies-by-type');
     Route::get('/top-ten-locations', 'TopTenLocationsController@index')->name('top-ten-locations');
     Route::get('/companies-by-focus-drug', 'CompaniesByFocusDrug@index')->name('companies-by-focus-drug');
+    Route::get('/clinical-trials-pipeline', 'ClinicalTrialPipelineController@show')->name('clinicaltrials.pipeline');
 
     //insights only for registered users
     Route::group([
@@ -53,7 +54,6 @@ Route::group([
         Route::post('/collaborators/list', 'ClinicalTrialCollaboratorsListController@index')->name('collaborators');
         Route::get('/most-interest', 'ClinicalTrialFocusListController@show')->name('most-interest.show');
         Route::post('/most-interest/list', 'ClinicalTrialFocusListController@index')->name('most-interest');
-        Route::get('/clinical-trials-pipeline', 'ClinicalTrialPipelineController@show')->name('clinicaltrials.pipeline');
         Route::get('/research-authors', 'ResearchAuthorsController@index')->name('research-authors');
         Route::get('/research-authors/widget', 'ResearchAuthorsController@widget')->name('research-authors.widget');
         Route::get('/research-organizations', 'ResearchOrganizationsController@index')->name('research-organizations');
