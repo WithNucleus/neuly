@@ -24,6 +24,20 @@
 				{{ $job->employment_type }}
 			</p>
 
+            @if($job->salary)
+            <p class="mb-2">
+                <strong>Salary:</strong><br>
+                ${{ number_format($job->salary) }}
+            </p>
+            @endif
+
+            @if($job->hourly_rate)
+                <p class="mb-2">
+                    <strong>Hourly rate:</strong><br>
+                    ${{ number_format($job->hourly_rate, 2) }}
+                </p>
+            @endif
+
 			@if($job->locations->count() > 0)
 				<p class="mb-2">
 					<strong>Location:</strong><br>
