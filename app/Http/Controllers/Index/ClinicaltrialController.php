@@ -6,11 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Repositories\FollowRepository;
 use Illuminate\Http\Request;
 use App\Models\Clinicaltrial;
-use App\Models\Focus;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
-use Spatie\Activitylog\Models\Activity;
 use Auth;
 use DB;
 use App\Models\Location;
@@ -31,17 +29,18 @@ class ClinicaltrialController extends Controller
     // Index
     public function index(Request $request)
     {
-
         $clinicaltrials = QueryBuilder::for(Clinicaltrial::class)
             ->allowedFilters([
                 'nct_number',
                 'title',
                 'study_results',
+                'conditions',
+                'interventions',
                 AllowedFilter::exact('status'),
                 AllowedFilter::exact('focus', 'focus.name'),
                 AllowedFilter::partial('locations', 'locations.name'),
-                AllowedFilter::partial('companies', 'companies.name'),
-                AllowedFilter::partial('people', 'people.name'),
+                AllowedFilter::partial('company', 'companies.name'),
+                AllowedFilter::partial('researchers', 'people.name'),
             ])
             ->defaultSort('-start_date')
             ->allowedSorts([
@@ -58,7 +57,44 @@ class ClinicaltrialController extends Controller
         $locations = Location::findMany($location_ids)->sortBy('country')->pluck('country')->unique();
         $focus_cats = Focus::drugs()->orderBy('name')->get()->pluck('name');
 
-        return view('discover.clinicaltrials.index', compact('clinicaltrials', 'status', 'focus_cats', 'locations'));
+        $filters_companies = [];
+        $filters_researchers = [];
+        $filters_conditions = [];
+        $filters_interventions = [];
+
+        if ($request->has('filter')) {
+            $filterInput = $request->input('filter');
+            $filter = array_map(function ($entity) {
+                return explode('|', $entity);
+            }, $filterInput);
+
+            if(isset($filter['company'])) {
+                $filters_companies = $filter['company'];
+            }
+
+            if(isset($filter['researchers'])) {
+                $filters_researchers = $filter['researchers'];
+            }
+
+            if(isset($filter['conditions'])) {
+                $filters_conditions = $filter['conditions'];
+            }
+
+            if(isset($filter['interventions'])) {
+                $filters_interventions = $filter['interventions'];
+            }
+        }
+
+        return view('discover.clinicaltrials.index', compact(
+            'clinicaltrials',
+            'status',
+            'focus_cats',
+            'locations',
+            'filters_companies',
+            'filters_researchers',
+            'filters_conditions',
+            'filters_interventions'
+        ));
     }
 
     public function show(Request $request, $slug)

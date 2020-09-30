@@ -9,6 +9,7 @@ use App\Models\Person;
 use App\Models\Location;
 use App\Models\Focus;
 use DB;
+use Illuminate\Http\Response;
 
 class SearchSuggestionsController extends Controller
 {
@@ -89,6 +90,34 @@ class SearchSuggestionsController extends Controller
     public function clinicalTrialCollaborators() {
         $collaborators = self::getPivotRelationships('clinicaltrial_company', 'company_id', 'App\Models\Company');
         return $collaborators;
+    }
+
+    public function clinicalTrialResearchers() {
+        return self::getPivotRelationships('clinicaltrial_person', 'person_id', 'App\Models\Person');
+    }
+
+    public function clinicalTrialConditions() {
+        $data = Clinicaltrial::select('conditions')
+            ->distinct()
+            ->orderBy('conditions')
+            ->pluck('conditions')
+            ->map(function ($item) {
+                return ['name' => $item];
+            });
+
+        return response()->json($data, Response::HTTP_OK);
+    }
+
+    public function clinicalTrialInterventions() {
+        $data = Clinicaltrial::select('interventions')
+            ->distinct()
+            ->orderBy('interventions')
+            ->pluck('interventions')
+            ->map(function ($item) {
+                return ['name' => $item];
+            });
+
+        return response()->json($data, Response::HTTP_OK);
     }
 
     /* Get All Regions */

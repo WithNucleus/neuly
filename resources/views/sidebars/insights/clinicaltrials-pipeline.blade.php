@@ -1,23 +1,30 @@
-<div class="clinicaltrial-collaborators mb-3">
-    <label for="organizations" class="h4">Organizations</label>
-    <div class="d-flex">
-        <input type="text" class="typeahead form-control" name="organizations-search" placeholder="Search organizations">
-        <button class="btn btn-link px-1 text-primary"><i class="fad fa-search fa-lg"></i></button>
-    </div>
+@include('sidebars.filters.typeahead', [
+    'label'     => 'Organizations',
+    'name'      => 'company',
+    'items'     => $filters_organizations,
+    'action'    => route('searchassets.clinicalTrialCollaborators')
+])
 
-    <div id="organizations-filter">
-        <span class="d-block title"></span>
+@include('sidebars.filters.typeahead', [
+    'label'     => 'Researchers',
+    'name'      => 'researchers',
+    'items'     => $filters_researchers,
+    'action'    => route('searchassets.clinicalTrialResearchers')
+])
 
-        @isset($filters_organizations)
-            @foreach ($filters_organizations as $company)
-                <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" name="company" id="{{ $company }}" value="{{ $company }}" checked>
-                    <label class="custom-control-label" for="{{ $company }}">{{ $company }}</label>
-                </div>
-            @endforeach
-        @endisset
-    </div>
-</div>
+@include('sidebars.filters.typeahead', [
+    'label'     => 'Conditions',
+    'name'      => 'conditions',
+    'items'     => $filters_conditions,
+    'action'    => route('searchassets.clinicalTrialConditions')
+])
+
+@include('sidebars.filters.typeahead', [
+    'label'     => 'Interventions',
+    'name'      => 'interventions',
+    'items'     => $filters_interventions,
+    'action'    => route('searchassets.clinicalTrialInterventions')
+])
 
 @include('sidebars.filters.checkboxes-new', [
     'label'     => 'Focus',
@@ -41,22 +48,3 @@
 ])
 
 @include('sidebars.filters.scripts')
-
-<script>
-    $(document).ready(function() {
-        var clinicalTrialCollaborators = new Bloodhound({
-            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-            queryTokenizer: Bloodhound.tokenizers.whitespace,
-            prefetch: '/searchassets/clinicalTrialCollaborators.json'
-        });
-
-        clinicalTrialCollaborators.initialize();
-
-        $('.clinicaltrial-collaborators .typeahead').typeahead(null, {
-            name: 'organizations',
-            display: 'name',
-            source: clinicalTrialCollaborators,
-            limit: 10,
-        });
-    });
-</script>

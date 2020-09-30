@@ -1,3 +1,31 @@
+@include('sidebars.filters.typeahead', [
+    'label'     => 'Organizations',
+    'name'      => 'company',
+    'items'     => $filters_companies,
+    'action'    => route('searchassets.clinicalTrialCollaborators')
+])
+
+@include('sidebars.filters.typeahead', [
+    'label'     => 'Researchers',
+    'name'      => 'researchers',
+    'items'     => $filters_researchers,
+    'action'    => route('searchassets.clinicalTrialResearchers')
+])
+
+@include('sidebars.filters.typeahead', [
+    'label'     => 'Conditions',
+    'name'      => 'conditions',
+    'items'     => $filters_conditions,
+    'action'    => route('searchassets.clinicalTrialConditions')
+])
+
+@include('sidebars.filters.typeahead', [
+    'label'     => 'Interventions',
+    'name'      => 'interventions',
+    'items'     => $filters_interventions,
+    'action'    => route('searchassets.clinicalTrialInterventions')
+])
+
 @include('sidebars.filters.checkboxes-new', [
     'label'     => 'Status',
     'name'      => 'status',

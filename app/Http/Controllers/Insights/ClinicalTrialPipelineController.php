@@ -2,25 +2,18 @@
 
 namespace App\Http\Controllers\Insights;
 
-use App\Helpers\InsightsHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Clinicaltrial;
 use App\Models\ClinicaltrialPhase;
-use App\Models\Company;
 use App\Models\Focus;
-use Backpack\CRUD\app\Library\CrudPanel\Traits\Query;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
-use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\AllowedSort;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class ClinicalTrialPipelineController extends Controller
 {
     /**
      * @param \Illuminate\Http\Request $request
-     * @return view
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function show(Request $request) {
 
@@ -31,37 +24,52 @@ class ClinicalTrialPipelineController extends Controller
         $filters_organizations = [];
         $filters_status = [];
         $filters_phases = [];
+        $filters_researchers = [];
+        $filters_conditions = [];
+        $filters_interventions = [];
 
-        $sort = $request->has('sort') ? $request->input('sort') : 'organizations';
+        if ($request->has('filter')) {
+            $filterInput = $request->input('filter');
+            $filter = array_map(function ($entity) {
+                    return explode('|', $entity);
+                }, $filterInput);
 
-        if ($request->has('filter'))
-        {
-            $filter = $request->input('filter');
             $query = $this->filterQuery($query, $filter);
 
             if(isset($filter['focus'])) {
-                $filters_focus = $this->getEntityNameArray($filter['focus']);
+                $filters_focus = $filter['focus'];
             }
 
             if(isset($filter['company'])) {
-                $filters_organizations = $this->getEntityNameArray($filter['company']);
+                $filters_organizations = $filter['company'];
             }
 
             if(isset($filter['status'])) {
-                $filters_status = $this->getEntityNameArray($filter['status']);
+                $filters_status = $filter['status'];
             }
 
             if(isset($filter['phase'])) {
-                $filters_phases = $this->getEntityNameArray($filter['phase']);
+                $filters_phases = $filter['phase'];
+            }
+
+            if(isset($filter['researchers'])) {
+                $filters_researchers = $filter['researchers'];
+            }
+
+            if(isset($filter['conditions'])) {
+                $filters_conditions = $filter['conditions'];
+            }
+
+            if(isset($filter['interventions'])) {
+                $filters_interventions = $filter['interventions'];
             }
         }
 
+        $sort = $request->has('sort') ? $request->input('sort') : 'organizations';
         $companies = $this->sortQuery($query, $sort)->get()->groupBy('company_id');
 
-        $focus_cats = Focus::has('clinicaltrials', '>' , 0)->get()->pluck('name')->unique()->sort();
-
-        $status = Clinicaltrial::pluck('status')->unique()->sort();
-
+        $focus_cats = Focus::whereHas('clinicaltrials')->orderBy('name')->pluck('name')->unique();
+        $status = Clinicaltrial::orderBy('status')->pluck('status')->unique();
         $phases = ClinicaltrialPhase::orderBy('integer')->pluck('pretty_name')->unique();
 
         return view('discover.insights.clinicaltrials.show', compact(
@@ -72,6 +80,9 @@ class ClinicalTrialPipelineController extends Controller
             'filters_organizations',
             'filters_status',
             'filters_phases',
+            'filters_researchers',
+            'filters_conditions',
+            'filters_interventions',
             'sort',
             'status',
             'phases'
@@ -87,7 +98,8 @@ class ClinicalTrialPipelineController extends Controller
             ->join('focus', 'focus.id', 'clinicaltrial_focus.focus_id')
             ->select('companies.id as company_id', 'companies.name as company_name', 'companies.slug as company_slug',
                 'clinicaltrials.id as clinicaltrial_id', 'clinicaltrials.title as title', 'clinicaltrials.slug as slug',
-                'clinicaltrials.phases as phase_value', 'clinicaltrials.phase_integer as phase_integer', 'clinicaltrials.status as status',
+                'clinicaltrials.phases as phase_value', 'clinicaltrials.phase_integer as phase_integer',
+                'clinicaltrials.status as status', 'clinicaltrials.conditions as conditions',
                 'focus.id as focus_id', 'focus.name as focus_name', 'focus.slug as focus_slug');
     }
 
@@ -109,11 +121,13 @@ class ClinicalTrialPipelineController extends Controller
                 break;
         }
 
+        $query->orderBy($orderField, $direction);
+
         if ($sortType === 'organizations') {
-            return $query->orderBy($orderField, $direction)->orderBy('phase_integer', 'desc');
-        } else {
-            return $query->orderBy($orderField, $direction);
+            $query->orderBy('phase_integer', 'desc');
         }
+
+        return $query;
     }
 
     private function filterQuery($query, $filter)
@@ -138,30 +152,56 @@ class ClinicalTrialPipelineController extends Controller
             $query = $this->filterByPhase($query, $filter['phase']);
         }
 
+        if(isset($filter['researchers'])) {
+            $query = $this->filterByResearchers($query, $filter['researchers']);
+        }
+
+        if(isset($filter['conditions'])) {
+            $query = $this->filterByConditions($query, $filter['conditions']);
+        }
+
+        if(isset($filter['interventions'])) {
+            $query = $this->filterByInterventions($query, $filter['interventions']);
+        }
+
         return $query;
     }
 
-    private function filterByFocus($query, $focus)
+    private function filterByFocus($query, $params)
     {
-        return $query->whereIn('focus.name', $this->getEntityNameArray($focus));
+        return $query->whereIn('focus.name', $params);
     }
 
-    private function filterByOrganizations($query, $organizations)
+    private function filterByOrganizations($query, $params)
     {
-        return $query->whereIn('companies.name', $this->getEntityNameArray($organizations));
+        return $query->whereIn('companies.name', $params);
     }
 
-    private function filterByStatus($query, $status)
+    private function filterByStatus($query, $params)
     {
-        return $query->whereIn('clinicaltrials.status', $this->getEntityNameArray($status));
+        return $query->whereIn('clinicaltrials.status', $params);
     }
 
-    private function filterByPhase($query, $phase)
+    private function filterByPhase($query, $params)
     {
-        return $query->whereIn('clinicaltrials.phases', $this->getEntityNameArray($phase));
+        return $query->whereIn('clinicaltrials.phases', $params);
     }
 
-    private function getEntityNameArray($entity) {
-        return explode('|', $entity);
+    private function filterByResearchers($query, $params)
+    {
+        return $query
+            ->join('clinicaltrial_person', 'clinicaltrials.id', 'clinicaltrial_person.clinicaltrial_id')
+            ->join('people', 'people.id', 'clinicaltrial_person.person_id')
+            ->whereIn('people.name', $params);
+    }
+
+    private function filterByConditions($query, $params)
+    {
+        return $query->whereIn('clinicaltrials.conditions', $params);
+    }
+
+    private function filterByInterventions($query, $params)
+    {
+        return $query->whereIn('clinicaltrials.interventions', $params);
     }
 }
