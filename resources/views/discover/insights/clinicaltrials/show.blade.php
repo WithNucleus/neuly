@@ -88,43 +88,52 @@
                         <strong class="text-uppercase mr-3 text-black-50">Current Filters:</strong>
 
                         @if(isset($filters_focus) && $filters_focus)
-                            <span class="mr-3">
-                                <i class="fad fa-flask text-secondarydark"></i>
-                                @foreach ($filters_focus as $focus)
-                                {{ $focus }}
-                                @if (!$loop->last) <strong class="text-black-50">/</strong> @endif
-                            @endforeach
-                            </span>
+                            @include('discover.includes.filters.current-filter', [
+                                'iconClass' => 'fa-flask',
+                                'items' => $filters_focus
+                            ])
                         @endif
 
                         @if(isset($filters_organizations) && $filters_organizations)
-                        <span class="mr-3">
-                                <i class="fad fa-building text-secondarydark"></i>
-                                @foreach ($filters_organizations as $organization)
-                                {{ $organization }}
-                                @if (!$loop->last) <strong class="text-black-50">/</strong> @endif
-                            @endforeach
-                            </span>
+                            @include('discover.includes.filters.current-filter', [
+                                'iconClass' => 'fa-building',
+                                'items' => $filters_organizations
+                            ])
                         @endif
 
                         @if(isset($filters_status) && $filters_status)
-                        <span class="mr-3">
-                                <i class="fad fa-info-circle text-secondarydark"></i>
-                                @foreach ($filters_status as $status)
-                                {{ $status }}
-                                @if (!$loop->last) <strong class="text-black-50">/</strong> @endif
-                            @endforeach
-                            </span>
+                            @include('discover.includes.filters.current-filter', [
+                                'iconClass' => 'fa-info-circle',
+                                'items' => $filters_status
+                            ])
                         @endif
 
                         @if(isset($filters_phases) && $filters_phases)
-                            <span class="mr-3">
-                                <i class="fad fa-stream text-secondarydark"></i>
-                                @foreach ($filters_phases as $phase)
-                                    {{ $phase }}
-                                    @if (!$loop->last) <strong class="text-black-50">/</strong> @endif
-                                @endforeach
-                            </span>
+                            @include('discover.includes.filters.current-filter', [
+                                'iconClass' => 'fa-stream',
+                                'items' => $filters_phases
+                            ])
+                        @endif
+
+                        @if(isset($filters_researchers) && $filters_researchers)
+                            @include('discover.includes.filters.current-filter', [
+                                'iconClass' => 'fa-users',
+                                'items' => $filters_researchers
+                            ])
+                        @endif
+
+                        @if(isset($filters_conditions) && $filters_conditions)
+                            @include('discover.includes.filters.current-filter', [
+                                'iconClass' => 'fa-info-circle',
+                                'items' => $filters_conditions
+                            ])
+                        @endif
+
+                        @if(isset($filters_interventions) && $filters_interventions)
+                            @include('discover.includes.filters.current-filter', [
+                                'iconClass' => 'fa-info-circle',
+                                'items' => $filters_interventions
+                            ])
                         @endif
                     </div>
                 @endif
