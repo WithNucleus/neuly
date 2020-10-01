@@ -70,6 +70,8 @@
     {{-- Bootstrap Javascript --}}
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
+    <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+
     {{-- Typeahead --}}
     <script type="text/javascript" src="{{ asset('assets/typeahead.js') }}"></script>
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/bootstrap-tagsinput.css') }}"/>
