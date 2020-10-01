@@ -24,8 +24,6 @@ class JobController extends Controller
      */
     public function __construct()
     {
-        // $this->middleware('auth');
-        // $this->middleware('neuly.membership');
         $this->middleware('query_filters')->only('index', 'embedIndex');
     }
 
@@ -92,7 +90,7 @@ class JobController extends Controller
                 AllowedFilter::exact('type', 'employment_type'),
                 AllowedFilter::exact('title', 'job_title'),
                 AllowedFilter::exact('locations', 'locations.name'),
-                AllowedFilter::exact('company', 'company.name'),
+                AllowedFilter::partial('company', 'company.name'),
             ])
             ->defaultSort('-posted_date')
             ->allowedSorts([
