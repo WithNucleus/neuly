@@ -13,6 +13,10 @@
                 </span>
             </div>
 
+            @if(Route::is('embeds.jobs.index'))
+                @include('sidebars.embeds')
+            @endif
+
             {{-- Sorting --}}
             @isset($sort)
                 <div class="sort-container font-size-small mt-3 mb-3">
