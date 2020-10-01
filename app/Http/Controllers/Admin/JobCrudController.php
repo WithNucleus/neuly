@@ -51,15 +51,11 @@ class JobCrudController extends CrudController
     protected function setupListOperation()
     {
         // CRUD::setFromDb(); // columns
-
-        // Job Title
         $this->crud->addColumn(['name' => 'job_title', 'type' => 'text', 'label' => 'Job Title']);
-
-        // Posted Date
         $this->crud->addColumn(['name' => 'posted_date', 'type' => 'date', 'label' => 'Posted Date']);
-
-        // Employment Type
         $this->crud->addColumn(['name' => 'employment_type', 'type' => 'text', 'label' => 'Employment Type']);
+        $this->crud->addColumn(['name' => 'salary', 'label' => 'Salary', 'type' => 'number', 'prefix' => '$']);
+        $this->crud->addColumn(['name' => 'hourly_rate', 'label' => 'Hourly Rate', 'type' => 'number', 'prefix' => '$', 'decimals' => 2]);
     }
 
     /**
@@ -102,6 +98,21 @@ class JobCrudController extends CrudController
             'name' => 'employment_type',
             'type' => 'text',
             'label' => 'Employment Type'
+        ]);
+
+        $this->crud->addColumn([
+            'name' => 'salary',
+            'label' => 'Salary',
+            'type' => 'number',
+            'prefix' => '$',
+        ]);
+
+        $this->crud->addColumn([
+            'name' => 'hourly_rate',
+            'label' => 'Hourly Rate',
+            'type' => 'number',
+            'prefix' => '$',
+            'decimals' => 2,
         ]);
 
         // Focus -- Relationship
@@ -172,6 +183,21 @@ class JobCrudController extends CrudController
             'name' => 'posted_date',
             'type' => 'date',
             'label' => 'Posted Date'
+        ]);
+
+        $this->crud->addField([
+            'name' => 'salary',
+            'label' => 'Salary',
+            'type' => 'number',
+            'prefix' => "$",
+        ]);
+
+        $this->crud->addField([
+            'name' => 'hourly_rate',
+            'label' => 'Hourly Rate',
+            'type' => 'number',
+            'prefix' => "$",
+            'attributes' => ["step" => ".01"]
         ]);
 
         // Company Relationship
@@ -254,7 +280,7 @@ class JobCrudController extends CrudController
         if($request->has('company_id') && $request->input('company_id') !== null) {
 
             $company = Company::find($request->input('company_id'));
-            
+
             $title = 'New job posting for ' . $company->name;
             $description = $company->getShowLink() . ' is hiring for a ' . $job->employment_type . ' position: ' . $job->getShowLink();
 
