@@ -60,6 +60,7 @@ Route::group([
         Route::get('/research-organizations/widget', 'ResearchOrganizationsController@widget')->name('research-organizations.widget');
         Route::get('/research-by-focus', 'ResearchByFocus@index')->name('research-by-focus');
         Route::get('/companies-by-focus-industry', 'CompaniesByFocusIndustry@index')->name('companies-by-focus-industry');
+        Route::get('/location-top-by-jobs', 'LocationTopByJobsController@index')->name('location-top-by-jobs');
     });
 });
 

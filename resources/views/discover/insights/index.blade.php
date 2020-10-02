@@ -81,6 +81,9 @@
                     <div class="col-12 col-lg-4">
                         @include('discover.insights.widgets.companies-by-focus-industry')
                     </div>
+                    <div class="col-12 col-lg-4">
+                        @include('discover.insights.widgets.location-top-by-jobs')
+                    </div>
                 @endauth
             </div>
 
