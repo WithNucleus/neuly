@@ -19,11 +19,15 @@
                 </span>
             </div>
 
+            @if(Route::is('embeds.events.index'))
+                @include('sidebars.embeds')
+            @endif
+
             {{-- Events Navbar --}}
             @include('navbars.events')
 
             {{-- Events --}}
-            <ul class="list-group list-group-flush mb-4 shadow-sm js-items-list">
+            <ul class="list-group list-group-flush mb-4 @if((isset($embed) && $embed == false) OR !isset($embed))shadow-sm @endif js-items-list">
                 @forelse($events as $event)
                     <li class="list-group-item p-4 d-md-flex">
 

@@ -8,9 +8,10 @@
  */
 ?>
 <div class="filter-checkbox-container mb-3" aria-label="Filter by {{ $label }}">
-    <label for="{{ $name }}-filter" class="h4">{{ $label }}</label><br>
+    <label for="{{ $name }}-filter" class="h4 d-block">{{ $label }}</label>
     @isset($items)
-        <select class="form-control" id="{{ $name }}-filter" name="{{ $name }}" {{ isset($multi) ? 'multiple' : '' }}>
+        <select class="custom-select" id="{{ $name }}-filter" name="{{ $name }}" {{ isset($multi) ? 'multiple' : '' }}>
+            <option></option>
             @foreach ($items as $item)
                 <option value="{{ $item }}" {{ in_array($item, $item_filters) ? 'selected' : '' }}>{{ $item }}</option>
             @endforeach

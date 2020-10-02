@@ -1,16 +1,11 @@
 @extends('layouts.embed')
 
-@section('body-class', 'page-jobs bg-light')
+@section('body-class', 'page-jobs')
 
 @section('content')
-    <div class="container-fluid">
-        <div class="row mt-2">
-
-            @include('sidebars.primary')
-
-            <main role="main" class="col-lg-9 col-xl-10 ml-auto">
-                @include('discover.jobs.includes.items-list', ['embed' => true])
-            </main>
-        </div>
+    <div class="container-fluid py-4">
+        <main role="main">
+            @include('discover.jobs.includes.items-list', ['embed' => true])
+        </main>
     </div>
 @endsection

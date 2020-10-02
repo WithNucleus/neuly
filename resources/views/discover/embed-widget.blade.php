@@ -1,3 +1,11 @@
+<?php
+$minHeight = 1500;
+
+if ($title === 'Events') {
+    $minHeight = 2700;
+}
+?>
+
 @extends('layouts.app')
 
 @section('body-class', 'page-jobs bg-light')
@@ -30,49 +38,50 @@
                 ])
             </div>
         </div>
+    </div>
 
-        {{-- Sidebar and Content Area --}}
-        <div class="row">
-            <main id="index-main" role="main" class="col-lg-9 col-xl-10 ml-auto">
+    <main id="index-main" role="main">
 
-                <div class="row">
-                    <div class="col-12">
-                        <div class="full-width-show-view">
-
-                            <div class="page-title-default d-md-flex justify-content-between">
-                                <h1 class="mb-0 mr-5">Neuly {{ $title }} Embed Widget</h1>
-                            </div>
-
-                            <div class="row mt-4">
-                                <div class="col-12 col-md-6">
-                                    <iframe src="{{ $embedUrl }}" width="100%" height="100%" style="min-width: 480px; min-height: 480px"></iframe>
-                                </div>
-                                <div class="col-12 col-md-6">
-                                    <p class="lead">
-                                        @if($title === 'Events')
-                                            Embed our free events widget to display upcoming events related to the psychedelics industry on your website.
-                                        @elseif ($title === 'Jobs')
-                                            Embed our free jobs widget to display job listings for the psychedelic industry on your website.
-                                        @endif
-                                    </p>
-                                    <div class="form-group">
-                                        <label class="font-weight-bold">Embed widget code:</label>
-                                        <textarea class="form-control" readonly><iframe src="{{ $embedUrl }}" width="100%" height="100%" style="min-width: 480px; min-height: 480px"></iframe></textarea>
-                                        <p><small>Copy and paste to your webpage</small></p>
-                                    </div>
-                                </div>
-                            </div>
+        <div class="container">
+            <h1>Neuly {{ $title }} Embed Widget</h1>
+            <div class="bg-white p-3 shadow-sm">
+                <div class="row mt-4">
+                    <div class="col-12 col-md-6">
+                        <div class="py-3 px-5">
+                            @if($title === 'Events')
+                                <img src="{{ asset('images/embed-events.png') }}" alt="Neuly Embed Widget" class="w-100">
+                            @else
+                                <img src="{{ asset('images/embed-jobs.png') }}" alt="Neuly Embed Widget" class="w-100">
+                            @endif
                         </div>
                     </div>
-
+                    <div class="col-12 col-md-6">
+                        <p class="lead mt-md-3">
+                            @if($title === 'Events')
+                                Embed our free events widget to display upcoming events related to the psychedelics industry on your website.
+                            @elseif ($title === 'Jobs')
+                                Embed our free jobs widget to display job listings for the psychedelic industry on your website.
+                            @endif
+                        </p>
+                        <div class="form-group">
+                            <label class="font-weight-bold">Embed widget code:</label>
+                            <textarea class="form-control" readonly><iframe src="{{ $embedUrl }}" width="100%" height="100%" style="min-height: {{ $minHeight }}px; border: 0;"></iframe></textarea>
+                            <p><small>Copy and paste to your webpage</p>
+                        </div>
+                    </div>
                 </div>
 
-                @include('discover.includes.discover-footer-content')
-
-            </main>
-
+                <div class="row mt-5">
+                    <div class="col-12">
+                        <h2 class="lead-larger text-secondarydark mb-0 font-normal">Example:</h2>
+                    </div>
+                    <div class="col-12">
+                        <iframe src="{{ $embedUrl }}" width="100%" height="100%" style="min-width: 480px; min-height: {{ $minHeight }}px; border: 0;"></iframe>
+                    </div>
+                </div>
+            </div>
         </div>
 
-    </div>
+    </main>
 
 @endsection
