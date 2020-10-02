@@ -19,7 +19,7 @@ class ContentSecurityPolicyGuard
 
         if(config('http.enable_content_security_policy'))
         {
-            $response->header('Content-Security-Policy', config('http.content_security_policy_value'));
+            $response->headers->set('Content-Security-Policy', config('http.content_security_policy_value'));
         }
 
         return $response;

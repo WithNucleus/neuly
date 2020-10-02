@@ -18,7 +18,7 @@ class FeaturePolicyGuard
         $response = $next($request);
         if(config('http.enable_feature_policy'))
         {
-            $response->header('FeaturePolicy', config('http.feature_policy_value'));
+            $response->headers->set('FeaturePolicy', config('http.feature_policy_value'));
 
         }
         return $response;
