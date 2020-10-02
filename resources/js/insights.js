@@ -6,7 +6,9 @@ Chart.defaults.global.defaultFontColor = '#111';
 Chart.defaults.global.defaultFontFamily = '"Roboto", Avenir, "Helvetica", Arial, sans-serif';
 
 window.addEventListener("load", function() {
-    $('.insights-grid').masonry().animate({opacity: 1});
+    setTimeout(function () {
+        $('.insights-grid').masonry().animate({opacity: 1});
+    }, 1000);
 });
 
 $('.js-chart-pie-with-action').each(function () {
