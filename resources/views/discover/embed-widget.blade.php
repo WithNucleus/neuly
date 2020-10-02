@@ -1,8 +1,8 @@
 <?php
-$minheight = 1500;
+$minHeight = 1500;
 
 if ($title === 'Events') {
-    $minheight = 2700;
+    $minHeight = 2700;
 }
 ?>
 
@@ -65,7 +65,7 @@ if ($title === 'Events') {
                         </p>
                         <div class="form-group">
                             <label class="font-weight-bold">Embed widget code:</label>
-                            <textarea class="form-control" readonly><iframe src="{{ $embedUrl }}" width="100%" height="100%" style="min-height: {{ $minheight }}px; border: 0;"></iframe></textarea>
+                            <textarea class="form-control" readonly><iframe src="{{ $embedUrl }}" width="100%" height="100%" style="min-height: {{ $minHeight }}px; border: 0;"></iframe></textarea>
                             <p><small>Copy and paste to your webpage</p>
                         </div>
                     </div>
@@ -76,7 +76,7 @@ if ($title === 'Events') {
                         <h2 class="lead-larger text-secondarydark mb-0 font-normal">Example:</h2>
                     </div>
                     <div class="col-12">
-                        <iframe src="{{ $embedUrl }}" width="100%" height="100%" style="min-width: 480px; min-height: {{ $minheight }}px; border: 0;"></iframe>
+                        <iframe src="{{ $embedUrl }}" width="100%" height="100%" style="min-width: 480px; min-height: {{ $minHeight }}px; border: 0;"></iframe>
                     </div>
                 </div>
             </div>
