@@ -14,12 +14,10 @@ class CompaniesByFocusIndustry extends Controller
      */
     public function index()
     {
-        $exceptFocusNames = Focus::getDrugFocusNames();
-
         $data = DB::table('company_focus')
             ->select('focus.name', DB::raw('COUNT(company_focus.company_id) as total'))
             ->join('focus', 'focus.id', '=', 'company_focus.focus_id')
-            ->whereNotIn('focus.name', $exceptFocusNames)
+            ->where('focus.type', '!=', Focus::TYPE_DRUG)
             ->groupBy('company_focus.focus_id')
             ->get();
 

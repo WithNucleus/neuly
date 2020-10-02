@@ -42,12 +42,10 @@ class FocusController extends Controller
             ->paginate(10)
             ->appends(request()->query());
 
-        //$focus_cats = Focus::pluck('name')->unique()->sort();
-        // $focus_cats = $focus_items->pluck('name')->unique()->sort();
-
+        $focusCats = Focus::drugs()->orderBy('name')->get();
         $metas = Metas::fromPage($request->path());
 
-        return view('discover.focus.index', compact('focus_items', 'metas'));
+        return view('discover.focus.index', compact('focus_items', 'focusCats', 'metas'));
     }
 
     // Show
@@ -55,6 +53,7 @@ class FocusController extends Controller
 
         // Get Focus
         $focus = Focus::where('slug', $slug)->firstOrFail();
+        $focusCats = Focus::drugs()->orderBy('name')->get();
 
         $metas = Metas::process(array(
             'title'         => $focus->name,
@@ -76,6 +75,6 @@ class FocusController extends Controller
             ->performedOn($focus)
             ->log($focus->name);
 
-        return view('discover.focus.show', compact('focus', 'metas', 'entity', 'isFollowed'));
+        return view('discover.focus.show', compact('focus', 'focusCats', 'metas', 'entity', 'isFollowed'));
     }
 }

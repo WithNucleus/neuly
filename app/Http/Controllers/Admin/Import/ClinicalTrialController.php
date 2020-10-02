@@ -6,6 +6,7 @@ use App\Helpers\StringHelper;
 use App\Http\Controllers\Controller;
 use App\Jobs\Import\ClinicalTrial\ProcessLocation;
 use App\Jobs\Import\ClinicalTrial\ProcessSponsorCollaborators;
+use App\Models\Focus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
@@ -28,12 +29,13 @@ class ClinicalTrialController extends Controller
 
     public function importClinicaltrials()
     {
-    	$import_results = ImportResult::clinicalTrials()
+    	$focusCats = Focus::drugs()->orderBy('name')->get();
+    	$importResults = ImportResult::clinicalTrials()
     		->latest()
     		->take(20)
     		->get();
 
-    	return view('admin.import.clinicaltrials', compact('import_results'));
+    	return view('admin.import.clinicaltrials', compact('importResults', 'focusCats'));
     }
 
     public function processClinicaltrials(Request $request)

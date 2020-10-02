@@ -56,17 +56,7 @@ class ClinicaltrialController extends Controller
 
         $location_ids = DB::table('clinicaltrial_location')->pluck('location_id')->unique();
         $locations = Location::findMany($location_ids)->sortBy('country')->pluck('country')->unique();
-
-        $focus_cats = array(
-            'Psilocybin',
-            'MDMA',
-            'LSD',
-            'DMT',
-            'Ketamine',
-            'Ibogaine',
-            'GHB',
-            'Tryptamine',
-        );
+        $focus_cats = Focus::drugs()->orderBy('name')->get()->pluck('name');
 
         return view('discover.clinicaltrials.index', compact('clinicaltrials', 'status', 'focus_cats', 'locations'));
     }

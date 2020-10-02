@@ -13,7 +13,7 @@
 
 
     @if (session('info'))
-    
+
         <pre>
             <?php
             // var_dump(session('info'));
@@ -44,7 +44,7 @@
                             <li class="list-group-item">
                                 @if($result['status'] == 'success')
                                     <span class="h4"><i class="las la-check-double text-success mr-2"></i></span>
-                                    #{{ $result['model_id'] }} - 
+                                    #{{ $result['model_id'] }} -
                                 @else
                                     <span class="h4"><i class="las la-times-circle text-danger mr-2"></i></span>
                                 @endif
@@ -88,14 +88,9 @@
                             <label for="focus_id" class="font-weight-bold">Focus Category</label>
                             <select class="form-control custom-select" name="focus_id" required>
                                 <option value="" selected disabled="">--</option>
-                                <option value="25">Psilocybin</option>
-                                <option value="29">MDMA</option>
-                                <option value="26">LSD</option>
-                                <option value="28">DMT</option>
-                                <option value="30">Ketamine</option>
-                                <option value="31">Ibogaine</option>
-                                <option value="52">GHB</option>
-                                <option value="49">Tryptamine</option>
+                                @foreach($focusCats as $focus)
+                                    <option value="{{ $focus->id }}">{{ $focus->name }}</option>
+                                @endforeach
                             </select>
                         </div>
 

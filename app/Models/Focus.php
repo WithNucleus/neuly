@@ -19,6 +19,8 @@ class Focus extends Model implements EntityContract
     use OldSlugRedirectable;
     use LogsActivity;
 
+    const TYPE_DRUG = 'drug';
+
     /*
     |--------------------------------------------------------------------------
     | GLOBAL VARIABLES
@@ -32,32 +34,11 @@ class Focus extends Model implements EntityContract
     protected static $logUnguarded = true;
     protected static $logName = 'entities';
 
-    private static $drugFocusNames = [
-        'Psilocybin',
-        'MDMA',
-        'LSD',
-        'DMT',
-        'Tryptamine',
-        'Ketamine',
-        'Ibogaine',
-        'GHB',
-        'Iboga',
-        'Ayahuasca',
-        'Arketamine',
-        'Mescaline',
-        'Noribogaine'
-    ];
-
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
-
-    public static function getDrugFocusNames()
-    {
-        return self::$drugFocusNames;
-    }
 
     /*
     |--------------------------------------------------------------------------
@@ -110,6 +91,11 @@ class Focus extends Model implements EntityContract
     | SCOPES
     |--------------------------------------------------------------------------
     */
+
+    public function scopeDrugs($query)
+    {
+        return $query->where('type', self::TYPE_DRUG);
+    }
 
     /*
     |--------------------------------------------------------------------------

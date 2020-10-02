@@ -27,9 +27,9 @@ class ResearchController extends Controller
 
     // Form for Starting an Import
     public function start() {
+        $focusCats = Focus::drugs()->orderBy('name')->get();
 
-        return view('admin.import.research');
-
+        return view('admin.import.research', compact('focusCats'));
     }
 
     // Search the Research API -- NO SAVING YET
@@ -53,19 +53,19 @@ class ResearchController extends Controller
 
             // If This is a Paginated Link or Not
             if ($request->input('serpapi_pagination')) {
-                
+
                 // Paginated Search
                 $next_link = explode('&start=', $request->input('serpapi_pagination'));
 
                 $api_results = ResearchAPI::googleScholar(strtolower($focus->name), $next_link[1]);
 
             } else {
-             
+
                 // New Search
                 $api_results = ResearchAPI::googleScholar(strtolower($focus->name));
 
             }
-            
+
         }
 
         return view('admin.import.process-research', compact('api_results', 'focus', 'api' ,'current_research'));
@@ -128,9 +128,9 @@ class ResearchController extends Controller
 
                         // Find or Create Author
                         $person = Person::findOrCreatePerson($author->name, $author->link);
-                        
+
                         if ($person) {
-                            
+
                             // Attach
                             $research->people()->syncWithoutDetaching($person->id);
 
@@ -147,7 +147,7 @@ class ResearchController extends Controller
                 }
 
             } else {
-                
+
                 $this_import_results['model_id'] = 'Error creating record';
                 $this_import_results['status'] = 'danger';
 

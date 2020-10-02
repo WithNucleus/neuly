@@ -27,6 +27,7 @@ class FocusRequest extends FormRequest
     {
         return [
             'name' => 'required|min:3|max:255|unique:focus,name,' . $this->get('id'),
+            'slug' => 'required|min:3|max:255|unique:focus,slug,' . $this->get('id'),
         ];
     }
 

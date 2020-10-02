@@ -45,14 +45,9 @@
                             <label for="focus_id" class="font-weight-bold">Focus Category</label>
                             <select class="form-control custom-select" name="focus_id" required>
                                 <option value="" selected disabled="">--</option>
-                                <option value="25">Psilocybin</option>
-                                <option value="29">MDMA</option>
-                                <option value="26">LSD</option>
-                                <option value="28">DMT</option>
-                                <option value="30">Ketamine</option>
-                                <option value="31">Ibogaine</option>
-                                <option value="52">GHB</option>
-                                <option value="49">Tryptamine</option>
+                                @foreach($focusCats as $focus)
+                                    <option value="{{ $focus->id }}">{{ $focus->name }}</option>
+                                @endforeach
                             </select>
                         </div>
 
@@ -82,7 +77,7 @@
 
         <div class="col-12 col-md-8 col-xl-6 mt-2">
 
-            @isset($import_results)
+            @isset($importResults)
             <div class="card card-body">
                 <h4>Previous Imports</h4>
 
@@ -96,7 +91,7 @@
                         </tr>
                     </thead>
 
-                    @foreach($import_results as $result)
+                    @foreach($importResults as $result)
                         <tr>
                             <td>
                                 {{ Carbon\Carbon::parse($result->created_at)->diffForHumans() }}
