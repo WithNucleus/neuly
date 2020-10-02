@@ -48,16 +48,7 @@ class ResearchController extends Controller
             ->paginate(10)
             ->appends(request()->query());
 
-        $focus_cats = array(
-            'Psilocybin',
-            'MDMA',
-            'LSD',
-            'DMT',
-            'Ketamine',
-            'Ibogaine',
-            'GHB',
-            'Tryptamine',
-        );
+        $focus_cats = Focus::drugs()->orderBy('name')->get()->pluck('name');
 
         $metas = Metas::fromPage($request->path());
 

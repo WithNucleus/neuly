@@ -14,12 +14,10 @@ class CompaniesByFocusDrug extends Controller
      */
     public function index()
     {
-        $onlyFocusNames = Focus::getDrugFocusNames();
-
         $data = DB::table('company_focus')
             ->select('focus.name', DB::raw('COUNT(company_focus.company_id) as total'))
             ->join('focus', 'focus.id', '=', 'company_focus.focus_id')
-            ->whereIn('focus.name', $onlyFocusNames)
+            ->where('focus.type', Focus::TYPE_DRUG)
             ->groupBy('company_focus.focus_id')
             ->get();
 
@@ -29,7 +27,7 @@ class CompaniesByFocusDrug extends Controller
             ],
             "datasets" => [
                 [
-                    "name" => "Number of Research",
+                    "name" => "Number of Companies",
                     "values" => $data->pluck('total')
                 ]
             ]

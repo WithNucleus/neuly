@@ -4,7 +4,7 @@
             <h3 class="h4">
             	Search Results
             </h3>
-			
+
 
 			<ul class="list-group list-group-flush">
 				<form action="{{ route('import.research.save') }}" method="POST" enctype="multipart/form-data">
@@ -17,7 +17,7 @@
 					@isset($listing->link)
 						<li class="list-group-item @if($loop->first) border-top-0 @elseif($loop->last) border-bottom-0 @endif">
 							<div class="d-flex justify-content-between">
-								<div class="input-area">						
+								<div class="input-area flex-shrink-0 flex-grow-0">
 									@if(in_array($listing->result_id, $current_research))
 										<span class="h3"><i class="las la-check-double text-success mr-2"></i></span>
 									@else
@@ -27,7 +27,7 @@
 										</div>
 									@endif
 								</div>
-								<div class="content">
+								<div class="content flex-grow-1">
 
 									<p class="lead font-weight-normal mb-0">
 										<a href="{{ $listing->link }}" target="_blank" rel="noopener noreferrer" class="font-blue">
@@ -73,7 +73,7 @@
 							</div>
 						</li>
 
-						<?php 
+						<?php
 							$listing_details = json_encode($listing);
 						?>
 						<input type="hidden" name="{{ $listing->result_id }}" value="{{ $listing_details }}">

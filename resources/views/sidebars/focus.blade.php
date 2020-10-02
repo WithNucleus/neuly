@@ -1,13 +1,13 @@
 {{-- @include('sidebars.filters.textsearch', [
-	'title' 		=> 'Organization', 
-	'placeholder' 	=> 'e.g. 920 Coalition', 
+	'title' 		=> 'Organization',
+	'placeholder' 	=> 'e.g. 920 Coalition',
 	'prefetch' 		=> 'organization/names.json',
 	'column' 		=> 1
 ]) --}}
 
 {{-- @include('sidebars.filters.textsearch', [
-	'title' 		=> 'Investor', 
-	'placeholder' 	=> 'e.g. Tabula Rasa Ventures', 
+	'title' 		=> 'Investor',
+	'placeholder' 	=> 'e.g. Tabula Rasa Ventures',
 	'prefetch' 		=> 'investor/names.json',
 	'column' 		=> 2
 ]) --}}
@@ -35,35 +35,18 @@
 	</div>
 </div>
 
+@isset($focusCats)
 <div class="popular-focus-categories">
 	<h2 class="h4">Most Viewed</h2>
 
 	<ul class="list-group list-group-flush">
+        @foreach($focusCats as $focus)
 		<li class="list-group-item bg-light">
-			<a href="{{ route('discover.focus.show', 'psilocybin') }}">Psilocybin</a>
+			<a href="{{ route('discover.focus.show', $focus->slug) }}">{{ $focus->name }}</a>
 		</li>
-		<li class="list-group-item bg-light">
-			<a href="{{ route('discover.focus.show', 'mdma') }}">MDMA</a>
-		</li>
-		<li class="list-group-item bg-light">
-			<a href="{{ route('discover.focus.show', 'lsd') }}">LSD</a>
-		</li>
-		<li class="list-group-item bg-light">
-			<a href="{{ route('discover.focus.show', 'dmt') }}">DMT</a>
-		</li>
-		<li class="list-group-item bg-light">
-			<a href="{{ route('discover.focus.show', 'ketamine') }}">Ketamine</a>
-		</li>
-		<li class="list-group-item bg-light">
-			<a href="{{ route('discover.focus.show', 'ibogaine') }}">Ibogaine</a>
-		</li>
-		<li class="list-group-item bg-light">
-			<a href="{{ route('discover.focus.show', 'ghb') }}">GHB</a>
-		</li>
-		<li class="list-group-item bg-light">
-			<a href="{{ route('discover.focus.show', 'tryptamine') }}">Tryptamine</a>
-		</li>
+		@endforeach
 	</ul>
 </div>
+@endisset
 
 @include('sidebars.filters.scripts')

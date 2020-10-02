@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\FocusRequest;
+use App\Models\Focus;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Backpack\CRUD\app\Library\Widget;
 
 /**
  * Class FocusCrudController
@@ -35,16 +37,29 @@ class FocusCrudController extends CrudController
 
     protected function setupListOperation()
     {
-        // TODO: remove setFromDb() and manually define Columns, maybe Filters
-        $this->crud->setFromDb();
+        $this->crud->addColumn(['name' => 'name', 'type' => 'text', 'label' => 'Name']);
+        $this->crud->addColumn(['name' => 'slug', 'type' => 'text', 'label' => 'Slug']);
+        $this->crud->addColumn(['name' => 'type', 'type' => 'text', 'label' => 'Type']);
     }
 
     protected function setupCreateOperation()
     {
         $this->crud->setValidation(FocusRequest::class);
 
-        // TODO: remove setFromDb() and manually define Fields
-        $this->crud->setFromDb();
+        Widget::add([
+            'type' => 'view',
+            'view' => 'customwidget.updateSlug',
+            'field_name' => 'name' // field name to generate slug
+        ])->to('before_content');
+
+        $this->crud->addField(['name' => 'name', 'type' => 'text', 'label' => 'Name']);
+        $this->crud->addField(['name' => 'slug', 'type' => 'text', 'label' => 'Slug']);
+        $this->crud->addField([
+            'name' => 'type',
+            'type' => 'select_from_array',
+            'label' => 'Type',
+            'options' => ['', Focus::TYPE_DRUG => Focus::TYPE_DRUG],
+        ]);
     }
 
     protected function setupUpdateOperation()

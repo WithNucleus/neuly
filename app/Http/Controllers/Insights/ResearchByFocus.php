@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Insights;
 
 use App\Http\Controllers\Controller;
+use App\Models\Focus;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
@@ -16,6 +17,7 @@ class ResearchByFocus extends Controller
         $data = DB::table('focus_research')
             ->select('focus.name', DB::raw('COUNT(focus_research.research_id) as total'))
             ->join('focus', 'focus.id', '=', 'focus_research.focus_id')
+            ->where('focus.type', Focus::TYPE_DRUG)
             ->groupBy('focus_research.focus_id')
             ->get();
 
