@@ -4,6 +4,7 @@
  * @param $name
  * @param $items
  * @param $item_filters
+ * @param bool $inline
  */
 ?>
 <div class="filter-checkbox-container mb-3" aria-label="Filter by {{ $label }}">
@@ -18,7 +19,7 @@
                     <div id="filters-more-{{ $name }}" class="collapse js-collapse-filter">
                 @endif
 
-                    <div class="custom-control custom-checkbox">
+                    <div class="custom-control custom-checkbox {{ isset($inline) ? 'custom-control-inline' : '' }}">
                         <input type="checkbox" class="custom-control-input" name="{{ $name }}" id="{{ $item }}" value="{{ $item }}" @if (in_array($item, $item_filters)) checked @endif>
                         <label class="custom-control-label" for="{{ $item }}">{{ $item }}</label>
                     </div>

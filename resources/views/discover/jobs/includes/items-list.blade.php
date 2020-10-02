@@ -50,39 +50,39 @@
 
                 <?php if (isset($filters_type) && $filters_type) : ?>
                 <span class="mr-3">
-                                            <i class="fad fa-briefcase text-quaternary"></i>
-                                            @foreach ($filters_type as $type)
+                    <i class="fad fa-briefcase text-quaternary"></i>
+                    @foreach ($filters_type as $type)
                         {{ $type }}
                         @if (!$loop->last) <strong class="text-black-50">/</strong> @endif
                     @endforeach
-                                        </span>
+                </span>
                 <?php endif; ?>
 
                 <?php if (isset($filters_location) && $filters_location) : ?>
                 <span class="mr-3">
-                                            <i class="fad fa-map-marker-alt text-info"></i>
-                                            @foreach ($filters_location as $location)
+                    <i class="fad fa-map-marker-alt text-info"></i>
+                    @foreach ($filters_location as $location)
                         {{ $location }}
                         @if (!$loop->last) <strong class="text-info">/</strong> @endif
                     @endforeach
-                                        </span>
+                </span>
                 <?php endif; ?>
 
                 <?php if (isset($filters_company_name) && $filters_company_name) : ?>
                 <span class="mr-3">
-                                            <i class="fad fa-building text-secondarydark"></i>
-                                            @foreach ($filters_company_name as $company)
+                    <i class="fad fa-building text-secondarydark"></i>
+                    @foreach ($filters_company_name as $company)
                         {{ $company }}
                         @if (!$loop->last) <strong class="text-black-50">/</strong> @endif
                     @endforeach
-                                        </span>
+                </span>
                 <?php endif; ?>
 
             </div>
             <?php endif; ?>
 
             {{-- Jobs --}}
-            <ul class="list-group list-group-flush mb-4 shadow-sm js-items-list">
+            <ul class="list-group list-group-flush mb-4 @if((isset($embed) && $embed == false) OR !isset($embed))shadow-sm @endif js-items-list">
                 @forelse($jobs as $job)
                     <li class="list-group-item d-md-flex">
 
