@@ -18,7 +18,7 @@ class ExpectCTGuard
         $response = $next($request);
         if(config('http.enable_except_ct'))
         {
-            $response->header('Expect-CT', config('http.except_ct_value'));
+            $response->headers->set('Expect-CT', config('http.except_ct_value'));
         }
         return $response;
     }

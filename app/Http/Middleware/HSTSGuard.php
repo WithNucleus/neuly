@@ -18,7 +18,7 @@ class HSTSGuard
         $response = $next($request);
         if(config('http.enable_hsts'))
         {
-            $response->header('Strict-Transport-Security', config('http.hsts_value'));
+            $response->headers->set('Strict-Transport-Security', config('http.hsts_value'));
         }
         return $response;
     }
