@@ -1,6 +1,6 @@
 <div class="card shadow-sm mb-4">
     <div class="card-body">
-        <h3 class="text-center">Top Research Organisations</h3>
+        <h3 class="text-center">Top Research Organizations</h3>
 
         <ul class="list-group js-top-ten-list-chart" data-action="{{ route('insights.research-organizations.widget') }}"
             data-icon-class="fa fa-microscope" style="display: none;">

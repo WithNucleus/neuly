@@ -8,6 +8,7 @@ Chart.defaults.global.defaultFontFamily = '"Roboto", Avenir, "Helvetica", Arial,
 window.addEventListener("load", function() {
     setTimeout(function () {
         $('.insights-grid').masonry().animate({opacity: 1});
+        $('.loading').hide();
     }, 1000);
 });
 
