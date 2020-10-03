@@ -1,6 +1,6 @@
 <div class="card shadow-sm mb-4">
     <div class="card-body">
-        <h3 class="text-center">Top 10 Locations</h3>
+        <h3 class="text-center">Top 10 Locations for People</h3>
 
         <ul class="list-group js-top-ten-list-chart" data-action="{{ route('insights.top-ten-locations') }}" data-icon-class="fa fa-user" style="display: none;">
             <li class="js-item-template d-none py-2 list-group-item d-flex flex-wrap text-right justify-content-between border-top-0 border-left-0 border-right-0">

@@ -42,7 +42,12 @@
                     </p>
                 </div>
             </div>
-            <div class="row">
+
+            <div class="loading text-center">
+                <i class="fas fa-spinner fa-pulse fa-3x text-secondarydark"></i>
+            </div>
+
+            <div class="row insights-grid" style="opacity: 0">
                 <div class="col-12 col-lg-4">
                     @include('discover.insights.widgets.organizations-by-type')
                 </div>

@@ -5,6 +5,13 @@ require('./insights/most-interest-list');
 Chart.defaults.global.defaultFontColor = '#111';
 Chart.defaults.global.defaultFontFamily = '"Roboto", Avenir, "Helvetica", Arial, sans-serif';
 
+window.addEventListener("load", function() {
+    setTimeout(function () {
+        $('.insights-grid').masonry().animate({opacity: 1});
+        $('.loading').hide();
+    }, 1000);
+});
+
 $('.js-chart-pie-with-action').each(function () {
     let canvasObj = $(this),
         action    = canvasObj.data('action');
@@ -50,7 +57,7 @@ $('.js-top-ten-list-chart').each(function () {
                 let bar = '',
                     link = '<a href="' + item.link + '">' + item.name + '</a>';
 
-                for (j = 0; j < item.percent; j++) {
+                for (let j = 0; j < item.percent; j++) {
                     bar += icon;
                 }
 
@@ -65,7 +72,7 @@ $('.js-top-ten-list-chart').each(function () {
                 itemsHtml += itemTemplate.get(0).outerHTML;
             });
 
-            itemsList.html(itemsHtml).slideDown();
+            itemsList.html(itemsHtml).show();
         }
     });
 });
@@ -81,5 +88,4 @@ $('.js-bar-chart').each(function (i, item) {
             .legend(false)
             .datasets(['bar']),
     });
-
 });

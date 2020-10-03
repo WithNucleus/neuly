@@ -1,4 +1,4 @@
-<div class="card shadow-sm mb-5">
+<div class="card shadow-sm mb-4">
     <div class="card-body">
         <h3 class="text-center">Clinical Trial Sponsors &amp; Collaborators</h3>
         <div class="mx-auto" style="max-width: 480px;">
