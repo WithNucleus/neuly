@@ -20,13 +20,14 @@
                         <span class="text-success"><i class="fad fa-at"></i></span>
                         {{ $article->publisher }}
                     </p>
-                    <p class="mb-0">
-                        <span class="text-secondary"><i class="fad fa-flask"></i></span>
-                        @foreach($article->focus as $item)
-                            {{ $item->name }}@if (!$loop->last),@endif
-                        @endforeach
-                    </p>
-                    
+                    @if ($article->focus->count() > 0)
+                        <p class="mb-0">
+                            <span class="text-secondary"><i class="fad fa-flask"></i></span>
+                            @foreach($article->focus as $item)
+                                {{ $item->name }}@if (!$loop->last),@endif
+                            @endforeach
+                        </p>
+                    @endif
                 </div>
             @endforeach
         </div>

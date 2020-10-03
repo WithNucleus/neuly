@@ -7,6 +7,15 @@
 	background: rgba($black, .1) !important;
 }
 
+.bg-tertiary-hover {
+    background: $tertiary;
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+.bg-tertiary-hover:hover {
+    background-color: darken($tertiary, 5%);
+}
+
 // Brain Background
 .bg-brains {
 	background-color: $primary;
