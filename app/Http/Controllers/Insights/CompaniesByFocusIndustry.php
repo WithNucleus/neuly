@@ -18,6 +18,7 @@ class CompaniesByFocusIndustry extends Controller
             ->select('focus.name', DB::raw('COUNT(company_focus.company_id) as total'))
             ->join('focus', 'focus.id', '=', 'company_focus.focus_id')
             ->where('focus.type', '!=', Focus::TYPE_DRUG)
+            ->orWhereNull('focus.type')
             ->groupBy('company_focus.focus_id')
             ->get();
 
@@ -27,7 +28,7 @@ class CompaniesByFocusIndustry extends Controller
             ],
             "datasets" => [
                 [
-                    "name" => "Number of Research",
+                    "name" => "Number of Organizations",
                     "values" => $data->pluck('total')
                 ]
             ]
