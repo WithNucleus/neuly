@@ -105,7 +105,7 @@
                     <div class="form-group row">
                         <div class="col-12 col-md-6">
                             <label for="text_search" class="font-weight-bold">Specific Keyword</label>
-                            <input type="text" class="form-control" name="text_search">
+                            <input type="text" class="form-control" name="search_term">
                             <small class="form-text text-muted">Leave blank to use Focus Name for search results</small>
                         </div>
                     </div>

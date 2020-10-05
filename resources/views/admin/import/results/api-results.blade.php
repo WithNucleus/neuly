@@ -1,10 +1,13 @@
 <div class="row mt-1">
     <div class="col-12 col-md-12">
         <div class="card card-body">
-            <h3 class="h4">
-            	Search Results
-            </h3>
-
+            <h3 class="h4">Search Results for <em>{{ urldecode($search_term) }}</em></h3>
+            <p class="lead">
+                @if(property_exists($api_results, 'search_information'))
+                    {{ $api_results->search_information->total_results }} results /
+                    {{ $api_results->search_information->organic_results_state }}
+                @endif
+            </p>
 
 			<ul class="list-group list-group-flush">
 				<form action="{{ route('import.research.save') }}" method="POST" enctype="multipart/form-data">
@@ -96,6 +99,7 @@
                     <input type="hidden" name="serpapi_pagination" value="{{ $api_results->serpapi_pagination->next_link }}">
                     <input type="hidden" name="focus_id" value="{{ $focus->id }}">
                     <input type="hidden" name="api" value="Google Scholar">
+                    <input type="hidden" name="search_term" value="{{ $search_term }}">
 					<button type="submit" class="btn btn-success">More Search Results</button>
                 </form>
 			@endisset

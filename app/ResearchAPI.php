@@ -12,6 +12,8 @@ class ResearchAPI extends Model
     */
     public static function googleScholar($query, $start = NULL) {
 
+        $query = urlencode($query);
+
         if ($start == NULL) {
             $url = 'https://serpapi.com/search.json?engine=google_scholar&q=' . $query . '&hl=en&filter=0&api_key=' . config('import-api-keys.serpapi_key', false);
         } else {

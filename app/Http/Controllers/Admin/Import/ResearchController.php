@@ -36,6 +36,7 @@ class ResearchController extends Controller
         $validated = $request->validate([
             'focus_id' => 'required|integer',
             'api' => 'required|string',
+            'search_term' => 'nullable|string'
         ]);
 
         $current_research = Research::pluck('slug', 'api_identifier')->toArray();
@@ -44,8 +45,8 @@ class ResearchController extends Controller
 
         $focus = Focus::findOrFail($request->input('focus_id'));
 
-        if ($request->input('text_search') != '') {
-            $search_term = urlencode($request->input('text_search'));
+        if ($request->input('search_term') != '') {
+            $search_term = $request->input('search_term');
         } else {
             $search_term = strtolower($focus->name);
         }
@@ -67,7 +68,7 @@ class ResearchController extends Controller
 
         }
 
-        return view('admin.import.process-research', compact('api_results', 'focus', 'api' ,'current_research'));
+        return view('admin.import.process-research', compact('api_results', 'focus', 'api' ,'current_research', 'search_term'));
 
     }
 
