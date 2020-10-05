@@ -18,8 +18,11 @@
 						<li class="list-group-item @if($loop->first) border-top-0 @elseif($loop->last) border-bottom-0 @endif">
 							<div class="d-flex justify-content-between">
 								<div class="input-area flex-shrink-0 flex-grow-0">
-									@if(in_array($listing->result_id, $current_research))
-										<span class="h3"><i class="las la-check-double text-success mr-2"></i></span>
+                                    @if (array_key_exists($listing->result_id, $current_research))
+										<span class="h3">
+                                            <a href="{{ route('discover.research.show', $current_research[$listing->result_id]) }}" title="Open Neuly Link"
+                                               target="_blank" rel="noopener noreferrer"><i class="las la-check-double text-success mr-2"></i></a>
+                                        </span>
 									@else
 										<div class="custom-control custom-checkbox">
 											<input type="checkbox" class="custom-control-input" name="import[]" id="{{ $listing->result_id }}" value="{{ $listing->result_id }}">

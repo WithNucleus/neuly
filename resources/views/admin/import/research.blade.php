@@ -119,6 +119,15 @@
 
                 </form>
 
+                <div class="mt-3 pt-4 border-top">
+                    <p class="lead font-weight-bold">Other Names/Abbreviations</p>
+                    <p class="mb-2">GHB = gamma-Hydroxybutyric acid OR γ-Hydroxybutyric acid (GHB)</p>
+                    <p class="mb-2">LSD = Lysergic acid diethylamide</p>
+                    <p class="mb-2">MDMA = Methyl​enedioxy​methamphetamine</p>
+                    <p class="mb-2">DMT = Dimethyltryptamine</p>
+                    <p class="mb-2">Arketamine = (R)-ketamine</p>
+                </div>
+
             </div>
         </div>
     </div>

@@ -38,7 +38,7 @@ class ResearchController extends Controller
             'api' => 'required|string',
         ]);
 
-        $current_research = Research::pluck('api_identifier')->toArray();
+        $current_research = Research::pluck('slug', 'api_identifier')->toArray();
 
         $api = $request->input('api');
 
