@@ -173,15 +173,6 @@ class Clinicaltrial extends Model implements EntityContract
             'study_results'           => [
                 'type' => EntityMergeHelper::TYPE_STRING,
             ],
-            'conditions'              => [
-                'type' => EntityMergeHelper::TYPE_STRING,
-            ],
-            'interventions'           => [
-                'type' => EntityMergeHelper::TYPE_STRING,
-            ],
-            'outcome_measures'        => [
-                'type' => EntityMergeHelper::TYPE_TEXT,
-            ],
             'gender'                  => [
                 'type' => EntityMergeHelper::TYPE_STRING,
             ],
@@ -199,9 +190,6 @@ class Clinicaltrial extends Model implements EntityContract
             ],
             'study_type'              => [
                 'type' => EntityMergeHelper::TYPE_STRING,
-            ],
-            'study_designs'           => [
-                'type' => EntityMergeHelper::TYPE_TEXT,
             ],
             'other_ids'               => [
                 'type' => EntityMergeHelper::TYPE_STRING,
@@ -243,6 +231,24 @@ class Clinicaltrial extends Model implements EntityContract
             'focus'                   => [
                 'type'          => EntityMergeHelper::TYPE_RELATION,
                 'relationField' => 'name',
+            ],
+            'conditions'              => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'value',
+            ],
+            'interventions'           => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'value',
+            ],
+            'outcomeMeasures'        => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'value',
+                'label'         => 'Outcome Measures',
+            ],
+            'studyDesigns'           => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'value',
+                'label'         => 'Study Designs',
             ],
         ];
     }
