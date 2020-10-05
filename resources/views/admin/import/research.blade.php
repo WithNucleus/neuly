@@ -102,6 +102,14 @@
                         </div>
                     </div>
 
+                    <div class="form-group row">
+                        <div class="col-12 col-md-6">
+                            <label for="text_search" class="font-weight-bold">Specific Keyword</label>
+                            <input type="text" class="form-control" name="text_search">
+                            <small class="form-text text-muted">Leave blank to use Focus Name for search results</small>
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <button type="submit" class="btn btn-success">
                             <span class="la la-atom" role="presentation" aria-hidden="true"></span> &nbsp;

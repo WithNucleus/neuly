@@ -20,7 +20,6 @@ class ResearchController extends Controller
      */
     public function __construct()
     {
-        // Auth and Permission Middleware
         $this->middleware('auth');
         $this->middleware(['role:Admin','permission:import']);
     }
@@ -28,11 +27,10 @@ class ResearchController extends Controller
     // Form for Starting an Import
     public function start() {
         $focusCats = Focus::drugs()->orderBy('name')->get();
-
         return view('admin.import.research', compact('focusCats'));
     }
 
-    // Search the Research API -- NO SAVING YET
+    // Search the Research API
     public function search(Request $request) {
 
         $validated = $request->validate([
@@ -40,29 +38,30 @@ class ResearchController extends Controller
             'api' => 'required|string',
         ]);
 
-        // Get API Resource IDs to Compare to Results
         $current_research = Research::pluck('api_identifier')->toArray();
 
         $api = $request->input('api');
 
-        // Get name of Focus
         $focus = Focus::findOrFail($request->input('focus_id'));
 
-        // Search Google Scholar
+        if ($request->input('text_search') != '') {
+            $search_term = urlencode($request->input('text_search'));
+        } else {
+            $search_term = strtolower($focus->name);
+        }
+
+        // Google Scholar
         if ($request->input('api') == 'Google Scholar') {
 
-            // If This is a Paginated Link or Not
             if ($request->input('serpapi_pagination')) {
 
-                // Paginated Search
                 $next_link = explode('&start=', $request->input('serpapi_pagination'));
 
-                $api_results = ResearchAPI::googleScholar(strtolower($focus->name), $next_link[1]);
+                $api_results = ResearchAPI::googleScholar($search_term, $next_link[1]);
 
             } else {
 
-                // New Search
-                $api_results = ResearchAPI::googleScholar(strtolower($focus->name));
+                $api_results = ResearchAPI::googleScholar($search_term);
 
             }
 
@@ -75,7 +74,6 @@ class ResearchController extends Controller
     // Import Selected Items
     public function import(Request $request) {
 
-        // Get Selected Items
         $selected_items = $request->input('import');
 
         $import_results = array();
@@ -84,12 +82,10 @@ class ResearchController extends Controller
 
         foreach($selected_items as $key => $api_identifier) {
 
-            // Find the Details for this $api_identifier
             $this_listing = $request->input($api_identifier);
 
             $result = json_decode($this_listing);
 
-            // This Item's Import Results
             $this_import_results = array(
                 'title' => $result->title,
                 'api_identifier' => $result->result_id,
@@ -126,19 +122,16 @@ class ResearchController extends Controller
 
                     foreach ($result->publication_info->authors as $author) {
 
-                        // Find or Create Author
                         $person = Person::findOrCreatePerson($author->name, $author->link);
 
                         if ($person) {
 
-                            // Attach
                             $research->people()->syncWithoutDetaching($person->id);
 
                             $this_import_results['authors'] = 'Attached authors';
 
                         } else {
 
-                            // throw error to user person wasn't attached
                             $this_import_results['authors'] = 'Error creating authors';
 
                         }
@@ -153,15 +146,10 @@ class ResearchController extends Controller
 
             }
 
-            // Push to Results Array
             array_push($import_results, $this_import_results);
 
+        }
 
-        } // endforeach selected_item
-
-        // dd($import_results);
-
-        // Has next search link?
         if ($request->input('serpapi_pagination')) {
             $next_link = $request->input('serpapi_pagination');
         }
@@ -172,7 +160,6 @@ class ResearchController extends Controller
             'focus_id' => $focus_id
         );
 
-        // return view('admin.import.research', compact('import_results', 'next_link', 'focus_id'));
         return redirect()->route('import.research')->with(
             'info', $info
         );
