@@ -102,6 +102,14 @@
                         </div>
                     </div>
 
+                    <div class="form-group row">
+                        <div class="col-12 col-md-6">
+                            <label for="text_search" class="font-weight-bold">Specific Keyword</label>
+                            <input type="text" class="form-control" name="text_search">
+                            <small class="form-text text-muted">Leave blank to use Focus Name for search results</small>
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <button type="submit" class="btn btn-success">
                             <span class="la la-atom" role="presentation" aria-hidden="true"></span> &nbsp;
@@ -110,6 +118,15 @@
                     </div>
 
                 </form>
+
+                <div class="mt-3 pt-4 border-top">
+                    <p class="lead font-weight-bold">Other Names/Abbreviations</p>
+                    <p class="mb-2">GHB = gamma-Hydroxybutyric acid OR γ-Hydroxybutyric acid (GHB)</p>
+                    <p class="mb-2">LSD = Lysergic acid diethylamide</p>
+                    <p class="mb-2">MDMA = Methyl​enedioxy​methamphetamine</p>
+                    <p class="mb-2">DMT = Dimethyltryptamine</p>
+                    <p class="mb-2">Arketamine = (R)-ketamine</p>
+                </div>
 
             </div>
         </div>

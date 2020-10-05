@@ -8,14 +8,14 @@ class ResearchAPI extends Model
 {
     /*
     *  Google Scholar
-    *  
+    *
     */
     public static function googleScholar($query, $start = NULL) {
 
         if ($start == NULL) {
-            $url = 'https://serpapi.com/search.json?engine=google_scholar&q=' . $query . '&hl=en&api_key=' . config('import-api-keys.serpapi_key', false);
+            $url = 'https://serpapi.com/search.json?engine=google_scholar&q=' . $query . '&hl=en&filter=0&api_key=' . config('import-api-keys.serpapi_key', false);
         } else {
-            $url = 'https://serpapi.com/search.json?engine=google_scholar&q=' . $query . '&hl=en&start=' . $start . '&api_key=' . config('import-api-keys.serpapi_key', false);
+            $url = 'https://serpapi.com/search.json?engine=google_scholar&q=' . $query . '&hl=en&filter=0&start=' . $start . '&api_key=' . config('import-api-keys.serpapi_key', false);
         }
 
         $headers = array(
