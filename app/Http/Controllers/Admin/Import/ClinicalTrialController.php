@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Import;
 use App\Helpers\StringHelper;
 use App\Http\Controllers\Controller;
 use App\Jobs\Import\ClinicalTrial\ProcessLocation;
+use App\Jobs\Import\ClinicalTrial\ProcessSimpleRelationValues;
 use App\Jobs\Import\ClinicalTrial\ProcessSponsorCollaborators;
 use App\Models\Focus;
 use Illuminate\Http\Request;
@@ -83,6 +84,10 @@ class ClinicalTrialController extends Controller
             $nctNumber            = '';
             $locations            = [];
             $sponsorCollaborators = [];
+            $conditions           = [];
+            $interventions        = [];
+            $outcomeMeasures      = [];
+            $studyDesigns         = [];
             $attributes           = [];
 
     		// Loop through columns in a record
@@ -103,7 +108,19 @@ class ClinicalTrialController extends Controller
                 } elseif ($column == 'sponsorcollaborators') {
                     $sponsorCollaborators = StringHelper::explodeAndFilterEmpty($value, '|');
 
-	    		} elseif ($column == 'rank' OR $column == 'study_documents') {
+                } elseif ($column == 'conditions') {
+                    $conditions = StringHelper::explodeAndFilterEmpty($value, '|');
+
+                } elseif ($column == 'interventions') {
+                    $interventions = StringHelper::explodeAndFilterEmpty($value, '|');
+
+                } elseif ($column == 'outcome_measures') {
+                    $outcomeMeasures = StringHelper::explodeAndFilterEmpty($value, '|');
+
+                } elseif ($column == 'study_designs') {
+                    $studyDesigns = StringHelper::explodeAndFilterEmpty($value, '|');
+
+                } elseif ($column == 'rank' OR $column == 'study_documents') {
 	    			// ignore these
 
 	    		} else {
@@ -126,6 +143,22 @@ class ClinicalTrialController extends Controller
 
 			if ($sponsorCollaborators !== []) {
                 ProcessSponsorCollaborators::dispatch($clinicaltrial, $importResult, $sponsorCollaborators);
+            }
+
+            if ($conditions !== []) {
+                ProcessSimpleRelationValues::dispatch($clinicaltrial, $conditions, 'conditions');
+            }
+
+            if ($interventions !== []) {
+                ProcessSimpleRelationValues::dispatch($clinicaltrial, $interventions, 'interventions');
+            }
+
+            if ($outcomeMeasures !== []) {
+                ProcessSimpleRelationValues::dispatch($clinicaltrial, $outcomeMeasures, 'outcomeMeasures');
+            }
+
+            if ($studyDesigns !== []) {
+                ProcessSimpleRelationValues::dispatch($clinicaltrial, $studyDesigns, 'studyDesigns');
             }
 
 	    	$clinicaltrial->focus()->syncWithoutDetaching($focusId);

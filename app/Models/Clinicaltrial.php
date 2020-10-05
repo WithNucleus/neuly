@@ -3,6 +3,10 @@
 namespace App\Models;
 
 use App\Helpers\EntityMergeHelper;
+use App\Models\ClinicalTrialDetails\CtCondition;
+use App\Models\ClinicalTrialDetails\CtIntervention;
+use App\Models\ClinicalTrialDetails\CtOutcomeMeasure;
+use App\Models\ClinicalTrialDetails\CtStudyDesign;
 use App\Models\Contracts\EntityContract;
 use App\Models\Traits\OldSlugRedirectable;
 use App\Traits\HasFollowers;
@@ -65,6 +69,26 @@ class Clinicaltrial extends Model implements EntityContract
     public function focus() {
         return $this->belongsToMany('App\Models\Focus', 'clinicaltrial_focus', 'clinicaltrial_id', 'focus_id')
                     ->withTimestamps();
+    }
+
+    public function conditions()
+    {
+        return $this->belongsToMany(CtCondition::class, 'clinicaltrial_condition');
+    }
+
+    public function interventions()
+    {
+        return $this->belongsToMany(CtIntervention::class, 'clinicaltrial_intervention');
+    }
+
+    public function outcomeMeasures()
+    {
+        return $this->belongsToMany(CtOutcomeMeasure::class, 'clinicaltrial_outcome_measures');
+    }
+
+    public function studyDesigns()
+    {
+        return $this->belongsToMany(CtStudyDesign::class, 'clinicaltrial_study_designs');
     }
 
     /**

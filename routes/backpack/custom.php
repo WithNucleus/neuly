@@ -25,6 +25,16 @@ Route::group([
     Route::crud('eventtype', 'EventTypeCrudController');
     Route::crud('newsarticle', 'NewsArticleCrudController');
     Route::crud('clinicaltrial', 'ClinicaltrialCrudController');
+
+    Route::group([
+        'namespace'  => 'ClinicalTrialDetails',
+    ], function (){
+        Route::crud('ct_condition', 'CtConditionCrudController');
+        Route::crud('ct_intervention', 'CtInterventionCrudController');
+        Route::crud('ct_outcome_measure', 'CtOutcomeMeasureCrudController');
+        Route::crud('ct_study_design', 'CtStudyDesignCrudController');
+    });
+
     Route::crud('listingrequest', 'ListingRequestCrudController');
     Route::crud('jobapplication', 'JobApplicationCrudController');
     Route::crud('redirect', 'RedirectCrudController');
