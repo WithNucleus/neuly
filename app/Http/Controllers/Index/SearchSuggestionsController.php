@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Index;
 
 use App\Http\Controllers\Controller;
 use App\Models\Clinicaltrial;
+use App\Models\ClinicalTrialDetails\CtCondition;
+use App\Models\ClinicalTrialDetails\CtIntervention;
+use App\Models\ClinicalTrialDetails\CtOutcomeMeasure;
+use App\Models\ClinicalTrialDetails\CtStudyDesign;
 use App\Models\Company;
 use App\Models\Person;
 use App\Models\Location;
@@ -97,10 +101,9 @@ class SearchSuggestionsController extends Controller
     }
 
     public function clinicalTrialConditions() {
-        $data = Clinicaltrial::select('conditions')
-            ->distinct()
-            ->orderBy('conditions')
-            ->pluck('conditions')
+        $data = CtCondition::whereHas('clinicalTrials')
+            ->orderBy('value')
+            ->pluck('value')
             ->map(function ($item) {
                 return ['name' => $item];
             });
@@ -109,10 +112,31 @@ class SearchSuggestionsController extends Controller
     }
 
     public function clinicalTrialInterventions() {
-        $data = Clinicaltrial::select('interventions')
-            ->distinct()
-            ->orderBy('interventions')
-            ->pluck('interventions')
+        $data = CtIntervention::whereHas('clinicalTrials')
+            ->orderBy('value')
+            ->pluck('value')
+            ->map(function ($item) {
+                return ['name' => $item];
+            });
+
+        return response()->json($data, Response::HTTP_OK);
+    }
+
+    public function clinicalTrialOutcomeMeasures() {
+        $data = CtOutcomeMeasure::whereHas('clinicalTrials')
+            ->orderBy('value')
+            ->pluck('value')
+            ->map(function ($item) {
+                return ['name' => $item];
+            });
+
+        return response()->json($data, Response::HTTP_OK);
+    }
+
+    public function clinicalTrialStudyDesigns() {
+        $data = CtStudyDesign::whereHas('clinicalTrials')
+            ->orderBy('value')
+            ->pluck('value')
             ->map(function ($item) {
                 return ['name' => $item];
             });

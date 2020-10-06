@@ -47,7 +47,9 @@
             'phase',
             'researchers',
             'conditions',
-            'interventions'
+            'interventions',
+            'outcome_measures',
+            'study_designs'
         ];
 
         allowedFilters.forEach(function (filterName) {

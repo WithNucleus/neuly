@@ -26,6 +26,20 @@
     'action'    => route('searchassets.clinicalTrialInterventions')
 ])
 
+@include('sidebars.filters.typeahead', [
+    'label'     => 'Outcome Measures',
+    'name'      => 'outcome_measures',
+    'items'     => $filters_outcome_measures,
+    'action'    => route('searchassets.clinicalTrialOutcomeMeasures')
+])
+
+@include('sidebars.filters.typeahead', [
+    'label'     => 'Study Designs',
+    'name'      => 'study_designs',
+    'items'     => $filters_study_designs,
+    'action'    => route('searchassets.clinicalTrialStudyDesigns')
+])
+
 @include('sidebars.filters.checkboxes-new', [
     'label'     => 'Status',
     'name'      => 'status',

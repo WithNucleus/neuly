@@ -82,7 +82,9 @@
                     isset($filters_phases) && $filters_phases OR
                     isset($filters_researchers) && $filters_researchers OR
                     isset($filters_conditions) && $filters_conditions OR
-                    isset($filters_interventions) && $filters_interventions
+                    isset($filters_interventions) && $filters_interventions OR
+                    isset($filters_outcome_measures) && $filters_outcome_measures OR
+                    isset($filters_study_designs) && $filters_study_designs
                 )
                     <div class="current-filter-list font-size-small align-self-end mt-3 mb-3 border-bottom pb-1">
                         <strong class="text-uppercase mr-3 text-black-50">Current Filters:</strong>
@@ -133,6 +135,20 @@
                             @include('discover.includes.filters.current-filter', [
                                 'iconClass' => 'fa-info-circle',
                                 'items' => $filters_interventions
+                            ])
+                        @endif
+
+                        @if(isset($filters_outcome_measures) && $filters_outcome_measures)
+                            @include('discover.includes.filters.current-filter', [
+                                'iconClass' => 'fa-info-circle',
+                                'items' => $filters_outcome_measures
+                            ])
+                        @endif
+
+                        @if(isset($filters_study_designs) && $filters_study_designs)
+                            @include('discover.includes.filters.current-filter', [
+                                'iconClass' => 'fa-info-circle',
+                                'items' => $filters_study_designs
                             ])
                         @endif
                     </div>

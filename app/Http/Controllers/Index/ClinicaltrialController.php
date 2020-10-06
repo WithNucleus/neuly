@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Index;
 use App\Http\Controllers\Controller;
 use App\Repositories\FollowRepository;
 use Illuminate\Http\Request;
+use App\Models\Focus;
 use App\Models\Clinicaltrial;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -34,13 +35,15 @@ class ClinicaltrialController extends Controller
                 'nct_number',
                 'title',
                 'study_results',
-                'conditions',
-                'interventions',
                 AllowedFilter::exact('status'),
                 AllowedFilter::exact('focus', 'focus.name'),
-                AllowedFilter::partial('locations', 'locations.name'),
-                AllowedFilter::partial('company', 'companies.name'),
-                AllowedFilter::partial('researchers', 'people.name'),
+                AllowedFilter::exact('locations', 'locations.name'),
+                AllowedFilter::exact('company', 'companies.name'),
+                AllowedFilter::exact('researchers', 'people.name'),
+                AllowedFilter::exact('conditions', 'conditions.value'),
+                AllowedFilter::exact('interventions', 'interventions.value'),
+                AllowedFilter::exact('outcome_measures', 'outcomeMeasures.value'),
+                AllowedFilter::exact('study_designs', 'studyDesigns.value'),
             ])
             ->defaultSort('-start_date')
             ->allowedSorts([
@@ -52,15 +55,19 @@ class ClinicaltrialController extends Controller
             ->appends(request()->query());
 
     	$status = Clinicaltrial::pluck('status')->unique()->sort();
-
-        $location_ids = DB::table('clinicaltrial_location')->pluck('location_id')->unique();
-        $locations = Location::findMany($location_ids)->sortBy('country')->pluck('country')->unique();
         $focus_cats = Focus::drugs()->orderBy('name')->get()->pluck('name');
+        $locations = Location::select('country')
+            ->join('clinicaltrial_location', 'locations.id', 'clinicaltrial_location.location_id')
+            ->orderBy('country')
+            ->pluck('country')
+            ->unique();
 
         $filters_companies = [];
         $filters_researchers = [];
         $filters_conditions = [];
         $filters_interventions = [];
+        $filters_outcome_measures = [];
+        $filters_study_designs = [];
 
         if ($request->has('filter')) {
             $filterInput = $request->input('filter');
@@ -83,6 +90,14 @@ class ClinicaltrialController extends Controller
             if(isset($filter['interventions'])) {
                 $filters_interventions = $filter['interventions'];
             }
+
+            if(isset($filter['outcome_measures'])) {
+                $filters_outcome_measures = $filter['outcome_measures'];
+            }
+
+            if(isset($filter['study_designs'])) {
+                $filters_study_designs = $filter['study_designs'];
+            }
         }
 
         return view('discover.clinicaltrials.index', compact(
@@ -93,7 +108,9 @@ class ClinicaltrialController extends Controller
             'filters_companies',
             'filters_researchers',
             'filters_conditions',
-            'filters_interventions'
+            'filters_interventions',
+            'filters_outcome_measures',
+            'filters_study_designs'
         ));
     }
 
