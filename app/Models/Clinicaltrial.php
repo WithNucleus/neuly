@@ -83,12 +83,12 @@ class Clinicaltrial extends Model implements EntityContract
 
     public function outcomeMeasures()
     {
-        return $this->belongsToMany(CtOutcomeMeasure::class, 'clinicaltrial_outcome_measures');
+        return $this->belongsToMany(CtOutcomeMeasure::class, 'clinicaltrial_outcome_measure');
     }
 
     public function studyDesigns()
     {
-        return $this->belongsToMany(CtStudyDesign::class, 'clinicaltrial_study_designs');
+        return $this->belongsToMany(CtStudyDesign::class, 'clinicaltrial_study_design');
     }
 
     /**

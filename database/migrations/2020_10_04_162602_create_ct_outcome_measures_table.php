@@ -12,7 +12,7 @@ class CreateCtOutcomeMeasuresTable extends Migration
     const CT_ATTRIBUTE = 'outcome_measures';
 
     const CT_ATTRIBUTE_TABLE = 'ct_outcome_measures';
-    const CT_ATTRIBUTE_RELATION_TABLE = 'clinicaltrial_outcome_measures';
+    const CT_ATTRIBUTE_RELATION_TABLE = 'clinicaltrial_outcome_measure';
 
     const CT_FOREIGN_COLUMN_NAME = 'clinicaltrial_id';
     const CT_ATTRIBUTE_FOREIGN_COLUMN_NAME = 'ct_outcome_measure_id';

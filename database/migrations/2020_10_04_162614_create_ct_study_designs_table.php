@@ -12,7 +12,7 @@ class CreateCtStudyDesignsTable extends Migration
     const CT_ATTRIBUTE = 'study_designs';
 
     const CT_ATTRIBUTE_TABLE = 'ct_study_designs';
-    const CT_ATTRIBUTE_RELATION_TABLE = 'clinicaltrial_study_designs';
+    const CT_ATTRIBUTE_RELATION_TABLE = 'clinicaltrial_study_design';
 
     const CT_FOREIGN_COLUMN_NAME = 'clinicaltrial_id';
     const CT_ATTRIBUTE_FOREIGN_COLUMN_NAME = 'ct_study_design_id';
