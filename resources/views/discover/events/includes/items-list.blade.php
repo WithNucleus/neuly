@@ -34,12 +34,9 @@
                         <div class="image mr-3 mt-1">
                             <a href="{{ route('discover.events.show', $event->slug) }}" {!! $attrTarget !!}>
                                 @if ($event->image == '')
-                                    <div class="logo-is-contained bg-brains rounded">
-                                        <img src="{{ asset('images/icons/events.svg') }}" alt="{{ $event->name }}">
-                                    </div>
+                                    <div class="d-none d-mb-block job-org-logo" style="background-image: url({{ asset('images/icons/events.svg') }});"></div>
                                 @else
-                                    <div class="logo-is-contained"
-                                         style="background-image: url('/storage/{{ $event->image }}');"></div>
+                                    <div class="job-org-logo" style="background-image: url('/storage/{{ $event->image }}');"></div>
                                 @endif
                             </a>
                         </div>
