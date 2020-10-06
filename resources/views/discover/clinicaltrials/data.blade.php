@@ -1,7 +1,7 @@
 <div class="row">
 	@auth
 			<div class="col-12 col-md-8 col-lg-7">
-				
+
 			<?php
 			$fields = array(
 				'nct_number' => ['type' => 'text', 'label' => 'NCT Number'],
@@ -9,16 +9,12 @@
 				'acronym' => ['type' => 'text', 'label' => 'Acronym'],
 				'status' => ['type' => 'text', 'label' => 'Status'],
 				'study_results' => ['type' => 'text', 'label' => 'Study results'],
-				'conditions' => ['type' => 'text', 'label' => 'Conditions'],
-				'interventions' => ['type' => 'text', 'label' => 'Interventions'],
-				'outcome_measures' => ['type' => 'text', 'label' => 'Outcome measure'],
 				'gender' => ['type' => 'text', 'label' => 'Gender'],
 				'age' => ['type' => 'text', 'label' => 'Age'],
 				'phases' => ['type' => 'text', 'label' => 'Phases'],
 				'enrollment' => ['type' => 'text', 'label' => 'Enrollment'],
 				'funded_bys' => ['type' => 'text', 'label' => 'Funded bys'],
 				'study_type' => ['type' => 'text', 'label' => 'Study type'],
-				'study_designs' => ['type' => 'text', 'label' => 'Study designs'],
 				'other_ids' => ['type' => 'text', 'label' => 'Other IDs'],
 				'start_date' => ['type' => 'date', 'label' => 'Start date'],
 				'primary_completion_date' => ['type' => 'date', 'label' => 'Primary completion date'],
@@ -49,16 +45,52 @@
 				@endif
 			@endforeach
 
+            @if($clinicaltrial->conditions->count() > 0)
+                <p><strong>Conditions:</strong></p>
+                <ul class="mb-2">
+                    @foreach ($clinicaltrial->conditions as $item)
+                        <li>{{ $item->value }}</li>
+                    @endforeach
+                </ul>
+            @endif
+
+            @if($clinicaltrial->interventions->count() > 0)
+                <p><strong>Interventions:</strong></p>
+                <ul class="mb-2">
+                    @foreach ($clinicaltrial->interventions as $item)
+                        <li>{{ $item->value }}</li>
+                    @endforeach
+                </ul>
+            @endif
+
+            @if($clinicaltrial->outcomeMeasures->count() > 0)
+                <p><strong>Outcome Measures:</strong></p>
+                <ul class="mb-2">
+                    @foreach ($clinicaltrial->outcomeMeasures as $item)
+                        <li>{{ $item->value }}</li>
+                    @endforeach
+                </ul>
+            @endif
+
+            @if($clinicaltrial->studyDesigns->count() > 0)
+                <p><strong>Study Designs:</strong></p>
+                <ul class="mb-2">
+                    @foreach ($clinicaltrial->studyDesigns as $item)
+                        <li>{{ $item->value }}</li>
+                    @endforeach
+                </ul>
+            @endif
+
 		</div>
 		<div class="col-12 col-md-4 col-lg-5">
 
 			@if($clinicaltrial->locations->count() > 0)
 				<p class="mb-2">
 					<strong>Location:</strong><br>
-				
+
 					@foreach ($clinicaltrial->locations as $location)
 					    <a href="{{ route('discover.locations.show', $location->slug) }}">{{ $location->name }}</a>
-					    
+
 					    @if (!$loop->last)<br>@endif
 					@endforeach
 				</p>
@@ -83,7 +115,7 @@
 					@endif
 				</p>
 			@endif
-			
+
 		</div>
 
 

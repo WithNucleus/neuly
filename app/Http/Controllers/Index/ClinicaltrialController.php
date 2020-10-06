@@ -63,7 +63,17 @@ class ClinicaltrialController extends Controller
 
     public function show(Request $request, $slug)
     {
-        $clinicaltrial = Clinicaltrial::where('slug', $slug)->firstOrFail();
+        $clinicaltrial = Clinicaltrial::with([
+                'conditions',
+                'interventions',
+                'outcomeMeasures',
+                'studyDesigns',
+                'locations',
+                'people',
+                'companies'
+            ])
+            ->where('slug', $slug)
+            ->firstOrFail();
 
         $entity = 'clinicaltrials';
         $isFollowed = (bool) count(FollowRepository::fromuser(Clinicaltrial::class, $clinicaltrial->id));
