@@ -116,15 +116,7 @@ $(document).ready(function() {
 
 	globalSearchSuggestions.initialize();
 
-	$('#homepage-discover .typeahead').typeahead(null,
-	{
-	  name: 'search-items',
-	  display: 'name',
-	  source: globalSearchSuggestions,
-	  limit: 10,
-	});
-
-	$('.global-search-form .typeahead').typeahead(null,
+	$('.js-global-search-input').typeahead(null,
 	{
 	  name: 'search-items',
 	  display: 'name',

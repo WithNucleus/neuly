@@ -9,7 +9,7 @@
         <div class="ml-3 mr-auto">
             <form class="global-search-form form-inline mt-3 mt-lg-0" method="post" action="{{ route('search') }}">
                 @csrf
-                <input class="form-control typeahead global-search-input mr-sm-2 search-field" name="search" type="search" placeholder="Discover organizations, people, research..." aria-label="Search">
+                <input class="form-control global-search-input mr-sm-2 search-field js-global-search-input" name="search" type="search" placeholder="Discover organizations, people, research..." aria-label="Search">
                 <button class="btn global-search-button my-2 my-sm-0" type="submit" title="Search Neuly"><i class="far fa-search"></i></button>
             </form>
         </div>

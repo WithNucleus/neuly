@@ -40,6 +40,7 @@ class FocusCrudController extends CrudController
         $this->crud->addColumn(['name' => 'name', 'type' => 'text', 'label' => 'Name']);
         $this->crud->addColumn(['name' => 'slug', 'type' => 'text', 'label' => 'Slug']);
         $this->crud->addColumn(['name' => 'type', 'type' => 'text', 'label' => 'Type']);
+        $this->crud->addColumn(['name' => 'aliases', 'type' => 'text', 'label' => 'Aliases']);
     }
 
     protected function setupCreateOperation()
@@ -58,7 +59,13 @@ class FocusCrudController extends CrudController
             'name' => 'type',
             'type' => 'select_from_array',
             'label' => 'Type',
-            'options' => ['', Focus::TYPE_DRUG => Focus::TYPE_DRUG],
+            'options' => [null => 'None', Focus::TYPE_DRUG => ucfirst(Focus::TYPE_DRUG)],
+        ]);
+
+        $this->crud->addField([
+            'name'            => 'aliases',
+            'type'            => 'textarea',
+            'label'           => 'Aliases <br><small>list values divided by ; (semicolon)</small>',
         ]);
     }
 
