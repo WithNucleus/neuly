@@ -75,55 +75,84 @@
                     </div>
                 </div>
 
-                <?php if (
-                isset($filters_focus) && $filters_focus OR
-                isset($filters_organizations) && $filters_organizations OR
-                isset($filters_status) && $filters_status OR
-                isset($filters_phases) && $filters_phases
-                ) : ?>
+                @if(
+                    isset($filters_focus) && $filters_focus OR
+                    isset($filters_organizations) && $filters_organizations OR
+                    isset($filters_status) && $filters_status OR
+                    isset($filters_phases) && $filters_phases OR
+                    isset($filters_researchers) && $filters_researchers OR
+                    isset($filters_conditions) && $filters_conditions OR
+                    isset($filters_interventions) && $filters_interventions OR
+                    isset($filters_outcome_measures) && $filters_outcome_measures OR
+                    isset($filters_study_designs) && $filters_study_designs
+                )
                     <div class="current-filter-list font-size-small align-self-end mt-3 mb-3 border-bottom pb-1">
                         <strong class="text-uppercase mr-3 text-black-50">Current Filters:</strong>
 
-                        <?php
-                        if (isset($filters_focus) && $filters_focus) : ?>
-                            <span class="mr-3">
-                                <i class="fad fa-flask text-secondarydark"></i>
-                                @foreach ($filters_focus as $focus)
-                                {{ $focus }}
-                                @if (!$loop->last) <strong class="text-black-50">/</strong> @endif
-                            @endforeach
-                            </span>
-                        <?php endif;
-                        if (isset($filters_organizations) && $filters_organizations) : ?>
-                        <span class="mr-3">
-                                <i class="fad fa-building text-secondarydark"></i>
-                                @foreach ($filters_organizations as $organization)
-                                {{ $organization }}
-                                @if (!$loop->last) <strong class="text-black-50">/</strong> @endif
-                            @endforeach
-                            </span>
-                        <?php endif;
-                        if (isset($filters_status) && $filters_status) : ?>
-                        <span class="mr-3">
-                                <i class="fad fa-info-circle text-secondarydark"></i>
-                                @foreach ($filters_status as $status)
-                                {{ $status }}
-                                @if (!$loop->last) <strong class="text-black-50">/</strong> @endif
-                            @endforeach
-                            </span>
-                        <?php endif;
-                        if (isset($filters_phases) && $filters_phases) : ?>
-                        <span class="mr-3">
-                                <i class="fad fa-stream text-secondarydark"></i>
-                                @foreach ($filters_phases as $phase)
-                                {{ $phase }}
-                                @if (!$loop->last) <strong class="text-black-50">/</strong> @endif
-                            @endforeach
-                            </span>
-                        <?php endif;
-                        ?>
+                        @if(isset($filters_focus) && $filters_focus)
+                            @include('discover.includes.filters.current-filter', [
+                                'iconClass' => 'fa-flask',
+                                'items' => $filters_focus
+                            ])
+                        @endif
+
+                        @if(isset($filters_organizations) && $filters_organizations)
+                            @include('discover.includes.filters.current-filter', [
+                                'iconClass' => 'fa-building',
+                                'items' => $filters_organizations
+                            ])
+                        @endif
+
+                        @if(isset($filters_status) && $filters_status)
+                            @include('discover.includes.filters.current-filter', [
+                                'iconClass' => 'fa-info-circle',
+                                'items' => $filters_status
+                            ])
+                        @endif
+
+                        @if(isset($filters_phases) && $filters_phases)
+                            @include('discover.includes.filters.current-filter', [
+                                'iconClass' => 'fa-stream',
+                                'items' => $filters_phases
+                            ])
+                        @endif
+
+                        @if(isset($filters_researchers) && $filters_researchers)
+                            @include('discover.includes.filters.current-filter', [
+                                'iconClass' => 'fa-users',
+                                'items' => $filters_researchers
+                            ])
+                        @endif
+
+                        @if(isset($filters_conditions) && $filters_conditions)
+                            @include('discover.includes.filters.current-filter', [
+                                'iconClass' => 'fa-info-circle',
+                                'items' => $filters_conditions
+                            ])
+                        @endif
+
+                        @if(isset($filters_interventions) && $filters_interventions)
+                            @include('discover.includes.filters.current-filter', [
+                                'iconClass' => 'fa-info-circle',
+                                'items' => $filters_interventions
+                            ])
+                        @endif
+
+                        @if(isset($filters_outcome_measures) && $filters_outcome_measures)
+                            @include('discover.includes.filters.current-filter', [
+                                'iconClass' => 'fa-info-circle',
+                                'items' => $filters_outcome_measures
+                            ])
+                        @endif
+
+                        @if(isset($filters_study_designs) && $filters_study_designs)
+                            @include('discover.includes.filters.current-filter', [
+                                'iconClass' => 'fa-info-circle',
+                                'items' => $filters_study_designs
+                            ])
+                        @endif
                     </div>
-                <?php endif; ?>
+                @endif
 
                 @auth
                     @include('discover.insights.clinicaltrials.clinicaltrials-table')
@@ -136,7 +165,5 @@
     </div>
 
     @include('footers.mini')
-
-    @include('sidebars.filters.scripts')
 
 @endsection

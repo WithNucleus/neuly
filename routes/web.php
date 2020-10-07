@@ -65,14 +65,25 @@ Route::group([
 });
 
 // Search Suggestions
-Route::get('/searchassets/everything.json', 'Index\SearchSuggestionsController@everything');
-Route::get('/searchassets/researchAuthors.json', 'Index\SearchSuggestionsController@researchAuthors');
-Route::get('/searchassets/investorsPeople.json', 'Index\SearchSuggestionsController@investorsPeople');
-Route::get('/searchassets/investorsOrganizations.json', 'Index\SearchSuggestionsController@investorsOrganizations');
-Route::get('/searchassets/companiesLocations.json', 'Index\SearchSuggestionsController@companiesLocations');
-Route::get('/searchassets/locationsRegions.json', 'Index\SearchSuggestionsController@locationsRegions');
-Route::get('/searchassets/focusOrganizations.json', 'Index\SearchSuggestionsController@focusOrganizations');
-Route::get('/searchassets/clinicalTrialCollaborators.json', 'Index\SearchSuggestionsController@clinicalTrialCollaborators');
+Route::group([
+    'prefix'     => '/searchassets',
+    'namespace'  => 'Index',
+    'as'         => 'searchassets.',
+], function () {
+    Route::get('/everything.json', 'SearchSuggestionsController@everything')->name('everything');
+    Route::get('/researchAuthors.json', 'SearchSuggestionsController@researchAuthors')->name('researchAuthors');
+    Route::get('/investorsPeople.json', 'SearchSuggestionsController@investorsPeople')->name('investorsPeople');
+    Route::get('/investorsOrganizations.json', 'SearchSuggestionsController@investorsOrganizations')->name('investorsOrganizations');
+    Route::get('/companiesLocations.json', 'SearchSuggestionsController@companiesLocations')->name('companiesLocations');
+    Route::get('/locationsRegions.json', 'SearchSuggestionsController@locationsRegions')->name('locationsRegions');
+    Route::get('/focusOrganizations.json', 'SearchSuggestionsController@focusOrganizations')->name('focusOrganizations');
+    Route::get('/clinicalTrialCollaborators.json', 'SearchSuggestionsController@clinicalTrialCollaborators')->name('clinicalTrialCollaborators');
+    Route::get('/clinicalTrialResearchers.json', 'SearchSuggestionsController@clinicalTrialResearchers')->name('clinicalTrialResearchers');
+    Route::get('/clinicalTrialConditions.json', 'SearchSuggestionsController@clinicalTrialConditions')->name('clinicalTrialConditions');
+    Route::get('/clinicalTrialInterventions.json', 'SearchSuggestionsController@clinicalTrialInterventions')->name('clinicalTrialInterventions');
+    Route::get('/clinicalTrialOutcomeMeasures.json', 'SearchSuggestionsController@clinicalTrialOutcomeMeasures')->name('clinicalTrialOutcomeMeasures');
+    Route::get('/clinicalTrialStudyDesigns.json', 'SearchSuggestionsController@clinicalTrialStudyDesigns')->name('clinicalTrialStudyDesigns');
+});
 
 // Companies
 Route::get('/organizations', 'Index\CompanyController@index')->name('discover.organizations');

@@ -4,11 +4,16 @@ namespace App\Http\Controllers\Index;
 
 use App\Http\Controllers\Controller;
 use App\Models\Clinicaltrial;
+use App\Models\ClinicalTrialDetails\CtCondition;
+use App\Models\ClinicalTrialDetails\CtIntervention;
+use App\Models\ClinicalTrialDetails\CtOutcomeMeasure;
+use App\Models\ClinicalTrialDetails\CtStudyDesign;
 use App\Models\Company;
 use App\Models\Person;
 use App\Models\Location;
 use App\Models\Focus;
 use DB;
+use Illuminate\Http\Response;
 
 class SearchSuggestionsController extends Controller
 {
@@ -89,6 +94,54 @@ class SearchSuggestionsController extends Controller
     public function clinicalTrialCollaborators() {
         $collaborators = self::getPivotRelationships('clinicaltrial_company', 'company_id', 'App\Models\Company');
         return $collaborators;
+    }
+
+    public function clinicalTrialResearchers() {
+        return self::getPivotRelationships('clinicaltrial_person', 'person_id', 'App\Models\Person');
+    }
+
+    public function clinicalTrialConditions() {
+        $data = CtCondition::whereHas('clinicalTrials')
+            ->orderBy('value')
+            ->pluck('value')
+            ->map(function ($item) {
+                return ['name' => $item];
+            });
+
+        return response()->json($data, Response::HTTP_OK);
+    }
+
+    public function clinicalTrialInterventions() {
+        $data = CtIntervention::whereHas('clinicalTrials')
+            ->orderBy('value')
+            ->pluck('value')
+            ->map(function ($item) {
+                return ['name' => $item];
+            });
+
+        return response()->json($data, Response::HTTP_OK);
+    }
+
+    public function clinicalTrialOutcomeMeasures() {
+        $data = CtOutcomeMeasure::whereHas('clinicalTrials')
+            ->orderBy('value')
+            ->pluck('value')
+            ->map(function ($item) {
+                return ['name' => $item];
+            });
+
+        return response()->json($data, Response::HTTP_OK);
+    }
+
+    public function clinicalTrialStudyDesigns() {
+        $data = CtStudyDesign::whereHas('clinicalTrials')
+            ->orderBy('value')
+            ->pluck('value')
+            ->map(function ($item) {
+                return ['name' => $item];
+            });
+
+        return response()->json($data, Response::HTTP_OK);
     }
 
     /* Get All Regions */

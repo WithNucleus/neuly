@@ -44,7 +44,12 @@
             'countries',
             'hiring',
             'upcoming_events',
-            'phase'
+            'phase',
+            'researchers',
+            'conditions',
+            'interventions',
+            'outcome_measures',
+            'study_designs'
         ];
 
         allowedFilters.forEach(function (filterName) {
@@ -77,6 +82,43 @@
     }
 
     $(document).ready(function() {
+
+        $('.js-typeahead-filter').each(function () {
+            let input = $(this),
+                name = input.attr('name'),
+                action = input.data('action');
+
+            let resource = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                prefetch: action
+            });
+
+            resource.initialize();
+
+            input.typeahead(null, {
+                name: name,
+                display: 'name',
+                source: resource,
+                limit: 10,
+            })
+        });
+
+        $('.js-typeahead-filter').on('change', function() {
+            let input = $(this),
+                name = input.attr('name'),
+                value = $(this).val(),
+                container = input.parents('.js-typeahead-filter-container'),
+                valuesBlock = container.find('.js-typeahead-filter-values');
+
+            let checkbox = '<div class="custom-control custom-checkbox">' +
+                '<input type="checkbox" class="custom-control-input" name="' + name + '" id="' + value + '" value="' + value + '" checked>' +
+                '<label class="custom-control-label" for="' + value + '">' + value + '</label></div>';
+
+            valuesBlock.append(checkbox);
+
+            get_filters_and_go();
+        });
 
         // Checkboxes
         $("#filterSidebar input[type=checkbox]").on('change', function() {

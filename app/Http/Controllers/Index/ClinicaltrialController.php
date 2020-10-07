@@ -5,12 +5,11 @@ namespace App\Http\Controllers\Index;
 use App\Http\Controllers\Controller;
 use App\Repositories\FollowRepository;
 use Illuminate\Http\Request;
-use App\Models\Clinicaltrial;
 use App\Models\Focus;
+use App\Models\Clinicaltrial;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
-use Spatie\Activitylog\Models\Activity;
 use Auth;
 use DB;
 use App\Models\Location;
@@ -31,7 +30,6 @@ class ClinicaltrialController extends Controller
     // Index
     public function index(Request $request)
     {
-
         $clinicaltrials = QueryBuilder::for(Clinicaltrial::class)
             ->allowedFilters([
                 'nct_number',
@@ -39,9 +37,13 @@ class ClinicaltrialController extends Controller
                 'study_results',
                 AllowedFilter::exact('status'),
                 AllowedFilter::exact('focus', 'focus.name'),
-                AllowedFilter::partial('locations', 'locations.name'),
-                AllowedFilter::partial('companies', 'companies.name'),
-                AllowedFilter::partial('people', 'people.name'),
+                AllowedFilter::exact('locations', 'locations.name'),
+                AllowedFilter::exact('company', 'companies.name'),
+                AllowedFilter::exact('researchers', 'people.name'),
+                AllowedFilter::exact('conditions', 'conditions.value'),
+                AllowedFilter::exact('interventions', 'interventions.value'),
+                AllowedFilter::exact('outcome_measures', 'outcomeMeasures.value'),
+                AllowedFilter::exact('study_designs', 'studyDesigns.value'),
             ])
             ->defaultSort('-start_date')
             ->allowedSorts([
@@ -53,12 +55,63 @@ class ClinicaltrialController extends Controller
             ->appends(request()->query());
 
     	$status = Clinicaltrial::pluck('status')->unique()->sort();
-
-        $location_ids = DB::table('clinicaltrial_location')->pluck('location_id')->unique();
-        $locations = Location::findMany($location_ids)->sortBy('country')->pluck('country')->unique();
         $focus_cats = Focus::drugs()->orderBy('name')->get()->pluck('name');
+        $locations = Location::select('country')
+            ->join('clinicaltrial_location', 'locations.id', 'clinicaltrial_location.location_id')
+            ->orderBy('country')
+            ->pluck('country')
+            ->unique();
 
-        return view('discover.clinicaltrials.index', compact('clinicaltrials', 'status', 'focus_cats', 'locations'));
+        $filters_companies = [];
+        $filters_researchers = [];
+        $filters_conditions = [];
+        $filters_interventions = [];
+        $filters_outcome_measures = [];
+        $filters_study_designs = [];
+
+        if ($request->has('filter')) {
+            $filterInput = $request->input('filter');
+            $filter = array_map(function ($entity) {
+                return explode('|', $entity);
+            }, $filterInput);
+
+            if(isset($filter['company'])) {
+                $filters_companies = $filter['company'];
+            }
+
+            if(isset($filter['researchers'])) {
+                $filters_researchers = $filter['researchers'];
+            }
+
+            if(isset($filter['conditions'])) {
+                $filters_conditions = $filter['conditions'];
+            }
+
+            if(isset($filter['interventions'])) {
+                $filters_interventions = $filter['interventions'];
+            }
+
+            if(isset($filter['outcome_measures'])) {
+                $filters_outcome_measures = $filter['outcome_measures'];
+            }
+
+            if(isset($filter['study_designs'])) {
+                $filters_study_designs = $filter['study_designs'];
+            }
+        }
+
+        return view('discover.clinicaltrials.index', compact(
+            'clinicaltrials',
+            'status',
+            'focus_cats',
+            'locations',
+            'filters_companies',
+            'filters_researchers',
+            'filters_conditions',
+            'filters_interventions',
+            'filters_outcome_measures',
+            'filters_study_designs'
+        ));
     }
 
     public function show(Request $request, $slug)

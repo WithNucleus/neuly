@@ -1,3 +1,45 @@
+@include('sidebars.filters.typeahead', [
+    'label'     => 'Organizations',
+    'name'      => 'company',
+    'items'     => $filters_companies,
+    'action'    => route('searchassets.clinicalTrialCollaborators')
+])
+
+@include('sidebars.filters.typeahead', [
+    'label'     => 'Researchers',
+    'name'      => 'researchers',
+    'items'     => $filters_researchers,
+    'action'    => route('searchassets.clinicalTrialResearchers')
+])
+
+@include('sidebars.filters.typeahead', [
+    'label'     => 'Conditions',
+    'name'      => 'conditions',
+    'items'     => $filters_conditions,
+    'action'    => route('searchassets.clinicalTrialConditions')
+])
+
+@include('sidebars.filters.typeahead', [
+    'label'     => 'Interventions',
+    'name'      => 'interventions',
+    'items'     => $filters_interventions,
+    'action'    => route('searchassets.clinicalTrialInterventions')
+])
+
+@include('sidebars.filters.typeahead', [
+    'label'     => 'Outcome Measures',
+    'name'      => 'outcome_measures',
+    'items'     => $filters_outcome_measures,
+    'action'    => route('searchassets.clinicalTrialOutcomeMeasures')
+])
+
+@include('sidebars.filters.typeahead', [
+    'label'     => 'Study Designs',
+    'name'      => 'study_designs',
+    'items'     => $filters_study_designs,
+    'action'    => route('searchassets.clinicalTrialStudyDesigns')
+])
+
 @include('sidebars.filters.checkboxes-new', [
     'label'     => 'Status',
     'name'      => 'status',

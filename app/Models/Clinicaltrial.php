@@ -144,7 +144,14 @@ class Clinicaltrial extends Model implements EntityContract
 
         // Assign Slug
         $this->attributes['slug'] = $nct_number . '-' . Str::slug($value);
+    }
 
+    public function setConditionsAttribute($value) {
+        $this->attributes['conditions'] = str_replace('|', ';', $value);
+    }
+
+    public function setInterventionsAttribute($value) {
+        $this->attributes['interventions'] = str_replace('|', ';', $value);
     }
 
     /**
