@@ -88,7 +88,6 @@ class ClinicalTrialPipelineController extends Controller
             ->select('companies.id as company_id', 'companies.name as company_name', 'companies.slug as company_slug',
                 'clinicaltrials.id as clinicaltrial_id', 'clinicaltrials.title as title', 'clinicaltrials.slug as slug',
                 'clinicaltrials.phases as phase_value', 'clinicaltrials.phase_integer as phase_integer', 'clinicaltrials.status as status',
-                'clinicaltrials.conditions as conditions',
                 'focus.id as focus_id', 'focus.name as focus_name', 'focus.slug as focus_slug');
     }
 
