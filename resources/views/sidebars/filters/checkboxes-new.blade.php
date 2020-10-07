@@ -20,8 +20,8 @@
                 @endif
 
                     <div class="custom-control custom-checkbox {{ isset($inline) ? 'custom-control-inline' : '' }}">
-                        <input type="checkbox" class="custom-control-input" name="{{ $name }}" id="{{ $item }}" value="{{ $item }}" @if (in_array($item, $item_filters)) checked @endif>
-                        <label class="custom-control-label" for="{{ $item }}">{{ $item }}</label>
+                        <input type="checkbox" class="custom-control-input" name="{{ $name }}" id="{{ $name }}{{ $item }}" value="{{ $item }}" @if (in_array($item, $item_filters)) checked @endif>
+                        <label class="custom-control-label" for="{{ $name }}{{ $item }}">{{ $item }}</label>
                     </div>
 
                 @if($loop->last AND $loop->index >= 4)

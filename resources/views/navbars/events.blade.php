@@ -40,43 +40,41 @@
 </div>
 
 {{-- Filters --}}
-<?php if (
+@if (
     isset($filters_location) && $filters_location OR
     isset($filters_company_name) && $filters_company_name OR
+    isset($filters_focus) && $filters_focus OR
     isset($filters_type) && $filters_type
-    ) : ?>
+)
 <div class="current-filter-list font-size-small align-self-end border-bottom mb-3 pb-1">
     <strong class="text-uppercase mr-3 text-black-50">Current Filters:</strong>
 
-    <?php if (isset($filters_type) && $filters_type) : ?>
-            <span class="mr-3">
-                <i class="fad fa-briefcase text-quaternary"></i>
-                @foreach ($filters_type as $type)
-                    {{ $type }}
-                    @if (!$loop->last) <strong class="text-black-50">/</strong> @endif
-                @endforeach
-            </span>
-    <?php endif; ?>
+    @if(isset($filters_type) && $filters_type)
+        @include('discover.includes.filters.current-filter', [
+            'iconClass' => 'fa-briefcase',
+            'items' => $filters_type
+        ])
+    @endif
 
-    <?php if (isset($filters_location) && $filters_location) : ?>
-            <span class="mr-3">
-                <i class="fad fa-map-marker-alt text-info"></i>
-                @foreach ($filters_location as $location)
-                    {{ $location }}
-                    @if (!$loop->last) <strong class="text-info">/</strong> @endif
-                @endforeach
-            </span>
-    <?php endif; ?>
+    @if(isset($filters_location) && $filters_location)
+        @include('discover.includes.filters.current-filter', [
+            'iconClass' => 'fa-map-marker-alt',
+            'items' => $filters_location
+        ])
+    @endif
 
-    <?php if (isset($filters_company_name) && $filters_company_name) : ?>
-            <span class="mr-3">
-                <i class="fad fa-building text-secondarydark"></i>
-                @foreach ($filters_company_name as $company)
-                    {{ $company }}
-                    @if (!$loop->last) <strong class="text-black-50">/</strong> @endif
-                @endforeach
-            </span>
-    <?php endif; ?>
+    @if(isset($filters_focus) && $filters_focus)
+        @include('discover.includes.filters.current-filter', [
+            'iconClass' => 'fa-tags',
+            'items' => $filters_focus
+        ])
+    @endif
 
+    @if(isset($filters_company_name) && $filters_company_name)
+        @include('discover.includes.filters.current-filter', [
+            'iconClass' => 'fa-building',
+            'items' => $filters_company_name
+        ])
+    @endif
 </div>
-<?php endif; ?>
+@endif
