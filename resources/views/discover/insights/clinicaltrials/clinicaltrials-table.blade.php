@@ -25,7 +25,7 @@
     <table class="table table-bordered bg-white shadow-sm">
         <thead class="thead-dark">
         <tr>
-            <th>Focus</th>
+            <th>Focus / Condition</th>
             <th>Status</th>
             <th>Early Phase 1</th>
             <th>Phase 1</th>
@@ -46,7 +46,7 @@
                 <tr>
                     <td>
                         <a href="{{ route('discover.clinicaltrials.show', $clinicaltrial->slug) }}">
-                            <span class="truncate-this">{{ $clinicaltrial->focus_name }}</span>
+                            <span class="truncate-this">{{ $clinicaltrial->focus_name }} &ndash; {{ $clinicaltrial->conditions }}</span>
                         </a>
                     </td>
                     <td>
