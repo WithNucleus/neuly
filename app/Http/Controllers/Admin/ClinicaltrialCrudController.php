@@ -166,6 +166,44 @@ class ClinicaltrialCrudController extends CrudController
             }),
         ]);
 
+        $this->crud->addColumn([
+            'type'      => 'relationship',
+            'name'      => 'conditions',
+            'attribute' => 'value',
+            'options'   => (function ($query) {
+                return $query->orderBy('value', 'ASC')->get();
+            }),
+        ]);
+
+        $this->crud->addColumn([
+            'type'      => 'relationship',
+            'name'      => 'interventions',
+            'attribute' => 'value',
+            'options'   => (function ($query) {
+                return $query->orderBy('value', 'ASC')->get();
+            }),
+        ]);
+
+        $this->crud->addColumn([
+            'type'      => 'relationship',
+            'name'      => 'outcomeMeasures',
+            'label'     => 'Outcome Measures',
+            'attribute' => 'value',
+            'options'   => (function ($query) {
+                return $query->orderBy('value', 'ASC')->get();
+            }),
+        ]);
+
+        $this->crud->addColumn([
+            'type'      => 'relationship',
+            'name'      => 'studyDesigns',
+            'label'     => 'Study Designs',
+            'attribute' => 'value',
+            'options'   => (function ($query) {
+                return $query->orderBy('value', 'ASC')->get();
+            }),
+        ]);
+
         CRUD::setFromDb(); // columns
 
         /**
@@ -211,16 +249,12 @@ class ClinicaltrialCrudController extends CrudController
         $this->crud->addField(['name' => 'acronym', 'type' => 'text', 'label' => 'Acronym']);
         $this->crud->addField(['name' => 'status', 'type' => 'text', 'label' => 'Status']);
         $this->crud->addField(['name' => 'study_results', 'type' => 'text', 'label' => 'Study results']);
-        $this->crud->addField(['name' => 'conditions', 'type' => 'text', 'label' => 'Conditions']);
-        $this->crud->addField(['name' => 'interventions', 'type' => 'text', 'label' => 'Interventions']);
-        $this->crud->addField(['name' => 'outcome_measures', 'type' => 'textarea', 'label' => 'Outcome measures']);
         $this->crud->addField(['name' => 'gender', 'type' => 'text', 'label' => 'Gender']);
         $this->crud->addField(['name' => 'age', 'type' => 'text', 'label' => 'Age']);
         $this->crud->addField(['name' => 'phases', 'type' => 'text', 'label' => 'Phases']);
         $this->crud->addField(['name' => 'enrollment', 'type' => 'text', 'label' => 'Enrollment']);
         $this->crud->addField(['name' => 'funded_bys', 'type' => 'text', 'label' => 'Funded bys']);
         $this->crud->addField(['name' => 'study_type', 'type' => 'text', 'label' => 'Study type']);
-        $this->crud->addField(['name' => 'study_designs', 'type' => 'textarea', 'label' => 'Study designs']);
         $this->crud->addField(['name' => 'other_ids', 'type' => 'text', 'label' => 'Ohter IDs']);
         $this->crud->addField(['name' => 'start_date', 'type' => 'date', 'label' => 'Start date']);
         $this->crud->addField(['name' => 'primary_completion_date', 'type' => 'date', 'label' => 'Primary completion date']);
@@ -287,6 +321,50 @@ class ClinicaltrialCrudController extends CrudController
                 return $query->orderBy('name', 'ASC')->get();
             }),
              'model'     => "App\Models\Focus",
+        ]);
+
+        $this->crud->addField([
+            'type'      => 'select2_multiple',
+            'name'      => 'conditions',
+            'label'     => 'Conditions',
+            'attribute' => 'value',
+            'pivot'     => true,
+            'options'   => (function ($query) {
+                return $query->orderBy('value', 'ASC')->get();
+            }),
+        ]);
+
+        $this->crud->addField([
+            'type'      => 'select2_multiple',
+            'name'      => 'interventions',
+            'label'     => 'Interventions',
+            'attribute' => 'value',
+            'pivot'     => true,
+            'options'   => (function ($query) {
+                return $query->orderBy('value', 'ASC')->get();
+            }),
+        ]);
+
+        $this->crud->addField([
+            'type'      => 'select2_multiple',
+            'name'      => 'outcomeMeasures',
+            'label'     => 'Outcome Measures',
+            'attribute' => 'value',
+            'pivot'     => true,
+            'options'   => (function ($query) {
+                return $query->orderBy('value', 'ASC')->get();
+            }),
+        ]);
+
+        $this->crud->addField([
+            'type'      => 'select2_multiple',
+            'name'      => 'studyDesigns',
+            'label'     => 'Study Designs',
+            'attribute' => 'value',
+            'pivot'     => true,
+            'options'   => (function ($query) {
+                return $query->orderBy('value', 'ASC')->get();
+            }),
         ]);
 
         /**

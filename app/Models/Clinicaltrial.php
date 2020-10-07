@@ -3,6 +3,10 @@
 namespace App\Models;
 
 use App\Helpers\EntityMergeHelper;
+use App\Models\ClinicalTrialDetails\CtCondition;
+use App\Models\ClinicalTrialDetails\CtIntervention;
+use App\Models\ClinicalTrialDetails\CtOutcomeMeasure;
+use App\Models\ClinicalTrialDetails\CtStudyDesign;
 use App\Models\Contracts\EntityContract;
 use App\Models\Traits\OldSlugRedirectable;
 use App\Traits\HasFollowers;
@@ -65,6 +69,26 @@ class Clinicaltrial extends Model implements EntityContract
     public function focus() {
         return $this->belongsToMany('App\Models\Focus', 'clinicaltrial_focus', 'clinicaltrial_id', 'focus_id')
                     ->withTimestamps();
+    }
+
+    public function conditions()
+    {
+        return $this->belongsToMany(CtCondition::class, 'clinicaltrial_condition');
+    }
+
+    public function interventions()
+    {
+        return $this->belongsToMany(CtIntervention::class, 'clinicaltrial_intervention');
+    }
+
+    public function outcomeMeasures()
+    {
+        return $this->belongsToMany(CtOutcomeMeasure::class, 'clinicaltrial_outcome_measure');
+    }
+
+    public function studyDesigns()
+    {
+        return $this->belongsToMany(CtStudyDesign::class, 'clinicaltrial_study_design');
     }
 
     /**
@@ -149,15 +173,6 @@ class Clinicaltrial extends Model implements EntityContract
             'study_results'           => [
                 'type' => EntityMergeHelper::TYPE_STRING,
             ],
-            'conditions'              => [
-                'type' => EntityMergeHelper::TYPE_STRING,
-            ],
-            'interventions'           => [
-                'type' => EntityMergeHelper::TYPE_STRING,
-            ],
-            'outcome_measures'        => [
-                'type' => EntityMergeHelper::TYPE_TEXT,
-            ],
             'gender'                  => [
                 'type' => EntityMergeHelper::TYPE_STRING,
             ],
@@ -175,9 +190,6 @@ class Clinicaltrial extends Model implements EntityContract
             ],
             'study_type'              => [
                 'type' => EntityMergeHelper::TYPE_STRING,
-            ],
-            'study_designs'           => [
-                'type' => EntityMergeHelper::TYPE_TEXT,
             ],
             'other_ids'               => [
                 'type' => EntityMergeHelper::TYPE_STRING,
@@ -219,6 +231,24 @@ class Clinicaltrial extends Model implements EntityContract
             'focus'                   => [
                 'type'          => EntityMergeHelper::TYPE_RELATION,
                 'relationField' => 'name',
+            ],
+            'conditions'              => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'value',
+            ],
+            'interventions'           => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'value',
+            ],
+            'outcomeMeasures'        => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'value',
+                'label'         => 'Outcome Measures',
+            ],
+            'studyDesigns'           => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relationField' => 'value',
+                'label'         => 'Study Designs',
             ],
         ];
     }

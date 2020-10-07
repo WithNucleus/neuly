@@ -99,6 +99,25 @@
 			<i class="nav-icon la la-stethoscope"></i> <span>Clinical Trials</span>
 		</a>
 	</li>
+
+    <li class="nav-item nav-dropdown">
+        <a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon la la-list-alt"></i> Clinical Trial Details</a>
+        <ul class="nav-dropdown-items">
+            <li class='nav-item'>
+                <a class='nav-link' href='{{ backpack_url('ct_condition') }}'>Conditions</a>
+            </li>
+            <li class='nav-item'>
+                <a class='nav-link' href='{{ backpack_url('ct_intervention') }}'>Interventions</a>
+            </li>
+            <li class='nav-item'>
+                <a class='nav-link' href='{{ backpack_url('ct_outcome_measure') }}'>Outcome Measures</a>
+            </li>
+            <li class='nav-item'>
+                <a class='nav-link' href='{{ backpack_url('ct_study_design') }}'>Study Designs</a>
+            </li>
+        </ul>
+    </li>
+
     <li class="nav-item">
         <a class="nav-link" href="{{ backpack_url('clinicaltrialphase') }}">
             <i class="nav-icon la la-stopwatch"></i> Clinical Trial Phases
