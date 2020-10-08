@@ -37,13 +37,13 @@ class ClinicaltrialController extends Controller
                 'study_results',
                 AllowedFilter::exact('status'),
                 AllowedFilter::exact('focus', 'focus.name'),
-                AllowedFilter::exact('locations', 'locations.name'),
+                AllowedFilter::partial('locations', 'locations.name'),
                 AllowedFilter::exact('company', 'companies.name'),
                 AllowedFilter::exact('researchers', 'people.name'),
-                AllowedFilter::exact('conditions', 'conditions.value'),
-                AllowedFilter::exact('interventions', 'interventions.value'),
-                AllowedFilter::exact('outcome_measures', 'outcomeMeasures.value'),
-                AllowedFilter::exact('study_designs', 'studyDesigns.value'),
+                AllowedFilter::partial('conditions', 'conditions.value'),
+                AllowedFilter::partial('interventions', 'interventions.value'),
+                AllowedFilter::partial('outcome_measures', 'outcomeMeasures.value'),
+                AllowedFilter::partial('study_designs', 'studyDesigns.value'),
             ])
             ->defaultSort('-start_date')
             ->allowedSorts([
