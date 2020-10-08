@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Repositories\FollowRepository;
 use Illuminate\Http\Request;
 use App\Models\Focus;
+use App\Models\Company;
 use App\Services\Metas;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedSort;
@@ -53,6 +54,8 @@ class FocusController extends Controller
 
         // Get Focus
         $focus = Focus::where('slug', $slug)->firstOrFail();
+        $focus = Focus::where('slug', $slug)->with(['companies', 'investors', 'jobs', 'research', 'events', 'clinicaltrials'])->firstOrFail();
+
         $focusCats = Focus::drugs()->orderBy('name')->get();
 
         $metas = Metas::process(array(
