@@ -309,7 +309,7 @@ class SearchController extends Controller
 
     private function searchFocus(string $term, bool $limitResults = false)
     {
-        $searchQuery = Focus::where('name', 'like', $term);
+        $searchQuery = Focus::where('name', 'like', $term)->orWhere('aliases', 'like', $term);
 
         if($limitResults)
         {

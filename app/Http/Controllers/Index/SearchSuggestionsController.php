@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Index;
 
+use App\Helpers\StringHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Clinicaltrial;
 use App\Models\ClinicalTrialDetails\CtCondition;
@@ -47,13 +48,23 @@ class SearchSuggestionsController extends Controller
      */
     public function everything() {
 
-        $companies      = Company::all()->pluck('slug', 'name')->toArray();
-        $people         = Person::all()->pluck('slug', 'name')->toArray();
-        $locations      = Location::all()->pluck('slug', 'name')->toArray();
-        $focus          = Focus::all()->pluck('slug', 'name')->toArray();
-        $clinicalTrials = Clinicaltrial::all()->pluck('slug', 'title')->toArray();
+        $companies        = Company::all()->pluck('slug', 'name')->toArray();
+        $people           = Person::all()->pluck('slug', 'name')->toArray();
+        $locations        = Location::all()->pluck('slug', 'name')->toArray();
+        $clinicalTrials   = Clinicaltrial::all()->pluck('slug', 'title')->toArray();
+        $focuses            = Focus::all();
+        $focusesWithAliases = [];
 
-        $everything = array_merge($companies, $people, $locations, $focus, $clinicalTrials);
+        foreach ($focuses as $focus) {
+            $focusesWithAliases[$focus->name] = $focus->slug;
+            $aliases = StringHelper::explodeAndFilterEmpty($focus->aliases, ';');
+
+            foreach ($aliases as $alias) {
+                $focusesWithAliases[$alias] = $focus->slug;
+            }
+        }
+
+        $everything = array_merge($companies, $people, $locations, $clinicalTrials, $focusesWithAliases);
         $results    = [];
 
         foreach ($everything as $name => $slug) {
