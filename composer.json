@@ -34,6 +34,7 @@
     },
     "require-dev": {
         "backpack/generators": "^3.1",
+        "barryvdh/laravel-debugbar": "^3.5",
         "facade/ignition": "^2.0",
         "friendsofphp/php-cs-fixer": "^2.16",
         "fzaninotto/faker": "^1.9.1",
