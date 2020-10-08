@@ -73,9 +73,10 @@
     <script type="text/javascript" src="{{ asset('assets/chart.js') }}"></script>
     <script type="text/javascript" src="{{ asset('assets/chartisan.js') }}"></script>
 
-    <!-- SVG Map -->
-    <script type="text/javascript" src="{{ asset('assets/jquery-jvectormap.min.js') }}"></script>
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/jquery-jvectormap.css') }}"/>
+    @if (Route::is('insights.distribution.countries.show') OR Route::is('insights.distribution.countries.focus.show'))
+        <script type="text/javascript" src="{{ asset('assets/jquery-jvectormap.min.js') }}"></script>
+        <link rel="stylesheet" type="text/css" href="{{ asset('assets/jquery-jvectormap.css') }}"/>
+    @endif
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-171437771-1"></script>
     <script>
