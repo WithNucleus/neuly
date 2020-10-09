@@ -47,6 +47,7 @@
         <input type="text" class="form-control" name="entity_name" placeholder="Name of Event" required>
     </div>
 @endif
+@include('discover.listing-requests.entity-forms.includes.select-focus')
 <div class="form-group">
     <label for="entity_website" class="font-weight-bold">Website:</label>
     <input type="url" class="form-control" name="entity_website">

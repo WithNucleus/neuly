@@ -165,5 +165,16 @@ jQuery(function($){
         $('select[name="entity_type"] option:selected').removeAttr('selected');
         $('select[name="entity_type"] option:contains('+value+')').prop('selected',true);
     });
+
+    $('.btn-restore-focus').on('click', function(e) {
+        e.preventDefault();
+        $(this).blur();
+        var values = $('select[name="original_focus[]"]').val();
+
+        $('select[name="entity_focus[]"] option:selected').removeAttr('selected');
+        $.each(values, function(i, value) {
+            $('select[name="entity_focus[]"] option[value="' + value + '"]').attr("selected", true);
+        });
+    });
 });
 

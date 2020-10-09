@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Index;
 
 use App\Models\Company;
 use App\Models\Event;
+use App\Models\Focus;
 use App\Models\Investor;
 use App\Models\ListingRequest;
 use App\Models\Person;
@@ -34,9 +35,11 @@ class ListingRequestController extends Controller
             'mail' => $request->input('general_mail'),
             'type' => $request->input('general_type')
         ];
+        $focusCategories = Focus::orderBy('name')->get();
 
         return view('discover.listing-requests.entity', [
             'general' => $general,
+            'focusCategories' => $focusCategories,
         ]);
     }
 
@@ -86,7 +89,7 @@ class ListingRequestController extends Controller
     private function getInvestorId($name)
     {
         $investor = Investor::where('name', '=', $name)->first();
-        
+
         if ($investor) {
             return $investor->id;
         } else {
@@ -108,7 +111,7 @@ class ListingRequestController extends Controller
     private function getEventId($name)
     {
         $event = Event::where('name', '=', $name)->first();
-        
+
         if ($event) {
             return $event->id;
         } else {
@@ -153,6 +156,7 @@ class ListingRequestController extends Controller
             'ticker_symbol' => $data['entity_ticker_symbol'],
             'total_funding_amount' => $data['entity_total_funding_amount'],
             'last_funding_date' => $data['entity_last_funding_date'],
+            'focus_ids' => $data['entity_focus'],
             'logo' => $logo,
         ];
 
@@ -167,7 +171,8 @@ class ListingRequestController extends Controller
             'registration' => $data['entity_registration'],
             'start' => $data['entity_start'],
             'end' => $data['entity_end'],
-            'description' => $data['entity_description']
+            'description' => $data['entity_description'],
+            'focus_ids' => $data['entity_focus'],
         ];
 
         return $resourceData;
