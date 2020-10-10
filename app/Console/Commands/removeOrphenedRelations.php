@@ -2,25 +2,24 @@
 
 namespace App\Console\Commands;
 
-use App\GarbageCollection\ImportCleaner;
-use App\GarbageCollection\ImportCleaner\FailureCleaner;
+use App\GarbageCollection\RelationshipCleaner;
 use Illuminate\Console\Command;
 
-class removeOldImportFailures extends Command
+class removeOrphenedRelations extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'clean:failures';
+    protected $signature = 'clean:relations';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Clean old import failures.';
+    protected $description = 'Command description';
 
     /**
      * Create a new command instance.
@@ -35,12 +34,12 @@ class removeOldImportFailures extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return int
      */
     public function handle()
     {
-        $collector = new ImportCleaner();
-        $messages = $collector->cleanImports();
+        $collector = new RelationshipCleaner();
+        $messages = $collector->cleanRelations();
 
         foreach($messages as $message)
         {
