@@ -2,16 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\GarbageCollection\RelationshipCleaner;
-use App\GarbageCollection\RelationshipCleaner\ClinicalTrialCleaner;
-use App\GarbageCollection\RelationshipCleaner\CompanyCleaner;
-use App\GarbageCollection\RelationshipCleaner\EventCleaner;
-use App\GarbageCollection\RelationshipCleaner\FocusCleaner;
-use App\GarbageCollection\RelationshipCleaner\InvestorCleaner;
-use App\GarbageCollection\RelationshipCleaner\JobCleaner;
-use App\GarbageCollection\RelationshipCleaner\LocationCleaner;
-use App\GarbageCollection\RelationshipCleaner\PersonCleaner;
-use App\GarbageCollection\RelationshipCleaner\UserCleaner;
+use App\GarbageCollection\GarbageCollector;
 use Illuminate\Console\Command;
 
 class collectGarbage extends Command
@@ -47,7 +38,12 @@ class collectGarbage extends Command
      */
     public function handle()
     {
-        $cleaner = new RelationshipCleaner();
-        dd($cleaner->cleanRelations());
+        $collector = new GarbageCollector();
+        $messages = $collector->collectGarbage();
+
+        foreach($messages as $message)
+        {
+            $this->info($message);
+        }
     }
 }
