@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin\Company;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -8,37 +8,25 @@ use App\Models\Company;
 use App\Models\Person;
 use App\Events\SendNotification;
 
-class CompanyPersonController extends Controller
+class PersonController extends Controller
 {
     /**
-     * Create a new controller instance.
-     *
-     * @return void
+     * @param int $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function __construct()
-    {
-        // Auth and Permission Middleware
-        $this->middleware('auth');
-        $this->middleware(['permission:edit companies']);
-    }
-
-    // Show View for Adding People to Companies
-    public function index(Request $request, $id) {
-
-    	// Get Company
+    public function index($id) {
     	$company = Company::with('people')->find($id);
-
-    	// Get All People
     	$people = Person::orderBy('name')->get();
 
-    	// Return View to Add People and Relationships
-    	return view('admin.company_person', compact('company', 'people'));
+    	return view('admin.company.person', compact('company', 'people'));
     }
 
     /**
-     * Add a person to a company.
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function add(Request $request, $id)
+    public function store(Request $request, $id)
     {
         $company = Company::findOrFail($id);
         $person = Person::findOrFail($request->input('person'));
@@ -60,21 +48,24 @@ class CompanyPersonController extends Controller
     }
 
     /**
-     * Remove a person from a company.
+     * @param \Illuminate\Http\Request $request
+     * @param int $company_id
+     * @param int $person_id
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function remove(Request $request, $company_id, $person_id)
+    public function remove($company_id, $person_id)
     {
         $company = Company::findOrFail($company_id);
         $person = Person::findOrFail($person_id);
 
         $title = $person->name . ' left ' . $company->name;
-
         $description = $person->getShowLink() . ' no longer works at ' . $company->getShowLink() . ', ' . $company->getTypeDescription() . '.';
 
         SendNotification::dispatch($company, $title, $description, 'organizations');
         SendNotification::dispatch($person, $title, $description, 'people');
 
-        Company::findOrFail($company_id)->people()->detach($person_id);
+        $company->people()->detach($person_id);
+
         return redirect()->back();
     }
 }

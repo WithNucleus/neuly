@@ -13,7 +13,7 @@
 							{{ $widget['company']->website }} <i class="las la-external-link-alt"></i>
 						</a></p>
 					@endif
-			
+
 					<p class="mb-0">
 						<strong>Focus: </strong>
 						@forelse ($widget['company']['focus'] as $item)
@@ -30,7 +30,7 @@
 			<div class="col-12 col-md-8 col-xl-6 d-flex">
 				<div class="card card-body flex-fill">
 					<h5 class="mb-1">Locations</h5>
-			
+
 					<div class="list-group list-group-flush">
 						@foreach ($widget['company']['locations'] as $location)
 							<div class="list-group-item">
@@ -47,17 +47,17 @@
 				<div class="row mb-2">
 					<div class="col"><h5 class="mb-1">People</h5></div>
 					<div class="col text-right">
-						<a href="/admin/companyperson/{{ $widget['company']->id }}" class="btn btn-sm btn-primary font-weight-bold">Add <i class='nav-icon la la-user'></i></a>
+						<a href="{{ route('admin.company.person.index', $widget['company']->id) }}" class="btn btn-sm btn-primary font-weight-bold">Add <i class='nav-icon la la-user'></i></a>
 					</div>
 				</div>
-		
+
 				<div class="list-group list-group-flush">
 					@forelse ($widget['company']['people'] as $person)
 						<div class="list-group-item d-flex justify-content-between">
 							<a href="/admin/person/{{ $person->id }}/show">
 								{{ $person->name }} ({{ $person->getOriginal('pivot_position') }})
-							</a> 
-							<a class="small" onclick="return confirm_action()" href="{{ route('companyperson.remove', ['company_id' => $widget['company']->id, 'person_id' => $person->id]) }}">
+							</a>
+							<a class="small" onclick="return confirm_action()" href="{{ route('admin.company.person.remove', ['company_id' => $widget['company']->id, 'person_id' => $person->id]) }}">
 								<i class="la la-trash"></i> Remove
 							</a>
 						</div>
@@ -68,11 +68,54 @@
 			</div>
 		</div>
 
+        <div class="col-12 col-md-8 col-xl-6 d-flex">
+            <div class="card card-body flex-fill">
+                <div class="row mb-2">
+                    <div class="col"><h5 class="mb-1">Parent Organisations</h5></div>
+                    <div class="col text-right">
+                        <a href="{{ route('admin.company.parent.index', $widget['company']->id) }}" class="btn btn-sm btn-primary font-weight-bold">
+                            Add <i class='nav-icon la la-user'></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col">
+                    @include('admin.company.partials.related-companies-list', [
+                        'companies' => $widget['company']['parents'],
+                        'currentCompanyId' => $widget['company']->id,
+                        'actionRouteName' => 'admin.company.parent.remove'
+                    ])
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col"><h5 class="mb-1">Subsidiaries</h5></div>
+                    <div class="col text-right">
+                        <a href="{{ route('admin.company.subsidiary.index', $widget['company']->id) }}" class="btn btn-sm btn-primary font-weight-bold">
+                            Add <i class='nav-icon la la-user'></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col">
+                    @include('admin.company.partials.related-companies-list', [
+                        'companies' => $widget['company']['subsidiaries'],
+                        'currentCompanyId' => $widget['company']->id,
+                        'actionRouteName' => 'admin.company.subsidiary.remove'
+                    ])
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
 		@if ($widget['company']['investors']->count() > 0)
 			<div class="col-12 col-md-8 col-xl-6 d-flex">
 				<div class="card card-body flex-fill">
 					<h5 class="mb-1">Investors</h5>
-			
+
 					<div class="list-group list-group-flush">
 						@foreach ($widget['company']['investors'] as $investor)
 							<div class="list-group-item d-flex justify-content-between">

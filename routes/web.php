@@ -255,9 +255,25 @@ Route::group(['middleware' => 'auth'], function () {
 Route::get('/user/retake/{token}', 'Index\UserRetakeController@index')->name('user.retake');
 
 /* SPECIAL ADMIN CONTROLLERS */
-Route::get('/admin/companyperson/{id}', 'Admin\CompanyPersonController@index');
-Route::post('/admin/companyperson/{id}', 'Admin\CompanyPersonController@add');
-Route::get('/admin/companyperson/{company_id}/person/{person_id}/remove', 'Admin\CompanyPersonController@remove')->name('companyperson.remove');
+Route::group([
+    'prefix'     => '/admin/company/{company_id}',
+    'namespace'  => 'Admin\Company',
+    'as'         => 'admin.company.',
+    'middleware' => ['role:Admin', 'permission:edit companies'],
+], function () {
+    Route::get('/person', 'PersonController@index')->name('person.index');
+    Route::post('/person', 'PersonController@store')->name('person.store');
+    Route::get('/person/{person_id}', 'PersonController@remove')->name('person.remove');
+
+    Route::get('/parent', 'ParentController@index')->name('parent.index');
+    Route::post('/parent', 'ParentController@store')->name('parent.store');
+    Route::delete('/parent/{parent_id}', 'ParentController@remove')->name('parent.remove');
+
+    Route::get('/subsidiary', 'SubsidiaryController@index')->name('subsidiary.index');
+    Route::post('/subsidiary', 'SubsidiaryController@store')->name('subsidiary.store');
+    Route::delete('/subsidiary/{child_id}', 'SubsidiaryController@remove')->name('subsidiary.remove');
+});
+
 
 Route::get('/admin/person/{id}/company', 'Admin\PersonCompanyController@index');
 Route::post('/admin/person/{id}/company', 'Admin\PersonCompanyController@add');

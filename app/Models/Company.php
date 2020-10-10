@@ -33,6 +33,12 @@ class Company extends Model implements EntityContract
     protected static $logUnguarded = true;
     protected static $logName = 'entities';
 
+    protected static $companyToCompanyTypes = [
+        'Full ownership',
+        'Investor',
+        'Partner'
+    ];
+
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS
@@ -57,6 +63,11 @@ class Company extends Model implements EntityContract
 
             return 'a ' . strtolower($this->ownership);
         }
+    }
+
+    public static function getCompanyToCompanyTypes()
+    {
+        return self::$companyToCompanyTypes;
     }
 
     /*
@@ -112,6 +123,16 @@ class Company extends Model implements EntityContract
     public function clinicaltrials() {
         return $this->belongsToMany('App\Models\Clinicaltrial', 'clinicaltrial_company', 'company_id', 'clinicaltrial_id')
                     ->withTimestamps();
+    }
+
+    public function parents() {
+        return $this->belongsToMany(self::class, 'company_company', 'child_id', 'parent_id')
+            ->withPivot('type');
+    }
+
+    public function subsidiaries() {
+        return $this->belongsToMany(self::class, 'company_company', 'parent_id', 'child_id')
+            ->withPivot('type');
     }
 
     /*
