@@ -31,6 +31,8 @@ Route::get('/psychedelic-index', 'Content\IndexController@index')->name('discove
 
 //Insights main page
 Route::get('/insights', 'Index\InsightsController@index')->name('discover.insights');
+Route::get('/insights/request', 'Index\InsightsController@request')->name('discover.insights.request');
+Route::post('/insights/request', 'Index\InsightsController@saveRequest')->name('discover.insights.saveRequest');
 
 //Insights
 Route::group([
@@ -38,6 +40,7 @@ Route::group([
     'namespace'  => 'Insights',
     'as'         => 'insights.',
 ], function () {
+
     //demo insights
     Route::get('/companies-by-type', 'CompaniesByTypeController@index')->name('companies-by-type');
     Route::get('/top-ten-locations', 'TopTenLocationsController@index')->name('top-ten-locations');

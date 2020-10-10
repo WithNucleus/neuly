@@ -33,6 +33,8 @@
 
     <div class="container-fluid">
         <main id="show-main" role="main" class="col-12">
+            @include('discover.includes.status-messages')
+
             <div class="row mb-3">
                 <div class="col text-center">
                     <h1 class="page-title-default text-primary">Coming Soon - Insights, by Neuly.</h1>
@@ -40,6 +42,12 @@
                     <p class="lead">
                         Neuly provides proprietary insights that are created from cross referencing our deep database of psychedelics industry information.
                     </p>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col text-center">
+                    <a href="{{ route('discover.insights.request') }}" class="btn btn-primary">Request Insight</a>
                 </div>
             </div>
 
