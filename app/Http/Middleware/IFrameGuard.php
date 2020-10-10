@@ -19,7 +19,7 @@ class IFrameGuard
 
         if(config('http.enable_x_frame_options'))
         {
-            if(is_object(Route::current()) && in_array(\Route::current()->action['prefix'], config('http.enable_x_frame_options_prefix'))) {
+            if(is_object(\Route::current()) && in_array(\Route::current()->action['prefix'], config('http.enable_x_frame_options_prefix'))) {
                 $response->headers->set('X-Frame-Options', 'ALLOW FROM '.$request->fullUrl(), false);
             } else {
                 $response->headers->set('X-Frame-Options', 'DENY', false);
