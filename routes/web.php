@@ -151,7 +151,7 @@ Route::post('/job-report-entry', 'Index\JobReportEntryController@store')->name('
 
 // Search
 Route::post('/search', 'Index\SearchController@search')->name('search');
-Route::get('/search/{term}', 'Index\SearchController@index')->name('search.term');
+Route::get('/search/{term}', 'Index\SearchController@index')->name('search.index');
 
 Route::post('/search/organizations', 'index\SearchController@showOrganizationResults')->name('search.organizations');
 Route::post('/search/organizations/{term}', 'Index\SearchController@showOrganizationResults');

@@ -59,9 +59,9 @@
             <span class="icon mr-1"><i class="fad fa-head-side-brain"></i></span>Insights
         </a>
     </li>
-    @if(Route::is('search.term'))
+    @if(Route::is('search.index'))
         <li class="nav-item">
-            <a href="{{ $term ? route('search.term', $term) : '#' }}" class="nav-link active">
+            <a href="{{ $term ? route('search.index', $term) : '#' }}" class="nav-link active">
                 <span class="icon"><i class="fad fa-search"></i></span><span class="sr-only">Search</span>
             </a>
         </li>

@@ -12,12 +12,9 @@ use App\Models\Location;
 use App\Models\Person;
 use App\Models\Research;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 
 class SearchController extends Controller
 {
-    private $limit = 3;
-
     /**
      * General search handler
      *
@@ -26,20 +23,32 @@ class SearchController extends Controller
      */
     public function index(string $term)
     {
-        $searchTerm = '%' . $term . '%';
+        $limit = 3;
+        $searchTerm = $this->getSearchTerm($term);
 
-        $organizations  = $this->searchOrganizations($searchTerm, true);
-        $people         = $this->searchPeople($searchTerm, true);
-        $investors      = $this->searchInvestors($searchTerm, true);
-        $research       = $this->searchResarch($searchTerm, true);
-        $locations      = $this->searchLocations($searchTerm, true);
-        $focus          = $this->searchFocus($searchTerm, true);
-        $events         = $this->searchEvents($searchTerm, true);
-        $jobs           = $this->searchJobs($searchTerm, true);
-        $clinicalTrials = $this->searchClinicalTrials($searchTerm, true);
+        $organizations  = $this->getOrganizationsQuery($searchTerm)->limit($limit)->get();
+        $people         = $this->getPeopleQuery($searchTerm)->limit($limit)->get();
+        $investors      = $this->getInvestorsQuery($searchTerm)->limit($limit)->get();
+        $research       = $this->getResearchQuery($searchTerm)->limit($limit)->get();
+        $locations      = $this->getLocationsQuery($searchTerm)->limit($limit)->get();
+        $focus          = $this->getFocusQuery($searchTerm)->limit($limit)->get();
+        $events         = $this->getEventsQuery($searchTerm)->limit($limit)->get();
+        $jobs           = $this->getJobsQuery($searchTerm)->limit($limit)->get();
+        $clinicalTrials = $this->getClinicalTrialsQuery($searchTerm)->limit($limit)->get();
 
         //return view
-        return view('search.index', compact('organizations', 'people', 'investors', 'research', 'locations', 'focus', 'events', 'jobs', 'term', 'clinicalTrials'));
+        return view('search.index', compact(
+            'organizations',
+            'people',
+            'investors',
+            'research',
+            'locations',
+            'focus',
+            'events',
+            'jobs',
+            'term',
+            'clinicalTrials'
+        ));
     }
 
     /**
@@ -48,26 +57,20 @@ class SearchController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function search(Request $request) {
-        $term = $request->input('search');
+    public function search() {
+        $searchTerm = $this->getSearchTerm();
 
-        if (empty($term)) {
+        if (empty($searchTerm)) {
             return redirect()->back()->with('error', "Search term can't be empty!");
         }
 
-        return redirect()->route('search.term', $term);
+        return redirect()->route('search.index', $searchTerm);
     }
 
-    public function showOrganizationResults(Request $request, string $term = null)
+    public function showOrganizationResults(string $term = null)
     {
-        if($term === null)
-        {
-            $term = $request->input('search');
-        }
-
-        $searchTerm = '%' . $term . '%';
-
-        $organizations = $this->searchOrganizations($searchTerm);
+        $searchTerm = $this->getSearchTerm($term);
+        $organizations = $this->getOrganizationsQuery($searchTerm)->get();
 
         $data  = [
           'term' => $term,
@@ -79,16 +82,10 @@ class SearchController extends Controller
         return view('search.entity-result', $data);
     }
 
-    public function showPeopleResults(Request $request, string $term = null)
+    public function showPeopleResults(string $term = null)
     {
-        if($term === null)
-        {
-            $term = $request->input('search');
-        }
-
-        $searchTerm = '%' . $term . '%';
-
-        $people = $this->searchPeople($searchTerm);
+        $searchTerm = $this->getSearchTerm($term);
+        $people = $this->getPeopleQuery($searchTerm)->get();
 
         $data  = [
             'term' => $term,
@@ -100,16 +97,10 @@ class SearchController extends Controller
         return view('search.entity-result', $data);
     }
 
-    public function showInvestorResults(Request $request, string $term = null)
+    public function showInvestorResults(string $term = null)
     {
-        if($term === null)
-        {
-            $term = $request->input('search');
-        }
-
-        $searchTerm = '%' . $term . '%';
-
-        $investors = $this->searchInvestors($searchTerm);
+        $searchTerm = $this->getSearchTerm($term);
+        $investors = $this->getInvestorsQuery($searchTerm)->get();
 
         $data  = [
             'term' => $term,
@@ -121,16 +112,10 @@ class SearchController extends Controller
         return view('search.entity-result', $data);
     }
 
-    public function showResearchResults(Request $request, string $term = null)
+    public function showResearchResults(string $term = null)
     {
-        if($term === null)
-        {
-            $term = $request->input('search');
-        }
-
-        $searchTerm = '%' . $term . '%';
-
-        $research = $this->searchResarch($searchTerm);
+        $searchTerm = $this->getSearchTerm($term);
+        $research = $this->getResearchQuery($searchTerm)->get();
 
         $data  = [
             'term' => $term,
@@ -142,16 +127,10 @@ class SearchController extends Controller
         return view('search.entity-result', $data);
     }
 
-    public function showLocationResults(Request $request, string $term = null)
+    public function showLocationResults(string $term = null)
     {
-        if($term === null)
-        {
-            $term = $request->input('search');
-        }
-
-        $searchTerm = '%' . $term . '%';
-
-        $locations = $this->searchLocations($searchTerm);
+        $searchTerm = $this->getSearchTerm($term);
+        $locations = $this->getLocationsQuery($searchTerm)->get();
 
         $data  = [
             'term' => $term,
@@ -163,16 +142,10 @@ class SearchController extends Controller
         return view('search.entity-result', $data);
     }
 
-    public function showFocusResults(Request $request, string $term = null)
+    public function showFocusResults(string $term = null)
     {
-        if($term === null)
-        {
-            $term = $request->input('search');
-        }
-
-        $searchTerm = '%' . $term . '%';
-
-        $focus = $this->searchFocus($searchTerm);
+        $searchTerm = $this->getSearchTerm($term);
+        $focus = $this->getFocusQuery($searchTerm)->get();
 
         $data  = [
             'term' => $term,
@@ -184,16 +157,10 @@ class SearchController extends Controller
         return view('search.entity-result', $data);
     }
 
-    public function showEventResults(Request $request, string $term = null)
+    public function showEventResults(string $term = null)
     {
-        if($term === null)
-        {
-            $term = $request->input('search');
-        }
-
-        $searchTerm = '%' . $term . '%';
-
-        $events = $this->searchEvents($searchTerm);
+        $searchTerm = $this->getSearchTerm($term);
+        $events = $this->getEventsQuery($searchTerm)->get();
 
         $data  = [
             'term' => $term,
@@ -205,16 +172,10 @@ class SearchController extends Controller
         return view('search.entity-result', $data);
     }
 
-    public function showJobResults(Request $request, string $term = null)
+    public function showJobResults(string $term = null)
     {
-        if($term === null)
-        {
-            $term = $request->input('search');
-        }
-
-        $searchTerm = '%' . $term . '%';
-
-        $jobs = $this->searchJobs($searchTerm);
+        $searchTerm = $this->getSearchTerm($term);
+        $jobs = $this->getJobsQuery($searchTerm)->get();
 
         $data  = [
             'term' => $term,
@@ -226,16 +187,10 @@ class SearchController extends Controller
         return view('search.entity-result', $data);
     }
 
-    public function showClinicalTrialsResults(Request $request, string $term = null)
+    public function showClinicalTrialsResults(string $term = null)
     {
-        if($term === null)
-        {
-            $term = $request->input('search');
-        }
-
-        $searchTerm = '%' . $term . '%';
-
-        $clinicalTrials = $this->searchClinicalTrials($searchTerm);
+        $searchTerm = $this->getSearchTerm($term);
+        $clinicalTrials = $this->getClinicalTrialsQuery($searchTerm)->get();
 
         $data  = [
             'term' => $term,
@@ -247,116 +202,93 @@ class SearchController extends Controller
         return view('search.entity-result', $data);
     }
 
-    private function searchOrganizations(string $term, bool $limitResults = false)
-    {
-        $searchQuery = Company::where('name', 'like', $term);
-
-        if($limitResults)
-        {
-            $searchQuery = $this->limitQueryResult($searchQuery);
-        }
-
-        return $searchQuery->get();
+    /**
+     * @param string|null $term
+     * @return string
+     */
+    private function getSearchTerm(string $term = null) {
+        return ($term !== null) ? $term : request()->input('search');
     }
 
-    private function searchPeople(string $term, bool $limitResults = false)
+    /**
+     * @param string $term
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    private function getOrganizationsQuery(string $term)
     {
-        $searchQuery = Person::where('name', 'like', $term);
-
-        if($limitResults)
-        {
-            $searchQuery = $this->limitQueryResult($searchQuery);
-        }
-
-        return $searchQuery->get();
+        return Company::where('name', 'like', '%' . $term . '%');
     }
 
-    private function searchInvestors(string $term, bool $limitResults = false)
+    /**
+     * @param string $term
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    private function getPeopleQuery(string $term)
     {
-        $searchQuery = Investor::where('name', 'like', $term);
-
-        if($limitResults)
-        {
-            $searchQuery = $this->limitQueryResult($searchQuery);
-        }
-
-        return $searchQuery->get();
+        return Person::where('name', 'like', '%' . $term . '%');
     }
 
-    private function searchResarch(string $term, bool $limitResults = false)
+    /**
+     * @param string $term
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    private function getInvestorsQuery(string $term)
     {
-        $searchQuery = Research::where('name', 'like', $term);
-
-        if($limitResults)
-        {
-            $searchQuery = $this->limitQueryResult($searchQuery);
-        }
-
-        return $searchQuery->get();
+        return Investor::where('name', 'like', '%' . $term . '%');
     }
 
-    private function searchLocations(string $term, bool $limitResults = false)
+    /**
+     * @param string $term
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    private function getResearchQuery(string $term)
     {
-        $searchQuery = Location::where('name', 'like', $term);
-
-        if($limitResults)
-        {
-            $searchQuery = $this->limitQueryResult($searchQuery);
-        }
-
-        return $searchQuery->get();
+        return Research::where('name', 'like', '%' . $term . '%');
     }
 
-    private function searchFocus(string $term, bool $limitResults = false)
+    /**
+     * @param string $term
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    private function getLocationsQuery(string $term)
     {
-        $searchQuery = Focus::where('name', 'like', $term)->orWhere('aliases', 'like', $term);
-
-        if($limitResults)
-        {
-            $searchQuery = $this->limitQueryResult($searchQuery);
-        }
-
-        return $searchQuery->get();
+        return Location::where('name', 'like', '%' . $term . '%');
     }
 
-    private function searchEvents(string $term, bool $limitResults = false)
+    /**
+     * @param string $term
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    private function getFocusQuery(string $term)
     {
-        $searchQuery = Event::where('name', 'like', $term);
-
-        if($limitResults)
-        {
-            $searchQuery = $this->limitQueryResult($searchQuery);
-        }
-
-        return $searchQuery->get();
+        return Focus::where('name', 'like', '%' . $term . '%')
+            ->orWhere('aliases', 'like', '%' . $term . '%');
     }
 
-    private function searchJobs(string $term, bool $limitResults = false)
+    /**
+     * @param string $term
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    private function getEventsQuery(string $term)
     {
-        $searchQuery = Job::where('job_title', 'like', $term);
-
-        if($limitResults)
-        {
-            $searchQuery = $this->limitQueryResult($searchQuery);
-        }
-
-        return $searchQuery->get();
+        return Event::where('name', 'like', '%' . $term . '%');
     }
 
-    private function searchClinicalTrials(string $term, bool $limitResults = false)
+    /**
+     * @param string $term
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    private function getJobsQuery(string $term)
     {
-        $searchQuery = Clinicaltrial::where('title', 'like', $term);
-
-        if($limitResults)
-        {
-            $searchQuery = $this->limitQueryResult($searchQuery);
-        }
-
-        return $searchQuery->get();
+        return Job::where('job_title', 'like', '%' . $term . '%');
     }
 
-    private function limitQueryResult($query)
+    /**
+     * @param string $term
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    private function getClinicalTrialsQuery(string $term)
     {
-        return $query->limit($this->limit);
+        return Clinicaltrial::where('title', 'like', '%' . $term . '%');
     }
 }

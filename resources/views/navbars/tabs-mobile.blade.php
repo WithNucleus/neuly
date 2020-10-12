@@ -62,7 +62,7 @@
                     selected
                 @endif
             >Insights</option>
-            @if(Route::is('search.term'))
+            @if(Route::is('search.index'))
                 <option value="search" selected>Search</option>
             @endif
             <option value="home">Home</option>
