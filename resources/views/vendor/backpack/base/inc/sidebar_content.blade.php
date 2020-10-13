@@ -166,6 +166,12 @@
     </li>
 @endcan
 
+<li class='nav-item'>
+    <a class='nav-link' href='{{ backpack_url('insightRequest') }}'>
+        <i class='nav-icon la la-question'></i> Insight requests
+    </a>
+</li>
+
 @can('manage entity merge')
     <li class='nav-item'>
         <a class='nav-link' href='{{ route('admin.entityMerge') }}'>
