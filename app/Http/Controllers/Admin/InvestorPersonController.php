@@ -18,7 +18,7 @@ class InvestorPersonController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware(['permission:edit companies']);
+        $this->middleware(['permission:edit investors']);
     }
 
     // Show View for Adding People to Companies

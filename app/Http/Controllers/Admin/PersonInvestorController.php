@@ -20,7 +20,7 @@ class PersonInvestorController extends Controller
     {
         // Auth and Permission Middleware
         $this->middleware('auth');
-        $this->middleware(['permission:edit companies']);
+        $this->middleware(['permission:edit investors']);
     }
 
     // Show View for Adding People to Companies
