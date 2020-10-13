@@ -1,3 +1,4 @@
+@include('vendor.backpack.crud.listing_requests.entity_forms.includes.select-focus')
 <div class="form-group">
     <label for="entity_name">Name:</label>
     <input type="text" class="form-control" name="entity_name" value="{{ $changes->name }}">

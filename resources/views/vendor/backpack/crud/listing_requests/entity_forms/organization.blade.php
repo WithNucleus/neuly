@@ -37,6 +37,7 @@
         <option @if($changes->ownership === "Non-Profit") selected @endif>Non-Profit</option>
     </select>
 </div>
+@include('vendor.backpack.crud.listing_requests.entity_forms.includes.select-focus')
 <div class="form-group">
     <label for="entity_website">Website:</label>
     <input type="url" class="form-control" name="entity_website" value="{{ $changes->website }}">

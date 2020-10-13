@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\ListingRequestRequest;
 use App\Models\Company;
 use App\Models\Event;
+use App\Models\Focus;
 use App\Models\Investor;
 use App\Models\ListingRequest;
 use App\Models\Person;
@@ -184,8 +185,8 @@ class ListingRequestCrudController extends CrudController
         $this->crud->hasAccessOrFail('update');
         $this->crud->setOperation('Publish');
 
-        $listingRequest = ListingRequest::find($id);
-
+        $listingRequest = ListingRequest::findOrFail($id);
+        $changes = json_decode($listingRequest->entity_data);
         $entity = null;
 
         if($listingRequest->is_update)
@@ -193,13 +194,18 @@ class ListingRequestCrudController extends CrudController
             $entity = $this->getEntityModel($listingRequest);
         }
 
+        $focusCategories = Focus::orderBy('name')->get();
+        $focusIdsSelected = isset($changes->focus_ids) ? $changes->focus_ids : [];
+
         $this->data['id'] = $listingRequest->id;
         $this->data['type'] = $listingRequest->type;
         $this->data['update'] = ((bool) $listingRequest->is_update) ? 'yes' : 'no';
-        $this->data['changes'] = json_decode($listingRequest->entity_data);
+        $this->data['changes'] = $changes;
         $this->data['original'] = $entity;
         $this->data['crud'] = $this->crud;
         $this->data['title'] = 'Publish Listing Request';
+        $this->data['focusCategories'] = $focusCategories;
+        $this->data['focusIdsSelected'] = $focusIdsSelected;
 
         return view('vendor.backpack.crud.listing_requests.publish', $this->data);
 
@@ -247,6 +253,10 @@ class ListingRequestCrudController extends CrudController
         else
         {
             $object->update();
+        }
+
+        if (!empty($data['focus_ids']) && method_exists($object, 'focus')) {
+            $object->focus()->sync($data['focus_ids']);
         }
 
         return $object;
@@ -377,6 +387,7 @@ class ListingRequestCrudController extends CrudController
             'total_funding_amount' => $data['entity_total_funding_amount'],
             'last_funding_date' => $data['entity_last_funding_date'],
             'ticker_symbol' => $data['entity_ticker'],
+            'focus_ids' => $data['entity_focus'],
             'logo' => $logo
         ];
 
@@ -392,7 +403,8 @@ class ListingRequestCrudController extends CrudController
             'registration' => $data['entity_registration'],
             'start' => $data['entity_start'],
             'end' => $data['entity_end'],
-            'description' => $data['entity_description']
+            'description' => $data['entity_description'],
+            'focus_ids' => $data['entity_focus'],
         ];
 
         return $resourceData;
@@ -460,7 +472,7 @@ class ListingRequestCrudController extends CrudController
 
     private function getOrganizationModel($id)
     {
-        return Company::find($id);
+        return Company::with('focus')->find($id);
     }
 
     private function getPersonModel($id)
@@ -470,7 +482,7 @@ class ListingRequestCrudController extends CrudController
 
     private function getEventModel($id)
     {
-        return Event::find($id);
+        return Event::with('focus')->find($id);
     }
 
     private function getInvestorModel($id)

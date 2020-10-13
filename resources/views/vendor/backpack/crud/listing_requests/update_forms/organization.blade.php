@@ -73,6 +73,7 @@
         </select>
     </div>
 </div>
+@include('vendor.backpack.crud.listing_requests.update_forms.includes.select-focus')
 <div class="row">
     <div class="form-group col-6">
         <label for="entity_website">Website:</label>

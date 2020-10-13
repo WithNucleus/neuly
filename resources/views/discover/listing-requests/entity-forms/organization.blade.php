@@ -60,6 +60,7 @@
         <otion>Non-Profit</otion>
     </select>
 </div>
+@include('discover.listing-requests.entity-forms.includes.select-focus')
 <div class="form-group">
     <label for="entity_website" class="font-weight-bold">Website:</label>
     <input type="url" class="form-control" name="entity_website">
