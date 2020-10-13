@@ -20,7 +20,7 @@ class PersonInvestorController extends Controller
     {
         // Auth and Permission Middleware
         $this->middleware('auth');
-        $this->middleware(['role:Admin','permission:edit companies']);
+        $this->middleware(['permission:edit investors']);
     }
 
     // Show View for Adding People to Companies
@@ -55,7 +55,7 @@ class PersonInvestorController extends Controller
         $title_person = $person->name . ' was added an investor';
 
         $description = $person->getShowLink() . ' has the role of ' . $request->input('role') . ' at ' . $investor->getShowLink() . ', ' . $investor->getTypeDescription() . '.';
-        
+
         SendNotification::dispatch($investor, $title_investor, $description, 'investors');
         SendNotification::dispatch($person, $title_person, $description, 'people');
 
