@@ -14,11 +14,7 @@ class SubsidiaryController extends Controller
      */
     public function index($id) {
         $company       = Company::with(['parents', 'subsidiaries'])->findOrFail($id);
-        $ignoreCompanyIds = array_merge(
-            [$id],
-            $company->parents->pluck('id')->toArray(),
-            $company->subsidiaries->pluck('id')->toArray()
-        );
+        $ignoreCompanyIds = $company->getParentsAndSubsidiariesIgnoredIds();
         $companiesList = Company::whereNotIn('id', $ignoreCompanyIds)->orderBy('name')->get();
         $types         = Company::getCompanyToCompanyTypes();
 

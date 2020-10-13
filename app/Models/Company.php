@@ -70,6 +70,18 @@ class Company extends Model implements EntityContract
         return self::$companyToCompanyTypes;
     }
 
+    /**
+     * @return array
+     */
+    public function getParentsAndSubsidiariesIgnoredIds()
+    {
+        return array_merge(
+            [$this->id],
+            $this->parents->pluck('id')->toArray(),
+            $this->subsidiaries->pluck('id')->toArray()
+        );
+    }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS

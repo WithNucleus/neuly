@@ -259,7 +259,7 @@ Route::group([
     'prefix'     => '/admin/company/{company_id}',
     'namespace'  => 'Admin\Company',
     'as'         => 'admin.company.',
-    'middleware' => ['role:Admin', 'permission:edit companies'],
+    'middleware' => ['permission:edit companies'],
 ], function () {
     Route::get('/person', 'PersonController@index')->name('person.index');
     Route::post('/person', 'PersonController@store')->name('person.store');
