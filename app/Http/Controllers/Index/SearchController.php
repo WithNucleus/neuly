@@ -12,6 +12,7 @@ use App\Models\Location;
 use App\Models\Person;
 use App\Models\Research;
 use App\Http\Controllers\Controller;
+use App\Models\SearchLog;
 
 class SearchController extends Controller
 {
@@ -27,6 +28,8 @@ class SearchController extends Controller
         $results      = [];
         $exactResults = [];
         $searchTerm   = $this->getSearchTerm($term);
+
+        $this->logSearchTerm($searchTerm);
 
         $exactResults['organizations']  = $this->getExactOrganizationsQuery($searchTerm)->get();
         $exactResults['people']         = $this->getExactPeopleQuery($searchTerm)->get();
@@ -402,5 +405,19 @@ class SearchController extends Controller
     private function getExactClinicalTrialsQuery(string $term)
     {
         return Clinicaltrial::where('title', $term);
+    }
+
+    /**
+     * @param string $searchTerm
+     */
+    private function logSearchTerm($searchTerm)
+    {
+        if ($searchTerm !== null) {
+            $log          = new SearchLog();
+            $log->term    = $searchTerm;
+            $log->ip      = request()->ip();
+            $log->user_id = auth()->check() ? auth()->user()->id : null;
+            $log->save();
+        }
     }
 }

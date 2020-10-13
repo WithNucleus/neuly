@@ -208,6 +208,12 @@
                     <i class="nav-icon la la-window-maximize"></i> Embed Log
                 </a>
             </li>
+
+            <li class='nav-item'>
+                <a class='nav-link' href='{{ backpack_url('searchlog') }}'>
+                    <i class='nav-icon la la-search'></i> Search Log
+                </a>
+            </li>
         </ul>
     </li>
 @endcan
