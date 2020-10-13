@@ -19,7 +19,7 @@ class CompanyPersonController extends Controller
     {
         // Auth and Permission Middleware
         $this->middleware('auth');
-        $this->middleware(['role:Admin','permission:edit companies']);
+        $this->middleware(['permission:edit companies']);
     }
 
     // Show View for Adding People to Companies
@@ -68,7 +68,7 @@ class CompanyPersonController extends Controller
         $person = Person::findOrFail($person_id);
 
         $title = $person->name . ' left ' . $company->name;
-        
+
         $description = $person->getShowLink() . ' no longer works at ' . $company->getShowLink() . ', ' . $company->getTypeDescription() . '.';
 
         SendNotification::dispatch($company, $title, $description, 'organizations');

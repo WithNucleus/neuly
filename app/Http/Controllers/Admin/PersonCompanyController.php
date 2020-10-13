@@ -19,7 +19,7 @@ class PersonCompanyController extends Controller
     {
         // Auth and Permission Middleware
         $this->middleware('auth');
-        $this->middleware(['role:Admin','permission:edit companies']);
+        $this->middleware(['permission:edit companies']);
     }
 
     // Show View for Adding People to Companies
