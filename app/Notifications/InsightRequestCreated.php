@@ -41,7 +41,7 @@ class InsightRequestCreated extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->line('Insight request created')
+            ->line('New Insight Request')
             ->action('Show Insight Request', route('insightRequest.show', $this->insightRequest->id))
             ->line('Thank you for using our application!');
     }

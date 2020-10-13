@@ -35,7 +35,7 @@ class InsightsController extends Controller
         $insightRequest->text = $request->input('text');
         $insightRequest->save();
 
-        Session::flash('success', 'Your request sent successfully.');
+        Session::flash('success', 'Your insight request was sent - thanks!');
 
         return redirect()->route('discover.insights');
     }
