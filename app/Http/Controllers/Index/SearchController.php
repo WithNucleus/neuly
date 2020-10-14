@@ -13,6 +13,7 @@ use App\Models\Person;
 use App\Models\Research;
 use App\Http\Controllers\Controller;
 use App\Models\SearchLog;
+use Illuminate\Database\Eloquent\Collection;
 
 class SearchController extends Controller
 {
@@ -224,24 +225,24 @@ class SearchController extends Controller
     }
 
     /**
-     * @param \Illuminate\Database\Eloquent\Collection[] $resultsArray
+     * @param \Illuminate\Database\Eloquent\Collection[] $results
      * @return array
      */
-    private function filterAndSortResults(array $resultsArray)
+    private function filterAndSortResults(array $results)
     {
-        $resultsArray = array_filter($resultsArray, function ($item) {
-            return $item->count() > 0;
+        $results = array_filter($results, function (Collection $entityResults) {
+            return $entityResults->count() > 0;
         });
 
-        uasort($resultsArray, function ($a, $b) {
-            if ($a->count() == $b->count()) {
+        uasort($results, function (Collection $entityResults, Collection $comparingEntityResults) {
+            if ($entityResults->count() == $comparingEntityResults->count()) {
                 return 0;
             }
 
-            return ($a->count() > $b->count()) ? -1 : 1;
+            return ($entityResults->count() > $comparingEntityResults->count()) ? -1 : 1;
         });
 
-        return $resultsArray;
+        return $results;
     }
 
     /**
