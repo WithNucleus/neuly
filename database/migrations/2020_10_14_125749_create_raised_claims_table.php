@@ -28,7 +28,7 @@ class CreateRaisedClaimsTable extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
             $table->unique('user_id');
-            $table->string('verification_token');
+            $table->string('verification_token')->nullable(true);
             $table->timestamps();
         });
     }
