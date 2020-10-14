@@ -61,7 +61,7 @@
                 @foreach($person->companies as $company)
                     <div class="d-flex justify-content-between">
                         <a href="/admin/company/{{ $company->id }}/show">{{ $company->name }} ({{ $company->getOriginal('pivot_position') }})</a>
-                        <a class="small" onclick="return confirm_action()" href="{{ route('companyperson.remove', ['company_id' => $company->id, 'person_id' => $person->id]) }}">
+                        <a class="small" onclick="return confirm_action()" href="{{ route('admin.company.person.remove', ['company_id' => $company->id, 'person_id' => $person->id]) }}">
                             <i class="la la-trash"></i> Remove
                         </a>
                     </div>

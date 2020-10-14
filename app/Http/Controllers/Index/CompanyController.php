@@ -67,7 +67,9 @@ class CompanyController extends Controller
     public function show(Request $request, $slug) {
 
         // Get Company
-        $company = Company::where('slug', $slug)->firstOrFail();
+        $company = Company::with(['people', 'locations', 'investors', 'jobs', 'events', 'clinicaltrials', 'parents', 'subsidiaries'])
+            ->where('slug', $slug)
+            ->firstOrFail();
 
         $metas = Metas::process(array(
             'title'         => $company->name,

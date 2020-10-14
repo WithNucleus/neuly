@@ -106,10 +106,10 @@ class CompanyCrudController extends CrudController
         // Get this ID
         $request = \Request::getPathInfo();
         $request_array = explode('/', $request);
-        $this_company_id = $request_array[3];
+        $companyId = $request_array[3];
 
         // Get this Company
-        $company = \App\Models\Company::find($this_company_id);
+        $company = Company::with(['people', 'parents', 'subsidiaries'])->find($companyId);
 
         // Company People Widget
         Widget::add([
@@ -421,7 +421,7 @@ class CompanyCrudController extends CrudController
                 $investor = Investor::find($investorId);
 
                 $title = $investor->name . ' was removed as an investor for ' . $company->name;
-                
+
                 $description = $investor->getShowLink() . ' was removed as an investor in ' . $company->getShowLink() . ', ' . $company->getTypeDescription() . '.';
 
                 SendNotification::dispatch($investor, $title, $description, 'investors');
@@ -460,7 +460,7 @@ class CompanyCrudController extends CrudController
                 } else {
                     $company_ownership = 'a ' . $company->ownership;
                 }
-                
+
                 $description = $company->getShowLink() . ', ' . $company->getTypeDescription() . ' is no longer focusing on ' . $focus->getShowLink() . '.';
 
                 SendNotification::dispatch($focus, $title, $description, 'focus');

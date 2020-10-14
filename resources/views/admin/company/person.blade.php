@@ -4,7 +4,7 @@
   <div class="container-fluid mt-5">
     <h2>
       <span class="text-capitalize">People</span>
-      <small id="datatable_info_stack">related to {{ $company->name }}</a></small>
+      <small id="datatable_info_stack">related to {{ $company->name }}</small>
       <a href="/admin/company/{{ $company->id }}/show" class="font-sm"><i class="la la-angle-double-left"></i> Back to <span>Company</span></a>
     </h2>
   </div>
@@ -48,7 +48,7 @@
                     </div>
 
                 </form>
-                
+
             </div>
        </div>
 
@@ -61,12 +61,12 @@
                 @foreach($company->people as $person)
                     <div class="d-flex justify-content-between">
                       <a href="/admin/person/{{ $person->id }}/show">{{ $person->name }} ({{ $person->getOriginal('pivot_position') }})</a>
-                      <a class="small" onclick="return confirm_action()" href="{{ route('companyperson.remove', ['company_id' => $company->id, 'person_id' => $person->id]) }}">
+                      <a class="small" onclick="return confirm_action()" href="{{ route('admin.company.person.remove', ['company_id' => $company->id, 'person_id' => $person->id]) }}">
                         <i class="la la-trash"></i> Remove
                       </a>
                     </div>
                 @endforeach
-                
+
             </div>
        </div>
 </div>

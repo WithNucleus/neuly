@@ -15,7 +15,7 @@
                             <a href="/admin/company/{{ $company->id }}/show">
                                 {{ $company->name }} ({{ $company->getOriginal('pivot_position') }})
                             </a>
-                            <a class="small" onclick="return confirm_action()" href="{{ route('companyperson.remove', ['company_id' => $company->id, 'person_id' => $widget['person']->id]) }}">
+                            <a class="small" onclick="return confirm_action()" href="{{ route('admin.company.person.remove', ['company_id' => $company->id, 'person_id' => $widget['person']->id]) }}">
                                 <i class="la la-trash"></i> Remove
                             </a>
                         </div>
@@ -31,7 +31,7 @@
             <div class="col-12 col-md-8 col-xl-6 d-flex">
                 <div class="card card-body flex-fill">
                     <h5 class="mb-1">Locations</h5>
-            
+
                     <div class="list-group list-group-flush">
                         @foreach ($widget['person']['locations'] as $location)
                             <div class="list-group-item">

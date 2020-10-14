@@ -97,6 +97,24 @@
 				</ul>
 			@endif
 
+            @if($company->subsidiaries->count() > 0)
+                <div class="mt-4">
+                    <h2 class="h4 mb-2">Parent for:</h2>
+                    @foreach ($company->subsidiaries as $subsidiary)
+                        <p class="mb-2"><a href="{{ route('discover.organizations.show', $subsidiary->slug) }}">{{ $subsidiary->name }}</a></p>
+                    @endforeach
+                </div>
+            @endif
+
+            @if($company->parents->count() > 0)
+                <div class="mt-4">
+                    <h2 class="h4 mb-2">Subsidiary of:</h2>
+                    @foreach ($company->parents as $parent)
+                        <p class="mb-2"><a href="{{ route('discover.organizations.show', $parent->slug) }}">{{ $parent->name }}</a> </>
+                    @endforeach
+                </div>
+            @endif
+
 		@else
 
 			@include('discover.includes.register-gate', ['details' => 'organization details'])
