@@ -9,30 +9,18 @@
     }
 ?>
 
-<style>
-    .table-scroll-container {
-        width: 100%;
-        overflow-x: auto;
-    }
-
-    .table-scroll-container table th,
-    .table-scroll-container table td {
-        min-width: 100px;
-    }
-</style>
-
-<div class="table-scroll-container">
+<div class="table-responsive">
     <table class="table table-bordered bg-white shadow-sm">
         <thead class="thead-dark">
         <tr>
-            <th>Focus / Condition</th>
-            <th>Status</th>
-            <th>Early Phase 1</th>
-            <th>Phase 1</th>
-            <th>Phase 2</th>
-            <th>Phase 3</th>
-            <th>Phase 4</th>
-            <th>Approval</th>
+            <th class="text-no-wrap">Focus / Condition</th>
+            <th class="text-no-wrap">Status</th>
+            <th class="text-no-wrap">Early Phase 1</th>
+            <th class="text-no-wrap">Phase 1</th>
+            <th class="text-no-wrap">Phase 2</th>
+            <th class="text-no-wrap">Phase 3</th>
+            <th class="text-no-wrap">Phase 4</th>
+            <th class="text-no-wrap">Approval</th>
         </tr>
         </thead>
         <tbody class="font-size-small">

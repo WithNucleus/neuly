@@ -41,7 +41,7 @@
             <main id="index-main" role="main" class="col-lg-9 col-xl-10 ml-auto">
                 @include('discover.includes.status-messages')
 
-                <h1 class="page-title-default mb-3">Clinical Trial Pipeline &amp; Collaborations</h1>
+                <h1 class="page-title-default mb-3">Clinical Trial Tracker</h1>
 
                 <div class="d-md-flex justify-content-between align-items-center mb-3">
                     @isset($sort)
@@ -69,8 +69,8 @@
 
                     <div class="switch-view mt-2 mb-3 my-md-0">
                         <div class="btn-group" role="group" aria-label="Switch Clinical Trial view">
-                            <a href="{{ route('discover.clinicaltrials') }}" class="btn btn-outline-primary" title="List View"><i class="fad fa-list-ul"></i></a>
-                            <a href="{{ route('insights.clinicaltrials.pipeline') }}" class="btn btn-primary" title="Clinical Trial Pipeline"><i class="fad fa-stream"></i></a>
+                            <a href="{{ route('discover.clinicaltrials') }}" class="btn btn-outline-primary" title="List View" data-toggle="tooltip" data-placement="top"><i class="fad fa-list-ul fa-lg"></i></a>
+                            <a href="{{ route('insights.clinicaltrials.pipeline') }}" class="btn btn-primary" title="Tracker" data-toggle="tooltip" data-placement="top"><i class="fad fa-stream fa-lg"></i></a>
                         </div>
                     </div>
                 </div>

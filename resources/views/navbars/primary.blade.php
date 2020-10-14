@@ -18,7 +18,7 @@
 
             <li class="nav-item dropdown">
                 <a id="navbarDropdownExplore" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                    Explore Neuly
+                    Explore
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-anchor-right" aria-labelledby="navbarDropdownExplore">
@@ -32,9 +32,20 @@
                     <a class="dropdown-item" href="{{ route('discover.clinicaltrials') }}"><i class="fad fa-stethoscope fa-fw"></i> Clinical Trials</a>
                     <a class="dropdown-item" href="{{ route('discover.index') }}"><i class="fad fa-chart-area fa-fw"></i> Pubco Index</a>
                     <a class="dropdown-item" href="{{ route('discover.investors') }}"><i class="fad fa-hands-usd fa-fw"></i> Investors</a>
-                    <a class="dropdown-item" href="{{ route('discover.insights') }}"><i class="fad fa-head-side-brain fa-fw"></i> Insights</a>
-                    <a class="dropdown-item" href="{{ route('insights.clinicaltrials.pipeline') }}"><i class="fad fa-stream fa-fw"></i> Clinical Trial Pipeline</a>
                 </div>
+            </li>
+
+            <li class="nav-item dropdown">
+                <a id="navbarDropdownExplore" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                    Insights
+                </a>
+
+                <div class="dropdown-menu dropdown-menu-anchor-right" aria-labelledby="navbarDropdownExplore">
+                    <a class="dropdown-item" href="{{ route('discover.insights') }}"><i class="fad fa-head-side-brain fa-fw"></i> Neuly Insights</a>
+                    <a class="dropdown-item" href="{{ route('insights.clinicaltrials.pipeline') }}"><i class="fad fa-stream fa-fw"></i> Clinical Trial Tracker</a>
+                    <a class="dropdown-item" href="{{ route('discover.insights.request') }}"><i class="fad fa-bullhorn fa-fw"></i> Request Insight</a>
+                </div>
+            </li>
 
             @guest
                 <li class="nav-item">

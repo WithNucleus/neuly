@@ -45,7 +45,7 @@ Route::group([
     Route::get('/companies-by-type', 'CompaniesByTypeController@index')->name('companies-by-type');
     Route::get('/top-ten-locations', 'TopTenLocationsController@index')->name('top-ten-locations');
     Route::get('/companies-by-focus-drug', 'CompaniesByFocusDrug@index')->name('companies-by-focus-drug');
-    Route::get('/clinical-trials-pipeline', 'ClinicalTrialPipelineController@show')->name('clinicaltrials.pipeline');
+    Route::get('/clinical-trial-tracker', 'ClinicalTrialPipelineController@show')->name('clinicaltrials.pipeline');
 
     //insights only for registered users
     Route::group([
