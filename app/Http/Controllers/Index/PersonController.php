@@ -78,6 +78,7 @@ class PersonController extends Controller
 
         $entity = 'people';
         $isFollowed = (bool) count(FollowRepository::fromuser(Person::class, $person->id));
+        $isClaimed = (bool) $person->relatedUser()->count();
 
         // Log Activity
         activity('pageview')
@@ -90,7 +91,7 @@ class PersonController extends Controller
             ->performedOn($person)
             ->log($person->name);
 
-        return view('discover.people.show', compact('person', 'metas', 'entity', 'isFollowed'));
+        return view('discover.people.show', compact('person', 'metas', 'entity', 'isFollowed', 'isClaimed'));
     }
 
     public function namesJson()

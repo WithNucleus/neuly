@@ -105,6 +105,7 @@ Route::get('/organization/{slug}/events', 'Index\CompanyController@events')->nam
 // People
 Route::get('/people', 'Index\PersonController@index')->name('discover.people');
 Route::get('/people/names.json', 'Index\PersonController@namesJson');
+Route::get('/person/{slug}/claim', 'Index\ClaimPersonController@claim')->name('discover.people.claim');
 Route::get('/person/{slug}', 'Index\PersonController@show')->name('discover.people.show');
 Route::get('/person/{slug}/requestDeletion', 'Index\PersonController@requestDeletion')->name('discover.people.requestDeletion');
 Route::post('/person/{slug}/requestDeletion', 'Index\PersonController@requestDeletionSubmit')->name('discover.people.requestDeletion');

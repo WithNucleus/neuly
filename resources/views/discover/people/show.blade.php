@@ -12,6 +12,11 @@
             'followable_id' => $person->id,
             'name' => $person->name
         ])
+        @if($isClaimed)
+            <span class="btn btn-primary">verified</span>
+        @else
+            <a class="btn btn-primary" href="{{ route('discover.people.claim', ['slug' => $person->slug]) }}">Claim this person?</a>
+        @endif
     </p>
 
     <h1>{{ $person->name }}</h1>
