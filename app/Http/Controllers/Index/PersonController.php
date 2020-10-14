@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\Person;
 use App\Models\Company;
 use App\Models\Location;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedSort;
@@ -17,7 +18,6 @@ use Spatie\QueryBuilder\AllowedFilter;
 use Illuminate\Support\Facades\DB;
 use App\Services\Metas;
 use Spatie\Activitylog\Models\Activity;
-use Auth;
 
 class PersonController extends Controller
 {
@@ -36,6 +36,7 @@ class PersonController extends Controller
 
         // Get People
         $people = QueryBuilder::for(Person::class)
+            ->where('visibility', '=', 'public')
             ->with('companies')
             ->allowedFilters([
                 'name',
@@ -65,6 +66,10 @@ class PersonController extends Controller
         // Get Person
         $person = Person::where('slug', $slug)->firstOrFail();
 
+        if(!$this->canUserViewPerson($person)) {
+            abort(404);
+        }
+
         $metas = Metas::process(array(
             'title'         => $person->name,
             'description'   => $person->bio,
@@ -91,6 +96,11 @@ class PersonController extends Controller
     public function namesJson()
     {
         return response()->json(Person::all()->pluck('name'));
+    }
+
+    private function canUserViewPerson($person)
+    {
+        return $person->visibility === 'public' || Auth::user()->person_id === $person->id;
     }
 
     public function requestDeletion($slug)

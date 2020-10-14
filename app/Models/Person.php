@@ -9,6 +9,7 @@ use App\Models\Traits\CrudShowEntityPageButton;
 use App\Models\Traits\OldSlugRedirectable;
 use App\Models\Traits\EntityImage;
 use App\Traits\HasFollowers;
+use App\User;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -145,11 +146,21 @@ class Person extends Model implements EntityContract, EntityImageContract
                     ->withTimestamps();
     }
 
+    public function relatedUser()
+    {
+        return $this->belongsTo('App\User');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES
     |--------------------------------------------------------------------------
     */
+
+    public function scopePublic($query)
+    {
+       return $query->where('visibilty', '=', 'public');
+    }
 
     /*
     |--------------------------------------------------------------------------

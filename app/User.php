@@ -4,6 +4,7 @@ namespace App;
 
 use App\Models\UserSocialAuth;
 use App\Models\FollowList;
+use App\Models\Person;
 use App\Traits\CanFollow;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -62,5 +63,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function socialAuth()
     {
         return $this->hasMany(UserSocialAuth::class);
+    }
+
+    public function relatedPerson()
+    {
+        return $this->hasOne(Person::class);
     }
 }
