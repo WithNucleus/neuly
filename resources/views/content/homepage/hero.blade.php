@@ -7,7 +7,7 @@
             <button class="btn hero-search-button ml-2 my-2 my-sm-0 shadow-sm" type="submit">Search</button>
         </form>
         <p class="mt-2" style="font-size: 1.5rem;font-weight: 600">
-            <a href="{{ route('discover.organizations') }}" class="text-dark text-decoration-none border-bottom-dark-heavy {{-- bold-link --}}">Or start exploring our database...</a>
+            <a href="{{ route('member.dashboard') }}" class="text-dark text-decoration-none border-bottom-dark-heavy">Or start exploring our database...</a>
         </p>
     </div>
 </div>

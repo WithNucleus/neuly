@@ -34,10 +34,14 @@
 
                     <h1 class="page-title-default text-primary">Welcome to Neuly’s interactive database!</h1>
 
-                    <p class="lead mt-4 col-xl-9 mx-auto">Become a member for free to access the entire database, view unique insights, and utilize your personal dashboard. </p>
+                    <p class="lead mt-4 col-xl-9 mx-auto">Register for your free membership to access the entire database, view unique insights, and utilize your personal dashboard</p>
 
                     <p class="mt-4 text-center">
-                        <a href="{{ route('register') }}" class="btn btn-lg btn-dark">Join Neuly</a>
+                        <a href="{{ route('register') }}" class="btn btn-lg btn-primary text-uppercase">Register</a>
+                    </p>
+
+                    <p class="mt-4 text-center">
+                        Neuly is a free resource to push forward our understanding of psychedelics.
                     </p>
 
                 </div>
