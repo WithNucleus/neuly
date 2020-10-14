@@ -50,7 +50,7 @@ class ClaimPersonController extends Controller
 
         if($this->hasPersonMultipleClaimRaises($person))
         {
-            $request->session()->flash('error', 'There has been a problem with your claim. Please contact us at <a href="mailto:support@neuly.com">support@neuly.com</a>.');
+            $request->session()->flash('error', 'There has been a problem with your claim. Please contact us at support@neuly.com.');
 
             return redirect()->route('member.dashboard');
         }
