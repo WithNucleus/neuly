@@ -15,6 +15,9 @@
                 <p class="mb-0">
                     <a href="/listing/request" class="font-weight-bold">Request Listing</a>
                 </p>
+                <p class="mb-0">
+                    <a href="{{ route('job-report-entry.index') }}" class="font-weight-bold">Jobs Report</a>
+                </p>
             </div>
 
             <div class="col-12 col-md-6 col-lg-3 offset-lg-1 mt-4 mt-md-0">

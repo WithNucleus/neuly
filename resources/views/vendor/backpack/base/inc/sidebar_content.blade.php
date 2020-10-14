@@ -172,6 +172,12 @@
     </a>
 </li>
 
+<li class='nav-item'>
+    <a class='nav-link' href='{{ backpack_url('jobreportentries') }}'>
+        <i class='nav-icon la la-business-time'></i> Job Report Entries
+    </a>
+</li>
+
 @can('manage entity merge')
     <li class='nav-item'>
         <a class='nav-link' href='{{ route('admin.entityMerge') }}'>

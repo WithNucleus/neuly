@@ -146,6 +146,9 @@ Route::get('/listing/request', 'Index\ListingRequestController@request')->name('
 Route::post('/listing/request/finish', 'Index\ListingRequestController@processData')->name('listing.request.finish');
 Route::post('/listing/request/{type}', 'Index\ListingRequestController@entityForm')->name('listing.request.investor');
 
+Route::get('/job-report-entry', 'Index\JobReportEntryController@index')->name('job-report-entry.index');
+Route::post('/job-report-entry', 'Index\JobReportEntryController@store')->name('job-report-entry.store');;
+
 // Search
 Route::post('/search', 'Index\SearchController@search')->name('search');
 Route::get('/search/{term}', 'Index\SearchController@index')->name('search.term');

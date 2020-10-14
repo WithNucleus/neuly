@@ -42,4 +42,5 @@ Route::group([
     Route::crud('clinicaltrialphase', 'ClinicaltrialPhaseCrudController');
     Route::crud('log-embed', 'LogEmbedCrudController');
     Route::crud('insightRequest', 'InsightRequestCrudController');
+    Route::crud('jobreportentries', 'JobReportEntryCrudController');
 }); // this should be the absolute last line of this file
