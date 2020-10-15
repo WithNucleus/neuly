@@ -33,10 +33,16 @@ class PersonController extends Controller
 
     // Public / Private Index for Homepage
     public function index(Request $request) {
+        $visibility = ['public'];
+
+        if(Auth::check())
+        {
+            $visibility[] = 'neuly';
+        }
 
         // Get People
         $people = QueryBuilder::for(Person::class)
-            ->where('visibility', '=', 'public')
+            ->whereIn('visibility', $visibility)
             ->with('companies')
             ->allowedFilters([
                 'name',
@@ -101,7 +107,7 @@ class PersonController extends Controller
 
     private function canUserViewPerson($person)
     {
-        return $person->visibility === 'public' || Auth::user()->person_id === $person->id;
+        return $person->visibility === 'public' || Auth::check();
     }
 
     public function requestDeletion($slug)

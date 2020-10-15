@@ -14,7 +14,7 @@ class AddVisibiltyToPeopleTable extends Migration
     public function up()
     {
         Schema::table('people', function (Blueprint $table) {
-            $table->enum('visibility', ['private', 'public'])->default('public');
+            $table->enum('visibility', ['neuly', 'public'])->default('public');
             $table->unsignedBigInteger('user_id')->nullable(true);
             $table->foreign('user_id')
                 ->on('users')
