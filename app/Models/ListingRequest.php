@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use App\Helpers\NotificationHelper;
 use App\Notifications\ListingRequestCreated;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Notification;
 
 class ListingRequest extends Model
 {
@@ -18,12 +18,7 @@ class ListingRequest extends Model
     */
 
     protected $table = 'listing_requests';
-    // protected $primaryKey = 'id';
-    // public $timestamps = false;
     protected $guarded = ['id'];
-    // protected $fillable = [];
-    // protected $hidden = [];
-    // protected $dates = [];
 
     /*
     |--------------------------------------------------------------------------
@@ -34,15 +29,7 @@ class ListingRequest extends Model
     protected static function booted()
     {
         static::created(function ($model) {
-            $emailToSettings = config('mail.custom.send_listing_request_created_email');
-            $emailToArray    = array_map('trim', explode(',', $emailToSettings));
-            $notification    = new ListingRequestCreated($model);
-
-            foreach ($emailToArray as $email) {
-                if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                    Notification::route('mail', $email)->notify($notification);
-                }
-            }
+            NotificationHelper::sendAdminNotifications(new ListingRequestCreated($model));
         });
     }
 

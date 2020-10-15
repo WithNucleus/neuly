@@ -3,15 +3,12 @@
 namespace App\Notifications;
 
 use App\Models\ListingRequest;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
 
-class ListingRequestCreated extends Notification implements ShouldQueue
+class ListingRequestCreated extends Notification
 {
-    use Queueable;
-
     /**
      * @var \App\Models\ListingRequest
      */
@@ -33,7 +30,7 @@ class ListingRequestCreated extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail', 'slack'];
     }
 
     /**
@@ -48,5 +45,26 @@ class ListingRequestCreated extends Notification implements ShouldQueue
             ->line('Listing request created for entity "' . $this->listingRequest->entity_name . '", entity type "' . $this->listingRequest->type . '"')
             ->action('Show Listing Request', route('listingrequest.show', $this->listingRequest->id))
             ->line('Thank you for using our application!');
+    }
+
+    /**
+     * @param mixed $notifiable
+     * @return \Illuminate\Notifications\Messages\SlackMessage
+     */
+    public function toSlack($notifiable)
+    {
+        $url = route('listingrequest.show', $this->listingRequest->id);
+        $entityName = $this->listingRequest->entity_name;
+        $entityType = $this->listingRequest->type;
+
+        return (new SlackMessage)
+            ->content('Listing request created')
+            ->attachment(function ($attachment) use ($url, $entityName, $entityType) {
+                $attachment->title('Show', $url)
+                    ->fields([
+                        'Entity Name' => $entityName,
+                        'Entity Type' => $entityType
+                    ]);
+            });
     }
 }

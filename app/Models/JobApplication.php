@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
+use App\Helpers\NotificationHelper;
 use App\Models\Traits\OldSlugRedirectable;
+use App\Notifications\JobApplicationCreated;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use App\User;
-use App\Models\Company;
-use App\Models\Job;
-use Illuminate\Support\Facades\Storage;
 
 class JobApplication extends Model
 {
@@ -22,24 +21,23 @@ class JobApplication extends Model
     */
 
     protected $table = 'job_applications';
-    // protected $primaryKey = 'id';
-    // public $timestamps = false;
     protected $guarded = ['id'];
-    // protected $fillable = [];
-    // protected $hidden = [];
-    // protected $dates = [];
 
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
-    public function getApplicantName() {
+    protected static function booted()
+    {
+        static::created(function ($model) {
+            NotificationHelper::sendAdminNotifications(new JobApplicationCreated($model));
+        });
+    }
 
-        $user = User::find($this->user_id);
-
-        return $user->name . ' ' . $user->last_name;
-
+    public function getApplicantNameAttribute()
+    {
+        return $this->user->name . ' ' . $this->user->last_name;
     }
 
     public function getApplicantEmail() {
