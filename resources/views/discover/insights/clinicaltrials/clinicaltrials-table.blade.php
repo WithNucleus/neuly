@@ -9,60 +9,56 @@
     }
 ?>
 
-<style>
-    .size-phase {
-        min-width: 130px;
-    }
-</style>
-
-<div class="table-responsive">
-    <table class="table table-bordered bg-white shadow-sm" id="clinical-trial-tracker">
-        <thead class="thead-dark">
-        <tr>
-            <th class="text-no-wrap">Focus / Condition</th>
-            <th class="text-no-wrap">Status</th>
-            <th class="size-phase text-no-wrap">Early Phase 1</th>
-            <th class="size-phase text-no-wrap">Phase 1</th>
-            <th class="size-phase text-no-wrap">Phase 2</th>
-            <th class="size-phase text-no-wrap">Phase 3</th>
-            <th class="size-phase text-no-wrap">Phase 4</th>
-            <th class="size-phase text-no-wrap">Approval</th>
-        </tr>
-        </thead>
-        <tbody class="font-size-small">
-        @forelse ($companies as $companyWithTrials)
+<div id="clinical-trial-tracker-container">
+    <div class="position-relative">
+        <table class="table bg-white mb-0" id="clinical-trial-tracker">
+            <thead class="thead-dark">
             <tr>
-                <td colspan="8" class="border-info bg-info text-uppercase">
-                    <a href="{{ route('discover.organizations.show', $companyWithTrials[0]->company_slug) }}" class="text-dark">{{ $companyWithTrials[0]->company_name }}</a>
-                </td>
+                <th class="text-no-wrap sticky-top">Focus / Condition</th>
+                <th class="text-no-wrap sticky-top">Status</th>
+                <th class="size-phase text-no-wrap sticky-top">Early Phase 1</th>
+                <th class="size-phase text-no-wrap sticky-top">Phase 1</th>
+                <th class="size-phase text-no-wrap sticky-top">Phase 2</th>
+                <th class="size-phase text-no-wrap sticky-top">Phase 3</th>
+                <th class="size-phase text-no-wrap sticky-top">Phase 4</th>
+                <th class="size-phase text-no-wrap sticky-top">Approval</th>
             </tr>
-            @foreach ($companyWithTrials as $clinicaltrial)
+            </thead>
+            <tbody class="font-size-small">
+            @forelse ($companies as $companyWithTrials)
                 <tr>
-                    <td>
-                        <a href="{{ route('discover.clinicaltrials.show', $clinicaltrial->slug) }}">
-                            <span class="truncate-this">{{ $clinicaltrial->focus_name }} &ndash; {{ $clinicaltrial->conditions }}</span>
-                        </a>
+                    <td colspan="8" class="border-info bg-info text-uppercase">
+                        <a href="{{ route('discover.organizations.show', $companyWithTrials[0]->company_slug) }}" class="text-dark">{{ $companyWithTrials[0]->company_name }}</a>
                     </td>
-                    <td>
-                        {{ $clinicaltrial->status }}
-                    </td>
-                    <?php
-                    $colored_cells = howManyColoredCells($clinicaltrial->phase_integer);
-                    $white_cells = 6 - $colored_cells;
-
-                    for ($count = 0 ; $count < $colored_cells; $count++) {
-                        echo '<td class="bg-primary"></td>';
-                    }
-
-                    for ($count = 0 ; $count < $white_cells; $count++) {
-                        echo '<td></td>';
-                    }
-                    ?>
                 </tr>
-            @endforeach
-        @empty
-            <td colspan="8">No clinical trials match your criteria</td>
-        @endforelse
-        </tbody>
-    </table>
+                @foreach ($companyWithTrials as $clinicaltrial)
+                    <tr>
+                        <td>
+                            <a href="{{ route('discover.clinicaltrials.show', $clinicaltrial->slug) }}">
+                                <span class="truncate-this">{{ $clinicaltrial->focus_name }} &ndash; {{ $clinicaltrial->conditions }}</span>
+                            </a>
+                        </td>
+                        <td class="text-no-wrap">
+                            {{ $clinicaltrial->status }}
+                        </td>
+                        <?php
+                        $colored_cells = howManyColoredCells($clinicaltrial->phase_integer);
+                        $white_cells = 6 - $colored_cells;
+
+                        for ($count = 0 ; $count < $colored_cells; $count++) {
+                            echo '<td class="bg-primary"></td>';
+                        }
+
+                        for ($count = 0 ; $count < $white_cells; $count++) {
+                            echo '<td></td>';
+                        }
+                        ?>
+                    </tr>
+                @endforeach
+            @empty
+                <td colspan="8">No clinical trials match your criteria</td>
+            @endforelse
+            </tbody>
+        </table>
+    </div>
 </div>
