@@ -24,7 +24,7 @@
                 @include('navbars.breadcrumb', [
                     'items' => [
                         'Insights' => route('discover.insights'),
-                        'Clinical Trial Pipeline' => false
+                        'Clinical Trial Tracker' => false
                     ]
                 ])
 

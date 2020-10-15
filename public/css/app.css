@@ -11774,11 +11774,17 @@ ul.plain-list li {
 }
 
 .nav-user-name {
-  max-width: 120px;
+  max-width: 180px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
   display: block;
+}
+
+@media (min-width: 992px) {
+  .nav-user-name {
+    max-width: 80px;
+  }
 }
 
 @media (min-width: 1201px) {
@@ -12448,6 +12454,18 @@ ul.nav-tabs.discover-tabs .nav-link .icon {
 @media (min-width: 992px) {
   .page-home .global-search-form {
     display: none;
+  }
+
+  .form-inline .form-control.global-search-input {
+    width: 305px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .form-inline .form-control.global-search-input {
+    width: 310px;
+    font-size: 0.9rem;
   }
 }
 

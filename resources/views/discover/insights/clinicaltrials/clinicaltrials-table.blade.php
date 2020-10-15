@@ -9,26 +9,32 @@
     }
 ?>
 
+<style>
+    .size-phase {
+        min-width: 130px;
+    }
+</style>
+
 <div class="table-responsive">
-    <table class="table table-bordered bg-white shadow-sm">
+    <table class="table table-bordered bg-white shadow-sm" id="clinical-trial-tracker">
         <thead class="thead-dark">
         <tr>
             <th class="text-no-wrap">Focus / Condition</th>
             <th class="text-no-wrap">Status</th>
-            <th class="text-no-wrap">Early Phase 1</th>
-            <th class="text-no-wrap">Phase 1</th>
-            <th class="text-no-wrap">Phase 2</th>
-            <th class="text-no-wrap">Phase 3</th>
-            <th class="text-no-wrap">Phase 4</th>
-            <th class="text-no-wrap">Approval</th>
+            <th class="size-phase text-no-wrap">Early Phase 1</th>
+            <th class="size-phase text-no-wrap">Phase 1</th>
+            <th class="size-phase text-no-wrap">Phase 2</th>
+            <th class="size-phase text-no-wrap">Phase 3</th>
+            <th class="size-phase text-no-wrap">Phase 4</th>
+            <th class="size-phase text-no-wrap">Approval</th>
         </tr>
         </thead>
         <tbody class="font-size-small">
         @forelse ($companies as $companyWithTrials)
             <tr>
-                <th colspan="8" class="border-info bg-info text-uppercase">
+                <td colspan="8" class="border-info bg-info text-uppercase">
                     <a href="{{ route('discover.organizations.show', $companyWithTrials[0]->company_slug) }}" class="text-dark">{{ $companyWithTrials[0]->company_name }}</a>
-                </th>
+                </td>
             </tr>
             @foreach ($companyWithTrials as $clinicaltrial)
                 <tr>
