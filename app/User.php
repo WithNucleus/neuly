@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\Model\UserSocialAuth;
+use App\Models\UserSocialAuth;
 use App\Models\FollowList;
 use App\Traits\CanFollow;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
