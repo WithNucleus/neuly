@@ -4,6 +4,7 @@ namespace App\Notifications;
 
 use App\Models\InsightRequest;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
 
 class InsightRequestCreated extends Notification
@@ -29,7 +30,7 @@ class InsightRequestCreated extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail', 'slack'];
     }
 
     /**
@@ -44,5 +45,24 @@ class InsightRequestCreated extends Notification
             ->line('New Insight Request')
             ->action('Show Insight Request', route('insightRequest.show', $this->insightRequest->id))
             ->line('Thank you for using our application!');
+    }
+
+    /**
+     * @param mixed $notifiable
+     * @return \Illuminate\Notifications\Messages\SlackMessage
+     */
+    public function toSlack($notifiable)
+    {
+        $url = route('insightRequest.show', $this->insightRequest->id);
+        $from = $this->insightRequest->name . ' [' . $this->insightRequest->email . ']';
+
+        return (new SlackMessage)
+            ->content('New Insight Request')
+            ->attachment(function ($attachment) use ($url, $from) {
+                $attachment->title('Show', $url)
+                    ->fields([
+                        'From' => $from,
+                    ]);
+            });
     }
 }

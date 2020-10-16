@@ -2,11 +2,10 @@
 
 namespace App\Models;
 
-use App\Helpers\StringHelper;
+use App\Helpers\NotificationHelper;
 use App\Notifications\InsightRequestCreated;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Notification;
 
 class InsightRequest extends Model
 {
@@ -30,15 +29,7 @@ class InsightRequest extends Model
     protected static function booted()
     {
         static::created(function ($model) {
-            $notification  = new InsightRequestCreated($model);
-            $emailSettings = config('mail.custom.send_listing_request_created_email');
-            $emailArray    = StringHelper::explodeAndFilterEmpty($emailSettings, ',');
-
-            foreach ($emailArray as $email) {
-                if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                    Notification::route('mail', $email)->notify($notification);
-                }
-            }
+            NotificationHelper::sendAdminNotifications(new InsightRequestCreated($model));
         });
     }
 

@@ -48,10 +48,9 @@ class JobApplicationCrudController extends CrudController
         ]);
 
         $this->crud->addColumn([
-            'name'  => 'applicant',
+            'name'  => 'applicantName',
             'label' => 'Applicant',
-            'type'  => 'model_function',
-            'function_name' => 'getApplicantName'
+            'type'  => 'text',
         ]);
 
         $this->crud->addColumn([
@@ -93,10 +92,9 @@ class JobApplicationCrudController extends CrudController
         ]);
 
         $this->crud->addColumn([
-            'name'  => 'user_id',
+            'name'  => 'applicantName',
             'label' => 'Applicant',
-            'type'  => 'model_function',
-            'function_name' => 'getApplicantName'
+            'type'  => 'text',
         ]);
 
         $this->crud->addColumn([

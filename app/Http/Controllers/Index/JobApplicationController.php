@@ -9,10 +9,6 @@ use App\Models\Company;
 use App\Models\JobApplication;
 use App\Http\Requests\JobApplicationRequest;
 use Auth;
-use App\User;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\JobApplicationNotification;
-use Illuminate\Support\Facades\Storage;
 
 class JobApplicationController extends Controller
 {
@@ -72,12 +68,7 @@ class JobApplicationController extends Controller
             'cover_letter' => $cover_letter_path
         );
 
-		$job_application = JobApplication::create($attributes);
-
-		// Send Mail to Cody
-		Mail::to('support@neuly.com')
-				->bcc('sydney@gotsmith.com')
-				->send(new JobApplicationNotification($job_id, $fullName, $company, $position, $resume_path, $cover_letter_path));
+		JobApplication::create($attributes);
 
 		return view('discover.jobs.success', compact('name', 'company', 'position'));
     }
@@ -87,7 +78,7 @@ class JobApplicationController extends Controller
 
         $job_app = JobApplication::find($id);
 
-        $applicant = $job_app->getApplicantName();
+        $applicant = $job_app->applicantName;
 
         $file = storage_path() . '/app/' . $job_app->resume;
 
@@ -108,7 +99,7 @@ class JobApplicationController extends Controller
 
         $job_app = JobApplication::find($id);
 
-        $applicant = $job_app->getApplicantName();
+        $applicant = $job_app->applicantName;
 
         $file = storage_path() . '/app/' . $job_app->cover_letter;
 
