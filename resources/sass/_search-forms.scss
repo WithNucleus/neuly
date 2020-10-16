@@ -43,6 +43,19 @@
     .page-home .global-search-form {
         display: none;
     }
+
+    .form-inline .form-control.global-search-input {
+        width: 305px;
+        font-size: .85rem;
+    }
+}
+
+@media (min-width: 1024px) {
+
+    .form-inline .form-control.global-search-input {
+        width: 310px;
+        font-size: .9rem;
+    }
 }
 
 @media (max-width: 991px) {

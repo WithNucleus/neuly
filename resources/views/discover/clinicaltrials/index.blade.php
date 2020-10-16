@@ -78,8 +78,8 @@
 
                             <div class="switch-view mt-2 mb-3 my-md-0">
                                 <div class="btn-group" role="group" aria-label="Switch Clinical Trial view">
-                                    <a href="{{ route('discover.clinicaltrials') }}" class="btn btn-primary" title="List View"><i class="fad fa-list-ul"></i></a>
-                                    <a href="{{ route('insights.clinicaltrials.pipeline') }}" class="btn btn-outline-primary" title="Clinical Trial Pipeline"><i class="fad fa-stream"></i></a>
+                                    <a href="{{ route('discover.clinicaltrials') }}" class="btn btn-primary" title="List View" data-toggle="tooltip" data-placement="top"><i class="fad fa-list-ul fa-lg"></i></a>
+                                    <a href="{{ route('insights.clinicaltrials.pipeline') }}" class="btn btn-outline-primary" title="Tracker" data-toggle="tooltip" data-placement="top"><i class="fad fa-stream fa-lg"></i></a>
                                 </div>
                             </div>
                         </div>
