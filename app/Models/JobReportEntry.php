@@ -31,7 +31,6 @@ class JobReportEntry extends Model
         'most_important_role',
         'holding_from_expanding',
         'job_growth_forecast',
-        'psychedelics_will_decrease',
     ];
 
     /*

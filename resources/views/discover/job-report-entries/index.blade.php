@@ -6,7 +6,7 @@
     @include('navbars.primary')
     <div class="container-fluid">
         <div class="row">
-            <main id="content-main" role="main" class="col-lg-8 mx-auto">
+            <main id="content-main" role="main" class="col-lg-10 col-xl-8 mx-auto">
 
                 @include('discover.includes.status-messages')
 
@@ -14,22 +14,25 @@
                     <div class="col-12">
                         <div class="card mt-3 shadow-sm">
                             <div class="card-body">
-                                <h1 class="text-center text-primary page-title-default">Jobs Report</h1>
+                                <h1 class="text-center text-primary page-title-default">Neuly Jobs Report</h1>
                                 <p class="lead-smaller text-center">
-                                    Please answer the following questions. Note: The information provided may be
-                                    included in our inaugural Psychedelics Industry Jobs Report. Linkbacks to your job
-                                    offerings and/or website will be provided. Thank you for your participation!
+                                    Please answer the following questions. The information provided may be included in our inaugural Psychedelics Industry Jobs Report.
+                                    Links to your job offerings and/or website will be provided. Thank you for your participation!
                                 </p>
 
                                 <div class="row">
-                                    <div class="col-lg-6 mx-auto mt-4 border-top pt-4">
+                                    <div class="col-lg-8 mx-auto mt-4 border-top py-4">
 
-                                        <form method="post" action="{{ route('job-report-entry.store') }}">
+                                        <form method="post" action="{{ route('job-report-entry.store') }}" style="max-width: 600px;" class="mx-auto">
                                             @csrf
 
                                             <div class="form-group">
                                                 <label class="font-weight-bold">Name <span class="text-danger">*</span></label>
-                                                <input class="form-control" type="text" name="name" value="{{ old('name') }}" required>
+                                                @auth
+                                                    <input class="form-control" type="text" name="name" value="{{ Auth::user()->name . ' ' . Auth::user()->last_name }}" required>
+                                                @else
+                                                    <input class="form-control" type="text" name="name" value="{{ old('name') }}" required>
+                                                @endauth
                                             </div>
 
                                             <div class="form-group">
@@ -148,12 +151,6 @@
                                                     <input class="form-control" type="text" name="job_growth_forecast_other"
                                                            value="{{ old('job_growth_forecast_other') }}"/>
                                                 </div>
-                                            </div>
-                                            <hr>
-
-                                            <div class="form-group">
-                                                <label class="font-weight-bold">What leads you to believe job growth in psychedelics will decrease?</label>
-                                                <textarea class="form-control" type="text" name="psychedelics_will_decrease">{{ old('psychedelics_will_decrease') }}</textarea>
                                             </div>
 
                                             <button type="submit" class="btn btn-primary">Send</button>

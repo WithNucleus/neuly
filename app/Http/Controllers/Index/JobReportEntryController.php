@@ -22,11 +22,11 @@ class JobReportEntryController extends Controller
             'Offering is not published yet, will follow up with an email',
         ];
         $mostImportantRoles   = [
-            'Marketing/ Media',
+            'Marketing / Media',
             'Public Relations',
-            'CEO/ Executive',
+            'CEO / Executive',
             'Scientific Research',
-            'Therapist/ Counselor',
+            'Therapist / Counselor',
             'Other',
         ];
         $holdingFromExpanding = [
@@ -65,7 +65,6 @@ class JobReportEntryController extends Controller
             'company'                    => $request->input('company'),
             'position'                   => $request->input('position'),
             'currently_hiring'           => $request->input('currently_hiring'),
-            'psychedelics_will_decrease' => $request->input('psychedelics_will_decrease'),
         ];
 
         if ($data['currently_hiring'] == JobReportEntry::CURRENTLY_HIRING_YES) {

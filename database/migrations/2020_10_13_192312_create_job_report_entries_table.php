@@ -24,7 +24,6 @@ class CreateJobReportEntriesTable extends Migration
             $table->string('most_important_role')->nullable();
             $table->string('holding_from_expanding')->nullable();
             $table->string('job_growth_forecast')->nullable();
-            $table->text('psychedelics_will_decrease')->nullable();
             $table->timestamps();
         });
     }

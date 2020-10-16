@@ -62,6 +62,5 @@ class JobReportEntryCrudController extends CrudController
         CRUD::addColumn(['name' => 'most_important_role', 'type' => 'text', 'label' => 'What Role is most important for you to fill today?']);
         CRUD::addColumn(['name' => 'holding_from_expanding', 'type' => 'text', 'label' => 'What, if anything, is currently holding you back from expanding your workforce?']);
         CRUD::addColumn(['name' => 'job_growth_forecast', 'type' => 'text', 'label' => 'What is your 12-24 month forecast concerning psychedelic industry job growth?']);
-        CRUD::addColumn(['name' => 'psychedelics_will_decrease', 'type' => 'text', 'label' => 'What leads you to believe job growth in psychedelics will decrease?']);
     }
 }
