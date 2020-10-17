@@ -67,7 +67,17 @@ class CompanyController extends Controller
     public function show(Request $request, $slug) {
 
         // Get Company
-        $company = Company::with(['people', 'locations', 'investors', 'jobs', 'events', 'clinicaltrials', 'parents', 'subsidiaries'])
+        $company = Company::with([
+                'people',
+                'locations',
+                'investors',
+                'jobs',
+                'events',
+                'clinicaltrials',
+                'parents',
+                'subsidiaries',
+                'valuations',
+            ])
             ->where('slug', $slug)
             ->firstOrFail();
 
@@ -81,7 +91,6 @@ class CompanyController extends Controller
 
         $entity = 'organizations';
         $isFollowed = (bool) count(FollowRepository::fromuser(Company::class, $company->id));
-
 
         // Log Activity
         activity('pageview')
