@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Model\UserSocialAuth;
+use App\Models\UserSocialAuth;
 use App\Providers\RouteServiceProvider;
 use App\User;
 use Carbon\Carbon;
