@@ -24,7 +24,8 @@ class CompanyValuationRequest extends FormRequest
     public function rules()
     {
         return [
-            'company_id' => 'required|int',
+            'company_id' => 'required|int|exists:companies,id',
+            'acquirer_id' => 'nullable|int|exists:companies,id',
             'amount' => 'required|numeric',
             'date' => 'required|date',
         ];
