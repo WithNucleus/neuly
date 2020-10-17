@@ -269,6 +269,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/user/settings/password', 'Index\UserPasswordController@index')->name('user.settings.password');
     Route::post('/user/settings/password', 'Index\UserPasswordController@update');
     Route::post('/user/settings/validateurl', 'Index\UserProfileController@checkMemberUrl')->name('user.validate.member_url');
+
+    Route::get('/user/person', 'Index\UserPersonController@index')->name('user.person.index');
 });
 
 // User Email Reset
