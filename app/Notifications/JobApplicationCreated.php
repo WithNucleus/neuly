@@ -2,8 +2,8 @@
 
 namespace App\Notifications;
 
-use App\Mail\JobApplicationMail;
 use App\Models\JobApplication;
+use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
 
@@ -37,11 +37,19 @@ class JobApplicationCreated extends Notification
      * Get the mail representation of the notification.
      *
      * @param mixed $notifiable
-     * @return \App\Mail\JobApplicationMail
+     * @return \Illuminate\Notifications\Messages\MailMessage
      */
     public function toMail($notifiable)
     {
-        return (new JobApplicationMail($this->jobApplication));
+        return (new MailMessage)
+            ->subject('Job Application: ' . $this->jobApplication->job->job_title . ' - ' . $this->jobApplication->applicantName)
+            ->markdown('emails.jobs.apply_notification', [
+                'organization' => $this->jobApplication->company->name,
+                'fullName'     => $this->jobApplication->applicantName,
+                'position'     => $this->jobApplication->job->job_title,
+            ])
+            ->attach(storage_path() . '/app/' . $this->jobApplication->resume)
+            ->attach(storage_path() . '/app/' . $this->jobApplication->cover_letter);
     }
 
     /**
