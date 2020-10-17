@@ -93,7 +93,7 @@ class FocusCleaner
     {
         $orphened = DB::table('focus_research')
             ->select('focus_id', 'research_id')
-            ->whereNotIn('research_id', $this->articles)
+            ->whereNotIn('research_id', $this->researchs)
             ->orWhereNotIn('focus_id', $this->focus)
             ->get();
 
