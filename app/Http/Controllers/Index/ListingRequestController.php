@@ -47,6 +47,10 @@ class ListingRequestController extends Controller
     {
         $data = $request->all();
 
+        if (!isset($data['entity_focus'])) {
+            $data['entity_focus'] = [];
+        }
+
         $entityData = $this->createDummyEntityData($data['general_type'], $data);
 
         $toUpdateId = null;
