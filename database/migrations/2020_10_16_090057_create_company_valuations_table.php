@@ -18,7 +18,7 @@ class CreateCompanyValuationsTable extends Migration
             $table->unsignedBigInteger('company_id');
             $table->unsignedBigInteger('acquirer_id')->nullable();
             $table->date('date');
-            $table->decimal('amount');
+            $table->bigInteger('amount');
             $table->text('notes')->nullable();
             $table->timestamps();
 

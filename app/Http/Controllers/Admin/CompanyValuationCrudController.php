@@ -60,7 +60,6 @@ class CompanyValuationCrudController extends CrudController
             'name'     => 'amount',
             'type'     => 'number',
             'prefix'   => '$',
-            'decimals' => 2,
         ]);
 
         CRUD::addColumn([
@@ -112,7 +111,6 @@ class CompanyValuationCrudController extends CrudController
             'name'     => 'amount',
             'type'     => 'number',
             'prefix'   => '$',
-            'decimals' => 2,
         ]);
 
         CRUD::addField([
