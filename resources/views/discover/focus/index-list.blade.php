@@ -132,17 +132,6 @@
                                                 </li>
                                                 @endif
 
-                                                @if ($focus->investors->count() > 0)
-                                                <li class="list-group-item">
-                                                    <span class="truncate-this-xl">
-                                                        <i class="fad fa-hands-usd text-primary"></i>
-                                                        @foreach ($focus->investors as $item)
-                                                            {{ $item->name }}@if (!$loop->last) &bull; @endif
-                                                        @endforeach
-                                                    </span>
-                                                </li>
-                                                @endif
-
                                                 @if ($focus->jobs->count() > 0)
                                                 <li class="list-group-item">
                                                     <span class="truncate-this-xl">
@@ -182,15 +171,6 @@
                                                     <span class="text-quaternary"><i class="fad fa-building"></i></span>
                                                     @foreach ($focus->companies as $company)
                                                         {{ $company->name }}@if (!$loop->last) &bull; @endif
-                                                    @endforeach
-                                                </p>
-                                            @endif
-
-                                            @if($focus->investors->count() > 0)
-                                                <p class="mb-1 truncate-this-xl">
-                                                    <span class="text-primary"><i class="fad fa-hands-usd"></i></span>
-                                                    @foreach ($focus->investors as $investor)
-                                                        {{ $investor->name }}@if (!$loop->last) &bull; @endif
                                                     @endforeach
                                                 </p>
                                             @endif

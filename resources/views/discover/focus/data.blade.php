@@ -60,23 +60,6 @@
 			</div>
 		@endif
 
-		@if($focus->investors->count() > 0)
-			<div class="card shadow-sm mb-3">
-				<div class="card-header bg-white">
-					<button class="text-dark btn btn-link btn-lg p-0" type="button" data-toggle="collapse" data-target="#investors" aria-expanded="true" aria-controls="investors"><i class="fa fa-plus text-info"></i> Investors ({{ $focus->investors->count() }})</button>
-				</div>
-				<div class="border-top border-tertiary card-body collapse show" id="investors">
-					<ul class="list-group list-group-flush">
-						@foreach ($focus->investors as $investor)
-						    <div class="list-group-item">
-						    	<a href="{{ route('discover.investors.show', $investor->slug) }}">{{ $investor->name }}</a>
-						    </div>
-						@endforeach
-					</ul>
-				</div>
-			</div>
-		@endif
-
 		@if($focus->research->count() > 0)
 			<div class="card shadow-sm mb-3">
 				<div class="card-header bg-white">

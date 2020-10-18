@@ -7,7 +7,7 @@
 					</a>
 				</p>
 			@endif
-			
+
 			@if($investor->website != '')
 				<p class="mb-2">
 					<a href="{{ $investor->website }}" target="_blank" rel="noopener noreferrer">
@@ -19,21 +19,11 @@
 			@if($investor->people->count() > 0)
 				<p class="mb-2">
 					<strong>People:</strong><br>
-				
+
 					@foreach ($investor->people as $person)
 					    <a href="{{ route('discover.people.show', $person->slug) }}">{{ $person->name }} <span class="text-dark">({{ $person->pivot->role }})</span></a>
-					    
+
 					    @if (!$loop->last)<br>@endif
-					@endforeach
-				</p>
-			@endif
-
-			@if($investor->focus->count() > 0)
-				<p class="mb-2">
-					<strong>Focus:</strong><br>
-
-					@foreach ($investor->focus as $item)
-					    <a href="{{ route('discover.focus.show', $item->slug) }}">{{ $item->name }}</a>@if (!$loop->last)<br>@endif
 					@endforeach
 				</p>
 			@endif
@@ -41,10 +31,10 @@
 			@if($investor->locations->count() > 0)
 				<p class="mb-2">
 					<strong>Location:</strong><br>
-				
+
 					@foreach ($investor->locations as $location)
 					    <a href="{{ route('discover.locations.show', $location->slug) }}">{{ $location->name }}</a>
-					    
+
 					    @if (!$loop->last)<br>@endif
 					@endforeach
 				</p>
@@ -77,7 +67,7 @@
 	                    @endif
 	                </div>
 	                <div class="card-footer font-size-small">
-	                    <strong>Focus:</strong> 
+	                    <strong>Focus:</strong>
 	                    @foreach ($company->focus as $focus)
 	                        <a href="{{ route('discover.focus.show', $focus->slug) }}">{{ $focus->name }}</a>@if (!$loop->last),@endif
 	                    @endforeach

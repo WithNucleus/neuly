@@ -51,11 +51,6 @@ class Focus extends Model implements EntityContract
         return $this->belongsToMany('App\Models\Company', 'company_focus', 'focus_id', 'company_id')->withTimestamps();
     }
 
-    // Each Focus Can Have Multiple Investors
-    public function investors() {
-        return $this->belongsToMany('App\Models\Investor', 'focus_investor', 'focus_id', 'investor_id')->withTimestamps();
-    }
-
     // Each Focus Can Have Multiple Research Items
     public function research() {
         return $this->belongsToMany('App\Models\Research', 'focus_research', 'focus_id', 'research_id')->withTimestamps();
