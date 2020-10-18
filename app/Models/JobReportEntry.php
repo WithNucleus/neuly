@@ -23,6 +23,7 @@ class JobReportEntry extends Model
     protected $guarded = ['id'];
     protected $fillable = [
         'name',
+        'email',
         'company',
         'position',
         'currently_hiring',

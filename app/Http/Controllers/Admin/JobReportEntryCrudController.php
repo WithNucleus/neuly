@@ -38,6 +38,7 @@ class JobReportEntryCrudController extends CrudController
     protected function setupListOperation()
     {
         CRUD::addColumn(['name' => 'name', 'type' => 'text']);
+        CRUD::addColumn(['name' => 'email', 'type' => 'text']);
         CRUD::addColumn(['name' => 'company', 'type' => 'text']);
         CRUD::addColumn(['name' => 'position', 'type' => 'text']);
         CRUD::addColumn([
@@ -49,14 +50,8 @@ class JobReportEntryCrudController extends CrudController
 
     protected function setupShowOperation()
     {
-        CRUD::addColumn(['name' => 'name', 'type' => 'text']);
-        CRUD::addColumn(['name' => 'company', 'type' => 'text']);
-        CRUD::addColumn(['name' => 'position', 'type' => 'text']);
-        CRUD::addColumn([
-            'name'    => 'currently_hiring',
-            'type'    => 'select_from_array',
-            'options' => JobReportEntry::getCurrentlyHiringValues()
-        ]);
+        $this->setupListOperation();
+
         CRUD::addColumn(['name' => 'job_listing_src', 'type' => 'text', 'label' => 'If you are hiring, where can we find the job listings?']);
         CRUD::addColumn(['name' => 'job_listing_url', 'type' => 'text', 'label' => 'Please provide the URL(s) to your job listings']);
         CRUD::addColumn(['name' => 'most_important_role', 'type' => 'text', 'label' => 'What Role is most important for you to fill today?']);

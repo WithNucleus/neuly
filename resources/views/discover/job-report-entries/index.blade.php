@@ -28,11 +28,14 @@
 
                                             <div class="form-group">
                                                 <label class="font-weight-bold">Name <span class="text-danger">*</span></label>
-                                                @auth
-                                                    <input class="form-control" type="text" name="name" value="{{ Auth::user()->name . ' ' . Auth::user()->last_name }}" required>
-                                                @else
-                                                    <input class="form-control" type="text" name="name" value="{{ old('name') }}" required>
-                                                @endauth
+                                                <input class="form-control" type="text" name="name"
+                                                       value="{{ Auth::check() ? Auth::user()->name . ' ' . Auth::user()->last_name : old('name') }}" required>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="font-weight-bold">Email <span class="text-danger">*</span></label>
+                                                <input class="form-control" type="email" name="email"
+                                                       value="{{ Auth::check() ? Auth::user()->email : old('email') }}" required>
                                             </div>
 
                                             <div class="form-group">
