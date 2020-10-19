@@ -6,14 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Repositories\FollowRepository;
 use Illuminate\Http\Request;
 use App\Models\Investor;
-use App\Models\Focus;
 use App\Models\Location;
 use App\Services\Metas;
-use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\Activitylog\Models\Activity;
 use Auth;
 use App\Services\StringLengthSort;
 
@@ -72,8 +69,6 @@ class InvestorController extends Controller
             'image'         => '',
         ));
 
-        $related = $this->getReltaedEntities($investor);
-
         $entity = 'investors';
         $isFollowed = (bool) count(FollowRepository::fromuser(Investor::class, $investor->id));
 
@@ -89,29 +84,11 @@ class InvestorController extends Controller
             ->performedOn($investor)
             ->log($investor->name);
 
-        return view('discover.investors.show', compact('investor', 'related', 'metas', 'entity', 'isFollowed'));
+        return view('discover.investors.show', compact('investor', 'metas', 'entity', 'isFollowed'));
     }
 
     public function namesJson()
     {
         return response()->json(Investor::all()->pluck('name'));
-    }
-
-    private function getReltaedEntities(Investor $investor)
-    {
-        $focuses = $investor->focus->pluck('id');
-
-        $relatedIds = DB::table('focus_investor')
-            ->select(['investor_id', DB::raw('COUNT(investor_id) as accurance')])
-            ->whereIn('focus_id', $focuses)
-            ->where('investor_id', '!=', $investor->id)
-            ->groupBy('investor_id')
-            ->orderBy('accurance', 'desc')
-            ->take(6)
-            ->get()->pluck('investor_id');
-
-        $entities = Investor::whereIn('id', $relatedIds)->get();
-
-        return $entities;
     }
 }

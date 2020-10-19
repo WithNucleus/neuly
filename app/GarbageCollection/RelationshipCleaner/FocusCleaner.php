@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\DB;
 class FocusCleaner
 {
     private $focus = null;
-    private $investors = null;
     private $jobs = null;
     private $articles = null;
     private $researchs = null;
@@ -20,7 +19,6 @@ class FocusCleaner
     public function __construct()
     {
         $this->focus = Focus::all()->pluck('id');
-        $this->investors = Investor::all()->pluck('id');
         $this->jobs = Job::all()->pluck('id');
         $this->articles = NewsArticle::all()->pluck('id');
         $this->researchs = Research::all()->pluck('id');
@@ -30,25 +28,11 @@ class FocusCleaner
     {
         $messages = [];
 
-        $messages[] = $this->cleanInvestorRelation();
         $messages[] = $this->cleanJobRelation();
         $messages[] = $this->cleanNewsArticleRelation();
         $messages[] = $this->cleanResearchRelation();
 
         return $messages;
-    }
-
-    public function cleanInvestorRelation()
-    {
-        $orphened = DB::table('focus_investor')
-            ->select('id')
-            ->whereNotIn('investor_id', $this->investors)
-            ->orWhereNotIn('focus_id', $this->focus)
-            ->get()->pluck('id');
-
-        DB::table('focus_investor')->whereIn('id', $orphened)->delete();
-
-        return "Cleaned ".$orphened->count()." orphened Relationships between Focus and Investors.";
     }
 
     public function cleanJobRelation()

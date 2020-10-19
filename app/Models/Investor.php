@@ -63,13 +63,6 @@ class Investor extends Model implements EntityContract
             ->withTimestamps();
     }
 
-    //TODO: It seems that Focus is no longer used anywhere for the Investor.
-    // Leave it for future instructions for now.
-    public function focus() {
-        return $this->belongsToMany('App\Models\Focus', 'focus_investor', 'investor_id', 'focus_id')
-            ->withTimestamps();
-    }
-
     // Each Investor Can Have Multiple Companies
     public function companies() {
         return $this->belongsToMany('App\Models\Company', 'company_investor', 'investor_id', 'company_id')
