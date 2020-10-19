@@ -5,6 +5,12 @@
 	background-attachment: fixed;
 }
 
+.home-card-container {
+    max-width: 1600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .card-deck .home-who-is-card {
 	min-width: 280px;
 	transition: background-color .2s ease-in-out;
