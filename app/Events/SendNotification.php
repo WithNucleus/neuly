@@ -28,7 +28,7 @@ class SendNotification
      *
      * @return void
      */
-    public function __construct(Model $model, String $title, String $message, String $icon)
+    public function __construct(Model $model, String $title, String $message, String $icon  = '')
     {
         $this->id = $model->id;
         $this->type = NotificationHelper::getType($model);
