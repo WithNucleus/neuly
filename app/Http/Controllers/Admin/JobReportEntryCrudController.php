@@ -54,6 +54,7 @@ class JobReportEntryCrudController extends CrudController
 
         CRUD::addColumn(['name' => 'job_listing_src', 'type' => 'text', 'label' => 'If you are hiring, where can we find the job listings?']);
         CRUD::addColumn(['name' => 'job_listing_url', 'type' => 'text', 'label' => 'Please provide the URL(s) to your job listings']);
+        CRUD::addColumn(['name' => 'total_employees', 'type' => 'text', 'label' => 'How many employees does your company current have?']);
         CRUD::addColumn(['name' => 'most_important_role', 'type' => 'text', 'label' => 'What Role is most important for you to fill today?']);
         CRUD::addColumn(['name' => 'holding_from_expanding', 'type' => 'text', 'label' => 'What, if anything, is currently holding you back from expanding your workforce?']);
         CRUD::addColumn(['name' => 'job_growth_forecast', 'type' => 'text', 'label' => 'What is your 12-24 month forecast concerning psychedelic industry job growth?']);

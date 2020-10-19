@@ -30,6 +30,7 @@ class JobReportEntryRequest extends FormRequest
             'company' => 'required|max:255',
             'position' => 'required|max:255',
             'currently_hiring' => 'required',
+            'total_employees' => 'required',
         ];
     }
 }
