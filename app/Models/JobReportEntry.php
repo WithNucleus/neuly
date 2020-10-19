@@ -27,6 +27,7 @@ class JobReportEntry extends Model
         'company',
         'position',
         'currently_hiring',
+        'total_employees',
         'job_listing_src',
         'job_listing_url',
         'most_important_role',

@@ -15,6 +15,17 @@ class JobReportEntryController extends Controller
     public function index()
     {
         $currentlyHiring      = JobReportEntry::getCurrentlyHiringValues();
+        $totalEmployees       = [
+            '1-3 employees',
+            '4-10 employees',
+            '11-50 employees',
+            '51-200 employees',
+            '201-500 employees',
+            '501-1000 employees',
+            '1001-5000 employees',
+            '5001-10,000 employees',
+            '10,001+ employees',
+        ];
         $jobListingSources    = [
             'My website',
             'LinkedIn',
@@ -46,6 +57,7 @@ class JobReportEntryController extends Controller
 
         return view('discover.job-report-entries.index', compact(
             'currentlyHiring',
+            'totalEmployees',
             'jobListingSources',
             'mostImportantRoles',
             'holdingFromExpanding',
@@ -59,13 +71,13 @@ class JobReportEntryController extends Controller
      */
     public function store(JobReportEntryRequest $request)
     {
-
         $data = [
             'name'             => $request->input('name'),
             'email'            => $request->input('email'),
             'company'          => $request->input('company'),
             'position'         => $request->input('position'),
             'currently_hiring' => $request->input('currently_hiring'),
+            'total_employees'  => $request->input('total_employees'),
         ];
 
         if ($data['currently_hiring'] == JobReportEntry::CURRENTLY_HIRING_YES) {

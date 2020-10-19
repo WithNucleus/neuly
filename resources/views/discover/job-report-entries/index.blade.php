@@ -94,6 +94,16 @@
                                             </div>
 
                                             <div class="form-group">
+                                                <label class="d-block font-weight-bold">How many employees does your company current have? <span class="text-danger">*</span></label>
+                                                <select class="form-control" name="total_employees" required>
+                                                <option value="" disabled selected>-</option>
+                                                @foreach($totalEmployees as $value)
+                                                    <option value="{{ $value }}">{{ $value }}</option>
+                                                @endforeach
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
                                                 <label class="d-block font-weight-bold">What Role is most important for you to fill today?</label>
                                                 @foreach($mostImportantRoles as $value)
                                                     <div class="custom-control custom-radio">
