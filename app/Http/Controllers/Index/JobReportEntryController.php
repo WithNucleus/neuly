@@ -71,7 +71,6 @@ class JobReportEntryController extends Controller
      */
     public function store(JobReportEntryRequest $request)
     {
-
         $data = [
             'name'             => $request->input('name'),
             'email'            => $request->input('email'),

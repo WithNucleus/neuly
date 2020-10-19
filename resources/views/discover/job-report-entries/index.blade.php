@@ -95,7 +95,8 @@
 
                                             <div class="form-group">
                                                 <label class="d-block font-weight-bold">How many employees does your company current have? <span class="text-danger">*</span></label>
-                                                <select class="form-control" name="total_employees">
+                                                <select class="form-control" name="total_employees" required>
+                                                <option value="" disabled selected>-</option>
                                                 @foreach($totalEmployees as $value)
                                                     <option value="{{ $value }}">{{ $value }}</option>
                                                 @endforeach
