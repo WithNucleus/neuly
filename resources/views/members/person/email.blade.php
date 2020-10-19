@@ -26,18 +26,18 @@
 
                         @include('members.includes.status-messages')
 
-                        <form id="user-profile" action="{{ route('user.settings') }}" method="post" class="needs-validation" novalidate>
+                        <form id="user-profile" action="{{ route('user.person.save.email') }}" method="post" class="needs-validation" novalidate>
                             @csrf
                             <div class="form-group row">
                                 <div class="col-12 col-md-12 mb-3 mb-md-0">
                                     <label for="email" class="font-weight-bold">Email</label>
-                                    <input type="text" class="form-control" name="email" required>
+                                    <input type="text" class="form-control" name="email" value="{{ $person->email }}" required>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <div class="col-12 col-md-12 mb-3 mb-md-0">
                                     <label for="secondary_email" class="font-weight-bold">Second Email</label>
-                                    <input type="text" class="form-control" name="secondary_email" required>
+                                    <input type="text" class="form-control" name="secondary_email" value="{{ $person->secondary_email }}" required>
                                 </div>
                             </div>
                             <button type="submit" class="submit btn btn-primary">Save</button>

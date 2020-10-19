@@ -13,7 +13,7 @@
 
                     <h1 class="page-title-default text-primary mb-4">Person Listing</h1>
 
-                    @if( $hasPerson !== null)
+                    @if( $person !== null)
                         @include('members.person.personal')
                     @else
                         @include('members.person.create')

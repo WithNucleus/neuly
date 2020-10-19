@@ -26,9 +26,33 @@
 
                         @include('members.includes.status-messages')
 
-                        <form id="user-profile" action="{{ route('user.settings') }}" method="post" class="needs-validation" novalidate>
+                        <form id="user-profile" action="{{ route('user.person.save.social') }}" method="post" class="needs-validation" novalidate>
                             @csrf
 
+                            <div class="form-group row">
+                                <div class="col-12 col-md-12 mb-3 mb-md-0">
+                                    <label for="website" class="font-weight-bold">Website</label>
+                                    <input type="text" class="form-control" name="website" value="{{ $person->website }}" required>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-12 col-md-12 mb-3 mb-md-0">
+                                    <label for="facebook" class="font-weight-bold">Facebook</label>
+                                    <input type="text" class="form-control" name="facebook" value="{{ $person->facebook }}" required>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-12 col-md-12 mb-3 mb-md-0">
+                                    <label for="linkedin" class="font-weight-bold">LinkedIn</label>
+                                    <input type="text" class="form-control" name="linkedin" value="{{ $person->linkedin }}" required>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-12 col-md-12 mb-3 mb-md-0">
+                                    <label for="google_scholar" class="font-weight-bold">Google Scholar</label>
+                                    <input type="text" class="form-control" name="google_scholar" value="{{ $person->google_scholar }}" required>
+                                </div>
+                            </div>
                             <button type="submit" class="submit btn btn-primary">Save</button>
                         </form>
                     </div>

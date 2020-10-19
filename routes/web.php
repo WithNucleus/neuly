@@ -271,8 +271,11 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/user/settings/validateurl', 'Index\UserProfileController@checkMemberUrl')->name('user.validate.member_url');
 
     Route::get('/user/person', 'Index\UserPersonController@index')->name('user.person.index');
+    Route::post('/user/person', 'Index\UserPersonController@savePersonal')->name('user.person.save.personal');
     Route::get('/user/person/email', 'Index\UserPersonController@email')->name('user.person.email');
+    Route::post('/user/person/email', 'Index\UserPersonController@saveEmail')->name('user.person.save.email');
     Route::get('/user/person/social', 'Index\UserPersonController@social')->name('user.person.social');
+    Route::post('/user/person/social', 'Index\UserPersonController@saveSocial')->name('user.person.save.social');
 });
 
 // User Email Reset

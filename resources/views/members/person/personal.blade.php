@@ -11,38 +11,30 @@
 
     @include('members.includes.status-messages')
 
-    <form id="user-profile" action="{{ route('user.settings') }}" method="post" class="needs-validation" novalidate>
+    <form id="user-profile" action="{{ route('user.person.save.personal') }}" method="post" class="needs-validation" novalidate>
         @csrf
         <div class="form-group row">
             <div class="col-12 col-md-12 mb-3 mb-md-0">
                 <label for="visibility" class="font-weight-bold">Visibility</label>
-                <select class="form-control" id="visibility">
-                    <option>Public</option>
-                    <option>Members only</option>
+                <select class="form-control" name="visibility">
+                    <option value="public" @if ($person->visibility === 'public') selected @endif>Public</option>
+                    <option value="neuly" @if ($person->visibility === 'neuly') selected @endif>Members only</option>
                 </select>
             </div>
         </div>
         <div class="form-group row">
-            <div class="col-12 col-md-6 mb-3 mb-md-0">
-                <label for="new_name" class="font-weight-bold">First Name</label>
-                <input type="text" class="form-control" name="new_name" required>
+            <div class="col-12 col-md-12 mb-3 mb-md-0">
+                <label for="name" class="font-weight-bold">First Name</label>
+                <input type="text" class="form-control" name="name" value="{{ $person->name }}" required>
                 <div class="invalid-feedback">
                     Your first name is required.
-                </div>
-            </div>
-
-            <div class="col-12 col-md-6">
-                <label for="last_name" class="font-weight-bold">Last Name</label>
-                <input type="text" class="form-control" name="last_name" required>
-                <div class="invalid-feedback">
-                    Your last name is required.
                 </div>
             </div>
         </div>
         <div class="form-group row">
             <div class="col-12 col-md-12 mb-3 mb-md-0">
                 <label for="bio" class="font-weight-bold">Biography</label>
-                <textarea class="form-control" id="bio" rows="10"></textarea>
+                <textarea class="form-control" name="bio" rows="10">{{ $person->bio }}</textarea>
             </div>
         </div>
         <button type="submit" class="submit btn btn-primary">Save</button>
