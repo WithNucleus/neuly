@@ -26,6 +26,7 @@ class JobReportEntryRequest extends FormRequest
     {
         return [
             'name' => 'required|max:255',
+            'email' => 'required|email|max:255',
             'company' => 'required|max:255',
             'position' => 'required|max:255',
             'currently_hiring' => 'required',

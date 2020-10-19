@@ -61,10 +61,11 @@ class JobReportEntryController extends Controller
     {
 
         $data = [
-            'name'                       => $request->input('name'),
-            'company'                    => $request->input('company'),
-            'position'                   => $request->input('position'),
-            'currently_hiring'           => $request->input('currently_hiring'),
+            'name'             => $request->input('name'),
+            'email'            => $request->input('email'),
+            'company'          => $request->input('company'),
+            'position'         => $request->input('position'),
+            'currently_hiring' => $request->input('currently_hiring'),
         ];
 
         if ($data['currently_hiring'] == JobReportEntry::CURRENTLY_HIRING_YES) {
