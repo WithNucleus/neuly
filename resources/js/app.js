@@ -125,106 +125,118 @@ $(document).ready(function() {
 	});
 
 	// People Search on Research Index
-	var researchAuthors = new Bloodhound({
-	  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-	  queryTokenizer: Bloodhound.tokenizers.whitespace,
-	  prefetch: '/searchassets/researchAuthors.json'
-	});
+    if ($('.research-authors .typeahead').length !== 0) {
+        var researchAuthors = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            prefetch: '/searchassets/researchAuthors.json'
+        });
 
-	researchAuthors.initialize();
+        researchAuthors.initialize();
 
-	$('.research-authors .typeahead').typeahead(null,
-	{
-	  name: 'authors',
-	  display: 'name',
-	  source: researchAuthors,
-	  limit: 10,
-	});
+        $('.research-authors .typeahead').typeahead(null,
+            {
+                name: 'authors',
+                display: 'name',
+                source: researchAuthors,
+                limit: 10,
+            });
+    }
 
-	// People Search on Investors Index
-	var investorsPeople = new Bloodhound({
-	  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-	  queryTokenizer: Bloodhound.tokenizers.whitespace,
-	  prefetch: '/searchassets/investorsPeople.json'
-	});
+    if ($('.investors-people .typeahead').length !== 0) {
+        // People Search on Investors Index
+        var investorsPeople = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            prefetch: '/searchassets/investorsPeople.json'
+        });
 
-	investorsPeople.initialize();
+        investorsPeople.initialize();
 
-	$('.investors-people .typeahead').typeahead(null,
-	{
-	  name: 'people',
-	  display: 'name',
-	  source: investorsPeople,
-	  limit: 10,
-	});
+        $('.investors-people .typeahead').typeahead(null,
+            {
+                name: 'people',
+                display: 'name',
+                source: investorsPeople,
+                limit: 10,
+            });
+    }
 
 	// Organization Search on Investors Index
-	var investorsOrganizations = new Bloodhound({
-	  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-	  queryTokenizer: Bloodhound.tokenizers.whitespace,
-	  prefetch: '/searchassets/investorsOrganizations.json'
-	});
+    if ($('.investors-organizations .typeahead').length !== 0) {
+        var investorsOrganizations = new Bloodhound({
+          datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+          queryTokenizer: Bloodhound.tokenizers.whitespace,
+          prefetch: '/searchassets/investorsOrganizations.json'
+        });
 
-	investorsOrganizations.initialize();
+        investorsOrganizations.initialize();
 
-	$('.investors-organizations .typeahead').typeahead(null,
-	{
-	  name: 'organizations',
-	  display: 'name',
-	  source: investorsOrganizations,
-	  limit: 10,
-	});
+        $('.investors-organizations .typeahead').typeahead(null,
+        {
+          name: 'organizations',
+          display: 'name',
+          source: investorsOrganizations,
+          limit: 10,
+        });
+    }
 
 	// Location Search on Organizations Index
-	var companiesLocations = new Bloodhound({
-	  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-	  queryTokenizer: Bloodhound.tokenizers.whitespace,
-	  prefetch: '/searchassets/companiesLocations.json'
-	});
+    if ($('.organizations-locations .typeahead').length !== 0) {
+        var companiesLocations = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            prefetch: '/searchassets/companiesLocations.json'
+        });
 
-	companiesLocations.initialize();
+        companiesLocations.initialize();
 
-	$('.organizations-locations .typeahead').typeahead(null,
-	{
-	  name: 'organizations',
-	  display: 'name',
-	  source: companiesLocations,
-	  limit: 10,
-	});
+        $('.organizations-locations .typeahead').typeahead(null,
+            {
+                name: 'organizations',
+                display: 'name',
+                source: companiesLocations,
+                limit: 10,
+            });
+    }
 
 	// Regions Search on Locations Index
-	var locationsRegions = new Bloodhound({
-	  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-	  queryTokenizer: Bloodhound.tokenizers.whitespace,
-	  prefetch: '/searchassets/locationsRegions.json'
-	});
+    if ($('.locations-locations .typeahead').length !== 0) {
+        var locationsRegions = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            prefetch: '/searchassets/locationsRegions.json'
+        });
 
-	locationsRegions.initialize();
+        locationsRegions.initialize();
 
-	$('.locations-locations .typeahead').typeahead(null,
-	{
-	  name: 'organizations',
-	  display: 'name',
-	  source: locationsRegions,
-	  limit: 10,
-	});
+        $('.locations-locations .typeahead').typeahead(null,
+            {
+                name: 'organizations',
+                display: 'name',
+                source: locationsRegions,
+                limit: 10,
+            });
+    }
 
 	// Organization Search on Focus Index
-	var focusOrganizations = new Bloodhound({
-	  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-	  queryTokenizer: Bloodhound.tokenizers.whitespace,
-	  prefetch: '/searchassets/focusOrganizations.json'
-	});
+    if ($('.focus-organizations .typeahead').length !== 0) {
+        var focusOrganizations = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            prefetch: '/searchassets/focusOrganizations.json'
+        });
 
-	focusOrganizations.initialize();
+        focusOrganizations.initialize();
 
-	$('.focus-organizations .typeahead').typeahead(null,
-	{
-	  name: 'organizations',
-	  display: 'name',
-	  source: focusOrganizations,
-	  limit: 10,
-	});
+        $('.focus-organizations .typeahead').typeahead(null,
+            {
+                name: 'organizations',
+                display: 'name',
+                source: focusOrganizations,
+                limit: 10,
+            });
+    }
 
 	$('.single-notification').on('mouseenter', function() {
 	    let id = $(this).data('notification-id');
