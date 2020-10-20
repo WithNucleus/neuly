@@ -36,7 +36,7 @@
                     <a href="{{ route('member.dashboard') }}" class="btn btn-dark btn-lg">Start exploring our database...</a>
                 </p>
                 <p class="ml-md-3">
-                    <a href="{{ route('about') }}" class="text-dark">Tell me more about Neuly</a>
+                    <a href="{{ route('about') }}" class="text-dark">Or learn more about Neuly</a>
                 </p>
             </div>
         </div>
