@@ -16,14 +16,12 @@
             </div>
         @endif
 
-{{--        @include('content.homepage.neuly-knows')--}}
         @include('content.homepage.who-is-neuly-for')
 
         <div class="container-fluid pt-2">
             <div class="home-card-container mx-auto">
                 <div class="row">
                     <div class="col-12 col-md-6">
-                        @include('content.homepage.insights-widget')
                         @include('content.homepage.news')
                         @include('discover.insights.widgets.organizations-by-type')
                         @include('content.homepage.recent-jobs')
