@@ -11,6 +11,12 @@
 			<i class='nav-icon la la-building'></i> Organizations
 		</a>
 	</li>
+
+    <li class='nav-item'>
+        <a class='nav-link' href='{{ backpack_url('companyvaluation') }}'>
+            <i class='nav-icon la la-dollar'></i> Organization Valuations
+        </a>
+    </li>
 @endcan
 
 @can('edit people')

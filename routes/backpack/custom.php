@@ -44,4 +44,5 @@ Route::group([
     Route::crud('insightRequest', 'InsightRequestCrudController');
     Route::crud('jobreportentries', 'JobReportEntryCrudController');
     Route::crud('searchlog', 'SearchLogCrudController');
+    Route::crud('companyvaluation', 'CompanyValuationCrudController');
 }); // this should be the absolute last line of this file

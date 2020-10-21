@@ -147,6 +147,10 @@ class Company extends Model implements EntityContract
             ->withPivot('type');
     }
 
+    public function valuations() {
+        return $this->hasMany(CompanyValuation::class);
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES
@@ -176,6 +180,13 @@ class Company extends Model implements EntityContract
     | ACCESSORS
     |--------------------------------------------------------------------------
     */
+
+    public function getLatestValuationAmountAttribute()
+    {
+        $latestValuation = $this->valuations()->latest('date')->first();
+
+        return $latestValuation ? $latestValuation->amount : null;
+    }
 
     /*
     |--------------------------------------------------------------------------

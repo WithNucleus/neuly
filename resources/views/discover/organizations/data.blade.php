@@ -64,6 +64,13 @@
 				</p>
 			@endif
 
+            @if($company->latestValuationAmount)
+                <p class="mb-2">
+                    <strong>Valuation:</strong><br>
+                    ${{ $company->latestValuationAmount }}
+                </p>
+            @endif
+
 			@if($company->jobs->count() > 0)
 				<div id="jobs" class="mt-4">
 					<h2 class="h4 mb-0">Jobs:</h2>

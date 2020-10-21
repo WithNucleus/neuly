@@ -1,0 +1,139 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Requests\CompanyValuationRequest;
+use Backpack\CRUD\app\Http\Controllers\CrudController;
+use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+
+/**
+ * Class CompanyValuationCrudController
+ * @package App\Http\Controllers\Admin
+ * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
+ */
+class CompanyValuationCrudController extends CrudController
+{
+    use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+
+    /**
+     * Configure the CrudPanel object. Apply settings to all operations.
+     *
+     * @return void
+     */
+    public function setup()
+    {
+        CRUD::setModel(\App\Models\CompanyValuation::class);
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/companyvaluation');
+        CRUD::setEntityNameStrings('organisation valuation', 'organisation valuations');
+    }
+
+    /**
+     * Define what happens when the List operation is loaded.
+     *
+     * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
+     * @return void
+     */
+    protected function setupListOperation()
+    {
+        CRUD::addColumn([
+            'label'     => 'Company',
+            'name'      => 'company_id',
+            'type'      => 'select',
+            'entity'    => 'company',
+            'attribute' => 'name',
+        ]);
+
+        CRUD::addColumn([
+            'label'     => 'Acquirer',
+            'name'      => 'acquirer_id',
+            'type'      => 'select',
+            'entity'    => 'acquirer',
+            'attribute' => 'name',
+        ]);
+
+        CRUD::addColumn([
+            'label'    => 'Amount',
+            'name'     => 'amount',
+            'type'     => 'number',
+            'prefix'   => '$',
+        ]);
+
+        CRUD::addColumn([
+            'label'    => 'Date',
+            'name'     => 'date',
+            'type'     => 'date',
+        ]);
+    }
+
+    protected function setupShowOperation()
+    {
+        $this->setupListOperation();
+
+        CRUD::addColumn([
+            'label'    => 'Notes',
+            'name'     => 'notes',
+            'type'     => 'text',
+        ]);
+    }
+
+    /**
+     * Define what happens when the Create operation is loaded.
+     *
+     * @see https://backpackforlaravel.com/docs/crud-operation-create
+     * @return void
+     */
+    protected function setupCreateOperation()
+    {
+        CRUD::setValidation(CompanyValuationRequest::class);
+
+        CRUD::addField([
+                'label'     => "Company",
+                'type'      => 'select2',
+                'name'      => 'company_id',
+                'entity'    => 'company',
+                'attribute' => 'name',
+        ]);
+
+        CRUD::addField([
+            'label'     => "Acquirer",
+            'type'      => 'select2',
+            'name'      => 'acquirer_id',
+            'entity'    => 'acquirer',
+            'attribute' => 'name',
+        ]);
+
+        CRUD::addField([
+            'label'    => 'Amount',
+            'name'     => 'amount',
+            'type'     => 'number',
+            'prefix'   => '$',
+        ]);
+
+        CRUD::addField([
+            'label'    => 'Date',
+            'name'     => 'date',
+            'type'     => 'date',
+        ]);
+
+        CRUD::addField([
+            'label'    => 'Notes',
+            'name'     => 'notes',
+            'type'     => 'textarea',
+        ]);
+    }
+
+    /**
+     * Define what happens when the Update operation is loaded.
+     *
+     * @see https://backpackforlaravel.com/docs/crud-operation-update
+     * @return void
+     */
+    protected function setupUpdateOperation()
+    {
+        $this->setupCreateOperation();
+    }
+}
