@@ -22,15 +22,6 @@
                     <p class="mb-2">
                         {{ $widget['investor']->type }}
                     </p>
-            
-                    @if ($widget['investor']['focus']->count() > 0)
-                        <p class="mb-0">
-                            <strong>Focus: </strong>
-                            @foreach ($widget['investor']['focus'] as $item)
-                                <a href="/admin/focus/{{ $item->id }}/show">{{ $item->name }}</a>@if (!$loop->last) / @endif
-                            @endforeach
-                        </p>
-                    @endif
                 </div>
             </div>
         </div>
@@ -81,7 +72,7 @@
             <div class="col-12 col-md-8 col-xl-6 d-flex">
                 <div class="card card-body flex-fill">
                     <h5 class="mb-1">Locations</h5>
-            
+
                     <div class="list-group list-group-flush">
                         @foreach ($widget['investor']['locations'] as $location)
                             <div class="list-group-item">
