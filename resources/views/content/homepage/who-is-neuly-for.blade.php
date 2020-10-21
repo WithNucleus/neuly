@@ -1,15 +1,15 @@
-<div class="bg-dark bg-brains py-5 mb-5 shadow-sm">
-    <div class="container mt-4 mb-5">
+<div class="bg-dark bg-brains pt-5 mb-5 shadow-sm">
+    <div class="container mt-4">
         <div class="row">
             <div class="col-12 text-center">
-                <h2 class="h1 text-tertiary ">Who is Neuly For?</h2>
-                <p class="lead-smaller mb-3 text-light font-normal">
+                <h2 class="h1 text-info">Who is Neuly For?</h2>
+                <p class="lead-larger mb-3 text-light font-normal">
                     Entrepreneurs, investors, researchers, scientists, educators, policy makers, and anyone interested in the psychedelics industry.
                 </p>
             </div>
         </div>
 
-        <div class="card-deck">
+        <div class="card-deck mb-4">
             <div class="card home-who-is-card">
                 <div class="card-body text-center shadow-sm">
                     <a href="{{ route('discover.people') }}" class="text-dark">
@@ -41,5 +41,41 @@
                 </div>
             </div>
         </div>
+
+        <div class="card-deck">
+            <div class="card home-who-is-card">
+                <div class="card-body text-center shadow-sm">
+                    <a href="{{ route('discover.events') }}" class="text-dark">
+                        <div class="icon-image-people">
+                            <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><title/><g id="icon"><polygon points="52 56.42 59.42 49 52 49 52 56.42"/><path d="M55,13H51V11a4,4,0,0,0-8,0v2H36V11a4,4,0,0,0-8,0v2H21V11a4,4,0,0,0-8,0v2H9a5.0018,5.0018,0,0,0-5,5V52a5.0018,5.0018,0,0,0,5,5H50V48a1.0029,1.0029,0,0,1,1-1h9V18A5.0018,5.0018,0,0,0,55,13ZM45,11a2,2,0,0,1,4,0v2H45ZM30,11a2,2,0,0,1,4,0v2H30ZM15,11a2,2,0,0,1,4,0v2H15Zm1,39H12V46h4Zm0-8H12V38h4Zm0-8H12V30h4Zm9,16H21V46h4Zm0-8H21V38h4Zm0-8H21V30h4Zm9,16H30V46h4Zm0-8H30V38h4Zm0-8H30V30h4Zm9,16H39V46h4Zm0-8H39V38h4Zm0-8H39V30h4Zm9,8H48V38h4Zm0-8H48V30h4Zm6-11H6V18a3.0088,3.0088,0,0,1,3-3h4v2a4,4,0,0,0,8,0H19a2,2,0,0,1-4,0V15H28v2a4,4,0,0,0,8,0H34a2,2,0,0,1-4,0V15H43v2a4,4,0,0,0,8,0H49a2,2,0,0,1-4,0V15H55a3.0088,3.0088,0,0,1,3,3Z"/></g></svg>
+                        </div>
+                        <p class="lead mb-0">Join an event</p>
+                    </a>
+                </div>
+            </div>
+            <div class="card home-who-is-card">
+                <div class="card-body text-center shadow-sm">
+                    <a href="{{ route('discover.research') }}" class="text-dark">
+                        <div class="icon-image-jobs">
+                            <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><title/><g id="icon"><path d="M22,18.27,11,12a2,2,0,0,1-1-1.73V3H8v7.26a4,4,0,0,0,2,3.47L21,20a2,2,0,0,1,1,1.73V29h2V21.74A4,4,0,0,0,22,18.27Z"/><path d="M13,16.58l-3,1.69a4,4,0,0,0-2,3.47V29h2V21.74A2,2,0,0,1,11,20l4-2.28Z"/><path d="M22,3v7.26A2,2,0,0,1,21,12l-4,2.28,2,1.15,3-1.69a4,4,0,0,0,2-3.47V3Z"/><rect height="2" width="8" x="12" y="5"/><rect height="2" width="8" x="12" y="9"/><rect height="2" width="8" x="12" y="25"/><rect height="2" width="8" x="12" y="21"/></g></svg>
+                        </div>
+                        <p class="lead mb-0">Explore research</p>
+                    </a>
+                </div>
+            </div>
+            <div class="card home-who-is-card">
+                <div class="card-body text-center shadow-sm">
+                    <a href="{{ route('discover.insights') }}" class="text-dark">
+                        <div class="icon-image-organizations">
+                            <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><title/><g data-name="Profit" id="icon"><path d="M13,28A50.6745,50.6745,0,0,0,51,10.83V15a1,1,0,0,0,2,0V8a1.03,1.03,0,0,0-1-1H45a1,1,0,0,0,0,2h4.9452A48.5536,48.5536,0,0,1,13,26a1,1,0,0,0,0,2Z"/><path d="M37,26a1,1,0,0,0-1,1V53h8V27a1,1,0,0,0-1-1Z"/><path d="M48,20V53h8V20a1,1,0,0,0-1-1H49A1,1,0,0,0,48,20Z"/><path d="M25,34a1,1,0,0,0-1,1V53h8V35a1,1,0,0,0-1-1Z"/><path d="M20,42a1,1,0,0,0-1-1H13a1,1,0,0,0-1,1V53h8Z"/><path d="M59,55H8V6A3,3,0,0,0,2,6V60a1,1,0,0,0,1,1H59a3,3,0,0,0,0-6Z"/></g></svg>
+                        </div>
+                        <p class="lead mb-0">View insights</p>
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
+
+    @include('content.homepage.register-or-contact')
+
 </div>

@@ -15,7 +15,8 @@ const mix = require('laravel-mix');
 mix
 	.js('resources/js/app.js', 'public/js')
 	.js('resources/js/discovertabs.js', 'public/js')
-	.js('resources/js/formValidation.js', 'public/js');
+	.js('resources/js/formValidation.js', 'public/js')
+    .js('resources/js/home-hero.js', 'public/js');
 
 // Mix CSS
 mix

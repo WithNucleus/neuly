@@ -90,6 +90,10 @@
 
     <script type="text/javascript" src="{{ mix('js/app.js') }}"></script>
 
+    @if(Route::is('index') OR Route::is('home'))
+        <script type="text/javascript" src="{{ mix('js/home-hero.js') }}"></script>
+    @endif
+
     @include('navbars.discover-menu')
     @include('navbars.admin-menu')
 </body>

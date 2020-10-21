@@ -5,6 +5,45 @@
 	background-attachment: fixed;
 }
 
+.home-card-container {
+    max-width: 1600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#home-hero-image {
+    position: relative;
+    max-width: 400px;
+
+    img {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100%;
+        height: auto;
+        opacity: 0;
+        display: block;
+        transition: .5s ease-in-out opacity;
+    }
+
+    img#first-hero-image {
+        position: static;
+        z-index: 1;
+        opacity: 1;
+    }
+
+    img.active-hero-image {
+        opacity: 1;
+        z-index: 2;
+    }
+}
+
+@media (min-width: 768px) {
+    #home-hero-image {
+        max-width: 600px;
+    }
+}
+
 .card-deck .home-who-is-card {
 	min-width: 280px;
 	transition: background-color .2s ease-in-out;
