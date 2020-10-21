@@ -122,14 +122,17 @@ class Research extends Model implements EntityContract
             //relations
             'focus'            => [
                 'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relation'      => EntityMergeHelper::RELATION_N_N,
                 'relationField' => 'name',
             ],
             'companies'        => [
                 'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relation'      => EntityMergeHelper::RELATION_N_N,
                 'relationField' => 'name',
             ],
             'people'           => [
                 'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relation'      => EntityMergeHelper::RELATION_N_N,
                 'relationField' => 'name',
             ],
         ];

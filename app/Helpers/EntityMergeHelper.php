@@ -13,6 +13,9 @@ class EntityMergeHelper
     const TYPE_IMAGE    = 'image';
     const TYPE_RELATION = 'relation';
 
+    const RELATION_ONE_N = 'one_n';
+    const RELATION_N_N = 'n_n';
+
     /**
      * @param string $type
      * @return string

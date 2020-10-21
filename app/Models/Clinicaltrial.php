@@ -225,35 +225,43 @@ class Clinicaltrial extends Model implements EntityContract
             //relations
             'companies'               => [
                 'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relation'      => EntityMergeHelper::RELATION_N_N,
                 'relationField' => 'name',
             ],
             'locations'               => [
                 'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relation'      => EntityMergeHelper::RELATION_N_N,
                 'relationField' => 'name',
             ],
             'people'                  => [
                 'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relation'      => EntityMergeHelper::RELATION_N_N,
                 'relationField' => 'name',
             ],
             'focus'                   => [
                 'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relation'      => EntityMergeHelper::RELATION_N_N,
                 'relationField' => 'name',
             ],
             'conditions'              => [
                 'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relation'      => EntityMergeHelper::RELATION_ONE_N,
                 'relationField' => 'value',
             ],
             'interventions'           => [
                 'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relation'      => EntityMergeHelper::RELATION_ONE_N,
                 'relationField' => 'value',
             ],
             'outcomeMeasures'        => [
                 'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relation'      => EntityMergeHelper::RELATION_ONE_N,
                 'relationField' => 'value',
                 'label'         => 'Outcome Measures',
             ],
             'studyDesigns'           => [
                 'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relation'      => EntityMergeHelper::RELATION_ONE_N,
                 'relationField' => 'value',
                 'label'         => 'Study Designs',
             ],

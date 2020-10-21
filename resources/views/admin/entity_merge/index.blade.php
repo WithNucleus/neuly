@@ -12,7 +12,7 @@
 
 @include('admin.includes.status-messages')
 
-<form method="post" action="{{ route('admin.entityMerge.merge') }}">
+<form class="js-entity-merge-form" method="post" action="{{ route('admin.entityMerge.merge') }}">
     @csrf
     <div class="row">
         <div class="col-md-3">
@@ -207,7 +207,7 @@
                     },
                 }).then((value) => {
                     if (value) {
-                        $('form').submit();
+                        $('.js-entity-merge-form').submit();
                     }
                 });
             });

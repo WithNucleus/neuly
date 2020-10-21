@@ -336,36 +336,55 @@ class Company extends Model implements EntityContract
             //relations
             'focus'                => [
                 'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relation'      => EntityMergeHelper::RELATION_N_N,
                 'relationField' => 'name',
             ],
             'locations'            => [
                 'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relation'      => EntityMergeHelper::RELATION_N_N,
                 'relationField' => 'name',
             ],
             'people'               => [
                 'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relation'      => EntityMergeHelper::RELATION_N_N,
                 'relationField' => 'name',
+                'pivotColumns'  => [
+                    'position'
+                ],
             ],
             'investors'            => [
                 'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relation'      => EntityMergeHelper::RELATION_N_N,
                 'relationField' => 'name',
+                'pivotColumns'  => [
+                    'type'
+                ],
             ],
             'research'             => [
                 'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relation'      => EntityMergeHelper::RELATION_N_N,
                 'relationField' => 'name',
             ],
             'jobs'                 => [
                 'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relation'      => EntityMergeHelper::RELATION_N_N,
                 'relationField' => 'job_title',
             ],
             'events'               => [
                 'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relation'      => EntityMergeHelper::RELATION_N_N,
                 'relationField' => 'name',
             ],
             'clinicaltrials'       => [
                 'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relation'      => EntityMergeHelper::RELATION_N_N,
                 'relationField' => 'title',
             ],
+            'valuations'           => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relation'      => EntityMergeHelper::RELATION_ONE_N,
+                'relationField' => ['date', 'amount'],
+            ]
         ];
     }
 }
