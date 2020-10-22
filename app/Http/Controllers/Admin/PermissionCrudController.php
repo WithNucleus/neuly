@@ -6,8 +6,6 @@ use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\PermissionManager\app\Http\Requests\PermissionStoreCrudRequest as StoreRequest;
 use Backpack\PermissionManager\app\Http\Requests\PermissionUpdateCrudRequest as UpdateRequest;
 
-// VALIDATION
-
 class PermissionCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
@@ -17,11 +15,10 @@ class PermissionCrudController extends CrudController
 
     public function setup()
     {
-        // Check Guard
         if(!backpack_user()->can('edit users')) {
             abort(404);
         }
-        
+
         $this->role_model = $role_model = config('backpack.permissionmanager.models.role');
         $this->permission_model = $permission_model = config('backpack.permissionmanager.models.permission');
 
@@ -94,7 +91,7 @@ class PermissionCrudController extends CrudController
         }
     }
 
-    /*
+    /**
      * Get an array list of all available guard types
      * that have been defined in app/config/auth.php
      *

@@ -16,12 +16,7 @@ class EventType extends Model
     */
 
     protected $table = 'event_types';
-    // protected $primaryKey = 'id';
-    // public $timestamps = false;
     protected $guarded = ['id'];
-    // protected $fillable = [];
-    // protected $hidden = [];
-    // protected $dates = [];
 
     /*
     |--------------------------------------------------------------------------
@@ -34,7 +29,6 @@ class EventType extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    // Each Event Type Can Have Multiple Events
     public function events() {
         return $this->belongsToMany('App\Models\Event', 'event_event_type', 'event_type_id', 'event_id')->withTimestamps();
     }

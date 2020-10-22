@@ -28,19 +28,16 @@ class LogEmbedCrudController extends CrudController
             'type' => 'integer',
             'label' => 'Entity Id'
         ]);
-
         $this->crud->addColumn([
             'name' => 'entity_type',
             'type' => 'text',
             'label' => 'Entity Type'
         ]);
-
         $this->crud->addColumn([
             'name' => 'referer_url',
             'type' => 'text',
             'label' => 'Referer URL'
         ]);
-
         $this->crud->addColumn([
             'name' => 'created_at',
             'type' => 'datetime',

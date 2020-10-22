@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\FollowList;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
@@ -22,6 +21,6 @@ class Follow extends Model
     }
 
     public function list() {
-        return $this->belongsTo(\App\Models\FollowList::class, 'follow_list_id');
+        return $this->belongsTo(FollowList::class, 'follow_list_id');
     }
 }

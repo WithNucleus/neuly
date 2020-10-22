@@ -29,12 +29,11 @@ class ResearchCrudController extends CrudController
      */
     public function setup()
     {
-        // Check Guard
         if(!backpack_user()->can('edit research')) {
             abort(404);
         }
 
-        CRUD::setModel(\App\Models\Research::class);
+        CRUD::setModel(Research::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/research');
         CRUD::setEntityNameStrings('research', 'research');
     }
@@ -47,30 +46,11 @@ class ResearchCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        // CRUD::setFromDb(); // columns
-
-        // Name
         $this->crud->addColumn([
             'name'  => 'name',
             'label' => 'Name/Title',
             'type'  => 'text'
         ]);
-
-        // Link
-        // $this->crud->addColumn([
-        //     'name'  => 'link',
-        //     'label' => 'Link',
-        //     'type'  => 'text'
-        // ]);
-
-        // Abstract
-        // $this->crud->addColumn([
-        //     'name'  => 'abstract',
-        //     'label' => 'Abstract',
-        //     'type'  => 'text'
-        // ]);
-
-        // Focus -- Relationship
         $this->crud->addColumn([
            'label'     => 'Focus',
            'type'      => 'select_multiple',
@@ -78,13 +58,10 @@ class ResearchCrudController extends CrudController
            'entity'    => 'focus',
            'attribute' => 'name',
            'model'     => 'App\Models\Focus',
-           // 'orderable' => true,
            'options'   => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
         ]);
-
-        // Companies -- Relationship
         $this->crud->addColumn([
            'label'     => 'Companies',
            'type'      => 'select_multiple',
@@ -92,13 +69,10 @@ class ResearchCrudController extends CrudController
            'entity'    => 'companies',
            'attribute' => 'name',
            'model'     => 'App\Models\Company',
-           // 'orderable' => true,
            'options'   => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
         ]);
-
-        // People -- Relationship
         $this->crud->addColumn([
            'label'     => 'People',
            'type'      => 'select_multiple',
@@ -106,17 +80,10 @@ class ResearchCrudController extends CrudController
            'entity'    => 'people',
            'attribute' => 'name',
            'model'     => 'App\Models\Person',
-           // 'orderable' => true,
            'options'   => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
         ]);
-
-        /**
-         * Columns can be defined using the fluent syntax or array syntax:
-         * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
-         */
     }
 
     /**
@@ -129,14 +96,11 @@ class ResearchCrudController extends CrudController
     {
         $this->setupListOperation();
 
-        // Link
         $this->crud->addColumn([
             'name'  => 'link',
             'label' => 'Link',
             'type'  => 'text'
         ]);
-
-        // Abstract
         $this->crud->addColumn([
             'name'  => 'abstract',
             'label' => 'Abstract',
@@ -154,85 +118,57 @@ class ResearchCrudController extends CrudController
     {
         CRUD::setValidation(ResearchRequest::class);
 
-        // CRUD::setFromDb(); // fields
-
-        // Name
         $this->crud->addField([
             'name'  => 'name',
             'label' => 'Name/Title',
             'type'  => 'text'
         ]);
-
-        // Link
         $this->crud->addField([
             'name'  => 'link',
             'label' => 'Link',
             'type'  => 'url'
         ]);
-
-        // Abstract
         $this->crud->addField([
             'name'  => 'abstract',
             'label' => 'Abstract',
             'type'  => 'textarea'
         ]);
-
-        // Focus -- Relationship
         $this->crud->addField([
              'label'     => "Focus",
              'type'      => 'select2_multiple',
              'name'      => 'focus',
              'entity'    => 'focus',
              'attribute' => 'name',
-
              'pivot'     => true,
              'options'   => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
-
-             // optional
-             'model'     => "App\Models\Focus", // foreign key model
+             'model'     => "App\Models\Focus",
         ]);
-
-        // Companies -- Relationship
         $this->crud->addField([
              'label'     => "Companies",
              'type'      => 'select2_multiple',
              'name'      => 'companies',
              'entity'    => 'companies',
              'attribute' => 'name',
-
              'pivot'     => true,
              'options'   => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
-
-             // optional
-             'model'     => "App\Models\Company", // foreign key model
+             'model'     => "App\Models\Company",
         ]);
-
-        // People -- Relationship
         $this->crud->addField([
              'label'     => "People",
              'type'      => 'select2_multiple',
              'name'      => 'people',
              'entity'    => 'people',
              'attribute' => 'name',
-
              'pivot'     => true,
              'options'   => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
-
-             // optional
-             'model'     => "App\Models\Person", // foreign key model
+             'model'     => "App\Models\Person",
         ]);
-
-        /**
-         * Fields can be defined using the fluent syntax or array syntax:
-         * - CRUD::field('price')->type('number');
-         * - CRUD::addField(['name' => 'price', 'type' => 'number']));
-         */
     }
 
     public function store()
@@ -259,16 +195,10 @@ class ResearchCrudController extends CrudController
     {
         $originalResearch = $this->getOriginalModel($this->crud);
         $oldFocus = $this->getFocusIds($originalResearch);
-
         $response = $this->traitUpdate();
-        $request = $response->getRequest();
-
         $research = $this->data['entry'];
-
         $newFocus = $this->getFocusIds($research);
-
         $addedFocus = array_diff($newFocus, $oldFocus);
-        $removedFocus = array_diff($oldFocus, $newFocus);
 
         if($addedFocus !== [])
         {
@@ -305,6 +235,7 @@ class ResearchCrudController extends CrudController
     private function getOriginalModel($crud)
     {
         $request = $crud->validateRequest();
+
         return Research::find($request->get($crud->model->getKeyName()));
     }
 }

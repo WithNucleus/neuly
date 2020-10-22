@@ -6,8 +6,6 @@ use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\PermissionManager\app\Http\Requests\RoleStoreCrudRequest as StoreRequest;
 use Backpack\PermissionManager\app\Http\Requests\RoleUpdateCrudRequest as UpdateRequest;
 
-// VALIDATION
-
 class RoleCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
@@ -17,7 +15,6 @@ class RoleCrudController extends CrudController
 
     public function setup()
     {
-        // Check Guard
         if(!backpack_user()->can('edit users')) {
             abort(404);
         }
@@ -48,10 +45,10 @@ class RoleCrudController extends CrudController
             'label' => trans('backpack::permissionmanager.name'),
             'type'  => 'text',
         ]);
-        $this->crud->addColumn([   // select_multiple: n-n relationship (with pivot table)
-            'label'     => trans('backpack::permissionmanager.users'), // Table column heading
+        $this->crud->addColumn([
+            'label'     => trans('backpack::permissionmanager.users'),
             'type'      => 'relationship_count',
-            'name'      => 'users', // the method that defines the relationship in your Model
+            'name'      => 'users',
             'wrapper'   => [
                 'href' => function ($crud, $column, $entry, $related_key) {
                     return backpack_url('user?role='.$entry->getKey());
@@ -67,14 +64,13 @@ class RoleCrudController extends CrudController
             ]);
         }
         $this->crud->addColumn([
-            // n-n relationship (with pivot table)
             'label'     => ucfirst(trans('backpack::permissionmanager.permission_plural')),
             'type'      => 'select_multiple',
-            'name'      => 'permissions', // the method that defines the relationship in your Model
-            'entity'    => 'permissions', // the method that defines the relationship in your Model
-            'attribute' => 'name', // foreign key attribute that is shown to user
-            'model'     => $this->permission_model, // foreign key model
-            'pivot'     => true, // on create&update, do you need to add/delete pivot table entries?
+            'name'      => 'permissions',
+            'entity'    => 'permissions',
+            'attribute' => 'name',
+            'model'     => $this->permission_model,
+            'pivot'     => true,
         ]);
     }
 
@@ -83,7 +79,6 @@ class RoleCrudController extends CrudController
         $this->addFields();
         $this->crud->setValidation(StoreRequest::class);
 
-        //otherwise, changes won't have effect
         \Cache::forget('spatie.permission.cache');
     }
 
@@ -92,7 +87,6 @@ class RoleCrudController extends CrudController
         $this->addFields();
         $this->crud->setValidation(UpdateRequest::class);
 
-        //otherwise, changes won't have effect
         \Cache::forget('spatie.permission.cache');
     }
 
@@ -124,7 +118,7 @@ class RoleCrudController extends CrudController
         ]);
     }
 
-    /*
+    /**
      * Get an array list of all available guard types
      * that have been defined in app/config/auth.php
      *

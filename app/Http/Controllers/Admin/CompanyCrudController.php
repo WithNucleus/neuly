@@ -7,7 +7,6 @@ use App\Http\Requests\CompanyRequest;
 use App\Models\Company;
 use App\Models\Investor;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
-use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use App\Models\Focus;
 use Backpack\CRUD\app\Library\Widget;
 use Illuminate\Support\Facades\Route;
@@ -25,11 +24,8 @@ class CompanyCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 
-
     public function setup()
     {
-
-        // Check Guard
         if(!backpack_user()->can('edit companies')) {
             abort(404);
         }
@@ -37,145 +33,103 @@ class CompanyCrudController extends CrudController
         $this->crud->setModel('App\Models\Company');
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/company');
         $this->crud->setEntityNameStrings('organization', 'organizations');
-
-        // List
-        $this->crud->operation('list', function() {
-
-            // Name
-            $this->crud->addColumn(['name' => 'name', 'type' => 'text', 'label' => 'Name']);
-
-            // Focus -- Relationship
-            $this->crud->addColumn([
-               'label'     => 'Focus',
-               'type'      => 'select_multiple',
-               'name'      => 'focus',
-               'entity'    => 'focus',
-               'attribute' => 'name',
-               'model'     => 'App\Models\Focus',
-               // 'orderable' => true,
-               'options'   => (function ($query) {
-                    return $query->orderBy('name', 'ASC')->get();
-                }),
-            ]);
-
-            // Type
-            $this->crud->addColumn(['name' => 'ownership', 'type' => 'text', 'label' => 'Type']);
-
-            // Location -- Relationship
-            $this->crud->addColumn([
-               'label'     => 'Location',
-               'type'      => 'select_multiple',
-               'name'      => 'locations',
-               'entity'    => 'locations',
-               'attribute' => 'name',
-               'model'     => 'App\Models\Location',
-               // 'orderable' => true,
-               'options'   => (function ($query) {
-                    return $query->orderBy('name', 'ASC')->get();
-                }),
-            ]);
-
-            // People -- When it's Many to Many Relationship
-            $this->crud->addColumn([
-               'label'     => 'People',
-               'type'      => 'select_multiple',
-               'name'      => 'people',
-               'entity'    => 'people',
-               'attribute' => 'name',
-               'model'     => 'App\Models\Person',
-               // 'orderable' => true,
-               'options'   => (function ($query) {
-                    return $query->orderBy('name', 'ASC')->get();
-                }),
-            ]);
-
-        });
-
     }
 
     protected function setupListOperation()
     {
-        // TODO: remove setFromDb() and manually define Columns, maybe Filters
-        // $this->crud->setFromDb();
+        $this->crud->addColumn(['name' => 'name', 'type' => 'text', 'label' => 'Name']);
+
+        $this->crud->addColumn([
+            'label'     => 'Focus',
+            'type'      => 'select_multiple',
+            'name'      => 'focus',
+            'entity'    => 'focus',
+            'attribute' => 'name',
+            'model'     => 'App\Models\Focus',
+            'options'   => (function ($query) {
+                return $query->orderBy('name', 'ASC')->get();
+            }),
+        ]);
+
+        $this->crud->addColumn(['name' => 'ownership', 'type' => 'text', 'label' => 'Type']);
+
+        $this->crud->addColumn([
+            'label'     => 'Location',
+            'type'      => 'select_multiple',
+            'name'      => 'locations',
+            'entity'    => 'locations',
+            'attribute' => 'name',
+            'model'     => 'App\Models\Location',
+            'options'   => (function ($query) {
+                return $query->orderBy('name', 'ASC')->get();
+            }),
+        ]);
+
+        $this->crud->addColumn([
+            'label'     => 'People',
+            'type'      => 'select_multiple',
+            'name'      => 'people',
+            'entity'    => 'people',
+            'attribute' => 'name',
+            'model'     => 'App\Models\Person',
+            'options'   => (function ($query) {
+                return $query->orderBy('name', 'ASC')->get();
+            }),
+        ]);
     }
 
     protected function setupShowOperation()
     {
         $this->crud->set('show.setFromDb', false);
 
-        // Get this ID
-        $request = \Request::getPathInfo();
-        $request_array = explode('/', $request);
-        $companyId = $request_array[3];
+        $companyId = Route::current()->parameter('id');
+        $company = Company::with(['people', 'parents', 'subsidiaries'])->findOrFail($companyId);
 
-        // Get this Company
-        $company = Company::with(['people', 'parents', 'subsidiaries'])->find($companyId);
-
-        // Company People Widget
         Widget::add([
             'type' => 'view',
             'view' => 'customwidget.company_show_widget',
             'company' => $company
         ])->to('before_content');
 
-        // Ownership
         $this->crud->addColumn('ownership');
-
-        // Ticker Symbol
         $this->crud->addColumn('ticker_symbol');
-
-        // Founded Date
         $this->crud->addColumn([
             'name' => 'founded_date',
             'type' => 'date',
             'label' => 'Founded Date'
         ]);
-
-        // Valuation
         $this->crud->addColumn([
             'name' => 'valuation',
             'type' => 'number',
             'label' => 'Valuation',
             'prefix'     => "$",
         ]);
-
-        // Total Funding Amount
         $this->crud->addColumn([
             'name' => 'total_funding_amount',
             'type' => 'number',
             'label' => 'Total Funding Amount',
             'prefix'     => "$",
         ]);
-
-        // Last Funding Date
         $this->crud->addColumn([
             'name' => 'last_funding_date',
             'type' => 'date',
             'label' => 'Last Funding Date'
         ]);
-
-        // Number Employees
         $this->crud->addColumn([
             'name' => 'number_employees',
             'type' => 'number',
             'label' => '# of Employees'
         ]);
-
-        // Summary
         $this->crud->addColumn([
             'name' => 'summary',
             'type' => 'textarea',
             'label' => 'Summary'
         ]);
-
-        // Notes
         $this->crud->addColumn([
             'name' => 'notes',
             'type' => 'textarea',
             'label' => 'Notes'
         ]);
-
-        // Logo
         $this->crud->addColumn([
             'label'        => "Logo",
             'name'         => "logo",
@@ -189,157 +143,119 @@ class CompanyCrudController extends CrudController
     {
         $this->crud->setValidation(CompanyRequest::class);
 
-        // Name
         $this->crud->addField([
-            'name' => 'name',
-            'type' => 'text',
+            'name'  => 'name',
+            'type'  => 'text',
             'label' => 'Name'
         ]);
-
-        // Ownership
         $this->crud->addField([
-            'name' => 'ownership',
-            'type' => 'radio',
-            'label' => 'Type',
-            'options'     => [
-                'Public Company' => 'Public Company',
-                'Privately Held' => 'Privately Held',
+            'name'    => 'ownership',
+            'type'    => 'radio',
+            'label'   => 'Type',
+            'options' => [
+                'Public Company'          => 'Public Company',
+                'Privately Held'          => 'Privately Held',
                 'Educational Institution' => 'Educational Institution',
-                'Government Agency' => 'Government Agency',
-                'Non-Profit' => 'Non-Profit'
+                'Government Agency'       => 'Government Agency',
+                'Non-Profit'              => 'Non-Profit'
             ],
-            'inline' => true,
+            'inline'  => true,
         ]);
-
-        // Focus
-        $this->crud->addField([    // Select2Multiple = n-n relationship (with pivot table)
-             'label'     => "Focus",
-             'type'      => 'select2_multiple',
-             'name'      => 'focus', // the method that defines the relationship in your Model
-             'entity'    => 'focus', // the method that defines the relationship in your Model
-             'attribute' => 'name', // foreign key attribute that is shown to user
-
-             'pivot'     => true, // on create&update, do you need to add/delete pivot table entries?
-             // 'select_all' => true, // show Select All and Clear buttons?
-             'options'   => (function ($query) {
-                return $query->orderBy('name', 'ASC')->get();
-            }),
-
-             // optional
-             'model'     => "App\Models\Focus", // foreign key model
-        ]);
-
-        // Location Relationship
-        $this->crud->addField([    // Select2Multiple = n-n relationship (with pivot table)
-             'label'     => "Locations",
-             'type'      => 'select2_multiple',
-             'name'      => 'locations', // the method that defines the relationship in your Model
-             'entity'    => 'locations', // the method that defines the relationship in your Model
-             'attribute' => 'name', // foreign key attribute that is shown to user
-
-             'pivot'     => true, // on create&update, do you need to add/delete pivot table entries?
-             // 'select_all' => true, // show Select All and Clear buttons?
-             'options'   => (function ($query) {
-                return $query->orderBy('name', 'ASC')->get();
-            }),
-
-             // optional
-             'model'     => "App\Models\Location", // foreign key model
-        ]);
-
-        // Investor Relationship
-        $this->crud->addField([    // Select2Multiple = n-n relationship (with pivot table)
-             'label'     => "Investors",
-             'type'      => 'select2_multiple',
-             'name'      => 'investors', // the method that defines the relationship in your Model
-             'entity'    => 'investors', // the method that defines the relationship in your Model
-             'attribute' => 'name', // foreign key attribute that is shown to user
-
-             'pivot'     => true, // on create&update, do you need to add/delete pivot table entries?
-             // 'select_all' => true, // show Select All and Clear buttons?
-             'options'   => (function ($query) {
-                return $query->orderBy('name', 'ASC')->get();
-            }),
-
-             // optional
-             'model'     => "App\Models\Investor", // foreign key model
-        ]);
-
-        // Ticker Symbol
         $this->crud->addField([
-            'name' => 'ticker_symbol',
-            'type' => 'text',
+            'label'     => "Focus",
+            'type'      => 'select2_multiple',
+            'name'      => 'focus',
+            'entity'    => 'focus',
+            'attribute' => 'name',
+
+            'pivot'   => true,
+            'options' => (function ($query) {
+                return $query->orderBy('name', 'ASC')->get();
+            }),
+            'model'   => "App\Models\Focus",
+        ]);
+        $this->crud->addField([
+            'label'     => "Locations",
+            'type'      => 'select2_multiple',
+            'name'      => 'locations',
+            'entity'    => 'locations',
+            'attribute' => 'name',
+
+            'pivot' => true,
+
+            'options' => (function ($query) {
+                return $query->orderBy('name', 'ASC')->get();
+            }),
+            'model'   => "App\Models\Location",
+        ]);
+        $this->crud->addField([
+            'label'     => "Investors",
+            'type'      => 'select2_multiple',
+            'name'      => 'investors',
+            'entity'    => 'investors',
+            'attribute' => 'name',
+            'pivot'     => true,
+
+            'options' => (function ($query) {
+                return $query->orderBy('name', 'ASC')->get();
+            }),
+            'model'   => "App\Models\Investor",
+        ]);
+        $this->crud->addField([
+            'name'  => 'ticker_symbol',
+            'type'  => 'text',
             'label' => 'Ticker Symbol'
         ]);
-
-        // Website
         $this->crud->addField([
-            'name' => 'website',
-            'type' => 'text',
+            'name'  => 'website',
+            'type'  => 'text',
             'label' => 'Website'
         ]);
-
-        // Founded Date
         $this->crud->addField([
-            'name' => 'founded_date',
-            'type' => 'date',
+            'name'  => 'founded_date',
+            'type'  => 'date',
             'label' => 'Founded Date'
         ]);
-
-        // Valuation
         $this->crud->addField([
-            'name' => 'valuation',
-            'type' => 'number',
-            'label' => 'Valuation',
-            'prefix'     => "$",
+            'name'   => 'valuation',
+            'type'   => 'number',
+            'label'  => 'Valuation',
+            'prefix' => "$",
         ]);
-
-        // Total Funding Amount
         $this->crud->addField([
-            'name' => 'total_funding_amount',
-            'type' => 'number',
-            'label' => 'Total Funding Amount',
-            'prefix'     => "$",
+            'name'   => 'total_funding_amount',
+            'type'   => 'number',
+            'label'  => 'Total Funding Amount',
+            'prefix' => "$",
         ]);
-
-        // Last Funding Date
         $this->crud->addField([
-            'name' => 'last_funding_date',
-            'type' => 'date',
+            'name'  => 'last_funding_date',
+            'type'  => 'date',
             'label' => 'Last Funding Date'
         ]);
-
-        // Number Employees
         $this->crud->addField([
-            'name' => 'number_employees',
-            'type' => 'number',
+            'name'  => 'number_employees',
+            'type'  => 'number',
             'label' => '# of Employees'
         ]);
-
-        // Summary
         $this->crud->addField([
-            'name' => 'summary',
-            'type' => 'textarea',
+            'name'  => 'summary',
+            'type'  => 'textarea',
             'label' => 'Summary'
         ]);
-
-        // Notes
         $this->crud->addField([
-            'name' => 'notes',
-            'type' => 'textarea',
+            'name'  => 'notes',
+            'type'  => 'textarea',
             'label' => 'Notes'
         ]);
-
-        // Logo
         $this->crud->addField([
             'label'        => "Logo",
             'name'         => "logo",
             'type'         => 'image',
             'upload'       => true,
-            'crop'         => true, // set to true to allow cropping, false to disable
-            'aspect_ratio' => 0, // ommit or set to 0 to allow any aspect ratio
-            'disk'      => 'local', // in case you need to show images from a different disk
-            // 'prefix'    => 'storage/' // in case your db value is only the file name (no path), you can use this to prepend your path to the image src (in HTML), before it's shown to the user;
+            'crop'         => true,
+            'aspect_ratio' => 0,
+            'disk'         => 'local',
         ]);
     }
 
@@ -387,7 +303,6 @@ class CompanyCrudController extends CrudController
         $oldFocus = $this->getFocusIds($originalCompany);
 
         $response = $this->traitUpdate();
-        $request = $response->getRequest();
 
         $company = $this->data['entry'];
         $newInvestors = $this->getInvestorIds($company);

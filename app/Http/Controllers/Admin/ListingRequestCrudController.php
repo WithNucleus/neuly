@@ -24,8 +24,6 @@ use Illuminate\Support\Facades\Storage;
 class ListingRequestCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 
@@ -36,10 +34,9 @@ class ListingRequestCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\App\Models\ListingRequest::class);
+        CRUD::setModel(ListingRequest::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/listingrequest');
         CRUD::setEntityNameStrings('listing request', 'listing requests');
-
     }
 
     /**
@@ -50,14 +47,6 @@ class ListingRequestCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        /**
-         * Columns can be defined using the fluent syntax or array syntax:
-         * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
-         */
-
-        CRUD::removeButton('create');
-        CRUD::removeButton('update');
         CRUD::addClause('where', 'status', '=', 'open');
         CRUD::addColumn(['name' => 'status', 'label' => 'Status', 'type' => 'string']);
         CRUD::addColumn(['name' => 'type', 'label' => 'Type', 'type' => 'string']);
@@ -65,7 +54,6 @@ class ListingRequestCrudController extends CrudController
         CRUD::addColumn(['name' => 'entity_name', 'label' => 'Entity',  'type' => 'string']);
         CRUD::addColumn(['name' => 'name', 'label' => 'Submitted by', 'type' => 'string']);
         CRUD::addColumn(['name' => 'created_at', 'label' => 'Request created', 'type' => 'date']);
-
     }
 
     /**
@@ -77,22 +65,12 @@ class ListingRequestCrudController extends CrudController
     protected function setupCreateOperation()
     {
         CRUD::setValidation(ListingRequestRequest::class);
-
-
-
-        /**
-         * Fields can be defined using the fluent syntax or array syntax:
-         * - CRUD::field('price')->type('number');
-         * - CRUD::addField(['name' => 'price', 'type' => 'number']));
-         */
     }
 
     protected function setupShowOperation()
     {
-        $request = \Request::getPathInfo();
-        $request_array = explode('/', $request);
-        $this_request_id = $request_array[3];
-        $listingRequest = ListingRequest::find($this_request_id);
+        $requestId = Route::current()->parameter('id');
+        $listingRequest = ListingRequest::find($requestId);
 
         $entity = $this->getEntityModel($listingRequest);
 
@@ -103,8 +81,6 @@ class ListingRequestCrudController extends CrudController
             'isUpdate' => $listingRequest->is_update,
             'entityType' => $listingRequest->type,
         ])->to('after_content');
-
-        $this->crud->removeButton('update');
 
         if ($entity != null OR $listingRequest->is_update == false) {
             $this->crud->addButtonFromModelFunction('line', 'accept', 'generateAcceptButton', 'beginning');

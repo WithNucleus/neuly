@@ -6,8 +6,6 @@ use App\Http\Requests\RedirectRecordRequest;
 use App\Models\Redirect;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
-use Backpack\CRUD\app\Library\Widget;
-use Illuminate\Database\Eloquent\Relations\Relation;
 
 /**
  * Class RedirectCrudController
@@ -28,7 +26,6 @@ class RedirectCrudController extends CrudController
      */
     public function setup()
     {
-        // Check Guard
         if(!backpack_user()->can('manage redirects')) {
             abort(404);
         }
@@ -57,12 +54,12 @@ class RedirectCrudController extends CrudController
         $redirect = Redirect::findOrFail($id);
 
         $this->crud->addColumn([
-            'name'      => 'redirectable', // name of relationship method in the model
+            'name'      => 'redirectable',
             'type'      => 'relationship',
-            'label'     => 'Redirectable (' . $redirect->redirectable->getMorphClass() . ')', // Table column heading
-            'entity'    => 'redirectable', // the method that defines the relationship in your Model
-            'attribute' => 'name', // foreign key attribute that is shown to user
-            'model'     => $redirect->redirectable->getMorphClass(), // foreign key model
+            'label'     => 'Redirectable (' . $redirect->redirectable->getMorphClass() . ')',
+            'entity'    => 'redirectable',
+            'attribute' => 'name',
+            'model'     => $redirect->redirectable->getMorphClass(),
         ]);
 
         $content = $this->traitShow($id);

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Te7aHoudini\LaravelTrix\Traits\HasTrixRichText;
 
@@ -17,11 +16,7 @@ class MemberNote extends Model
     */
 
     protected $table = 'member_notes';
-    // protected $primaryKey = 'id';
-    // public $timestamps = false;
     protected $guarded = ['id'];
-    // protected $hidden = [];
-    // protected $dates = [];
 
     /*
     |--------------------------------------------------------------------------

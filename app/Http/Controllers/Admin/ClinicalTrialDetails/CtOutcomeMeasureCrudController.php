@@ -40,7 +40,7 @@ class CtOutcomeMeasureCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::setFromDb(); // columns
+        CRUD::setFromDb();
     }
 
     /**
@@ -53,7 +53,7 @@ class CtOutcomeMeasureCrudController extends CrudController
     {
         CRUD::setValidation(CtOutcomeMeasureRequest::class);
 
-        CRUD::setFromDb(); // fields
+        CRUD::setFromDb();
     }
 
     /**

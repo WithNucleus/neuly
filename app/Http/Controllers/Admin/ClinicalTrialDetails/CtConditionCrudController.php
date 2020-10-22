@@ -40,7 +40,7 @@ class CtConditionCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::setFromDb(); // columns
+        CRUD::setFromDb();
     }
 
     /**
@@ -53,7 +53,7 @@ class CtConditionCrudController extends CrudController
     {
         CRUD::setValidation(CtConditionRequest::class);
 
-        CRUD::setFromDb(); // fields
+        CRUD::setFromDb();
     }
 
     /**

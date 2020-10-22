@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\ClinicaltrialRequest;
+use App\Models\Clinicaltrial;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -26,23 +27,20 @@ class ClinicaltrialCrudController extends CrudController
      */
     public function setup()
     {
-        // Check Guard
         if(!backpack_user()->can('edit clinical trials')) {
             abort(404);
         }
 
-        CRUD::setModel(\App\Models\Clinicaltrial::class);
+        CRUD::setModel(Clinicaltrial::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/clinicaltrial');
         CRUD::setEntityNameStrings('Clinical trial', 'Clinical trials');
 
-        // List
         $this->crud->operation('list', function() {
 
             $this->crud->addColumn(['name' => 'nct_number', 'type' => 'text', 'label' => 'NCT Number']);
             $this->crud->addColumn(['name' => 'title', 'type' => 'text', 'label' => 'Title']);
             $this->crud->addColumn(['name' => 'status', 'type' => 'text', 'label' => 'Status']);
 
-            // Focus -- Relationship
             $this->crud->addColumn([
                'label'     => 'Focus',
                'type'      => 'select_multiple',
@@ -50,41 +48,11 @@ class ClinicaltrialCrudController extends CrudController
                'entity'    => 'focus',
                'attribute' => 'name',
                'model'     => 'App\Models\Focus',
-               // 'orderable' => true,
                'options'   => (function ($query) {
                     return $query->orderBy('name', 'ASC')->get();
                 }),
             ]);
 
-            // Location -- Relationship
-            // $this->crud->addColumn([
-            //    'label'     => 'Location',
-            //    'type'      => 'select_multiple',
-            //    'name'      => 'locations',
-            //    'entity'    => 'locations',
-            //    'attribute' => 'name',
-            //    'model'     => 'App\Models\Location',
-            //    // 'orderable' => true,
-            //    'options'   => (function ($query) {
-            //         return $query->orderBy('name', 'ASC')->get();
-            //     }),
-            // ]);
-
-            // People -- Relationship
-            // $this->crud->addColumn([
-            //    'label'     => 'People',
-            //    'type'      => 'select_multiple',
-            //    'name'      => 'people',
-            //    'entity'    => 'people',
-            //    'attribute' => 'name',
-            //    'model'     => 'App\Models\Person',
-            //    // 'orderable' => true,
-            //    'options'   => (function ($query) {
-            //         return $query->orderBy('name', 'ASC')->get();
-            //     }),
-            // ]);
-
-            // Company -- Relationship
             $this->crud->addColumn([
                'label'     => 'Collaborators',
                'type'      => 'select_multiple',
@@ -92,7 +60,6 @@ class ClinicaltrialCrudController extends CrudController
                'entity'    => 'companies',
                'attribute' => 'name',
                'model'     => 'App\Models\Company',
-               // 'orderable' => true,
                'options'   => (function ($query) {
                     return $query->orderBy('name', 'ASC')->get();
                 }),
@@ -109,8 +76,6 @@ class ClinicaltrialCrudController extends CrudController
      */
     protected function setupShowOperation()
     {
-
-        // Focus -- Relationship
         $this->crud->addColumn([
            'label'     => 'Focus',
            'type'      => 'select_multiple',
@@ -118,13 +83,11 @@ class ClinicaltrialCrudController extends CrudController
            'entity'    => 'focus',
            'attribute' => 'name',
            'model'     => 'App\Models\Focus',
-           // 'orderable' => true,
            'options'   => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
         ]);
 
-        // Company -- Relationship
         $this->crud->addColumn([
            'label'     => 'Collaborators',
            'type'      => 'select_multiple',
@@ -132,13 +95,11 @@ class ClinicaltrialCrudController extends CrudController
            'entity'    => 'companies',
            'attribute' => 'name',
            'model'     => 'App\Models\Company',
-           // 'orderable' => true,
            'options'   => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
         ]);
 
-        // Location -- Relationship
         $this->crud->addColumn([
            'label'     => 'Location',
            'type'      => 'select_multiple',
@@ -146,13 +107,11 @@ class ClinicaltrialCrudController extends CrudController
            'entity'    => 'locations',
            'attribute' => 'name',
            'model'     => 'App\Models\Location',
-           // 'orderable' => true,
            'options'   => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
         ]);
 
-        // People -- Relationship
         $this->crud->addColumn([
            'label'     => 'People',
            'type'      => 'select_multiple',
@@ -160,7 +119,6 @@ class ClinicaltrialCrudController extends CrudController
            'entity'    => 'people',
            'attribute' => 'name',
            'model'     => 'App\Models\Person',
-           // 'orderable' => true,
            'options'   => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
@@ -204,30 +162,7 @@ class ClinicaltrialCrudController extends CrudController
             }),
         ]);
 
-        CRUD::setFromDb(); // columns
-
-        /**
-         * Columns can be defined using the fluent syntax or array syntax:
-         * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
-         */
-    }
-
-    /**
-     * Define what happens when the List operation is loaded.
-     *
-     * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
-     * @return void
-     */
-    protected function setupListOperation()
-    {
-        //CRUD::setFromDb(); // columns
-
-        /**
-         * Columns can be defined using the fluent syntax or array syntax:
-         * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
-         */
+        CRUD::setFromDb();
     }
 
     /**
@@ -240,10 +175,7 @@ class ClinicaltrialCrudController extends CrudController
     {
         CRUD::setValidation(ClinicaltrialRequest::class);
 
-        //CRUD::setFromDb(); // fields
-
         $this->crud->addField(['name' => 'title', 'type' => 'text', 'label' => 'Title']);
-        // $this->crud->addField(['name' => 'slug', 'type' => 'text', 'label' => 'Page Slug']);
         $this->crud->addField(['name' => 'nct_number', 'type' => 'text', 'label' => 'NCT Number']);
 
         $this->crud->addField(['name' => 'acronym', 'type' => 'text', 'label' => 'Acronym']);
@@ -263,64 +195,57 @@ class ClinicaltrialCrudController extends CrudController
         $this->crud->addField(['name' => 'results_first_posted', 'type' => 'date', 'label' => 'Results first posted']);
         $this->crud->addField(['name' => 'last_update_posted', 'type' => 'date', 'label' => 'Last update posted']);
 
-        // Location -- Relationship
-        $this->crud->addField([    // Select2Multiple = n-n relationship (with pivot table)
-             'label'     => "Locations",
-             'type'      => 'select2_multiple',
-             'name'      => 'locations', // the method that defines the relationship in your Model
-             'entity'    => 'locations', // the method that defines the relationship in your Model
-             'attribute' => 'name', // foreign key attribute that is shown to user
+        $this->crud->addField([
+            'label'     => "Locations",
+            'type'      => 'select2_multiple',
+            'name'      => 'locations',
+            'entity'    => 'locations',
+            'attribute' => 'name',
 
-             'pivot'     => true, // on create&update, do you need to add/delete pivot table entries?
-             // 'select_all' => true, // show Select All and Clear buttons?
-             'options'   => (function ($query) {
+            'pivot'   => true,
+            'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
-
-             // optional
-             'model'     => "App\Models\Location", // foreign key model
+            'model'   => "App\Models\Location",
         ]);
 
-        // People Relationship
         $this->crud->addField([
-             'label'     => "People",
-             'type'      => 'select2_multiple',
-             'name'      => 'people',
-             'entity'    => 'people',
-             'attribute' => 'name',
-             'pivot'     => true,
-             'options'   => (function ($query) {
+            'label'     => "People",
+            'type'      => 'select2_multiple',
+            'name'      => 'people',
+            'entity'    => 'people',
+            'attribute' => 'name',
+            'pivot'     => true,
+            'options'   => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
-             'model'     => "App\Models\Person",
+            'model'     => "App\Models\Person",
         ]);
 
-        // Company Relationship
         $this->crud->addField([
-             'label'     => "Organizations",
-             'type'      => 'select2_multiple',
-             'name'      => 'companies',
-             'entity'    => 'companies',
-             'attribute' => 'name',
-             'pivot'     => true,
-             'options'   => (function ($query) {
+            'label'     => "Organizations",
+            'type'      => 'select2_multiple',
+            'name'      => 'companies',
+            'entity'    => 'companies',
+            'attribute' => 'name',
+            'pivot'     => true,
+            'options'   => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
-             'model'     => "App\Models\Company",
+            'model'     => "App\Models\Company",
         ]);
 
-        // Focus Relationship
         $this->crud->addField([
-             'label'     => "Focus",
-             'type'      => 'select2_multiple',
-             'name'      => 'focus',
-             'entity'    => 'focus',
-             'attribute' => 'name',
-             'pivot'     => true,
-             'options'   => (function ($query) {
+            'label'     => "Focus",
+            'type'      => 'select2_multiple',
+            'name'      => 'focus',
+            'entity'    => 'focus',
+            'attribute' => 'name',
+            'pivot'     => true,
+            'options'   => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
-             'model'     => "App\Models\Focus",
+            'model'     => "App\Models\Focus",
         ]);
 
         $this->crud->addField([
@@ -366,12 +291,6 @@ class ClinicaltrialCrudController extends CrudController
                 return $query->orderBy('value', 'ASC')->get();
             }),
         ]);
-
-        /**
-         * Fields can be defined using the fluent syntax or array syntax:
-         * - CRUD::field('price')->type('number');
-         * - CRUD::addField(['name' => 'price', 'type' => 'number']));
-         */
     }
 
     /**

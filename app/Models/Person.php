@@ -8,10 +8,11 @@ use App\Models\Traits\OldSlugRedirectable;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Log;
+use Intervention\Image\Facades\Image;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Person extends Model implements EntityContract
@@ -28,12 +29,7 @@ class Person extends Model implements EntityContract
     */
 
     protected $table = 'people';
-    // protected $primaryKey = 'id';
-    // public $timestamps = false;
     protected $guarded = ['id'];
-    // protected $fillable = [];
-    // protected $hidden = [];
-    // protected $dates = [];
 
     // log activity for all attributes, which not listed in $guarded array
     protected static $logUnguarded = true;
@@ -110,39 +106,33 @@ class Person extends Model implements EntityContract
     |--------------------------------------------------------------------------
     */
 
-    // Each Person Can Have Many Companies
     public function companies() {
         return $this->belongsToMany('App\Models\Company', 'company_person', 'person_id', 'company_id')
                     ->withPivot(['position'])
                     ->withTimestamps();
     }
 
-    // Each Person Can Have Multiple Locations
     public function locations() {
         return $this->belongsToMany('App\Models\Location', 'location_person', 'person_id', 'location_id')
             ->withTimestamps();
     }
 
-    // Each Person Can Have Many Investors
     public function investors() {
         return $this->belongsToMany('App\Models\Investor', 'investor_person', 'person_id', 'investor_id')
                     ->withPivot(['role'])
                     ->withTimestamps();
     }
 
-    // Each Person Can Have Many Research Items
     public function research() {
         return $this->belongsToMany('App\Models\Research', 'person_research', 'person_id', 'research_id')
                     ->withTimestamps();
     }
 
-    // Each Person Can Have Multiple Events
     public function events() {
         return $this->belongsToMany('App\Models\Event', 'event_person', 'person_id', 'event_id')
                     ->withTimestamps();
     }
 
-    // Each Person Can Have Multiple Clinical Trials
     public function clinicaltrials() {
         return $this->belongsToMany('App\Models\Clinicaltrial', 'clinicaltrial_person', 'person_id', 'clinicaltrial_id')
                     ->withTimestamps();
@@ -175,38 +165,26 @@ class Person extends Model implements EntityContract
         // if a base64 was sent, store it in the db
         if (Str::startsWith($value, 'data:image'))
         {
-            // Make the image
-            $image = \Image::make($value)->encode('png', 90);
-            // Delete the previous image, if there was one
-            \Storage::disk($disk)->delete('public/' . $this->photo);
-            // Store the image on disk
-            \Storage::disk($disk)->put($destination_path . '/' . $filename, $image->stream());
-            // Save the public path to the database
+            $image = Image::make($value)->encode('png', 90);
+
+            Storage::disk($disk)->delete('public/' . $this->photo);
+            Storage::disk($disk)->put($destination_path . '/' . $filename, $image->stream());
+
             $public_destination_path = Str::replaceFirst('public/', '', $destination_path);
 
             $this->attributes['photo'] = $public_destination_path . '/' . $filename;
-
         } else {
-
             // if the image was erased
             if ($value == null) {
-
-                // delete the image from disk
-                \Storage::disk($disk)->delete('public/' . $this->photo);
-
-                // set null in the database column
+                Storage::disk($disk)->delete('public/' . $this->photo);
                 $this->attributes['photo'] = null;
 
             } elseif (Str::startsWith($value, '/storage')) {
-
                 // do nothing because image isn't updated
-
             } else {
-
                 // moving listing request image
                 $this->attributes['photo'] = $value;
             }
-
         }
     }
 

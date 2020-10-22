@@ -40,7 +40,7 @@ class CtStudyDesignCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::setFromDb(); // columns
+        CRUD::setFromDb();
     }
 
     /**
@@ -53,7 +53,7 @@ class CtStudyDesignCrudController extends CrudController
     {
         CRUD::setValidation(CtStudyDesignRequest::class);
 
-        CRUD::setFromDb(); // fields
+        CRUD::setFromDb();
     }
 
     /**

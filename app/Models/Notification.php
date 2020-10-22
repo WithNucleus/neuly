@@ -3,12 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Notification extends Model
 {
 	protected $table = 'notifications';
     protected $guarded = ['id'];
+
+    /*
+    |--------------------------------------------------------------------------
+    | SCOPES
+    |--------------------------------------------------------------------------
+    */
 
     public function scopeUnseen($query)
     {
@@ -19,6 +24,12 @@ class Notification extends Model
     {
         return $query->where('user_id', '=', $userId);
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | RELATIONS
+    |--------------------------------------------------------------------------
+    */
 
     public function notifier()
     {

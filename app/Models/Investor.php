@@ -57,20 +57,17 @@ class Investor extends Model implements EntityContract
     |--------------------------------------------------------------------------
     */
 
-    // Each Investor Can Have Multiple Locations
     public function locations() {
         return $this->belongsToMany('App\Models\Location', 'investor_location', 'investor_id', 'location_id')
             ->withTimestamps();
     }
 
-    // Each Investor Can Have Multiple Companies
     public function companies() {
         return $this->belongsToMany('App\Models\Company', 'company_investor', 'investor_id', 'company_id')
             ->withPivot(['type'])
             ->withTimestamps();
     }
 
-    // Each Investor Can Have Multiple People
     public function people() {
         return $this->belongsToMany('App\Models\Person', 'investor_person', 'investor_id', 'person_id')
             ->withPivot(['role'])
@@ -96,11 +93,8 @@ class Investor extends Model implements EntityContract
     */
 
     public function setNameAttribute($value) {
-
         $this->attributes['name'] = $value;
-
         $this->attributes['slug'] = Str::slug($value);
-
     }
 
     public function setLogoAttribute($value)
@@ -121,14 +115,13 @@ class Investor extends Model implements EntityContract
         // if a base64 was sent, store it in the db
         if (Str::startsWith($value, 'data:image'))
         {
-            // Make the image
             $image = Image::make($value)->encode('png', 90);
-            // 3. Delete the previous image, if there was one
+
             Storage::disk($disk)->delete($this->{$attribute_name});
-            // Store the image on disk
             Storage::disk($disk)->put($destination_path.'/'.$filename, $image->stream());
-            // 4. Save the public path to the database
+
             $public_destination_path = Str::replaceFirst($public_path, '', $destination_path);
+
             return $this->attributes[$attribute_name] = $public_destination_path.'/'.$filename;
         }
 

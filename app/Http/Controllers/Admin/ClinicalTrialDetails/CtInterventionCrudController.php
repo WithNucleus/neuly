@@ -40,7 +40,7 @@ class CtInterventionCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::setFromDb(); // columns
+        CRUD::setFromDb();
     }
 
     /**
@@ -53,7 +53,7 @@ class CtInterventionCrudController extends CrudController
     {
         CRUD::setValidation(CtInterventionRequest::class);
 
-        CRUD::setFromDb(); // fields
+        CRUD::setFromDb();
     }
 
     /**

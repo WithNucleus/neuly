@@ -98,37 +98,31 @@ class Location extends Model implements EntityContract
     |--------------------------------------------------------------------------
     */
 
-    // Each Location Can Have Multiple Companies
     public function companies() {
         return $this->belongsToMany('App\Models\Company', 'company_location', 'location_id', 'company_id')
             ->withTimestamps();
     }
 
-    // Each Location Can Have Multiple People
     public function people() {
         return $this->belongsToMany('App\Models\Person', 'location_person', 'location_id', 'person_id')
             ->withTimestamps();
     }
 
-    // Each Location Can Have Multiple Investors
     public function investors() {
         return $this->belongsToMany('App\Models\Investor', 'investor_location', 'location_id', 'investor_id')
             ->withTimestamps();
     }
 
-    // Each Location Can Have Multiple Jobs
     public function jobs() {
         return $this->belongsToMany('App\Models\Job', 'job_location', 'location_id', 'job_id')
             ->withTimestamps();
     }
 
-    // Each Location Can Have Multiple Events
     public function events() {
         return $this->belongsToMany('App\Models\Event', 'event_location', 'location_id', 'event_id')
             ->withTimestamps();
     }
 
-    // Each Location Can Have Multiple Clinical Trials
     public function clinicaltrials() {
         return $this->belongsToMany('App\Models\Clinicaltrial', 'clinicaltrial_location', 'location_id', 'clinicaltrial_id')
             ->withTimestamps();
@@ -153,11 +147,8 @@ class Location extends Model implements EntityContract
     */
 
     public function setNameAttribute($value) {
-
         $this->attributes['name'] = $value;
-
         $this->attributes['slug'] = Str::slug($value);
-
     }
 
     /**

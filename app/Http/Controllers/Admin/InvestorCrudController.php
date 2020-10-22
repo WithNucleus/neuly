@@ -10,6 +10,7 @@ use App\Models\Location;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Backpack\CRUD\app\Library\Widget;
+use Illuminate\Support\Facades\Route;
 
 /**
  * Class InvestorCrudController
@@ -31,13 +32,11 @@ class InvestorCrudController extends CrudController
      */
     public function setup()
     {
-
-        // Check Guard
         if(!backpack_user()->can('edit investors')) {
             abort(404);
         }
 
-        CRUD::setModel(\App\Models\Investor::class);
+        CRUD::setModel(Investor::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/investor');
         CRUD::setEntityNameStrings('investor', 'investors');
 
@@ -51,21 +50,17 @@ class InvestorCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-
         $this->crud->addColumn(['name' => 'name']);
         $this->crud->addColumn(['name' => 'type']);
         $this->crud->addColumn(['name' => 'website']);
-
         $this->crud->addColumn([
             'name' => 'created_at',
             'type' => 'date'
         ]);
-
         $this->crud->addColumn([
             'name' => 'updated_at',
             'type' => 'date'
         ]);
-
     }
 
     /**
@@ -76,12 +71,9 @@ class InvestorCrudController extends CrudController
      */
     protected function setupShowOperation()
     {
-        $request = \Request::getPathInfo();
-        $request_array = explode('/', $request);
-        $this_investor_id = $request_array[3];
-        $investor = \App\Models\Investor::find($this_investor_id);
+        $investorId = Route::current()->parameter('id');
+        $investor = Investor::find($investorId);
 
-        // Company People Widget
         Widget::add([
             'type' => 'view',
             'view' => 'customwidget.investor_show_widget',
@@ -89,8 +81,6 @@ class InvestorCrudController extends CrudController
         ])->to('before_content');
 
         $this->setupListOperation();
-
-        // Logo
         $this->crud->addColumn([
             'label'        => "Logo",
             'name'         => "logo",
@@ -109,62 +99,51 @@ class InvestorCrudController extends CrudController
     {
         CRUD::setValidation(InvestorRequest::class);
 
-        // Name
         $this->crud->addField([
-            'name' => 'name',
-            'type' => 'text',
+            'name'  => 'name',
+            'type'  => 'text',
             'label' => 'Name'
         ]);
-
-        // Website
         $this->crud->addField([
-            'name' => 'website',
-            'type' => 'text',
+            'name'  => 'website',
+            'type'  => 'text',
             'label' => 'Website'
         ]);
-
-        // Type
         $this->crud->addField([
-            'name' => 'type',
-            'type' => 'radio',
-            'label' => 'Type',
-            'options'     => [
-                'Venture Capital' => 'Venture Capital',
-                'Private Equity' => 'Private Equity',
+            'name'    => 'type',
+            'type'    => 'radio',
+            'label'   => 'Type',
+            'options' => [
+                'Venture Capital'    => 'Venture Capital',
+                'Private Equity'     => 'Private Equity',
                 'Private Individual' => 'Private Individual',
             ],
-            'inline' => true,
+            'inline'  => true,
         ]);
-
-        // Location Relationship
         $this->crud->addField([
-             'label'     => "Locations",
-             'type'      => 'select2_multiple',
-             'name'      => 'locations',
-             'entity'    => 'locations',
-             'attribute' => 'name',
-             'pivot'     => true,
-             'options'   => (function ($query) {
+            'label'     => "Locations",
+            'type'      => 'select2_multiple',
+            'name'      => 'locations',
+            'entity'    => 'locations',
+            'attribute' => 'name',
+            'pivot'     => true,
+            'options'   => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
             'model'     => "App\Models\Location", // foreign key model
         ]);
-
-        // Company Relationship
         $this->crud->addField([
-             'label'     => "Companies",
-             'type'      => 'select2_multiple',
-             'name'      => 'companies',
-             'entity'    => 'companies',
-             'attribute' => 'name',
-             'pivot'     => true,
-             'options'   => (function ($query) {
+            'label'     => "Companies",
+            'type'      => 'select2_multiple',
+            'name'      => 'companies',
+            'entity'    => 'companies',
+            'attribute' => 'name',
+            'pivot'     => true,
+            'options'   => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
             'model'     => "App\Models\Company",
         ]);
-
-        // Logo
         $this->crud->addField([
             'label'        => "Logo",
             'name'         => "logo",
@@ -172,9 +151,8 @@ class InvestorCrudController extends CrudController
             'upload'       => true,
             'crop'         => true,
             'aspect_ratio' => 0,
-            'disk'      => 'local',
+            'disk'         => 'local',
         ]);
-
     }
 
     /**
@@ -212,7 +190,7 @@ class InvestorCrudController extends CrudController
                 $company = Company::find($companyId);
 
                 $title = 'New investor for ' . $company->name;
-                
+
                 $description = $investor->getShowLink() . ' is a recently added investor in ' . $company->getShowLink() . ', ' . $company->getTypeDescription() . '.';
 
                 SendNotification::dispatch($company, $title, $description, 'organizations');
@@ -224,13 +202,11 @@ class InvestorCrudController extends CrudController
 
     public function update()
     {
-
         $originalInvestor = $this->getOriginalModel($this->crud);
         $oldCompanies= $this->getCompanyIds($originalInvestor);
         $oldLocations = $this->getLocationIds($originalInvestor);
 
         $response = $this->traitUpdate();
-        $request = $response->getRequest();
 
         $investor = $this->data['entry'];
         $newCompanies = $this->getCompanyIds($investor);

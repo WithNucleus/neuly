@@ -6,7 +6,6 @@ use App\Events\SendNotification;
 use App\Http\Controllers\Controller;
 use App\Models\Investor;
 use Illuminate\Http\Request;
-use App\Models\Company;
 use App\Models\Person;
 
 class PersonInvestorController extends Controller
@@ -18,21 +17,14 @@ class PersonInvestorController extends Controller
      */
     public function __construct()
     {
-        // Auth and Permission Middleware
         $this->middleware('auth');
         $this->middleware(['permission:edit investors']);
     }
 
-    // Show View for Adding People to Companies
-    public function index(Request $request, $id) {
-
-        // Get Company
-        $person = Person::with('companies')->find($id);
-
-        // Get All People
+    public function index($id) {
+        $person = Person::with('companies')->findOrFail($id);
         $investors = Investor::orderBy('name')->get();
 
-        // Return View to Add People and Relationships
         return view('admin.person_investor', compact('person', 'investors'));
     }
 
