@@ -12,8 +12,9 @@ use Yadahan\AuthenticationLog\AuthenticationLogable;
 use Spatie\Permission\Traits\HasRoles;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
+
     use Notifiable;
     use HasRoles;
     use CrudTrait;

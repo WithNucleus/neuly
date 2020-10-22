@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Auth Routes for Front-End
-Auth::routes();
+Auth::routes(['verify' => true]);
 
 Route::get('login/{provider}', 'Auth\LoginController@redirectToProvider')->name('login.social');
 Route::get('login/{provider}/callback', 'Auth\LoginController@handleProviderCallback');
@@ -30,9 +30,13 @@ Route::get('/about', 'Content\AboutController@index')->name('about');
 Route::get('/psychedelic-index', 'Content\IndexController@index')->name('discover.index');
 
 //Insights main page
-Route::get('/insights', 'Index\InsightsController@index')->name('discover.insights');
-Route::get('/insights/request', 'Index\InsightsController@request')->name('discover.insights.request');
-Route::post('/insights/request', 'Index\InsightsController@saveRequest')->name('discover.insights.saveRequest');
+Route::group([
+    'middleware' => 'verifiedIfAuthorized',
+], function () {
+    Route::get('/insights', 'Index\InsightsController@index')->name('discover.insights');
+    Route::get('/insights/request', 'Index\InsightsController@request')->name('discover.insights.request');
+    Route::post('/insights/request', 'Index\InsightsController@saveRequest')->name('discover.insights.saveRequest');
+});
 
 //Insights
 Route::group([
@@ -49,7 +53,7 @@ Route::group([
 
     //insights only for registered users
     Route::group([
-        'middleware' => 'auth',
+        'middleware' => ['auth', 'verified'],
     ], function () {
         Route::get('/jobs-by-focus', 'JobsByFocusController@index')->name('jobs-by-focus');
         Route::get('/jobs-by-type', 'JobsByTypeController@index')->name('jobs-by-type');
@@ -197,9 +201,11 @@ Route::post('/feedback', 'FeedbackController@store')->name('feedback.store');
 Route::get('/register/success', 'Auth\SuccessController@thanks')->name('register.success');
 
 /* MEMBER DASHBOARD */
-Route::get('/dashboard', 'Dashboard\DashboardController@index')->name('member.dashboard');
+Route::get('/dashboard', 'Dashboard\DashboardController@index')
+    ->middleware('verifiedIfAuthorized')
+    ->name('member.dashboard');
 
-Route::group(['middleware' => 'auth'], function () {
+Route::group(['middleware' => ['auth', 'verified']], function () {
 
     /* MEMBER DASHBOARD PAGES */
     Route::group(['prefix' => '/dashboard'], function () {
