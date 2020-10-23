@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Helpers\NotificationHelper;
+use App\Notifications\FeedbackCreated;
 use App\User;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -25,53 +27,36 @@ class Feedback extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function getStatusName()
+    protected static function booted()
     {
-        return ucfirst($this->status);
+        static::created(function ($model) {
+            NotificationHelper::sendAdminNotifications(new FeedbackCreated($model));
+        });
     }
 
-    public function getTypeName()
+    public function getStatusAttribute($value)
     {
-        return ucfirst($this->type);
+        return ucfirst($value);
     }
 
-    public function getUserName()
+    public function getTypeAttribute($value)
     {
-        $name = $this->user_name;
-
-        if($this->user_id !== null)
-        {
-            $user = User::find($this->user_id);
-            $name = $user->name;
-        }
-
-        return $name;
+        return ucfirst($value);
     }
 
-    public function getUserEmail()
+    public function getUserNameAttribute($value)
     {
-        $email = $this->user_email;
-
-        if($this->user_id !== null)
-        {
-            $user = User::find($this->user_id);
-            $email = $user->email;
-        }
-
-        return $email;
+        return ($this->user !== null) ? $this->user->name : $value;
     }
 
-    public function getAssigneeName()
+    public function getUserEmailAttribute($value)
     {
-        $assignee = 'Unassigned';
+        return ($this->user !== null) ? $this->user->email : $value;
+    }
 
-        if($this->assignee_id !== null)
-        {
-            $user = User::find($this->assignee_id);
-            $assignee = $user->name;
-        }
-
-        return $assignee;
+    public function getAssigneeNameAttribute()
+    {
+        return ($this->assignee !== null) ? $this->assignee->name : 'Unassigned';
     }
 
     /*
@@ -80,9 +65,14 @@ class Feedback extends Model
     |--------------------------------------------------------------------------
     */
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
     public function assignee()
     {
-        return $this->belongsTo('App\User', 'assignee_id');
+        return $this->belongsTo(User::class, 'assignee_id');
     }
 
     /*
