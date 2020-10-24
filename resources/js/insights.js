@@ -89,3 +89,23 @@ $('.js-bar-chart').each(function (i, item) {
             .datasets(['bar']),
     });
 });
+
+document.getElementById('open-full-screen-tracker').onclick = function() {
+    maximizeContent();
+}
+
+document.getElementById('close-full-screen-tracker').onclick = function() {
+    closeCsv();
+}
+
+function maximizeContent() {
+    document.getElementById('clinical-trial-tracker-container').classList.toggle('fixed');
+    document.getElementById('close-full-screen-tracker').classList.toggle('d-none');
+    document.body.classList.toggle('noscroll');
+}
+
+function closeCsv() {
+    document.getElementById('clinical-trial-tracker-container').classList.toggle('fixed');
+    document.getElementById('close-full-screen-tracker').classList.toggle('d-none');
+    document.body.classList.toggle('noscroll');
+}

@@ -156,7 +156,7 @@ table.dataTable thead .sorting_desc_disabled::after {
 }
 
 #clinical-trial-tracker-container .position-relative {
-    z-index: 155;
+    z-index: 1;
 }
 
 #clinical-trial-tracker {
@@ -190,4 +190,27 @@ table.dataTable thead .sorting_desc_disabled::after {
 #clinical-trial-tracker tr td:last-of-type,
 #clinical-trial-tracker tr th:last-of-type {
     border-right: 0 !important;
+}
+
+#clinical-trial-tracker-container.fixed {
+    position: fixed;
+    display:  block;
+    top:  0;
+    left:  0;
+    width:  100%;
+    height:  100%;
+    z-index:  1031;
+    background: rgba(0, 0, 0, .80);
+    padding:  0 2rem 2rem 2rem;
+}
+
+#clinical-trial-tracker.fixed .position-relative {
+    height: 100%;
+}
+
+#close-full-screen-tracker {
+    position:  fixed;
+    z-index:  1032;
+    top: 3rem;
+    right:  1rem;
 }

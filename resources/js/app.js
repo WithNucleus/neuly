@@ -266,7 +266,7 @@ $(document).ready(function() {
             button.addClass('text-dark');
             button.addClass('lead-smaller');
         })
-    })
+    });
 });
 
 require('./bootstrap');
