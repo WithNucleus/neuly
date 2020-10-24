@@ -253,26 +253,38 @@ class Person extends Model implements EntityContract
             //relations
             'locations'       => [
                 'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relation'      => EntityMergeHelper::RELATION_N_N,
                 'relationField' => 'name',
             ],
             'companies'       => [
                 'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relation'      => EntityMergeHelper::RELATION_N_N,
                 'relationField' => 'name',
+                'pivotColumns'  => [
+                    'position'
+                ],
             ],
             'investors'       => [
                 'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relation'      => EntityMergeHelper::RELATION_N_N,
                 'relationField' => 'name',
+                'pivotColumns'  => [
+                    'role'
+                ],
             ],
             'research'        => [
                 'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relation'      => EntityMergeHelper::RELATION_N_N,
                 'relationField' => 'name',
             ],
             'events'          => [
                 'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relation'      => EntityMergeHelper::RELATION_N_N,
                 'relationField' => 'name',
             ],
             'clinicaltrials'  => [
                 'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relation'      => EntityMergeHelper::RELATION_N_N,
                 'relationField' => 'title',
             ],
         ];

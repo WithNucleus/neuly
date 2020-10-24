@@ -132,31 +132,38 @@ class Focus extends Model implements EntityContract
             //relations
             'companies'      => [
                 'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relation'      => EntityMergeHelper::RELATION_N_N,
                 'relationField' => 'name',
             ],
             'investors'      => [
                 'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relation'      => EntityMergeHelper::RELATION_N_N,
                 'relationField' => 'name',
             ],
             'research'       => [
                 'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relation'      => EntityMergeHelper::RELATION_N_N,
                 'relationField' => 'name',
             ],
             'jobs'           => [
                 'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relation'      => EntityMergeHelper::RELATION_N_N,
                 'relationField' => 'job_title',
             ],
             'events'         => [
                 'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relation'      => EntityMergeHelper::RELATION_N_N,
                 'relationField' => 'name',
             ],
             'newsarticles'   => [
                 'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relation'      => EntityMergeHelper::RELATION_N_N,
                 'relationField' => 'name',
                 'label'         => 'News Articles'
             ],
             'clinicaltrials' => [
                 'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relation'      => EntityMergeHelper::RELATION_N_N,
                 'relationField' => 'title',
             ],
         ];

@@ -119,23 +119,71 @@ class EntityMergeController extends Controller
             }
         }
 
+        $mapping = $masterEntity::getMergeMapping();
+
         foreach ($relations as $relationName => $source) {
             if ($source === EntityMergeHelper::SOURCE_SECONDARY || $source === EntityMergeHelper::SOURCE_MERGE) {
 
-                if ($source === EntityMergeHelper::SOURCE_SECONDARY) {
-                    // clear master entity relation's data to save only secondary entity relations
-                    $masterEntity->{$relationName}()->detach();
+                if ($mapping[$relationName]['relation'] === EntityMergeHelper::RELATION_ONE_N) {
+                    $masterEntity = $this->mergeRelationOneToMany($masterEntity, $secondaryEntity, $relationName, $source);
+                } elseif ($mapping[$relationName]['relation'] === EntityMergeHelper::RELATION_N_N) {
+                    $pivotColumns = isset($mapping[$relationName]['pivotColumns']) ? $mapping[$relationName]['pivotColumns'] : [];
+                    $masterEntity = $this->mergeRelationManyToMany($masterEntity, $secondaryEntity, $relationName, $source, $pivotColumns);
                 }
-
-                $relationKeys = [];
-                // add relation's data from secondary entity to master entity
-                foreach ($secondaryEntity->{$relationName} as $relation) {
-                    $relationKeys[] = $relation->getKey();
-                }
-
-                $masterEntity->{$relationName}()->syncWithoutDetaching($relationKeys);
             }
         }
+
+        return $masterEntity;
+    }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Model $masterEntity
+     * @param \Illuminate\Database\Eloquent\Model $secondaryEntity
+     * @param string $relationName
+     * @param string $source
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    private function mergeRelationOneToMany($masterEntity, $secondaryEntity, $relationName, $source)
+    {
+        if ($source === EntityMergeHelper::SOURCE_SECONDARY) {
+            // clear master entity relation's data to save only secondary entity relations
+            $masterEntity->{$relationName}()->delete();
+        }
+
+        $masterEntity->{$relationName}()->saveMany($secondaryEntity->{$relationName});
+
+        return $masterEntity;
+    }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Model $masterEntity
+     * @param \Illuminate\Database\Eloquent\Model $secondaryEntity
+     * @param string $relationName
+     * @param string $source
+     * @param array $pivotColumns
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    private function mergeRelationManyToMany($masterEntity, $secondaryEntity, $relationName, $source, $pivotColumns)
+    {
+        if ($source === EntityMergeHelper::SOURCE_SECONDARY) {
+            // clear master entity relation's data to save only secondary entity relations
+            $masterEntity->{$relationName}()->detach();
+        }
+
+        $relationData = [];
+        // add relation's data from secondary entity to master entity
+        foreach ($secondaryEntity->{$relationName} as $relation) {
+
+            if ($pivotColumns !== []) {
+                foreach ($pivotColumns as $pivotColumn) {
+                    $relationData[$relation->getKey()][$pivotColumn] = $relation->pivot->{$pivotColumn};
+                }
+            } else {
+                $relationData[] = $relation->getKey();
+            }
+        }
+
+        $masterEntity->{$relationName}()->syncWithoutDetaching($relationData);
 
         return $masterEntity;
     }
