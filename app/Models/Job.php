@@ -11,6 +11,7 @@ class Job extends Model
 {
     use CrudTrait;
     use OldSlugRedirectable;
+    use LogsActivity;
 
     /*
     |--------------------------------------------------------------------------
