@@ -5,62 +5,64 @@ namespace App\Http\Controllers;
 use App\Http\Requests\FeedbackApiRequest;
 use App\Http\Requests\FeedbackRequest;
 use App\Models\Feedback;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class FeedbackController extends Controller
 {
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function create()
     {
         return view('feedback.create');
     }
 
+    /**
+     * @param \App\Http\Requests\FeedbackRequest $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function store(FeedbackRequest $request)
     {
-        $data = $request->validated();
+        $this->storeFeedback($request->validated());
 
-        $feedback = new Feedback();
-        $feedback->title = $data['title'];
-        $feedback->type = $data['type'];
-        $feedback->content = $data['content'];
-
-        if(!Auth::user()) {
-            $feedback->user_name = $data['user_name'];
-            $feedback->user_email = $data['user_email'];
-        } else {
-            $feedback->user_id = Auth::user()->id;
-        }
-
-        if($data['url'] !== null) {
-            $feedback->url = $data['url'];
-        }
-
-        $feedback->save();
         return view('feedback.finish');
     }
 
+    /**
+     * @param \App\Http\Requests\FeedbackApiRequest $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
     public function apiStore(FeedbackApiRequest $request)
     {
-        $data = $request->validated();
+        $feedback = $this->storeFeedback($request->validated());
 
-        $feedback = new Feedback();
-        $feedback->title = $data['title'];
-        $feedback->type = $data['type'];
-        $feedback->content = $data['content'];
+        return response($feedback, 200);
+    }
 
-        if(!Auth::user()) {
-            $feedback->user_name = $data['user_name'];
-            $feedback->user_email = $data['user_email'];
+    /**
+     * @param $requestData
+     * @return \App\Models\Feedback
+     */
+    private function storeFeedback($requestData)
+    {
+        $feedback          = new Feedback();
+        $feedback->title   = $requestData['title'];
+        $feedback->type    = $requestData['type'];
+        $feedback->content = $requestData['content'];
+
+        if (!Auth::user()) {
+            $feedback->user_name  = $requestData['user_name'];
+            $feedback->user_email = $requestData['user_email'];
         } else {
             $feedback->user_id = Auth::user()->id;
         }
 
-        if($data['url'] !== null) {
-            $feedback->url = $data['url'];
+        if (isset($data['url'])) {
+            $feedback->url = $requestData['url'];
         }
 
         $feedback->save();
 
-        return response($feedback, 200);
+        return $feedback;
     }
 }
