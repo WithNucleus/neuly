@@ -10,6 +10,7 @@
 ?>
 
 <div id="clinical-trial-tracker-container">
+    <button id="close-full-screen-tracker" class="btn d-none mb-3 btn-dark text-uppercase"><i class="fas fa-times"></i> Close</button>
     <div class="position-relative">
         <table class="table bg-white mb-0" id="clinical-trial-tracker">
             <thead class="thead-dark">
@@ -24,7 +25,7 @@
                 <th class="size-phase text-no-wrap sticky-top">Approval</th>
             </tr>
             </thead>
-            <tbody class="font-size-small">
+            <tbody>
             @forelse ($companies as $companyWithTrials)
                 <tr>
                     <td colspan="8" class="border-info bg-info text-uppercase">
@@ -35,7 +36,7 @@
                     <tr>
                         <td>
                             <a href="{{ route('discover.clinicaltrials.show', $clinicaltrial->slug) }}">
-                                <span class="truncate-this">{{ $clinicaltrial->focus_name }} &ndash; {{ $clinicaltrial->conditions }}</span>
+                                <span class="truncate-this-long">{{ $clinicaltrial->focus_name }} &ndash; {{ $clinicaltrial->conditions }}</span>
                             </a>
                         </td>
                         <td class="text-no-wrap">
