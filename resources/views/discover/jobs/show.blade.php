@@ -21,32 +21,43 @@
     @include('discover.jobs.data')
 
     @auth
-        <p class="mb-0 mr-2">
+        <p class="mt-2 mb-0 mr-2">
             <a href="{{ route('discover.jobs.apply', $job->slug) }}" class="btn btn-lg btn-danger">Apply Now</a>
         </p>
     @endauth
 
     @if(count($related) > 0)
-
-        <h4 class="mt-5">Related Jobs:</h4>
-        <div class="card-deck mt-2">
+        <h2 class="h3 mt-5 ">Related Jobs:</h2>
+        <div class="row">
             @foreach($related as $index => $item)
-                <div class="card">
-                    <div class="card-header"><a href="{{ route('discover.organizations.show', ['slug' => $item->slug]) }}">{{$item->job_title}}</a></div>
-                    <div class="card-body">
-                        {!! $item->job_description !!}
-                    </div>
-                    <div class="card-footer">
-                        <strong>Focus:</strong><br>
-                        @foreach ($item->focus as $focus)
-                            <a href="{{ route('discover.focus.show', $focus->slug) }}">{{ $focus->name }}</a>@if (!$loop->last),@endif
-                        @endforeach
+                <div class="col-12 col-md-6 mb-3">
+                    <div class="border-top pt-3 d-md-flex">
+                        <div class="image mr-5 flex-shrink-0">
+                            <div class="job-org-logo" style="background-image: url('/storage/{{ $item->company->logo }}');"></div>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h3 class="font-normal lead">
+                                <a href="{{ route('discover.organizations.show', ['slug' => $item->slug]) }}">{{$item->job_title}}</a>
+                            </h3>
+                            @if($item->locations->count() > 0)
+                                <p class="mb-0">
+                                    <span class="text-info"><i class="fad fa-globe-stand"></i></span>
+                                    @foreach ($item->locations as $location)
+                                        {{ $location->name }}@if (!$loop->last),@endif
+                                    @endforeach
+                                </p>
+                            @endif
+                            @if($item->focus->count() > 0)
+                                <p class="mb-0">
+                                    <span class="text-secondarydark"><i class="fad fa-flask"></i></span>
+                                    @foreach ($item->focus as $focus)
+                                        {{ $focus->name }}@if (!$loop->last) / @endif
+                                    @endforeach
+                                </p>
+                            @endif
+                        </div>
                     </div>
                 </div>
-                @if($index%2 === 1)
-        </div>
-        <div class="card-deck mt-4">
-            @endif
             @endforeach
         </div>
     @endif

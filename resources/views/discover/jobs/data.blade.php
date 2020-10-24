@@ -57,14 +57,9 @@
 					@endforeach
 				</p>
 			@endif
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-12 col-xl-8">
-			<p class="mb-2">
-				<h2>Job Description:</h2>
-				{!! $job->job_description !!}
-			</p>
+
+            <h2 class="mt-5">Job Description:</h2>
+            {!! $job->job_description !!}
 		</div>
 	</div>
 @else
