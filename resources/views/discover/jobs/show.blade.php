@@ -33,11 +33,13 @@
                 <div class="col-12 col-md-6 mb-3">
                     <div class="border-top pt-3 d-md-flex">
                         <div class="image mr-5 flex-shrink-0">
-                            <div class="job-org-logo" style="background-image: url('/storage/{{ $item->company->logo }}');"></div>
+                            <a href="{{ route('discover.jobs.show', ['slug' => $item->slug]) }}">
+                                <div class="job-org-logo" style="background-image: url('/storage/{{ $item->company->logo }}');"></div>
+                            </a>
                         </div>
                         <div class="flex-grow-1">
                             <h3 class="font-normal lead">
-                                <a href="{{ route('discover.organizations.show', ['slug' => $item->slug]) }}">{{$item->job_title}}</a>
+                                <a href="{{ route('discover.jobs.show', ['slug' => $item->slug]) }}">{{$item->job_title}}</a>
                             </h3>
                             @if($item->locations->count() > 0)
                                 <p class="mb-0">
