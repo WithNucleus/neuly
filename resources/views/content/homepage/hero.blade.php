@@ -19,7 +19,7 @@
                         <li class="lead pt-2 pb-2">We all work together to grow the psychedelics industry</li>
                     </ul>
                     <p class="text-center text-lg-left ml-lg-3">
-                        <a href="{{ route('member.dashboard') }}" class="btn btn-dark btn-lg">Start exploring our database...</a>
+                        <a href="{{ route('member.dashboard') }}" class="btn btn-primary btn-lg">Start exploring our database...</a>
                     </p>
                     <p class="text-center text-lg-left ml-lg-3">
                         <a href="{{ route('about') }}" class="text-dark">Or learn more about Neuly</a>
