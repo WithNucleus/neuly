@@ -36,6 +36,8 @@
             </div>
         </div>
 
+        @include('content.homepage.how-neuly-helps')
+
         @include('footers.full')
 
     </main>
