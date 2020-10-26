@@ -21,7 +21,7 @@
             </div>
         </div>
         <p class="text-center mb-0">
-            <a href="mailto:support@neuly.com" class="btn btn-primary font-weight-bold btn-lg text-uppercase">Contact Us</a>
+            <a href="{{ route('feedback.create') }}" class="btn btn-primary font-weight-bold btn-lg text-uppercase">Contact Us</a>
         </p>
     </div>
 @endguest
