@@ -21,7 +21,6 @@ class InvestorPersonController extends Controller
         $this->middleware(['permission:edit investors']);
     }
 
-    // Show View for Adding People to Companies
     public function index(Request $request, $id) {
 
         $investor = Investor::with('people')->find($id);

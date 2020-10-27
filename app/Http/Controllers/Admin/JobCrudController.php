@@ -31,13 +31,11 @@ class JobCrudController extends CrudController
      */
     public function setup()
     {
-
-        // Check Guard
         if(!backpack_user()->can('edit jobs')) {
             abort(404);
         }
 
-        CRUD::setModel(\App\Models\Job::class);
+        CRUD::setModel(Job::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/job');
         CRUD::setEntityNameStrings('job', 'jobs');
     }
@@ -50,7 +48,6 @@ class JobCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        // CRUD::setFromDb(); // columns
         $this->crud->addColumn(['name' => 'job_title', 'type' => 'text', 'label' => 'Job Title']);
         $this->crud->addColumn(['name' => 'posted_date', 'type' => 'date', 'label' => 'Posted Date']);
         $this->crud->addColumn(['name' => 'employment_type', 'type' => 'text', 'label' => 'Employment Type']);
@@ -66,24 +63,16 @@ class JobCrudController extends CrudController
      */
     protected function setupShowOperation()
     {
-
-        // $this->crud->set('show.setFromDb', false);
-
-        // Job Title
         $this->crud->addColumn(
             ['name' => 'job_title',
             'type' => 'text',
             'label' => 'Job Title'
         ]);
-
-        // Posted Date
         $this->crud->addColumn([
             'name' => 'posted_date',
             'type' => 'date',
             'label' => 'Posted Date'
         ]);
-
-        // Company Relationship
         $this->crud->addColumn([
              'label'     => "Organization",
              'type'      => 'select',
@@ -92,21 +81,17 @@ class JobCrudController extends CrudController
              'attribute' => 'name',
              'model'     => "App\Models\Company",
         ]);
-
-        // Employment Type
         $this->crud->addColumn([
             'name' => 'employment_type',
             'type' => 'text',
             'label' => 'Employment Type'
         ]);
-
         $this->crud->addColumn([
             'name' => 'salary',
             'label' => 'Salary',
             'type' => 'number',
             'prefix' => '$',
         ]);
-
         $this->crud->addColumn([
             'name' => 'hourly_rate',
             'label' => 'Hourly Rate',
@@ -114,8 +99,6 @@ class JobCrudController extends CrudController
             'prefix' => '$',
             'decimals' => 2,
         ]);
-
-        // Focus -- Relationship
         $this->crud->addColumn([
            'label'     => 'Focus',
            'type'      => 'select_multiple',
@@ -123,13 +106,10 @@ class JobCrudController extends CrudController
            'entity'    => 'focus',
            'attribute' => 'name',
            'model'     => 'App\Models\Focus',
-           // 'orderable' => true,
            'options'   => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
         ]);
-
-        // Location -- Relationship
         $this->crud->addColumn([
            'label'     => 'Location',
            'type'      => 'select_multiple',
@@ -137,12 +117,10 @@ class JobCrudController extends CrudController
            'entity'    => 'locations',
            'attribute' => 'name',
            'model'     => 'App\Models\Location',
-           // 'orderable' => true,
            'options'   => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
         ]);
-
     }
 
     /**
@@ -155,126 +133,97 @@ class JobCrudController extends CrudController
     {
         CRUD::setValidation(JobRequest::class);
 
-        // CRUD::setFromDb(); // fields
-
-        // Update Slug Widget
         Widget::add([
             'type' => 'view',
             'view' => 'customwidget.updateSlug',
-            'field_name' => 'job_title' // field name to generate slug
+            'field_name' => 'job_title'
         ])->to('before_content');
 
-        // Job Title
         $this->crud->addField([
-            'name' => 'job_title',
-            'type' => 'text',
+            'name'  => 'job_title',
+            'type'  => 'text',
             'label' => 'Job Title'
         ]);
-
-        // Page Slug
         $this->crud->addField([
-            'name' => 'slug',
-            'type' => 'text',
+            'name'  => 'slug',
+            'type'  => 'text',
             'label' => 'Page Slug'
         ]);
-
-        // Posted Date
         $this->crud->addField([
-            'name' => 'posted_date',
-            'type' => 'date',
+            'name'  => 'posted_date',
+            'type'  => 'date',
             'label' => 'Posted Date'
         ]);
-
         $this->crud->addField([
-            'name' => 'salary',
-            'label' => 'Salary',
-            'type' => 'number',
+            'name'   => 'salary',
+            'label'  => 'Salary',
+            'type'   => 'number',
             'prefix' => "$",
         ]);
-
         $this->crud->addField([
-            'name' => 'hourly_rate',
-            'label' => 'Hourly Rate',
-            'type' => 'number',
-            'prefix' => "$",
+            'name'       => 'hourly_rate',
+            'label'      => 'Hourly Rate',
+            'type'       => 'number',
+            'prefix'     => "$",
             'attributes' => ["step" => ".01"]
         ]);
-
-        // Company Relationship
         $this->crud->addField([
-             'label'     => "Organization",
-             'type'      => 'select2',
-             'name'      => 'company_id',
-             'entity'    => 'company',
-             'attribute' => 'name',
-             'options'   => (function ($query) {
+            'label'     => "Organization",
+            'type'      => 'select2',
+            'name'      => 'company_id',
+            'entity'    => 'company',
+            'attribute' => 'name',
+            'options'   => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
-             'model'     => "App\Models\Company",
+            'model'     => "App\Models\Company",
         ]);
-
-        // Employment Type
         $this->crud->addField([
-            'name' => 'employment_type',
-            'type' => 'radio',
-            'label' => 'Employment Type',
-            'options'     => [
+            'name'    => 'employment_type',
+            'type'    => 'radio',
+            'label'   => 'Employment Type',
+            'options' => [
                 'Full Time' => 'Full Time',
                 'Part Time' => 'Part Time',
-                'One Time' => 'One Time',
+                'One Time'  => 'One Time',
             ],
-            'inline' => true,
+            'inline'  => true,
         ]);
-
-        // Location Relationship
         $this->crud->addField([
-             'label'     => "Locations",
-             'type'      => 'select2_multiple',
-             'name'      => 'locations',
-             'entity'    => 'locations',
-             'attribute' => 'name',
-             'pivot'     => true,
-             'options'   => (function ($query) {
+            'label'     => "Locations",
+            'type'      => 'select2_multiple',
+            'name'      => 'locations',
+            'entity'    => 'locations',
+            'attribute' => 'name',
+            'pivot'     => true,
+            'options'   => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
-             'model'     => "App\Models\Location",
+            'model'     => "App\Models\Location",
         ]);
-
-        // Focus
         $this->crud->addField([
-             'label'     => "Focus",
-             'type'      => 'select2_multiple',
-             'name'      => 'focus',
-             'entity'    => 'focus',
-             'attribute' => 'name',
-             'pivot'     => true,
-             'options'   => (function ($query) {
+            'label'     => "Focus",
+            'type'      => 'select2_multiple',
+            'name'      => 'focus',
+            'entity'    => 'focus',
+            'attribute' => 'name',
+            'pivot'     => true,
+            'options'   => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
-             'model'     => "App\Models\Focus",
+            'model'     => "App\Models\Focus",
         ]);
-
-        // Job Description
         $this->crud->addField([
-            'name' => 'job_description',
-            'type' => 'wysiwyg',
+            'name'  => 'job_description',
+            'type'  => 'wysiwyg',
             'label' => 'Job Description'
         ]);
-
-        /**
-         * Fields can be defined using the fluent syntax or array syntax:
-         * - CRUD::field('price')->type('number');
-         * - CRUD::addField(['name' => 'price', 'type' => 'number']));
-         */
     }
 
     public function store()
     {
         $response = $this->traitStore();
         $request = $response->getRequest();
-
-        $investor = $this->data['entry'];
-
         $job = $this->data['entry'];
 
         if($request->has('company_id') && $request->input('company_id') !== null) {
@@ -369,6 +318,7 @@ class JobCrudController extends CrudController
     private function getOriginalModel($crud)
     {
         $request = $crud->validateRequest();
+
         return Job::find($request->get($crud->model->getKeyName()));
     }
 }

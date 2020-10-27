@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\SearchLog;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -22,7 +23,7 @@ class SearchLogCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\App\Models\SearchLog::class);
+        CRUD::setModel(SearchLog::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/searchlog');
         CRUD::setEntityNameStrings('search log', 'search log');
     }
@@ -35,7 +36,7 @@ class SearchLogCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::setFromDb(); // columns
+        CRUD::setFromDb();
 
         $this->crud->addColumn([
             'type' => 'datetime',

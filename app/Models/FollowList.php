@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
@@ -11,26 +12,28 @@ class FollowList extends Model
 
     protected $guarded = ['id'];
 
-    /**
-     * RELATIONS
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | RELATIONS
+    |--------------------------------------------------------------------------
+    */
 
     public function user() {
-        return $this->belongsTo(\App\User::class);
+        return $this->belongsTo(User::class);
     }
 
     public function followItems() {
-        return $this->hasMany(\App\Models\Follow::class);
+        return $this->hasMany(Follow::class);
     }
 
-    /**
-     * MUTATORS
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | MUTATORS
+    |--------------------------------------------------------------------------
+    */
 
     public function setNameAttribute($value) {
-
         $this->attributes['name'] = $value;
-
         $this->attributes['slug'] = isset($this->attributes['slug']) ? $this->attributes['slug'] : Str::slug($value);
     }
 }

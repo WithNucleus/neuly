@@ -47,19 +47,16 @@ class Research extends Model implements EntityContract
     |--------------------------------------------------------------------------
     */
 
-    // Each Research Item Can Have Many Focus Cats
     public function focus() {
         return $this->belongsToMany('App\Models\Focus', 'focus_research', 'research_id', 'focus_id')
                     ->withTimestamps();
     }
 
-    // Each Research Item Can Have Many Companies
     public function companies() {
         return $this->belongsToMany('App\Models\Company', 'company_research', 'research_id', 'company_id')
                     ->withTimestamps();
     }
 
-    // Each Research Item Can Have Many People
     public function people() {
         return $this->belongsToMany('App\Models\Person', 'person_research', 'research_id', 'person_id')
                     ->withTimestamps();

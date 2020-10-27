@@ -17,21 +17,14 @@ class PersonCompanyController extends Controller
      */
     public function __construct()
     {
-        // Auth and Permission Middleware
         $this->middleware('auth');
         $this->middleware(['permission:edit companies']);
     }
 
-    // Show View for Adding People to Companies
     public function index(Request $request, $id) {
-
-        // Get Company
         $person = Person::with('companies')->find($id);
-
-        // Get All People
         $companies = Company::orderBy('name')->get();
 
-        // Return View to Add People and Relationships
         return view('admin.person_company', compact('person', 'companies'));
     }
 

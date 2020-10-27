@@ -24,10 +24,7 @@ class Page extends Model
     protected $table = 'pages';
     protected $primaryKey = 'id';
     public $timestamps = true;
-    // protected $guarded = ['id'];
     protected $fillable = ['template', 'name', 'title', 'slug', 'content', 'extras', 'meta_image'];
-    // protected $hidden = [];
-    // protected $dates = [];
     protected $fakeColumns = ['extras'];
     protected $casts = [
         'extras' => 'array',
@@ -87,7 +84,6 @@ class Page extends Model
     |--------------------------------------------------------------------------
     */
 
-    // The slug is created automatically from the "name" field if no slug exists.
     public function getSlugOrTitleAttribute()
     {
         if ($this->slug != '') {
@@ -111,24 +107,24 @@ class Page extends Model
         $storage = Storage::disk($disk);
 
         if(is_null($value)){
-            
+
             $storage->delete(Str::replaceFirst('storage/', 'public/', $this->meta_image));
             $this->attributes['meta_image'] = $value;
-            
+
         }else{
 
             if(Str::startsWith($value, 'data:image')){
 
                 // Get extension
                 @list($type, $file_data) = explode(';', $value);
-                @list(, $file_data) = explode(',', $file_data); 
-                
+                @list(, $file_data) = explode(',', $file_data);
+
                 $extension = substr(strrchr($type, '/'), 1);
-                // Note We can't use $this->id since initialy the Page is 
+                // Note We can't use $this->id since initialy the Page is
                 // still not saved so no ID.
                 $filename = md5(uniqid()).".{$extension}";
 
-                // Save image into storage                
+                // Save image into storage
                 $storage->put("{$destination_path}/{$filename}", base64_decode($file_data));
 
                 // Save path into database

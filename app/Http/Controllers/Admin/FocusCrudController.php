@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\FocusRequest;
 use App\Models\Focus;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
-use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Backpack\CRUD\app\Library\Widget;
 
 /**
@@ -24,8 +23,6 @@ class FocusCrudController extends CrudController
 
     public function setup()
     {
-
-        // Check Guard
         if(!backpack_user()->can('edit focus categories')) {
             abort(404);
         }
@@ -50,7 +47,7 @@ class FocusCrudController extends CrudController
         Widget::add([
             'type' => 'view',
             'view' => 'customwidget.updateSlug',
-            'field_name' => 'name' // field name to generate slug
+            'field_name' => 'name'
         ])->to('before_content');
 
         $this->crud->addField(['name' => 'name', 'type' => 'text', 'label' => 'Name']);
@@ -61,7 +58,6 @@ class FocusCrudController extends CrudController
             'label' => 'Type',
             'options' => [null => 'None', Focus::TYPE_DRUG => ucfirst(Focus::TYPE_DRUG)],
         ]);
-
         $this->crud->addField([
             'name'            => 'aliases',
             'type'            => 'textarea',

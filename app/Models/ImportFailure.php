@@ -10,6 +10,12 @@ class ImportFailure extends Model
     const TYPE_SPONSOR_COLLABORATORS = 'sponsorcollaborators';
     const TYPE_IMAGE                 = 'image';
 
+    /*
+    |--------------------------------------------------------------------------
+    | GLOBAL VARIABLES
+    |--------------------------------------------------------------------------
+    */
+
     protected $table = 'import_failures';
 
     protected $guarded = ['id'];
@@ -17,6 +23,12 @@ class ImportFailure extends Model
     protected $casts = [
         'details' => 'array',
     ];
+
+    /*
+    |--------------------------------------------------------------------------
+    | RELATIONS
+    |--------------------------------------------------------------------------
+    */
 
     public function result()
     {

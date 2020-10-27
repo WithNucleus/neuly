@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\CompanyValuationRequest;
+use App\Models\CompanyValuation;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -26,7 +27,7 @@ class CompanyValuationCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\App\Models\CompanyValuation::class);
+        CRUD::setModel(CompanyValuation::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/companyvaluation');
         CRUD::setEntityNameStrings('organisation valuation', 'organisation valuations');
     }
@@ -46,7 +47,6 @@ class CompanyValuationCrudController extends CrudController
             'entity'    => 'company',
             'attribute' => 'name',
         ]);
-
         CRUD::addColumn([
             'label'     => 'Acquirer',
             'name'      => 'acquirer_id',
@@ -54,14 +54,12 @@ class CompanyValuationCrudController extends CrudController
             'entity'    => 'acquirer',
             'attribute' => 'name',
         ]);
-
         CRUD::addColumn([
             'label'    => 'Amount',
             'name'     => 'amount',
             'type'     => 'number',
             'prefix'   => '$',
         ]);
-
         CRUD::addColumn([
             'label'    => 'Date',
             'name'     => 'date',
@@ -97,7 +95,6 @@ class CompanyValuationCrudController extends CrudController
                 'entity'    => 'company',
                 'attribute' => 'name',
         ]);
-
         CRUD::addField([
             'label'     => "Acquirer",
             'type'      => 'select2',
@@ -105,20 +102,17 @@ class CompanyValuationCrudController extends CrudController
             'entity'    => 'acquirer',
             'attribute' => 'name',
         ]);
-
         CRUD::addField([
             'label'    => 'Amount',
             'name'     => 'amount',
             'type'     => 'number',
             'prefix'   => '$',
         ]);
-
         CRUD::addField([
             'label'    => 'Date',
             'name'     => 'date',
             'type'     => 'date',
         ]);
-
         CRUD::addField([
             'label'    => 'Notes',
             'name'     => 'notes',

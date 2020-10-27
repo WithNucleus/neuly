@@ -10,7 +10,6 @@ use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
-use Intervention\Image\ImageManagerStatic as Image;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Company extends Model implements EntityContract
@@ -88,50 +87,42 @@ class Company extends Model implements EntityContract
     |--------------------------------------------------------------------------
     */
 
-    // Each Company Can Have Many Focus Categories
     public function focus() {
         return $this->belongsToMany('App\Models\Focus', 'company_focus', 'company_id', 'focus_id')
                     ->withTimestamps();
     }
 
-    // Each Company Can Have Many People
     public function people() {
         return $this->belongsToMany('App\Models\Person', 'company_person', 'company_id', 'person_id')
                     ->withPivot(['position'])
                     ->withTimestamps();
     }
 
-    // Each Company Can Have Multiple Locations
     public function locations() {
         return $this->belongsToMany('App\Models\Location', 'company_location', 'company_id', 'location_id')
                     ->withTimestamps();
     }
 
-    // Each Company Can Have Multiple Investors
     public function investors() {
         return $this->belongsToMany('App\Models\Investor', 'company_investor', 'company_id', 'investor_id')
                     ->withPivot(['type'])
                     ->withTimestamps();
     }
 
-    // Each Company Can Have Many Research Items
     public function research() {
         return $this->belongsToMany('App\Models\Research', 'company_research', 'company_id', 'research_id')
                     ->withTimestamps();
     }
 
-    // Each Company Can Have Multiple Jobs
     public function jobs() {
         return $this->hasMany('App\Models\Job');
     }
 
-    // Each Company Can Have Multiple Events
     public function events() {
         return $this->belongsToMany('App\Models\Event', 'company_event', 'company_id', 'event_id')
                     ->withTimestamps();
     }
 
-    // Each Company Can Have Multiple Clinical Trials
     public function clinicaltrials() {
         return $this->belongsToMany('App\Models\Clinicaltrial', 'clinicaltrial_company', 'company_id', 'clinicaltrial_id')
                     ->withTimestamps();
@@ -195,34 +186,21 @@ class Company extends Model implements EntityContract
     */
 
     public function setNameAttribute($value) {
-
         $this->attributes['name'] = $value;
-
         $this->attributes['slug'] = Str::slug($value);
-
     }
 
     public function setpeopleRelationshipAttribute($value) {
 
-        // Get this Company ID
         $company_id = $this->id;
-
-        // Find Company Record
         $company = Company::find($company_id);
-
-        // Decode json
         $person_relationship = json_decode($value, true);
 
-        // Check if $value is empty
         if ($value != '[{"person":"","position":""}]') {
-
-            // Setup Array to Sync Relationships
             $sync_array = array();
 
-            // Loop through
             foreach($person_relationship as $relationship) {
 
-                // Get Values
                 $person_id = $relationship['person'];
                 $position = $relationship['position'];
 
@@ -231,7 +209,6 @@ class Company extends Model implements EntityContract
 
             }
 
-            // Attach Relationships
             $company->people()->attach(
                 $sync_array
             );
@@ -266,10 +243,7 @@ class Company extends Model implements EntityContract
             // if the image was erased
             if ($value == null) {
 
-                // delete the image from disk
                 \Storage::disk($disk)->delete('public/' . $this->logo);
-
-                // set null in the database column
                 $this->attributes['logo'] = null;
 
             } elseif (Str::startsWith($value, '/storage')) {

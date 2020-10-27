@@ -10,8 +10,20 @@ class ImportResult extends Model
     const TYPE_RELATED_ENTITIES = 'related_entities';
     const TYPE_BATCH_IMAGES_UPLOAD = 'batch_images_upload';
 
+    /*
+    |--------------------------------------------------------------------------
+    | GLOBAL VARIABLES
+    |--------------------------------------------------------------------------
+    */
+
 	protected $table = 'import_results';
     protected $guarded = ['id'];
+
+    /*
+    |--------------------------------------------------------------------------
+    | RELATIONS
+    |--------------------------------------------------------------------------
+    */
 
     public function focus() {
         return $this->belongsTo('App\Models\Focus');
@@ -21,6 +33,12 @@ class ImportResult extends Model
     {
         return $this->hasMany('App\Models\ImportFailure', 'import_result_id', 'id');
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | SCOPES
+    |--------------------------------------------------------------------------
+    */
 
     public function scopeClinicalTrials($query)
     {
