@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\Import\RelatedEntities\PeopleOrganisationRequest;
 use App\Jobs\Import\RelatedEntities\ProcessPeopleOrganization;
 use App\Models\ImportResult;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class PeopleOrganizationController extends Controller
 {
@@ -54,19 +55,25 @@ class PeopleOrganizationController extends Controller
         }
 
         foreach ($records as $record) {
-            $companyId = $record[$columnIndexes['organization id']];
-            $personData = [
-                'name' => $record[$columnIndexes['person name']],
-                'email' => $record[$columnIndexes['email']],
-                'position' => $record[$columnIndexes['position']],
-                'location'  => $record[$columnIndexes['location']],
-                'linkedin' => $record[$columnIndexes['linkedin']],
-            ];
+            try {
+                $recordTrimmed = array_map('trim', $record);
+                $companyId     = $recordTrimmed[$columnIndexes['organization id']];
+                $personData    = [
+                    'name'     => $recordTrimmed[$columnIndexes['person name']],
+                    'email'    => $recordTrimmed[$columnIndexes['email']],
+                    'position' => $recordTrimmed[$columnIndexes['position']],
+                    'location' => $recordTrimmed[$columnIndexes['location']],
+                    'linkedin' => $recordTrimmed[$columnIndexes['linkedin']],
+                ];
 
-            $personData = array_map('trim', $personData);
+                if (!empty($personData['name'])) {
+                    ProcessPeopleOrganization::dispatch($importResult, $companyId, $personData);
+                }
+            } catch (\Exception $e) {
+                Log::error('CSV row import exception!
+                Row data: ' . json_encode($recordTrimmed) . '. Error message: ' . $e->getMessage());
 
-            if (!empty($personData['name'])) {
-                ProcessPeopleOrganization::dispatch($importResult, $companyId, $personData);
+                continue;
             }
         }
 

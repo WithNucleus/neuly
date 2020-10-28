@@ -70,7 +70,9 @@ class ProcessPeopleOrganization implements ShouldQueue
      */
     public function handle()
     {
-        $existingPerson = Person::where('name', $this->personData['name'])->first();
+        $existingPerson = Person::where('name', $this->personData['name'])
+            ->orWhere('email', $this->personData['email'])
+            ->first();
 
         if ($existingPerson) {
             $this->addFailedRecord($existingPerson);
