@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Follow;
 use App\Models\FollowList;
 use App\Models\MemberNote;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Models\Activity;
 
