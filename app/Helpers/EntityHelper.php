@@ -56,6 +56,18 @@ class EntityHelper
     }
 
     /**
+     * @return array
+     */
+    public static function getLocationRelatedEntities()
+    {
+        return array_diff(self::getEntities(), [
+            Focus::class,
+            Location::class,
+            Research::class,
+        ]);
+    }
+
+    /**
      * @param string $class
      * @return string|bool
      */

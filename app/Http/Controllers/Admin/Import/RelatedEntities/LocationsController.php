@@ -22,15 +22,8 @@ class LocationsController extends Controller
 
     public function index()
     {
-        $importResults = ImportResult::relatedEntitiesLocations()->latest()->take(20)->get();
-
-        //skip entities without "locations" relation
-        $entityTypes = array_diff(EntityHelper::getEntities(), [
-            Focus::class,
-            Location::class,
-            Research::class,
-        ]);
-
+        $importResults  = ImportResult::relatedEntitiesLocations()->latest()->take(20)->get();
+        $entityTypes    = EntityHelper::getLocationRelatedEntities();
         $allowedColumns = $this->allowedColumns;
 
         return view('admin.import.related-entities.locations.index',
@@ -40,7 +33,7 @@ class LocationsController extends Controller
     public function import(LocationsRequest $request)
     {
         $entityClass = $request->input('entity_type');
-        $records = array_map('str_getcsv', file($request->file('csv')));
+        $records     = array_map('str_getcsv', file($request->file('csv')));
 
         $importResult = ImportResult::create([
             'type'    => ImportResult::TYPE_RELATED_ENTITIES_LOCATION,
@@ -78,11 +71,11 @@ class LocationsController extends Controller
 
     public function results($id)
     {
-        $result = ImportResult::relatedEntitiesLocations()->findOrFail($id);
+        $result           = ImportResult::relatedEntitiesLocations()->findOrFail($id);
         $peopleMessages   = json_decode($result->people_messages);
         $locationMessages = json_decode($result->location_messages);
         $companyMessages  = json_decode($result->company_messages);
-        $csv = json_decode($result->csv);
+        $csv              = json_decode($result->csv);
 
         return view('admin.import.related-entities.locations.results', compact(
             'result',
@@ -95,7 +88,7 @@ class LocationsController extends Controller
 
     public function failures($id)
     {
-        $result = ImportResult::with('failures')
+        $result              = ImportResult::with('failures')
             ->relatedEntitiesLocations()
             ->findorFail($id);
         $failuresTotalByType = [];
