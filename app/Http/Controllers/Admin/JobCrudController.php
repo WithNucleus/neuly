@@ -121,6 +121,8 @@ class JobCrudController extends CrudController
                 return $query->orderBy('name', 'ASC')->get();
             }),
         ]);
+
+        $this->crud->addButtonFromModelFunction('line', 'show_entity', 'getShowEntityPageButton', 'beginning');
     }
 
     /**
