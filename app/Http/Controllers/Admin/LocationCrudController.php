@@ -67,6 +67,13 @@ class LocationCrudController extends CrudController
         ]);
     }
 
+    protected function setupShowOperation()
+    {
+        $this->setupListOperation();
+
+        $this->crud->addButtonFromModelFunction('line', 'show_entity', 'getShowEntityPageButton', 'beginning');
+    }
+
     /**
      * Define what happens when the Create operation is loaded.
      *

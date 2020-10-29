@@ -40,6 +40,13 @@ class FocusCrudController extends CrudController
         $this->crud->addColumn(['name' => 'aliases', 'type' => 'text', 'label' => 'Aliases']);
     }
 
+    protected function setupShowOperation()
+    {
+        $this->setupListOperation();
+
+        $this->crud->addButtonFromModelFunction('line', 'show_entity', 'getShowEntityPageButton', 'beginning');
+    }
+
     protected function setupCreateOperation()
     {
         $this->crud->setValidation(FocusRequest::class);

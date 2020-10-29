@@ -87,6 +87,8 @@ class InvestorCrudController extends CrudController
             'type'         => 'image',
             'prefix'       => 'storage/'
         ]);
+
+        $this->crud->addButtonFromModelFunction('line', 'show_entity', 'getShowEntityPageButton', 'beginning');
     }
 
     /**

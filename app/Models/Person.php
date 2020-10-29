@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Helpers\EntityMergeHelper;
 use App\Models\Contracts\EntityContract;
+use App\Models\Traits\CrudShowEntityPageButton;
 use App\Models\Traits\OldSlugRedirectable;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
@@ -21,6 +22,7 @@ class Person extends Model implements EntityContract
     use HasFollowers;
     use OldSlugRedirectable;
     use LogsActivity;
+    use CrudShowEntityPageButton;
 
     /*
     |--------------------------------------------------------------------------

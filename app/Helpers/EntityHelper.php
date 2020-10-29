@@ -7,6 +7,7 @@ use App\Models\Company;
 use App\Models\Event;
 use App\Models\Focus;
 use App\Models\Investor;
+use App\Models\Job;
 use App\Models\Location;
 use App\Models\Person;
 use App\Models\Research;
@@ -22,6 +23,7 @@ class EntityHelper
         'events'         => Event::class,
         'focus'          => Focus::class,
         'investors'      => Investor::class,
+        'jobs'           => Job::class,
         'locations'      => Location::class,
         'people'         => Person::class,
         'research'       => Research::class,

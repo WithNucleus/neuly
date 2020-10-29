@@ -163,6 +163,8 @@ class ClinicaltrialCrudController extends CrudController
         ]);
 
         CRUD::setFromDb();
+
+        $this->crud->addButtonFromModelFunction('line', 'show_entity', 'getShowEntityPageButton', 'beginning');
     }
 
     /**

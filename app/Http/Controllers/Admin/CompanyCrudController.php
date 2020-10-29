@@ -137,6 +137,7 @@ class CompanyCrudController extends CrudController
             'prefix'       => 'storage/'
         ]);
 
+        $this->crud->addButtonFromModelFunction('line', 'show_entity', 'getShowEntityPageButton', 'beginning');
     }
 
     protected function setupCreateOperation()

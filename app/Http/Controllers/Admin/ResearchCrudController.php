@@ -106,6 +106,8 @@ class ResearchCrudController extends CrudController
             'label' => 'Abstract',
             'type'  => 'text'
         ]);
+
+        $this->crud->addButtonFromModelFunction('line', 'show_entity', 'getShowEntityPageButton', 'beginning');
     }
 
     /**
