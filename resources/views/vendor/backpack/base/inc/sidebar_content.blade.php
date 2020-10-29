@@ -172,17 +172,21 @@
     </li>
 @endcan
 
+@can('manage insight requests')
 <li class='nav-item'>
     <a class='nav-link' href='{{ backpack_url('insightRequest') }}'>
         <i class='nav-icon la la-question'></i> Insight requests
     </a>
 </li>
+@endcan
 
+@can('manage job reports')
 <li class='nav-item'>
     <a class='nav-link' href='{{ backpack_url('jobreportentries') }}'>
         <i class='nav-icon la la-business-time'></i> Job Report Entries
     </a>
 </li>
+@endcan
 
 @can('manage entity merge')
     <li class='nav-item'>

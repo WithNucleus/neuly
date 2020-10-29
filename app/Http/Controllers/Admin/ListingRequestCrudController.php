@@ -34,6 +34,10 @@ class ListingRequestCrudController extends CrudController
      */
     public function setup()
     {
+        if(!backpack_user()->can('manage listing requests')) {
+            abort(403);
+        }
+
         CRUD::setModel(ListingRequest::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/listingrequest');
         CRUD::setEntityNameStrings('listing request', 'listing requests');
@@ -131,7 +135,6 @@ class ListingRequestCrudController extends CrudController
 
     public function getDeclineForm($id)
     {
-        $this->crud->hasAccessOrFail('update');
         $this->crud->setOperation('Decline');
 
         $this->data['id'] = $id;
@@ -143,7 +146,6 @@ class ListingRequestCrudController extends CrudController
 
     public function postDeclineForm($id)
     {
-        $this->crud->hasAccessOrFail('update');
         $this->crud->setOperation('Decline');
 
         $this->data['crud'] = $this->crud;
@@ -158,7 +160,6 @@ class ListingRequestCrudController extends CrudController
 
     public function getPublishForm($id)
     {
-        $this->crud->hasAccessOrFail('update');
         $this->crud->setOperation('Publish');
 
         $listingRequest = ListingRequest::findOrFail($id);
@@ -189,7 +190,6 @@ class ListingRequestCrudController extends CrudController
 
     public function postPublishForm(Request $request, $id)
     {
-        $this->crud->hasAccessOrFail('update');
         $this->crud->setOperation('Publish');
 
         $data = $request->all();
