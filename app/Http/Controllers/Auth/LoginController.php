@@ -103,7 +103,7 @@ class LoginController extends Controller
                     'name'              => $socialiteUser->getName(),
                     'password'          => Hash::make(Str::random('20')),
                     'email_verified_at' => Carbon::now(),
-                ]);
+                ])->assignRole('Subscriber');
 
                 $socialAuth = new UserSocialAuth();
                 $socialAuth->user_id = $user->id;
