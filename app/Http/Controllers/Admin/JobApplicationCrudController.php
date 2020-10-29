@@ -24,6 +24,10 @@ class JobApplicationCrudController extends CrudController
      */
     public function setup()
     {
+        if(!backpack_user()->can('view job applications')) {
+            abort(403);
+        }
+
         CRUD::setModel(JobApplication::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/jobapplication');
         CRUD::setEntityNameStrings('job application', 'job applications');

@@ -27,6 +27,10 @@ class CompanyValuationCrudController extends CrudController
      */
     public function setup()
     {
+        if(!backpack_user()->can('edit companies')) {
+            abort(403);
+        }
+
         CRUD::setModel(CompanyValuation::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/companyvaluation');
         CRUD::setEntityNameStrings('organisation valuation', 'organisation valuations');

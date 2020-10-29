@@ -24,6 +24,10 @@ class JobReportEntryCrudController extends CrudController
      */
     public function setup()
     {
+        if(!backpack_user()->can('manage job reports')) {
+            abort(403);
+        }
+
         CRUD::setModel(JobReportEntry::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/jobreportentries');
         CRUD::setEntityNameStrings('job report entry', 'job report entries');

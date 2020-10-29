@@ -24,6 +24,10 @@ class InsightRequestCrudController extends CrudController
      */
     public function setup()
     {
+        if(!backpack_user()->can('manage insight requests')) {
+            abort(403);
+        }
+
         CRUD::setModel(InsightRequest::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/insightRequest');
         CRUD::setEntityNameStrings('insight request', 'insight requests');
