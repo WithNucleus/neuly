@@ -106,7 +106,9 @@ class ProcessSponsorCollaborators
             if ($this->checkValueInMappingOrganisationSettings($value)) {
                 $company      = Company::firstOrCreate(['name' => $value]);
                 $companyIds[] = $company->id;
+
                 $this->addCompanyMessage($company->id, $value);
+                $this->addNewCompanyName($company);
                 continue;
             }
 
@@ -161,6 +163,16 @@ class ProcessSponsorCollaborators
     }
 
     /**
+     * @param \App\Models\Company $company
+     * @return void
+     */
+    private function addNewCompanyName(Company $company) {
+        if (!in_array($company->name, $this->existedCompanyNames)) {
+            $this->existedCompanyNames[$company->id] = $company->name;
+        }
+    }
+
+    /**
      * @param string $value
      * @return int|bool
      */
@@ -180,20 +192,19 @@ class ProcessSponsorCollaborators
      */
     private function addCompanyMessage($companyId, $value)
     {
+        $nctNumber = $this->clinicaltrial->nct_number;
         $message = [
-            'nct_number' => $this->clinicaltrial->nct_number,
-            'id'         => $companyId,
-            'company'    => $value,
-            'info'       => 'Success',
+            'import_id'    => $companyId,
+            'import_value' => $value,
         ];
 
-        if (!isset($this->importCompanyMessages[$this->clinicaltrial->nct_number])) {
-            $this->importCompanyMessages[$this->clinicaltrial->nct_number] = [
-                'id' => $this->clinicaltrial->id,
+        if (!isset($this->importCompanyMessages[$nctNumber])) {
+            $this->importCompanyMessages[$nctNumber] = [
+                'clinicaltrial_id' => $this->clinicaltrial->id,
                 'messages' => [$message],
             ];
         } else {
-            $this->importCompanyMessages[$this->clinicaltrial->nct_number]['messages'][] = $message;
+            $this->importCompanyMessages[$nctNumber]['messages'][] = $message;
         }
 
     }
@@ -204,20 +215,19 @@ class ProcessSponsorCollaborators
      */
     private function addPersonMessage($personId, $value)
     {
+        $nctNumber = $this->clinicaltrial->nct_number;
         $message = [
-            'nct_number' => $this->clinicaltrial->nct_number,
-            'id'         => $personId,
-            'person'     => $value,
-            'info'       => 'Success',
+            'import_id'    => $personId,
+            'import_value' => $value,
         ];
 
-        if (!isset($this->importPersonMessages[$this->clinicaltrial->nct_number])) {
-            $this->importPersonMessages[$this->clinicaltrial->nct_number] = [
-                'id' => $this->clinicaltrial->id,
+        if (!isset($this->importPersonMessages[$nctNumber])) {
+            $this->importPersonMessages[$nctNumber] = [
+                'clinicaltrial_id' => $this->clinicaltrial->id,
                 'messages' => [$message],
             ];
         } else {
-            $this->importPersonMessages[$this->clinicaltrial->nct_number]['messages'][] = $message;
+            $this->importPersonMessages[$nctNumber]['messages'][] = $message;
         }
     }
 

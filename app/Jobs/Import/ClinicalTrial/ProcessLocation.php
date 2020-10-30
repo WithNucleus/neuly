@@ -116,16 +116,14 @@ class ProcessLocation implements ShouldQueue
     private function addImportMessage($location)
     {
         $nctNumber = $this->clinicaltrial->nct_number;
-
         $message = [
-            'nct_number'   => $nctNumber,
             'import_id'    => $location->id,
             'import_value' => $location->name,
         ];
 
         if (!isset($this->importMessages[$nctNumber])) {
             $this->importMessages[$nctNumber] = [
-                'id' => $nctNumber,
+                'clinicaltrial_id' => $this->clinicaltrial->id,
                 'messages' => [$message],
             ];
         } else {

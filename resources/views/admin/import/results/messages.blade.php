@@ -2,19 +2,17 @@
     <div class="card card-body">
         <h3 class="h5">{{ Str::plural(ucfirst($entityName)) }}</h3>
         <ul class="list-group">
-            @forelse($messages as $key => $array)
+            @forelse($messages as $nctNumber => $messagesData)
                 <li class="list-group-item">
 
                     <p class="mb-0 font-weight-bold">
-                        <a href="/admin/clinicaltrial/{{ $array->id }}/show">{{ $key }}</a>
+                        <a href="{{ route('clinicaltrial.show', $messagesData->clinicaltrial_id) }}">{{ $nctNumber }}</a>
                     </p>
 
                     <ul>
-                        @foreach ($array->messages as $message)
+                        @foreach ($messagesData->messages as $message)
                             <li>
-                                    <span @if ($message->info == 'Error') class="bg-danger text-white" @endif>
-                                        {{ $message->info }} - {{ $message->{$entityName} }}
-                                    </span>
+                                [ID: {{ $message->import_id }}] {{ $message->import_value }}
                             </li>
                         @endforeach
                     </ul>

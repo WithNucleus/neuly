@@ -20,7 +20,7 @@ class ResultsController extends Controller
     }
 
     public function showResults($id) {
-    	$results = ImportResult::find($id);
+    	$results = ImportResult::findorFail($id);
 
         $location_messages = json_decode($results->location_messages);
         $company_messages  = json_decode($results->company_messages);
