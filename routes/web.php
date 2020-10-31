@@ -276,6 +276,13 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/user/person/email', 'Index\UserPersonController@saveEmail')->name('user.person.save.email');
     Route::get('/user/person/social', 'Index\UserPersonController@social')->name('user.person.social');
     Route::post('/user/person/social', 'Index\UserPersonController@saveSocial')->name('user.person.save.social');
+
+    Route::get('/user/person/create', 'Index\UserPersonController@create')->name('user.person.create');
+    Route::post('/user/person/create/email', 'Index\UserPersonController@createEmail')->name('user.person.create.email');
+    Route::post('/user/person/create/social', 'Index\UserPersonController@createSocial')->name('user.person.create.social');
+    Route::post('/user/person/create/finish', 'Index\UserPersonController@createFinish')->name('user.person.create.finish');
+
+    Route::get('/user/person/search', 'Index\UserPersonController@search')->name('user.person.search');
 });
 
 // User Email Reset

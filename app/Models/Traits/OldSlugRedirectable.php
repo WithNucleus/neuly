@@ -4,6 +4,7 @@ namespace App\Models\Traits;
 
 use App\Notifications\SlugUpdated;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Str;
 
 trait OldSlugRedirectable
 {

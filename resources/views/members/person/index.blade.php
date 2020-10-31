@@ -16,7 +16,7 @@
                     @if( $person !== null)
                         @include('members.person.personal')
                     @else
-                        @include('members.person.create')
+                        @include('members.person.choose')
                     @endif
                 </div>
             </div>

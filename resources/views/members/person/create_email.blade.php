@@ -14,7 +14,7 @@
                     <h1 class="page-title-default text-primary mb-4">Create your person profile</h1>
 
                     <div class="progress">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="progress-bar bg-success" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
 
                     <div class="py-4 col-12 col-lg-12">
@@ -28,30 +28,19 @@
 
                         @include('members.includes.status-messages')
 
-                        <form id="user-profile" action="{{ route('user.person.create.email') }}" method="post" class="needs-validation" novalidate>
+                        <form id="user-profile" action="{{ route('user.person.create.social') }}" method="post" class="needs-validation" novalidate>
                             @csrf
+
                             <div class="form-group row">
                                 <div class="col-12 col-md-12 mb-3 mb-md-0">
-                                    <label for="visibility" class="font-weight-bold">Visibility</label>
-                                    <select class="form-control" name="visibility">
-                                        <option value="public">Public</option>
-                                        <option value="neuly">Members only</option>
-                                    </select>
+                                    <label for="email" class="font-weight-bold">Email</label>
+                                    <input type="text" class="form-control" name="email" required>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <div class="col-12 col-md-12 mb-3 mb-md-0">
-                                    <label for="name" class="font-weight-bold">First Name</label>
-                                    <input type="text" class="form-control" name="name" required>
-                                    <div class="invalid-feedback">
-                                        Your first name is required.
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-12 col-md-12 mb-3 mb-md-0">
-                                    <label for="bio" class="font-weight-bold">Biography</label>
-                                    <textarea class="form-control" name="bio" rows="10"></textarea>
+                                    <label for="secondary_email" class="font-weight-bold">Second Email</label>
+                                    <input type="text" class="form-control" name="secondary_email">
                                 </div>
                             </div>
                             <button type="submit" class="submit btn btn-primary">next</button>
