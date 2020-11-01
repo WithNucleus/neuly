@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Index;
 
 use App\Http\Controllers\Controller;
 use App\Models\Person;
+use App\Models\RaisedClaim;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,6 +16,17 @@ class UserPersonController extends Controller
         $person = Auth::user()->relatedPerson;
 
         return view('members.person.index', compact('person'));
+    }
+
+    public function status()
+    {
+
+        $user= Auth::user();
+        $claims = RaisedClaim::where('user_id', '=', $user->id)
+            ->whereNotNull('verification_token')
+            ->get();
+
+        return view('members.person.status', compact('claims', 'user'));
     }
 
     public function email()
