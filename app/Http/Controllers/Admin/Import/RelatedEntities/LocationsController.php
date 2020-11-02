@@ -6,10 +6,7 @@ use App\Helpers\EntityHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Import\RelatedEntities\LocationsRequest;
 use App\Jobs\Import\RelatedEntities\ProcessLocation;
-use App\Models\Focus;
 use App\Models\ImportResult;
-use App\Models\Location;
-use App\Models\Research;
 use Illuminate\Support\Facades\Auth;
 
 class LocationsController extends Controller

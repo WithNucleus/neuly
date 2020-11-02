@@ -20,17 +20,44 @@
                     @forelse($failures as $failure)
                         <li class="list-group-item js-failure-item-container">
                             @foreach ($failure->details as $key => $detail)
+                                @if($key === 'company_id')
+                                    <input type="hidden" name="company_id" value="{{$detail}}"/>
+                                @endif
+
                                 @if(is_array($detail))
                                     <p>{{ strtoupper($key) }}:</p>
                                     <ul class="mb-4">
                                     @foreach ($detail as $name => $value)
-                                        <li>{{ strtoupper($name) }}: {{ $value }}</li>
+                                        <li>
+                                        @if($key == 'import_value')
+                                            <label>{{ strtoupper($name) }}:</label>
+                                            <div class="input-group">
+                                                <input class="form-control js-import-data-input" type="text" name="{{ $name }}" value="{{ $value }}">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text">
+                                                        Update <input type="checkbox" class="ml-2 js-toogle-input-checkbox" checked>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @else
+                                            {{ strtoupper($name) }}: {{ $value }}
+                                        @endif
+                                        </li>
                                     @endforeach
                                     </ul>
                                 @else
-                                <p>{{ strtoupper($key) }}: {{ $detail }}</p>
+                                    <p>{{ strtoupper($key) }}: {{ $detail }}</p>
                                 @endif
                             @endforeach
+
+                            <button class="btn btn-primary js-fix-people-orgs-failure-button"
+                                    data-type="create"
+                                    data-action="{{ route('import.failures.fix', $failure->id) }}">Create new person
+                            </button>
+                            <button class="btn btn-primary js-fix-people-orgs-failure-button"
+                                    data-type="update"
+                                    data-action="{{ route('import.failures.fix', $failure->id) }}">Update existing
+                            </button>
                             <button class="btn btn-danger js-delete-failure-button"
                                     data-action="{{ route('import.failures.delete', $failure->id) }}">Delete
                             </button>

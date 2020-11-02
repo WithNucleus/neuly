@@ -76,12 +76,8 @@ class FailuresController extends Controller
                 $result = ClinicalTrialCorrector::correctFailure($failure, $request->all());
                 break;
             case ImportResult::TYPE_RELATED_ENTITIES_LOCATION:
-                $result = RelatedEntitiesCorrector::correctFailure($failure, $request->all());
-                break;
             case ImportResult::TYPE_RELATED_ENTITIES_PEOPLE_ORGANIZATION:
-                if ($failure->type === ImportFailure::TYPE_LOCATIONS) {
-                    $result = RelatedEntitiesCorrector::correctFailure($failure, $request->all());
-                }
+                $result = RelatedEntitiesCorrector::correctFailure($failure, $request->all());
                 break;
             case ImportResult::TYPE_BATCH_IMAGES_UPLOAD:
                 $result = BatchImageUploadCorrector::correctFailure($failure, $request->file('image'));

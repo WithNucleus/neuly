@@ -128,6 +128,39 @@
         });
     });
 
+    $(".js-fix-people-orgs-failure-button").on('click', function () {
+        let button = $(this),
+            itemBlock = button.parents('.js-failure-item-container'),
+            action = button.data('action'),
+            type = button.data('type'),
+            companyId = itemBlock.find('input[name=company_id').val(),
+            data = {
+                'type': type,
+                'company_id': companyId
+            };
+
+        let inputsSelector = '.js-import-data-input';
+
+        if (type === 'update') {
+            inputsSelector += ':enabled';
+        }
+
+        itemBlock.find(inputsSelector).each(function () {
+            data[$(this).attr('name')] = $(this).val();
+        });
+
+        $.post(action, data, function (response){
+            processRequestResponse(itemBlock, response.status);
+        });
+    });
+
+    $('.js-toogle-input-checkbox').on('change', function (event) {
+        let checkbox = $(this);
+        let input = checkbox.parents('.input-group').find('.js-import-data-input');
+
+        input.prop('disabled', !checkbox.prop('checked'));
+    });
+
     $(".js-delete-failure-button").on('click', function () {
         let button = $(this),
             itemBlock = button.parents('.js-failure-item-container'),

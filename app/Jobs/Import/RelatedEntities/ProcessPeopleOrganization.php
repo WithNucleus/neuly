@@ -127,6 +127,7 @@ class ProcessPeopleOrganization implements ShouldQueue
     private function addFailedRecord($existingPerson)
     {
         $this->importFailedRecords[] = [
+            'company_id'   => $this->company->id,
             'target_id'    => $existingPerson->id,
             'target_class' => get_class($existingPerson),
             'existing_data' => $existingPerson->toArray(),
