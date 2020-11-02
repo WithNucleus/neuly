@@ -2,7 +2,7 @@
     <div class="container py-5">
         <div class="row">
             <div class="col-12">
-                <img src="{{ asset('images/neuly-logo-dark.png') }}" alt="Neuly" width="120" class="mb-1">
+                <img src="{{ asset('images/neuly-logo-dark.png') }}" alt="Neuly" width="120" class="mb-1 mr-2"> <span class="font-weight-bold">v 1.0</span>
             </div>
         </div>
         <div class="row">
@@ -17,6 +17,9 @@
                 </p>
                 <p class="mb-0">
                     <a href="{{ route('job-report-entry.index') }}" class="font-weight-bold">Jobs Report</a>
+                </p>
+                <p class="mb-0">
+                    <a href="{{ route('discover.organizations.jobs', 'neuly') }}" class="font-weight-bold text-info">We're Hiring!</a>
                 </p>
             </div>
 
