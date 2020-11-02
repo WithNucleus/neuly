@@ -87,8 +87,8 @@ class ProcessSponsorCollaborators
             $this->companyMappingSettings = $importSettings->mapping_organisation;
         }
 
-        $this->existedCompanyNames = Company::all()->pluck('name', 'id');
-        $this->existedPersonNames  = Person::all()->pluck('name', 'id');
+        $this->existedCompanyNames = Company::all()->pluck('name', 'id')->toArray();
+        $this->existedPersonNames  = Person::all()->pluck('name', 'id')->toArray();
     }
 
     /**
