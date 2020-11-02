@@ -93,13 +93,14 @@ class ClinicalTrialController extends Controller
     		// Loop through columns in a record
     		foreach ($record as $key => $value) {
 	    		$column = $headings[$key];
+                $value = trim($value);
 
 	    		// if column name
 	    		if ($column == 'nct_number') {
                     $nctNumber = $value;
 	    			$attributes['nct_number'] = $nctNumber;
 
-	    		} elseif (in_array($column, $dateColumns)) {
+	    		} elseif (in_array($column, $dateColumns) && $value != '') {
 	    			$attributes[$column] = Carbon::parse($value)->format('Y-m-d');
 
                 } elseif ($column == 'locations') {
