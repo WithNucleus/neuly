@@ -93,6 +93,11 @@ class ClinicalTrialController extends Controller
     		// Loop through columns in a record
     		foreach ($record as $key => $value) {
 	    		$column = $headings[$key];
+                $value = trim($value);
+
+                if ($value == '') {
+                    continue;
+                }
 
 	    		// if column name
 	    		if ($column == 'nct_number') {

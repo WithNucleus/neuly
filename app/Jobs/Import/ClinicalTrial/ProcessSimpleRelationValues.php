@@ -56,7 +56,7 @@ class ProcessSimpleRelationValues implements ShouldQueue
     {
         $relationIds = [];
 
-        foreach ($this->valuesArray as $value) {
+        foreach ($this->values as $value) {
             $entity = $this->relationClass::firstOrCreate(['value' => $value]);
             $relationIds[] = $entity->id;
         }
