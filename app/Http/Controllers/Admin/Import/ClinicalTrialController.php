@@ -95,12 +95,16 @@ class ClinicalTrialController extends Controller
 	    		$column = $headings[$key];
                 $value = trim($value);
 
+                if ($value == '') {
+                    continue;
+                }
+
 	    		// if column name
 	    		if ($column == 'nct_number') {
                     $nctNumber = $value;
 	    			$attributes['nct_number'] = $nctNumber;
 
-	    		} elseif (in_array($column, $dateColumns) && $value != '') {
+	    		} elseif (in_array($column, $dateColumns)) {
 	    			$attributes[$column] = Carbon::parse($value)->format('Y-m-d');
 
                 } elseif ($column == 'locations') {
