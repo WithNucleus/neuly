@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -50,7 +51,9 @@ class CreateCountriesTable extends Migration
                     'area' => $country['area'],
                     'timezones' => json_encode($country['timezones']),
                     'currencies' => json_encode($country['currencies']),
-                    'languages' => json_encode($country['languages'])
+                    'languages' => json_encode($country['languages']),
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now()
                 )
             );
         }
