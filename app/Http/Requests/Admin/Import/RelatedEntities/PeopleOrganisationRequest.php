@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Admin\Import;
+namespace App\Http\Requests\Admin\Import\RelatedEntities;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RelatedEntitiesRequest extends FormRequest
+class PeopleOrganisationRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,6 @@ class RelatedEntitiesRequest extends FormRequest
     public function rules()
     {
         return [
-            'entity_type' => 'required',
             'csv' => 'required|mimes:csv,txt',
         ];
     }

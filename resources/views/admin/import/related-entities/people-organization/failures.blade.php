@@ -4,7 +4,7 @@
     <div class="container-fluid mt-5">
         <h2>
             <span class="text-capitalize">Import Failures</span>
-            <a href="{{ route('import.related-entities.index') }}" class="font-sm"><i class="la la-angle-double-left"></i> Back to <span>Import Related Entities</span></a>
+            <a href="{{ route('import.related-entities.people-organization.index') }}" class="font-sm"><i class="la la-angle-double-left"></i> Back to <span>Import Related People To Organization</span></a>
         </h2>
     </div>
 @endsection
@@ -13,7 +13,7 @@
     <!-- Default box -->
     <div class="row mt-4">
         <div class="col-6 col-md-4">
-            <h2 class="h3">#{{ $result->id }} Target entity: {{ class_basename($result->entity) }}</h2>
+            <h2 class="h3">#{{ $result->id }}</h2>
         </div>
     </div>
 

@@ -30,6 +30,7 @@ class FailuresController extends Controller
             ImportFailure::TYPE_LOCATIONS,
             ImportFailure::TYPE_SPONSOR_COLLABORATORS,
             ImportFailure::TYPE_IMAGE,
+            ImportFailure::TYPE_PEOPLE_ORGANIZATION,
         ];
 
         if (!in_array($type, $allowedTypes)) {
@@ -68,12 +69,14 @@ class FailuresController extends Controller
     public function fix(Request $request, $id)
     {
         $failure = ImportFailure::with('result')->findOrFail($id);
+        $result = false;
 
         switch ($failure->result->type) {
             case ImportResult::TYPE_CLINICAL_TRIALS:
                 $result = ClinicalTrialCorrector::correctFailure($failure, $request->all());
                 break;
-            case ImportResult::TYPE_RELATED_ENTITIES:
+            case ImportResult::TYPE_RELATED_ENTITIES_LOCATION:
+            case ImportResult::TYPE_RELATED_ENTITIES_PEOPLE_ORGANIZATION:
                 $result = RelatedEntitiesCorrector::correctFailure($failure, $request->all());
                 break;
             case ImportResult::TYPE_BATCH_IMAGES_UPLOAD:

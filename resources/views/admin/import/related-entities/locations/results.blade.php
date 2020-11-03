@@ -5,7 +5,7 @@
         <h1 class="h2">
             <span class="text-capitalize">Success Import Results</span>
 
-            <a href="{{ route('import.related-entities.index') }}" class="font-sm"><i class="la la-angle-double-left"></i> Back to <span>Import Related Entities</span></a>
+            <a href="{{ route('import.related-entities.locations.index') }}" class="font-sm"><i class="la la-angle-double-left"></i> Back to <span>Import Related Entities</span></a>
         </h1>
     </div>
 @endsection

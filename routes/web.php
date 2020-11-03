@@ -338,9 +338,29 @@ Route::group([
         'as'     => 'related-entities.'
     ], function () {
         Route::get('/', 'RelatedEntitiesController@index')->name('index');
-        Route::post('/import', 'RelatedEntitiesController@import')->name('import');
-        Route::get('/results/{id}', 'RelatedEntitiesController@results')->name('results');
-        Route::get('/failures/{id}', 'RelatedEntitiesController@failures')->name('failures');
+
+        Route::group([
+            'prefix' => '/locations',
+            'namespace'  => 'RelatedEntities',
+            'as'     => 'locations.'
+        ], function () {
+            Route::get('/', 'LocationsController@index')->name('index');
+            Route::post('/import', 'LocationsController@import')->name('import');
+            Route::get('/results/{id}', 'LocationsController@results')->name('results');
+            Route::get('/failures/{id}', 'LocationsController@failures')->name('failures');
+        });
+
+        Route::group([
+            'prefix' => '/people-organization',
+            'namespace'  => 'RelatedEntities',
+            'as'     => 'people-organization.'
+        ], function () {
+            Route::get('/', 'PeopleOrganizationController@index')->name('index');
+            Route::post('/import', 'PeopleOrganizationController@import')->name('import');
+            Route::get('/results/{id}', 'PeopleOrganizationController@results')->name('results');
+            Route::get('/failures/{id}', 'PeopleOrganizationController@failures')->name('failures');
+        });
+
     });
 
     Route::group([
