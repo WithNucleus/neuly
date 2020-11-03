@@ -30,7 +30,12 @@ class UserCrudController extends CrudController
         $this->crud->setColumns([
             [
                 'name'  => 'name',
-                'label' => trans('backpack::permissionmanager.name'),
+                'label' => 'First Name',
+                'type'  => 'text',
+            ],
+            [
+                'name'  => 'last_name',
+                'label' => 'Last Name',
                 'type'  => 'text',
             ],
             [
@@ -148,7 +153,12 @@ class UserCrudController extends CrudController
         $this->crud->addFields([
             [
                 'name'  => 'name',
-                'label' => trans('backpack::permissionmanager.name'),
+                'label' => 'First Name',
+                'type'  => 'text',
+            ],
+            [
+                'name'  => 'last_name',
+                'label' => 'Last Name',
                 'type'  => 'text',
             ],
             [
