@@ -74,6 +74,11 @@ img {
     max-width: 100%;
 }
 
+li {
+    font-size: 16px;
+    line-height: 1.5em;
+}
+
 /* Layout */
 
 .wrapper {
