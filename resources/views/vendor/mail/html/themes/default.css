@@ -74,6 +74,11 @@ img {
     max-width: 100%;
 }
 
+li {
+    font-size: 16px;
+    line-height: 1.5em;
+}
+
 /* Layout */
 
 .wrapper {
@@ -287,4 +292,13 @@ img {
 
 .break-all {
     word-break: break-all;
+}
+
+.preheader {
+    display:none !important;
+    visibility:hidden;
+    opacity:0;
+    color:transparent;
+    height:0;
+    width:0;
 }

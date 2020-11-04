@@ -7,6 +7,7 @@ use App\Models\UserSocialAuth;
 use App\Providers\RouteServiceProvider;
 use App\User;
 use Carbon\Carbon;
+use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -104,6 +105,8 @@ class LoginController extends Controller
                     'password'          => Hash::make(Str::random('20')),
                     'email_verified_at' => Carbon::now(),
                 ])->assignRole('Subscriber');
+
+                Verified::dispatch($user);
 
                 $socialAuth = new UserSocialAuth();
                 $socialAuth->user_id = $user->id;
