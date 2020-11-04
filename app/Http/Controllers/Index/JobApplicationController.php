@@ -36,41 +36,45 @@ class JobApplicationController extends Controller
 
     }
 
-    // Process Job Application
-    public function apply(JobApplicationRequest $request) {
-
+    /**
+     * @param \App\Http\Requests\JobApplicationRequest $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function apply(JobApplicationRequest $request)
+    {
         $user       = Auth::user();
         $name       = $user->name;
-        $fullName   = $user->name . ' ' . $user->last_name;
         $job_id     = $request->input('job_id');
         $company_id = $request->input('company_id');
 
-    	$company  = Company::find($company_id)->name;
-    	$position = Job::find($job_id)->job_title;
+        $company  = Company::findOrFail($company_id)->name;
+        $position = Job::findOrFail($job_id)->job_title;
 
-    	if ($request->file('resume')->isValid() AND $request->file('cover_letter')->isValid()) {
-			// Store Resume
-			$resume = $request->file('resume');
-			$resume_filename = 'job-' . $job_id . '-' . $name . '-resume.pdf';
-			$resume_path = $request->resume->storeAs('jobsapps' , $resume_filename);
+        $resume_path       = null;
+        $cover_letter_path = null;
+        $fullName          = $user->name . '-' . $user->last_name;
 
-			// Store Cover Letter
-			$cover_letter = $request->file('cover_letter');
-			$cover_letter_filename = 'job-' . $job_id . '-' . $name . '-cover-letter.pdf';
-			$cover_letter_path = $request->cover_letter->storeAs('jobsapps' , $cover_letter_filename);
-		}
+        if ($request->file('resume')->isValid()) {
+            $resume_filename = 'job-' . $job_id . '-' . $fullName . '-resume.pdf';
+            $resume_path     = $request->resume->storeAs('jobsapps', $resume_filename);
+        }
 
-        $attributes = array(
+        if ($request->file('cover_letter')->isValid()) {
+            $cover_letter_filename = 'job-' . $job_id . '-' . $fullName . '-cover-letter.pdf';
+            $cover_letter_path     = $request->cover_letter->storeAs('jobsapps', $cover_letter_filename);
+        }
+
+        $attributes = [
             'user_id'      => $user->id,
             'job_id'       => $job_id,
             'company_id'   => $company_id,
             'resume'       => $resume_path,
             'cover_letter' => $cover_letter_path
-        );
+        ];
 
-		JobApplication::create($attributes);
+        JobApplication::create($attributes);
 
-		return view('discover.jobs.success', compact('name', 'company', 'position'));
+        return view('discover.jobs.success', compact('name', 'company', 'position'));
     }
 
     // Get Resume
