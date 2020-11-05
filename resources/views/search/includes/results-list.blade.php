@@ -23,8 +23,8 @@ $showMoreLimit = 9;
                                             <div
                                                 class="card-body text-center d-flex justify-content-center align-items-center">
                                                 <a href="{{ route('discover.organizations.show', ['slug' => $organization->slug]) }}">
-                                                    @if($organization->logo != '')
-                                                        <img src="/storage/{{ $organization->logo }}"
+                                                    @if($organization->entityImageUrl)
+                                                        <img src="{{ $organization->entityImageUrl }}"
                                                              alt="{{ $organization->name }}" class="company-logo mx-auto"
                                                              alt="{{$organization->name}}">
                                                     @endif

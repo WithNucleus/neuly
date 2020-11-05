@@ -121,8 +121,8 @@
                                     <li class="list-group-item p-4 d-md-flex">
 
                                         <div class="image mr-3">
-                                            @if($person->photo != '')
-                                                <div class="person-photo-small shadow-sm" style="background-image: url('/storage/{{ $person->photo }}');">
+                                            @if($person->entityImageUrl)
+                                                <div class="person-photo-small shadow-sm" style="background-image: url('{{ $person->entityImageUrl }}');">
                                                     <span class="sr-only">{{ $person->name }}</span>
                                                 </div>
                                             @else

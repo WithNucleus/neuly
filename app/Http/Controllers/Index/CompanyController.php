@@ -84,7 +84,7 @@ class CompanyController extends Controller
         $metas = Metas::process(array(
             'title'         => $company->name,
             'description'   => $company->summary,
-            'image'         => $company->logo ? "storage/{$company->logo}" : '',
+            'image'         => $company->entityImageUrl,
         ));
 
         $related = $this->getReltaedEntities($company);

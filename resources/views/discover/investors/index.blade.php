@@ -113,15 +113,15 @@
                                             <div class="pt-4 text-center">
 
                                                 <a href="{{ route('discover.investors.show', $investor->slug) }}" class="text-decoration-none">
-                                                @if ($investor->logo == '')
-                                                    <div class="bg-brains logo-is-contained rounded">
-                                                        {{-- <span class="lead-smaller m-0 text-white px-2">{{ $company->name }}</span> --}}
-                                                    </div>
+                                                @if ($investor->entityImageUrl)
+                                                    <div class="logo-is-contained" style="background-image: url('{{ $investor->entityImageUrl }}')" data-toggle="tooltip" data-placement="top" title="{{ $investor->name }}"></div>
                                                     <p class="my-3 lead">
                                                         <a href="{{ route('discover.investors.show', $investor->slug) }}" class="text-decoration-none">{{ $investor->name }}</a>
                                                     </p>
                                                 @else
-                                                    <div class="logo-is-contained" style="background-image: url('/storage/{{ $investor->logo }}')" data-toggle="tooltip" data-placement="top" title="{{ $investor->name }}"></div>
+                                                    <div class="bg-brains logo-is-contained rounded">
+                                                        {{-- <span class="lead-smaller m-0 text-white px-2">{{ $company->name }}</span> --}}
+                                                    </div>
                                                     <p class="my-3 lead">
                                                         <a href="{{ route('discover.investors.show', $investor->slug) }}" class="text-decoration-none">{{ $investor->name }}</a>
                                                     </p>

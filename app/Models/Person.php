@@ -4,25 +4,26 @@ namespace App\Models;
 
 use App\Helpers\EntityMergeHelper;
 use App\Models\Contracts\EntityContract;
+use App\Models\Contracts\EntityImageContract;
 use App\Models\Traits\CrudShowEntityPageButton;
 use App\Models\Traits\OldSlugRedirectable;
+use App\Models\Traits\EntityImage;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Log;
-use Intervention\Image\Facades\Image;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class Person extends Model implements EntityContract
+class Person extends Model implements EntityContract, EntityImageContract
 {
     use CrudTrait;
     use HasFollowers;
     use OldSlugRedirectable;
     use LogsActivity;
     use CrudShowEntityPageButton;
+    use EntityImage;
 
     /*
     |--------------------------------------------------------------------------
@@ -35,6 +36,10 @@ class Person extends Model implements EntityContract
 
     // log activity for all attributes, which not listed in $guarded array
     protected static $logUnguarded = true;
+
+    protected static $imageAttribute = 'photo';
+    protected static $imageFolderPath = 'people';
+    protected static $imageFilenameAttribute = 'id';
 
     /*
     |--------------------------------------------------------------------------
@@ -158,36 +163,9 @@ class Person extends Model implements EntityContract
     |--------------------------------------------------------------------------
     */
 
-    public function setPhotoAttribute($value) {
-
-        $filename         = 'photo-' . $this->id . '.png';
-        $disk             = 'local';
-        $destination_path = "public/people";
-
-        // if a base64 was sent, store it in the db
-        if (Str::startsWith($value, 'data:image'))
-        {
-            $image = Image::make($value)->encode('png', 90);
-
-            Storage::disk($disk)->delete('public/' . $this->photo);
-            Storage::disk($disk)->put($destination_path . '/' . $filename, $image->stream());
-
-            $public_destination_path = Str::replaceFirst('public/', '', $destination_path);
-
-            $this->attributes['photo'] = $public_destination_path . '/' . $filename;
-        } else {
-            // if the image was erased
-            if ($value == null) {
-                Storage::disk($disk)->delete('public/' . $this->photo);
-                $this->attributes['photo'] = null;
-
-            } elseif (Str::startsWith($value, '/storage')) {
-                // do nothing because image isn't updated
-            } else {
-                // moving listing request image
-                $this->attributes['photo'] = $value;
-            }
-        }
+    public function setPhotoAttribute($value)
+    {
+        $this->updateImageAttribute($value);
     }
 
     /**

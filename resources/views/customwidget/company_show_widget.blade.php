@@ -3,8 +3,8 @@
 		<div class="col-12 col-md-8 col-xl-6 d-flex">
 			<div class="card card-body flex-fill">
 				<div>
-					@if($widget['company']->logo != '')
-						<img src="/storage/{{ $widget['company']->logo }}" alt="{{ $widget['company']->name }}" class="company-logo pull-right">
+					@if($widget['company']->entityImageUrl)
+						<img src="{{ $widget['company']->entityImageUrl }}" alt="{{ $widget['company']->name }}" class="company-logo pull-right">
 					@endif
 					<h2 class="h3">{{ $widget['company']->name }}</h2>
 

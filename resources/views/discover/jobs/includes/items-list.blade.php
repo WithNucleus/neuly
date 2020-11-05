@@ -88,7 +88,7 @@
 
                         <div class="image mr-5 flex-shrink-0">
                             <a href="{{ route('discover.jobs.show', $job->slug) }}" {!! $attrTarget !!}>
-                                <div class="job-org-logo" style="background-image: url('/storage/{{ $job->company->logo }}');"></div>
+                                <div class="job-org-logo" style="background-image: url('{{ $job->company->entityImageUrl }}');"></div>
                             </a>
                         </div>
 

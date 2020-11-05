@@ -4,23 +4,24 @@ namespace App\Models;
 
 use App\Helpers\EntityMergeHelper;
 use App\Models\Contracts\EntityContract;
+use App\Models\Contracts\EntityImageContract;
 use App\Models\Traits\CrudShowEntityPageButton;
+use App\Models\Traits\EntityImage;
 use App\Models\Traits\OldSlugRedirectable;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Intervention\Image\Facades\Image;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class Investor extends Model implements EntityContract
+class Investor extends Model implements EntityContract, EntityImageContract
 {
     use CrudTrait;
     use HasFollowers;
     use OldSlugRedirectable;
     use LogsActivity;
     use CrudShowEntityPageButton;
+    use EntityImage;
 
     /*
     |--------------------------------------------------------------------------
@@ -35,6 +36,9 @@ class Investor extends Model implements EntityContract
     protected static $logUnguarded = true;
     protected static $logName = 'entities';
 
+    protected static $imageAttribute = 'logo';
+    protected static $imageFolderPath = 'investors';
+    protected static $imageFilenameAttribute = 'name';
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS
@@ -106,45 +110,7 @@ class Investor extends Model implements EntityContract
 
     public function setLogoAttribute($value)
     {
-        $investor_name    = Str::slug($this->name);
-        $filename         = 'investor-' . $investor_name . '.png';
-        $attribute_name   = "logo";
-        $disk             = 'local';
-        $public_path      = "public/";
-        $destination_path = $public_path . "logos";
-
-        // if the image was erased
-        if ($value === null) {
-            Storage::disk($disk)->delete($this->{$attribute_name});
-            return $this->attributes[$attribute_name] = null;
-        }
-
-        // if a base64 was sent, store it in the db
-        if (Str::startsWith($value, 'data:image'))
-        {
-            $image = Image::make($value)->encode('png', 90);
-
-            Storage::disk($disk)->delete($this->{$attribute_name});
-            Storage::disk($disk)->put($destination_path.'/'.$filename, $image->stream());
-
-            $public_destination_path = Str::replaceFirst($public_path, '', $destination_path);
-
-            return $this->attributes[$attribute_name] = $public_destination_path.'/'.$filename;
-        }
-
-        $oldValue = Storage::disk($disk)->url($this->{$attribute_name});
-
-        //if another already uploaded image was assigned (e.g. after Entity Merge)
-        if ($value !== null && $oldValue != $value) {
-            $oldImagePath = $public_path . $this->{$attribute_name};
-            $newImagePath = $public_path . $value;
-            //delete old image from disk
-            Storage::disk($disk)->delete($oldImagePath);
-            //replace old image with new
-            Storage::disk($disk)->move($newImagePath, $oldImagePath);
-            //assign back correct old image value
-            return $this->attributes[$attribute_name] = $this->{$attribute_name};
-        }
+        $this->updateImageAttribute($value);
     }
 
     /**

@@ -134,7 +134,7 @@ class CompanyCrudController extends CrudController
             'label'        => "Logo",
             'name'         => "logo",
             'type'         => 'image',
-            'prefix'       => 'storage/'
+            'prefix'       => Company::getImageUrlPrefix()
         ]);
 
         $this->crud->addButtonFromModelFunction('line', 'show_entity', 'getShowEntityPageButton', 'beginning');
@@ -256,7 +256,7 @@ class CompanyCrudController extends CrudController
             'upload'       => true,
             'crop'         => true,
             'aspect_ratio' => 0,
-            'disk'         => 'local',
+            'prefix'       => Company::getImageUrlPrefix(),
         ]);
     }
 

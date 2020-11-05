@@ -123,15 +123,15 @@
                                                 @if($company->events->count() > 0) <a href="{{ route('discover.organizations.events', $company->slug) }}"><span class="events-badge font-weight-bold"><i class="fad fa-calendar-day"></i> EVENTS</span></a> @endif
 
                                                 <a href="{{ route('discover.organizations.show', $company->slug) }}" class="text-decoration-none">
-                                                @if ($company->logo == '')
-                                                    <div class="bg-brains logo-is-contained rounded">
-                                                        {{-- <span class="lead-smaller m-0 text-white px-2">{{ $company->name }}</span> --}}
-                                                    </div>
+                                                @if ($company->entityImageUrl)
+                                                    <div class="logo-is-contained" style="background-image: url('{{ $company->entityImageUrl }}')" data-toggle="tooltip" data-placement="top" title="{{ $company->name }}"></div>
                                                     <p class="my-3 lead">
                                                         <a href="{{ route('discover.organizations.show', $company->slug) }}" class="text-decoration-none">{{ $company->name }}</a>
                                                     </p>
                                                 @else
-                                                    <div class="logo-is-contained" style="background-image: url('/storage/{{ $company->logo }}')" data-toggle="tooltip" data-placement="top" title="{{ $company->name }}"></div>
+                                                    <div class="bg-brains logo-is-contained rounded">
+                                                        {{-- <span class="lead-smaller m-0 text-white px-2">{{ $company->name }}</span> --}}
+                                                    </div>
                                                     <p class="my-3 lead">
                                                         <a href="{{ route('discover.organizations.show', $company->slug) }}" class="text-decoration-none">{{ $company->name }}</a>
                                                     </p>

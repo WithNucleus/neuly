@@ -1,14 +1,13 @@
 @if($widget['entity'] != null)
     <div class="clearfix">
-        @if($widget['entity']->logo !== '' && $widget['entity']->logo !== null)
-            <img src="/storage/{{ $widget['entity']->logo }}" alt="{{ $widget['entity']->name }}" class="company-logo float-right" style="max-width: 300px">
+        @if($widget['entity']->entityImageUrl)
+            <img src="{{ $widget['entity']->entityImageUrl }}" alt="{{ $widget['entity']->name }}" class="company-logo float-right" style="max-width: 300px">
         @endif
 
         <h4 class="h5">{{ $widget['entity']->name }}</h4>
 
         @if ($widget['entity']->ownership != '')
-            <p class="mb-2"><strong>Ownership:</strong> {{ $widget['entity']->ownership }}
-                </a></p>
+            <p class="mb-2"><strong>Ownership:</strong> {{ $widget['entity']->ownership }}</p>
         @endif
 
         @if ($widget['entity']->website != '')

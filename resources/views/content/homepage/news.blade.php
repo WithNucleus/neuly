@@ -6,7 +6,7 @@
                 <div class="p-2 mt-1 @if(!$loop->last) border-bottom @endif">
                     @if($loop->iteration == 1)
                         <a href="{{ $article->url }}" target="_blank" rel="noopener noreferrer">
-                            <div class="news-featured-image rounded shadow-sm mb-1" style="background-image: url('/storage/{{ $article->image }}');"></div>
+                            <div class="news-featured-image rounded shadow-sm mb-1" style="background-image: url('{{ $article->entityImageUrl }}');"></div>
                             <p class="lead mb-0">{{ $article->name }}</p>
                         </a>
                     @else

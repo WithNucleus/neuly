@@ -1,24 +1,24 @@
 <div class="row">
     <div class="form-group col-6">
         <label class="d-block">Photo:</label>
-        @if ($original->photo != '')
-            <img src="{{ Storage::url($original->photo) }}" style="max-width: 300px;">
+        @if ($original->entityImageUrl)
+            <img src="{{ $original->entityImageUrl }}" style="max-width: 300px;">
         @endif
     </div>
     <div class="form-group col-6">
         <label class="d-block">Photo:</label>
-        @if ($changes->photo != '')
-            <img src="{{ Storage::url($changes->photo) }}" style="max-width: 300px;">
+        @if ($changes->entityImageUrl)
+            <img src="{{ $changes->entityImageUrl }}" style="max-width: 300px;">
         @endif
         <input type="hidden" name="entity_photo" value="{{ $changes->photo }}">
 
         <div class="option-list mt-3">
-            @if ($original->photo != '')
+            @if ($original->photo)
                 <div class="option-item">
-                    <input type="radio" name="entity_what_photo" value="original" @if ($changes->photo == '') checked @endif> <label> use original image</label>
+                    <input type="radio" name="entity_what_photo" value="original" @if ($changes->photo) checked @endif> <label> use original image</label>
                 </div>
             @endif
-            @if ($changes->photo != '')
+            @if ($changes->photo)
                 <div class="option-item text-success font-weight-bold">
                     <input type="radio" name="entity_what_photo" value="shown" checked> <label> use shown image</label>
                 </div>

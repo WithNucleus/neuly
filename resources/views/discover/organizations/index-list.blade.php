@@ -122,8 +122,8 @@
 
                                         <div class="image mr-3">
 
-                                            @if($company->logo != '')
-                                                <div class="company-logo-contained" style="background-image: url('/storage/{{ $company->logo }}');">
+                                            @if($company->entityImageUrl)
+                                                <div class="company-logo-contained" style="background-image: url('{{ $company->entityImageUrl }}');">
                                                 </div>
                                             @else
                                                 <div class="company-logo-contained">
