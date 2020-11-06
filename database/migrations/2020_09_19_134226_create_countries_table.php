@@ -18,6 +18,7 @@ class CreateCountriesTable extends Migration
         Schema::create('countries', function (Blueprint $table) {
             //$table->bigIncrements('id');
             $table->string('name')->unique()->primary();
+            $table->string('official_name')->unique();
             $table->string('native_name');
             $table->string('alpha2code', 2);
             $table->string('alpha3code', 3);
@@ -41,6 +42,7 @@ class CreateCountriesTable extends Migration
             DB::table('countries')->insert(
                 array(
                     'name' => $country['name'],
+                    'official_name' => $country['name'],
                     'native_name' => $country['nativeName'],
                     'alpha2code' => $country['alpha2Code'],
                     'alpha3code' => $country['alpha3Code'],

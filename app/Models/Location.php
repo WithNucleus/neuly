@@ -131,7 +131,7 @@ class Location extends Model implements EntityContract
     }
 
     // Each Location can have exactly one country
-    public function country()
+    public function officialCountry()
     {
         return $this->belongsTo('App\Models\Country', 'country', 'name');
     }
