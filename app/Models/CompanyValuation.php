@@ -40,6 +40,11 @@ class CompanyValuation extends Model
         return $this->belongsTo(Company::class, 'acquirer_id');
     }
 
+    public function investors()
+    {
+        return $this->belongsToMany(Investor::class);
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES
