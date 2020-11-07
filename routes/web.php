@@ -68,6 +68,8 @@ Route::group([
         Route::get('/research-by-focus', 'ResearchByFocus@index')->name('research-by-focus');
         Route::get('/companies-by-focus-industry', 'CompaniesByFocusIndustry@index')->name('companies-by-focus-industry');
         Route::get('/location-top-by-jobs', 'LocationTopByJobsController@index')->name('location-top-by-jobs');
+        Route::get('/clinical-trials/distribution/countries', 'ClinicalTrialDistributionController@show')->name('distribution.countries.show');
+        Route::get('/clinical-trials/distribution/countries/focus', 'ClinicalTrialDistributionController@showWithFocus')->name('distribution.countries.focus.show');
     });
 });
 
