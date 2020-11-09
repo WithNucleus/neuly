@@ -106,7 +106,7 @@ class LoginController extends Controller
                     'email_verified_at' => Carbon::now(),
                 ])->assignRole('Subscriber');
 
-                Verified::dispatch($user);
+                event(new Verified($user));
 
                 $socialAuth = new UserSocialAuth();
                 $socialAuth->user_id = $user->id;
