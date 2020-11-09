@@ -76,6 +76,11 @@ class Investor extends Model implements EntityContract
             ->withTimestamps();
     }
 
+    public function companyValuations()
+    {
+        return $this->belongsToMany(CompanyValuation::class);
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES

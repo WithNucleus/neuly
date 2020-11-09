@@ -15,8 +15,8 @@ use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 class CompanyValuationCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation { store as traitStore; }
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation { update as traitUpdate; }
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 
@@ -80,6 +80,17 @@ class CompanyValuationCrudController extends CrudController
             'name'     => 'notes',
             'type'     => 'text',
         ]);
+
+        CRUD::addColumn([
+            'label'     => 'Investors',
+            'type'      => 'select_multiple',
+            'name'      => 'investors',
+            'entity'    => 'investors',
+            'attribute' => 'name',
+            'options'   => (function ($query) {
+                return $query->orderBy('name', 'ASC')->get();
+            }),
+        ]);
     }
 
     /**
@@ -122,6 +133,26 @@ class CompanyValuationCrudController extends CrudController
             'name'     => 'notes',
             'type'     => 'textarea',
         ]);
+
+        CRUD::addField([
+            'label'     => "Investors",
+            'type'      => 'select2_multiple',
+            'name'      => 'investors',
+            'entity'    => 'investors',
+            'attribute' => 'name',
+            'options'   => (function ($query) {
+                return $query->orderBy('name', 'ASC')->get();
+            }),
+        ]);
+    }
+
+    public function store()
+    {
+        $response = $this->traitStore();
+
+        $this->updateCompanyInvestorRelations($this->crud->getCurrentEntry());
+
+        return $response;
     }
 
     /**
@@ -133,5 +164,26 @@ class CompanyValuationCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+
+    public function update()
+    {
+        $response = $this->traitUpdate();
+
+        $this->updateCompanyInvestorRelations($this->crud->getCurrentEntry());
+
+        return $response;
+    }
+
+    /**
+     * @param CompanyValuation $companyValuation
+     */
+    private function updateCompanyInvestorRelations(CompanyValuation $companyValuation)
+    {
+        $relatedInvestorIds = $companyValuation->investors()->pluck('id');
+
+        if ($relatedInvestorIds) {
+            $companyValuation->company->investors()->syncWithoutDetaching($relatedInvestorIds);
+        }
     }
 }
