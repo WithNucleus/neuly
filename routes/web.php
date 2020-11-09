@@ -195,9 +195,10 @@ Route::post('/search/clinicaltrials', 'index\SearchController@showClinicalTrials
 Route::get('/search/clinicaltrials/{term}', 'Index\SearchController@showClinicalTrialsResults')->name('search.clinicaltrials.term');
 
 // Feedback
-
-Route::get('/feedback', 'FeedbackController@create')->name('feedback.create');
-Route::post('/feedback', 'FeedbackController@store')->name('feedback.store');
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/feedback', 'FeedbackController@create')->name('feedback.create');
+    Route::post('/feedback', 'FeedbackController@store')->name('feedback.store');
+});
 
 // Thanks for Registering Page
 Route::get('/register/success', 'Auth\SuccessController@thanks')->name('register.success');
