@@ -98,10 +98,22 @@ class LoginController extends Controller
                 })->first();
 
             if (!$user) {
+                $name = $socialiteUser->getName();
+                $nameParts = explode(' ', $name);
+
+                if (count($nameParts) === 2) {
+                    $firstName = $nameParts[0];
+                    $lastName = $nameParts[1];
+                } else {
+                    $firstName = $name;
+                    $lastName = null;
+                }
+
                 $user = User::firstOrCreate([
                     'email' => $socialiteUser->getEmail()
                 ], [
-                    'name'              => $socialiteUser->getName(),
+                    'name'              => $firstName,
+                    'last_name'         => $lastName,
                     'password'          => Hash::make(Str::random('20')),
                     'email_verified_at' => Carbon::now(),
                 ])->assignRole('Subscriber');
