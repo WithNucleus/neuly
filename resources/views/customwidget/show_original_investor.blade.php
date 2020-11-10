@@ -19,18 +19,8 @@
         @endif
 
         @if ($widget['entity']->type != '')
-            <p class="mb-2"><strong>Type:</strong> {{ $widget['entity']->type }}
-                </a></p>
+            <p class="mb-2"><strong>Type:</strong> {{ $widget['entity']->type }}</p>
         @endif
-
-        <p class="mb-0">
-            <strong>Focus: </strong>
-            @forelse ($widget['entity']['focus'] as $item)
-                <a href="/admin/focus/{{ $item->id }}/show">{{ $item->name }}</a>@if (!$loop->last) / @endif
-            @empty
-                -
-            @endforelse
-        </p>
     </div>
 @else
     <p class="lead text-danger font-weight-bold">

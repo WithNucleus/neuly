@@ -183,6 +183,7 @@ class ListingRequestCrudController extends CrudController
         $this->data['title'] = 'Publish Listing Request';
         $this->data['focusCategories'] = $focusCategories;
         $this->data['focusIdsSelected'] = $focusIdsSelected;
+        $this->data['declineButton'] = $listingRequest->generateDeclineButton();
 
         return view('vendor.backpack.crud.listing_requests.publish', $this->data);
 

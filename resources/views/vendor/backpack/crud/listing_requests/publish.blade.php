@@ -120,8 +120,9 @@
                                 <input type="hidden" name="update" value="{{ $update }}" />
                             </div>
 
-                            <div class="form-group">
-                                <button class="btn btn-primary float-right" type="submit">Save</button>
+                            <div class="form-group text-right">
+                                {!! $declineButton !!}
+                                <button class="btn btn-primary" type="submit">Save</button>
                             </div>
                         </div>
                     </form>
