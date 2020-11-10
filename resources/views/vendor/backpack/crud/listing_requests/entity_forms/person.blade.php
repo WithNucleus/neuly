@@ -1,7 +1,7 @@
 <div class="form-group">
     <label class="d-block">Photo:</label>
-    @if ($changes->entityImageUrl)
-        <img src="{{ $changes->entityImageUrl }}" />
+    @if ($changes->photo != '')
+        <img src="{{ Storage::url($changes->photo) }}" />
     @endif
     <input type="hidden" name="entity_photo" value="{{ $changes->photo }}">
 

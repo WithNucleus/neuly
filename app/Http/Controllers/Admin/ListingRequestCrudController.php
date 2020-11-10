@@ -468,21 +468,26 @@ class ListingRequestCrudController extends CrudController
 
     private function handleFileUpload($path, $file)
     {
-        return Storage::disk('public')->putFileAs($path, $file, $file->getClientOriginalName());
+        $filepath = Storage::disk('public')->putFileAs($path, $file, $file->getClientOriginalName());
+
+        return $this->getFilenameFromPath($filepath);
     }
 
-    private function moveFile($path, $file)
+    private function moveFile($destinationPrefix, $filepath)
     {
-        $newFile = $this->generateFilePath($path, $file);
-        Storage::disk('public')->move($file, $newFile);
+        $filename        = $this->getFilenameFromPath($filepath);
+        $destinationPath = $destinationPrefix . DIRECTORY_SEPARATOR . $filename;
 
-        return $newFile;
+        Storage::disk('public')->move($filepath, $destinationPath);
+
+        return $filename;
     }
 
-    private function generateFilePath($path, $file)
+    private function getFilenameFromPath($filepath)
     {
-        $fileName = preg_split('/\//', $file)[1];
-        return $path . '/' .$fileName;
+        $filepathParts = explode('/', $filepath);
+
+        return array_pop($filepathParts);
     }
 
     private function deleteTemporaryFile($path)

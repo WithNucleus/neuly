@@ -9,8 +9,8 @@
     <div class="form-group col-6">
         <label>Logo:</label>
         <br />
-        @if ($changes->entityImageUrl)
-            <img src="{{ $changes->entityImageUrl }}"  style="max-width: 300px">
+        @if ($changes->logo != '')
+            <img src="{{ Storage::url($changes->logo) }}"  style="max-width: 300px">
         @endif
         <input type="hidden" name="entity_logo" value="{{ $changes->logo }}">
         <div class="option-list">
