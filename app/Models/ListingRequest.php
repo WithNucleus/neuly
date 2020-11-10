@@ -11,6 +11,10 @@ class ListingRequest extends Model
 {
     use CrudTrait;
 
+    const STATUS_OPEN = 'open';
+    const STATUS_ACCEPTED = 'accepted';
+    const STATUS_DECLINED = 'declined';
+
     /*
     |--------------------------------------------------------------------------
     | GLOBAL VARIABLES
@@ -31,6 +35,11 @@ class ListingRequest extends Model
         static::created(function ($model) {
             NotificationHelper::sendAdminNotifications(new ListingRequestCreated($model));
         });
+    }
+
+    public function scopeOpen($query)
+    {
+        return $query->where('status', self::STATUS_OPEN);
     }
 
     /*
