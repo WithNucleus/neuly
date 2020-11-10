@@ -55,15 +55,6 @@
             <div class="form-group">
                 <input type="hidden" class="form-control" name="user_email" value="{{ Auth::user()->email  }}">
             </div>
-        @else
-            <div class="form-group">
-                <label for="user_name" class="font-weight-bold">Your Name:</label>
-                <input type="text" class="form-control" name="user_name">
-            </div>
-            <div class="form-group">
-                <label for="user_email" class="font-weight-bold">Your Email:</label>
-                <input type="text" class="form-control" name="user_email">
-            </div>
         @endauth
         <div class="form-group">
             <label for="title" class="font-weight-bold">Title:</label>
@@ -83,7 +74,12 @@
             <textarea class="form-control" name="content" rows="5" required></textarea>
         </div>
         <div class="form-group">
-            <button id="submit-feedback" class="btn btn-primary float-right" type="submit">submit</button>
+            @auth
+                <button id="submit-feedback" class="btn btn-primary float-right" type="submit">Submit</button>
+            @else
+                <p>Please login to submit feedback</p>
+                <a href="{{ route('login') }}" class="btn btn-primary">Login</a>
+            @endauth
         </div>
     </form>
 </div>
