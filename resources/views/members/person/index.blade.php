@@ -15,6 +15,8 @@
 
                     @if( $person !== null)
                         @include('members.person.personal')
+                    @elseif( count($claims) === 1)
+                        @include('members.person.verify')
                     @else
                         @include('members.person.choose')
                     @endif

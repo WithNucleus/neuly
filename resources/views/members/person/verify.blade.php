@@ -2,6 +2,7 @@
 
     <h4 class="text-center">You have raised a claim that is missing verification. Please choose:</h4>
 
+    @include('members.includes.status-messages')
     <div class="row mt-5">
         <div class="col-6 d-inline-flex justify-content-center flex-column align-items-center">
             <div class="d-flex justify-content-center align-items-center" style="background: rgba(115, 251, 211, 0.75); border-radius: 50%; width:200px; height: 200px; color: #275DAD;">
@@ -11,7 +12,7 @@
                     <path fill-rule="evenodd" d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8z"/>
                 </svg>
             </div>
-            <a href="#" class="btn btn-primary mt-4">verify by social media</a>
+            <a href="{{ route('user.person.verify.social') }}" class="btn btn-primary mt-4">verify by social media</a>
         </div>
         <div class="col-6  d-inline-flex justify-content-center flex-column align-items-center">
             <div class="d-flex justify-content-center align-items-center" style="background: rgba(115, 251, 211, 0.75); border-radius: 50%; width:200px; height: 200px; color: #275DAD;">
@@ -21,7 +22,7 @@
                     <path d="M5 7c0 .552-.448 0-1 0s-1 .552-1 0a1 1 0 0 1 2 0z"/>
                 </svg>
             </div>
-            <a href="#" class="btn btn-primary mt-4">verify by email</a>
+            <a href="{{ route('user.person.verify.email') }}" class="btn btn-primary mt-4">verify by email</a>
         </div>
     </div>
 

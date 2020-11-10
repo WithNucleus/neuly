@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Index;
 
 use App\Http\Controllers\Controller;
+use App\Mail\VerifyClaimedPersonMail;
 use App\Model\UserSocialAuth;
 use App\Models\Person;
 use App\Models\RaisedClaim;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class ClaimPersonController extends Controller
 {
@@ -64,9 +66,8 @@ class ClaimPersonController extends Controller
 
         if($this->hasPersonMultipleClaimRaises($person))
         {
-            $request->session()->flash('error', 'There has been a problem with your claim. Please contact us at support@neuly.com.');
-
-            return redirect()->route('member.dashboard');
+            return redirect()->route('user.person.status')
+                ->with('error', 'There has been a problem with your claim. Please contact us at support@neuly.com.');
         }
 
         $person->user_id = $claim->user_id;
@@ -77,9 +78,8 @@ class ClaimPersonController extends Controller
         $claim->verification_token = null;
         $claim->save();
 
-        $request->session()->flash('success', 'Your claim was successfully granted.');
-
-        return redirect()->route('member.dashboard');
+        return redirect()->route('user.person.status')
+            ->with('success', 'Your claim was successfully granted.');
     }
 
     public function verifyClaimBySocial(Request $request, RaisedClaim $claim)
@@ -89,9 +89,8 @@ class ClaimPersonController extends Controller
 
         if($this->hasPersonMultipleClaimRaises($person))
         {
-            $request->session()->flash('error', 'There has been a problem with your claim. Please contact us at support@neuly.com.');
-
-            return redirect()->route('member.dashboard');
+            return redirect()->route('user.person.status')
+                ->with('error', 'There has been a problem with your claim. Please contact us at support@neuly.com.');
         }
 
         $socials = $this->getPersonSocialProfiles($person);
@@ -106,10 +105,36 @@ class ClaimPersonController extends Controller
             $claim->verification_token = null;
             $claim->save();
 
-            $request->session()->flash('success', 'Your claim was successfully granted.');
-
-            return redirect()->route('member.dashboard');
+            return redirect()->route('user.person.status')
+                ->with('success', 'Your claim was successfully granted.');
         }
+
+        return redirect()->route('user.person.status')
+            ->with('error', 'Your claim could not be verified.');
+    }
+
+    public function sendVerificationMail(Request $request)
+    {
+        $user = Auth::user();
+        $claim = RaisedClaim::where('user_id', '=', $user->id)
+            ->whereNotNull('verification_token')
+            ->firstOrFail();
+
+        $claim->verification_token = sha1(time());
+        $claim->save();
+
+        $person = Person::find($claim->person_id);
+
+        if($person->email === null) {
+            return redirect()->route('user.person.status')
+                ->with('error', 'Verification E-Mail could not be send. Please use social verification or contact us.');
+        }
+
+        Mail::to($person->email)
+            ->send(new VerifyClaimedPersonMail($claim, $person));
+
+        return redirect()->route('user.person.status')
+            ->with('success', 'Verification E-Mail has ben resent to the E-Mail of the Person you are trying to claim.');
     }
 
     private function hasUserRaisedAClaimBefore($user)

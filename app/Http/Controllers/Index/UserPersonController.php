@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Index;
 
 
 use App\Http\Controllers\Controller;
+use App\Model\UserSocialAuth;
 use App\Models\Person;
 use App\Models\RaisedClaim;
 use Illuminate\Http\Request;
@@ -13,20 +14,37 @@ class UserPersonController extends Controller
 {
     public function index()
     {
-        $person = Auth::user()->relatedPerson;
+        $user = Auth::user();
+        $person = $user->relatedPerson;
 
-        return view('members.person.index', compact('person'));
+        $claims = RaisedClaim::where('user_id', '=', $user->id)
+            ->whereNotNull('verification_token')
+            ->get();
+
+        return view('members.person.index', compact('person', 'claims'));
     }
 
     public function status()
     {
-
         $user= Auth::user();
         $claims = RaisedClaim::where('user_id', '=', $user->id)
             ->whereNotNull('verification_token')
             ->get();
 
         return view('members.person.status', compact('claims', 'user'));
+    }
+
+    public function verifyEmail() {
+        return view('members.person.verify-mail');
+    }
+
+    public function verifySocial() {
+        $user = Auth::user();
+        $claim = RaisedClaim::where('user_id', '=', $user->id)
+            ->whereNotNull('verification_token')
+            ->firstOrFail();
+
+        return view('members.person.verify-social', compact('claim'));
     }
 
     public function email()
@@ -157,5 +175,51 @@ class UserPersonController extends Controller
         $people = Person::where('name', 'like', $searchTerm)->get();
 
         return view('members.person.search', compact('people', 'cleanTerm'));
+    }
+
+    private function checkForIdenticalEmails($user, $person)
+    {
+        return $user->email === $person->email || $user->email === $person->secondary_email;
+    }
+
+    private function getPersonSocialProfiles($person)
+    {
+        $social = [];
+
+        if($person->linkedin !== null)
+        {
+            $social[] = 'linkedin';
+        }
+
+        if($person->facebook !== null)
+        {
+            $social[] = 'facebook';
+        }
+
+        if($person->twitter !== null)
+        {
+            $social[] = 'twitter';
+        }
+
+        if($person->google_scholar !== null)
+        {
+            $social[] = 'google';
+        }
+
+        return $social;
+    }
+
+    private function checkUsersSocialLogins($socials, $user)
+    {
+        $logins = UserSocialAuth::whereIn('provider_name', $socials)
+            ->where('user_id', '=', $user->id)
+            ->get();
+
+        return (bool) count($logins);
+    }
+
+    private function canBeClaimedViaSocial($socials, $user, $person)
+    {
+        return $this->checkForIdenticalEmails($user, $person) && $this->checkUsersSocialLogins($socials, $user);
     }
 }
