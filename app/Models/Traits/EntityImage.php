@@ -18,6 +18,17 @@ trait EntityImage
     }
 
     /**
+     * @return array
+     */
+    public static function getImageImportSettings()
+    {
+        return [
+            'field' => self::$imageAttribute,
+            'folder' => self::$imageFolderPath,
+        ];
+    }
+
+    /**
      * @return string
      */
     public static function getImageUrlPrefix()

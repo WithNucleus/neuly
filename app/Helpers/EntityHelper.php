@@ -66,32 +66,4 @@ class EntityHelper
             Research::class,
         ]);
     }
-
-    /**
-     * @param string $class
-     * @return string|bool
-     */
-    public static function getImageSettingsByClass(string $class)
-    {
-        $mapping = [
-            Person::class => [
-                'field' => 'photo',
-                'folder'  => 'people',
-            ],
-            Company::class  => [
-                'field' => 'logo',
-                'folder'  => 'logos',
-            ],
-            Investor::class => [
-                'field' => 'logo',
-                'folder'  => 'logos',
-            ],
-            Event::class    => [
-                'field' => 'image',
-                'folder'  => 'events',
-            ],
-        ];
-
-        return isset($mapping[$class]) ? $mapping[$class] : false;
-    }
 }

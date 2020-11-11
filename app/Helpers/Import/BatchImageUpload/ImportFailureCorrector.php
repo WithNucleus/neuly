@@ -3,6 +3,7 @@
 namespace App\Helpers\Import\BatchImageUpload;
 
 use App\Helpers\EntityHelper;
+use App\Models\Contracts\EntityImageContract;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -48,12 +49,13 @@ class ImportFailureCorrector
 
         try {
             $targetEntity  = $targetClass::findOrFail($targetId);
-            $imageSettings = EntityHelper::getImageSettingsByClass($targetClass);
 
-            if ($imageSettings === false) {
-                throw new \Exception("Image Settings not found for '$targetClass'.");
+            if ($targetEntity instanceof EntityImageContract === false) {
+                $message = "Entity '$targetClass' is not an instance of '" . EntityImageContract::class . "'." ;
+                throw new \Exception($message);
             }
 
+            $imageSettings = $targetClass::getImageImportSettings();
             $entityImageField  = $imageSettings['field'];
             $entityImageFolder = $imageSettings['folder'];
             $newImageValue  = $entityImageFolder .  DIRECTORY_SEPARATOR . uniqid() . '.' . $imageFile->extension();
