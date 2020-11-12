@@ -11,6 +11,10 @@ class ListingRequest extends Model
 {
     use CrudTrait;
 
+    const STATUS_OPEN = 'open';
+    const STATUS_ACCEPTED = 'accepted';
+    const STATUS_DECLINED = 'declined';
+
     /*
     |--------------------------------------------------------------------------
     | GLOBAL VARIABLES
@@ -31,6 +35,11 @@ class ListingRequest extends Model
         static::created(function ($model) {
             NotificationHelper::sendAdminNotifications(new ListingRequestCreated($model));
         });
+    }
+
+    public function scopeOpen($query)
+    {
+        return $query->where('status', self::STATUS_OPEN);
     }
 
     /*
@@ -59,7 +68,7 @@ class ListingRequest extends Model
 
     public function generateAcceptButton()
     {
-        return '<a class="btn btn-xs btn-default" href="'.route('listingrequest.getPublish', ['id' => $this->id]).'" data-toggle="tooltip" title="Accept listing request">Accept</a>';
+        return '<a class="btn btn-xs btn-default" href="'.route('listingrequest.getPublish', ['id' => $this->id]).'" data-toggle="tooltip" title="Review All Changes">Review All Changes</a>';
     }
 
     public function generateDeclineButton()

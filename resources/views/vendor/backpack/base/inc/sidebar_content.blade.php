@@ -168,6 +168,9 @@
     <li class='nav-item'>
         <a class='nav-link' href='{{ backpack_url('listingrequest') }}'>
             <i class='nav-icon la la-business-time'></i> Listing Requests
+            @if($countListingRequests)
+                <span class="badge badge-default">{{ $countListingRequests }}</span>
+            @endif
         </a>
     </li>
 @endcan
@@ -176,6 +179,9 @@
 <li class='nav-item'>
     <a class='nav-link' href='{{ backpack_url('insightRequest') }}'>
         <i class='nav-icon la la-question'></i> Insight requests
+        @if($countInsightRequests)
+            <span class="badge badge-default">{{ $countInsightRequests }}</span>
+        @endif
     </a>
 </li>
 @endcan
@@ -184,6 +190,9 @@
 <li class='nav-item'>
     <a class='nav-link' href='{{ backpack_url('jobreportentries') }}'>
         <i class='nav-icon la la-business-time'></i> Job Report Entries
+        @if($countJobReports)
+            <span class="badge badge-default">{{ $countJobReports }}</span>
+        @endif
     </a>
 </li>
 @endcan
