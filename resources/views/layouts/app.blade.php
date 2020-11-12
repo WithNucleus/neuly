@@ -73,7 +73,7 @@
     <script type="text/javascript" src="{{ asset('assets/chart.js') }}"></script>
     <script type="text/javascript" src="{{ asset('assets/chartisan.js') }}"></script>
 
-    @if (Route::is('insights.distribution.countries.show') OR Route::is('insights.distribution.countries.focus.show'))
+    @if (Route::is('insights.distribution.countries.show') OR Route::is('insights.distribution.countries.focus.show') OR Route::is('discover.locations.map'))
         <script type="text/javascript" src="{{ asset('assets/jquery-jvectormap.min.js') }}"></script>
         <link rel="stylesheet" type="text/css" href="{{ asset('assets/jquery-jvectormap.css') }}"/>
     @endif

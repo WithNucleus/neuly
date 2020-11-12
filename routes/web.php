@@ -119,6 +119,7 @@ Route::get('/investor/{slug}/jobs', 'Index\InvestorController@jobs')->name('disc
 
 // Locations
 Route::get('/locations', 'Index\LocationController@index')->name('discover.locations');
+Route::get('/locations/map', 'Index\LocationMapController@show')->name('discover.locations.map');
 Route::get('/locations/citynames.json', 'Index\LocationController@citynames');
 Route::get('/locations/countries.json', 'Index\LocationController@countries');
 Route::get('/location/{slug}', 'Index\LocationController@show')->name('discover.locations.show');
