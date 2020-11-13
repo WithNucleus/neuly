@@ -3,6 +3,7 @@
 namespace App\Jobs\Import;
 
 use App\Helpers\EntityHelper;
+use App\Models\Contracts\EntityImageContract;
 use App\Models\ImportFailure;
 use App\Models\ImportResult;
 use Illuminate\Bus\Queueable;
@@ -68,7 +69,6 @@ class BatchImageUpload implements ShouldQueue
         $this->importResult  = $importResult;
         $this->imageFilename = $imageFilename;
         $this->entity        = $entityClass::find($entityId);
-        $this->imageSettings = EntityHelper::getImageSettingsByClass($entityClass);
 
         if ($this->entity === null) {
             $message = "Entity '$entityClass' with ID $entityId not found.";
@@ -76,11 +76,13 @@ class BatchImageUpload implements ShouldQueue
             throw new \Exception($message);
         }
 
-        if ($this->imageSettings === false) {
-            $message = "Image Settings not found for '$entityClass'.";
+        if ($this->entity instanceof EntityImageContract === false) {
+            $message = "Entity '$entityClass' is not an instance of '" . EntityImageContract::class . "'." ;
             Log::error($message);
             throw new \Exception($message);
         }
+
+        $this->imageSettings = $entityClass::getImageImportSettings();
     }
 
     /**

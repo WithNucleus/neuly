@@ -1,7 +1,7 @@
 @if($widget['entity'] != null)
     <div>
-        @if($widget['entity']->logo !== '' && $widget['entity']->logo !== null)
-            <img src="/storage/{{ $widget['entity']->logo }}" alt="{{ $widget['entity']->name }}" class="company-logo pull-right">
+        @if($widget['entity']->entityImageUrl)
+            <img src="{{ $widget['entity']->entityImageUrl }}" alt="{{ $widget['entity']->name }}" class="company-logo pull-right">
         @endif
 
         <h2 class="h3">{{ $widget['entity']->name }}</h2>

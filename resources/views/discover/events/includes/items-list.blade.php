@@ -33,10 +33,10 @@
 
                         <div class="image mr-3 mt-1">
                             <a href="{{ route('discover.events.show', $event->slug) }}" {!! $attrTarget !!}>
-                                @if ($event->image == '')
-                                    <div class="d-none d-mb-block job-org-logo" style="background-image: url({{ asset('images/icons/events.svg') }});"></div>
+                                @if ($event->entityImageUrl)
+                                    <div class="job-org-logo" style="background-image: url('{{ $event->entityImageUrl }}');"></div>
                                 @else
-                                    <div class="job-org-logo" style="background-image: url('/storage/{{ $event->image }}');"></div>
+                                    <div class="d-none d-mb-block job-org-logo" style="background-image: url({{ asset('images/icons/events.svg') }});"></div>
                                 @endif
                             </a>
                         </div>

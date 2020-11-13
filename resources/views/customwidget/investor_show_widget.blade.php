@@ -4,8 +4,8 @@
         <div class="col-12 col-md-8 col-xl-6 d-flex">
             <div class="card card-body flex-fill">
                 <div>
-                    @if($widget['investor']->logo != '')
-                        <img src="/storage/{{ $widget['investor']->logo }}" alt="{{ $widget['investor']->name }}" class="company-logo pull-right">
+                    @if($widget['investor']->entityImageUrl)
+                        <img src="{{ $widget['investor']->entityImageUrl }}" alt="{{ $widget['investor']->name }}" class="company-logo pull-right">
                     @endif
                     <h2 class="h3">{{ $widget['investor']->name }}</h2>
 

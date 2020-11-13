@@ -65,7 +65,7 @@ class PersonController extends Controller
         $metas = Metas::process(array(
             'title'         => $person->name,
             'description'   => $person->bio,
-            'image'         => $person->photo ? "storage/{$person->photo}" : '',
+            'image'         => $person->entityImageUrl,
         ));
 
         $entity = 'people';

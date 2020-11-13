@@ -130,8 +130,8 @@
 
 	</div>
 	<div class="col-12 col-md-4 col-lg-5">
-		@if($company->logo != '')
-			<img src="/storage/{{ $company->logo }}" alt="{{ $company->name }}" class="company-logo mb-4">
+		@if($company->entityImageUrl)
+			<img src="{{ $company->entityImageUrl }}" alt="{{ $company->name }}" class="company-logo mb-4">
 		@endif
 
 		@auth

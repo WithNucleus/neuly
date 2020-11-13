@@ -11,16 +11,16 @@
 						@foreach ($location->companies as $company)
 							<div class="card col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
 				                <div class="card-body border border-bottom-0 text-center d-flex justify-content-center align-items-center">
-				                    @if($company->logo != '')
+				                    @if($company->entityImageUrl)
 				                        <a href="{{ route('discover.organizations.show', ['slug' => $company->slug]) }}" data-toggle="tooltip" data-placement="top" title="{{$company->name}}">
-				                            <img src="/storage/{{ $company->logo }}" alt="{{ $company->name }}" class="company-logo mx-auto" alt="{{$company->name}}">
+				                            <img src="{{ $company->entityImageUrl }}" alt="{{ $company->name }}" class="company-logo mx-auto" alt="{{$company->name}}">
 				                        </a>
 				                    @else
 				                        <a href="{{ route('discover.organizations.show', ['slug' => $company->slug]) }}">{{$company->name}}</a>
 				                    @endif
 				                </div>
 				                <div class="card-footer font-size-small">
-				                    <strong>Focus:</strong> 
+				                    <strong>Focus:</strong>
 				                    @foreach ($company->focus as $focus)
 				                        <a href="{{ route('discover.focus.show', $focus->slug) }}">{{ $focus->name }}</a>@if (!$loop->last),@endif
 				                    @endforeach
@@ -126,7 +126,7 @@
 		$(".collapse.show").each(function(){
         	$(this).prev(".card-header").find(".fa").addClass("fa-minus").removeClass("fa-plus");
         });
-        
+
         // Toggle plus minus icon on show hide of collapse element
         $(".collapse").on('show.bs.collapse', function(){
 

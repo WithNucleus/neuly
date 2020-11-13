@@ -199,7 +199,7 @@ class EventCrudController extends CrudController
             'label'        => "Image",
             'name'         => "image",
             'type'         => 'image',
-            'prefix'       => 'storage/'
+            'prefix'       => Event::getImageUrlPrefix(),
         ]);
 
         $this->crud->addButtonFromModelFunction('line', 'show_entity', 'getShowEntityPageButton', 'beginning');

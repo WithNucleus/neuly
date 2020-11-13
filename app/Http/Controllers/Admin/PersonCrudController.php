@@ -175,7 +175,7 @@ class PersonCrudController extends CrudController
             'label'  => "Photo",
             'name'   => "photo",
             'type'   => 'image',
-            'prefix' => 'storage/'
+            'prefix' => Person::getImageUrlPrefix()
         ]);
 
         $this->crud->addButtonFromModelFunction('line', 'show_entity', 'getShowEntityPageButton', 'beginning');

@@ -6,7 +6,7 @@
                 <div class="p-2 mt-1 d-flex @if(!$loop->last) border-bottom @endif">
                     <div class="image mr-3">
                         <a href="{{ route('discover.events.show', $event->slug) }}">
-                            <div class="job-org-logo" style="background-image: url('/storage/{{ $event->image }}');"></div>
+                            <div class="job-org-logo" style="background-image: url('{{ $event->entityImageUrl }}');"></div>
                         </a>
                     </div>
                     <div class="text">

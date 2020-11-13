@@ -1,8 +1,8 @@
 <div class="row">
     <div class="form-group col-6">
         <label class="d-block">Photo:</label>
-        @if ($original->photo != '')
-            <img src="{{ Storage::url($original->photo) }}" style="max-width: 300px;">
+        @if ($original->entityImageUrl)
+            <img src="{{ $original->entityImageUrl }}" style="max-width: 300px;">
         @endif
     </div>
     <div class="form-group col-6">

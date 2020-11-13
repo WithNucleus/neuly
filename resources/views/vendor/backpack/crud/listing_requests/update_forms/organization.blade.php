@@ -2,8 +2,8 @@
     <div class="form-group col-6">
         <label>Logo:</label>
         <br />
-        @if ($original->logo != '')
-            <img src="{{ Storage::url($original->logo) }}" style="max-width: 300px">
+        @if ($original->entityImageUrl)
+            <img src="{{ $original->entityImageUrl }}" style="max-width: 300px">
         @endif
     </div>
     <div class="form-group col-6">

@@ -4,23 +4,23 @@ namespace App\Models;
 
 use App\Helpers\EntityMergeHelper;
 use App\Models\Contracts\EntityContract;
+use App\Models\Contracts\EntityImageContract;
 use App\Models\Traits\CrudShowEntityPageButton;
+use App\Models\Traits\EntityImage;
 use App\Models\Traits\OldSlugRedirectable;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
-use Intervention\Image\Facades\Image;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class Event extends Model implements EntityContract
+class Event extends Model implements EntityContract, EntityImageContract
 {
     use CrudTrait;
     use HasFollowers;
     use OldSlugRedirectable;
     use LogsActivity;
     use CrudShowEntityPageButton;
+    use EntityImage;
 
     /*
     |--------------------------------------------------------------------------
@@ -34,6 +34,10 @@ class Event extends Model implements EntityContract
     // log activity for all attributes, which not listed in $guarded array
     protected static $logUnguarded = true;
     protected static $logName = 'entities';
+
+    protected static $imageAttribute = 'image';
+    protected static $imageFolderPath = 'events';
+    protected static $imageFilenameAttribute = 'name';
 
     /*
     |--------------------------------------------------------------------------
@@ -87,30 +91,7 @@ class Event extends Model implements EntityContract
 
     public function setImageAttribute($value)
     {
-
-        $title = Str::slug($this->name);
-        $date = $this->start_date;
-        $filename = 'event-' . $date . '-' . $title . '.png';
-        $attribute_name = "image";
-        $disk = 'local';
-        $destination_path = "public/events";
-
-        // if the image was erased
-        if ($value==null) {
-            Storage::disk($disk)->delete($this->{$attribute_name});
-            $this->attributes[$attribute_name] = null;
-        }
-
-        // if a base64 was sent, store it in the db
-        if (Str::startsWith($value, 'data:image'))
-        {
-            $image = Image::make($value)->encode('png', 90);
-            Storage::disk($disk)->put($destination_path.'/'.$filename, $image->stream());
-            Storage::disk($disk)->delete($this->{$attribute_name});
-
-            $public_destination_path = Str::replaceFirst('public/', '', $destination_path);
-            $this->attributes[$attribute_name] = $public_destination_path.'/'.$filename;
-        }
+        $this->updateImageAttribute($value);
     }
 
     /**

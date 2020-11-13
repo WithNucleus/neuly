@@ -85,7 +85,7 @@ class InvestorCrudController extends CrudController
             'label'        => "Logo",
             'name'         => "logo",
             'type'         => 'image',
-            'prefix'       => 'storage/'
+            'prefix'       => Investor::getImageUrlPrefix(),
         ]);
 
         $this->crud->addButtonFromModelFunction('line', 'show_entity', 'getShowEntityPageButton', 'beginning');

@@ -5,7 +5,7 @@
 			@if($person->website != '')
 				<p class="mb-2">
 					<strong>Website:</strong><br>
-					
+
 					<a href="{{ $person->website }}" target="_blank" rel="noopener noreferrer">
 						{{ $person->website }} <i class="fad fa-external-link fa-xs"></i>
 					</a>
@@ -13,7 +13,7 @@
 			@endif
 
 			@if($person->google_scholar != '')
-				<p class="mb-2">			
+				<p class="mb-2">
 					<a href="{{ $person->google_scholar }}" target="_blank" rel="noopener noreferrer">
 						Google Scholar <i class="fad fa-external-link fa-xs"></i>
 					</a>
@@ -32,10 +32,10 @@
 			@if($person->investors->count() > 0)
 			<p class="mb-2">
 				<strong>Investors:</strong><br>
-			
+
 				@foreach ($person->investors as $investor)
 				    <a href="{{ route('discover.investors.show', $investor->slug) }}">{{ $investor->name }} <span class="text-dark">({{ $investor->pivot->role }})</span></a>
-				    
+
 				    @if (!$loop->last)<br>@endif
 				@endforeach
 			</p>
@@ -93,14 +93,14 @@
 		@else
 
 			@include('discover.includes.register-gate', ['details' => $person->name . '\'s details'])
-			
+
 		@endauth
 
 	</div>
 	<div class="col-12 col-md-4 col-lg-5 text-center">
 		@auth
-			@if($person->photo != '')
-				<div class="person-photo-large shadow-sm" style="background-image: url('/storage/{{ $person->photo }}');">
+			@if($person->entityImageUrl)
+				<div class="person-photo-large shadow-sm" style="background-image: url('{{ $person->entityImageUrl }}');">
 					<span class="sr-only">{{ $person->name }}</span>
 				</div>
 			@else

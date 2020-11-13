@@ -4,16 +4,16 @@
         @foreach($related as $index => $item)
             <div class="card border-0 shadow-sm">
                 <div class="card-body text-center d-flex justify-content-center align-items-center">
-                    @if($item->logo != '')
+                    @if($item->entityImageUrl)
                         <a href="{{ route('discover.organizations.show', ['slug' => $item->slug]) }}" data-toggle="tooltip" data-placement="top" title="{{$item->name}}">
-                            <img src="/storage/{{ $item->logo }}" alt="{{ $item->name }}" class="company-logo mx-auto" alt="{{$item->name}}">
+                            <img src="{{ $item->entityImageUrl }}" alt="{{ $item->name }}" class="company-logo mx-auto" alt="{{$item->name}}">
                         </a>
                     @else
                         <a href="{{ route('discover.organizations.show', ['slug' => $item->slug]) }}">{{$item->name}}</a>
                     @endif
                 </div>
                 <div class="card-footer">
-                    <strong>Focus:</strong> 
+                    <strong>Focus:</strong>
                     @foreach ($item->focus as $focus)
                         <a href="{{ route('discover.focus.show', $focus->slug) }}">{{ $focus->name }}</a>@if (!$loop->last),@endif
                     @endforeach

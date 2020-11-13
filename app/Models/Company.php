@@ -4,7 +4,9 @@ namespace App\Models;
 
 use App\Helpers\EntityMergeHelper;
 use App\Models\Contracts\EntityContract;
+use App\Models\Contracts\EntityImageContract;
 use App\Models\Traits\CrudShowEntityPageButton;
+use App\Models\Traits\EntityImage;
 use App\Models\Traits\OldSlugRedirectable;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
@@ -13,13 +15,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class Company extends Model implements EntityContract
+class Company extends Model implements EntityContract, EntityImageContract
 {
     use CrudTrait;
     use HasFollowers;
     use OldSlugRedirectable;
     use LogsActivity;
     use CrudShowEntityPageButton;
+    use EntityImage;
 
     /*
     |--------------------------------------------------------------------------
@@ -39,6 +42,10 @@ class Company extends Model implements EntityContract
         'Investor',
         'Partner'
     ];
+
+    protected static $imageAttribute = 'logo';
+    protected static $imageFolderPath = 'logos';
+    protected static $imageFilenameAttribute = 'name';
 
     /*
     |--------------------------------------------------------------------------
@@ -220,45 +227,7 @@ class Company extends Model implements EntityContract
 
     public function setLogoAttribute($value)
     {
-
-        $company_name     = Str::slug($this->name);
-        $filename         = 'logo-' . $company_name . '.png';
-        $disk             = 'local';
-        $destination_path = "public/logos";
-
-        // if a base64 was sent, store it in the db
-        if (Str::startsWith($value, 'data:image'))
-        {
-            // Make the image
-            $image = \Image::make($value)->encode('png', 90);
-            // Delete the previous image, if there was one
-            \Storage::disk($disk)->delete('public/' . $this->logo);
-            // Store the image on disk
-            \Storage::disk($disk)->put($destination_path . '/' . $filename, $image->stream());
-            // Save the public path to the database
-            $public_destination_path = Str::replaceFirst('public/', '', $destination_path);
-
-            $this->attributes['logo'] = $public_destination_path . '/' . $filename;
-
-        } else {
-
-            // if the image was erased
-            if ($value == null) {
-
-                \Storage::disk($disk)->delete('public/' . $this->logo);
-                $this->attributes['logo'] = null;
-
-            } elseif (Str::startsWith($value, '/storage')) {
-
-                // do nothing because image isn't updated
-
-            } else {
-
-                // moving listing request image
-                $this->attributes['logo'] = $value;
-            }
-
-        }
+        $this->updateImageAttribute($value);
     }
 
     /**

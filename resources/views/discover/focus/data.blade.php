@@ -45,9 +45,9 @@
 						@foreach ($focus->companies as $company)
 							<div class="card col-12 col-sm-6 col-md-4 col-lg-3 mb-5">
 				                <div class="card-body border text-center d-flex justify-content-center align-items-center">
-				                    @if($company->logo != '')
+				                    @if($company->entityImageUrl)
 				                        <a href="{{ route('discover.organizations.show', ['slug' => $company->slug]) }}" data-toggle="tooltip" data-placement="top" title="{{$company->name}}">
-				                            <img src="/storage/{{ $company->logo }}" alt="{{ $company->name }}" class="company-logo mx-auto" alt="{{$company->name}}">
+				                            <img src="{{ $company->entityImageUrl }}" alt="{{ $company->name }}" class="company-logo mx-auto" alt="{{$company->name}}">
 				                        </a>
 				                    @else
 				                        <a href="{{ route('discover.organizations.show', ['slug' => $company->slug]) }}">{{$company->name}}</a>

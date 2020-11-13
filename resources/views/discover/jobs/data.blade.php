@@ -3,7 +3,7 @@
 		<div class="col-12 col-md-6 pt-2 pt-md-5 order-md-1">
 			<p class="lead text-center">
 				<a href="{{ route('discover.organizations.show', $job->company->slug) }}">
-					<img src="/storage/{{ $job->company->logo }}" alt="{{ $job->company->name }}" class="company-logo"><br>
+					<img src="{{ $job->company->entityImageUrl }}" alt="{{ $job->company->name }}" class="company-logo"><br>
 					{{ $job->company->name }}
 				</a>
 			</p>

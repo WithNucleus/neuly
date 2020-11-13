@@ -43,8 +43,8 @@
 		</div>
 		<div class="col-12 col-md-4 col-lg-5">
 
-			@if($investor->logo != '')
-				<img src="/storage/{{ $investor->logo }}" alt="{{ $investor->name }}" class="company-logo mb-4">
+			@if($investor->entityImageUrl)
+				<img src="{{ $investor->entityImageUrl }}" alt="{{ $investor->name }}" class="company-logo mb-4">
 			@endif
 		</div>
 
@@ -58,9 +58,9 @@
 			@foreach ($investor->companies as $company)
 				<div class="card col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
 	                <div class="card-body border border-bottom-0 text-center d-flex justify-content-center align-items-center">
-	                    @if($company->logo != '')
+	                    @if($company->entityImageUrl)
 	                        <a href="{{ route('discover.organizations.show', ['slug' => $company->slug]) }}" data-toggle="tooltip" data-placement="top" title="{{$company->name}}">
-	                            <img src="/storage/{{ $company->logo }}" alt="{{ $company->name }}" class="company-logo mx-auto" alt="{{$company->name}}">
+	                            <img src="{{ $company->entityImageUrl }}" alt="{{ $company->name }}" class="company-logo mx-auto" alt="{{$company->name}}">
 	                        </a>
 	                    @else
 	                        <a href="{{ route('discover.organizations.show', ['slug' => $company->slug]) }}">{{$company->name}}</a>
