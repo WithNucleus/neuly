@@ -68,7 +68,7 @@ class ClinicalTrialDistributionController extends Controller
         return DB::table('locations')
             ->join('clinicaltrial_location', 'locations.id', 'clinicaltrial_location.location_id')
             ->join('countries', 'locations.country', 'countries.name')
-            ->select('country', 'alpha2code', DB::raw('count(country)'), DB::raw('concat(clinicaltrial_location.clinicaltrial_id, locations.country) AS identifier'))
+            ->select('country', 'countries.alpha2code', DB::raw('count(country)'), DB::raw('concat(clinicaltrial_location.clinicaltrial_id, locations.country) AS identifier'))
             ->groupBy('identifier', 'country');
     }
 
@@ -79,7 +79,7 @@ class ClinicalTrialDistributionController extends Controller
             ->join('countries', 'locations.country', 'countries.name')
             ->join('clinicaltrial_focus', 'clinicaltrial_location.clinicaltrial_id', 'clinicaltrial_focus.clinicaltrial_id')
             ->join('focus', 'focus.id', 'clinicaltrial_focus.focus_id')
-            ->select('focus.name', 'country', 'alpha2code', DB::raw('count(country)'), DB::raw('concat(clinicaltrial_location.clinicaltrial_id, locations.country, focus.name) AS identifier'))
+            ->select('focus.name', 'country', 'countries.alpha2code', DB::raw('count(country)'), DB::raw('concat(clinicaltrial_location.clinicaltrial_id, locations.country, focus.name) AS identifier'))
             ->groupBy('focus.name', 'identifier', 'country');
     }
 
