@@ -1,4 +1,4 @@
-@if ($general['update'] === "true")
+@if ($general['update'])
     <div id="organisation-to-update" class="form-group mb-4 pb-4 page-title-default">
         <label for="entity_name" class="d-block lead text-center">What organization do you want to update?</label>
         <input type="text" class="w-100 form-control updateEntity" placeholder="Search for organization" name="entity_update_resource" required>
@@ -60,7 +60,11 @@
         <otion>Non-Profit</otion>
     </select>
 </div>
-@include('discover.listing-requests.entity-forms.includes.select-focus')
+@include('discover.listing-requests.entity-forms.includes.select-multiple', [
+    'label' => 'Focus',
+    'name' => 'entity_focus',
+    'items' => $focusCategories
+])
 <div class="form-group">
     <label for="entity_website" class="font-weight-bold">Website:</label>
     <input type="url" class="form-control" name="entity_website">

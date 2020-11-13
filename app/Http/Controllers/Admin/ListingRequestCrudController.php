@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\EntityHelper;
 use App\Http\Requests\ListingRequestRequest;
 use App\Models\Company;
 use App\Models\Event;
 use App\Models\Focus;
 use App\Models\Investor;
+use App\Models\Job;
 use App\Models\ListingRequest;
 use App\Models\Person;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
@@ -75,8 +77,11 @@ class ListingRequestCrudController extends CrudController
     {
         $requestId = Route::current()->parameter('id');
         $listingRequest = ListingRequest::find($requestId);
+        $entity = null;
 
-        $entity = $this->getEntityModel($listingRequest);
+        if ($listingRequest->is_update) {
+            $entity = $this->getEntityModel($listingRequest->type, $listingRequest->to_update_id);
+        }
 
         Widget::add([
             'type' => 'view',
@@ -155,7 +160,6 @@ class ListingRequestCrudController extends CrudController
         $listingRequest->save();
 
         return view('vendor.backpack.crud.listing_requests.declined', $this->data);
-
     }
 
     public function getPublishForm($id)
@@ -163,30 +167,32 @@ class ListingRequestCrudController extends CrudController
         $this->crud->setOperation('Publish');
 
         $listingRequest = ListingRequest::findOrFail($id);
-        $changes = json_decode($listingRequest->entity_data);
+        $changes = $listingRequest->entity_data;
         $entity = null;
 
-        if($listingRequest->is_update)
-        {
-            $entity = $this->getEntityModel($listingRequest);
+        if ($listingRequest->is_update) {
+            $entity = $this->getEntityModel($listingRequest->type, $listingRequest->to_update_id);
         }
 
+        $companies = Company::orderBy('name')->get();
+        $companyIdSelected = isset($changes->company_id) ? $changes->company_id : null;
         $focusCategories = Focus::orderBy('name')->get();
         $focusIdsSelected = isset($changes->focus_ids) ? $changes->focus_ids : [];
 
         $this->data['id'] = $listingRequest->id;
         $this->data['type'] = $listingRequest->type;
-        $this->data['update'] = ((bool) $listingRequest->is_update) ? 'yes' : 'no';
+        $this->data['update'] = $listingRequest->is_update;
         $this->data['changes'] = $changes;
         $this->data['original'] = $entity;
         $this->data['crud'] = $this->crud;
         $this->data['title'] = 'Publish Listing Request';
+        $this->data['companies'] = $companies;
+        $this->data['companyIdSelected'] = $companyIdSelected;
         $this->data['focusCategories'] = $focusCategories;
         $this->data['focusIdsSelected'] = $focusIdsSelected;
         $this->data['declineButton'] = $listingRequest->generateDeclineButton();
 
         return view('vendor.backpack.crud.listing_requests.publish', $this->data);
-
     }
 
     public function postPublishForm(Request $request, $id)
@@ -194,23 +200,18 @@ class ListingRequestCrudController extends CrudController
         $this->crud->setOperation('Publish');
 
         $data = $request->all();
-
-        $listingRequest = ListingRequest::find($id);
-
+        $listingRequest = ListingRequest::findOrFail($id);
         $entity = null;
 
-        if($listingRequest->is_update)
-        {
-            $entity = $this->getEntityModel($listingRequest);
+        if ($listingRequest->is_update) {
+            $entity = $this->getEntityModel($listingRequest->type, $listingRequest->to_update_id);
         }
 
-        $entityData = $this->createDummyEntityData($data['type'], $data);
-
-        $object = $this->saveDummyEntityData($data['type'], $entityData, $entity);
+        $entityData = $this->createDummyEntityData($listingRequest->type, $data);
+        $object = $this->saveDummyEntityData($listingRequest->type, $entityData, $entity);
 
         $this->data['crud'] = $this->crud;
         $this->data['object'] = $object;
-
 
         $listingRequest = ListingRequest::find($id);
         $listingRequest->status = 'accepted';
@@ -265,6 +266,25 @@ class ListingRequestCrudController extends CrudController
         }
 
         return $organisation;
+    }
+
+    private function saveDummyJob($data, $entity = null) {
+        $job = $entity;
+
+        if ($job === null) {
+            $job = new job();
+        }
+
+        $job->job_title       = $data['job_title'];
+        $job->slug            = $data['slug'];
+        $job->posted_date     = $data['posted_date'];
+        $job->salary          = $data['salary'];
+        $job->hourly_rate     = $data['hourly_rate'];
+        $job->employment_type = $data['employment_type'];
+        $job->job_description = $data['job_description'];
+        $job->company_id      = $data['company_id'];
+
+        return $job;
     }
 
     private function saveDummyEvent($data, $entity = null) {
@@ -442,29 +462,38 @@ class ListingRequestCrudController extends CrudController
         return $resourceData;
     }
 
-    private function getEntityModel($request)
+    private function createDummyJob($data)
     {
-        return $this->{'get'.$request->type.'Model'}($request->to_update_id);
+        return [
+            'job_title'       => $data['entity_job_title'],
+            'slug'            => $data['entity_slug'],
+            'posted_date'     => $data['entity_posted_date'],
+            'salary'          => $data['entity_salary'],
+            'hourly_rate'     => $data['entity_hourly_rate'],
+            'employment_type' => $data['entity_employment_type'],
+            'job_description' => $data['entity_job_description'],
+            'company_id'      => $data['entity_company_id'],
+            'focus_ids'       => $data['entity_focus'],
+        ];
     }
 
-    private function getOrganizationModel($id)
+    /**
+     * @param string $type
+     * @param int $id
+     * @return mixed
+     * @throws \Exception
+     */
+    private function getEntityModel($type, $id)
     {
-        return Company::with('focus')->find($id);
-    }
+        $entityTypes = EntityHelper::getListingRequestEntities();
 
-    private function getPersonModel($id)
-    {
-        return Person::find($id);
-    }
+        if (isset($entityTypes[$type]) === false) {
+            throw new \Exception("Wrong entity type!");
+        }
 
-    private function getEventModel($id)
-    {
-        return Event::with('focus')->find($id);
-    }
+        $entityClass = $entityTypes[$type];
 
-    private function getInvestorModel($id)
-    {
-        return Investor::find($id);
+        return $entityClass::find($id);
     }
 
     private function handleFileUpload($path, $file)

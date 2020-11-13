@@ -34,7 +34,7 @@
                 <div class="card-body">
                     <form class="row" method="post" action="/admin/listingrequest/{{ $id }}/publish" enctype="multipart/form-data">
                         <div class="col-12">
-                        @if($update == 'yes')
+                        @if($update)
                             <div class="row">
                                 <h3 class="col-6">Original Data:</h3>
                                 <h3 class="col-6">Submitted Data:</h3>

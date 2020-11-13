@@ -14,19 +14,20 @@
                                 <h1 class="text-center text-primary">Neuly Listing Request</h1>
                                 @include('discover.includes.status-messages')
 
-                                <form method="post" action="/listing/request/finish" enctype="multipart/form-data" class="max-width-450">
-
-                                    @include('discover.listing-requests.entity-forms.'.strtolower($general['type']))
+                                <form method="post" action=" {{ route('listing.request.finish') }}" enctype="multipart/form-data" class="max-width-450">
+                                    @csrf
+                                    @include('discover.listing-requests.entity-forms.'.$general['type'])
 
                                     <div class="form-group">
                                         <label for="general_comment" class="font-weight-bold">Any additional info or comments?</label>
                                         <textarea class="form-control" name="general_comment" rows="3"></textarea>
                                     </div>
+
                                     <input type="hidden" name="general_update" value="{{ $general['update'] }}" />
                                     <input type="hidden" name="general_name" value="{{ $general['name'] }}" />
                                     <input type="hidden" name="general_mail" value="{{ $general['mail'] }}" />
                                     <input type="hidden" name="general_type" value="{{ $general['type'] }}" />
-                                    @csrf
+
                                     <div class="form-group">
                                         <button class="btn btn-primary float-right" type="submit">next</button>
                                     </div>

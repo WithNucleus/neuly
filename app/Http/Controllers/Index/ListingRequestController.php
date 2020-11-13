@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\Index;
 
+use App\Helpers\EntityHelper;
 use App\Models\Company;
 use App\Models\Event;
 use App\Models\Focus;
 use App\Models\Investor;
+use App\Models\Job;
 use App\Models\ListingRequest;
 use App\Models\Person;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use Auth;
-use Illuminate\Support\Str;
 use Carbon\Carbon;
 
 class ListingRequestController extends Controller
@@ -24,11 +25,22 @@ class ListingRequestController extends Controller
 
     public function request()
     {
-        return view('discover.listing-requests.request');
+        $entityTypes = EntityHelper::getListingRequestEntities();
+
+        return view('discover.listing-requests.request', [
+            'entityTypes' => $entityTypes
+        ]);
     }
 
-    public function entityForm(Request $request)
+    public function submitRequest(Request $request)
     {
+        $type = $request->input('general_type');
+        $entityTypes = EntityHelper::getListingRequestEntities();
+
+        if (isset($entityTypes[$type]) === false) {
+            return redirect()->back()->with('error', 'Wrong entity type!');
+        }
+
         $general = [
             'update' => $request->input('general_update'),
             'name' => $request->input('general_name'),
@@ -36,120 +48,123 @@ class ListingRequestController extends Controller
             'type' => $request->input('general_type')
         ];
         $focusCategories = Focus::orderBy('name')->get();
+        $companies = Company::orderBy('name')->get();
 
         return view('discover.listing-requests.entity', [
-            'general' => $general,
+            'general'         => $general,
             'focusCategories' => $focusCategories,
+            'companies'       => $companies,
         ]);
     }
 
-    public function processData(Request $request)
+    public function finishRequest(Request $request)
     {
         $data = $request->all();
+        $type = $data['general_type'];
+        $entityTypes = EntityHelper::getListingRequestEntities();
+
+        if (isset($entityTypes[$type]) === false) {
+            return redirect()->back()->with('error', 'Wrong entity type!');
+        }
+
+        $requestEntityClass = $entityTypes[$type];
+        $isUpdate = (bool)$data['general_update'];
+        $toUpdateId = null;
+
+        if ($isUpdate) {
+            $entityToUpdate = $this->getEntityToUpdate($requestEntityClass, $data['entity_update_resource']);
+            $toUpdateId     = $entityToUpdate ? $entityToUpdate->id : null;
+        }
 
         if (!isset($data['entity_focus'])) {
             $data['entity_focus'] = [];
         }
 
-        $entityData = $this->createDummyEntityData($data['general_type'], $data);
-
-        $toUpdateId = null;
-
-        if($this->getBoolValue($data['general_update']))
-        {
-            $toUpdateId = $this->getUpdatedResourceId($data['general_type'], $data['entity_update_resource']);
-        }
-
-        // If Logged-in User Overwrite their Given Info
-        if (Auth::user()) {
-            $data['general_name'] = Auth::user()->name . ' ' . Auth::user()->last_name;
-            $data['general_mail'] = Auth::user()->email;
-        }
-
         $listingRequest = new ListingRequest();
         $listingRequest->name = $data['general_name'];
         $listingRequest->email = $data['general_mail'];
-        $listingRequest->is_update = $this->getBoolValue($data['general_update']);
-        $listingRequest->type = $data['general_type'];
         $listingRequest->comment = $data['general_comment'];
-        $listingRequest->entity_data = $entityData;
-        $listingRequest->entity_name = $data['entity_name'];
+        $listingRequest->type = $type;
+        $listingRequest->entity_name = $this->getEntityNameValue($requestEntityClass, $data);
+        $listingRequest->entity_data = $this->createDummyEntityData($requestEntityClass, $data);
+        $listingRequest->is_update = $isUpdate;
         $listingRequest->to_update_id = $toUpdateId;
         $listingRequest->save();
 
+        $additionalEntitiesRequested = [];
 
-        return view('discover.listing-requests.finish');
-    }
-
-    private function getBoolValue($value) {
-        return ($value === 'true') ? true : false;
-    }
-
-    private function getUpdatedResourceId($type, $name)
-    {
-        return $this->{'get'.$type.'Id'}($name);
-    }
-
-    private function getInvestorId($name)
-    {
-        $investor = Investor::where('name', '=', $name)->first();
-
-        if ($investor) {
-            return $investor->id;
-        } else {
-            return 0;
-        }
-    }
-
-    private function getPersonId($name)
-    {
-        $person = Person::where('name', '=', $name)->first();
-
-        if ($person) {
-            return $person->id;
-        } else {
-            return 0;
-        }
-    }
-
-    private function getEventId($name)
-    {
-        $event = Event::where('name', '=', $name)->first();
-
-        if ($event) {
-            return $event->id;
-        } else {
-            return 0;
-        }
-    }
-
-    private function getOrganizationId($name)
-    {
-        $organisation = Company::where('name', '=', $name)->first();
-
-        if ($organisation) {
-            return $organisation->id;
-        } else {
-            return 0;
-        }
-    }
-
-    private function createDummyEntityData($type, $data)
-    {
-        return json_encode($this->{'createDummy'.$type}($data));
-    }
-
-    private function createDummyOrganization($data)
-    {
-        $logo = null;
-
-        if(array_key_exists('entity_logo', $data))
-        {
-            $filename = 'org-logo-' . Str::slug($data['entity_name']) . Carbon::now()->format('YmdHis') . '.' . $data['entity_logo']->getClientOriginalExtension();
-            $logo = $this->handleFileUpload($data['entity_logo'], $filename);
+        if (isset($data['entity_company_new'])) {
+            $additionalEntitiesRequested['company'] = $data['entity_company_new'];
         }
 
-        $resourceData = [
+        return view('discover.listing-requests.finish', [
+            'additionalEntitiesRequested' => $additionalEntitiesRequested
+        ]);
+    }
+
+    /**
+     * @param string $entityClass
+     * @param string $searchValue
+     * @return \Illuminate\Database\Eloquent\Model|null
+     */
+    private function getEntityToUpdate($entityClass, $searchValue)
+    {
+        if ($entityClass === Job::class) {
+            return $entityClass::where('job_title', $searchValue)->first();
+        }
+
+        return $entityClass::where('name', $searchValue)->first();
+    }
+
+    /**
+     * @param string $entityClass
+     * @param array $entityData
+     * @return string
+     */
+    private function getEntityNameValue($entityClass, $entityData)
+    {
+        if ($entityClass === Job::class) {
+            return $entityData['entity_job_title'];
+        }
+
+        return $entityData['entity_name'];
+    }
+
+    /**
+     * @param string $entityClass
+     * @param array $data
+     * @return array
+     */
+    private function createDummyEntityData($entityClass, $data)
+    {
+        $dummyEntityData = [];
+
+        switch ($entityClass) {
+            case Event::class:
+                $dummyEntityData = $this->createDummyEvent($data);
+                break;
+            case Investor::class:
+                $dummyEntityData = $this->createDummyInvestor($data);
+                break;
+            case Job::class:
+                $dummyEntityData = $this->createDummyJob($data);
+                break;
+            case Company::class:
+                $dummyEntityData = $this->createDummyCompany($data);
+                break;
+            case Person::class:
+                $dummyEntityData = $this->createDummyPerson($data);
+                break;
+        }
+
+        return $dummyEntityData;
+    }
+
+    private function createDummyCompany($data)
+    {
+        $logo = isset($data['entity_logo']) ? $this->handleFileUpload($data['entity_logo']) : null;
+
+        return [
             'name' => $data['entity_name'],
             'ownership' => $data['entity_ownership'],
             'website' => $data['entity_website'],
@@ -163,13 +178,11 @@ class ListingRequestController extends Controller
             'focus_ids' => $data['entity_focus'],
             'logo' => $logo,
         ];
-
-        return $resourceData;
     }
 
     private function createDummyEvent($data)
     {
-        $resourceData = [
+        return [
             'name' => $data['entity_name'],
             'website' => $data['entity_website'],
             'registration' => $data['entity_registration'],
@@ -178,32 +191,22 @@ class ListingRequestController extends Controller
             'description' => $data['entity_description'],
             'focus_ids' => $data['entity_focus'],
         ];
-
-        return $resourceData;
     }
 
     private function createDummyInvestor($data)
     {
-        $resourceData = [
+        return [
             'name' => $data['entity_name'],
             'website' => $data['entity_website'],
             'type' => $data['entity_type']
         ];
-
-        return $resourceData;
     }
 
     private function createDummyPerson($data)
     {
-        $photo = null;
+        $photo = isset($data['entity_photo']) ? $this->handleFileUpload($data['entity_photo']) : null;
 
-        if(array_key_exists('entity_photo', $data))
-        {
-            $filename = 'person-photo-' . Str::slug($data['entity_name']) . '-' . Carbon::now()->format('YmdHis') . '.' . $data['entity_photo']->getClientOriginalExtension();
-            $photo = $this->handleFileUpload($data['entity_photo'], $filename);
-        }
-
-        $resourceData = [
+        return [
             'name' => $data['entity_name'],
             'email' => $data['entity_email'],
             'website' => $data['entity_website'],
@@ -213,12 +216,35 @@ class ListingRequestController extends Controller
             'bio' => $data['entity_bio'],
             'photo' => $photo,
         ];
-
-        return $resourceData;
     }
 
-    private function handleFileUpload($file, $filename)
+    private function createDummyJob($data)
     {
+        $dummyData = [
+            'job_title' => $data['entity_job_title'],
+            'job_description' => $data['entity_job_description'],
+            'employment_type' => $data['entity_employment_type'],
+            'posted_date' => $data['entity_posted_date'],
+            'salary' => $data['entity_salary'],
+            'hourly_rate' => $data['entity_hourly_rate'],
+            'focus_ids' => $data['entity_focus'],
+        ];
+
+        if (isset($data['entity_company'])) {
+            $dummyData['company_id'] = $data['entity_company'];
+        }
+
+        if (isset($data['entity_company_new'])) {
+            $dummyData['company_new'] = $data['entity_company_new'];
+        }
+
+        return $dummyData;
+    }
+
+    private function handleFileUpload($file)
+    {
+        $filename = Carbon::now()->format('YmdHis') . '.' . $file->getClientOriginalExtension();
+
         return Storage::disk('public')->putFileAs('requests', $file, $filename);
     }
 }

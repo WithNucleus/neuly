@@ -9,11 +9,12 @@ use App\Models\Job;
 use App\Models\Location;
 use App\Models\Company;
 use App\Services\Metas;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\AllowedFilter;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 
 class JobController extends Controller
 {
@@ -80,6 +81,13 @@ class JobController extends Controller
         $data = $this->getIndexData($request);
 
         return view('discover.jobs.embed-index', $data);
+    }
+
+    public function titlesJson()
+    {
+        $data = Job::all()->pluck('job_title');
+
+        return response()->json($data, Response::HTTP_OK);
     }
 
     private function getIndexData(Request $request)
