@@ -199,8 +199,13 @@ class ListingRequestCrudController extends CrudController
     {
         $this->crud->setOperation('Publish');
 
-        $data = $request->all();
         $listingRequest = ListingRequest::findOrFail($id);
+        $data = $request->all();
+
+        if (!isset($data['entity_focus'])) {
+            $data['entity_focus'] = [];
+        }
+
         $entity = null;
 
         if ($listingRequest->is_update) {

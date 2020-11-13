@@ -3,53 +3,7 @@
         <label for="entity_name" class="d-block lead text-center">What job do you want to update?</label>
         <input type="text" class="form-control updateEntity" placeholder="Search for job" data-action="{{ route('discover.jobs.titlesJson') }}" name="entity_update_resource" required>
     </div>
-    <script>
-        $(document).ready(function() {
-            let input = $('.updateEntity'),
-                actionUrl = input.data('action');
 
-            let names = new Bloodhound({
-                datumTokenizer: Bloodhound.tokenizers.whitespace,
-                queryTokenizer: Bloodhound.tokenizers.whitespace,
-                prefetch: {
-                    url: actionUrl,
-                }
-            });
-            names.initialize();
-
-            input.typeahead(null, {
-                name: 'people',
-                source: names
-            });
-
-            input.on('change', function() {
-                var name = $(this).val();
-                $('input[name=entity_job_title]').val(name);
-            });
-
-            $('.js-add-new-company-checkbox').on('change', function () {
-                let checkbox = $(this),
-                    inputContainer = $('.js-add-new-company-input-container'),
-                    input = $('.js-add-new-company-input'),
-                    companyInput = $('select[name=entity_company]');
-
-                if(checkbox.prop('checked')) {
-                    inputContainer.show();
-                    input.attr('disabled', false);
-                    companyInput.attr('disabled', true);
-                } else {
-                    inputContainer.hide();
-                    input.attr('disabled', true);
-                    companyInput.attr('disabled', false);
-                }
-            });
-        });
-    </script>
-    <style>
-        .entity-to-update .twitter-typeahead {
-            width:  100%;
-        }
-    </style>
     <p class="lead text-center">Updated Job Details</p>
     <div class="form-group">
         <label for="entity_name" class="font-weight-bold">Job title:</label>
@@ -63,21 +17,25 @@
     </div>
 @endif
 
-@include('discover.listing-requests.entity-forms.includes.select', [
-    'label' => 'Organisation',
+<div class="js-existed-companies-input-container">
+@include('discover.listing-requests.entity-forms.includes.select2', [
+    'label' => 'Organization',
     'name' => 'entity_company',
     'items' => $companies,
     'required' => true,
 ])
-
-<div class="form-group">
-    <label for="entity_company_new" class="font-weight-bold">My organisation isn't listed here:</label>
-    <input id="entity_company_new" class="js-add-new-company-checkbox" type="checkbox" name="entity_company_not_exist"/>
 </div>
 
-<div class="form-group js-add-new-company-input-container" style="display: none">
-    <label class="font-weight-bold">New organisation name:</label>
-    <input class="form-control js-add-new-company-input" type="text" name="entity_company_new" required disabled/>
+<div class="js-new-company-input-container" style="display: none">
+    <div class="form-group">
+        <label class="font-weight-bold">New organization name:</label>
+        <input class="form-control" type="text" name="entity_company_new" required disabled/>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="entity_company_new" class="font-weight-bold">My organization isn't listed here:</label>
+    <input id="entity_company_new" class="js-new-company-checkbox" type="checkbox"/>
 </div>
 
 @include('discover.listing-requests.entity-forms.includes.select-multiple', [
@@ -125,3 +83,59 @@
         <input type="number" name="entity_hourly_rate" class="form-control" value="">
     </div>
 </div>
+
+<style>
+    .entity-to-update .twitter-typeahead {
+        width:  100%;
+    }
+</style>
+<link href="{{ asset('packages/select2/dist/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('packages/select2-bootstrap-theme/dist/select2-bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+<script src="{{ asset('packages/select2/dist/js/select2.full.min.js') }}"></script>
+<script>
+    $(document).ready(function() {
+        $('.select2').select2();
+
+        let input = $('.updateEntity'),
+            actionUrl = input.data('action');
+
+        let names = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.whitespace,
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            prefetch: {
+                url: actionUrl,
+            }
+        });
+        names.initialize();
+
+        input.typeahead(null, {
+            name: 'people',
+            source: names
+        });
+
+        input.on('change', function() {
+            var name = $(this).val();
+            $('input[name=entity_job_title]').val(name);
+        });
+
+        $('.js-new-company-checkbox').on('change', function () {
+            let checkbox = $(this),
+                newCompanyContainer = $('.js-new-company-input-container'),
+                newCompanyInput = newCompanyContainer.find('input'),
+                existedCompaniesContainer = $('.js-existed-companies-input-container'),
+                existedCompaniesSelect = existedCompaniesContainer.find('select');
+
+            if(checkbox.prop('checked')) {
+                existedCompaniesContainer.hide();
+                existedCompaniesSelect.attr('disabled', true);
+                newCompanyContainer.show();
+                newCompanyInput.attr('disabled', false);
+            } else {
+                newCompanyContainer.hide();
+                newCompanyInput.attr('disabled', true);
+                existedCompaniesContainer.show();
+                existedCompaniesSelect.attr('disabled', false);
+            }
+        });
+    });
+</script>
