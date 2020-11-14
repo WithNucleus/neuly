@@ -26,7 +26,7 @@ class ClaimPersonController extends Controller
             return redirect()->route('discover.people.show', ['slug' => $person->slug]);
         }
 
-        $socials = $this->getPersonSocialProfiles($person);
+        $socials = $person->getSocialProfiles();
 
 
         //ToDo: this isn't 100% secure yet and needs some additional polish
@@ -93,7 +93,7 @@ class ClaimPersonController extends Controller
                 ->with('error', 'There has been a problem with your claim. Please contact us at support@neuly.com.');
         }
 
-        $socials = $this->getPersonSocialProfiles($person);
+        $socials = $person->getSocialProfiles();
 
         if($this->canBeClaimedViaSocial($socials, $user, $person))
         {
@@ -141,34 +141,6 @@ class ClaimPersonController extends Controller
     {
         return $user->email === $person->email || $user->email === $person->secondary_email;
     }
-
-    private function getPersonSocialProfiles($person)
-    {
-        $social = [];
-
-        if($person->linkedin !== null)
-        {
-            $social[] = 'linkedin';
-        }
-
-        if($person->facebook !== null)
-        {
-            $social[] = 'facebook';
-        }
-
-        if($person->twitter !== null)
-        {
-            $social[] = 'twitter';
-        }
-
-        if($person->google_scholar !== null)
-        {
-            $social[] = 'google';
-        }
-
-        return $social;
-    }
-
     private function checkUsersSocialLogins($socials, $user)
     {
         $logins = UserSocialAuth::whereIn('provider_name', $socials)
