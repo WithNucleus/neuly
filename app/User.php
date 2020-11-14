@@ -5,6 +5,7 @@ namespace App;
 use App\Models\UserSocialAuth;
 use App\Models\FollowList;
 use App\Models\Person;
+use App\Models\RaisedClaim;
 use App\Traits\CanFollow;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -68,5 +69,20 @@ class User extends Authenticatable implements MustVerifyEmail
     public function relatedPerson()
     {
         return $this->hasOne(Person::class, 'user_id');
+    }
+
+    public function raisedClaims()
+    {
+        return $this->hasMany(RaisedClaim::class);
+    }
+
+    public function hasRaisedClaimBefore()
+    {
+        return $this->raisedClaims()->count() > 0;
+    }
+
+    public function hasRaisedMultipleClaims()
+    {
+        return $this->raisedCLaims()->count() > 1;
     }
 }

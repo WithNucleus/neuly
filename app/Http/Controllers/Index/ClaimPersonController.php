@@ -19,7 +19,7 @@ class ClaimPersonController extends Controller
         $user = Auth::user();
         $person = Person::where('slug', '=', $slug)->firstOrFail();
 
-        if($this->hasUserRaisedAClaimBefore($user))
+        if($user->hasRaisedClaimBefore())
         {
             $request->session()->flash('error', 'You can only raise one claim at the same time.');
 
@@ -64,7 +64,7 @@ class ClaimPersonController extends Controller
 
         $user = User::findOrFail($claim->user_id);
 
-        if($this->hasPersonMultipleClaimRaises($person))
+        if($user->hasRaisedMultipleClaims())
         {
             return redirect()->route('user.person.status')
                 ->with('error', 'There has been a problem with your claim. Please contact us at support@neuly.com.');
@@ -87,7 +87,7 @@ class ClaimPersonController extends Controller
         $person = Person::find($claim->person_id);
         $user = User::find($claim->user_id);
 
-        if($this->hasPersonMultipleClaimRaises($person))
+        if($user->hasRaisedMultipleClaims())
         {
             return redirect()->route('user.person.status')
                 ->with('error', 'There has been a problem with your claim. Please contact us at support@neuly.com.');
@@ -135,16 +135,6 @@ class ClaimPersonController extends Controller
 
         return redirect()->route('user.person.status')
             ->with('success', 'Verification E-Mail has ben resent to the E-Mail of the Person you are trying to claim.');
-    }
-
-    private function hasUserRaisedAClaimBefore($user)
-    {
-        return RaisedClaim::where('user_id', '=', $user->id)->get()->count() > 0;
-    }
-
-    private function hasPersonMultipleClaimRaises($person)
-    {
-        return RaisedClaim::where('person_id', '=', $person->id)->get()->count() > 1;
     }
 
     private function checkForIdenticalEmails($user, $person)
