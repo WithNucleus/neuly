@@ -176,23 +176,4 @@ class UserPersonController extends Controller
 
         return view('members.person.search', compact('people', 'cleanTerm'));
     }
-
-    private function checkForIdenticalEmails($user, $person)
-    {
-        return $user->email === $person->email || $user->email === $person->secondary_email;
-    }
-
-    private function checkUsersSocialLogins($socials, $user)
-    {
-        $logins = UserSocialAuth::whereIn('provider_name', $socials)
-            ->where('user_id', '=', $user->id)
-            ->get();
-
-        return (bool) count($logins);
-    }
-
-    private function canBeClaimedViaSocial($socials, $user, $person)
-    {
-        return $this->checkForIdenticalEmails($user, $person) && $this->checkUsersSocialLogins($socials, $user);
-    }
 }

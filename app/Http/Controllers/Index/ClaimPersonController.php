@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Index;
 
+use App\Helpers\ClaimPersonHelper;
 use App\Http\Controllers\Controller;
 use App\Mail\VerifyClaimedPersonMail;
 use App\Model\UserSocialAuth;
@@ -30,7 +31,7 @@ class ClaimPersonController extends Controller
 
 
         //ToDo: this isn't 100% secure yet and needs some additional polish
-        if($this->canBeClaimedViaSocial($socials, $user, $person))
+        if(ClaimPersonHelper::canBeClaimedViaSocial($socials, $user, $person))
         {
             $user->person_id = $person->id;
             $user->save();
@@ -95,7 +96,7 @@ class ClaimPersonController extends Controller
 
         $socials = $person->getSocialProfiles();
 
-        if($this->canBeClaimedViaSocial($socials, $user, $person))
+        if(ClaimPersonHelper::canBeClaimedViaSocial($socials, $user, $person))
         {
             $person->user_id = $claim->user_id;
             $person->save();
@@ -135,23 +136,5 @@ class ClaimPersonController extends Controller
 
         return redirect()->route('user.person.status')
             ->with('success', 'Verification E-Mail has ben resent to the E-Mail of the Person you are trying to claim.');
-    }
-
-    private function checkForIdenticalEmails($user, $person)
-    {
-        return $user->email === $person->email || $user->email === $person->secondary_email;
-    }
-    private function checkUsersSocialLogins($socials, $user)
-    {
-        $logins = UserSocialAuth::whereIn('provider_name', $socials)
-            ->where('user_id', '=', $user->id)
-            ->get();
-
-        return (bool) count($logins);
-    }
-
-    private function canBeClaimedViaSocial($socials, $user, $person)
-    {
-        return $this->checkForIdenticalEmails($user, $person) && $this->checkUsersSocialLogins($socials, $user);
     }
 }
