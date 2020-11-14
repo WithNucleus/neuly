@@ -23,7 +23,7 @@
                         Your verification link will be valid for xx hours.
                         <br /><br />
 
-                        <a href="{{ route('user.person.send.mail') }}" class="btn btn-primary mt-4">Send verification email</a>
+                        <a href="{{ route('user.person.mail.send') }}" class="btn btn-primary mt-4">Send verification email</a>
                     </div>
 
                 </div>

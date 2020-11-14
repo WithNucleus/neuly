@@ -26,7 +26,7 @@
 
                         @include('members.includes.status-messages')
 
-                        <form id="user-profile" action="{{ route('user.person.save.email') }}" method="post" class="needs-validation" novalidate>
+                        <form id="user-profile" action="{{ route('user.person.email.save') }}" method="post" class="needs-validation" novalidate>
                             @csrf
                             <div class="form-group row">
                                 <div class="col-12 col-md-12 mb-3 mb-md-0">

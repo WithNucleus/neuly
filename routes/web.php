@@ -272,23 +272,23 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/user/settings/validateurl', 'Index\UserProfileController@checkMemberUrl')->name('user.validate.member_url');
 
     Route::get('/user/person', 'Index\UserPersonController@index')->name('user.person.index');
-    Route::post('/user/person', 'Index\UserPersonController@savePersonal')->name('user.person.save.personal');
+    Route::post('/user/person', 'Index\UserPersonController@savePersonal')->name('user.person.personal.save');
     Route::get('/user/person/email', 'Index\UserPersonController@email')->name('user.person.email');
-    Route::post('/user/person/email', 'Index\UserPersonController@saveEmail')->name('user.person.save.email');
+    Route::post('/user/person/email', 'Index\UserPersonController@saveEmail')->name('user.person.email.save');
     Route::get('/user/person/social', 'Index\UserPersonController@social')->name('user.person.social');
-    Route::post('/user/person/social', 'Index\UserPersonController@saveSocial')->name('user.person.save.social');
+    Route::post('/user/person/social', 'Index\UserPersonController@saveSocial')->name('user.person.social.save');
     Route::get('/user/person/status', 'Index\UserPersonController@status')->name('user.person.status');
-    Route::get('/user/person/sendmail', 'Index\ClaimPersonController@sendVerificationMail')->name('user.person.send.mail');
+    Route::get('/user/person/sendmail', 'Index\ClaimPersonController@sendVerificationMail')->name('user.person.mail.send');
 
     Route::get('/user/person/create', 'Index\UserPersonController@create')->name('user.person.create');
-    Route::post('/user/person/create/email', 'Index\UserPersonController@createEmail')->name('user.person.create.email');
-    Route::post('/user/person/create/social', 'Index\UserPersonController@createSocial')->name('user.person.create.social');
-    Route::post('/user/person/create/finish', 'Index\UserPersonController@createFinish')->name('user.person.create.finish');
+    Route::post('/user/person/create/email', 'Index\UserPersonController@createEmail')->name('user.person.email.store');
+    Route::post('/user/person/create/social', 'Index\UserPersonController@createSocial')->name('user.person.social.store');
+    Route::post('/user/person/create/finish', 'Index\UserPersonController@createFinish')->name('user.person.finish.store');
 
     Route::get('/user/person/search', 'Index\UserPersonController@search')->name('user.person.search');
 
-    Route::get('/user/person/verify/email', 'Index\UserPersonController@verifyEmail')->name('user.person.verify.email');
-    Route::get('/user/person/verify/social', 'Index\UserPersonController@verifySocial')->name('user.person.verify.social');
+    Route::get('/user/person/verify/email', 'Index\UserPersonController@verifyEmail')->name('user.person.email.verify');
+    Route::get('/user/person/verify/social', 'Index\UserPersonController@verifySocial')->name('user.person.social.verify');
 });
 
 // User Email Reset

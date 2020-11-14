@@ -258,4 +258,31 @@ class Person extends Model implements EntityContract, EntityImageContract
             ],
         ];
     }
+
+    public function getSocialProfiles()
+    {
+        $social = [];
+
+        if($this->linkedin !== null)
+        {
+            $social[] = 'linkedin';
+        }
+
+        if($this->facebook !== null)
+        {
+            $social[] = 'facebook';
+        }
+
+        if($this->twitter !== null)
+        {
+            $social[] = 'twitter';
+        }
+
+        if($this->google_scholar !== null)
+        {
+            $social[] = 'google';
+        }
+
+        return $social;
+    }
 }
