@@ -182,33 +182,6 @@ class UserPersonController extends Controller
         return $user->email === $person->email || $user->email === $person->secondary_email;
     }
 
-    private function getPersonSocialProfiles($person)
-    {
-        $social = [];
-
-        if($person->linkedin !== null)
-        {
-            $social[] = 'linkedin';
-        }
-
-        if($person->facebook !== null)
-        {
-            $social[] = 'facebook';
-        }
-
-        if($person->twitter !== null)
-        {
-            $social[] = 'twitter';
-        }
-
-        if($person->google_scholar !== null)
-        {
-            $social[] = 'google';
-        }
-
-        return $social;
-    }
-
     private function checkUsersSocialLogins($socials, $user)
     {
         $logins = UserSocialAuth::whereIn('provider_name', $socials)
