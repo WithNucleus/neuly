@@ -90,22 +90,22 @@ $('.js-bar-chart').each(function (i, item) {
     });
 });
 
-document.getElementById('open-full-screen-tracker').onclick = function() {
+document.getElementById('open-full-screen-table').onclick = function() {
     maximizeContent();
 }
 
-document.getElementById('close-full-screen-tracker').onclick = function() {
+document.getElementById('close-full-screen-table').onclick = function() {
     closeCsv();
 }
 
 function maximizeContent() {
-    document.getElementById('clinical-trial-tracker-container').classList.toggle('fixed');
-    document.getElementById('close-full-screen-tracker').classList.toggle('d-none');
+    document.getElementById('resizable-fullscreen-table-container').classList.toggle('fixed');
+    document.getElementById('close-full-screen-table').classList.toggle('d-none');
     document.body.classList.toggle('noscroll');
 }
 
 function closeCsv() {
-    document.getElementById('clinical-trial-tracker-container').classList.toggle('fixed');
-    document.getElementById('close-full-screen-tracker').classList.toggle('d-none');
+    document.getElementById('resizable-fullscreen-table-container').classList.toggle('fixed');
+    document.getElementById('close-full-screen-table').classList.toggle('d-none');
     document.body.classList.toggle('noscroll');
 }

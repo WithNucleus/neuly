@@ -9,8 +9,8 @@
     }
 ?>
 
-<div id="clinical-trial-tracker-container">
-    <button id="close-full-screen-tracker" class="btn d-none mb-3 btn-dark text-uppercase"><i class="fas fa-times"></i> Close</button>
+<div id="resizable-fullscreen-table-container">
+    <button id="close-full-screen-table" class="btn d-none mb-3 btn-dark text-uppercase"><i class="fas fa-times"></i> Close</button>
     <div class="position-relative">
         <table class="table bg-white mb-0" id="clinical-trial-tracker">
             <thead class="thead-dark">
