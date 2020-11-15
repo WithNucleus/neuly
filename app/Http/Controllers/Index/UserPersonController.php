@@ -117,7 +117,7 @@ class UserPersonController extends Controller
         return view('members.person.create');
     }
 
-    public function createEmail(Request $request)
+    public function storeBasicInformationShowEmailStep(Request $request)
     {
         $user = Auth::user();
         $person = new Person();
@@ -135,7 +135,7 @@ class UserPersonController extends Controller
         return view('members.person.create_email');
     }
 
-    public function createSocial(Request $request)
+    public function storeEmailShowSocialStep(Request $request)
     {
         $person = Auth::user()->relatedPerson;
         $person->email = $request->has('email') ? $request->input('email') : $person->email;
@@ -146,7 +146,7 @@ class UserPersonController extends Controller
         return view('members.person.create_social');
     }
 
-    public function createFinish(Request $request)
+    public function storeSocialShowFinishStep(Request $request)
     {
         $person = Auth::user()->relatedPerson;
         $person->website = $request->has('website') ? $request->input('website') : $person->website;

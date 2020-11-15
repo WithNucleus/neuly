@@ -281,9 +281,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/user/person/sendmail', 'Index\ClaimPersonController@sendVerificationMail')->name('user.person.mail.send');
 
     Route::get('/user/person/create', 'Index\UserPersonController@create')->name('user.person.create');
-    Route::post('/user/person/create/email', 'Index\UserPersonController@createEmail')->name('user.person.email.store');
-    Route::post('/user/person/create/social', 'Index\UserPersonController@createSocial')->name('user.person.social.store');
-    Route::post('/user/person/create/finish', 'Index\UserPersonController@createFinish')->name('user.person.finish.store');
+    Route::post('/user/person/create/email', 'Index\UserPersonController@storeBasicInformationShowEmailStep')->name('user.person.email.store');
+    Route::post('/user/person/create/social', 'Index\UserPersonController@storeEmailShowSocialStep')->name('user.person.social.store');
+    Route::post('/user/person/create/finish', 'Index\UserPersonController@storeSocialShowFinishStep')->name('user.person.finish.store');
 
     Route::get('/user/person/search', 'Index\UserPersonController@search')->name('user.person.search');
 
