@@ -72,7 +72,7 @@ class PersonController extends Controller
         // Get Person
         $person = Person::where('slug', $slug)->firstOrFail();
 
-        if(!$this->canUserViewPerson($person)) {
+        if(!$person->canBeViewed()) {
             abort(404);
         }
 

@@ -12,6 +12,7 @@ use App\Traits\HasFollowers;
 use App\User;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Log;
@@ -284,5 +285,9 @@ class Person extends Model implements EntityContract, EntityImageContract
         }
 
         return $social;
+    }
+
+    public function canBeViewed() {
+        return $this->visibility === 'public' || Auth::check();
     }
 }
