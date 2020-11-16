@@ -51,7 +51,7 @@
                                 </span>
                             </div>
 
-                            <div class="d-md-flex justify-content-between align-items-center mb-3">
+                            <div class="d-md-flex justify-content-between align-items-center">
                                 {{-- Sorting --}}
                                 @isset($sort)
                                     <div class="sort-container font-size-small mt-3 mb-3">
@@ -86,48 +86,6 @@
                                     </div>
                                 @endisset
 
-                                {{-- Filters --}}
-                                <?php if (
-                                    isset($filters_location) && $filters_location OR
-                                    isset($filters_countries) && $filters_countries OR
-                                    isset($filters_company_name) && $filters_company_name
-                                    ) : ?>
-                                <div class="current-filter-list font-size-small align-self-end border-bottom mb-3 pb-1">
-                                    <strong class="text-uppercase mr-3 text-black-50">Current Filters:</strong>
-
-                                    <?php if (isset($filters_countries) && $filters_countries) : ?>
-                                            <span class="mr-3">
-                                                <i class="fad fa-globe-stand text-info"></i>
-                                                @foreach ($filters_countries as $country)
-                                                    {{ $country }}
-                                                    @if (!$loop->last) <strong class="text-black-50">/</strong> @endif
-                                                @endforeach
-                                            </span>
-                                    <?php endif; ?>
-
-                                    <?php if (isset($filters_location) && $filters_location) : ?>
-                                            <span class="mr-3">
-                                                <i class="fad fa-map-marker-alt text-info"></i>
-                                                @foreach ($filters_location as $location)
-                                                    {{ $location }}
-                                                    @if (!$loop->last) <strong class="text-info">/</strong> @endif
-                                                @endforeach
-                                            </span>
-                                    <?php endif; ?>
-
-                                    <?php if (isset($filters_company_name) && $filters_company_name) : ?>
-                                            <span class="mr-3">
-                                                <i class="fad fa-building text-secondarydark"></i>
-                                                @foreach ($filters_company_name as $company)
-                                                    {{ $company }}
-                                                    @if (!$loop->last) <strong class="text-black-50">/</strong> @endif
-                                                @endforeach
-                                            </span>
-                                    <?php endif; ?>
-
-                                </div>
-                                <?php endif; ?>
-
                                 <div class="switch-view ml-auto mt-2 mb-3 my-md-0 d-flex">
                                     <div class="btn-group" role="group" aria-label="Switch Location view">
                                         <a href="{{ route('discover.locations') }}" class="btn btn-primary" title="List View" data-toggle="tooltip" data-placement="top">
@@ -140,8 +98,50 @@
                                 </div>
                             </div>
 
+                            {{-- Filters --}}
+                            <?php if (
+                                isset($filters_location) && $filters_location OR
+                                isset($filters_countries) && $filters_countries OR
+                                isset($filters_company_name) && $filters_company_name
+                                ) : ?>
+                            <div class="current-filter-list font-size-small align-self-end">
+                                <strong class="text-uppercase mr-3 text-black-50">Current Filters:</strong>
+
+                                <?php if (isset($filters_countries) && $filters_countries) : ?>
+                                        <span class="mr-3">
+                                            <i class="fad fa-globe-stand text-info"></i>
+                                            @foreach ($filters_countries as $country)
+                                                {{ $country }}
+                                                @if (!$loop->last) <strong class="text-black-50">/</strong> @endif
+                                            @endforeach
+                                        </span>
+                                <?php endif; ?>
+
+                                <?php if (isset($filters_location) && $filters_location) : ?>
+                                        <span class="mr-3">
+                                            <i class="fad fa-map-marker-alt text-info"></i>
+                                            @foreach ($filters_location as $location)
+                                                {{ $location }}
+                                                @if (!$loop->last) <strong class="text-info">/</strong> @endif
+                                            @endforeach
+                                        </span>
+                                <?php endif; ?>
+
+                                <?php if (isset($filters_company_name) && $filters_company_name) : ?>
+                                        <span class="mr-3">
+                                            <i class="fad fa-building text-secondarydark"></i>
+                                            @foreach ($filters_company_name as $company)
+                                                {{ $company }}
+                                                @if (!$loop->last) <strong class="text-black-50">/</strong> @endif
+                                            @endforeach
+                                        </span>
+                                <?php endif; ?>
+
+                            </div>
+                            <?php endif; ?>
+
                             {{-- Locations --}}
-                            <ul class="list-group list-group-flush mb-4 shadow-sm">
+                            <ul class="list-group list-group-flush mb-4 shadow-sm mt-4">
                                 @forelse($locations as $location)
                                     <li class="list-group-item p-4 d-md-flex">
 

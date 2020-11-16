@@ -39,11 +39,11 @@
                 @include('discover.includes.status-messages')
 
                 <div class="d-flex align-items-center justify-content-between">
-                    <h1>Locations Map</h1>
+                    <h1>{{ $country }}</h1>
 
                     <div class="switch-view ml-auto mt-2 mb-3 my-md-0 d-flex">
                         <div class="btn-group" role="group" aria-label="Switch Location view">
-                            <a href="{{ route('discover.locations') }}" class="btn btn-outline-primary" title="List View" data-toggle="tooltip" data-placement="top">
+                            <a href="{{ route('discover.locations') }}?filter[countries]={{ $country }}" class="btn btn-outline-primary" title="List View" data-toggle="tooltip" data-placement="top">
                                 <i class="fad fa-list-ul fa-lg"></i>
                             </a>
                             <a href="{{ route('discover.locations.maps.global') }}" class="btn btn-primary" title="Map View" data-toggle="tooltip" data-placement="top">
@@ -58,43 +58,45 @@
                     </div>
                 </div>
 
+                @if ($country == 'USA')
                 <div style="margin-right: 2rem;">
                     <div class="resizable overflow-hidden" style="height: 600px;">
                         <div id="world-distribution-map" style="width: 100%; height: 100%;"></div>
                     </div>
                 </div>
+                @endif
 
                 <div id="resizable-fullscreen-table-container">
                     <button id="close-full-screen-table" class="btn d-none mb-3 btn-dark text-uppercase"><i class="fas fa-times"></i> Close</button>
                     <div class="position-relative">
                         <table id="global-locations-map-table" class="table table-striped bg-white border-0">
                             <thead class="font-size-large">
-                            <th scope="col" class="sticky-top text-no-wrap bg-dark text-light">Country</th>
+                            <th scope="col" class="sticky-top text-no-wrap bg-dark text-light">Location</th>
                             <?php if (isset($filters_type) && $filters_type) : ?>
-                                @foreach ($filters_type as $type)
-                                    <th scope="col" class="sticky-top text-no-wrap bg-dark text-light">{{ ucwords($type) }}</th>
-                                @endforeach
+                            @foreach ($filters_type as $type)
+                                <th scope="col" class="sticky-top text-no-wrap bg-dark text-light">{{ ucwords($type) }}</th>
+                            @endforeach
                             <?php else : ?>
-                                @foreach ($all_filters_type as $type)
-                                    <th scope="col" class="sticky-top text-no-wrap bg-dark text-light">{{ ucwords($type) }}</th>
-                                @endforeach
+                            @foreach ($all_filters_type as $type)
+                                <th scope="col" class="sticky-top text-no-wrap bg-dark text-light">{{ ucwords($type) }}</th>
+                            @endforeach
                             <?php endif; ?>
                             <th scope="col" class="sticky-top text-no-wrap bg-dark text-light">Total</th>
                             </thead>
                             <tbody>
-                            @foreach($countriesByCode as $alpha2code => $item)
+                             @foreach($countriesByCode as $alpha2code => $item)
                                 <tr>
                                     <td>
-                                        <a href="{{ route('discover.locations') }}?filter[countries]={{ $item['country'] }}">{{ $item['country'] }}</a>
+                                        <a href="{{ route('discover.locations') }}?filter[locations]={{ $item['country'] }}">{{ $item['country'] }}</a>
                                     </td>
                                     <?php if (isset($filters_type) && $filters_type) : ?>
                                     @foreach ($filters_type as $type)
                                         <td>{{ $item[$type] }}</td>
                                     @endforeach
                                     <?php else : ?>
-                                        @foreach ($all_filters_type as $type)
-                                            <td>{{ $item[$type] }}</td>
-                                        @endforeach
+                                    @foreach ($all_filters_type as $type)
+                                        <td>{{ $item[$type] }}</td>
+                                    @endforeach
                                     <?php endif; ?>
                                     <td><strong>{{ $item['total'] }}</strong></td>
                                 </tr>
@@ -106,7 +108,9 @@
             </main>
         </div>
     </div>
-    <script type="text/javascript" src="{{ asset('assets/maps/world.js') }}"></script>
+    @if ($country == 'USA')
+        <script type="text/javascript" src="{{ asset('assets/maps/country-US.js') }}"></script>
+    @endif
     <script>
         // Map
         var countries = {!! json_encode($countriesByCode) !!}
@@ -118,7 +122,9 @@
             }
 
             $('#world-distribution-map').vectorMap({
-                map: 'world_merc',
+                <?php if ($country == 'USA') : ?>
+                map: 'us_merc',
+                <?php endif; ?>
                 series: {
                     regions: [{
                         values: values,
@@ -151,4 +157,3 @@
         });
     </script>
 @endsection
-

@@ -79,7 +79,7 @@
                 @include('sidebars.insights.research-organizations')
             @endif
 
-            @if(Route::is('discover.locations.maps.global'))
+            @if(Route::is('discover.locations.maps.global') OR Route::is('discover.locations.maps.country'))
                 @include('sidebars.locations.global-map')
             @endif
 

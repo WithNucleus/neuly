@@ -36,6 +36,8 @@ class LocationMapController extends Controller
             if (isset($filter['type'])) {
                 $filters_type = $filter['type'];
             }
+        } else {
+            $filters_type = $all_filters_type;
         }
 
         $locations = Location::whereNotNull('alpha2code');
@@ -48,29 +50,61 @@ class LocationMapController extends Controller
             ->groupBy('alpha2code')
             ->toArray();
 
-        $countriesByCode = $this->getMappedCountries($locations);
+        $countriesByCode = $this->getMappedLocationGroups($locations, 'alpha2code');
 
         $path = route('discover.locations.maps.global');
         $sort = $request->has('sort') ? $request->input('sort') : 'organizations';
 
-        return view('discover.locations.map', compact('countriesByCode', 'all_filters_type', 'filters_type', 'path', 'sort'));
+        return view('discover.locations.maps.global', compact('countriesByCode', 'all_filters_type', 'filters_type', 'path', 'sort'));
     }
 
     /**
      * Show
      * @return \Illuminate\View\View
      */
-    public function showCountry($country)
+    public function showCountry(Request $request, $country)
     {
+        $filter = [];
+        $all_filters_type = [
+            'organizations',
+            'people',
+            'investors',
+            'clinical trials',
+            'events',
+            'jobs',
+        ];
+        $filters_type = [];
+
+        if ($request->has('filter')) {
+            $filterInput = $request->input('filter');
+
+            $filter = array_map(function ($entity) {
+                return explode('|', $entity);
+            }, $filterInput);
+
+            if (isset($filter['type'])) {
+                $filters_type = $filter['type'];
+            }
+        } else {
+            $filters_type = $all_filters_type;
+        }
+
         $locations = Location::where('country', $country);
 
-        $locations->get()
-            ->groupBy('alpha2code')
+        $locations = $this->filterQuery($locations, $filter);
+
+        $locations = $locations
+            ->orderBy('region')
+            ->get()
+            ->groupBy('region')
             ->toArray();
 
-        $countriesByCode = $this->getMappedCountries($locations);
+        $countriesByCode = $this->getMappedLocationGroups($locations, 'region');
 
-        return view('discover.locations.map', compact('countriesByCode'));
+        $path = route('discover.locations.maps.country', $country);
+        $sort = $request->has('sort') ? $request->input('sort') : 'organizations';
+
+        return view('discover.locations.maps.country', compact('country', 'locations', 'countriesByCode', 'all_filters_type', 'filters_type', 'path', 'sort'));
     }
 
     private function filterQuery($locations, $filter)
@@ -93,7 +127,7 @@ class LocationMapController extends Controller
         return $locations;
     }
 
-    private function getMappedCountries($country_groups)
+    private function getMappedLocationGroups($country_groups, $groupBy)
     {
         $mappedArray = [];
 
@@ -142,17 +176,39 @@ class LocationMapController extends Controller
 
             }
 
-            $mappedArray[$country_group[0]['alpha2code']] = [
-                'country' => $country_group[0]['country'],
-                'map_count' => $map_count,
-                'total' => $total,
-                'organizations' => $total_companies,
-                'people' => $total_people,
-                'investors' => $total_investors,
-                'jobs' => $total_jobs,
-                'events' => $total_events,
-                'clinical trials' => $total_clinicaltrials,
-            ];
+            if ($groupBy == 'alpha2code') {
+                $mappedArray[$country_group[0]['alpha2code']] = [
+                    'country' => $country_group[0]['country'],
+                    'map_count' => $map_count,
+                    'total' => $total,
+                    'organizations' => $total_companies,
+                    'people' => $total_people,
+                    'investors' => $total_investors,
+                    'jobs' => $total_jobs,
+                    'events' => $total_events,
+                    'clinical trials' => $total_clinicaltrials,
+                ];
+            } else {
+                if ($country_group[0]['region'] == '') {
+                    $label_code = $country_group[0]['alpha2code'];
+                    $label = $country_group[0]['country'];
+                } else {
+                    $label_code = $country_group[0]['region_code'];
+                    $label = $country_group[0]['region'];
+                }
+
+                $mappedArray[$label_code] = [
+                    'country' => $label,
+                    'map_count' => $map_count,
+                    'total' => $total,
+                    'organizations' => $total_companies,
+                    'people' => $total_people,
+                    'investors' => $total_investors,
+                    'jobs' => $total_jobs,
+                    'events' => $total_events,
+                    'clinical trials' => $total_clinicaltrials,
+                ];
+            }
         }
 
         return $mappedArray;
