@@ -25,7 +25,7 @@
                     <a class="dropdown-item" href="{{ route('discover.organizations') }}"><i class="fad fa-building fa-fw"></i> Organizations</a>
                     <a class="dropdown-item" href="{{ route('discover.people') }}"><i class="fad fa-users fa-fw"></i> People</a>
                     <a class="dropdown-item" href="{{ route('discover.research') }}"><i class="fad fa-microscope fa-fw"></i> Research</a>
-                    <a class="dropdown-item" href="{{ route('discover.locations') }}"><i class="fad fa-map-pin fa-fw"></i> Locations</a>
+                    <a class="dropdown-item" href="{{ route('discover.locations.maps.global') }}"><i class="fad fa-map-pin fa-fw"></i> Locations</a>
                     <a class="dropdown-item" href="{{ route('discover.focus') }}"><i class="fad fa-tags fa-fw"></i> Focus</a>
                     <a class="dropdown-item" href="{{ route('discover.events') }}"><i class="fad fa-calendar fa-fw"></i> Events</a>
                     <a class="dropdown-item" href="{{ route('discover.jobs') }}"><i class="fad fa-briefcase fa-fw"></i> Jobs</a>

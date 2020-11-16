@@ -23,7 +23,7 @@
                 @endif
             >Investors</option>
             <option value="locations"
-                @if(Route::is('discover.locations') OR Route::is('discover.locations.show'))
+                @if(Route::is('discover.locations') OR Route::is('discover.locations.*'))
                     selected
                 @endif
             >Locations</option>
