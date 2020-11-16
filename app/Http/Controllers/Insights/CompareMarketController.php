@@ -20,12 +20,12 @@ class CompareMarketController extends Controller
 
     private function getQuery()
     {
-        return Company::select('name', 'logo', 'slug', 'ownership', 'valuation', 'location');
+        return Company::select('id', 'name', 'logo', 'slug', 'ownership', 'valuation', 'founded_date');
     }
 
     private function getRelatedData($query)
     {
-        return $query->with(['investors', 'people', 'locations', 'valuations']);
+        return $query->with(['investors', 'people', 'locations', 'valuations', 'focus']);
     }
 
     private function filterQuery($query, $request)
