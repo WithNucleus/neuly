@@ -6,6 +6,7 @@ use App\Events\SendNotification;
 use App\Http\Requests\JobRequest;
 use App\Models\Company;
 use App\Models\Focus;
+use App\Models\Investor;
 use App\Models\Job;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
@@ -73,14 +74,21 @@ class JobCrudController extends CrudController
             'type' => 'date',
             'label' => 'Posted Date'
         ]);
+
         $this->crud->addColumn([
-             'label'     => "Organization",
-             'type'      => 'select',
-             'name'      => 'company_id',
-             'entity'    => 'company',
-             'attribute' => 'name',
-             'model'     => "App\Models\Company",
+            'label'     => "Owner",
+            'type'      => 'select',
+            'name'      => 'owner_id',
+            'entity'    => 'owner',
+            'attribute' => 'name',
         ]);
+
+        $this->crud->addColumn([
+            'label'     => "Owner type",
+            'name'      => 'owner_type',
+            'type'      => 'text',
+        ]);
+
         $this->crud->addColumn([
             'name' => 'employment_type',
             'type' => 'text',
@@ -169,17 +177,26 @@ class JobCrudController extends CrudController
             'prefix'     => "$",
             'attributes' => ["step" => ".01"]
         ]);
+
         $this->crud->addField([
-            'label'     => "Organization",
-            'type'      => 'select2',
-            'name'      => 'company_id',
-            'entity'    => 'company',
-            'attribute' => 'name',
-            'options'   => (function ($query) {
-                return $query->orderBy('name', 'ASC')->get();
-            }),
-            'model'     => "App\Models\Company",
+            'name'  => 'owner',
+            'type'  => 'select2_morph_1_n',
+            'label' => 'Owner',
+            'showAsterisk' => true,
+            'data' => [
+                'companies' => [
+                    'label' => 'Company',
+                    'type' => Company::class,
+                    'options' => Company::orderBy('name')->pluck('name', 'id'),
+                ],
+                'investors' => [
+                    'label' => 'Investor',
+                    'type' => Investor::class,
+                    'options' => Investor::orderBy('name')->pluck('name', 'id'),
+                ],
+            ]
         ]);
+
         $this->crud->addField([
             'name'    => 'employment_type',
             'type'    => 'radio',
@@ -222,21 +239,31 @@ class JobCrudController extends CrudController
         ]);
     }
 
+    /**
+     * Define what happens when the Update operation is loaded.
+     *
+     * @see https://backpackforlaravel.com/docs/crud-operation-update
+     * @return void
+     */
+    protected function setupUpdateOperation()
+    {
+        $this->setupCreateOperation();
+    }
+
     public function store()
     {
+        //backpack documented hack to not strip custom fields for morph relations
+        $this->crud->setOperationSetting('saveAllInputsExcept', ['_token', '_method', 'http_referrer', 'current_tab', 'save_action']);
+
         $response = $this->traitStore();
         $request = $response->getRequest();
         $job = $this->data['entry'];
 
-        if($request->has('company_id') && $request->input('company_id') !== null) {
+        $owner       = $job->owner;
+        $title       = 'New job posting for ' . $owner->name;
+        $description = $owner->getShowLink() . ' is hiring for a ' . $job->employment_type . ' position: ' . $job->getShowLink();
 
-            $company = Company::find($request->input('company_id'));
-
-            $title = 'New job posting for ' . $company->name;
-            $description = $company->getShowLink() . ' is hiring for a ' . $job->employment_type . ' position: ' . $job->getShowLink();
-
-            SendNotification::dispatch($company, $title, $description, 'jobs');
-        }
+        SendNotification::dispatch($owner, $title, $description, 'jobs');
 
         if($request->has('focus') && $request->input('focus') !== null) {
             foreach($request->input('focus') as $focusId) {
@@ -244,7 +271,7 @@ class JobCrudController extends CrudController
                 $focus = Focus::find($focusId);
 
                 $title = 'New job posting related to ' . $focus->name;
-                $description = $company->getShowLink() . ' is hiring for a ' . $job->employment_type . ' position: ' . $job->getShowLink();
+                $description = $owner->getShowLink() . ' is hiring for a ' . $job->employment_type . ' position: ' . $job->getShowLink();
 
                 SendNotification::dispatch($focus, $title, $description, 'jobs');
             }
@@ -255,6 +282,9 @@ class JobCrudController extends CrudController
 
     public function update()
     {
+        //backpack documented hack to not strip custom fields for morph relations
+        $this->crud->setOperationSetting('saveAllInputsExcept', ['_token', '_method', 'http_referrer', 'current_tab', 'save_action']);
+
         $originalJob = $this->getOriginalModel($this->crud);
         $oldFocus = $this->getFocusIds($originalJob);
 
@@ -262,19 +292,19 @@ class JobCrudController extends CrudController
         $request = $response->getRequest();
 
         $job = $this->data['entry'];
-        $company = Company::find($job->company_id);
 
-        $title = 'Updated job posting for ' . $company->name;
-        $description = 'The job posting for ' . $job->getShowLink() . ' at ' . $company->getShowLink() . ' has been updated.';
+        $owner       = $job->owner;
+        $title       = 'Updated job posting for ' . $owner->name;
+        $description = 'The job posting for ' . $job->getShowLink() . ' at ' . $owner->getShowLink() . ' has been updated.';
 
-        SendNotification::dispatch($company, $title, $description, 'jobs');
+        SendNotification::dispatch($owner, $title, $description, 'jobs');
 
-        $newFocus = $this->getFocusIds($job);
+        // Waiting till later to implement
+//        $newFocus = $this->getFocusIds($job);
 
-        $addedFocus = array_diff($newFocus, $oldFocus);
-        $removedFocus = array_diff($oldFocus, $newFocus);
+//        $addedFocus = array_diff($newFocus, $oldFocus);
+//        $removedFocus = array_diff($oldFocus, $newFocus);
 
-        // Waiting til later to implement
         // if($addedFocus !== [])
         // {
         //     foreach($addedFocus as $key => $focusId)
@@ -299,17 +329,6 @@ class JobCrudController extends CrudController
         // }
 
         return $response;
-    }
-
-    /**
-     * Define what happens when the Update operation is loaded.
-     *
-     * @see https://backpackforlaravel.com/docs/crud-operation-update
-     * @return void
-     */
-    protected function setupUpdateOperation()
-    {
-        $this->setupCreateOperation();
     }
 
     private function getFocusIds($model)

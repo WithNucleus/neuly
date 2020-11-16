@@ -23,6 +23,17 @@ class Job extends Model
 
     protected $table = 'jobs';
     protected $guarded = ['id'];
+    protected $fillable = [
+        'job_title',
+        'slug',
+        'owner_id',
+        'owner_type',
+        'job_description',
+        'employment_type',
+        'posted_date',
+        'salary',
+        'hourly_rate',
+    ];
 
     // log activity for all attributes, which not listed in $guarded array
     protected static $logUnguarded = true;
@@ -38,14 +49,56 @@ class Job extends Model
         return '<a href="' . route('discover.jobs.show', $this->slug) . '">' . $this->job_title . '</a>';
     }
 
+    /**
+     * @return string|null
+     */
+    public function getOwnerShowUrlAdminAttribute()
+    {
+        if ($this->owner instanceof Company) {
+            return route('company.show', $this->owner->id);
+        }
+
+        if ($this->owner instanceof Investor) {
+            return route('investor.show', $this->owner->id);
+        }
+
+        return null;
+    }
+
+    public function getOwnerShowUrlAttribute()
+    {
+        if ($this->owner instanceof Company) {
+            return route('discover.organizations.show', $this->owner->slug);
+        }
+
+        if ($this->owner instanceof Investor) {
+            return route('discover.investors.show', $this->owner->slug);
+        }
+
+        return null;
+    }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
     |--------------------------------------------------------------------------
     */
 
-    public function company() {
-        return $this->belongsTo('App\Models\Company');
+    public function owner()
+    {
+        return $this->morphTo();
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class, 'owner_id')
+            ->where('owner_type', Company::class);
+    }
+
+    public function investor()
+    {
+        return $this->belongsTo(Investor::class, 'owner_id')
+            ->where('owner_type', Investor::class);
     }
 
     public function focus() {

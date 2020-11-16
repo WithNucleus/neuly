@@ -188,5 +188,36 @@ jQuery(function($){
         let value = $('[name="original_' + targetName + '"]').val();
         $('[name="entity_' + targetName + '"]').val(value);
     });
+
+    $('.js-owner-type-radio').on('change', function() {
+        let type = $(this).data('type'),
+            selectCompany = $('.js-owner-id-company'),
+            selectInvestor = $('.js-owner-id-investor');
+
+        if (type === 'company') {
+            selectInvestor.attr('disabled', true).hide();
+            selectCompany.attr('disabled', false).show();
+        } else {
+            selectCompany.attr('disabled', true).hide();
+            selectInvestor.attr('disabled', false).show();
+        }
+    });
+
+    $('.js-btn-restore-job-owner').on('click', function(e) {
+        e.preventDefault();
+
+        let btn = $(this);
+        btn.blur();
+
+        let ownerType = $('[name="original_owner_type"]').val(),
+            ownerId = $('[name="original_owner_id"]').val();
+
+        $('[name="entity_owner_type"]').each(function (){
+            if ($(this).val() === ownerType) {
+                $(this).trigger('click');
+                $('[name="entity_owner_id"]:not(disabled)').val(ownerId);
+            }
+        });
+    });
 });
 

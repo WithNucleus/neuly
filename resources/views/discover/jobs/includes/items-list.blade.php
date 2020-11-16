@@ -43,6 +43,7 @@
             <?php if (
             isset($filters_location) && $filters_location OR
             isset($filters_company_name) && $filters_company_name OR
+            isset($filters_investor_name) && $filters_investor_name OR
             isset($filters_type) && $filters_type
             ) : ?>
             <div class="current-filter-list font-size-small align-self-end border-bottom mb-3 pb-1">
@@ -78,6 +79,16 @@
                 </span>
                 <?php endif; ?>
 
+                <?php if (isset($filters_investor_name) && $filters_investor_name) : ?>
+                <span class="mr-3">
+                    <i class="fad fa-hands-usd text-secondarydark"></i>
+                    @foreach ($filters_investor_name as $investor)
+                        {{ $investor }}
+                        @if (!$loop->last) <strong class="text-black-50">/</strong> @endif
+                    @endforeach
+                </span>
+                <?php endif; ?>
+
             </div>
             <?php endif; ?>
 
@@ -88,7 +99,7 @@
 
                         <div class="image mr-5 flex-shrink-0">
                             <a href="{{ route('discover.jobs.show', $job->slug) }}" {!! $attrTarget !!}>
-                                <div class="job-org-logo" style="background-image: url('{{ $job->company->entityImageUrl }}');"></div>
+                                <div class="job-org-logo" style="background-image: url('{{ $job->owner->entityImageUrl }}');"></div>
                             </a>
                         </div>
 

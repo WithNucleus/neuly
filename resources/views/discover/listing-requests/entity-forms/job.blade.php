@@ -17,35 +17,70 @@
     </div>
 @endif
 
-<div class="js-existed-companies-input-container">
-    @if ($general['update'])
-        @include('discover.listing-requests.entity-forms.includes.select2', [
-            'label' => 'Organization',
-            'name' => 'entity_company',
-            'items' => $companies,
-            'required' => false,
-        ])
-    @else
-        @include('discover.listing-requests.entity-forms.includes.select2', [
-            'label' => 'Organization',
-            'name' => 'entity_company',
-            'items' => $companies,
-            'required' => true,
-        ])
-    @endif
-</div>
+{{-- Job owner section --}}
+<div class="row mb-2">
+    <div class="col-sm-12">
+        <label class="font-weight-bold">Owner:</label><br>
+        <div class="form-check form-check-inline">
+            <input id="company-owner-type" class="form-check-input js-owner-type-radio" type="radio"
+                   name="entity_owner_type" value="organizations" required>
+            <label for="company-owner-type" class="form-check-label">Organization</label>
+        </div>
 
-<div class="js-new-company-input-container" style="display: none">
-    <div class="form-group">
-        <label class="font-weight-bold">New organization name:</label>
-        <input class="form-control" type="text" name="entity_company_new" required disabled/>
+        <div class="form-check form-check-inline">
+            <input id="investor-owner-type" class="form-check-input js-owner-type-radio" type="radio"
+                   name="entity_owner_type" value="investors" required>
+            <label for="investor-owner-type" class="form-check-label">Investor</label>
+        </div>
     </div>
 </div>
 
-<div class="form-group">
-    <label for="entity_company_new" class="font-weight-bold">My organization isn't listed here:</label>
-    <input id="entity_company_new" class="js-new-company-checkbox" type="checkbox"/>
+<div class="js-owner-container" data-type="organizations" style="display: none;">
+    <div class="js-existed-input-container" data-type="company">
+        @include('discover.listing-requests.entity-forms.includes.select2', [
+            'label' => 'Organization list',
+            'name' => 'entity_company_id',
+            'items' => $companies,
+            'required' => true,
+        ])
+    </div>
+
+    <div class="js-new-input-container" style="display: none">
+        <div class="form-group">
+            <label class="font-weight-bold">New organization name:</label>
+            <input class="form-control" type="text" name="entity_company_new" required disabled/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="entity_company_new" class="font-weight-bold">My organization isn't listed here:</label>
+        <input id="entity_company_new" class="js-new-input-toggle" type="checkbox"/>
+    </div>
 </div>
+
+<div class="js-owner-container" data-type="investors" style="display: none;">
+    <div class="js-existed-input-container">
+    @include('discover.listing-requests.entity-forms.includes.select2', [
+        'label' => 'Investors list',
+        'name' => 'entity_investor_id',
+        'items' => $investors,
+        'required' => true,
+    ])
+    </div>
+
+    <div class="js-new-input-container" style="display: none">
+        <div class="form-group">
+            <label class="font-weight-bold">New investor name:</label>
+            <input class="form-control" type="text" name="entity_investor_new" required disabled/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="entity_investor_new" class="font-weight-bold">My investor isn't listed here:</label>
+        <input id="entity_investor_new" type="checkbox" class="js-new-input-toggle"/>
+    </div>
+</div>
+{{-- Job owner section end --}}
 
 @include('discover.listing-requests.entity-forms.includes.select-multiple', [
     'label' => 'Focus',
@@ -103,7 +138,7 @@
 <script src="{{ asset('packages/select2/dist/js/select2.full.min.js') }}"></script>
 <script>
     $(document).ready(function() {
-        $('.select2').select2();
+        $('.select2').select2({ width: '100%' });
 
         if ($('.updateEntity').length) {
             let input = $('.updateEntity'),
@@ -129,23 +164,32 @@
             });
         }
 
-        $('.js-new-company-checkbox').on('change', function () {
+        $('.js-owner-type-radio').on('change', function (){
+            let type = $(this).val();
+
+            $('.js-owner-container').each(function (){
+                $(this).data('type') === type ? $(this).show() : $(this).hide();
+            });
+        });
+
+        $('.js-new-input-toggle').on('change', function () {
             let checkbox = $(this),
-                newCompanyContainer = $('.js-new-company-input-container'),
-                newCompanyInput = newCompanyContainer.find('input'),
-                existedCompaniesContainer = $('.js-existed-companies-input-container'),
-                existedCompaniesSelect = existedCompaniesContainer.find('select');
+                container = $(this).parents('.js-owner-container'),
+                newContainer = container.find('.js-new-input-container'),
+                newInput = newContainer.find('input'),
+                existedContainer = container.find('.js-existed-input-container'),
+                existedInput = existedContainer.find('select');
 
             if(checkbox.prop('checked')) {
-                existedCompaniesContainer.hide();
-                existedCompaniesSelect.attr('disabled', true);
-                newCompanyContainer.show();
-                newCompanyInput.attr('disabled', false);
+                existedContainer.hide();
+                existedInput.attr('disabled', true);
+                newContainer.show();
+                newInput.attr('disabled', false);
             } else {
-                newCompanyContainer.hide();
-                newCompanyInput.attr('disabled', true);
-                existedCompaniesContainer.show();
-                existedCompaniesSelect.attr('disabled', false);
+                newContainer.hide();
+                newInput.attr('disabled', true);
+                existedContainer.show();
+                existedInput.attr('disabled', false);
             }
         });
     });

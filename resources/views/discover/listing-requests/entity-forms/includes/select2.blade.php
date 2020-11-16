@@ -8,7 +8,7 @@
 ?>
 @if(!empty($items))
     <div class="form-group">
-        <label class="font-weight-bold">{{ $label }}:</label>
+        <label class="font-weight-bold">{{ $label }}:</label><br>
         <select name="{{ $name }}"  class="form-control select2" {{ isset($required) && $required ? 'required' : ''}}>
             <option value="" disabled selected>Select {{ $label }}</option>
             @foreach($items as $item)

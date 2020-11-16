@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Index;
 
 use App\Helpers\EmbedLogHelper;
 use App\Http\Controllers\Controller;
+use App\Models\Investor;
 use Illuminate\Http\Request;
 use App\Models\Job;
 use App\Models\Location;
@@ -93,12 +94,13 @@ class JobController extends Controller
     private function getIndexData(Request $request)
     {
         $jobs = QueryBuilder::for(Job::class)
-            ->with('company')
+            ->with('owner')
             ->allowedFilters([
                 AllowedFilter::exact('type', 'employment_type'),
                 AllowedFilter::exact('title', 'job_title'),
                 AllowedFilter::exact('locations', 'locations.name'),
                 AllowedFilter::partial('company', 'company.name'),
+                AllowedFilter::partial('investor', 'investor.name'),
             ])
             ->defaultSort('-posted_date')
             ->allowedSorts([
@@ -109,13 +111,15 @@ class JobController extends Controller
             ->paginate(10)
             ->appends(request()->query());
 
-        $locations = Location::has('jobs', '>' , 0)->with('jobs')->get()->pluck('name')->unique()->sort();
-        $companies = Company::has('jobs', '>' , 0)->with('jobs')->get()->pluck('name')->unique()->sort();
+        $locations = Location::whereHas('jobs')->get()->pluck('name')->unique()->sort();
+        $companies = Company::whereHas('jobs')->get()->pluck('name')->unique()->sort();
+        $investors = Investor::whereHas('jobs')->get()->pluck('name')->unique()->sort();
 
         return [
             'jobs' => $jobs,
             'locations' => $locations,
             'companies' => $companies,
+            'investors' => $investors,
         ];
     }
 

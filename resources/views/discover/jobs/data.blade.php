@@ -2,9 +2,9 @@
 	<div class="row">
 		<div class="col-12 col-md-6 pt-2 pt-md-5 order-md-1">
 			<p class="lead text-center">
-				<a href="{{ route('discover.organizations.show', $job->company->slug) }}">
-					<img src="{{ $job->company->entityImageUrl }}" alt="{{ $job->company->name }}" class="company-logo"><br>
-					{{ $job->company->name }}
+				<a href="{{ $job->ownerShowUrl }}">
+					<img src="{{ $job->owner->entityImageUrl }}" alt="{{ $job->owner->name }}" class="company-logo"><br>
+					{{ $job->owner->name }}
 				</a>
 			</p>
 

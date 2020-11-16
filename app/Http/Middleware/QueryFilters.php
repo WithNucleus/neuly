@@ -62,6 +62,13 @@ class QueryFilters
             $company_name_array = array();
         }
 
+        if (isset($request->query('filter')['investor'])) {
+            $investor_name_array = explode('|', $request->query('filter')['investor']);
+        } else {
+            $investor_name_array = array();
+        }
+
+
         // If status
         if (isset($request->query('filter')['status'])) {
             $status_array = explode('|', $request->query('filter')['status']);
@@ -103,6 +110,7 @@ class QueryFilters
         view()->share('filters_regions', $regions_array);
         view()->share('filters_countries', $countries_array);
         view()->share('filters_company_name', $company_name_array);
+        view()->share('filters_investor_name', $investor_name_array);
         view()->share('filters_person_name', $person_name_array);
         view()->share('filters_status', $status_array);
         view()->share('filters_type', $type_array);

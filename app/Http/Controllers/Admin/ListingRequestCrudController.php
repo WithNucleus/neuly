@@ -174,8 +174,6 @@ class ListingRequestCrudController extends CrudController
             $entity = $this->getEntityModel($listingRequest->type, $listingRequest->to_update_id);
         }
 
-        $companies = Company::orderBy('name')->get();
-        $companyIdSelected = isset($changes->company_id) ? $changes->company_id : null;
         $focusCategories = Focus::orderBy('name')->get();
         $focusIdsSelected = isset($changes->focus_ids) ? $changes->focus_ids : [];
 
@@ -186,11 +184,14 @@ class ListingRequestCrudController extends CrudController
         $this->data['original'] = $entity;
         $this->data['crud'] = $this->crud;
         $this->data['title'] = 'Publish Listing Request';
-        $this->data['companies'] = $companies;
-        $this->data['companyIdSelected'] = $companyIdSelected;
         $this->data['focusCategories'] = $focusCategories;
         $this->data['focusIdsSelected'] = $focusIdsSelected;
         $this->data['declineButton'] = $listingRequest->generateDeclineButton();
+
+        if ($listingRequest->type === 'job') {
+            $this->data['companies'] = Company::orderBy('name')->get();
+            $this->data['investors'] = Investor::orderBy('name')->get();
+        }
 
         return view('vendor.backpack.crud.listing_requests.publish', $this->data);
     }
@@ -218,9 +219,8 @@ class ListingRequestCrudController extends CrudController
         $this->data['crud'] = $this->crud;
         $this->data['object'] = $object;
 
-        $listingRequest = ListingRequest::find($id);
         $listingRequest->status = 'accepted';
-        $listingRequest->save();
+        $listingRequest->update();
 
         return view('vendor.backpack.crud.listing_requests.finish', $this->data);
     }
@@ -287,7 +287,8 @@ class ListingRequestCrudController extends CrudController
         $job->hourly_rate     = $data['hourly_rate'];
         $job->employment_type = $data['employment_type'];
         $job->job_description = $data['job_description'];
-        $job->company_id      = $data['company_id'];
+        $job->owner_id        = $data['owner_id'];
+        $job->owner_type      = $data['owner_type'];
 
         return $job;
     }
@@ -477,8 +478,9 @@ class ListingRequestCrudController extends CrudController
             'hourly_rate'     => $data['entity_hourly_rate'],
             'employment_type' => $data['entity_employment_type'],
             'job_description' => $data['entity_job_description'],
-            'company_id'      => $data['entity_company_id'],
             'focus_ids'       => $data['entity_focus'],
+            'owner_id'        => $data['entity_owner_id'],
+            'owner_type'      => $data['entity_owner_type'],
         ];
     }
 

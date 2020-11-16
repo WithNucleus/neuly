@@ -37,6 +37,7 @@
             'type',
             'locations',
             'company',
+            'investor',
             'status',
             'focus',
             'people',
