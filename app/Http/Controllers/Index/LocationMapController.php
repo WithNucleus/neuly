@@ -127,86 +127,69 @@ class LocationMapController extends Controller
         return $locations;
     }
 
+    private function getEntityCount($entity_count, $location, $country_count)
+    {
+        if (array_key_exists($entity_count, $location)) {
+            $country_count['total'] += $location[$entity_count];
+            $country_count[$entity_count] += $location[$entity_count];
+        }
+
+        return $country_count;
+    }
+
     private function getMappedLocationGroups($country_groups, $groupBy)
     {
         $mappedArray = [];
 
         foreach($country_groups as $country_group) {
 
-            $total = 0;
-            $map_count = 0;
-            $total_companies = 0;
-            $total_people = 0;
-            $total_investors = 0;
-            $total_jobs = 0;
-            $total_events = 0;
-            $total_clinicaltrials = 0;
+            $country_count = [
+                'total' => 0,
+                'companies_count' => 0,
+                'people_count' => 0,
+                'investors_count' => 0,
+                'jobs_count' => 0,
+                'events_count' => 0,
+                'clinicaltrials_count' => 0,
+            ];
 
             foreach ($country_group as $location) {
-
-                if (array_key_exists('companies_count', $location)) {
-                    $total += $location['companies_count'];
-                    $total_companies += $location['companies_count'];
-                }
-
-                if (array_key_exists('people_count', $location)) {
-                    $total += $location['people_count'];
-                    $total_people += $location['people_count'];
-                }
-
-                if (array_key_exists('investors_count', $location)) {
-                    $total += $location['investors_count'];
-                    $total_investors += $location['investors_count'];
-                }
-
-                if (array_key_exists('jobs_count', $location)) {
-                    $total += $location['jobs_count'];
-                    $total_jobs += $location['jobs_count'];
-                }
-
-                if (array_key_exists('events_count', $location)) {
-                    $total += $location['events_count'];
-                    $total_events += $location['events_count'];
-                }
-
-                if (array_key_exists('clinicaltrials_count', $location)) {
-                    $total += $location['clinicaltrials_count'];
-                    $total_clinicaltrials += $location['clinicaltrials_count'];
-                }
-
+                $country_count = $this->getEntityCount('companies_count', $location, $country_count);
+                $country_count = $this->getEntityCount('people_count', $location, $country_count);
+                $country_count = $this->getEntityCount('investors_count', $location, $country_count);
+                $country_count = $this->getEntityCount('jobs_count', $location, $country_count);
+                $country_count = $this->getEntityCount('events_count', $location, $country_count);
+                $country_count = $this->getEntityCount('clinicaltrials_count', $location, $country_count);
             }
 
+            // Labels by Group Type
             if ($groupBy == 'alpha2code') {
-                $mappedArray[$country_group[0]['alpha2code']] = [
-                    'country' => $country_group[0]['country'],
-                    'map_count' => $map_count,
-                    'total' => $total,
-                    'organizations' => $total_companies,
-                    'people' => $total_people,
-                    'investors' => $total_investors,
-                    'jobs' => $total_jobs,
-                    'events' => $total_events,
-                    'clinical trials' => $total_clinicaltrials,
-                ];
+                $label = $country_group[0]['country'];
+                $label_code = $country_group[0]['alpha2code'];
             } else {
-                if ($country_group[0]['region'] == '') {
-                    $label_code = $country_group[0]['alpha2code'];
-                    $label = $country_group[0]['country'];
-                } else {
-                    $label_code = $country_group[0]['region_code'];
+                if ($country_group[0]['region'] != '') {
                     $label = $country_group[0]['region'];
+                    if ($country_group[0]['region_code'] != '') {
+                        $label_code = $country_group[0]['region_code'];
+                    } else {
+                        $label_code = $country_group[0]['region'];
+                    }
+                } else {
+                    $label = $country_group[0]['country'];
+                    $label_code = $country_group[0]['country'];
                 }
+            }
 
+            if ($country_count['total'] != 0) {
                 $mappedArray[$label_code] = [
                     'country' => $label,
-                    'map_count' => $map_count,
-                    'total' => $total,
-                    'organizations' => $total_companies,
-                    'people' => $total_people,
-                    'investors' => $total_investors,
-                    'jobs' => $total_jobs,
-                    'events' => $total_events,
-                    'clinical trials' => $total_clinicaltrials,
+                    'total' => $country_count['total'],
+                    'organizations' => $country_count['companies_count'],
+                    'people' => $country_count['people_count'],
+                    'investors' => $country_count['investors_count'],
+                    'jobs' => $country_count['jobs_count'],
+                    'events' => $country_count['events_count'],
+                    'clinical trials' => $country_count['clinicaltrials_count'],
                 ];
             }
         }

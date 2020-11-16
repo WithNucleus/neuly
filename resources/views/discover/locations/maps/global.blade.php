@@ -123,7 +123,10 @@
                     regions: [{
                         values: values,
                         scale: ['#60c6a9', '#265dad'],
-                        normalizeFunction: 'polynomial'
+                        normalizeFunction: 'polynomial',
+                        legend: {
+                            vertical: true
+                        }
                     }]
                 },
                 onRegionTipShow: function(event, label, code){
@@ -143,7 +146,7 @@
                 onRegionClick: function(event, code){
                     var country = countries[code].country;
                     if(countries[code] !== undefined) {
-                        window.location.href = "{{ route('discover.locations') }}?filter[countries]=" + country;
+                        window.location.href = "/locations/map/" + country;
 
                     }
                 }
