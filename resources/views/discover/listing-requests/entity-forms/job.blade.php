@@ -13,17 +13,26 @@
     <p class="lead text-center">What job do you want to add?</p>
     <div class="form-group mb-4 pb-4 page-title-default">
         <label for="entity_name" class="sr-only">Job title:</label>
-        <input type="text" class="form-control" name="entity_job_title" required>
+        <input type="text" class="form-control" placeholder="Job title" name="entity_job_title" required>
     </div>
 @endif
 
 <div class="js-existed-companies-input-container">
-@include('discover.listing-requests.entity-forms.includes.select2', [
-    'label' => 'Organization',
-    'name' => 'entity_company',
-    'items' => $companies,
-    'required' => true,
-])
+    @if ($general['update'])
+        @include('discover.listing-requests.entity-forms.includes.select2', [
+            'label' => 'Organization',
+            'name' => 'entity_company',
+            'items' => $companies,
+            'required' => false,
+        ])
+    @else
+        @include('discover.listing-requests.entity-forms.includes.select2', [
+            'label' => 'Organization',
+            'name' => 'entity_company',
+            'items' => $companies,
+            'required' => true,
+        ])
+    @endif
 </div>
 
 <div class="js-new-company-input-container" style="display: none">
@@ -46,12 +55,12 @@
 
 <div class="form-group">
     <label class="font-weight-bold">Job description:</label>
-    <textarea class="form-control" name="entity_job_description"></textarea>
+    <textarea class="form-control" name="entity_job_description" @if (!$general['update']) required @endif></textarea>
 </div>
 
 <div class="form-group">
     <label class="font-weight-bold">Type:</label>
-    <select class="custom-select" name="entity_employment_type">
+    <select class="custom-select" name="entity_employment_type" @if (!$general['update']) required @endif>
         <option selected></option>
         <option>Full Time</option>
         <option>Part Time</option>

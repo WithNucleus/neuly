@@ -18,18 +18,18 @@
                             @if($additionalEntitiesRequested)
                                 <div class="m-2 text-center">
                                     @foreach($additionalEntitiesRequested as $type => $value)
-                                        <p>You can create new Listing Request for {{ ucfirst($type) }} "{{ $value }}"</p>
+                                        <p class="lead">Please create a request for {{ ucfirst($type) }} "{{ $value }}"</p>
                                     @endforeach
                                     <p class="text-center">
                                         <a class="btn btn-primary" href="{{ route('listing.request') }}">New Listing
                                             Request</a>
                                     </p>
                                 </div>
+                            @else
+                                <p class="text-center">
+                                    <a href="{{ route('home') }}" class="btn btn-dark">Back to Neuly</a>
+                                </p>
                             @endif
-
-                            <p class="text-center">
-                                <a href="{{ route('home') }}" class="btn btn-dark">Back to Neuly</a>
-                            </p>
                         </div>
                     </div>
                 </div>
