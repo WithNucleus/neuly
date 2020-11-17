@@ -1,6 +1,6 @@
 <div class="form-group">
     <label>Job title:</label>
-    <input type="text" class="form-control" name="entity_job_title" value="{{ $changes->job_title }}" required>
+    <input type="text" class="form-control js-entity_name" name="entity_job_title" value="{{ $changes->job_title }}" required>
 </div>
 <div class="form-group">
     <label>Posted date:</label>
@@ -17,7 +17,7 @@
 
 <div class="form-group">
     <label>Type:</label>
-    <select class="form-control" name="entity_employment_type">
+    <select class="form-control" name="entity_employment_type" required>
         <option value="Full Time" {{ $changes->employment_type == 'Full Time' ? 'selected' : '' }}>Full Time</option>
         <option value="Part Time" {{ $changes->employment_type == 'Part Time' ? 'selected' : '' }}>Part Time</option>
         <option value="One Time" {{ $changes->employment_type == 'One Time' ? 'selected' : '' }}>One Time</option>

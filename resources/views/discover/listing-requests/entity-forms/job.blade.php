@@ -1,3 +1,6 @@
+<?php
+    $required = $general['update'] ? '' : 'required';
+?>
 @if ($general['update'])
     <div class="form-group mb-4 pb-4 page-title-default entity-to-update">
         <label for="entity_name" class="d-block lead text-center">What job do you want to update?</label>
@@ -23,13 +26,13 @@
         <label class="font-weight-bold">Owner:</label><br>
         <div class="form-check form-check-inline">
             <input id="company-owner-type" class="form-check-input js-owner-type-radio" type="radio"
-                   name="entity_owner_type" value="organizations" required>
+                   name="entity_owner_type" value="organizations" {{ $required }}>
             <label for="company-owner-type" class="form-check-label">Organization</label>
         </div>
 
         <div class="form-check form-check-inline">
             <input id="investor-owner-type" class="form-check-input js-owner-type-radio" type="radio"
-                   name="entity_owner_type" value="investors" required>
+                   name="entity_owner_type" value="investors" {{ $required }}>
             <label for="investor-owner-type" class="form-check-label">Investor</label>
         </div>
     </div>
@@ -41,7 +44,7 @@
             'label' => 'Organization list',
             'name' => 'entity_company_id',
             'items' => $companies,
-            'required' => true,
+            'required' => $required,
         ])
     </div>
 
@@ -64,7 +67,7 @@
         'label' => 'Investors list',
         'name' => 'entity_investor_id',
         'items' => $investors,
-        'required' => true,
+        'required' => $required,
     ])
     </div>
 
@@ -90,12 +93,12 @@
 
 <div class="form-group">
     <label class="font-weight-bold">Job description:</label>
-    <textarea class="form-control" name="entity_job_description" @if (!$general['update']) required @endif></textarea>
+    <textarea class="form-control" name="entity_job_description" {{ $required }}></textarea>
 </div>
 
 <div class="form-group">
     <label class="font-weight-bold">Type:</label>
-    <select class="custom-select" name="entity_employment_type" @if (!$general['update']) required @endif>
+    <select class="custom-select" name="entity_employment_type" {{ $required }}>
         <option selected></option>
         <option>Full Time</option>
         <option>Part Time</option>
@@ -105,7 +108,7 @@
 
 <div class="form-group">
     <label class="font-weight-bold">Posted Date:</label>
-    <input type="date" class="form-control" name="entity_posted_date" value="">
+    <input type="date" class="form-control" name="entity_posted_date" value="" {{ $required }}>
 </div>
 
 <div class="form-group">
@@ -168,16 +171,34 @@
             let type = $(this).val();
 
             $('.js-owner-container').each(function (){
-                $(this).data('type') === type ? $(this).show() : $(this).hide();
+                let ownerTypeContainer = $(this),
+                    checkbox = ownerTypeContainer.find('.js-new-input-toggle'),
+                    newContainer = ownerTypeContainer.find('.js-new-input-container'),
+                    newInput = newContainer.find('input'),
+                    existedContainer = ownerTypeContainer.find('.js-existed-input-container'),
+                    existedInput = existedContainer.find('select');
+
+                if (ownerTypeContainer.data('type') === type) {
+                    checkbox.prop('checked', false);
+                    newContainer.hide();
+                    newInput.attr('disabled', true);
+                    existedContainer.show();
+                    existedInput.attr('disabled', false);
+                    ownerTypeContainer.show();
+                } else {
+                    ownerTypeContainer.hide();
+                    newInput.attr('disabled', true);
+                    existedInput.attr('disabled', true);
+                }
             });
         });
 
         $('.js-new-input-toggle').on('change', function () {
             let checkbox = $(this),
-                container = $(this).parents('.js-owner-container'),
-                newContainer = container.find('.js-new-input-container'),
+                ownerTypeContainer = $(this).parents('.js-owner-container'),
+                newContainer = ownerTypeContainer.find('.js-new-input-container'),
                 newInput = newContainer.find('input'),
-                existedContainer = container.find('.js-existed-input-container'),
+                existedContainer = ownerTypeContainer.find('.js-existed-input-container'),
                 existedInput = existedContainer.find('select');
 
             if(checkbox.prop('checked')) {

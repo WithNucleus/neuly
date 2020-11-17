@@ -223,8 +223,6 @@ class ListingRequestController extends Controller
 
     private function createDummyJob($data)
     {
-        $ownerType = EntityHelper::getClassByAlias($data['entity_owner_type']);
-
         $dummyData = [
             'job_title' => $data['entity_job_title'],
             'job_description' => $data['entity_job_description'],
@@ -233,8 +231,14 @@ class ListingRequestController extends Controller
             'salary' => $data['entity_salary'],
             'hourly_rate' => $data['entity_hourly_rate'],
             'focus_ids' => $data['entity_focus'],
-            'owner_type' => $ownerType
         ];
+
+        $ownerType = null;
+
+        if (isset($data['entity_owner_type'])) {
+            $ownerType = EntityHelper::getClassByAlias($data['entity_owner_type']);
+            $dummyData['owner_type'] = $ownerType;
+        }
 
         if ($ownerType === Company::class) {
             if (isset($data['entity_company_id'])) {

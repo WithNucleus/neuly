@@ -174,6 +174,16 @@ class ListingRequestCrudController extends CrudController
             $entity = $this->getEntityModel($listingRequest->type, $listingRequest->to_update_id);
         }
 
+        if ($listingRequest->type === 'job') {
+            $this->data['companies'] = Company::orderBy('name')->get();
+            $this->data['investors'] = Investor::orderBy('name')->get();
+
+            if ($entity && isset($changes->owner_type) === false) {
+                $changes->owner_type = $entity->owner_type;
+                $changes->owner_id = $entity->owner_id;
+            }
+        }
+
         $focusCategories = Focus::orderBy('name')->get();
         $focusIdsSelected = isset($changes->focus_ids) ? $changes->focus_ids : [];
 
@@ -187,11 +197,6 @@ class ListingRequestCrudController extends CrudController
         $this->data['focusCategories'] = $focusCategories;
         $this->data['focusIdsSelected'] = $focusIdsSelected;
         $this->data['declineButton'] = $listingRequest->generateDeclineButton();
-
-        if ($listingRequest->type === 'job') {
-            $this->data['companies'] = Company::orderBy('name')->get();
-            $this->data['investors'] = Investor::orderBy('name')->get();
-        }
 
         return view('vendor.backpack.crud.listing_requests.publish', $this->data);
     }

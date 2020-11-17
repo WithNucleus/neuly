@@ -6,6 +6,7 @@ use App\Models\Traits\CrudShowEntityPageButton;
 use App\Models\Traits\OldSlugRedirectable;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Job extends Model
@@ -44,6 +45,18 @@ class Job extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
+
+    public static function generateUniqueSlug($name)
+    {
+        $slug      = Str::slug($name);
+        $slugCount = Person::where('slug', $slug)->count();
+
+        if ($slugCount > 0) {
+            $slug = $slug . '-' . uniqid();
+        }
+
+        return $slug;
+    }
 
     public function getShowLink() {
         return '<a href="' . route('discover.jobs.show', $this->slug) . '">' . $this->job_title . '</a>';
@@ -132,4 +145,10 @@ class Job extends Model
     | MUTATORS
     |--------------------------------------------------------------------------
     */
+
+    public function setJobTitleAttribute($value)
+    {
+        $this->attributes['job_title'] = $value;
+        $this->attributes['slug'] = self::generateUniqueSlug($value);
+    }
 }

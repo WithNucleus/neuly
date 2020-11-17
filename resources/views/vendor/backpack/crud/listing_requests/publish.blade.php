@@ -62,14 +62,14 @@
                                     window.onload = function () {
 
                                         // Get Field Name to Listen for Updating the Slug, otherwise default to 'name'
-                                        var field_name = 'entity_name';
+                                        var fieldNameClass = 'js-entity_name';
 
-                                        var slug = slugify(document.getElementsByName(field_name)[0].value);
+                                        var slug = slugify(document.getElementsByClassName(fieldNameClass)[0].value);
                                         console.log("slug: " + slug);
                                         document.getElementsByName('entity_slug')[0].value = slug;
 
                                         // Set Event Listener on Name Field
-                                        document.getElementsByName(field_name)[0].addEventListener('input', updateName);
+                                        document.getElementsByClassName(fieldNameClass)[0].addEventListener('input', updateName);
 
                                         // Update Slug Field Function
                                         function updateName(e) {
@@ -77,7 +77,7 @@
                                             var newSlug = '';
 
                                             // Get Name
-                                            var nameValue = document.getElementsByName(field_name)[0].value;
+                                            var nameValue = document.getElementsByClassName(fieldNameClass)[0].value;
 
                                             // Slugify
                                             if (nameValue) {
