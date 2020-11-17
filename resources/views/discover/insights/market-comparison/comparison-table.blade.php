@@ -18,7 +18,7 @@
             <tbody>
             @forelse ($companies as $company)
                 <tr>
-                    <td><img src="{{ $company->entityImageUrl }}" alt="{{ $company->name }}"/></td>
+                    <td><img style="width:100px" src="{{ $company->entityImageUrl }}" alt="{{ $company->name }}"/></td>
                     <td>{{ $company->name}}</td>
                     <td>{{ $company->ownership }}</td>
                     <td>

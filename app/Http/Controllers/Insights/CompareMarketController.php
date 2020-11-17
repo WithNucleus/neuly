@@ -30,6 +30,44 @@ class CompareMarketController extends Controller
 
     private function filterQuery($query, $request)
     {
+        //filter by valuation
+        if($request->has('valuation')) {
+            $query = $this->filterByValuation($query, $request->input('valuation'));
+        }
+        if($request->has('locations')) {
+            $query = $this->filterByLocation($query, $request->input('locations'));
+        }
+        if($request->has('focus')) {
+            $query = $this->filterByFocus($query, $request->input('focus'));
+        }
+        if($request->has('founded')) {
+            $query = $this->filterByFoundationYear($query, $request->input('founded'));
+        }
+
         return $query;
     }
+
+    private function filterByValuation($query, $request) {
+        return $query;
+    }
+
+    private function filterByLocation($query, $values) {
+        $query = $query->whereHas('locations', function($q) use ($values) {
+            $q->whereIn('country', $values);
+        });
+        return $query;
+    }
+
+    private function filterByFocus($query, $values) {
+        $query = $query->whereHas('focus', function($q) use ($values) {
+            $q->whereIn('name', $values);
+        });
+        return $query;
+    }
+
+    private function filterByFoundationYear($query, $value) {
+        $query = $query->whereYear('founded_date', '>=', $value);
+        return $query;
+    }
+
 }
