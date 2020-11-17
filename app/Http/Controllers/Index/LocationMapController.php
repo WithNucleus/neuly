@@ -15,36 +15,14 @@ class LocationMapController extends Controller
      */
     public function showMap(Request $request)
     {
-        $filter = [];
-        $all_filters_type = [
-            'organizations',
-            'people',
-            'investors',
-            'clinical trials',
-            'events',
-            'jobs',
-        ];
-        $filters_type = [];
+        $filter_array = $this->filterRequest($request);
+        $filters_type = $filter_array['filters_type'];
+        $all_filters_type = $filter_array['all_filters_type'];
 
-        if ($request->has('filter')) {
-            $filterInput = $request->input('filter');
+        $locationsQuery = Location::whereNotNull('alpha2code');
+        $locationsQuery = $this->filterQuery($locationsQuery, $filter_array['filter']);
 
-            $filter = array_map(function ($entity) {
-                return explode('|', $entity);
-            }, $filterInput);
-
-            if (isset($filter['type'])) {
-                $filters_type = $filter['type'];
-            }
-        } else {
-            $filters_type = $all_filters_type;
-        }
-
-        $locations = Location::whereNotNull('alpha2code');
-
-        $locations = $this->filterQuery($locations, $filter);
-
-        $locations = $locations
+        $locations = $locationsQuery
             ->orderBy('country')
             ->get()
             ->groupBy('alpha2code')
@@ -63,6 +41,29 @@ class LocationMapController extends Controller
      * @return \Illuminate\View\View
      */
     public function showCountry(Request $request, $country)
+    {
+        $filter_array = $this->filterRequest($request);
+        $filters_type = $filter_array['filters_type'];
+        $all_filters_type = $filter_array['all_filters_type'];
+
+        $locationsQuery = Location::where('country', $country);
+        $locationsQuery = $this->filterQuery($locationsQuery, $filter_array['filter']);
+
+        $locations = $locationsQuery
+            ->orderBy('region')
+            ->get()
+            ->groupBy('region')
+            ->toArray();
+
+        $countriesByCode = $this->getMappedLocationGroups($locations, 'region');
+
+        $path = route('discover.locations.maps.country', $country);
+        $sort = $request->has('sort') ? $request->input('sort') : 'organizations';
+
+        return view('discover.locations.maps.country', compact('country', 'locations', 'countriesByCode', 'all_filters_type', 'filters_type', 'path', 'sort'));
+    }
+
+    private function filterRequest($request)
     {
         $filter = [];
         $all_filters_type = [
@@ -89,22 +90,11 @@ class LocationMapController extends Controller
             $filters_type = $all_filters_type;
         }
 
-        $locations = Location::where('country', $country);
-
-        $locations = $this->filterQuery($locations, $filter);
-
-        $locations = $locations
-            ->orderBy('region')
-            ->get()
-            ->groupBy('region')
-            ->toArray();
-
-        $countriesByCode = $this->getMappedLocationGroups($locations, 'region');
-
-        $path = route('discover.locations.maps.country', $country);
-        $sort = $request->has('sort') ? $request->input('sort') : 'organizations';
-
-        return view('discover.locations.maps.country', compact('country', 'locations', 'countriesByCode', 'all_filters_type', 'filters_type', 'path', 'sort'));
+        return [
+            'filter' => $filter,
+            'filters_type' => $filters_type,
+            'all_filters_type' => $all_filters_type
+        ];
     }
 
     private function filterQuery($locations, $filter)
