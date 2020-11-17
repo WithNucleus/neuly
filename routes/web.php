@@ -137,7 +137,7 @@ Route::get('/events/{slug}', 'Index\EventController@show')->name('discover.event
 // Jobs
 Route::get('/jobs', 'Index\JobController@index')->name('discover.jobs');
 Route::get('/jobs/embed-widget', 'Index\JobController@embedWidget')->name('discover.jobs.embedWidget');
-Route::get('/jobs/citynames.json', 'Index\JobController@citynames');
+Route::get('/jobs/titles.json', 'Index\JobController@titlesJson')->name('discover.jobs.titlesJson');
 Route::get('/jobs/{slug}', 'Index\JobController@show')->name('discover.jobs.show');
 Route::get('/jobs/apply/{slug}', 'Index\JobApplicationController@index')->name('discover.jobs.apply');
 Route::post('/jobs/apply', 'Index\JobApplicationController@apply')->name('discover.jobs.applyProcess');
@@ -149,8 +149,8 @@ Route::get('/clinical-trials/{slug}', 'Index\ClinicaltrialController@show')->nam
 // Listing Requests
 Route::get('/listing', 'Index\ListingRequestController@index')->name('listing');
 Route::get('/listing/request', 'Index\ListingRequestController@request')->name('listing.request');
-Route::post('/listing/request/finish', 'Index\ListingRequestController@processData')->name('listing.request.finish');
-Route::post('/listing/request/{type}', 'Index\ListingRequestController@entityForm')->name('listing.request.investor');
+Route::post('/listing/request', 'Index\ListingRequestController@submitRequest');
+Route::post('/listing/request/finish', 'Index\ListingRequestController@finishRequest')->name('listing.request.finish');
 
 Route::get('/job-report-entry', 'Index\JobReportEntryController@index')->name('job-report-entry.index');
 Route::post('/job-report-entry', 'Index\JobReportEntryController@store')->name('job-report-entry.store');;

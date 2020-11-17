@@ -24,6 +24,8 @@ class ListingRequest extends Model
     protected $table = 'listing_requests';
     protected $guarded = ['id'];
 
+    protected $casts = ['entity_data' => 'object'];
+
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS

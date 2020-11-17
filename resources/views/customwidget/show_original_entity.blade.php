@@ -8,7 +8,7 @@
                     This request is a for a new entry. Therefore there is no data for an entity that should be updated.
                 @else
                     <h3>Original Record</h3>
-                    @include('customwidget.show_original_'.strtolower($entry['type']))
+                    @include('customwidget.show_original_'.strtolower($widget['entityType']))
                 @endif
             </div>
         </div>

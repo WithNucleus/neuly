@@ -176,5 +176,17 @@ jQuery(function($){
             $('select[name="entity_focus[]"] option[value="' + value + '"]').attr("selected", true);
         });
     });
+
+    $('.js-btn-restore').on('click', function(e) {
+        e.preventDefault();
+
+        let btn = $(this),
+            targetName = btn.data('target');
+
+        btn.blur();
+
+        let value = $('[name="original_' + targetName + '"]').val();
+        $('[name="entity_' + targetName + '"]').val(value);
+    });
 });
 

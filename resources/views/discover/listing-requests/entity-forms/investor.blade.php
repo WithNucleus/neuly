@@ -1,4 +1,4 @@
-@if ($general['update'] === "true")
+@if ($general['update'])
     <div id="investor-to-update" class="form-group mb-4 pb-4 page-title-default">
         <label for="entity_name" class="d-block lead text-center">What investor do you want to update?</label>
         <input type="text" class="form-control updateEntity" placeholder="Search for investor" name="entity_update_resource" required>
