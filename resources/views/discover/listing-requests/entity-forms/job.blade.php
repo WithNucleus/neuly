@@ -96,27 +96,29 @@
     $(document).ready(function() {
         $('.select2').select2();
 
-        let input = $('.updateEntity'),
-            actionUrl = input.data('action');
+        if ($('.updateEntity').length) {
+            let input = $('.updateEntity'),
+                actionUrl = input.data('action');
 
-        let names = new Bloodhound({
-            datumTokenizer: Bloodhound.tokenizers.whitespace,
-            queryTokenizer: Bloodhound.tokenizers.whitespace,
-            prefetch: {
-                url: actionUrl,
-            }
-        });
-        names.initialize();
+            let names = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.whitespace,
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                prefetch: {
+                    url: actionUrl,
+                }
+            });
+            names.initialize();
 
-        input.typeahead(null, {
-            name: 'people',
-            source: names
-        });
+            input.typeahead(null, {
+                name: 'people',
+                source: names
+            });
 
-        input.on('change', function() {
-            var name = $(this).val();
-            $('input[name=entity_job_title]').val(name);
-        });
+            input.on('change', function () {
+                var name = $(this).val();
+                $('input[name=entity_job_title]').val(name);
+            });
+        }
 
         $('.js-new-company-checkbox').on('change', function () {
             let checkbox = $(this),
