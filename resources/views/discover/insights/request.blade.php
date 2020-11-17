@@ -71,24 +71,23 @@
 
             <div class="row">
                 <div class="col-12 col-md-8 col-lg-6 col-xl-4 mx-auto">
-                    <form action="{{ route('discover.insights.saveRequest') }}" method="post">
-                        @csrf
-                        @guest
+                    @auth
+                        <form action="{{ route('discover.insights.saveRequest') }}" method="post">
+                            @csrf
                             <div class="form-group">
-                                <input class="form-control" type="text" name="name" placeholder="Your name" required/>
-                            </div>
-                            <div class="form-group">
-                                <input class="form-control" type="email" name="email" placeholder="Your email" required/>
-                            </div>
-                        @endguest
-                        <div class="form-group">
                             <textarea class="form-control" name="text" placeholder="Describe your request"
                                       rows="8" required></textarea>
-                        </div>
-                        <div class="form-group text-center">
-                            <button type="submit" class="btn btn-primary">Send</button>
-                        </div>
-                    </form>
+                            </div>
+                            <div class="form-group text-center">
+                                <button type="submit" class="btn btn-primary">Send</button>
+                            </div>
+                        </form>
+                    @else
+                        <p class="lead text-center bg-tertiary p-4 shadow-sm">
+                            You must be logged in to request an insight.<br><br>
+                            <a href="{{ route('login') }}" class="btn btn-primary">Login to Neuly</a>
+                        </p>
+                    @endauth
                 </div>
             </div>
         </main>
