@@ -14,10 +14,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Auth Routes for Front-End
-Auth::routes(['verify' => true]);
-
-Route::get('login/{provider}', 'Auth\LoginController@redirectToProvider')->name('login.social');
-Route::get('login/{provider}/callback', 'Auth\LoginController@handleProviderCallback');
+Route::group(['middleware' => 'firewall.all'], function () {
+    Auth::routes(['verify' => true]);
+    Route::get('login/{provider}', 'Auth\LoginController@redirectToProvider')->name('login.social');
+    Route::get('login/{provider}/callback', 'Auth\LoginController@handleProviderCallback');
+});
 
 // Homepage
 Route::get('/', 'Content\HomeController@index')->name('index');

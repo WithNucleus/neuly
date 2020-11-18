@@ -15,7 +15,7 @@ return [
     'responses' => [
 
         'block' => [
-            'view' => env('FIREWALL_BLOCK_VIEW', null),
+            'view' => env('FIREWALL_BLOCK_VIEW', 'auth.blocked'),
             'redirect' => env('FIREWALL_BLOCK_REDIRECT', null),
             'abort' => env('FIREWALL_BLOCK_ABORT', false),
             'code' => env('FIREWALL_BLOCK_CODE', 403),
@@ -191,7 +191,7 @@ return [
             'enabled' => true,
 
             'auto_block' => [
-                'attempts' => 5,
+                'attempts' => 3,
                 'frequency' => 1 * 60, // 1 minute
                 'period' => 30 * 60, // 30 minutes
             ],
