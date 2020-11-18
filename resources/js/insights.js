@@ -5,12 +5,14 @@ require('./insights/most-interest-list');
 Chart.defaults.global.defaultFontColor = '#111';
 Chart.defaults.global.defaultFontFamily = '"Roboto", Avenir, "Helvetica", Arial, sans-serif';
 
-window.addEventListener("load", function() {
-    setTimeout(function () {
-        $('.insights-grid').masonry().animate({opacity: 1});
-        $('.loading').hide();
-    }, 1000);
-});
+if ($(".insights-grid").length !== 0) {
+    window.addEventListener("load", function () {
+        setTimeout(function () {
+            $('.insights-grid').masonry().animate({opacity: 1});
+            $('.loading').hide();
+        }, 1000);
+    });
+}
 
 $('.js-chart-pie-with-action').each(function () {
     let canvasObj = $(this),
@@ -90,22 +92,26 @@ $('.js-bar-chart').each(function (i, item) {
     });
 });
 
-document.getElementById('open-full-screen-tracker').onclick = function() {
-    maximizeContent();
+if ($("#open-full-screen-table").length) {
+    document.getElementById('open-full-screen-table').onclick = function () {
+        maximizeContent();
+    }
 }
 
-document.getElementById('close-full-screen-tracker').onclick = function() {
-    closeCsv();
+if ($("#close-full-screen-table").length) {
+    document.getElementById('close-full-screen-table').onclick = function () {
+        closeCsv();
+    }
 }
 
 function maximizeContent() {
-    document.getElementById('clinical-trial-tracker-container').classList.toggle('fixed');
-    document.getElementById('close-full-screen-tracker').classList.toggle('d-none');
+    document.getElementById('resizable-fullscreen-table-container').classList.toggle('fixed');
+    document.getElementById('close-full-screen-table').classList.toggle('d-none');
     document.body.classList.toggle('noscroll');
 }
 
 function closeCsv() {
-    document.getElementById('clinical-trial-tracker-container').classList.toggle('fixed');
-    document.getElementById('close-full-screen-tracker').classList.toggle('d-none');
+    document.getElementById('resizable-fullscreen-table-container').classList.toggle('fixed');
+    document.getElementById('close-full-screen-table').classList.toggle('d-none');
     document.body.classList.toggle('noscroll');
 }

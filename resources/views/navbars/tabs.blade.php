@@ -20,7 +20,7 @@
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link @if(Route::is('discover.locations') OR Route::is('discover.locations.show')) active @endif "href="{{ route('discover.locations') }}">
+        <a class="nav-link @if(Route::is('discover.locations') OR Route::is('discover.locations.*')) active @endif "href="{{ route('discover.locations.maps.global') }}">
             <span class="icon mr-1"><i class="fad fa-map-pin"></i></span>Locations
         </a>
     </li>

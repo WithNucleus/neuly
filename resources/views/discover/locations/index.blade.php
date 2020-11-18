@@ -51,39 +51,52 @@
                                 </span>
                             </div>
 
-                            {{-- Sorting --}}
-                            @isset($sort)
-                                <div class="sort-container font-size-small mt-3 mb-3">
-                                    <strong class="text-uppercase mr-3 text-black-50">Sort by:</strong>
-                                    <div class="d-inline sort-name text-uppercase">
+                            <div class="d-md-flex justify-content-between align-items-center">
+                                {{-- Sorting --}}
+                                @isset($sort)
+                                    <div class="sort-container font-size-small mt-3 mb-3">
+                                        <strong class="text-uppercase mr-3 text-black-50">Sort by:</strong>
+                                        <div class="d-inline sort-name text-uppercase">
 
-                                        @include('discover.includes.filters.sort-button-default', [
-                                            'asc' => 'name',
-                                            'desc' => '-name',
-                                            'label' => 'Name'
-                                        ])
+                                            @include('discover.includes.filters.sort-button-default', [
+                                                'asc' => 'name',
+                                                'desc' => '-name',
+                                                'label' => 'Name'
+                                            ])
 
-                                        @include('discover.includes.filters.sort-button', [
-                                            'asc' => 'city',
-                                            'desc' => '-city',
-                                            'label' => 'City'
-                                        ])
+                                            @include('discover.includes.filters.sort-button', [
+                                                'asc' => 'city',
+                                                'desc' => '-city',
+                                                'label' => 'City'
+                                            ])
 
-                                        @include('discover.includes.filters.sort-button', [
-                                            'asc' => 'region',
-                                            'desc' => '-region',
-                                            'label' => 'Region'
-                                        ])
+                                            @include('discover.includes.filters.sort-button', [
+                                                'asc' => 'region',
+                                                'desc' => '-region',
+                                                'label' => 'Region'
+                                            ])
 
-                                        @include('discover.includes.filters.sort-button', [
-                                            'asc' => 'country',
-                                            'desc' => '-country',
-                                            'label' => 'Country'
-                                        ])
+                                            @include('discover.includes.filters.sort-button', [
+                                                'asc' => 'country',
+                                                'desc' => '-country',
+                                                'label' => 'Country'
+                                            ])
 
+                                        </div>
+                                    </div>
+                                @endisset
+
+                                <div class="switch-view ml-auto mt-2 mb-3 my-md-0 d-flex">
+                                    <div class="btn-group" role="group" aria-label="Switch Location view">
+                                        <a href="{{ route('discover.locations') }}" class="btn btn-primary" title="List View" data-toggle="tooltip" data-placement="top">
+                                            <i class="fad fa-list-ul fa-lg"></i>
+                                        </a>
+                                        <a href="{{ route('discover.locations.maps.global') }}" class="btn btn-outline-primary" title="Map View" data-toggle="tooltip" data-placement="top">
+                                            <i class="fad fa-map"></i>
+                                        </a>
                                     </div>
                                 </div>
-                            @endisset
+                            </div>
 
                             {{-- Filters --}}
                             <?php if (
@@ -91,7 +104,7 @@
                                 isset($filters_countries) && $filters_countries OR
                                 isset($filters_company_name) && $filters_company_name
                                 ) : ?>
-                            <div class="current-filter-list font-size-small align-self-end border-bottom mb-3 pb-1">
+                            <div class="current-filter-list font-size-small align-self-end">
                                 <strong class="text-uppercase mr-3 text-black-50">Current Filters:</strong>
 
                                 <?php if (isset($filters_countries) && $filters_countries) : ?>
@@ -128,7 +141,7 @@
                             <?php endif; ?>
 
                             {{-- Locations --}}
-                            <ul class="list-group list-group-flush mb-4 shadow-sm">
+                            <ul class="list-group list-group-flush mb-4 shadow-sm mt-4">
                                 @forelse($locations as $location)
                                     <li class="list-group-item p-4 d-md-flex">
 

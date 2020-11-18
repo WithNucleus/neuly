@@ -18,7 +18,7 @@ $("select.discover").change(function(){
 	} else if (value == 'research') {
 		window.location.replace("/research");
 	} else if (value == 'locations') {
-		window.location.replace("/locations");
+		window.location.replace("/locations/map");
 	} else if (value == 'focus') {
 		window.location.replace("/focus");
 	} else if (value == 'events') {

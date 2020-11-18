@@ -73,7 +73,7 @@
                             <a href="{{ route('insights.clinicaltrials.pipeline') }}" class="btn btn-primary" title="Tracker" data-toggle="tooltip" data-placement="top"><i class="fad fa-stream fa-lg"></i></a>
                         </div>
                         <div class="text-right">
-                            <button id="open-full-screen-tracker" class="btn btn-link text-secondarydark" title="Open in Full Screen" data-toggle="tooltip" data-placement="left"><i class="far fa-expand-arrows fa-lg"></i></button>
+                            <button id="open-full-screen-table" class="btn btn-link text-secondarydark" title="Open in Full Screen" data-toggle="tooltip" data-placement="left"><i class="far fa-expand-arrows fa-lg"></i></button>
                         </div>
                     </div>
                 </div>
