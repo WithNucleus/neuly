@@ -13,12 +13,12 @@
 <div class="row">
     <div class="form-group col-6">
         <label>Posted date:</label>
-        <input type="date" class="form-control" name="original_posted_date" value="{{ $original->posted_date }}" disabled>
+        <input type="text" class="form-control datepicker" name="original_posted_date" value="{{ $original->posted_date }}" disabled>
         <a href="#" class="btn btn-sm btn-link js-btn-restore" data-target="posted_date">use original data</a>
     </div>
     <div class="form-group col-6 {{ ($changes->posted_date != $original->posted_date) ? 'bg-success' : '' }}">
         <label>Posted date:</label>
-        <input type="date" class="form-control" name="entity_posted_date" value="{{ $changes->posted_date }}" required>
+        <input type="text" class="form-control datepicker" name="entity_posted_date" value="{{ $changes->posted_date }}">
     </div>
 </div>
 

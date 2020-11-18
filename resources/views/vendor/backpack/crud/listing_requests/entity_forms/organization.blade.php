@@ -48,7 +48,7 @@
 </div>
 <div class="form-group">
     <label for="entity_founded_date">Founded Date:</label>
-    <input type="date" class="form-control" name="entity_founded_date" value="{{ $changes->founded_date }}">
+    <input type="text" class="form-control datepicker" name="entity_founded_date" value="{{ $changes->founded_date }}">
 </div>
 <div class="form-group">
     <label for="entity_valuation">Valuation:</label>
@@ -64,7 +64,7 @@
 </div>
 <div class="form-group">
     <label for="entity_last_funding_date">Last Funding Date:</label>
-    <input type="date" class="form-control" name="entity_last_funding_date">
+    <input type="text" class="form-control datepicker" name="entity_last_funding_date">
 </div>
 <div class="form-group">
     <label for="entity_ticker">Ticker Symbol:</label>

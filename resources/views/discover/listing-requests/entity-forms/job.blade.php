@@ -108,7 +108,7 @@
 
 <div class="form-group">
     <label class="font-weight-bold">Posted Date:</label>
-    <input type="date" class="form-control" name="entity_posted_date" value="" {{ $required }}>
+    <input type="text" class="form-control datepicker" name="entity_posted_date" value="">
 </div>
 
 <div class="form-group">

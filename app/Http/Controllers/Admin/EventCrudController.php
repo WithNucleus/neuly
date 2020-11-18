@@ -232,13 +232,19 @@ class EventCrudController extends CrudController
         ]);
         $this->crud->addField([
             'name' => 'start_date',
-            'type' => 'date',
-            'label' => 'Start Date'
+            'type' => 'date_picker',
+            'label' => 'Start Date',
+            'date_picker_options' => [
+                'format' => config('app.date_input_format'),
+            ],
         ]);
         $this->crud->addField([
             'name' => 'end_date',
-            'type' => 'date',
-            'label' => 'End Date'
+            'type' => 'date_picker',
+            'label' => 'End Date',
+            'date_picker_options' => [
+                'format' => config('app.date_input_format'),
+            ],
         ]);
         $this->crud->addField([
             'name' => 'event_url',

@@ -4,7 +4,7 @@
 </div>
 <div class="form-group">
     <label>Posted date:</label>
-    <input type="date" class="form-control" name="entity_posted_date" value="{{ $changes->posted_date }}" required>
+    <input type="text" class="form-control datepicker" name="entity_posted_date" value="{{ $changes->posted_date }}">
 </div>
 <div class="form-group">
     <label>Salary:</label>

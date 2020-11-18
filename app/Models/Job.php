@@ -36,6 +36,10 @@ class Job extends Model
         'hourly_rate',
     ];
 
+    protected $casts = [
+        'posted_date' => 'date',
+    ];
+
     // log activity for all attributes, which not listed in $guarded array
     protected static $logUnguarded = true;
     protected static $logName = 'entities';

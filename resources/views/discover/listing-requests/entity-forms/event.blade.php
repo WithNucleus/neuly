@@ -64,13 +64,13 @@
     <div class="col-12 col-sm-6">
         <div class="form-group">
             <label for="entity_start" class="font-weight-bold">Start:</label>
-            <input type="date" class="form-control" name="entity_start" required>
+            <input type="text" class="form-control datepicker" name="entity_start" required>
         </div>
     </div>
     <div class="col-12 col-sm-6">
         <div class="form-group">
             <label for="entity_end" class="font-weight-bold">End:</label>
-            <input type="date" class="form-control" name="entity_end">
+            <input type="text" class="form-control datepicker" name="entity_end">
         </div>
     </div>
 </div>

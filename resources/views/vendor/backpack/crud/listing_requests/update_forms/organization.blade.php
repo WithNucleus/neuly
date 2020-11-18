@@ -99,12 +99,12 @@
 <div class="row">
     <div class="form-group col-6">
         <label for="entity_founded_date">Founded Date:</label>
-        <input type="date" class="form-control" name="original_founded_date" value="{{ $original->founded_date }}" disabled>
+        <input type="text" class="form-control datepicker" name="original_founded_date" value="{{ $original->founded_date }}" disabled>
         <a href="#" class="btn btn-sm btn-link btn-restore-founded-date">use original data</a>
     </div>
     <div class="form-group col-6 {{ ($changes->founded_date) ? 'bg-success' : '' }}">
         <label for="entity_founded_date">Founded Date:</label>
-        <input type="date" class="form-control" name="entity_founded_date" value="{{ ($changes->founded_date) ? $changes->founded_date : $original->founded_date }}">
+        <input type="text" class="form-control datepicker" name="entity_founded_date" value="{{ ($changes->founded_date) ? $changes->founded_date : $original->founded_date }}">
     </div>
 </div>
 <div class="row">
@@ -143,12 +143,12 @@
 <div class="row">
     <div class="form-group col-6">
         <label for="entity_last_funding_date">Last Funding Date:</label>
-        <input type="date" class="form-control" name="original_last_funding_date" value="{{ $original->last_funding_date }}" disabled>
+        <input type="text" class="form-control datepicker" name="original_last_funding_date" value="{{ $original->last_funding_date }}" disabled>
         <a href="#" class="btn btn-sm btn-link btn-restore-last-funding">use original data</a>
     </div>
     <div class="form-group col-6 {{ ($changes->last_funding_date) ? 'bg-success' : '' }}">
         <label for="entity_last_funding_date">Last Funding Date:</label>
-        <input type="date" class="form-control" name="entity_last_funding_date" value="{{ ($changes->last_funding_date) ? $changes->last_funding_date : $original->last_funding_date }}">
+        <input type="text" class="form-control datepicker" name="entity_last_funding_date" value="{{ ($changes->last_funding_date) ? $changes->last_funding_date : $original->last_funding_date }}">
     </div>
 </div>
 <div class="row">

@@ -214,8 +214,11 @@ class CompanyCrudController extends CrudController
         ]);
         $this->crud->addField([
             'name'  => 'founded_date',
-            'type'  => 'date',
-            'label' => 'Founded Date'
+            'type'  => 'date_picker',
+            'label' => 'Founded Date',
+            'date_picker_options' => [
+                'format' => config('app.date_input_format'),
+            ],
         ]);
         $this->crud->addField([
             'name'   => 'valuation',
@@ -231,8 +234,11 @@ class CompanyCrudController extends CrudController
         ]);
         $this->crud->addField([
             'name'  => 'last_funding_date',
-            'type'  => 'date',
-            'label' => 'Last Funding Date'
+            'type'  => 'date_picker',
+            'label' => 'Last Funding Date',
+            'date_picker_options' => [
+                'format' => config('app.date_input_format'),
+            ],
         ]);
         $this->crud->addField([
             'name'  => 'number_employees',

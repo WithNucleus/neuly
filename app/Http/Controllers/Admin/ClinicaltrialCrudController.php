@@ -190,12 +190,54 @@ class ClinicaltrialCrudController extends CrudController
         $this->crud->addField(['name' => 'funded_bys', 'type' => 'text', 'label' => 'Funded bys']);
         $this->crud->addField(['name' => 'study_type', 'type' => 'text', 'label' => 'Study type']);
         $this->crud->addField(['name' => 'other_ids', 'type' => 'text', 'label' => 'Ohter IDs']);
-        $this->crud->addField(['name' => 'start_date', 'type' => 'date', 'label' => 'Start date']);
-        $this->crud->addField(['name' => 'primary_completion_date', 'type' => 'date', 'label' => 'Primary completion date']);
-        $this->crud->addField(['name' => 'completion_date', 'type' => 'date', 'label' => 'Completion date']);
-        $this->crud->addField(['name' => 'first_posted', 'type' => 'date', 'label' => 'First posted']);
-        $this->crud->addField(['name' => 'results_first_posted', 'type' => 'date', 'label' => 'Results first posted']);
-        $this->crud->addField(['name' => 'last_update_posted', 'type' => 'date', 'label' => 'Last update posted']);
+        $this->crud->addField([
+            'name' => 'start_date',
+            'type' => 'date_picker',
+            'label' => 'Start date',
+            'date_picker_options' => [
+                'format' => config('app.date_input_format'),
+            ],
+        ]);
+        $this->crud->addField([
+            'name'  => 'primary_completion_date',
+            'type'  => 'date_picker',
+            'label' => 'Primary completion date',
+            'date_picker_options' => [
+                'format' => config('app.date_input_format'),
+            ],
+        ]);
+        $this->crud->addField([
+            'name' => 'completion_date',
+            'type' => 'date_picker',
+            'label' => 'Completion date',
+            'date_picker_options' => [
+                'format' => config('app.date_input_format'),
+            ],
+        ]);
+        $this->crud->addField([
+            'name' => 'first_posted',
+            'type' => 'date_picker',
+            'label' => 'First posted',
+            'date_picker_options' => [
+                'format' => config('app.date_input_format'),
+            ],
+        ]);
+        $this->crud->addField([
+            'name' => 'results_first_posted',
+            'type' => 'date_picker',
+            'label' => 'Results first posted',
+            'date_picker_options' => [
+                'format' => config('app.date_input_format'),
+            ],
+        ]);
+        $this->crud->addField([
+            'name' => 'last_update_posted',
+            'type' => 'date_picker',
+            'label' => 'Last update posted',
+            'date_picker_options' => [
+                'format' => config('app.date_input_format'),
+            ],
+        ]);
 
         $this->crud->addField([
             'label'     => "Locations",

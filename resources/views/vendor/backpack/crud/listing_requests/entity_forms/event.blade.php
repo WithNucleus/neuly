@@ -13,11 +13,11 @@
 </div>
 <div class="form-group">
     <label for="entity_start">Start:</label>
-    <input type="date" class="form-control" name="entity_start" value="{{ $changes->start }}">
+    <input type="text" class="form-control datepicker" name="entity_start" value="{{ $changes->start }}">
 </div>
 <div class="form-group">
     <label for="entity_end">End:</label>
-    <input type="date" class="form-control" name="entity_end" value="{{ $changes->end }}">
+    <input type="text" class="form-control datepicker" name="entity_end" value="{{ $changes->end }}">
 </div>
 <div class="form-group">
     <label for="entity_description">Description</label>

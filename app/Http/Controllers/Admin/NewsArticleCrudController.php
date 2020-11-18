@@ -118,7 +118,10 @@ class NewsArticleCrudController extends CrudController
         $this->crud->addField([
             'name'  => 'date',
             'label' => 'Date',
-            'type'  => 'date'
+            'type'  => 'date_picker',
+            'date_picker_options' => [
+                'format' => config('app.date_input_format'),
+            ],
         ]);
         $this->crud->addField([
             'name'  => 'url',

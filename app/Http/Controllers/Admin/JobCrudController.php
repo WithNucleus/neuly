@@ -161,8 +161,11 @@ class JobCrudController extends CrudController
         ]);
         $this->crud->addField([
             'name'  => 'posted_date',
-            'type'  => 'date',
-            'label' => 'Posted Date'
+            'type'  => 'date_picker',
+            'label' => 'Posted Date',
+            'date_picker_options' => [
+                'format' => config('app.date_input_format'),
+            ],
         ]);
         $this->crud->addField([
             'name'   => 'salary',
