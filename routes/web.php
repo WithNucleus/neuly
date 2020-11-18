@@ -115,6 +115,7 @@ Route::get('/research/{slug}', 'Index\ResearchController@show')->name('discover.
 Route::get('/investors', 'Index\InvestorController@index')->name('discover.investors');
 Route::get('/investor/names.json', 'Index\InvestorController@namesJson');
 Route::get('/investor/{slug}', 'Index\InvestorController@show')->name('discover.investors.show');
+Route::get('/investor/{slug}/jobs', 'Index\InvestorController@jobs')->name('discover.investors.jobs');
 
 // Locations
 Route::get('/locations', 'Index\LocationController@index')->name('discover.locations');

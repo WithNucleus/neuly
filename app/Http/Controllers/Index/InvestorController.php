@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Index;
 
 use App\Http\Controllers\Controller;
+use App\Models\Job;
 use App\Repositories\FollowRepository;
 use Illuminate\Http\Request;
 use App\Models\Investor;
@@ -26,10 +27,14 @@ class InvestorController extends Controller
         $this->middleware('query_filters')->only('index');
     }
 
-    // Index
+    /**
+     * List of Investors
+     *
+     * @param Request $request
+     * @return View
+     */
     public function index(Request $request) {
 
-        // Get Investors
         $investors = QueryBuilder::for(Investor::class)
             ->with('companies')
             ->allowedFilters([
@@ -37,6 +42,7 @@ class InvestorController extends Controller
                 AllowedFilter::partial('locations', 'locations.name'),
                 AllowedFilter::partial('people', 'people.name'),
                 AllowedFilter::partial('company', 'companies.name'),
+                AllowedFilter::scope('hiring', 'hasJobs'),
             ])
             ->defaultSort('name')
             ->allowedSorts([
@@ -57,10 +63,15 @@ class InvestorController extends Controller
 
     }
 
-    // Show
+    /**
+     * Show Investor
+     *
+     * @param Request $request
+     * @param $slug
+     * @return View
+     */
     public function show(Request $request, $slug) {
 
-        // Get Investor
         $investor = Investor::where('slug', $slug)->firstOrFail();
 
         $metas = Metas::process(array(
@@ -72,7 +83,6 @@ class InvestorController extends Controller
         $entity = 'investors';
         $isFollowed = (bool) count(FollowRepository::fromuser(Investor::class, $investor->id));
 
-        // Log Activity
         activity('pageview')
             ->causedBy(Auth::user())
             ->withProperties([
@@ -90,5 +100,20 @@ class InvestorController extends Controller
     public function namesJson()
     {
         return response()->json(Investor::all()->pluck('name'));
+    }
+
+    /**
+     * Show Jobs for Investor
+     *
+     * @param $slug
+     * @return View
+     */
+    public function jobs($slug) {
+
+        $investor = Investor::where('slug', $slug)->firstOrFail();
+        $jobs = Job::where('owner_id', $investor->id)->orderBy('posted_date', 'desc')->get();
+        $entity = 'investors';
+
+        return view('discover.investors.jobs', compact('investor', 'jobs', 'entity'));
     }
 }

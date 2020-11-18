@@ -112,6 +112,8 @@
                                         <div class="card shadow-sm">
                                             <div class="pt-4 text-center">
 
+                                                @if($investor->jobs->count() > 0) <a href="{{ route('discover.investors.jobs', $investor->slug) }}"><span class="hiring-badge font-weight-bold"><i class="fad fa-briefcase"></i> HIRING</span></a> @endif
+
                                                 <a href="{{ route('discover.investors.show', $investor->slug) }}" class="text-decoration-none">
                                                 @if ($investor->entityImageUrl)
                                                     <div class="logo-is-contained" style="background-image: url('{{ $investor->entityImageUrl }}')" data-toggle="tooltip" data-placement="top" title="{{ $investor->name }}"></div>

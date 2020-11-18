@@ -14,6 +14,16 @@
             ])
         </p>
 
+    @if($investor->jobs->count() > 0)
+        <p class="text-uppercase m-2 float-right font-weight-bold">
+            @if ($investor->jobs->count() > 0)
+                <a href="{{ route('discover.investors.jobs', $investor->slug) }}" class="text-decoration-none mr-2 text-danger">
+                    <i class="fad fa-briefcase"></i> Hiring
+                </a>
+            @endif
+        </p>
+    @endif
+
         <h1>{{ $investor->name }}</h1>
 
         @include('discover.includes.status-messages')

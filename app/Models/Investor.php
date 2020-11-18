@@ -94,6 +94,13 @@ class Investor extends Model implements EntityContract, EntityImageContract
     | SCOPES
     |--------------------------------------------------------------------------
     */
+    /**
+     * @param \Illuminate\Database\Query\Builder $query
+     * @return \Illuminate\Database\Query\Builder
+     */
+    public function scopeHasJobs($query) {
+        return $query->whereHas('jobs');
+    }
 
     /*
     |--------------------------------------------------------------------------
