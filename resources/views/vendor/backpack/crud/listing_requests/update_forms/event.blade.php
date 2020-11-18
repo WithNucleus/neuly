@@ -35,23 +35,23 @@
 <div class="row">
     <div class="form-group col-6">
         <label for="entity_start">Start:</label>
-        <input type="date" class="form-control" name="original_start" value="{{ $original->start_date }}" disabled>
+        <input type="text" class="form-control datepicker" name="original_start" value="{{ $original->start_date }}" disabled>
         <a href="#" class="btn btn-sm btn-link btn-restore-start">use original data</a>
     </div>
     <div class="form-group col-6 {{ ($changes->start) ? 'bg-success' : '' }}">
         <label for="entity_start">Start:</label>
-        <input type="date" class="form-control" name="entity_start" value="{{ ($changes->start) ? $changes->start : $original->start_date }}">
+        <input type="text" class="form-control datepicker" name="entity_start" value="{{ ($changes->start) ? $changes->start : $original->start_date }}">
     </div>
 </div>
 <div class="row">
     <div class="form-group col-6">
         <label for="entity_end">End:</label>
-        <input type="date" class="form-control" name="original_end" value="{{ $original->end_date }}" disabled>
+        <input type="text" class="form-control datepicker" name="original_end" value="{{ $original->end_date }}" disabled>
         <a href="#" class="btn btn-sm btn-link btn-restore-end">use original data</a>
     </div>
     <div class="form-group col-6 {{ ($changes->end) ? 'bg-success' : '' }}">
         <label for="entity_end">End:</label>
-        <input type="date" class="form-control" name="entity_end" value="{{ ($changes->end) ? $changes->end : $original->end_date }}">
+        <input type="text" class="form-control datepicker" name="entity_end" value="{{ ($changes->end) ? $changes->end : $original->end_date }}">
     </div>
 </div>
 <div class="row">

@@ -45,3 +45,15 @@
 
     </div>
 @endsection
+
+@section('after_scripts')
+    <link rel="stylesheet" type="text/css" href="{{ asset('packages/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}"/>
+    <script type="text/javascript" src="{{ asset('packages/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
+    <script>
+        $(document).ready(function (){
+            $('.datepicker').datepicker({
+                format: '{{ config('app.date_input_format') }}'
+            });
+        });
+    </script>
+@endsection

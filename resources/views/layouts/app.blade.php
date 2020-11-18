@@ -105,5 +105,7 @@
 
     @include('navbars.discover-menu')
     @include('navbars.admin-menu')
+
+    @yield('after_scripts')
 </body>
 </html>

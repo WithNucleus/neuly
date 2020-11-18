@@ -79,7 +79,7 @@
 </div>
 <div class="form-group">
     <label for="entity_founded_date" class="font-weight-bold">Founded Date:</label>
-    <input type="date" class="form-control" name="entity_founded_date">
+    <input type="text" class="form-control datepicker" name="entity_founded_date">
 </div>
 <div class="form-group">
     <label for="entity_valuation" class="font-weight-bold">Valuation:</label>
@@ -91,7 +91,7 @@
 </div>
 <div class="form-group">
     <label for="entity_last_funding_date" class="font-weight-bold">Last Funding Date:</label>
-    <input type="date" class="form-control" name="entity_last_funding_date">
+    <input type="text" class="form-control datepicker" name="entity_last_funding_date">
 </div>
 <div class="form-group">
     <label for="entity_number_employees" class="font-weight-bold">Number of Employees:</label>
