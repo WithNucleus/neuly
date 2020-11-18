@@ -76,7 +76,7 @@ class EntityHelper
             'event'        => Event::class,
             'investor'     => Investor::class,
             'job'          => Job::class,
-            'organisation' => Company::class,
+            'organization' => Company::class,
             'person'       => Person::class,
         ];
     }

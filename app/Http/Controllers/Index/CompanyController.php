@@ -8,15 +8,12 @@ use Illuminate\Http\Request;
 use App\Models\Company;
 use App\Models\Focus;
 use App\Models\Job;
-use App\Models\Event;
-use App\Models\Location;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\AllowedFilter;
 use App\Services\Metas;
 use Illuminate\Support\Facades\DB;
 use Auth;
-use Spatie\Activitylog\Models\Activity;
 
 class CompanyController extends Controller
 {
@@ -30,10 +27,14 @@ class CompanyController extends Controller
         $this->middleware('query_filters')->only('index');
     }
 
-    // Index
+    /**
+     * List of Companies
+     *
+     * @param Request $request
+     * @return View
+     */
     public function index(Request $request) {
 
-        // Get Companies
         $companies = QueryBuilder::for(Company::class)
             ->with('focus')
             ->allowedFilters([
@@ -53,20 +54,22 @@ class CompanyController extends Controller
             ->paginate(12)
             ->appends(request()->query());
 
-        // Get All Focus Values
         $focus_cats = Focus::has('companies', '>' , 0)->with('companies')->get()->pluck('name')->unique()->sort();
 
         $metas = Metas::fromPage($request->path());
 
-        // Return View
         return view('discover.organizations.index', compact('companies', 'focus_cats', 'metas'));
 
     }
 
-    // Show
+    /**
+     * Show Company
+     *
+     * @param $slug
+     * @return View
+     */
     public function show(Request $request, $slug) {
 
-        // Get Company
         $company = Company::with([
                 'people',
                 'locations',
@@ -92,7 +95,6 @@ class CompanyController extends Controller
         $entity = 'organizations';
         $isFollowed = (bool) count(FollowRepository::fromuser(Company::class, $company->id));
 
-        // Log Activity
         activity('pageview')
             ->causedBy(Auth::user())
             ->withProperties([
@@ -130,30 +132,32 @@ class CompanyController extends Controller
         return $entities;
     }
 
-    // Show Jobs for this Company
+    /**
+     * Show Jobs for Company
+     *
+     * @param $slug
+     * @return View
+     */
     public function jobs($slug) {
 
-        // Get Company
         $company = Company::where('slug', $slug)->firstOrFail();
-
-        // Get Jobs
-        $jobs = Job::where('company_id', $company->id)->orderBy('posted_date', 'desc')->get();
-
+        $jobs = Job::where('owner_id', $company->id)->orderBy('posted_date', 'desc')->get();
         $entity = 'organizations';
 
-        // Return View
         return view('discover.organizations.jobs', compact('company', 'jobs', 'entity'));
     }
 
-    // Show Events for this Company
+    /**
+     * Show Events for Company
+     *
+     * @param $slug
+     * @return View
+     */
     public function events($slug) {
 
-        // Get Company
         $company = Company::where('slug', $slug)->firstOrFail();
-
         $entity = 'organizations';
 
-        // Return View
         return view('discover.organizations.events', compact('company', 'entity'));
     }
 }

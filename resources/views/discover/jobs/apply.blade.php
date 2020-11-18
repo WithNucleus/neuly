@@ -13,7 +13,7 @@
         </div>
 
         <p class="lead mb-2">
-            {{ $job->job_title }} at <a href="{{ route('discover.organizations.show', $job->company->slug) }}">{{ $job->company->name }}</a>
+            {{ $job->job_title }} at <a href="{{ $job->ownerShowUrl }}">{{ $job->owner->name }}</a>
         </p>
 
         <div class="form-group">
@@ -30,7 +30,7 @@
                 @csrf
 
                 <input type="hidden" name="job_id" value="{{ $job->id }}">
-                <input type="hidden" name="company_id" value="{{ $job->company->id }}">
+                <input type="hidden" name="owner_id" value="{{ $job->owner->id }}">
 
                 <div class="form-group">
                     <label for="resume" class="font-weight-bold">Resume</label>

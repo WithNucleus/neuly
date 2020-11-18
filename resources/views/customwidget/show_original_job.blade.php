@@ -23,9 +23,9 @@
         @endif
 
         <p class="mb-2">
-            <strong>Company:</strong>
-            @if ($widget['entity']->company)
-                <a href="{{ route('company.show', $widget['entity']->company->id) }}">{{ $widget['entity']->company->name }}</a>
+            <strong>Owner:</strong>
+            @if ($widget['entity']->owner)
+                <a href="{{ $widget['entity']->ownerShowUrlAdmin }}">{{ $widget['entity']->owner->name }}</a>
             @else
                 -
             @endif

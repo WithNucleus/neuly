@@ -85,11 +85,22 @@ class Investor extends Model implements EntityContract, EntityImageContract
         return $this->belongsToMany(CompanyValuation::class);
     }
 
+    public function jobs() {
+        return $this->morphMany(Job::class, 'owner');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES
     |--------------------------------------------------------------------------
     */
+    /**
+     * @param \Illuminate\Database\Query\Builder $query
+     * @return \Illuminate\Database\Query\Builder
+     */
+    public function scopeHasJobs($query) {
+        return $query->whereHas('jobs');
+    }
 
     /*
     |--------------------------------------------------------------------------

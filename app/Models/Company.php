@@ -124,7 +124,7 @@ class Company extends Model implements EntityContract, EntityImageContract
     }
 
     public function jobs() {
-        return $this->hasMany('App\Models\Job');
+        return $this->morphMany(Job::class, 'owner');
     }
 
     public function events() {

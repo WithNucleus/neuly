@@ -41,20 +41,20 @@ class ListingRequestController extends Controller
             return redirect()->back()->with('error', 'Wrong entity type!');
         }
 
-        $general = [
+        $data['general'] = [
             'update' => $request->input('general_update'),
             'name' => $request->input('general_name'),
             'mail' => $request->input('general_mail'),
             'type' => $request->input('general_type')
         ];
-        $focusCategories = Focus::orderBy('name')->get();
-        $companies = Company::orderBy('name')->get();
+        $data['focusCategories'] = Focus::orderBy('name')->get();
 
-        return view('discover.listing-requests.entity', [
-            'general'         => $general,
-            'focusCategories' => $focusCategories,
-            'companies'       => $companies,
-        ]);
+        if ($entityTypes[$type] === Job::class) {
+            $data['companies'] = Company::orderBy('name')->get();
+            $data['investors'] = Investor::orderBy('name')->get();
+        }
+
+        return view('discover.listing-requests.entity', $data);
     }
 
     public function finishRequest(Request $request)
@@ -95,6 +95,9 @@ class ListingRequestController extends Controller
 
         if (isset($data['entity_company_new'])) {
             $additionalEntitiesRequested['company'] = $data['entity_company_new'];
+        }
+        if (isset($data['entity_investor_new'])) {
+            $additionalEntitiesRequested['investor'] = $data['entity_investor_new'];
         }
 
         return view('discover.listing-requests.finish', [
@@ -230,12 +233,27 @@ class ListingRequestController extends Controller
             'focus_ids' => $data['entity_focus'],
         ];
 
-        if (isset($data['entity_company'])) {
-            $dummyData['company_id'] = $data['entity_company'];
+        $ownerType = null;
+
+        if (isset($data['entity_owner_type'])) {
+            $ownerType = EntityHelper::getClassByAlias($data['entity_owner_type']);
+            $dummyData['owner_type'] = $ownerType;
         }
 
-        if (isset($data['entity_company_new'])) {
-            $dummyData['company_new'] = $data['entity_company_new'];
+        if ($ownerType === Company::class) {
+            if (isset($data['entity_company_id'])) {
+                $dummyData['owner_id'] = $data['entity_company_id'];
+            }
+            if (isset($data['entity_company_new'])) {
+                $dummyData['company_new'] = $data['entity_company_new'];
+            }
+        } elseif ($ownerType === Investor::class) {
+            if (isset($data['entity_investor_id'])) {
+                $dummyData['owner_id'] = $data['entity_investor_id'];
+            }
+            if (isset($data['entity_investor_new'])) {
+                $dummyData['investor_new'] = $data['entity_investor_new'];
+            }
         }
 
         return $dummyData;

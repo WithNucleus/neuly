@@ -23,7 +23,7 @@
     </div>
 </div>
 <div class="form-group">
-    <label for="entity_name">Name:</label>
+    <label for="entity_name js-entity_name">Name:</label>
     <input type="text" class="form-control" name="entity_name" value="{{ $changes->name }}">
 </div>
 <div class="form-group">

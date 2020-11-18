@@ -1,6 +1,6 @@
 <div class="form-group">
     <label for="entity_name">Name:</label>
-    <input type="text" class="form-control" name="entity_name" value="{{ $changes->name }}">
+    <input type="text" class="form-control js-entity_name" name="entity_name" value="{{ $changes->name }}">
 </div>
 <div class="form-group">
     <label for="entity_website">Website:</label>

@@ -34,7 +34,7 @@
                     <div class="border-top pt-3 d-md-flex">
                         <div class="image mr-5 flex-shrink-0">
                             <a href="{{ route('discover.jobs.show', ['slug' => $item->slug]) }}">
-                                <div class="job-org-logo" style="background-image: url('{{ $item->company->entityImageUrl }}');"></div>
+                                <div class="job-org-logo" style="background-image: url('{{ $item->owner->entityImageUrl }}');"></div>
                             </a>
                         </div>
                         <div class="flex-grow-1">

@@ -19,4 +19,11 @@
     'item_filters' => $filters_company_name
 ])
 
+@include('sidebars.filters.checkboxes-new', [
+    'label'     => 'Investors',
+    'name'      => 'investor',
+    'items'     => $investors,
+    'item_filters' => $filters_investor_name
+])
+
 @include('sidebars.filters.scripts')
