@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Insights;
 
 use App\Http\Controllers\Controller;
 use App\Models\Company;
+use App\Models\Location;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -12,10 +13,39 @@ class CompareMarketController extends Controller
     public function show(Request $request) {
         $query = $this->getQuery();
         $query = $this->getRelatedData($query);
-        $query = $this->filterQuery($query, $request);
-        $companies = $query->get();
 
-        return view('discover.insights.market-comparison.show', compact('companies'));
+        $path = route('insights.compare-market');
+        $sort = $request->has('sort') ? $request->input('sort') : 'organizations';
+
+        $filters_location = [];
+        $filters_focus = [];
+
+        if ($request->has('filter')) {
+            $filterInput = $request->input('filter');
+
+            $filter = array_map(function ($entity) {
+                return explode('|', $entity);
+            }, $filterInput);
+
+            $query = $this->filterQuery($query, $filter);
+
+            if (isset($filter['locations'])) {
+                $filters_location = $filter['locations'];
+            }
+
+            if (isset($filter['focus'])) {
+                $filters_focus = $filter['focus'];
+            }
+        }
+
+        $companies = $this->sortQuery($query, $sort)->get();
+
+        return view('discover.insights.market-comparison.show', compact(
+            'companies',
+            'path',
+            'sort',
+            'filters_location'
+        ));
     }
 
     private function getQuery()
@@ -30,31 +60,31 @@ class CompareMarketController extends Controller
 
     private function filterQuery($query, $request)
     {
-        //filter by valuation
-        if($request->has('valuation')) {
-            $query = $this->filterByValuation($query, $request->input('valuation'));
+        if(array_key_exists('valuation', $request)) {
+            $query = $this->filterByValuation($query, $request['valuation']);
         }
-        if($request->has('locations')) {
-            $query = $this->filterByLocation($query, $request->input('locations'));
+        if(array_key_exists('locations', $request)) {
+            $query = $this->filterByLocation($query, $request['locations']);
         }
-        if($request->has('focus')) {
-            $query = $this->filterByFocus($query, $request->input('focus'));
+        if(array_key_exists('focus', $request)) {
+            $query = $this->filterByFocus($query, $request['focus']);
         }
-        if($request->has('founded')) {
-            $query = $this->filterByFoundationYear($query, $request->input('founded'));
+        if(array_key_exists('founded', $request)) {
+            $query = $this->filterByFoundationYear($query, $request['founded']);
         }
 
         return $query;
     }
 
-    private function filterByValuation($query, $request) {
+    private function filterByValuation($query, $min, $max) {
         return $query;
     }
 
     private function filterByLocation($query, $values) {
         $query = $query->whereHas('locations', function($q) use ($values) {
-            $q->whereIn('country', $values);
+            $q->whereIn('locations.name', $values);
         });
+
         return $query;
     }
 
@@ -70,4 +100,20 @@ class CompareMarketController extends Controller
         return $query;
     }
 
+    private function sortQuery($query, $sort)
+    {
+        $direction = strpos($sort, '-') !== false ? 'desc' : 'asc';
+        $sortType = str_replace('-', '', $sort);
+
+        switch ($sortType) {
+            case 'organizations':
+            default:
+                $orderField = 'name';
+                break;
+        }
+
+        $query->orderBy($orderField, $direction);
+
+        return $query;
+    }
 }

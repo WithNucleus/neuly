@@ -53,16 +53,6 @@
                                     'desc' => '-organizations',
                                     'label' => 'Organization'
                                 ])
-                                @include('discover.includes.filters.sort-button', [
-                                    'asc' => 'status',
-                                    'desc' => '-status',
-                                    'label' => 'Status'
-                                ])
-                                @include('discover.includes.filters.sort-button', [
-                                    'asc' => 'phase',
-                                    'desc' => '-phase',
-                                    'label' => 'Phase'
-                                ])
                             </div>
                         </div>
                     @endisset

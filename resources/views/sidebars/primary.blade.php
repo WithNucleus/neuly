@@ -83,6 +83,10 @@
                 @include('sidebars.locations.global-map')
             @endif
 
+            @if(Route::is('insights.compare-market'))
+                @include('sidebars.insights.market-compare')
+            @endif
+
         </div>
     </div>
 </nav>
