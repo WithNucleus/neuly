@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Insights;
 
 use App\Http\Controllers\Controller;
 use App\Models\Company;
+use App\Models\Focus;
 use App\Models\Location;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class CompareMarketController extends Controller
@@ -17,25 +19,22 @@ class CompareMarketController extends Controller
         $path = route('insights.compare-market');
         $sort = $request->has('sort') ? $request->input('sort') : 'organizations';
 
+        $focuses = $this->getRelatedFocuses();
+
+        $foundationYears = $this->getProcessedFoundationYears();
+
         $filters_location = [];
         $filters_focus = [];
+        $filters_foundation_years = [];
 
         if ($request->has('filter')) {
-            $filterInput = $request->input('filter');
-
-            $filter = array_map(function ($entity) {
-                return explode('|', $entity);
-            }, $filterInput);
+            $filter = $this->getFilterValues($request->input('filter'));
 
             $query = $this->filterQuery($query, $filter);
 
-            if (isset($filter['locations'])) {
-                $filters_location = $filter['locations'];
-            }
-
-            if (isset($filter['focus'])) {
-                $filters_focus = $filter['focus'];
-            }
+            $filters_location = $this->getFilteredLocations($filter);
+            $filters_focus = $this->getFilteredFOcus($filter);
+            $filters_foundation_years = $this->getFilteredFoundationYears($filter);
         }
 
         $companies = $this->sortQuery($query, $sort)->get();
@@ -44,7 +43,11 @@ class CompareMarketController extends Controller
             'companies',
             'path',
             'sort',
-            'filters_location'
+            'focuses',
+            'foundationYears',
+            'filters_location',
+            'filters_focus',
+            'filters_foundation_years'
         ));
     }
 
@@ -69,8 +72,8 @@ class CompareMarketController extends Controller
         if(array_key_exists('focus', $request)) {
             $query = $this->filterByFocus($query, $request['focus']);
         }
-        if(array_key_exists('founded', $request)) {
-            $query = $this->filterByFoundationYear($query, $request['founded']);
+        if(array_key_exists('foundation_year', $request)) {
+            $query = $this->filterByFoundationYear($query, $request['foundation_year']);
         }
 
         return $query;
@@ -82,7 +85,18 @@ class CompareMarketController extends Controller
 
     private function filterByLocation($query, $values) {
         $query = $query->whereHas('locations', function($q) use ($values) {
-            $q->whereIn('locations.name', $values);
+            $firstElement = true;
+
+            foreach($values as $value)
+            {
+                if($firstElement)
+                {
+                    $q->where('locations.name', 'LIKE',  '%'.$value.'%');
+                    $firstElement = false;
+                } else {
+                    $q->orWhere('locations.name', 'LIKE',  '%'.$value.'%');
+                }
+            }
         });
 
         return $query;
@@ -95,8 +109,18 @@ class CompareMarketController extends Controller
         return $query;
     }
 
-    private function filterByFoundationYear($query, $value) {
-        $query = $query->whereYear('founded_date', '>=', $value);
+    private function filterByFoundationYear($query, $values) {
+        $firstElement = true;
+
+        foreach($values as $value) {
+            if($firstElement) {
+                $query = $this->getFoundedYearWhereClause($value, $query);
+                $firstElement = false;
+            } else {
+                $query = $this->getFoundedYearOrWhereClause($value, $query);
+            }
+        }
+
         return $query;
     }
 
@@ -115,5 +139,78 @@ class CompareMarketController extends Controller
         $query->orderBy($orderField, $direction);
 
         return $query;
+    }
+
+    private function getProcessedFoundationYears()
+    {
+        return $this->processFoundationYears($this->getRelatedFoundationYears());
+    }
+
+    private function getRelatedFoundationYears()
+    {
+        return Company::selectRaw('YEAR(founded_date) as foundation_year')
+            ->orderBy('foundation_year')
+            ->pluck('foundation_year')
+            ->unique();
+    }
+
+    private function processFoundationYears($foundationYearsRaw)
+    {
+        $foundationYears = new Collection();
+
+        foreach($foundationYearsRaw as $year) {
+            if($year == null) {
+                $year = 'unknown';
+            }
+
+            $foundationYears->push($year);
+        }
+
+        return $foundationYears;
+    }
+
+    private function getFilterValues($filterRequestValues)
+    {
+        $filterInput = $filterRequestValues;
+
+        $filter = array_map(function ($entity) {
+            return explode('|', $entity);
+        }, $filterInput);
+
+        return $filter;
+    }
+
+    private function getRelatedFocuses()
+    {
+        return Focus::where('type', '=', Focus::TYPE_DRUG)
+            ->whereHas('companies')
+            ->orderBy('name')
+            ->pluck('name')
+            ->unique();
+    }
+
+    private function getFilteredLocations($filter)
+    {
+        return isset($filter['locations']) ? $filter['locations'] : [];
+    }
+
+    private function getFilteredFocus($filter)
+    {
+        return isset($filter['focus']) ? $filter['focus'] : [];
+    }
+
+    private function getFilteredFoundationYears($filter)
+    {
+        return isset($filter['foundation_year']) ? $filter['foundation_year'] : [];
+    }
+
+    private function getFoundedYearWhereClause($value, $query)
+    {
+        return ($value === 'unknown') ? $query->whereNull('founded_date') : $query->whereRaw('YEAR(founded_date) = ?', $value);
+    }
+
+    private function getFoundedYearOrWhereClause($value, $query)
+    {
+        return ($value === 'unknown') ? $query->orWhereNull('founded_date') : $query->orWhereRaw('YEAR(founded_date) = ?', $value);
     }
 }

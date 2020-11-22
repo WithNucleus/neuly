@@ -50,7 +50,8 @@
             'conditions',
             'interventions',
             'outcome_measures',
-            'study_designs'
+            'study_designs',
+            'foundation_year',
         ];
 
         allowedFilters.forEach(function (filterName) {
