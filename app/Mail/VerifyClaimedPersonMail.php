@@ -4,14 +4,12 @@ namespace App\Mail;
 
 use App\Models\Person;
 use App\Models\RaisedClaim;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
 class VerifyClaimedPersonMail extends Mailable
 {
-    use Queueable, SerializesModels;
+    use SerializesModels;
 
     protected $claim = null;
     protected $person = null;
@@ -37,7 +35,6 @@ class VerifyClaimedPersonMail extends Mailable
         return $this->markdown('emails.users.verify_claim')
             ->with([
                 'person_name' => $this->person->name,
-                'person_slug' => $this->person->slug,
                 'verification_token' => $this->claim->verification_token
             ]);
     }

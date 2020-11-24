@@ -22,6 +22,11 @@ class RaisedClaim extends Model
     |--------------------------------------------------------------------------
     */
 
+    public static function generateToken()
+    {
+        return sha1(time());
+    }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS

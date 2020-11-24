@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Index;
 
 
 use App\Http\Controllers\Controller;
-use App\Model\UserSocialAuth;
 use App\Models\Person;
 use App\Models\RaisedClaim;
 use Illuminate\Http\Request;
@@ -22,29 +21,6 @@ class UserPersonController extends Controller
             ->get();
 
         return view('members.person.index', compact('person', 'claims'));
-    }
-
-    public function status()
-    {
-        $user= Auth::user();
-        $claims = RaisedClaim::where('user_id', '=', $user->id)
-            ->whereNotNull('verification_token')
-            ->get();
-
-        return view('members.person.status', compact('claims', 'user'));
-    }
-
-    public function verifyEmail() {
-        return view('members.person.verify-mail');
-    }
-
-    public function verifySocial() {
-        $user = Auth::user();
-        $claim = RaisedClaim::where('user_id', '=', $user->id)
-            ->whereNotNull('verification_token')
-            ->firstOrFail();
-
-        return view('members.person.verify-social', compact('claim'));
     }
 
     public function email()

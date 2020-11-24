@@ -2,27 +2,74 @@
 
 namespace App\Helpers;
 
-use App\Model\UserSocialAuth;
-use Illuminate\Http\Request;
+use App\Models\Person;
+use App\Models\RaisedClaim;
+use App\Models\UserSocialAuth;
+use App\User;
 
 class ClaimPersonHelper
 {
-    public static function checkForIdenticalEmails($user, $person)
+    /**
+     * @param \App\User $user
+     * @param \App\Models\Person $person
+     * @return bool
+     */
+    public static function checkByEmail(User $user, Person $person)
     {
-        return $user->email === $person->email || $user->email === $person->secondary_email;
+        $emails = $person->getEmails();
+
+        if ($emails === []) {
+            return false;
+        }
+
+        return $user->hasVerifiedEmail() && in_array($user->email, $emails);
     }
 
-    public static function checkUsersSocialLogins($socials, $user)
+    /**
+     * @param \App\User $user
+     * @param \App\Models\Person $person
+     * @return false
+     */
+    public static function checkBySocials(User $user, Person $person)
     {
-        $logins = UserSocialAuth::whereIn('provider_name', $socials)
+        $socials = $person->getSocialProfiles();
+        $emails = $person->getEmails();
+
+        if ($socials === [] || $emails === []) {
+            return false;
+        }
+
+        return UserSocialAuth::whereIn('provider_name', $socials)
+            ->whereIn('email', $emails)
             ->where('user_id', '=', $user->id)
-            ->get();
-
-        return (bool) count($logins);
+            ->exists();
     }
 
-    public static function canBeClaimedViaSocial($socials, $user, $person)
+    /**
+     * @param \App\User $user
+     * @param \App\Models\Person $person
+     * @return bool
+     */
+    public static function canBeAutoClaimed(User $user, Person $person)
     {
-        return ClaimPersonHelper::checkForIdenticalEmails($user, $person) && ClaimPersonHelper::checkUsersSocialLogins($socials, $user);
+        return self::checkByEmail($user, $person) || self::checkBySocials($user, $person);
+    }
+
+    /**
+     * @param \App\User $user
+     * @param \App\Models\Person $person
+     * @param \App\Models\RaisedClaim|null $claim
+     */
+    public static function acceptClaim(User $user, Person $person, RaisedClaim $claim = null)
+    {
+        $person->user_id = $user->id;
+        $person->save();
+        $user->person_id = $person->id;
+        $user->save();
+
+        if ($claim) {
+            $claim->verification_token = null;
+            $claim->save();
+        }
     }
 }

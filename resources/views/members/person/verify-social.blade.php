@@ -14,16 +14,14 @@
                     <h1 class="page-title-default text-primary mb-4">Person Claiming Verification</h1>
 
                     <div class="py-4 col-12 col-lg-12">
-                        How to verify a claim by social logins:
+                        How to verify a claim by social profile:
                         <br /><br />
                         <ol>
-                            <li>Make sure your neuly E-Mail address is the one used with your social profile</li>
-                            <li>Log out from neuly.</li>
-                            <li>Login via a social login the claimed person has stated on neuly.</li>
-                            <li>Come back to this site and check your status</li>
+                            <li>Link social account to your profile here, that the claimed person has stated on Neuly.</li>
+                            <li>Come back to this page and press "Check verification status"</li>
                         </ol>
 
-                        <a href="{{ route('discover.people.claim.social.verify', ['claim' => $claim->id]) }}" class="btn btn-primary mt-4">Check verification status</a>
+                        <a href="{{ route('user.person.verify.social.check') }}" class="btn btn-primary mt-4">Check verification status</a>
                     </div>
 
                 </div>

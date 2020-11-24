@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Index;
 
+use App\Helpers\ClaimPersonHelper;
 use App\Helpers\NotificationHelper;
 use App\Http\Controllers\Controller;
+use App\Models\RaisedClaim;
 use App\Notifications\PersonDeletionRequested;
 use App\Repositories\FollowRepository;
 use Illuminate\Http\Request;
@@ -84,7 +86,7 @@ class PersonController extends Controller
 
         $entity = 'people';
         $isFollowed = (bool) count(FollowRepository::fromuser(Person::class, $person->id));
-        $isClaimed = (bool) $person->relatedUser()->count();
+        $isVerified = $person->user_id !== null;
 
         // Log Activity
         activity('pageview')
@@ -97,12 +99,42 @@ class PersonController extends Controller
             ->performedOn($person)
             ->log($person->name);
 
-        return view('discover.people.show', compact('person', 'metas', 'entity', 'isFollowed', 'isClaimed'));
+        return view('discover.people.show', compact('person', 'metas', 'entity', 'isFollowed', 'isVerified'));
     }
 
     public function namesJson()
     {
         return response()->json(Person::all()->pluck('name'));
+    }
+
+    public function claim(Request $request, $slug)
+    {
+        $person = Person::where('slug', '=', $slug)->firstOrFail();
+        $user = Auth::user();
+
+        if ($user->hasRaisedClaimBefore()) {
+            $request->session()->flash('error', 'You can only raise one claim at the same time.');
+
+            return redirect()->route('discover.people.show', ['slug' => $person->slug]);
+        }
+
+        if (ClaimPersonHelper::canBeAutoClaimed($user, $person)) {
+            ClaimPersonHelper::acceptClaim($user, $person);
+
+            $request->session()->flash('success', 'Your claim was successfully granted.');
+
+            return redirect()->route('user.person.index');
+        }
+
+        $claim = new RaisedClaim();
+        $claim->user_id = $user->id;
+        $claim->person_id = $person->id;
+        $claim->verification_token = RaisedClaim::generateToken();
+        $claim->save();
+
+        $request->session()->flash('success', 'Your claim was raised.');
+
+        return redirect()->route('discover.people.show', ['slug' => $person->slug]);
     }
 
     private function canUserViewPerson($person)

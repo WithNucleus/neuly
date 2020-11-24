@@ -260,6 +260,20 @@ class Person extends Model implements EntityContract, EntityImageContract
         ];
     }
 
+    public function getEmails() {
+        $personEmails = [];
+
+        if ($this->email) {
+            $personEmails[] = $this->email;
+        }
+
+        if ($this->secondary_email) {
+            $personEmails[] = $this->secondary_email;
+        }
+
+        return $personEmails;
+    }
+
     public function getSocialProfiles()
     {
         $social = [];

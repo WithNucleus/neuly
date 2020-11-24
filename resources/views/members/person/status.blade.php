@@ -17,7 +17,7 @@
 
                         @if($user->person_id !== null)
                             <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                You have allready claimed a person successfully
+                                You have already claimed a person successfully. You can manage it <a href="{{ route('user.person.index') }}">here</a>
                             </div>
                         @else
                             @if(count($claims) === 0)

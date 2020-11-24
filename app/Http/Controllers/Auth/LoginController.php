@@ -123,6 +123,7 @@ class LoginController extends Controller
                 $socialAuth->user_id = $user->id;
                 $socialAuth->provider_name = $provider;
                 $socialAuth->provider_id = $socialiteUser->getId();
+                $socialAuth->email = $socialiteUser->getEmail();
                 $socialAuth->save();
             }
 

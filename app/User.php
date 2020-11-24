@@ -71,18 +71,13 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(Person::class, 'user_id');
     }
 
-    public function raisedClaims()
+    public function raisedClaim()
     {
-        return $this->hasMany(RaisedClaim::class);
+        return $this->hasOne(RaisedClaim::class);
     }
 
     public function hasRaisedClaimBefore()
     {
-        return $this->raisedClaims()->count() > 0;
-    }
-
-    public function hasRaisedMultipleClaims()
-    {
-        return $this->raisedCLaims()->count() > 1;
+        return $this->raisedClaim()->exists();
     }
 }
