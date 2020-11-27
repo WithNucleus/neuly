@@ -71,7 +71,7 @@ class LoginController extends Controller
      */
     public function redirectToProvider($provider)
     {
-        if (!$this->isProviderAllowed($provider)) {
+        if (!UserSocialAuth::isProviderAllowed($provider)) {
             abort(404);
         }
 
@@ -86,7 +86,7 @@ class LoginController extends Controller
     public function handleProviderCallback($provider)
     {
         try {
-            if (!$this->isProviderAllowed($provider)) {
+            if (!UserSocialAuth::isProviderAllowed($provider)) {
                 throw new \Exception();
             }
 
@@ -134,9 +134,5 @@ class LoginController extends Controller
         } catch (\Exception $e) {
             return redirect()->route('login')->with('error', "Failed to authenticate with $provider");
         }
-    }
-
-    private function isProviderAllowed($provider){
-        return in_array($provider, ['facebook', 'google', 'twitter', 'linkedin']);
     }
 }

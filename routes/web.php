@@ -268,6 +268,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/user/settings/password', 'Index\UserPasswordController@index')->name('user.settings.password');
     Route::post('/user/settings/password', 'Index\UserPasswordController@update');
     Route::post('/user/settings/validateurl', 'Index\UserProfileController@checkMemberUrl')->name('user.validate.member_url');
+    Route::get('/user/settings/social', 'Index\UserSocialController@index')->name('user.settings.social');
+    Route::get('/user/settings/social/connect/{provider}', 'Index\UserSocialController@connect')->name('user.settings.social.connect');
+    Route::get('/user/settings/social/connect/{provider}/callback', 'Index\UserSocialController@connectCallback')->name('user.settings.social.connect.callback');
 
     Route::get('/user/person/status', 'Index\UserClaimPersonController@status')->name('user.person.status');
     Route::get('/user/person/verify/email', 'Index\UserClaimPersonController@verifyEmail')->name('user.person.verify.email');
