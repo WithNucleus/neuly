@@ -1,19 +1,19 @@
 <?php
 
 namespace App\Http\Controllers\Index;
- use App\Http\Controllers\Controller;
+
+use App\Http\Controllers\Controller;
 use App\Http\Requests\ChangeMailRequest;
-use App\Mail\ChangeMailAddressMail;
 use App\Mail\ResetChangedMailAddressMail;
- use App\Models\EmailReset;
- use App\Services\ValidateUserHandler;
-use App\User;
- use Carbon\Carbon;
- use Illuminate\Http\Request;
+use App\Models\EmailReset;
+use App\Services\ValidateUserHandler;
+use Carbon\Carbon;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
- use Illuminate\Support\Str;
+use Illuminate\Support\Str;
 
  class UserEmailController extends Controller
 {
@@ -40,19 +40,21 @@ use Illuminate\Support\Facades\Session;
         $emailReset->valid_till = Carbon::now()->addDay(30);
         $emailReset->save();
 
-
         $newMail = $request->input('new_email');
         $link = route('user.retake', ['token' => $emailReset->token]);
 
         Mail::to($user)->send(new ResetChangedMailAddressMail($user->name, $newMail, $link));
 
         $user->email = $newMail;
+        $user->email_verified_at = null;
         $user->save();
 
-        Mail::to($user)->send(new ChangeMailAddressMail($user->name));
+        if ($user instanceof MustVerifyEmail) {
+            $user->sendEmailVerificationNotification();
+        }
 
         Session::flash('success', 'Your email has been changed successfully.');
 
-        return redirect(route('user.settings.email'));
+        return view('members.settings.email-updated');
     }
 }
