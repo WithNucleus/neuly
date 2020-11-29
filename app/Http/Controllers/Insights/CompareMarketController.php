@@ -23,6 +23,9 @@ class CompareMarketController extends Controller
 
         $foundationYears = $this->getProcessedFoundationYears();
 
+        $valuation_min = $this->getValuationMinValue();
+        $valuation_max = $this->getValuationMaxValue();
+
         $filters_location = [];
         $filters_focus = [];
         $filters_foundation_years = [];
@@ -47,7 +50,9 @@ class CompareMarketController extends Controller
             'foundationYears',
             'filters_location',
             'filters_focus',
-            'filters_foundation_years'
+            'filters_foundation_years',
+            'valuation_min',
+            'valuation_max'
         ));
     }
 
@@ -63,8 +68,8 @@ class CompareMarketController extends Controller
 
     private function filterQuery($query, $request)
     {
-        if(array_key_exists('valuation', $request)) {
-            $query = $this->filterByValuation($query, $request['valuation']);
+        if(array_key_exists('valuation_min', $request) && array_key_exists('valuation_max', $request)) {
+            $query = $this->filterByValuation($query, $request['valuation_min']. $request['valuation_max']);
         }
         if(array_key_exists('locations', $request)) {
             $query = $this->filterByLocation($query, $request['locations']);
@@ -80,7 +85,8 @@ class CompareMarketController extends Controller
     }
 
     private function filterByValuation($query, $min, $max) {
-        return $query;
+        return $query->where('valuation', '>=', $min)
+                ->where('valuation', '<=', $max);
     }
 
     private function filterByLocation($query, $values) {
@@ -212,5 +218,15 @@ class CompareMarketController extends Controller
     private function getFoundedYearOrWhereClause($value, $query)
     {
         return ($value === 'unknown') ? $query->orWhereNull('founded_date') : $query->orWhereRaw('YEAR(founded_date) = ?', $value);
+    }
+
+    private function getValuationMinValue()
+    {
+        return Company::select('valuation')->orderBy('valuation', 'asc')->first()->valuation;
+    }
+
+    private function getValuationMaxValue()
+    {
+        return Company::select('valuation')->orderBy('valuation', 'desc')->first()->valuation;
     }
 }

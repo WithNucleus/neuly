@@ -18,6 +18,8 @@
 
         var filters = [];
 
+        console.log(filterName);
+
         $("#filterSidebar input[name='" + filterName + "']:checked").each(function(){
             filters.push($(this).val());
         });
@@ -25,6 +27,8 @@
         $("#filterSidebar select[name='" + filterName + "'] option:selected").each(function(){
             filters.push($(this).val());
         });
+
+        filters.push($("#filterSidebar input[type='range'][name='" + filterName + "']").val());
 
         return filters.join("|");
     }
@@ -52,6 +56,8 @@
             'outcome_measures',
             'study_designs',
             'foundation_year',
+            'valuation_min',
+            'valuation_max'
         ];
 
         allowedFilters.forEach(function (filterName) {
@@ -138,9 +144,9 @@
 
         // People Search
         $("input[name=people-search]").on('change', function() {
-            var name = $(this).val();
+            let name = $(this).val();
 
-            var this_item = '<div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" name="people" id="' + name + '" value="' + name + '"checked><label class="custom-control-label" for="' + name + '">' + name + '</label></div>';
+            let this_item = '<div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" name="people" id="' + name + '" value="' + name + '"checked><label class="custom-control-label" for="' + name + '">' + name + '</label></div>';
 
             $(this_item).insertAfter("#people-filter .title");
 
@@ -149,9 +155,9 @@
 
         // Organization Search
         $("input[name=organizations-search]").on('change', function() {
-            var name = $(this).val();
+            let name = $(this).val();
 
-            var this_item = '<div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" name="company" id="' + name + '" value="' + name + '"checked><label class="custom-control-label" for="' + name + '">' + name + '</label></div>';
+            let this_item = '<div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" name="company" id="' + name + '" value="' + name + '"checked><label class="custom-control-label" for="' + name + '">' + name + '</label></div>';
 
             $(this_item).insertAfter("#organizations-filter .title");
 
@@ -160,9 +166,9 @@
 
         // Location Search
         $("input[name=locations-search]").on('change', function() {
-            var name = $(this).val();
+            let name = $(this).val();
 
-            var this_item = '<div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" name="locations" id="' + name + '" value="' + name + '"checked><label class="custom-control-label" for="' + name + '">' + name + '</label></div>';
+            let this_item = '<div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" name="locations" id="' + name + '" value="' + name + '"checked><label class="custom-control-label" for="' + name + '">' + name + '</label></div>';
 
             $(this_item).insertAfter("#locations-filter .title");
 
@@ -171,9 +177,9 @@
 
         // Region Search
         $("input[name=regions-search]").on('change', function() {
-            var name = $(this).val();
+            let name = $(this).val();
 
-            var this_item = '<div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" name="region" id="' + name + '" value="' + name + '"checked><label class="custom-control-label" for="' + name + '">' + name + '</label></div>';
+            let this_item = '<div class="custom-control custom-checkbox"><input type="checkbox" class="custom-control-input" name="region" id="' + name + '" value="' + name + '"checked><label class="custom-control-label" for="' + name + '">' + name + '</label></div>';
 
             $(this_item).insertAfter("#regions-filter .title");
 
@@ -181,12 +187,22 @@
         });
 
         // Sort Buttons
-        $(".sort-records").click(function(){
+        $(".sort-records").on('click', function(){
 
-            var new_sort = $(this).data("sort");
+            let new_sort = $(this).data("sort");
 
             get_filters_and_go(new_sort);
         });
+
+        $(".set-valuation-filter").on('click', function() {
+            let min_input = $("input[name=valuation_min]");
+            let max_input = $("input[name=valuation_max]");
+
+            min_input.val(min_input.data("value"));
+            max_input.val(max_input.data("value"));
+
+            get_filters_and_go();
+        })
 
         $(".js-collapse-filter")
             .on('show.bs.collapse', function(){
