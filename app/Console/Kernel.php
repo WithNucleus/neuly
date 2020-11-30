@@ -52,7 +52,20 @@ class Kernel extends ConsoleKernel
 
         // Send E-Mail Notifications
 
-        $schedule->job(new SendEmailNotifications())->weeklyOn(3, '12:00');
+        $schedule
+            ->job(new SendEmailNotifications())
+            ->weeklyOn(3, '12:00');
+
+        // remove unverified users
+        $schedule
+            ->command('clean:unverivied')
+            ->dailyAt(1)
+            ->onFailure(function() {
+                Log::critical('Cleaning unverified users Failed!');
+            })
+            ->onSuccess(function() {
+                Log::info('Cleaning unverified users Succeeded!')
+            });
     }
 
     /**
