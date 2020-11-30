@@ -52,12 +52,12 @@ class AddRegionCodesToCountriesRoundTwo extends Migration
             'Utrecht' => 'NL-UT',
             'Gelderland' => 'NL-GE',
             'Flevoland' => 'NL-FL',
-            'Noord-Holland' => 'NL-NH',
+            'North Holland' => 'NL-NH',
             'Zeeland' => 'NL-ZE',
-            'Zuid-Holland' => 'NL-ZH',
+            'South Holland' => 'NL-ZH',
             'Groningen' => 'NL-GR',
             'Drenthe' => 'NL-DR',
-            'Noord-Brabant' => 'NL-NB',
+            'North Brabant' => 'NL-NB',
             'Limburg' => 'NL-LI',
         ];
 
