@@ -59,7 +59,7 @@
                     </div>
                 </div>
 
-                @if ($country == 'USA')
+                @if ($map['show'] == true)
                 <div style="margin-right: 2rem;">
                     <div class="resizable overflow-hidden" style="height: 600px;">
                         <div id="world-distribution-map" style="width: 100%; height: 100%;"></div>
@@ -109,8 +109,8 @@
             </main>
         </div>
     </div>
-    @if ($country == 'USA')
-        <script type="text/javascript" src="{{ asset('assets/maps/country-US.js') }}"></script>
+    @if ($map['show'] == true)
+        <script type="text/javascript" src="{{ asset('assets/maps/country-' . $map['code'] . '.js') }}"></script>
     @endif
     <script>
         // Map
@@ -123,8 +123,8 @@
             }
 
             $('#world-distribution-map').vectorMap({
-                <?php if ($country == 'USA') : ?>
-                map: 'us_merc',
+                <?php if ($map['show'] == true) : ?>
+                map: '{{ $map['map_name'] }}',
                 <?php endif; ?>
                 series: {
                     regions: [{
