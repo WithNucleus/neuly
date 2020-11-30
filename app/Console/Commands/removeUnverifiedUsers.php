@@ -40,7 +40,9 @@ class removeUnverifiedUsers extends Command
     public function handle()
     {
         User::whereNull('email_verified_at')
-            ->where('created_at', '<', Carbon::parse('-48 hours'))->delete();
+            ->where('created_at', '<', Carbon::parse('-48 hours'))
+            ->where('created_at', '>', Carbon::parse('2020-10-28'))
+            ->delete();
 
         $this->info('Unverified users older then 48 hours got deleted');
     }

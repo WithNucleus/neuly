@@ -64,7 +64,7 @@ class Kernel extends ConsoleKernel
                 Log::critical('Cleaning unverified users Failed!');
             })
             ->onSuccess(function() {
-                Log::info('Cleaning unverified users Succeeded!')
+                Log::info('Cleaning unverified users Succeeded!');
             });
     }
 
