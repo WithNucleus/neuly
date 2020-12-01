@@ -33,25 +33,45 @@
                         <div class="form-group row">
                             <div class="col-12 col-md-12 mb-3 mb-md-0">
                                 <label for="website" class="font-weight-bold">Website</label>
-                                <input type="text" class="form-control" name="website">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">http://</div>
+                                    </div>
+                                    <input type="text" class="form-control" name="website">
+                                </div>
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-12 col-md-12 mb-3 mb-md-0">
                                 <label for="facebook" class="font-weight-bold">Facebook</label>
-                                <input type="text" class="form-control" name="facebook">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">https://www.facebook.com/</div>
+                                    </div>
+                                    <input type="text" class="form-control" name="facebook">
+                                </div>
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-12 col-md-12 mb-3 mb-md-0">
                                 <label for="linkedin" class="font-weight-bold">LinkedIn</label>
-                                <input type="text" class="form-control" name="linkedin">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">https://www.linkedin.com/in/</div>
+                                    </div>
+                                    <input type="text" class="form-control" name="linkedin">
+                                </div>
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-12 col-md-12 mb-3 mb-md-0">
                                 <label for="google_scholar" class="font-weight-bold">Google Scholar</label>
-                                <input type="text" class="form-control" name="google_scholar">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">https://scholar.google.com/citations?user=</div>
+                                    </div>
+                                    <input type="text" class="form-control" name="google_scholar">
+                                </div>
                             </div>
                         </div>
 

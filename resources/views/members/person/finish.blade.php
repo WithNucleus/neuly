@@ -31,6 +31,11 @@
                         <div>
                             Your person profile was created successfully.
                         </div>
+                        <br /><br />
+                        <div>
+                            <a href="{{ route('discover.people.show', ['slug' => $person->slug]) }}" class="btn btn-primary">visit person</a>
+                            <a href="{{ route('member.dashboard') }}" class="btn btn-primary">go to dashboard</a>
+                        </div>
                     </div>
 
                 </div>

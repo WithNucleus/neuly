@@ -41,17 +41,21 @@
                             </div>
                             <div class="form-group row">
                                 <div class="col-12 col-md-12 mb-3 mb-md-0">
-                                    <label for="name" class="font-weight-bold">First Name</label>
-                                    <input type="text" class="form-control" name="name" required>
+                                    <label for="name" class="font-weight-bold">Name</label>
+                                    <input type="text" class="form-control" name="name" value="{{ $user->name }} {{ $user->last_name }}" required>
                                     <div class="invalid-feedback">
-                                        Your first name is required.
+                                        Your name is required.
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <div class="col-12 col-md-12 mb-3 mb-md-0">
                                     <label for="bio" class="font-weight-bold">Biography</label>
-                                    <textarea class="form-control" name="bio" rows="10"></textarea>
+                                    <textarea id="editor" class="form-control" name="bio" rows="10"></textarea>
+                                    <script>
+                                        ClassicEditor
+                                            .create( document.querySelector( '#editor' ) );
+                                    </script>
                                 </div>
                             </div>
                             <button type="submit" class="submit btn btn-primary">next</button>

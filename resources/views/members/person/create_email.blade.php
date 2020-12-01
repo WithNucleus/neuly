@@ -34,7 +34,7 @@
                             <div class="form-group row">
                                 <div class="col-12 col-md-12 mb-3 mb-md-0">
                                     <label for="email" class="font-weight-bold">Email</label>
-                                    <input type="text" class="form-control" name="email" required>
+                                    <input type="text" class="form-control" name="email" value="{{ $user->email }}" required>
                                 </div>
                             </div>
                             <div class="form-group row">

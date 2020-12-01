@@ -58,7 +58,7 @@ class UserClaimPersonController extends Controller
 
         ClaimPersonHelper::acceptClaim($user, $person, $claim);
 
-        return redirect()->route('user.person.index')
+        return redirect()->route('discover.people.show', ['slug' => $person->slug])
             ->with('success', 'Your claim was successfully granted.');
     }
 
@@ -90,7 +90,7 @@ class UserClaimPersonController extends Controller
 
         ClaimPersonHelper::acceptClaim($user, $person, $claim);
 
-        return redirect()->route('user.person.index')
+        return redirect()->route('discover.people.show', ['slug' => $person->slug])
             ->with('success', 'Your claim was successfully granted.');
     }
 }

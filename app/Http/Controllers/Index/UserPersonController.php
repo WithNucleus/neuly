@@ -90,7 +90,8 @@ class UserPersonController extends Controller
 
     public function create()
     {
-        return view('members.person.create');
+        $user = Auth::user();
+        return view('members.person.create', compact('user'));
     }
 
     public function storeBasicInformationShowEmailStep(Request $request)
@@ -108,7 +109,7 @@ class UserPersonController extends Controller
         $user->save();
 
 
-        return view('members.person.create_email');
+        return view('members.person.create_email', compact('user'));
     }
 
     public function storeEmailShowSocialStep(Request $request)
@@ -131,8 +132,7 @@ class UserPersonController extends Controller
         $person->google_scholar = $request->has('google_scholar') ? $request->input('google_scholar') : $person->google_scholar;
         $person->save();
 
-        return view('members.person.finish');
-        //redirect to person
+        return view('members.person.finish', compact('person'));
     }
 
     public function search(Request $request)

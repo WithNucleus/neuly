@@ -76,8 +76,11 @@
         <link rel="stylesheet" type="text/css" href="{{ asset('assets/nouislider.css') }}"/>
     @endif
 
-<script type="text/javascript" src="{{ asset('assets/chart.js') }}"></script>
-<script type="text/javascript" src="{{ asset('assets/chartisan.js') }}"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-171437771-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
 @if (Route::is('insights.distribution.countries.show') OR
      Route::is('insights.distribution.countries.focus.show') OR
