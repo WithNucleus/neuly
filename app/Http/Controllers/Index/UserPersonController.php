@@ -49,6 +49,10 @@ class UserPersonController extends Controller
 
     public function savePersonal(Request $request)
     {
+        $request->validate([
+            'name' => 'required'
+        ]);
+
         $person = Auth::user()->relatedPerson;
         $person->visibility = $request->has('visibility') ? $request->input('visibility') : $person->visibility;
         $person->name = $request->has('name') ? $request->input('name') : $person->name;
@@ -96,6 +100,10 @@ class UserPersonController extends Controller
 
     public function storeBasicInformationShowEmailStep(Request $request)
     {
+        $request->validate([
+            'name' => 'required'
+        ]);
+        
         $user = Auth::user();
         $person = new Person();
         $person->visibility = $request->has('visibility') ? $request->input('visibility') : $person->visibility;
