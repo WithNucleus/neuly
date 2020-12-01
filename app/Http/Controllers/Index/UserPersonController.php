@@ -52,7 +52,7 @@ class UserPersonController extends Controller
         $person = Auth::user()->relatedPerson;
         $person->visibility = $request->has('visibility') ? $request->input('visibility') : $person->visibility;
         $person->name = $request->has('name') ? $request->input('name') : $person->name;
-        $person->bio = $request->has('name') ? $request->input('bio') : $person->bio;
+        $person->bio = $request->has('name') ? strip_tags($request->input('bio')) : $person->bio;
 
         $person->save();
 
@@ -101,7 +101,7 @@ class UserPersonController extends Controller
         $person->visibility = $request->has('visibility') ? $request->input('visibility') : $person->visibility;
         $person->name = $request->has('name') ? $request->input('name') : $person->name;
         $person->slug = Person::generateUniqueSlug($person->name);
-        $person->bio = $request->has('name') ? $request->input('bio') : $person->bio;
+        $person->bio = $request->has('name') ? strip_tags($request->input('bio')) : $person->bio;
         $person->user_id = $user->id;
         $person->save();
 
