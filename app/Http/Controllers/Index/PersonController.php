@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Index;
 
+use App\Helpers\NotificationHelper;
 use App\Http\Controllers\Controller;
+use App\Notifications\PersonDeletionRequested;
 use App\Repositories\FollowRepository;
 use Illuminate\Http\Request;
 use App\Models\Person;
 use App\Models\Company;
 use App\Models\Location;
+use Illuminate\Support\Facades\Session;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -88,5 +91,27 @@ class PersonController extends Controller
     public function namesJson()
     {
         return response()->json(Person::all()->pluck('name'));
+    }
+
+    public function requestDeletion($slug)
+    {
+        $person = Person::where('slug', $slug)->firstOrFail();
+
+        return view('discover.people.requestDeletion', compact('person'));
+    }
+
+    public function requestDeletionSubmit(Request $request, $slug)
+    {
+        $person = Person::where('slug', $slug)->firstOrFail();
+        $name   = $request->input('name');
+        $email  = $request->input('email');
+        $cause  = $request->input('cause');
+
+        $notification = new PersonDeletionRequested($person, $name, $email, $cause);
+        NotificationHelper::sendAdminNotifications($notification);
+
+        return redirect()
+            ->route('discover.people.show', $person->slug)
+            ->with('success', 'Your deletion request sent successfully!');
     }
 }

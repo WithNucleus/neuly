@@ -20,8 +20,10 @@
 
     @include('discover.people.data')
 
-    <p class="mb-0">
+    <p class="mb-0 d-flex justify-content-between">
         <small>Last updated: {{ Carbon\Carbon::parse($person->updated_at)->format('M d, Y') }}</small>
+{{--    TODO: after "Claim Person" functionality will be finished and merged - add condition to show this link only for unverified person --}}
+        <small><a href="{{ route('discover.people.requestDeletion', $person->slug) }}" class="text-danger">Request deletion</a></small>
     </p>
 
     @include('discover.includes.show-end')
