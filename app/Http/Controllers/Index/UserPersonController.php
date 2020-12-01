@@ -132,15 +132,16 @@ class UserPersonController extends Controller
         $person->save();
 
         return view('members.person.finish');
+        //redirect to person
     }
 
     public function search(Request $request)
     {
         $user = Auth::user();
 
-        $cleanTerm = $user->name . ' ' . $user->lastname;
+        $cleanTerm = $user->name . ' ' . $user->last_name;
 
-        $searchTerm = '%'.$user->name.'%'.$user->lastname.'%';
+        $searchTerm = '%'.$user->name.'%'.$user->last_name.'%';
 
         if($request->has('search'))
         {
