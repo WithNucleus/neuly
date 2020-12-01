@@ -76,6 +76,15 @@
         <link rel="stylesheet" type="text/css" href="{{ asset('assets/nouislider.css') }}"/>
     @endif
 
+    @if (Route::is('insights.distribution.countries.show') OR
+         Route::is('insights.distribution.countries.focus.show') OR
+         Route::is('discover.locations.maps.global') OR
+         Route::is('discover.locations.maps.country')
+    )
+        <script type="text/javascript" src="{{ asset('assets/jquery-jvectormap.min.js') }}"></script>
+        <link rel="stylesheet" type="text/css" href="{{ asset('assets/jquery-jvectormap.css') }}"/>
+    @endif
+    <script type="text/javascript" src="{{ asset('assets/ckeditor/ckeditor.js') }}"></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-171437771-1"></script>
     <script>
       window.dataLayer = window.dataLayer || [];

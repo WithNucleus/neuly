@@ -51,11 +51,7 @@
                             <div class="form-group row">
                                 <div class="col-12 col-md-12 mb-3 mb-md-0">
                                     <label for="bio" class="font-weight-bold">Biography</label>
-                                    <textarea id="editor" class="form-control" name="bio" rows="10"></textarea>
-                                    <script>
-                                        ClassicEditor
-                                            .create( document.querySelector( '#editor' ) );
-                                    </script>
+                                    <textarea class="form-control" name="bio" rows="10"></textarea>
                                 </div>
                             </div>
                             <button type="submit" class="submit btn btn-primary">next</button>
