@@ -70,6 +70,9 @@
     <script type="text/javascript" src="{{ asset('assets/typeahead.js') }}"></script>
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/bootstrap-tagsinput.css') }}"/>
 
+    <script type="text/javascript" src="{{ asset('assets/nouislider.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/nouislider.css') }}"/>
+
     <script type="text/javascript" src="{{ asset('assets/chart.js') }}"></script>
     <script type="text/javascript" src="{{ asset('assets/chartisan.js') }}"></script>
 

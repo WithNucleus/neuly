@@ -36,14 +36,31 @@
 <div class="organizations-valuation mb-4">
     <label class="h4">Valuation</label>
     @if($valuation_min && $valuation_max)
-    <div class="min-max-slider" data-legendnum="2">
-        <label for="min">Minimum Valuation</label>
-        <input id="min" class="min" name="valuation_min" type="range" step="1" min="{{ $valuation_min }}" max="{{ $valuation_max }}" />
-        <label for="max">Maximum Valuation</label>
-        <input id="max" class="max" name="valuation_max" type="range" step="1" min="{{ $valuation_min }}" max="{{ $valuation_max }}" />
-    </div>
-    <button class="btn btn-sm btn-primary set-valuation-filter">Set valuation filter</button>
+    <div id="slider"></div>
+    <input type="hidden" name="valuation_min" />
+    <input type="hidden" name="valuation_max" />
+
     <script>
+        var slider = document.getElementById('slider');
+
+        noUiSlider.create(slider, {
+            start: [{{ $filters_valuation_min }}, {{ $filters_valuation_max }}],
+            connect: true,
+            tooltips: [true, true],
+            range: {
+                'min': {{ $valuation_min }},
+                'max': {{ $valuation_max }}
+            }
+        });
+    </script>
+    <!--<div class="min-max-slider" data-legendnum="2">
+        <label for="min">Minimum Valuation</label>
+        <input id="min" class="min" name="valuation_min" value="10188911" type="range" step="1" min="{{ $valuation_min }}" max="{{ $valuation_max }}" />
+        <label for="max">Maximum Valuation</label>
+        <input id="max" class="max" name="valuation_max" value="44999990.5" type="range" step="1" min="{{ $valuation_min }}" max="{{ $valuation_max }}" />
+    </div>-->
+    <button class="btn btn-sm btn-primary set-valuation-filter">Set valuation filter</button>
+    <!--<script>
         var thumbsize = 14;
 
         function draw(slider,splitvalue) {
@@ -185,7 +202,7 @@
             border-radius: 100%;
         }
         .min-max-slider > input::-webkit-slider-runnable-track {cursor: pointer;}
-    </style>
+    </style>-->
     @else
         <div>There was not enough data to provide this filter.</div>
     @endif

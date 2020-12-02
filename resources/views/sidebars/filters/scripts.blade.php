@@ -26,7 +26,7 @@
         });
 
         if(filterName === 'valuation_min' || filterName === 'valuation_max') {
-            filters.push($("#filterSidebar input[type='range'][name='" + filterName + "']").val());
+            filters.push($("#filterSidebar input[name='" + filterName + "']").val());
         }
 
         return filters.join("|");
@@ -197,8 +197,12 @@
             let min_input = $("input[name=valuation_min]");
             let max_input = $("input[name=valuation_max]");
 
-            min_input.val(min_input.data("value"));
-            max_input.val(max_input.data("value"));
+            let values = slider.noUiSlider.get();
+
+            console.log(values[0], values[1])
+
+            min_input.val(values[0]);
+            max_input.val(values[1]);
 
             get_filters_and_go();
         })

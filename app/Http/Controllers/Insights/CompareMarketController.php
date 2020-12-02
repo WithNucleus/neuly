@@ -31,6 +31,9 @@ class CompareMarketController extends Controller
         $filters_foundation_years = [];
         $filters_type = [];
 
+        $filters_valuation_min = $valuation_min;
+        $filters_valuation_max =  $valuation_max;
+
         if ($request->has('filter')) {
             $filter = $this->getFilterValues($request->input('filter'));
 
@@ -40,6 +43,11 @@ class CompareMarketController extends Controller
             $filters_focus = $this->getFilteredFOcus($filter);
             $filters_type = $this->getFilteredType($filter);
             $filters_foundation_years = $this->getFilteredFoundationYears($filter);
+
+            if(array_key_exists('valuation_min', $filter) && array_key_exists('valuation_max', $filter)) {
+                $filters_valuation_min = $filter['valuation_min'][0];
+                $filters_valuation_max =  $filter['valuation_max'][0];
+            }
         }
 
         $companies = $this->sortQuery($query, $sort)->get();
@@ -55,7 +63,10 @@ class CompareMarketController extends Controller
             'filters_foundation_years',
             'filters_type',
             'valuation_min',
-            'valuation_max'
+            'valuation_max',
+            'filters_valuation_min',
+            'filters_valuation_max'
+
         ));
     }
 
@@ -72,7 +83,7 @@ class CompareMarketController extends Controller
     private function filterQuery($query, $request)
     {
         if(array_key_exists('valuation_min', $request) && array_key_exists('valuation_max', $request)) {
-            $query = $this->filterByValuation($query, $request['valuation_min']. $request['valuation_max']);
+            $query = $this->filterByValuation($query, $request['valuation_min'][0], $request['valuation_max'][0]);
         }
         if(array_key_exists('locations', $request)) {
             $query = $this->filterByLocation($query, $request['locations']);
