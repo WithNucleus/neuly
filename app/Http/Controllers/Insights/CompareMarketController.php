@@ -122,6 +122,9 @@ class CompareMarketController extends Controller
     }
 
     private function filterByType($query, $values) {
+        foreach ($values as $type) {
+            $query->orWhere('ownership', $type);
+        }
         return $query;
     }
 
@@ -236,11 +239,11 @@ class CompareMarketController extends Controller
 
     private function getValuationMinValue()
     {
-        return Company::select('valuation')->orderBy('valuation', 'asc')->first()->valuation;
+        return Company::whereNotNull('valuation')->select('valuation')->orderBy('valuation', 'asc')->first()->valuation;
     }
 
     private function getValuationMaxValue()
     {
-        return Company::select('valuation')->orderBy('valuation', 'desc')->first()->valuation;
+        return Company::whereNotNull('valuation')->select('valuation')->orderBy('valuation', 'desc')->first()->valuation;
     }
 }

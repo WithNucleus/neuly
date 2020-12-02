@@ -18,10 +18,10 @@
             @forelse ($companies as $company)
                 <tr>
                     <td class="align-middle">
-                        <div class="d-flex align-items-center">
+                        <a href="{{ route('discover.organizations.show', $company->slug) }}" class="d-flex align-items-center">
                             <div class="logo-is-contained-square flex-shrink-0" style="background-image: url('{{ $company->entityImageUrl }}');"></div>
                             <strong class="ml-4 font-size-large">{{ $company->name}}</strong>
-                        </div>
+                        </a>
                     </td>
                     <td class="align-middle text-no-wrap">{{ $company->ownership }}</td>
                     <td class="align-middle text-no-wrap">

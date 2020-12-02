@@ -42,7 +42,7 @@
         <label for="max">Maximum Valuation</label>
         <input id="max" class="max" name="valuation_max" type="range" step="1" min="{{ $valuation_min }}" max="{{ $valuation_max }}" />
     </div>
-    <button class="btn set-valuation-filter">Set valuation filter</button>
+    <button class="btn btn-sm btn-primary set-valuation-filter">Set valuation filter</button>
     <script>
         var thumbsize = 14;
 
@@ -158,11 +158,11 @@
         });
     </script>
     <style>
-        .min-max-slider {position: relative; width: 200px; text-align: center; margin-bottom: 50px;}
+        .min-max-slider {position: relative; width: 200px; text-align: center;}
         .min-max-slider > label {display: none;}
         span.value {height: 1.7em; font-weight: bold; display: inline-block;}
-        span.value.lower::before {content: "€"; display: inline-block;}
-        span.value.upper::before {content: "- €"; display: inline-block; margin-left: 0.4em;}
+        span.value.lower::before {content: "$"; display: inline-block;}
+        span.value.upper::before {content: "- $"; display: inline-block; margin-left: 0.4em;}
         .min-max-slider > .legend {display: flex; justify-content: space-between;}
         .min-max-slider > .legend > * {font-size: small; opacity: 0.25;}
         .min-max-slider > input {cursor: pointer; position: absolute;}
