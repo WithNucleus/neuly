@@ -231,6 +231,18 @@ class LocationMapController extends Controller
             'Belgium' => [
                 'code' => 'BE',
                 'map_name' => 'be_merc'
+            ],
+            'China' => [
+                'code' => 'CN',
+                'map_name' => 'cn_merc'
+            ],
+            'Italy' => [
+                'code' => 'IT',
+                'map_name' => 'it_regions_merc'
+            ],
+            'Spain' => [
+                'code' => 'ES',
+                'map_name' => 'es_merc'
             ]
         ];
 
