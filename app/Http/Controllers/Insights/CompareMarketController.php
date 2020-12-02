@@ -160,6 +160,12 @@ class CompareMarketController extends Controller
         $sortType = str_replace('-', '', $sort);
 
         switch ($sortType) {
+            case 'valuation':
+                $orderField = 'valuation';
+                break;
+            case 'founded_date':
+                $orderField = 'founded_date';
+                break;
             case 'organizations':
             default:
                 $orderField = 'name';
@@ -250,11 +256,25 @@ class CompareMarketController extends Controller
 
     private function getValuationMinValue()
     {
-        return Company::whereNotNull('valuation')->select('valuation')->orderBy('valuation', 'asc')->first()->valuation;
+        $organization = Company::whereNotNull('valuation')->select('valuation')->orderBy('valuation', 'asc')->first();
+
+        if ($organization) {
+            $min_value = $organization->valuation;
+            return (int)$min_value = 10000 * floor($min_value/10000);
+        } else {
+            return 0;
+        }
     }
 
     private function getValuationMaxValue()
     {
-        return Company::whereNotNull('valuation')->select('valuation')->orderBy('valuation', 'desc')->first()->valuation;
+        $organization = Company::whereNotNull('valuation')->select('valuation')->orderBy('valuation', 'desc')->first();
+
+        if ($organization) {
+            $max_value = $organization->valuation;
+            return (int)$max_value = 10000 * ceil($max_value / 10000);
+        } else {
+            return 0;
+        }
     }
 }

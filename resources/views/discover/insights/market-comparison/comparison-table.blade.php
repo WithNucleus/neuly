@@ -26,9 +26,7 @@
                     <td class="align-middle text-no-wrap">{{ $company->ownership }}</td>
                     <td class="align-middle text-no-wrap">
                         @if(!is_null($company->valuation))
-                            {{ $company->valuation }}
-                        @else
-
+                            ${{ number_format($company->valuation) }}
                         @endif
                     </td>
                     <td class="align-middle">
@@ -53,9 +51,7 @@
                     </td>
                     <td class="align-middle text-no-wrap">
                         @if(!is_null($company->founded_date))
-                            {{ $company->founded_date }}
-                        @else
-
+                            {{ Carbon\Carbon::parse($company->founded_date)->format('F Y') }}
                         @endif
                     </td>
                 </tr>

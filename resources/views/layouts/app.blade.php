@@ -70,45 +70,48 @@
     <script type="text/javascript" src="{{ asset('assets/typeahead.js') }}"></script>
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/bootstrap-tagsinput.css') }}"/>
 
-    <script type="text/javascript" src="{{ asset('assets/nouislider.js') }}"></script>
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/nouislider.css') }}"/>
-
-    <script type="text/javascript" src="{{ asset('assets/chart.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('assets/chartisan.js') }}"></script>
-
-    @if (Route::is('insights.distribution.countries.show') OR
-         Route::is('insights.distribution.countries.focus.show') OR
-         Route::is('discover.locations.maps.global') OR
-         Route::is('discover.locations.maps.country')
-    )
-        <script type="text/javascript" src="{{ asset('assets/jquery-jvectormap.min.js') }}"></script>
-        <link rel="stylesheet" type="text/css" href="{{ asset('assets/jquery-jvectormap.css') }}"/>
+    @if (Route::is('insights.compare-market'))
+        <script type="text/javascript" src="{{ asset('assets/nouislider.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('assets/wNumb.js') }}"></script>
+        <link rel="stylesheet" type="text/css" href="{{ asset('assets/nouislider.css') }}"/>
     @endif
 
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-171437771-1"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+<script type="text/javascript" src="{{ asset('assets/chart.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/chartisan.js') }}"></script>
 
-      gtag('config', 'UA-171437771-1');
-    </script>
+@if (Route::is('insights.distribution.countries.show') OR
+     Route::is('insights.distribution.countries.focus.show') OR
+     Route::is('discover.locations.maps.global') OR
+     Route::is('discover.locations.maps.country')
+)
+    <script type="text/javascript" src="{{ asset('assets/jquery-jvectormap.min.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/jquery-jvectormap.css') }}"/>
+@endif
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-171437771-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-171437771-1');
+</script>
 
 </head>
 <body class="@yield('body-class', '')">
-    <div id="app">
-        @yield('content')
-    </div>
+<div id="app">
+    @yield('content')
+</div>
 
-    <script type="text/javascript" src="{{ mix('js/app.js') }}"></script>
+<script type="text/javascript" src="{{ mix('js/app.js') }}"></script>
 
-    @if(Route::is('index') OR Route::is('home'))
-        <script type="text/javascript" src="{{ mix('js/home-hero.js') }}"></script>
-    @endif
+@if(Route::is('index') OR Route::is('home'))
+    <script type="text/javascript" src="{{ mix('js/home-hero.js') }}"></script>
+@endif
 
-    @include('navbars.discover-menu')
-    @include('navbars.admin-menu')
+@include('navbars.discover-menu')
+@include('navbars.admin-menu')
 
-    @yield('after_scripts')
+@yield('after_scripts')
 </body>
 </html>

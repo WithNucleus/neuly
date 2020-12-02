@@ -36,27 +36,51 @@
 <div class="organizations-valuation mb-4">
     <label class="h4">Valuation</label>
     @if($valuation_min && $valuation_max)
-    <div id="slider"></div>
-    <input type="hidden" name="valuation_min" />
-    <input type="hidden" name="valuation_max" />
+        <div class="form-group pt-5 px-5 pb-5">
+            <div id="valuation_slider"></div>
+            <input type="hidden" name="valuation_min" />
+            <input type="hidden" name="valuation_max" />
+        </div>
 
-    <script>
-        var slider = document.getElementById('slider');
+        <script>
+            var slider = document.getElementById('valuation_slider');
 
-        noUiSlider.create(slider, {
-            start: [{{ $filters_valuation_min }}, {{ $filters_valuation_max }}],
-            connect: true,
-            tooltips: [true, true],
-            range: {
-                'min': {{ $valuation_min }},
-                'max': {{ $valuation_max }}
-            }
-        });
-    </script>
+            noUiSlider.create(slider, {
+                start: ['{{ $filters_valuation_min }}', '{{ $filters_valuation_max }}'],
+                step: 10000,
+                connect: true,
+                tooltips: [wNumb({
+                    decimals: 0,
+                    thousand: ',',
+                    prefix: '$ ',
+                }), wNumb({
+                    decimals: 0,
+                    thousand: ',',
+                    prefix: '$ ',
+                })],
+                range: {
+                    'min': {{ $valuation_min }},
+                    'max': {{ $valuation_max }}
+                },
+                pips: {
+                    mode: 'count',
+                    values: 3,
+                    density: 4,
+                    stepped: true,
+                    format: wNumb({
+                        decimals: 0,
+                        thousand: ',',
+                        prefix: '$'
+                    })
+                }
+            });
+        </script>
 
-    <button class="btn btn-sm btn-primary set-valuation-filter">Set valuation filter</button>
+        <div class="form-group">
+            <button class="btn btn-sm btn-primary set-valuation-filter">Set valuation filter</button>
+        </div>
     @else
-        <div>There was not enough data to provide this filter.</div>
+        <div class="form-group">There was not enough data to provide this filter.</div>
     @endif
 </div>
 
