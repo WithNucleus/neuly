@@ -15,10 +15,7 @@
     }
 
     function getFilterValuesByName(filterName) {
-
         var filters = [];
-
-        console.log(filterName);
 
         $("#filterSidebar input[name='" + filterName + "']:checked").each(function(){
             filters.push($(this).val());
@@ -28,7 +25,9 @@
             filters.push($(this).val());
         });
 
-        filters.push($("#filterSidebar input[type='range'][name='" + filterName + "']").val());
+        if(filterName === 'valuation_min' || filterName === 'valuation_max') {
+            filters.push($("#filterSidebar input[type='range'][name='" + filterName + "']").val());
+        }
 
         return filters.join("|");
     }
