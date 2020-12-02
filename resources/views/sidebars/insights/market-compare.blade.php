@@ -26,6 +26,13 @@
     'item_filters' => $filters_focus
 ])
 
+@include('sidebars.filters.checkboxes-new', [
+    'label'     => 'Type',
+    'name'      => 'type',
+    'items'     => ['Privately Held', 'Public Company', 'Non-Profit', 'Educational Institution', 'Government Agency'],
+    'item_filters' => $filters_type
+])
+
 <div class="organizations-valuation mb-4">
     <label class="h4">Valuation</label>
     @if($valuation_min && $valuation_max)

@@ -12,17 +12,17 @@
 <div id="resizable-fullscreen-table-container">
     <button id="close-full-screen-table" class="btn d-none mb-3 btn-dark text-uppercase"><i class="fas fa-times"></i> Close</button>
     <div class="position-relative">
-        <table class="table bg-white mb-0" id="clinical-trial-tracker">
+        <table class="table bg-white mb-0" id="resizable-table-with-all-borders">
             <thead class="thead-dark">
             <tr>
                 <th class="text-no-wrap sticky-top">Focus / Condition</th>
                 <th class="text-no-wrap sticky-top">Status</th>
-                <th class="size-phase text-no-wrap sticky-top">Early Phase 1</th>
-                <th class="size-phase text-no-wrap sticky-top">Phase 1</th>
-                <th class="size-phase text-no-wrap sticky-top">Phase 2</th>
-                <th class="size-phase text-no-wrap sticky-top">Phase 3</th>
-                <th class="size-phase text-no-wrap sticky-top">Phase 4</th>
-                <th class="size-phase text-no-wrap sticky-top">Approval</th>
+                <th class="size-130 text-no-wrap sticky-top">Early Phase 1</th>
+                <th class="size-130 text-no-wrap sticky-top">Phase 1</th>
+                <th class="size-130 text-no-wrap sticky-top">Phase 2</th>
+                <th class="size-130 text-no-wrap sticky-top">Phase 3</th>
+                <th class="size-130 text-no-wrap sticky-top">Phase 4</th>
+                <th class="size-130 text-no-wrap sticky-top">Approval</th>
             </tr>
             </thead>
             <tbody>

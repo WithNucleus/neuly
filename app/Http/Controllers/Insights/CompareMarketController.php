@@ -29,6 +29,7 @@ class CompareMarketController extends Controller
         $filters_location = [];
         $filters_focus = [];
         $filters_foundation_years = [];
+        $filters_type = [];
 
         if ($request->has('filter')) {
             $filter = $this->getFilterValues($request->input('filter'));
@@ -37,6 +38,7 @@ class CompareMarketController extends Controller
 
             $filters_location = $this->getFilteredLocations($filter);
             $filters_focus = $this->getFilteredFOcus($filter);
+            $filters_type = $this->getFilteredType($filter);
             $filters_foundation_years = $this->getFilteredFoundationYears($filter);
         }
 
@@ -51,6 +53,7 @@ class CompareMarketController extends Controller
             'filters_location',
             'filters_focus',
             'filters_foundation_years',
+            'filters_type',
             'valuation_min',
             'valuation_max'
         ));
@@ -79,6 +82,9 @@ class CompareMarketController extends Controller
         }
         if(array_key_exists('foundation_year', $request)) {
             $query = $this->filterByFoundationYear($query, $request['foundation_year']);
+        }
+        if(array_key_exists('type', $request)) {
+            $query = $this->filterByType($query, $request['type']);
         }
 
         return $query;
@@ -112,6 +118,10 @@ class CompareMarketController extends Controller
         $query = $query->whereHas('focus', function($q) use ($values) {
             $q->whereIn('name', $values);
         });
+        return $query;
+    }
+
+    private function filterByType($query, $values) {
         return $query;
     }
 
@@ -188,8 +198,7 @@ class CompareMarketController extends Controller
 
     private function getRelatedFocuses()
     {
-        return Focus::where('type', '=', Focus::TYPE_DRUG)
-            ->whereHas('companies')
+        return Focus::whereHas('companies')
             ->orderBy('name')
             ->pluck('name')
             ->unique();
@@ -203,6 +212,11 @@ class CompareMarketController extends Controller
     private function getFilteredFocus($filter)
     {
         return isset($filter['focus']) ? $filter['focus'] : [];
+    }
+
+    private function getFilteredType($filter)
+    {
+        return isset($filter['type']) ? $filter['type'] : [];
     }
 
     private function getFilteredFoundationYears($filter)

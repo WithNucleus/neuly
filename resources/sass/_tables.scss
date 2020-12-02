@@ -182,49 +182,63 @@ table.dataTable thead .sorting_desc_disabled::after {
     right:  1rem;
 }
 
-/* Clinical Trial Tracker */
-#clinical-trial-tracker {
+/* Table with All Borders */
+#resizable-table-with-all-borders {
     border: 0;
-}
 
-#clinical-trial-tracker .size-phase {
-    min-width: 130px;
-}
+    .sticky-top {
+        top: -2px;
+        z-index: 2;
+        outline: 2px solid #454d55;
+        outline-offset: -1px;
+    }
 
-#clinical-trial-tracker .sticky-top{
-    top: -2px;
-    z-index: 2;
-    outline: 2px solid #454d55;
-    outline-offset: -1px;
-}
+    td,
+    th {
+        border-top: 0 !important;
+        border-bottom: 1px solid #dee2e6;
+        border-left: 0 !important;
+        border-right: 1px solid #dee2e6;
+    }
 
-#clinical-trial-tracker tr td,
-#clinical-trial-tracker tr th {
-    border-top: 0 !important;
-    border-bottom: 1px solid #dee2e6;
-    border-left: 0 !important;
-    border-right: 1px solid #dee2e6;
-}
+    tr td:first-of-type,
+    tr th:first-of-type {
+        border-left: 0 !important;
+    }
 
-#clinical-trial-tracker tr td:first-of-type,
-#clinical-trial-tracker tr th:first-of-type {
-    border-left: 0 !important;
-}
+    tr td:last-of-type,
+    tr th:last-of-type {
+        border-right: 0 !important;
+    }
 
-#clinical-trial-tracker tr td:last-of-type,
-#clinical-trial-tracker tr th:last-of-type {
-    border-right: 0 !important;
-}
-
-#clinical-trial-tracker.fixed .position-relative {
-    height: 100%;
+    .fixed .position-relative {
+        height: 100%;
+    }
 }
 
 /* Location Maps */
-#global-locations-map-table .sticky-top {
+#resizable-table-with-x-borders .sticky-top {
     top: -2px;
     z-index: 2;
     outline-top: 2px solid #454d55;
     outline-bottom: 2px solid #454d55;
     outline-offset: -1px;
+}
+
+table {
+    .size-130 {
+        min-width: 130px;
+    }
+
+    .size-150 {
+        min-width: 150px;
+    }
+
+    .size-200 {
+        min-width: 200px;
+    }
+
+    .size-400 {
+        min-width: 400px;
+    }
 }
