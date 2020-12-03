@@ -88,7 +88,7 @@
                              @foreach($countriesByCode as $alpha2code => $item)
                                 <tr>
                                     <td>
-                                        <a href="{{ route('discover.locations') }}?filter[locations]={{ $item['country'] }}">{{ $item['country'] }}</a>
+                                        <a href="{{ route('discover.locations') }}?filter[regions]={{ $item['country'] }}">{{ $item['country'] }}</a>
                                     </td>
                                     <?php if (isset($filters_type) && $filters_type) : ?>
                                     @foreach ($filters_type as $type)
@@ -153,7 +153,7 @@
                 onRegionClick: function(event, code){
                     var country = countries[code].country;
                     if(countries[code] !== undefined) {
-                        window.location.href = "{{ route('discover.locations') }}?filter[locations]=" + country;
+                        window.location.href = "{{ route('discover.locations') }}?filter[regions]=" + country;
 
                     }
                 }
