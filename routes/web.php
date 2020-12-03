@@ -51,7 +51,7 @@ Route::group([
     Route::get('/top-ten-locations', 'TopTenLocationsController@index')->name('top-ten-locations');
     Route::get('/companies-by-focus-drug', 'CompaniesByFocusDrug@index')->name('companies-by-focus-drug');
     Route::get('/clinical-trial-tracker', 'ClinicalTrialPipelineController@show')->name('clinicaltrials.pipeline');
-
+    Route::get('/market-comparison', 'CompareMarketController@show')->name('compare-market');
     //insights only for registered users
     Route::group([
         'middleware' => ['auth', 'verified'],

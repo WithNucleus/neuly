@@ -12,7 +12,7 @@
     @isset($items)
         <div id="{{ $name }}-filter">
             @foreach ($items as $item)
-                @if($loop->index == 4)
+                @if($loop->index == 10)
                     <button class="toggle-more btn btn-sm font-weight-bold text-uppercase btn-link text-info p-0 text-decoration-none" type="button" data-toggle="collapse" data-target="#filters-more-{{ $name }}" aria-expanded="false" aria-controls="filters-more-{{ $name }}">
                         <span>Show More</span><i class="fad fa-arrow-square-down text-info ml-2"></i>
                     </button>
@@ -24,7 +24,7 @@
                         <label class="custom-control-label" for="{{ $name }}{{ $item }}">{{ $item }}</label>
                     </div>
 
-                @if($loop->last AND $loop->index >= 4)
+                @if($loop->last AND $loop->index >= 10)
                     </div>
                 @endif
             @endforeach

@@ -70,7 +70,7 @@
                 <div id="resizable-fullscreen-table-container">
                     <button id="close-full-screen-table" class="btn d-none mb-3 btn-dark text-uppercase"><i class="fas fa-times"></i> Close</button>
                     <div class="position-relative">
-                        <table id="global-locations-map-table" class="table table-striped bg-white border-0">
+                        <table id="resizable-table-with-x-borders" class="table table-striped bg-white border-0">
                             <thead class="font-size-large">
                             <th scope="col" class="sticky-top text-no-wrap bg-dark text-light">Location</th>
                             <?php if (isset($filters_type) && $filters_type) : ?>
