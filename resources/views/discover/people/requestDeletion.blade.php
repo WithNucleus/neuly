@@ -25,7 +25,7 @@
                                             @auth
                                                 <input type="hidden" name="name" value="{{ Auth::user()->name . ' ' . Auth::user()->last_name }}">
                                                 <input type="hidden" name="email" value="{{ Auth::user()->email }}">
-                                            @elseauth
+                                            @else
                                                 <div class="form-group">
                                                     <label class="font-weight-bold">Name <span class="text-danger">*</span></label>
                                                     <input class="form-control" type="text" name="name" value="" required>
@@ -38,8 +38,8 @@
                                             @endauth
 
                                             <div class="form-group">
-                                                <label class="font-weight-bold">Why do you want to delete this record?</label>
-                                                <textarea class="form-control" name="cause"></textarea>
+                                                <label class="font-weight-bold">Why do you want to delete this record? <span class="text-danger">*</span></label>
+                                                <textarea class="form-control" name="cause" required></textarea>
                                             </div>
 
                                             <button type="submit" class="btn btn-primary">Send</button>
