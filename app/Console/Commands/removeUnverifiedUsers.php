@@ -20,7 +20,7 @@ class removeUnverifiedUsers extends Command
      *
      * @var string
      */
-    protected $description = 'Cleans unverified users older than 42 hours';
+    protected $description = 'Cleans unverified users older than 48 hours';
 
     /**
      * Create a new command instance.
