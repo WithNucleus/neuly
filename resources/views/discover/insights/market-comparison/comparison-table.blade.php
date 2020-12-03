@@ -7,10 +7,10 @@
                 <th class="size-400 text-no-wrap sticky-top">Organization</th>
                 <th class="size-150 text-no-wrap sticky-top">Type</th>
                 <th class="size-150 text-no-wrap sticky-top">Valuation</th>
-                <th class="size-200 text-no-wrap sticky-top">Location</th>
-                <th class="size-200 text-no-wrap sticky-top">Focus</th>
-                <th class="size-200 text-no-wrap sticky-top">People</th>
-                <th class="size-200 text-no-wrap sticky-top">Investors</th>
+                <th class="size-250 text-no-wrap sticky-top">Location</th>
+                <th class="size-250 text-no-wrap sticky-top">Focus</th>
+                <th class="size-400 text-no-wrap sticky-top">People</th>
+                <th class="size-250 text-no-wrap sticky-top">Investors</th>
                 <th class="size-150 text-no-wrap sticky-top">Founded in</th>
             </tr>
             </thead>
@@ -19,7 +19,11 @@
                 <tr>
                     <td class="align-middle">
                         <a href="{{ route('discover.organizations.show', $company->slug) }}" class="d-flex align-items-center">
-                            <div class="logo-is-contained-square flex-shrink-0" style="background-image: url('{{ $company->entityImageUrl }}');"></div>
+                            <div class="logo-is-contained-square flex-shrink-0">
+                                @if ($company->entityImageUrl  != '')
+                                    <img src="{{ $company->entityImageUrl }}" alt="{{ $company->name}}" loading="lazy">
+                                @endif
+                            </div>
                             <strong class="ml-4 font-size-large">{{ $company->name}}</strong>
                         </a>
                     </td>
@@ -31,7 +35,7 @@
                     </td>
                     <td class="align-middle">
                         @foreach ($company->locations as $location)
-                            <a href="{{ route('discover.locations.show', $location->slug) }}">{{ $location->name }}</a> @if (!$loop->last)<br>@endif
+                            <a href="{{ route('discover.locations.show', $location->slug) }}" class="@if (!$loop->last) mb-1 @endif d-block">{{ $location->name }}</a>
                         @endforeach
                     </td>
                     <td class="align-middle">
@@ -41,12 +45,14 @@
                     </td>
                     <td class="align-middle">
                         @foreach ($company->people as $person)
-                            <a href="{{ route('discover.people.show', $person->slug) }}">{{ $person->name }} ({{ $person->pivot->position }})</a> @if (!$loop->last)<br>@endif
+                            <a href="{{ route('discover.people.show', $person->slug) }}" class="@if (!$loop->last) mb-1 @endif d-block">
+                                {{ $person->name }} <span class="text-dark">({{ $person->pivot->position }})</span>
+                            </a>
                         @endforeach
                     </td>
                     <td class="align-middle">
                         @foreach ($company->investors as $investor)
-                            <a href="{{ route('discover.investors.show', $investor->slug) }}">{{ $investor->name }}</a> @if (!$loop->last)<br>@endif
+                            <a href="{{ route('discover.investors.show', $investor->slug) }}" class="@if (!$loop->last) mb-1 @endif d-block">{{ $investor->name }}</a>
                         @endforeach
                     </td>
                     <td class="align-middle text-no-wrap">
