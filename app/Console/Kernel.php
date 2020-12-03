@@ -58,7 +58,7 @@ class Kernel extends ConsoleKernel
 
         // remove unverified users
         $schedule
-            ->command('clean:unverivied')
+            ->command('clean:unverified')
             ->dailyAt(1)
             ->onFailure(function() {
                 Log::critical('Cleaning unverified users Failed!');
