@@ -35,6 +35,7 @@ class LocationController extends Controller
                 'region',
                 AllowedFilter::partial('locations', 'name'),
                 AllowedFilter::partial('countries', 'country'),
+                AllowedFilter::exact('regions', 'region'),
                 AllowedFilter::partial('city', 'name'),
                 AllowedFilter::partial('people', 'people.name'),
                 AllowedFilter::partial('investors', 'investors.name'),

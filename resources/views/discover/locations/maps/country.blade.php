@@ -59,7 +59,7 @@
                     </div>
                 </div>
 
-                @if ($country == 'USA')
+                @if ($map['show'] == true)
                 <div style="margin-right: 2rem;">
                     <div class="resizable overflow-hidden" style="height: 600px;">
                         <div id="world-distribution-map" style="width: 100%; height: 100%;"></div>
@@ -88,7 +88,7 @@
                              @foreach($countriesByCode as $alpha2code => $item)
                                 <tr>
                                     <td>
-                                        <a href="{{ route('discover.locations') }}?filter[locations]={{ $item['country'] }}">{{ $item['country'] }}</a>
+                                        <a href="{{ route('discover.locations') }}?filter[regions]={{ $item['country'] }}">{{ $item['country'] }}</a>
                                     </td>
                                     <?php if (isset($filters_type) && $filters_type) : ?>
                                     @foreach ($filters_type as $type)
@@ -109,8 +109,8 @@
             </main>
         </div>
     </div>
-    @if ($country == 'USA')
-        <script type="text/javascript" src="{{ asset('assets/maps/country-US.js') }}"></script>
+    @if ($map['show'] == true)
+        <script type="text/javascript" src="{{ asset('assets/maps/country-' . $map['code'] . '.js') }}"></script>
     @endif
     <script>
         // Map
@@ -123,8 +123,8 @@
             }
 
             $('#world-distribution-map').vectorMap({
-                <?php if ($country == 'USA') : ?>
-                map: 'us_merc',
+                <?php if ($map['show'] == true) : ?>
+                map: '{{ $map['map_name'] }}',
                 <?php endif; ?>
                 series: {
                     regions: [{
@@ -153,7 +153,7 @@
                 onRegionClick: function(event, code){
                     var country = countries[code].country;
                     if(countries[code] !== undefined) {
-                        window.location.href = "{{ route('discover.locations') }}?filter[locations]=" + country;
+                        window.location.href = "{{ route('discover.locations') }}?filter[regions]=" + country;
 
                     }
                 }
