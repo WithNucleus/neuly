@@ -3,33 +3,26 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\MemberNote;
-use Auth;
-use Validator;
-use DB;
 use App\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class NoteController extends Controller
 {
 
-	// Index
 	public function index() {
-
 		$notes = MemberNote::where('user_id', Auth::id())
             ->orderBy('updated_at', 'desc')
             ->get();
 
 		return view('members.notes.index', compact('notes'));
-
 	}
 
-	// Note Editor
     public function create() {
-
-    	// Return View
     	return view('members.notes.create');
-
     }
 
     // Check Slug via ajax
@@ -71,162 +64,77 @@ class NoteController extends Controller
 
     // Store Note
     public function store(Request $request) {
-
-    	$validator = $request->validate([
+    	$request->validate([
     		'title' => 'nullable|max:255',
     		'slug' => 'required|max:255|unique:member_notes,slug,NULL,id,user_id,' . Auth::user()->id,
 	        'description' => 'nullable|max:255',
 	        'visibility' => 'required'
 	    ]);
 
-	    // If Title is Blank
-	    if ($request->input('title') == '') {
-	    	$title = 'Untitled';
-	    } else {
-	    	$title = $request->input('title');
-	    }
-
-	    // Create Note
     	$note = MemberNote::create([
-		    'membernote-trixFields' => $request->input('membernote-trixFields'),
-		    'title' => $title,
+		    'title' => $request->input('title', 'Untitled'),
 		    'slug' => $request->input('slug'),
 		    'user_id' => Auth::id(),
-		    'visibility' => $request->input('visibility')
+		    'visibility' => $request->input('visibility'),
 		]);
 
-		// Redirect to Notes with Message
+    	$note->saveTrixRichText($request->input('membernote-trixFields'));
+
 	    session()->flash('success', $note->title . ' saved!');
 	    return redirect(route('member.notes.index'));
-
     }
 
-    // Show Note -- User View
     public function show($slug) {
-
         $note = MemberNote::where('user_id', Auth::id())
             ->where('slug', $slug)
-            ->first();
+            ->firstOrFail();
 
-        $member = User::findOrFail(Auth::id());
+        $member = Auth::user();
+        $entity = 'member-notes';
 
-        if ($note) {
-
-            $entity = 'member-notes';
-
-            return view('members.notes.show', compact('note', 'entity', 'member'));
-        } else {
-            abort('404');
-        }
-
+        return view('members.notes.show', compact('note', 'entity', 'member'));
     }
 
-    // Show Note -- Public
     public function showPublic($member_url, $slug) {
 
-        $member = User::where('member_url', $member_url)->first();
-
-        if (!$member) {
-            abort(404);
-        }
+        $member = User::where('member_url', $member_url)->firstOrFail();
 
         $note = MemberNote::where('user_id', $member->id)
                 ->where('slug', $slug)
                 ->where('visibility', 'public')
-                ->first();
-
-        if (!$note) {
-            abort(404);
-        }
+                ->firstOrFail();
 
         return view('members.notes.public', compact('note', 'member'));
-
     }
 
-    // Edit Note
     public function edit($slug) {
-
         $note = MemberNote::where('user_id', Auth::id())
             ->where('slug', $slug)
-            ->first();
-
-        if (!$note) {
-            abort('404');
-        }
+            ->firstOrFail();
 
     	return view('members.notes.edit', compact('note'));
-
     }
 
-    // Update Note
     public function update($id, Request $request) {
 
-        // Find Note
-        $note = MemberNote::findOrFail($id);
+        $note = MemberNote::where('user_id', Auth::id())->findOrFail($id);
 
-        // Abort if Can't Find Note
-        if (!$note) {
-            abort('404');
-        }
-
-        // Abort if Note Doesn't Belong to User
-        if ($note->user_id !== Auth::id()) {
-            abort('404');
-        }
-
-        // If Title is Blank
-        if ($request->input('title') == '') {
-            $title = 'Untitled';
-        } else {
-            $title = $request->input('title');
-        }
-
-        // Update Title
-        $note->title = $title;
-
-        // Update Visibility
+        $note->title = $request->input('title', 'Untitled');
         $note->visibility = $request->input('visibility');
-
-        // Update Slug
         $note->slug = $request->input('slug');
-
-        // Save Note
         $note->save();
+        
+        $note->saveTrixRichText($request->input('membernote-trixFields'));
 
-        // Find and Update Trix Record
-        $trix_content = DB::table('trix_rich_texts')
-            ->where('model_type', 'App\Models\MemberNote')
-            ->where('model_id', $note->id)
-            ->update([
-                'content' => $request->input('membernote-trixFields.content')
-            ]);
-
-        // Return to Note
         return redirect(route('member.notes.show', $note->slug));
-
     }
 
     public function destroy($id) {
-
-        // Find Note
-        $note = MemberNote::findOrFail($id);
-
-        // Abort if Can't Find Note
-        if (!$note) {
-            abort('404');
-        }
-
-        // Abort if Note Doesn't Belong to User
-        if ($note->user_id !== Auth::id()) {
-            abort('404');
-        }
-
+        $note = MemberNote::where('user_id', Auth::id())->findOrFail($id);
         $note_title = $note->title;
-
         $note->delete();
 
         return redirect(route('member.notes.index'))->with('success', $note_title . ' was deleted.');
-
     }
 
 }
