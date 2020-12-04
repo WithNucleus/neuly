@@ -24,9 +24,27 @@ class MemberNote extends Model
     |--------------------------------------------------------------------------
     */
 
+    /**
+     * Auto-save in trait HasTrixRichText not work, that's why added this custom method
+     *
+     * @param array $fieldsData
+     */
+    public function saveTrixRichText($fieldsData) {
+        foreach ($fieldsData as $field => $content) {
+            $this->trixRichText()->updateOrCreate([
+                'field' => $field,
+            ], [
+                'field'   => $field,
+                'content' => $content,
+            ]);
+        }
+    }
+
     public function trixRender($field)
     {
-        return $this->trixRichText->where('field', $field)->first()->content;
+        $trixRender = $this->trixRichText->where('field', $field)->first();
+
+        return $trixRender ? $trixRender->content : null;
     }
 
     /*

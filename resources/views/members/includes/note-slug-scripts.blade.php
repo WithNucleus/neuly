@@ -8,7 +8,7 @@
             var _token = $("input[name='_token']").val();
             var title = $("input[name='title']").val();
             var slug = $("input[name='slug']").val();
-            
+
             @isset($note)
                 var note_id = {{ $note->id }};
             @else
@@ -28,7 +28,7 @@
                 }
             });
 
-        }); 
+        });
 
         function printSuccessMessage (message) {
             $(".success").find("p").html(message);
@@ -36,6 +36,7 @@
 
             // show validation on form
             $("input[name='slug']").addClass('is-valid');
+            $("input[name='title']").addClass('is-valid');
             $('.valid-feedback').show();
 
             // clear any errors
@@ -56,6 +57,7 @@
 
             // add invalid tag to slug field
             $("input[name='slug']").addClass('is-invalid');
+            $("input[name='title']").addClass('is-invalid');
 
             // scroll to top
             $([document.documentElement, document.body]).animate({

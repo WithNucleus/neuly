@@ -4,7 +4,7 @@
 
 @section('content')
 
-    @include('members.includes.dashboard-begin')    
+    @include('members.includes.dashboard-begin')
 
     <div class="container">
         <div class="row">
@@ -41,7 +41,7 @@
                         <div class="form-group row">
                             <div class="col-12 col-md-6">
                                 <label for="title" class="font-weight-bold">Title</label>
-                                <input type="text" class="form-control" placeholder="Untitled" name="title" value="{{ old('title') }}">
+                                <input type="text" class="form-control" name="title" value="{{ old('title') }}" required>
                             </div>
                             <div class="col-12 col-md-6">
                                 <label for="slug" class="font-weight-bold">Note URL <small>(Must be unique)</small></label>
@@ -76,7 +76,7 @@
                         <div class="form-group">
                             <button type="submit" class="submit btn btn-primary">Save</button>
                         </div>
-                    </form> 
+                    </form>
                 </div>
             </div>
         </div>
