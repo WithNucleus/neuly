@@ -24,6 +24,17 @@ class CompanyValuation extends Model
     |--------------------------------------------------------------------------
     */
 
+    protected static function booted()
+    {
+        static::created(function ($model) {
+            if ($model->amount > 0) {
+                $company = $model->company;
+                $company->valuation = $model->amount;
+                $company->save();
+            }
+        });
+    }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
