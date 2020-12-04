@@ -32,6 +32,7 @@ class NoteController extends Controller
         if ($request->input('note_id') == 'new') {
 
             $validator = Validator::make($request->all(), [
+                'title' => 'required|max:255',
                 'slug' => 'required|max:80|unique:member_notes,slug,NULL,id,user_id,' . Auth::user()->id,
             ]);
 
@@ -65,14 +66,14 @@ class NoteController extends Controller
     // Store Note
     public function store(Request $request) {
     	$request->validate([
-    		'title' => 'nullable|max:255',
-    		'slug' => 'required|max:255|unique:member_notes,slug,NULL,id,user_id,' . Auth::user()->id,
+    		'title' => 'required|max:255',
+    		'slug' => 'required|max:80|unique:member_notes,slug,NULL,id,user_id,' . Auth::user()->id,
 	        'description' => 'nullable|max:255',
 	        'visibility' => 'required'
 	    ]);
 
     	$note = MemberNote::create([
-		    'title' => $request->input('title', 'Untitled'),
+		    'title' => $request->input('title'),
 		    'slug' => $request->input('slug'),
 		    'user_id' => Auth::id(),
 		    'visibility' => $request->input('visibility'),
@@ -123,7 +124,7 @@ class NoteController extends Controller
         $note->visibility = $request->input('visibility');
         $note->slug = $request->input('slug');
         $note->save();
-        
+
         $note->saveTrixRichText($request->input('membernote-trixFields'));
 
         return redirect(route('member.notes.show', $note->slug));
