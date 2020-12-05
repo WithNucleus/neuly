@@ -13,6 +13,11 @@ class RaisedClaim extends Model
     protected $table = 'raised_claims';
     protected $guarded = ['id'];
 
+    public static function generateToken()
+    {
+        return sha1(time());
+    }
+
     public function user() {
         return $this->belongsTo(User::class);
     }

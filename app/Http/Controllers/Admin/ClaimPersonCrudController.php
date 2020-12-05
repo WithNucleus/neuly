@@ -48,12 +48,14 @@ class ClaimPersonCrudController extends CrudController
         CRUD::addColumn(['name' => 'user_id', 'label' => 'User Firstname', 'type' => 'model_function', 'function_name' => 'getUserName']);
         CRUD::addColumn(['name' => 'verification_token', 'label' => 'Verification Token', 'type' => 'string']);
         CRUD::addColumn(['name' => 'created_at', 'label' => 'Request created', 'type' => 'date']);
+    }
 
-        /**
-         * Columns can be defined using the fluent syntax or array syntax:
-         * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
-         */
+    protected function setupShowOperation()
+    {
+        CRUD::addColumn(['name' => 'person_id', 'label' => 'Person', 'type' => 'select', 'entity' => 'person', 'attribute' => 'name']);
+        CRUD::addColumn(['name' => 'user_id', 'label' => 'User Firstname', 'type' => 'model_function', 'function_name' => 'getUserName']);
+        CRUD::addColumn(['name' => 'verification_token', 'label' => 'Verification Token', 'type' => 'string']);
+        CRUD::addColumn(['name' => 'created_at', 'label' => 'Request created', 'type' => 'date']);
     }
 
     /**
@@ -98,14 +100,8 @@ class ClaimPersonCrudController extends CrudController
         $this->crud->addField([
             'name' => 'verification_token',
             'type' => 'hidden',
-            'value' =>
+            'value' => RaisedClaim::generateToken()
         ]);
-
-        /**
-         * Fields can be defined using the fluent syntax or array syntax:
-         * - CRUD::field('price')->type('number');
-         * - CRUD::addField(['name' => 'price', 'type' => 'number']));
-         */
     }
 
 
