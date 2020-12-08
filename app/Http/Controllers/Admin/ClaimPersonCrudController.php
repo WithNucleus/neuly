@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\ClaimPersonHelper;
 use App\Http\Requests\PersonClaimRequest;
+use App\Models\Person;
 use App\Models\RaisedClaim;
 use App\User;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
@@ -48,6 +50,8 @@ class ClaimPersonCrudController extends CrudController
         CRUD::addColumn(['name' => 'user_id', 'label' => 'User Firstname', 'type' => 'model_function', 'function_name' => 'getUserName']);
         CRUD::addColumn(['name' => 'verification_token', 'label' => 'Verification Token', 'type' => 'string']);
         CRUD::addColumn(['name' => 'created_at', 'label' => 'Request created', 'type' => 'date']);
+        CRUD::addButtonFromModelFunction('line', 'approve_claim', 'getApproveButton', 'beginning');
+
     }
 
     protected function setupShowOperation()
@@ -114,5 +118,14 @@ class ClaimPersonCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+
+    public function approve(RaisedClaim $claim)
+    {
+        $user = User::find($claim->user_id);
+        $person = Person::find($claim->person_id);
+        ClaimPersonHelper::acceptClaim($user, $person, $claim);
+
+        return view('admin.person-claim.approve');
     }
 }

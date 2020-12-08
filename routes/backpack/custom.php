@@ -46,4 +46,5 @@ Route::group([
     Route::crud('searchlog', 'SearchLogCrudController');
     Route::crud('companyvaluation', 'CompanyValuationCrudController');
     Route::crud('person-claim', 'ClaimPersonCrudController');
+    Route::get('person-claim/approve/{claim}', 'ClaimPersonCrudController@approve');
 }); // this should be the absolute last line of this file
