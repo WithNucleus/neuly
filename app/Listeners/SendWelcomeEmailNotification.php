@@ -3,8 +3,7 @@
 namespace App\Listeners;
 
 use App\Mail\WelcomeMail;
-use Illuminate\Auth\Events\Verified;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Mail;
 
 class SendWelcomeEmailNotification
@@ -12,12 +11,12 @@ class SendWelcomeEmailNotification
     /**
      * Handle the event.
      *
-     * @param  \Illuminate\Auth\Events\Verified  $event
+     * @param  \Illuminate\Auth\Events\Registered|\App\Events\RegisteredAndVerified $event
      * @return void
      */
-    public function handle(Verified $event)
+    public function handle($event)
     {
-        if ($event->user instanceof MustVerifyEmail && $event->user->hasVerifiedEmail()) {
+        if ($event->user instanceof Authenticatable) {
             Mail::to($event->user)->send(new WelcomeMail($event->user->name));
         }
     }

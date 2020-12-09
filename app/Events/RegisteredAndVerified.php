@@ -11,14 +11,14 @@ class RegisteredAndVerified
     /**
      * The verified user.
      *
-     * @var \Illuminate\Contracts\Auth\MustVerifyEmail
+     * @var \Illuminate\Contracts\Auth\Authenticatable
      */
     public $user;
 
     /**
      * Create a new event instance.
      *
-     * @param  \Illuminate\Contracts\Auth\MustVerifyEmail  $user
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
      * @return void
      */
     public function __construct($user)
