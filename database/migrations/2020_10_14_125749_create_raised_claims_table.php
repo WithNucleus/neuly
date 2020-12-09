@@ -3,9 +3,14 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
 
 class CreateRaisedClaimsTable extends Migration
 {
+
+    const PERMISSION_MANAGE_CLAIMS = 'edit person claims';
     /**
      * Run the migrations.
      *
@@ -32,6 +37,15 @@ class CreateRaisedClaimsTable extends Migration
             $table->unique('verification_token');
             $table->timestamps();
         });
+
+        app()[PermissionRegistrar::class]->forgetCachedPermissions();
+
+        $permission = Permission::create(['name' => self::PERMISSION_MANAGE_CLAIMS]);
+        $role       = Role::where(['name' => 'Admin'])->first();
+
+        if ($role) {
+            $role->givePermissionTo($permission);
+        }
     }
 
     /**
@@ -42,5 +56,16 @@ class CreateRaisedClaimsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('raised_claims');
+
+        $permission = Permission::where(['name' => self::PERMISSION_MANAGE_CLAIMS])->first();
+        $role       = Role::where(['name' => 'Admin'])->first();
+
+        if ($permission && $role) {
+            $role->revokePermissionTo($permission);
+            $permission->delete();
+        }
+
+        // Reset cached roles and permissions
+        app()[PermissionRegistrar::class]->forgetCachedPermissions();
     }
 }
