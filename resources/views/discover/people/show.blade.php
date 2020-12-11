@@ -12,6 +12,14 @@
             'followable_id' => $person->id,
             'name' => $person->name
         ])
+
+        @if($isVerified)
+            <span class="badge badge-success">verified</span>
+        @else
+            @if(Auth::check() && Auth::user()->hasRaisedClaimBefore() === false)
+                <a class="btn btn-primary" href="{{ route('discover.people.claim', ['slug' => $person->slug]) }}">Claim this person?</a>
+            @endif
+        @endif
     </p>
 
     <h1>{{ $person->name }}</h1>

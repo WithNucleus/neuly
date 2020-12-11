@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers\Index;
 
+use App\Helpers\ClaimPersonHelper;
 use App\Helpers\NotificationHelper;
 use App\Http\Controllers\Controller;
+use App\Models\RaisedClaim;
 use App\Notifications\PersonDeletionRequested;
 use App\Repositories\FollowRepository;
 use Illuminate\Http\Request;
 use App\Models\Person;
 use App\Models\Company;
 use App\Models\Location;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedSort;
@@ -17,7 +20,6 @@ use Spatie\QueryBuilder\AllowedFilter;
 use Illuminate\Support\Facades\DB;
 use App\Services\Metas;
 use Spatie\Activitylog\Models\Activity;
-use Auth;
 
 class PersonController extends Controller
 {
@@ -33,9 +35,16 @@ class PersonController extends Controller
 
     // Public / Private Index for Homepage
     public function index(Request $request) {
+        $visibility = ['public'];
+
+        if(Auth::check())
+        {
+            $visibility[] = 'neuly';
+        }
 
         // Get People
         $people = QueryBuilder::for(Person::class)
+            ->whereIn('visibility', $visibility)
             ->with('companies')
             ->allowedFilters([
                 'name',
@@ -65,6 +74,10 @@ class PersonController extends Controller
         // Get Person
         $person = Person::where('slug', $slug)->firstOrFail();
 
+        if(!$person->canBeViewed()) {
+            abort(404);
+        }
+
         $metas = Metas::process(array(
             'title'         => $person->name,
             'description'   => $person->bio,
@@ -73,6 +86,7 @@ class PersonController extends Controller
 
         $entity = 'people';
         $isFollowed = (bool) count(FollowRepository::fromuser(Person::class, $person->id));
+        $isVerified = $person->user_id !== null;
 
         // Log Activity
         activity('pageview')
@@ -85,12 +99,47 @@ class PersonController extends Controller
             ->performedOn($person)
             ->log($person->name);
 
-        return view('discover.people.show', compact('person', 'metas', 'entity', 'isFollowed'));
+        return view('discover.people.show', compact('person', 'metas', 'entity', 'isFollowed', 'isVerified'));
     }
 
     public function namesJson()
     {
         return response()->json(Person::all()->pluck('name'));
+    }
+
+    public function claim(Request $request, $slug)
+    {
+        $person = Person::where('slug', '=', $slug)->firstOrFail();
+        $user = Auth::user();
+
+        if ($user->hasRaisedClaimBefore()) {
+            $request->session()->flash('error', 'You can only raise one claim at the same time.');
+
+            return redirect()->route('discover.people.show', ['slug' => $person->slug]);
+        }
+
+        if (ClaimPersonHelper::canBeAutoClaimed($user, $person)) {
+            ClaimPersonHelper::acceptClaim($user, $person);
+
+            $request->session()->flash('success', 'Your claim was successfully granted.');
+
+            return redirect()->route('user.person.index');
+        }
+
+        $claim = new RaisedClaim();
+        $claim->user_id = $user->id;
+        $claim->person_id = $person->id;
+        $claim->verification_token = RaisedClaim::generateToken();
+        $claim->save();
+
+        $request->session()->flash('success', 'Your claim was raised.');
+
+        return redirect()->route('discover.people.show', ['slug' => $person->slug]);
+    }
+
+    private function canUserViewPerson($person)
+    {
+        return $person->visibility === 'public' || Auth::check();
     }
 
     public function requestDeletion($slug)

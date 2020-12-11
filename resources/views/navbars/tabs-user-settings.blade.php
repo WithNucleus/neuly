@@ -14,4 +14,9 @@
         <i class="fad fa-lock"></i> Password
     </a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link @if(Route::is('user.settings.social')) active text-primary @else text-muted @endif" href="{{ route('user.settings.social') }}">
+            <i class="fad fa-share-alt"></i> Social accounts
+        </a>
+    </li>
 </ul>

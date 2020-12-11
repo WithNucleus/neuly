@@ -2,12 +2,12 @@
 
 namespace App\Providers;
 
+use App\Events\RegisteredAndVerified;
 use App\Events\SendNotification;
 use App\Listeners\CreateAppNotification;
 use App\Listeners\CreateMailNotification;
 use App\Listeners\SendWelcomeEmailNotification;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Auth\Events\Verified;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -24,9 +24,10 @@ class EventServiceProvider extends ServiceProvider
             CreateMailNotification::class
         ],
         Registered::class => [
+            SendWelcomeEmailNotification::class,
             SendEmailVerificationNotification::class,
         ],
-        Verified::class => [
+        RegisteredAndVerified::class => [
             SendWelcomeEmailNotification::class
         ]
     ];
