@@ -41,6 +41,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'import',
             'view job applications',
             'manage redirects',
+            'edit person claims',
         );
 
         foreach ($permissions as $permission) {

@@ -66,6 +66,7 @@
                     <div class="dropdown-menu dropdown-menu-anchor-right" aria-labelledby="navbarDropdown">
 
                         <a class="dropdown-item" href="{{ route('user.settings') }}" title="Settings">Settings</a>
+                        <a class="dropdown-item" href="{{ route('user.person.index') }}" title="Person">Person Listing</a>
 
                         @can('admin login')
                             <a href="/admin" class="dropdown-item">Admin</a>

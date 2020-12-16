@@ -106,6 +106,7 @@ Route::get('/organization/{slug}/events', 'Index\CompanyController@events')->nam
 Route::get('/people', 'Index\PersonController@index')->name('discover.people');
 Route::get('/people/names.json', 'Index\PersonController@namesJson');
 Route::get('/person/{slug}', 'Index\PersonController@show')->name('discover.people.show');
+Route::get('/person/{slug}/claim', 'Index\PersonController@claim')->name('discover.people.claim');
 Route::get('/person/{slug}/requestDeletion', 'Index\PersonController@requestDeletion')->name('discover.people.requestDeletion');
 Route::post('/person/{slug}/requestDeletion', 'Index\PersonController@requestDeletionSubmit')->name('discover.people.requestDeletion');
 
@@ -267,6 +268,30 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/user/settings/password', 'Index\UserPasswordController@index')->name('user.settings.password');
     Route::post('/user/settings/password', 'Index\UserPasswordController@update');
     Route::post('/user/settings/validateurl', 'Index\UserProfileController@checkMemberUrl')->name('user.validate.member_url');
+    Route::get('/user/settings/social', 'Index\UserSocialController@index')->name('user.settings.social');
+    Route::get('/user/settings/social/connect/{provider}', 'Index\UserSocialController@connect')->name('user.settings.social.connect');
+    Route::get('/user/settings/social/connect/{provider}/callback', 'Index\UserSocialController@connectCallback')->name('user.settings.social.connect.callback');
+
+    Route::get('/user/person/status', 'Index\UserClaimPersonController@status')->name('user.person.status');
+    Route::get('/user/person/verify/email', 'Index\UserClaimPersonController@verifyEmail')->name('user.person.verify.email');
+    Route::get('/user/person/verify/email/send', 'Index\UserClaimPersonController@sendVerificationMail')->name('user.person.verify.email.send');
+    Route::get('/user/person/verify/email/{token}', 'Index\UserClaimPersonController@verifyClaimByEmail')->name('user.person.verify.email.check');
+    Route::get('/user/person/verify/social', 'Index\UserClaimPersonController@verifySocial')->name('user.person.verify.social');
+    Route::get('/user/person/verify/social/check', 'Index\UserClaimPersonController@verifyClaimBySocial')->name('user.person.verify.social.check');
+
+    Route::get('/user/person', 'Index\UserPersonController@index')->name('user.person.index');
+    Route::post('/user/person', 'Index\UserPersonController@savePersonal')->name('user.person.personal.save');
+    Route::get('/user/person/email', 'Index\UserPersonController@email')->name('user.person.email');
+    Route::post('/user/person/email', 'Index\UserPersonController@saveEmail')->name('user.person.email.save');
+    Route::get('/user/person/social', 'Index\UserPersonController@social')->name('user.person.social');
+    Route::post('/user/person/social', 'Index\UserPersonController@saveSocial')->name('user.person.social.save');
+
+    Route::get('/user/person/create', 'Index\UserPersonController@create')->name('user.person.create');
+    Route::post('/user/person/create/email', 'Index\UserPersonController@storeBasicInformationShowEmailStep')->name('user.person.email.store');
+    Route::post('/user/person/create/social', 'Index\UserPersonController@storeEmailShowSocialStep')->name('user.person.social.store');
+    Route::post('/user/person/create/finish', 'Index\UserPersonController@storeSocialShowFinishStep')->name('user.person.finish.store');
+
+    Route::get('/user/person/search', 'Index\UserPersonController@search')->name('user.person.search');
 });
 
 // User Email Reset
