@@ -67,6 +67,9 @@
         <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
     @endif
 
+    <script type="text/javascript" src="{{ asset('assets/chart.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/chartisan.js') }}"></script>
+
     <script type="text/javascript" src="{{ asset('assets/typeahead.js') }}"></script>
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/bootstrap-tagsinput.css') }}"/>
 
