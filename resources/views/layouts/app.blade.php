@@ -70,7 +70,9 @@
     <script type="text/javascript" src="{{ asset('assets/typeahead.js') }}"></script>
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/bootstrap-tagsinput.css') }}"/>
 
-    @if (Route::is('insights.compare-market'))
+    @if (Route::is('insights.compare-market') ||
+        Route::is('discover.clinicaltrials.recruiting')
+    )
         <script type="text/javascript" src="{{ asset('assets/nouislider.js') }}"></script>
         <script type="text/javascript" src="{{ asset('assets/wNumb.js') }}"></script>
         <link rel="stylesheet" type="text/css" href="{{ asset('assets/nouislider.css') }}"/>

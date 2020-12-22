@@ -87,6 +87,9 @@
                 @include('sidebars.insights.market-compare')
             @endif
 
+            @if(Route::is('discover.clinicaltrials.recruiting'))
+                @include('sidebars.recruitingtrial')
+            @endif
         </div>
     </div>
 </nav>
