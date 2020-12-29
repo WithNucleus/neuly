@@ -13,14 +13,14 @@ class ParseClinicalTrialAge extends Command
      *
      * @var string
      */
-    protected $signature = 'clinicaltrial:parseage';
+    protected $signature = 'clinicaltrial:parseAge';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Parses age values for clinical trial records';
 
     /**
      * Create a new command instance.

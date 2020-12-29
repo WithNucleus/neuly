@@ -12,14 +12,14 @@ class ParseClinicalTrialEmptyGender extends Command
      *
      * @var string
      */
-    protected $signature = 'clinicaltrial:parsegender';
+    protected $signature = 'clinicaltrial:parseEmptyGender';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Nulls empty gender fields for clinical trial records';
 
     /**
      * Create a new command instance.
