@@ -32,13 +32,6 @@ class HomeController extends Controller
     // Homepage
     public function index(Request $request) {
 
-        $count_companies      = Company::all()->count();
-        $count_people         = Person::all()->count();
-        $count_investors      = Investor::all()->count();
-        $count_locations      = Location::all()->count();
-        $count_clinicaltrials = Clinicaltrial::all()->count();
-        $count_jobs           = Job::all()->count();
-
         $latest_events = Event::where('start_date', '>=', Carbon::now('America/Chicago'))
             ->orderBy('start_date', 'asc')
             ->take(3)
@@ -46,14 +39,10 @@ class HomeController extends Controller
         $jobs          = Job::orderBy('posted_date', 'desc')->take(3)->get();
         $news_articles = NewsArticle::orderBy('date', 'desc')->take(3)->get();
         $metas         = Metas::fromPage($request->path());
+        $count_recruiting_trials = Clinicaltrial::where('status', 'Recruiting')->count();
 
         return view('content.homepage.index', compact(
-        	'count_companies',
-        	'count_people',
-        	'count_investors',
-        	'count_locations',
-            'count_clinicaltrials',
-            'count_jobs',
+        	'count_recruiting_trials',
         	'latest_events',
         	'jobs',
             'news_articles',
