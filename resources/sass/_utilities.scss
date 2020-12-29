@@ -20,6 +20,10 @@ body.noscroll {
     background-color: darken($tertiary, 5%);
 }
 
+.bg-none {
+    background: none !important;
+}
+
 // Brain Background
 .bg-brains {
 	background-color: $primary;
@@ -188,6 +192,27 @@ body.noscroll {
 .card-header,
 .card-footer {
 	background-color: rgba($secondary, .38);
+}
+
+// Card Deck - Medium Breakpoint
+.card-deck-medium-breakpoint {
+    .card {
+        margin-bottom: $card-deck-margin;
+    }
+
+    @media (min-width: 768px) {
+        display: flex;
+        flex-flow: row wrap;
+        margin-right: -$card-deck-margin;
+        margin-left: -$card-deck-margin;
+
+        .card {
+            flex: 1 0 0%;
+            margin-right: $card-deck-margin;
+            margin-bottom: 0;
+            margin-left: $card-deck-margin;
+        }
+    }
 }
 
 /* Unstyled Bullet List */

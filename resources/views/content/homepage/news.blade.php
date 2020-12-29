@@ -1,4 +1,4 @@
-<div class="card shadow-sm mb-5">
+<div class="card shadow-sm mb-4">
     <div class="card-body">
         <h3 class="h2">Top 3 Trending News</h3>
         <div>

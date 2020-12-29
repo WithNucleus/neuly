@@ -1,9 +1,11 @@
 <div class="card shadow-sm mb-5">
+    <div class="card-header bg-none">
+        <h3 class="h1 mb-0 border-bottom">Upcoming Events</h3>
+    </div>
     <div class="card-body">
-        <h3 class="h2">Upcoming Events</h3>
         <div class="mb-3">
             @foreach ($latest_events as $event)
-                <div class="p-2 mt-1 d-flex @if(!$loop->last) border-bottom @endif">
+                <div class="p-3 d-flex d-md-block d-lg-flex @if(!$loop->last) border-bottom @endif">
                     <div class="image mr-3">
                         <a href="{{ route('discover.events.show', $event->slug) }}">
                             <div class="job-org-logo" style="background-image: url('{{ $event->entityImageUrl }}');"></div>
@@ -37,7 +39,8 @@
                 </div>
             @endforeach
         </div>
-
-        <p class="mb-0 text-center"><a href="{{ route('discover.events') }}" class="btn btn-sm btn-dark">See More Events</a></p>
+    </div>
+    <div class="card-footer bg-none text-center">
+        <a href="{{ route('discover.events') }}" class="btn btn-dark">Browse All Events</a>
     </div>
 </div>

@@ -1,5 +1,5 @@
 @guest
-    <div class="container py-5">
+    <div class="container pb-5">
         <div class="row">
             <div class="mx-auto col-12 col-md-8 col-lg-7">
                 <p class="lead text-white text-center">
@@ -12,7 +12,7 @@
         </p>
     </div>
 @else
-    <div class="container py-5">
+    <div class="container pb-5">
         <div class="row">
             <div class="mx-auto col-12 col-md-10 col-lg-8">
                 <p class="lead text-white text-center">
