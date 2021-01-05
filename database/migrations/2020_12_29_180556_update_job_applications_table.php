@@ -14,9 +14,11 @@ class UpdateJobApplicationsTable extends Migration
     public function up()
     {
         Schema::table('job_applications', function (Blueprint $table) {
-            $table->dropForeign(['company_id', 'job_id']);
+            $table->dropForeign(['company_id']);
             $table->dropColumn('company_id');
 
+            //update onUpdate and onDelete for index 'job_id'
+            $table->dropForeign(['job_id']);
             $table->foreign('job_id')
                 ->on('jobs')
                 ->references('id')
