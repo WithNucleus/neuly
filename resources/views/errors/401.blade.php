@@ -5,12 +5,12 @@
 @endphp
 
 @section('title')
-  Unauthorized action.
+    OOOOH! {{ $error_number }}, UNAUTHORIZED ACTION
 @endsection
 
 @section('description')
   @php
-    $default_error_message = "Please <a href='javascript:history.back()''>go back</a> or return to <a href='".url('')."'>our homepage</a>.";
+    $default_error_message = "Sorry about that, but you aren't authorized to access this page.<br /><br /><small>You have an account? - Please login.<br />Don't have an account yet? - Please register.</small>";
   @endphp
   {!! isset($exception)? ($exception->getMessage()?$exception->getMessage():$default_error_message): $default_error_message !!}
 @endsection

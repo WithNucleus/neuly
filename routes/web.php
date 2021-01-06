@@ -13,6 +13,37 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+/**
+ * this are test routes for errors. These should be disabled after successfully testing those error pages.
+ */
+Route::get('/400', static function () {
+    return abort(400);
+});
+Route::get('/401', static function () {
+    return abort(401);
+});
+Route::get('/403', static function () {
+    return abort(403);
+});
+Route::get('/404', static function () {
+    return abort(404);
+});
+Route::get('/405', static function () {
+    return abort(405);
+});
+Route::get('/408', static function () {
+    return abort(408);
+});
+Route::get('/429', static function () {
+    return abort(429);
+});
+Route::get('/500', static function () {
+    return abort(500);
+});
+Route::get('/503', static function () {
+    return abort(503);
+});
+
 // Auth Routes for Front-End
 Route::group(['middleware' => 'firewall.all'], function () {
     Auth::routes(['verify' => true]);
@@ -202,7 +233,7 @@ Route::post('/search/clinicaltrials', 'index\SearchController@showClinicalTrials
 Route::get('/search/clinicaltrials/{term}', 'Index\SearchController@showClinicalTrialsResults')->name('search.clinicaltrials.term');
 
 // Feedback
-Route::group(['middleware' => 'auth'], function () {
+Route::group(['middleware' => 'spamprotection'], function () {
     Route::get('/feedback', 'FeedbackController@create')->name('feedback.create');
     Route::post('/feedback', 'FeedbackController@store')->name('feedback.store');
 });

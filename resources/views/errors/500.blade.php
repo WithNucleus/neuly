@@ -5,12 +5,12 @@
 @endphp
 
 @section('title')
-	It's not you, it's me.
+    OOOOH! {{ $error_number }}, IT IS US NOT YOU!!!!!!!
 @endsection
 
 @section('description')
 	@php
-	  $default_error_message = "An internal server error has occurred. If the error persists please contact the development team.";
+	  $default_error_message = "Sorry about that, but there was an error on our side. If this is happening repeatedly please inform us.";
 	@endphp
 	{!! isset($exception)? ($exception->getMessage()?$exception->getMessage():$default_error_message): $default_error_message !!}
 @endsection
