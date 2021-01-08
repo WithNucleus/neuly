@@ -113,10 +113,10 @@ class Event extends Model implements EntityContract, EntityImageContract
                 'type' => EntityMergeHelper::TYPE_STRING,
             ],
             'start_date'       => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => EntityMergeHelper::TYPE_DATE,
             ],
             'end_date'         => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => EntityMergeHelper::TYPE_DATE,
             ],
             'event_url'        => [
                 'type' => EntityMergeHelper::TYPE_STRING,
@@ -126,14 +126,14 @@ class Event extends Model implements EntityContract, EntityImageContract
             ],
             'description'      => [
                 'type'  => EntityMergeHelper::TYPE_TEXT,
-                'label' => 'Type',
             ],
             'image'            => [
                 'type'  => EntityMergeHelper::TYPE_IMAGE,
-                'label' => 'Type',
+                'label' => 'Image',
             ],
             //relations
             'eventTypes'       => [
+                'label'         => 'Event type',
                 'type'          => EntityMergeHelper::TYPE_RELATION,
                 'relation'      => EntityMergeHelper::RELATION_N_N,
                 'relationField' => 'name',
@@ -160,5 +160,17 @@ class Event extends Model implements EntityContract, EntityImageContract
                 'label'         => 'Exhibitors'
             ],
         ];
+    }
+
+    public static function getListingRequestMapping()
+    {
+        $mapping = self::getMergeMapping();
+        $skipFields = ['slug'];
+
+        foreach ($skipFields as $field) {
+            unset($mapping[$field]);
+        }
+
+        return $mapping;
     }
 }

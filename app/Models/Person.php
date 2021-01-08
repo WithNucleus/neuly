@@ -260,6 +260,18 @@ class Person extends Model implements EntityContract, EntityImageContract
         ];
     }
 
+    public static function getListingRequestMapping()
+    {
+        $mapping = self::getMergeMapping();
+        $skipFields = ['slug', 'companies', 'investors'];
+
+        foreach ($skipFields as $field) {
+            unset($mapping[$field]);
+        }
+
+        return $mapping;
+    }
+
     public function getEmails() {
         $personEmails = [];
 

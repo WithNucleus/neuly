@@ -160,11 +160,6 @@ class Investor extends Model implements EntityContract, EntityImageContract
                 'relation'      => EntityMergeHelper::RELATION_N_N,
                 'relationField' => 'name',
             ],
-            'focus'     => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_N_N,
-                'relationField' => 'name',
-            ],
             'companies' => [
                 'type'          => EntityMergeHelper::TYPE_RELATION,
                 'relation'      => EntityMergeHelper::RELATION_N_N,
@@ -182,5 +177,17 @@ class Investor extends Model implements EntityContract, EntityImageContract
                 ],
             ],
         ];
+    }
+
+    public static function getListingRequestMapping()
+    {
+        $mapping = self::getMergeMapping();
+        $skipFields = ['slug', 'companies', 'people'];
+
+        foreach ($skipFields as $field) {
+            unset($mapping[$field]);
+        }
+
+        return $mapping;
     }
 }

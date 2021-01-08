@@ -195,7 +195,7 @@ class ClinicaltrialCrudController extends CrudController
             'type' => 'date_picker',
             'label' => 'Start date',
             'date_picker_options' => [
-                'format' => config('app.date_input_format'),
+                'format' => config('app.datepicker_input_format'),
             ],
         ]);
         $this->crud->addField([
@@ -203,7 +203,7 @@ class ClinicaltrialCrudController extends CrudController
             'type'  => 'date_picker',
             'label' => 'Primary completion date',
             'date_picker_options' => [
-                'format' => config('app.date_input_format'),
+                'format' => config('app.datepicker_input_format'),
             ],
         ]);
         $this->crud->addField([
@@ -211,7 +211,7 @@ class ClinicaltrialCrudController extends CrudController
             'type' => 'date_picker',
             'label' => 'Completion date',
             'date_picker_options' => [
-                'format' => config('app.date_input_format'),
+                'format' => config('app.datepicker_input_format'),
             ],
         ]);
         $this->crud->addField([
@@ -219,7 +219,7 @@ class ClinicaltrialCrudController extends CrudController
             'type' => 'date_picker',
             'label' => 'First posted',
             'date_picker_options' => [
-                'format' => config('app.date_input_format'),
+                'format' => config('app.datepicker_input_format'),
             ],
         ]);
         $this->crud->addField([
@@ -227,7 +227,7 @@ class ClinicaltrialCrudController extends CrudController
             'type' => 'date_picker',
             'label' => 'Results first posted',
             'date_picker_options' => [
-                'format' => config('app.date_input_format'),
+                'format' => config('app.datepicker_input_format'),
             ],
         ]);
         $this->crud->addField([
@@ -235,7 +235,7 @@ class ClinicaltrialCrudController extends CrudController
             'type' => 'date_picker',
             'label' => 'Last update posted',
             'date_picker_options' => [
-                'format' => config('app.date_input_format'),
+                'format' => config('app.datepicker_input_format'),
             ],
         ]);
 

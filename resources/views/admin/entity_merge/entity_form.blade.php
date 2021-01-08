@@ -18,7 +18,7 @@ use App\Helpers\EntityMergeHelper;
         <div class="col-5">
             <div class="form-group">
                 <label>{{ isset($options['label']) ? $options['label'] : EntityMergeHelper::makeLabelFromFieldName($name) }}</label>
-                @include(EntityMergeHelper::getFieldViewPathByType($options['type']), ['entity' => $masterEntity])
+                @include('admin.entity_merge.fields.' . EntityMergeHelper::getViewByFieldType($options['type']), ['entity' => $masterEntity])
             </div>
         </div>
 
@@ -41,7 +41,7 @@ use App\Helpers\EntityMergeHelper;
         <div class="col-5">
             <div class="form-group">
                 <label>{{ isset($options['label']) ? $options['label'] : EntityMergeHelper::makeLabelFromFieldName($name) }}</label>
-                @include(EntityMergeHelper::getFieldViewPathByType($options['type']), ['entity' => $secondaryEntity])
+                @include('admin.entity_merge.fields.' . EntityMergeHelper::getViewByFieldType($options['type']), ['entity' => $secondaryEntity])
             </div>
         </div>
     </div>

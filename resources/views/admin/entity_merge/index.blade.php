@@ -20,7 +20,7 @@
                 <label for="entity-type">Choose entity type:</label>
                 <select id="entity-type" class="form-control js-entity-type-select" name="entity_type"
                         data-action-get-list="{{ route('admin.entityMerge.getEntityListJson') }}"
-                        data-action-get-entity-form= {{ route('admin.entityMerge.getEntityForm') }}>
+                        data-action-get-entity-form="{{ route('admin.entityMerge.getEntityForm') }}">
                     <option></option>
                     @foreach($entities as $entity)
                         <option value="{{$entity}}">{{ ucfirst($entity) }}</option>

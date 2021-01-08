@@ -345,4 +345,16 @@ class Company extends Model implements EntityContract, EntityImageContract
             ]
         ];
     }
+
+    public static function getListingRequestMapping()
+    {
+        $mapping = self::getMergeMapping();
+        $skipFields = ['slug', 'people', 'investors','valuations'];
+
+        foreach ($skipFields as $field) {
+            unset($mapping[$field]);
+        }
+
+        return $mapping;
+    }
 }

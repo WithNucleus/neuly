@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Helpers\EntityMergeHelper;
+use App\Models\Contracts\EntityContract;
 use App\Models\Traits\CrudShowEntityPageButton;
 use App\Models\Traits\OldSlugRedirectable;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
@@ -9,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class Job extends Model
+class Job extends Model implements EntityContract
 {
     use CrudTrait;
     use OldSlugRedirectable;
@@ -154,5 +156,69 @@ class Job extends Model
     {
         $this->attributes['job_title'] = $value;
         $this->attributes['slug'] = self::generateUniqueSlug($value);
+    }
+
+    /**
+     * @return array
+     */
+    public static function getMergeMapping()
+    {
+        return [
+            //attributes
+            'job_title'      => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+                'label' => 'Job Title'
+            ],
+            'slug'      => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+            ],
+            'job_description'   => [
+                'type' => EntityMergeHelper::TYPE_TEXT,
+                'label' => 'Job Description'
+            ],
+            'employment_type'      => [
+                'type' => EntityMergeHelper::TYPE_STRING,
+                'label' => 'Type'
+            ],
+            'posted_date'      => [
+                'type' => EntityMergeHelper::TYPE_DATE,
+                'label' => 'Posted date'
+            ],
+            'salary'      => [
+                'type' => EntityMergeHelper::TYPE_INTEGER,
+            ],
+            'hourly_rate'      => [
+                'type' => EntityMergeHelper::TYPE_INTEGER,
+                'label' => 'Hourly Rate'
+            ],
+            //relations
+            'owner'    => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relation'      => EntityMergeHelper::RELATION_ONE_N,
+                'relationField' => 'name',
+            ],
+            'locations' => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relation'      => EntityMergeHelper::RELATION_N_N,
+                'relationField' => 'name',
+            ],
+            'focus'     => [
+                'type'          => EntityMergeHelper::TYPE_RELATION,
+                'relation'      => EntityMergeHelper::RELATION_N_N,
+                'relationField' => 'name',
+            ],
+        ];
+    }
+
+    public static function getListingRequestMapping()
+    {
+        $mapping = self::getMergeMapping();
+        $skipFields = ['slug'];
+
+        foreach ($skipFields as $field) {
+            unset($mapping[$field]);
+        }
+
+        return $mapping;
     }
 }

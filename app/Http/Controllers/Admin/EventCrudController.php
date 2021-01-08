@@ -235,7 +235,7 @@ class EventCrudController extends CrudController
             'type' => 'date_picker',
             'label' => 'Start Date',
             'date_picker_options' => [
-                'format' => config('app.date_input_format'),
+                'format' => config('app.datepicker_input_format'),
             ],
         ]);
         $this->crud->addField([
@@ -243,7 +243,7 @@ class EventCrudController extends CrudController
             'type' => 'date_picker',
             'label' => 'End Date',
             'date_picker_options' => [
-                'format' => config('app.date_input_format'),
+                'format' => config('app.datepicker_input_format'),
             ],
         ]);
         $this->crud->addField([

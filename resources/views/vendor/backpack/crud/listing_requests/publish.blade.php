@@ -149,7 +149,7 @@
     <script>
         $(document).ready(function (){
             $('.datepicker').datepicker({
-                format: '{{ config('app.date_input_format') }}'
+                format: '{{ config('app.datepicker_input_format') }}'
             });
         });
     </script>

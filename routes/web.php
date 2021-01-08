@@ -157,6 +157,7 @@ Route::get('/clinical-trials/{slug}', 'Index\ClinicaltrialController@show')->nam
 // Listing Requests
 Route::get('/listing', 'Index\ListingRequestController@index')->name('listing');
 Route::get('/listing/request', 'Index\ListingRequestController@request')->name('listing.request');
+Route::get('/listing/request/getEntityListJson', 'Index\ListingRequestController@getEntityListJson')->name('listing.request.getEntityListJson');
 Route::post('/listing/request', 'Index\ListingRequestController@submitRequest');
 Route::post('/listing/request/finish', 'Index\ListingRequestController@finishRequest')->name('listing.request.finish');
 
