@@ -41,42 +41,48 @@ trait EntityImage
      */
     private function updateImageAttribute($imageValue)
     {
-        $attributeName = self::$imageAttribute;
+        $diskName        = 'public';
+        $attributeName   = self::$imageAttribute;
+        $currentFilename = $this->{$attributeName};
 
-        if ($this->{$attributeName} && strpos($imageValue, $this->{$attributeName}) !== false) {
-            // image not changed
+        // image not changed
+        if ($currentFilename && strpos($imageValue, $currentFilename) !== false) {
             return;
         }
 
-        $diskName = 'public';
-
-        if ($this->{$attributeName}) {
-            $oldImagePath = self::$imageFolderPath . DIRECTORY_SEPARATOR . $this->{$attributeName};
+        // remove old image file
+        if ($currentFilename) {
+            $oldImagePath = self::$imageFolderPath . DIRECTORY_SEPARATOR . $currentFilename;
 
             Storage::disk($diskName)->delete($oldImagePath);
         }
 
-        if ($imageValue === null) {
-            // image was erased
+        // image was erased or set to empty
+        if (empty($imageValue)) {
             $this->attributes[$attributeName] = null;
-        } else {
-            $imageFilename = Str::slug($this->{self::$imageFilenameAttribute}) . '.png';
-            $imagePath     = self::$imageFolderPath . DIRECTORY_SEPARATOR . $imageFilename;
-
-            // uploaded via backpack's CRUD
-            if (Str::startsWith($imageValue, 'data:image')) {
-                $image = Image::make($imageValue)->encode('png', 90);
-
-                Storage::disk($diskName)->put($imagePath, $image->stream());
-            }
-            // new image assigned from 'entity merge' or 'listing request'
-            elseif ($imageValue !== $this->{$attributeName}) {
-                $addedImagePath = self::$imageFolderPath . DIRECTORY_SEPARATOR . $imageValue;
-
-                Storage::disk($diskName)->move($addedImagePath, $imagePath);
-            }
-
-            $this->attributes[$attributeName] = $imageFilename;
+            return;
         }
+
+        // new image uploaded
+        $imageFilename = Str::slug($this->{self::$imageFilenameAttribute}) . '.png';
+        $imagePath     = self::$imageFolderPath . DIRECTORY_SEPARATOR . $imageFilename;
+
+        if (Str::startsWith($imageValue, 'data:image')) {
+            // uploaded via backpack's CRUD
+            $image = Image::make($imageValue)->encode('png', 90);
+
+            Storage::disk($diskName)->put($imagePath, $image->stream());
+        } elseif ($imageValue !== $currentFilename) {
+            // new image assigned from 'entity merge' or 'listing request'
+            $addedImagePath = self::$imageFolderPath . DIRECTORY_SEPARATOR . $imageValue;
+
+            if (Storage::disk($diskName)->exists($imagePath)) {
+                Storage::disk($diskName)->delete($imagePath);
+            }
+
+            Storage::disk($diskName)->move($addedImagePath, $imagePath);
+        }
+
+        $this->attributes[$attributeName] = $imageFilename;
     }
 }

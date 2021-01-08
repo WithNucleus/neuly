@@ -328,7 +328,7 @@ class EventCrudController extends CrudController
             'upload'       => true,
             'crop'         => true,
             'aspect_ratio' => 0,
-            'disk'      => 'local',
+            'prefix'       => Event::getImageUrlPrefix(),
         ]);
     }
 
