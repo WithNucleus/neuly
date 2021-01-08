@@ -30,7 +30,6 @@
                 @csrf
 
                 <input type="hidden" name="job_id" value="{{ $job->id }}">
-                <input type="hidden" name="owner_id" value="{{ $job->owner->id }}">
 
                 <div class="form-group">
                     <label for="resume" class="font-weight-bold">Resume</label>
