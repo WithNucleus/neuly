@@ -7,6 +7,10 @@
 
 @section('after_styles')
 	<style>
+        .text-muted {
+            color: #212529 !important;
+        }
+
 		.error_number {
 			font-size: 156px;
 			font-weight: 600;
@@ -14,6 +18,7 @@
             font-family: Bebas Neue,Avenir,Helvetica,Arial,sans-serif;
             color: #212529;
 		}
+
 		.error_number small {
 			font-size: 56px;
 			font-weight: 700;
@@ -58,12 +63,15 @@
             color: #212529;
         }
 
+        a,
+        a:hover,
         .error_feedback a,
         .sticky-footer a,
         .error_action a {
             color: #275dad;
             font-weight: 500;
         }
+
         .background {
             background: url(/images/hero-bg.jpg) no-repeat 50%;
             background-size: cover;
