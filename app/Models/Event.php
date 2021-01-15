@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Helpers\EntityMergeHelper;
+use App\Helpers\Entity\FieldsMapping;
 use App\Models\Contracts\EntityContract;
 use App\Models\Contracts\EntityImageContract;
 use App\Models\Traits\CrudShowEntityPageButton;
@@ -102,60 +102,60 @@ class Event extends Model implements EntityContract, EntityImageContract
     /**
      * @return array
      */
-    public static function getMergeMapping()
+    public static function getFieldsMapping()
     {
         return [
             //attributes
             'name'             => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             'slug'             => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             'start_date'       => [
-                'type' => EntityMergeHelper::TYPE_DATE,
+                'type' => FieldsMapping::TYPE_DATE,
             ],
             'end_date'         => [
-                'type' => EntityMergeHelper::TYPE_DATE,
+                'type' => FieldsMapping::TYPE_DATE,
             ],
             'event_url'        => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             'registration_url' => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             'description'      => [
-                'type'  => EntityMergeHelper::TYPE_TEXT,
+                'type'  => FieldsMapping::TYPE_TEXT,
             ],
             'image'            => [
-                'type'  => EntityMergeHelper::TYPE_IMAGE,
+                'type'  => FieldsMapping::TYPE_IMAGE,
                 'label' => 'Image',
             ],
             //relations
             'eventTypes'       => [
                 'label'         => 'Event type',
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_N_N,
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
             'focus'            => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_N_N,
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
             'locations'        => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_N_N,
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
             'people'           => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_N_N,
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
             'companies'        => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_N_N,
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
                 'label'         => 'Exhibitors'
             ],
@@ -164,7 +164,7 @@ class Event extends Model implements EntityContract, EntityImageContract
 
     public static function getListingRequestMapping()
     {
-        $mapping = self::getMergeMapping();
+        $mapping = self::getFieldsMapping();
         $skipFields = ['slug'];
 
         foreach ($skipFields as $field) {

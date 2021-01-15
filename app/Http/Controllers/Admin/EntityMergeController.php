@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\Entity\FieldsMapping;
 use App\Helpers\EntityHelper;
 use App\Helpers\EntityMergeHelper;
 use App\Http\Controllers\Controller;
@@ -61,7 +62,7 @@ class EntityMergeController extends Controller
             return response()->json(['status' => 'error'], 404);
         }
 
-        $mapping         = $entityModel::getMergeMapping();
+        $mapping         = $entityModel::getFieldsMapping();
         $masterEntity    = $entityModel::findOrFail($masterId);
         $secondaryEntity = $entityModel::findOrFail($secondaryId);
 
@@ -119,14 +120,14 @@ class EntityMergeController extends Controller
             }
         }
 
-        $mapping = $masterEntity::getMergeMapping();
+        $mapping = $masterEntity::getFieldsMapping();
 
         foreach ($relations as $relationName => $source) {
             if ($source === EntityMergeHelper::SOURCE_SECONDARY || $source === EntityMergeHelper::SOURCE_MERGE) {
 
-                if ($mapping[$relationName]['relation'] === EntityMergeHelper::RELATION_ONE_N) {
+                if ($mapping[$relationName]['relation'] === FieldsMapping::RELATION_ONE_N) {
                     $masterEntity = $this->mergeRelationOneToMany($masterEntity, $secondaryEntity, $relationName, $source);
-                } elseif ($mapping[$relationName]['relation'] === EntityMergeHelper::RELATION_N_N) {
+                } elseif ($mapping[$relationName]['relation'] === FieldsMapping::RELATION_N_N) {
                     $pivotColumns = isset($mapping[$relationName]['pivotColumns']) ? $mapping[$relationName]['pivotColumns'] : [];
                     $masterEntity = $this->mergeRelationManyToMany($masterEntity, $secondaryEntity, $relationName, $source, $pivotColumns);
                 }

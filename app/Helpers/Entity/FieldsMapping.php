@@ -1,0 +1,24 @@
+<?php
+
+namespace App\Helpers\Entity;
+
+class FieldsMapping
+{
+    const TYPE_DATE = 'date';
+    const TYPE_ENUM = 'enum';
+    const TYPE_IMAGE = 'image';
+    const TYPE_INTEGER = 'integer';
+    const TYPE_RELATION = 'relation';
+    const TYPE_STRING = 'string';
+    const TYPE_TEXT = 'text';
+
+    const RELATION_ONE_N = 'one_n';
+    const RELATION_N_N = 'n_n';
+    const RELATION_ONE_N_MORPHABLE = 'one_n_morphable';
+    const RELATION_N_N_MORPHABLE = 'n_n_morphable';
+
+    public static function makeLabelFromFieldName($name)
+    {
+        return ucwords(str_replace('_', ' ', $name));
+    }
+}

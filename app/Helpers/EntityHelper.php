@@ -66,18 +66,4 @@ class EntityHelper
             Research::class,
         ]);
     }
-
-    /**
-     * @return array
-     */
-    public static function getListingRequestEntities()
-    {
-        return [
-            'event'        => Event::class,
-            'investor'     => Investor::class,
-            'job'          => Job::class,
-            'organization' => Company::class,
-            'person'       => Person::class,
-        ];
-    }
 }

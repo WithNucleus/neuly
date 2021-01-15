@@ -5,8 +5,9 @@
  */
 $currentValues = [];
 
-if ($entity->{$field}) {
-    $currentValues = $entity->{$field}->pluck('id')->toArray();
+if (isset($entity)) {
+    $relationData = $entity->{$field};
+    $currentValues = $relationData ? $relationData->pluck('id')->toArray() : [];
 }
 ?>
 @isset($relationValues[$field])
@@ -16,4 +17,3 @@ if ($entity->{$field}) {
     @endforeach
 </select>
 @endisset
-

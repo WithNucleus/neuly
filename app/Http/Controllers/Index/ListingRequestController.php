@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Index;
 
-use App\Helpers\EntityHelper;
-use App\Helpers\EntityMergeHelper;
+use App\Helpers\Entity\FieldsMapping;
+use App\Helpers\ListingRequestHelper;
+use App\Http\Controllers\Controller;
 use App\Models\Job;
 use App\Models\ListingRequest;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ListingRequestController extends Controller
 {
@@ -20,25 +20,24 @@ class ListingRequestController extends Controller
 
     public function request()
     {
-        $entityTypes = EntityHelper::getListingRequestEntities();
+        $entityTypes = ListingRequestHelper::getAllowedEntities();
 
         return view('discover.listing-requests.request', [
-            'entityTypes' => $entityTypes
+            'entityTypes' => $entityTypes,
         ]);
     }
 
     public function submitRequest(Request $request)
     {
-        $allowedEntityTypes = EntityHelper::getListingRequestEntities();
         $entityType = $request->input('entity_type');
-
-        if (isset($allowedEntityTypes[$entityType]) === false) {
-            return redirect()->back()->with('error', 'Wrong entity type!');
-        }
-
-        $entityClass = $allowedEntityTypes[$entityType];
         $isUpdate = $request->input('is_update');
         $toUpdateId = $request->input('to_update_id');
+
+        try {
+            $entityClass = ListingRequestHelper::getEntityClassByType($entityType);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Wrong entity type!');
+        }
 
         if ($isUpdate) {
             if (empty($toUpdateId)) {
@@ -50,7 +49,7 @@ class ListingRequestController extends Controller
 
         $data['entityType'] = $entityType;
         $data['mapping'] = $entityClass::getListingRequestMapping();
-        $data['relationValues'] = EntityMergeHelper::getMappingRelationValues($entityClass);
+        $data['relationValues'] = ListingRequestHelper::getEntityRelationValuesByType($entityType);
 
         return view('discover.listing-requests.entity', $data);
     }
@@ -58,7 +57,7 @@ class ListingRequestController extends Controller
     public function finishRequest(Request $request)
     {
         $entityType = $request->input('entity_type');
-        $entityTypes = EntityHelper::getListingRequestEntities();
+        $entityTypes = ListingRequestHelper::getAllowedEntities();
 
         if (isset($entityTypes[$entityType]) === false) {
             return redirect()->back()->with('error', 'Wrong entity type!');
@@ -66,7 +65,7 @@ class ListingRequestController extends Controller
 
         $entityClass = $entityTypes[$entityType];
         $user = $request->user();
-        $requestData = $request->all();
+        $requestData = $request->except('_token', 'comment', 'entity_type', 'to_update_id');
         $entityName = ($entityClass === Job::class) ? $requestData['job_title'] : $requestData['name'];
         $requestData = $this->handleFilesUpload($entityClass, $requestData);
 
@@ -82,39 +81,33 @@ class ListingRequestController extends Controller
 
         $additionalEntitiesRequested = [];
 
-        if (isset($data['entity_company_new'])) {
-            $additionalEntitiesRequested['company'] = $data['entity_company_new'];
-        }
-        if (isset($data['entity_investor_new'])) {
-            $additionalEntitiesRequested['investor'] = $data['entity_investor_new'];
-        }
+//        if (isset($data['entity_company_new'])) {
+//            $additionalEntitiesRequested['company'] = $data['entity_company_new'];
+//        }
+//        if (isset($data['entity_investor_new'])) {
+//            $additionalEntitiesRequested['investor'] = $data['entity_investor_new'];
+//        }
 
         return view('discover.listing-requests.finish', [
-            'additionalEntitiesRequested' => $additionalEntitiesRequested
+            'additionalEntitiesRequested' => $additionalEntitiesRequested,
         ]);
     }
 
     public function getEntityListJson(Request $request)
     {
         $entityType = $request->input('type');
-        $entityTypes = EntityHelper::getListingRequestEntities();
-
-        if (isset($entityTypes[$entityType]) === false) {
-            return response()->json(['status' => 'error'], 404);
-        }
-
-        $entityClass = $entityTypes[$entityType];
+        $entityClass = ListingRequestHelper::getEntityClassByType($entityType);
 
         $data = $entityClass::all()->map(function ($item, $key) {
             return [
-                'id'   => $item->id,
-                'name' => $item->name
+                'id' => $item->id,
+                'name' => $item->name,
             ];
         });
 
         return response()->json([
             'status' => 'ok',
-            'data'   => $data
+            'data' => $data,
         ]);
     }
 
@@ -125,12 +118,12 @@ class ListingRequestController extends Controller
      */
     private function handleFilesUpload($entityClass, $requestData)
     {
-        $fieldMapping = $entityClass::getMergeMapping();
+        $fieldMapping = $entityClass::getFieldsMapping();
 
         foreach ($fieldMapping as $field => $options) {
-            if ($options['type'] === EntityMergeHelper::TYPE_IMAGE && isset($requestData[$field])) {
+            if ($options['type'] === FieldsMapping::TYPE_IMAGE && isset($requestData[$field])) {
                 $file = $requestData[$field];
-                $filename = Carbon::now()->format('YmdHis') . '.' . $file->getClientOriginalExtension();
+                $filename = Carbon::now()->format('YmdHis').'.'.$file->getClientOriginalExtension();
                 $requestData[$field] = Storage::disk('public')->putFileAs('requests', $file, $filename);
             }
         }

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Helpers\EntityMergeHelper;
+use App\Helpers\Entity\FieldsMapping;
 use App\Models\Contracts\EntityContract;
 use App\Models\Traits\CrudShowEntityPageButton;
 use App\Models\Traits\OldSlugRedirectable;
@@ -46,6 +46,12 @@ class Job extends Model implements EntityContract
     protected static $logUnguarded = true;
     protected static $logName = 'entities';
 
+    protected static $employmentTypes = [
+        'Full Time',
+        'Part Time',
+        'One Time',
+    ];
+
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS
@@ -54,8 +60,8 @@ class Job extends Model implements EntityContract
 
     public static function generateUniqueSlug($name)
     {
-        $slug      = Str::slug($name);
-        $slugCount = Person::where('slug', $slug)->count();
+        $slug = Str::slug($name);
+        $slugCount = self::where('slug', $slug)->count();
 
         if ($slugCount > 0) {
             $slug = $slug . '-' . uniqid();
@@ -66,6 +72,14 @@ class Job extends Model implements EntityContract
 
     public function getShowLink() {
         return '<a href="' . route('discover.jobs.show', $this->slug) . '">' . $this->job_title . '</a>';
+    }
+
+    /**
+     * @return array
+     */
+    public static function getEmploymentTypeValues()
+    {
+        return self::$employmentTypes;
     }
 
     /**
@@ -146,6 +160,11 @@ class Job extends Model implements EntityContract
     |--------------------------------------------------------------------------
     */
 
+    public function getNameAttribute()
+    {
+        return $this->job_title;
+    }
+
     /*
     |--------------------------------------------------------------------------
     | MUTATORS
@@ -161,50 +180,55 @@ class Job extends Model implements EntityContract
     /**
      * @return array
      */
-    public static function getMergeMapping()
+    public static function getFieldsMapping()
     {
         return [
             //attributes
             'job_title'      => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
                 'label' => 'Job Title'
             ],
             'slug'      => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             'job_description'   => [
-                'type' => EntityMergeHelper::TYPE_TEXT,
+                'type' => FieldsMapping::TYPE_TEXT,
                 'label' => 'Job Description'
             ],
             'employment_type'      => [
-                'type' => EntityMergeHelper::TYPE_STRING,
-                'label' => 'Type'
+                'type' => FieldsMapping::TYPE_ENUM,
+                'label' => 'Type',
+                'values' => self::$employmentTypes,
             ],
             'posted_date'      => [
-                'type' => EntityMergeHelper::TYPE_DATE,
+                'type' => FieldsMapping::TYPE_DATE,
                 'label' => 'Posted date'
             ],
             'salary'      => [
-                'type' => EntityMergeHelper::TYPE_INTEGER,
+                'type' => FieldsMapping::TYPE_INTEGER,
             ],
             'hourly_rate'      => [
-                'type' => EntityMergeHelper::TYPE_INTEGER,
+                'type' => FieldsMapping::TYPE_INTEGER,
                 'label' => 'Hourly Rate'
             ],
             //relations
             'owner'    => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_ONE_N,
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_ONE_N_MORPHABLE,
+                'relationMorphableTypes' => [
+                    Company::class,
+                    Investor::class,
+                ],
                 'relationField' => 'name',
             ],
             'locations' => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_N_N,
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
             'focus'     => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_N_N,
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
         ];
@@ -212,7 +236,7 @@ class Job extends Model implements EntityContract
 
     public static function getListingRequestMapping()
     {
-        $mapping = self::getMergeMapping();
+        $mapping = self::getFieldsMapping();
         $skipFields = ['slug'];
 
         foreach ($skipFields as $field) {

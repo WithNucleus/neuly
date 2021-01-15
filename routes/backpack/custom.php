@@ -35,7 +35,21 @@ Route::group([
         Route::crud('ct_study_design', 'CtStudyDesignCrudController');
     });
 
-    Route::crud('listingrequest', 'ListingRequestCrudController');
+    Route::group([
+        'as' => 'admin.'
+    ], function () {
+        Route::crud('listingrequest', 'ListingRequestCrudController');
+        Route::group([
+            'prefix' => 'listingrequest',
+            'as' => 'listingrequest.'
+        ], function () {
+            Route::get('{id}/decline', 'ListingRequestCrudController@getDeclineForm')->name('decline');
+            Route::post('{id}/decline', 'ListingRequestCrudController@postDeclineForm');
+            Route::get('{id}/accept', 'ListingRequestCrudController@getAcceptForm')->name('accept');
+            Route::post('{id}/accept', 'ListingRequestCrudController@postAcceptForm');
+        });
+    });
+
     Route::crud('jobapplication', 'JobApplicationCrudController');
     Route::crud('redirect', 'RedirectCrudController');
     Route::crud('feedback', 'FeedbackCrudController');

@@ -153,13 +153,7 @@ class CompanyCrudController extends CrudController
             'name'    => 'ownership',
             'type'    => 'radio',
             'label'   => 'Type',
-            'options' => [
-                'Public Company'          => 'Public Company',
-                'Privately Held'          => 'Privately Held',
-                'Educational Institution' => 'Educational Institution',
-                'Government Agency'       => 'Government Agency',
-                'Non-Profit'              => 'Non-Profit'
-            ],
+            'options' => Company::getOwnershipValues(),
             'inline'  => true,
         ]);
         $this->crud->addField([

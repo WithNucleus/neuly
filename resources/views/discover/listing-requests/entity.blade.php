@@ -1,5 +1,6 @@
 <?php
-use App\Helpers\EntityMergeHelper;
+use App\Helpers\ListingRequestHelper;
+use App\Helpers\Entity\FieldsMapping;
 ?>
 @extends('layouts.app')
 
@@ -33,8 +34,8 @@ use App\Helpers\EntityMergeHelper;
                                         <div class="row">
                                             <div class="col-12">
                                                 <div class="form-group">
-                                                    <label class="font-weight-bold">{{ isset($options['label']) ? $options['label'] : EntityMergeHelper::makeLabelFromFieldName($field) }}</label>
-                                                    @include('discover.listing-requests.fields.' . EntityMergeHelper::getViewByFieldType($options['type']))
+                                                    <label class="font-weight-bold">{{ isset($options['label']) ? $options['label'] : FieldsMapping::makeLabelFromFieldName($field) }}</label>
+                                                    @include('discover.listing-requests.fields.' . ListingRequestHelper::getFieldViewByMappingOptions($options))
                                                 </div>
                                             </div>
                                         </div>

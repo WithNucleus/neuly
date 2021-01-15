@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Helpers\EntityMergeHelper;
+use App\Helpers\Entity\FieldsMapping;
 use App\Models\Contracts\EntityContract;
 use App\Models\Contracts\EntityImageContract;
 use App\Models\Traits\CrudShowEntityPageButton;
@@ -48,6 +48,14 @@ class Company extends Model implements EntityContract, EntityImageContract
         'Partner'
     ];
 
+    protected static $ownershipValues = [
+        'Public Company',
+        'Privately Held',
+        'Educational Institution',
+        'Government Agency',
+        'Non-Profit'
+    ];
+
     protected static $imageAttribute = 'logo';
     protected static $imageFolderPath = 'logos';
     protected static $imageFilenameAttribute = 'name';
@@ -86,9 +94,20 @@ class Company extends Model implements EntityContract, EntityImageContract
         }
     }
 
+    /**
+     * @return array
+     */
     public static function getCompanyToCompanyTypes()
     {
         return self::$companyToCompanyTypes;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getOwnershipValues()
+    {
+        return self::$ownershipValues;
     }
 
     /**
@@ -246,101 +265,102 @@ class Company extends Model implements EntityContract, EntityImageContract
     /**
      * @return array
      */
-    public static function getMergeMapping()
+    public static function getFieldsMapping()
     {
         return [
             //attributes
             'name'                 => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             'slug'                 => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             'ownership'            => [
-                'type'  => EntityMergeHelper::TYPE_STRING,
+                'type'  => FieldsMapping::TYPE_ENUM,
                 'label' => 'Type',
+                'values' => self::$ownershipValues,
             ],
             'ticker_symbol'        => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             'website'              => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             'founded_date'         => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_DATE,
             ],
             'valuation'            => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_INTEGER,
             ],
             'total_funding_amount' => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_INTEGER,
             ],
             'last_funding_date'    => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_DATE,
             ],
             'number_employees'     => [
-                'type'  => EntityMergeHelper::TYPE_STRING,
+                'type'  => FieldsMapping::TYPE_INTEGER,
                 'label' => '# of Employees',
             ],
             'notes'                => [
-                'type' => EntityMergeHelper::TYPE_TEXT,
+                'type' => FieldsMapping::TYPE_TEXT,
             ],
             'summary'              => [
-                'type' => EntityMergeHelper::TYPE_TEXT,
+                'type' => FieldsMapping::TYPE_TEXT,
             ],
             'logo'                 => [
-                'type' => EntityMergeHelper::TYPE_IMAGE,
+                'type' => FieldsMapping::TYPE_IMAGE,
             ],
             //relations
             'focus'                => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_N_N,
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
             'locations'            => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_N_N,
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
             'people'               => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_N_N,
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
                 'pivotColumns'  => [
                     'position'
                 ],
             ],
             'investors'            => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_N_N,
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
                 'pivotColumns'  => [
                     'type'
                 ],
             ],
             'research'             => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_N_N,
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
             'jobs'                 => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_N_N,
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'job_title',
             ],
             'events'               => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_N_N,
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
             'clinicaltrials'       => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_N_N,
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'title',
             ],
             'valuations'           => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_ONE_N,
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_ONE_N,
                 'relationField' => ['date', 'amount'],
             ]
         ];
@@ -348,8 +368,8 @@ class Company extends Model implements EntityContract, EntityImageContract
 
     public static function getListingRequestMapping()
     {
-        $mapping = self::getMergeMapping();
-        $skipFields = ['slug', 'people', 'investors','valuations'];
+        $mapping = self::getFieldsMapping();
+        $skipFields = ['slug', 'jobs', 'people', 'investors','valuations'];
 
         foreach ($skipFields as $field) {
             unset($mapping[$field]);

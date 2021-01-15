@@ -6,18 +6,19 @@
  */
 
 use App\Helpers\EntityMergeHelper;
+use App\Helpers\Entity\FieldsMapping;
 ?>
 <input type="hidden" name="master_id" value="{{ $masterEntity->id }}"/>
 <input type="hidden" name="secondary_id" value="{{ $secondaryEntity->id }}"/>
 
 @foreach($mapping as $name => $options)
     @php
-        $fieldGroup = $options['type'] === EntityMergeHelper::TYPE_RELATION ? 'relations' : 'attributes';
+        $fieldGroup = $options['type'] === FieldsMapping::TYPE_RELATION ? 'relations' : 'attributes';
     @endphp
     <div class="row">
         <div class="col-5">
             <div class="form-group">
-                <label>{{ isset($options['label']) ? $options['label'] : EntityMergeHelper::makeLabelFromFieldName($name) }}</label>
+                <label>{{ isset($options['label']) ? $options['label'] : FieldsMapping::makeLabelFromFieldName($name) }}</label>
                 @include('admin.entity_merge.fields.' . EntityMergeHelper::getViewByFieldType($options['type']), ['entity' => $masterEntity])
             </div>
         </div>
@@ -27,7 +28,7 @@ use App\Helpers\EntityMergeHelper;
                 <label class="btn btn-secondary active">
                     <input type="radio" name="{{ $fieldGroup . '[' . $name . ']' }}" value="{{ EntityMergeHelper::SOURCE_MASTER }}" checked/> {{ ucfirst(EntityMergeHelper::SOURCE_MASTER) }}
                 </label>
-                @if($options['type'] === EntityMergeHelper::TYPE_RELATION)
+                @if($options['type'] === FieldsMapping::TYPE_RELATION)
                     <label class="btn btn-secondary">
                         <input type="radio" name="{{ $fieldGroup . '[' . $name . ']' }}" value="{{ EntityMergeHelper::SOURCE_MERGE }}"/> {{ ucfirst(EntityMergeHelper::SOURCE_MERGE) }}
                     </label>
@@ -40,7 +41,7 @@ use App\Helpers\EntityMergeHelper;
 
         <div class="col-5">
             <div class="form-group">
-                <label>{{ isset($options['label']) ? $options['label'] : EntityMergeHelper::makeLabelFromFieldName($name) }}</label>
+                <label>{{ isset($options['label']) ? $options['label'] : FieldsMapping::makeLabelFromFieldName($name) }}</label>
                 @include('admin.entity_merge.fields.' . EntityMergeHelper::getViewByFieldType($options['type']), ['entity' => $secondaryEntity])
             </div>
         </div>
