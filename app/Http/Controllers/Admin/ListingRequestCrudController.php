@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Helpers\Entity\FieldsMapping;
+use App\Helpers\EntityHelper;
 use App\Helpers\ListingRequestHelper;
 use App\Models\ListingRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
@@ -161,8 +162,6 @@ class ListingRequestCrudController extends CrudController
     private function applyListingRequestData(ListingRequest $listingRequest, Request $request)
     {
         $entityClass = ListingRequestHelper::getEntityClassByType($listingRequest->entity_type);
-        $mapping = $entityClass::getListingRequestMapping();
-        $relationsData = [];
         $sourceFlags = [];
 
         if ($listingRequest->to_update_id) {
@@ -171,6 +170,9 @@ class ListingRequestCrudController extends CrudController
         } else {
             $entity = new $entityClass;
         }
+
+        $mapping = $entity::getListingRequestMapping();
+        $relationsData = [];
 
         foreach ($mapping as $field => $options) {
             //if sourceFlag set to 'original' - skip this field
@@ -197,8 +199,10 @@ class ListingRequestCrudController extends CrudController
             }
         }
 
+        $this->handleOneToOneRelationData($entity, $mapping, $relationsData);
         $entity->save();
-        $this->handleRelationData($entity, $relationsData);
+
+        $this->handleManyToManyRelationData($entity, $mapping, $relationsData);
     }
 
     /**
@@ -267,12 +271,38 @@ class ListingRequestCrudController extends CrudController
 
     /**
      * @param object $entity
+     * @param array $mapping
      * @param array $relationsData
      */
-    private function handleRelationData($entity, $relationsData)
+    private function handleOneToOneRelationData($entity, $mapping, $relationsData)
     {
-        foreach ($relationsData as $relationName => $values) {
-            $entity->{$relationName}()->sync($values);
+        foreach ($relationsData as $key => $data) {
+            $options = $mapping[$key];
+
+            switch ($options['relation']) {
+                case FieldsMapping::RELATION_ONE_ONE:
+                    $entity->{$key} = $data;
+                    break;
+
+                case FieldsMapping::RELATION_ONE_ONE_MORPHABLE:
+                    $entity->{$options['morphableFieldId']} = $data['id'];
+                    $entity->{$options['morphableFieldType']} = EntityHelper::getClassByAlias($data['type']);
+                    break;
+            }
+        }
+    }
+
+    private function handleManyToManyRelationData($entity, $mapping, $relationsData)
+    {
+        foreach ($relationsData as $key => $data) {
+            $options = $mapping[$key];
+
+            switch ($options['relation']) {
+                case FieldsMapping::RELATION_N_N:
+                case FieldsMapping::RELATION_N_N_MORPHABLE:
+                    $entity->{$key}()->sync($data);
+                    break;
+            }
         }
     }
 }

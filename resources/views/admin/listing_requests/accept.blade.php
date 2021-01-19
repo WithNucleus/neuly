@@ -18,7 +18,9 @@
             <small>{!! $crud->getSubheading() ?? 'Moderate '.$crud->entity_name !!}.</small>
 
             @if ($crud->hasAccess('list'))
-                <small><a href="{{ url($crud->route) }}" class="hidden-print font-sm"><i class="fa fa-angle-double-left"></i> {{ trans('backpack::crud.back_to_all') }} <span>{{ $crud->entity_name_plural }}</span></a></small>
+                <small><a href="{{ url($crud->route) }}" class="hidden-print font-sm">
+                        <i class="fa fa-angle-double-left"></i> {{ trans('backpack::crud.back_to_all') }}
+                        <span>{{ $crud->entity_name_plural }}</span></a></small>
             @endif
         </h2>
     </section>
@@ -33,7 +35,8 @@
                 </div>
                 <div class="card-body">
 
-                    <form method="post" action="{{ route('admin.listingrequest.accept', $id) }}" enctype="multipart/form-data">
+                    <form method="post" action="{{ route('admin.listingrequest.accept', $id) }}"
+                          enctype="multipart/form-data">
                         @csrf
 
                         @if($originalEntity)
@@ -59,30 +62,22 @@
 @endsection
 
 @section('after_scripts')
-    <style>
-        .merge-buttons-column .btn:not(:disabled):not(.disabled).active,
-        .merge-buttons-column .btn:not(:disabled):not(.disabled):active {
-            color: #fff;
-            background-color: #2e66b5;
-            border-color: #2b60ab;
-        }
-        .form-group.alert-success {
-            color: inherit;
-        }
-    </style>
     {{-- select2 --}}
-    <link href="{{ asset('packages/select2/dist/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('packages/select2-bootstrap-theme/dist/select2-bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('packages/select2/dist/css/select2.min.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('packages/select2-bootstrap-theme/dist/select2-bootstrap.min.css') }}" rel="stylesheet"
+          type="text/css"/>
     <script src="{{ asset('packages/select2/dist/js/select2.full.min.js') }}"></script>
     {{-- datepicker --}}
-    <link rel="stylesheet" type="text/css" href="{{ asset('packages/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}"/>
-    <script type="text/javascript" src="{{ asset('packages/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
+    <link rel="stylesheet" type="text/css"
+          href="{{ asset('packages/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}"/>
+    <script type="text/javascript"
+            src="{{ asset('packages/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
     {{-- ckeditor --}}
     <script src="{{ asset('packages/ckeditor/ckeditor.js') }}"></script>
     <script src="{{ asset('packages/ckeditor/adapters/jquery.js') }}"></script>
 
     <script>
-        $(document).ready(function (){
+        $(document).ready(function () {
             $('.select2').select2();
 
             $('.datepicker').datepicker({
@@ -91,12 +86,54 @@
 
             $('.ckeditor-min').ckeditor({
                 toolbarGroups: [
-                    { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
-                    { name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] },
-                    { name: 'styles' },
-                    { name: 'colors' }
+                    {name: 'basicstyles', groups: ['basicstyles', 'cleanup']},
+                    {name: 'paragraph', groups: ['list', 'indent', 'blocks', 'align', 'bidi']},
+                    {name: 'styles'},
+                    {name: 'colors'}
                 ]
             });
+
+            $('.js-morphable-input-type:checked').each(function () {
+                initMorphableSelect($(this), true);
+            });
+
+            $('.js-morphable-input-type').on('change', function () {
+                initMorphableSelect($(this))
+            });
         });
+
+        function initMorphableSelect(toggleInput, selectCurrentValue = false) {
+            let allContainers = $(toggleInput.data('group')),
+                targetContainer = $(toggleInput.data('target')),
+                targetSelect = targetContainer.find('select'),
+                getListActionUrl = targetSelect.data('fetch-action'),
+                currentIdValue = targetSelect.data('current-value');
+
+            allContainers.hide();
+            allContainers.find('select').prop('disabled', true);
+            targetSelect.prop('disabled', false);
+            targetContainer.show();
+
+            if (targetSelect.hasClass('select2-hidden-accessible') === false) {
+                $.getJSON(getListActionUrl, function (response) {
+                    if (response.status === 'ok') {
+                        let dataArray = response.data;
+
+                        dataArray.forEach((el, i) => {
+                            dataArray[i].text = dataArray[i]['name'];
+                        });
+
+                        targetSelect.select2({
+                            data: dataArray
+                        });
+
+                        if (selectCurrentValue && currentIdValue) {
+                            targetSelect.val(currentIdValue);
+                            targetSelect.trigger('change')
+                        }
+                    }
+                });
+            }
+        }
     </script>
 @endsection

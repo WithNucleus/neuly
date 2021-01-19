@@ -8,6 +8,7 @@ use App\Models\Event;
 use App\Models\Investor;
 use App\Models\Job;
 use App\Models\Person;
+use Carbon\Carbon;
 
 class ListingRequestHelper
 {
@@ -35,13 +36,13 @@ class ListingRequestHelper
      */
     public static function getEntityClassByType($type)
     {
-        $entityTypes = self::getAllowedEntities();
+        $entities = self::getAllowedEntities();
 
-        if (isset($entityTypes[$type]) === false) {
+        if (isset($entities[$type]) === false) {
             throw new \Exception('Wrong entity type!');
         }
 
-        return $entityTypes[$type];
+        return $entities[$type];
     }
 
     /**
@@ -51,7 +52,13 @@ class ListingRequestHelper
      */
     public static function getEntityTypeByClass($class)
     {
-        return array_search($class, self::getAllowedEntities());
+        $type = array_search($class, self::getAllowedEntities());
+
+        if (! $type) {
+            throw new \Exception('Wrong entity class!');
+        }
+
+        return $type;
     }
 
     /**
@@ -61,7 +68,11 @@ class ListingRequestHelper
     public static function getFieldViewByMappingOptions($options)
     {
         $type = $options['type'];
-        $morphableRelationTypes = [FieldsMapping::RELATION_ONE_N_MORPHABLE, FieldsMapping::RELATION_N_N_MORPHABLE];
+        $morphableRelationTypes = [
+            FieldsMapping::RELATION_ONE_ONE_MORPHABLE,
+            FieldsMapping::RELATION_ONE_N_MORPHABLE,
+            FieldsMapping::RELATION_N_N_MORPHABLE,
+        ];
 
         switch ($type) {
             case FieldsMapping::TYPE_DATE:
@@ -124,12 +135,29 @@ class ListingRequestHelper
 
         switch ($options['type']) {
             case FieldsMapping::TYPE_RELATION:
-                $originalValues = $originalEntity->{$field}->pluck('id')->toArray();
-                $requestValues = $requestData->{$field} ? $requestData->{$field} : [];
+                if ($options['relation'] === FieldsMapping::RELATION_ONE_ONE_MORPHABLE) {
+                    $originalValue = $originalEntity->{$options['morphableFieldId']};
+                    $requestValue = isset($requestData->{$field}->id) ? $requestData->{$field}->id : null;
 
-                $difference = array_merge(array_diff($originalValues, $requestValues), array_diff($requestValues, $originalValues));
+                    return $originalValue != $requestValue;
+                } else {
+                    $originalValues = $originalEntity->{$field}->pluck('id')->toArray();
+                    $requestValues = $requestData->{$field} ? $requestData->{$field} : [];
 
-                return count($difference) > 0;
+                    $difference = array_merge(
+                        array_diff($originalValues, $requestValues),
+                        array_diff($requestValues, $originalValues)
+                    );
+
+                    return count($difference) > 0;
+                }
+
+            case FieldsMapping::TYPE_DATE:
+                $originalValue = $originalEntity->{$field}->format(config('app.date_format'));
+                $requestValue = Carbon::create($requestData->{$field})->format(config('app.date_format'));
+
+                return $originalValue != $requestValue;
+
             default:
 
                 return $originalEntity->{$field} != $requestData->{$field};

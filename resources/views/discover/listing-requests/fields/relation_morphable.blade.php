@@ -1,5 +1,6 @@
 <?php
-use App\Helpers\ListingRequestHelper;
+
+use App\Helpers\EntityHelper;
 
 /**
  * @var string $field
@@ -10,78 +11,42 @@ use App\Helpers\ListingRequestHelper;
 $relationMorphableTypes = [];
 
 foreach ($options['relationMorphableTypes'] as $relationClass) {
-    $alias = ListingRequestHelper::getEntityTypeByClass($relationClass);
-    $relationMorphableTypes[$alias] = $relationClass;
+    $type = EntityHelper::getAliasByClass($relationClass);
+    $relationMorphableTypes[$type] = $relationClass;
 }
+
+$currentId = null;
+$currentType = null;
+
+if (isset($entity) && $entity->{$field}) {
+    $currentId = $entity->{$field}->id;
+    $relatedClass = get_class($entity->{$field});
+    $currentType = EntityHelper::getAliasByClass($relatedClass);
+}
+
 ?>
 <div class="row mb-2">
     <div class="col-sm-12">
-        @foreach($relationMorphableTypes as $alias => $relationClass)
+        @foreach($relationMorphableTypes as $type => $className)
             <div class="form-check form-check-inline">
-                <input id="{{$alias}}-{{$field}}-type" class="form-check-input js-{{$field}}-type-toggle" type="radio"
-                       name="{{$field}}[type]" value="{{$alias}}">
-                <label for="{{$alias}}-{{$field}}-type" class="form-check-label"> {{ ucfirst($alias) }}</label>
+                <input id="{{$field}}-{{$type}}-type" class="form-check-input js-morphable-input-type" type="radio"
+                       name="{{$field}}[type]" value="{{$type}}" {{ $currentType == $type ? 'checked' : '' }}
+                       data-group=".js-{{$field}}-list-group" data-target=".js-{{$field}}-{{$type}}-list-container">
+                <label for="{{$field}}-{{$type}}-type" class="form-check-label"> {{ ucfirst($type) }}</label>
             </div>
         @endforeach
     </div>
 </div>
 
-<div class="js-{{$field}}-list-container" style="display: none;">
-    <div class="form-group">
-        <input type="text" class="form-control js-{{$field}}-list-input" placeholder="Search for {{$field}} name" data-action="{{ route('listing.request.getEntityListJson') }}">
-        <input type="hidden" name="{{$field}}[id]" class="js-{{$field}}-id-input" value=""/>
+@foreach($relationMorphableTypes as $type => $relationClass)
+    <div class="row mb-2 js-{{$field}}-list-group js-{{$field}}-{{$type}}-list-container" style="display: none;">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <select class="form-control js-morphable-select-id" name="{{$field}}[id]"
+                        {{ $currentType == $type ? '' : 'disabled' }}
+                        data-fetch-action="{{ route('api.entities.list.byAlias', ['alias' => $type]) }}"
+                        data-current-value="{{ $currentType == $type ? $currentId : null }}"></select>
+            </div>
+        </div>
     </div>
-</div>
-
-<style>
-    .js-{{$field}}-list-container .twitter-typeahead {
-        width: 100%;
-    }
-</style>
-<script>
-    $(document).ready(function() {
-        let typeToggleInput = $('.js-{{$field}}-type-toggle'),
-            listContainer = $('.js-{{$field}}-list-container'),
-            idInput = $('.js-{{$field}}-id-input'),
-            listInput = $('.js-{{$field}}-list-input'),
-            getListActionUrl = listInput.data('action'),
-            entityIdsByName = [],
-            entityNames = [];
-
-        typeToggleInput.on('change', function (){
-            listContainer.hide();
-            listInput.val('').typeahead('destroy');
-            idInput.val('');
-            entityIdsByName = [];
-            entityNames = [];
-
-            let entityType = $(this).val();
-
-            $.getJSON(getListActionUrl, {'type': entityType}, function (response) {
-                if (response.status === 'ok') {
-                    $.each(response.data, function (i, item) {
-                        entityNames.push(item.name);
-                        entityIdsByName[item.name] = item.id;
-                    });
-
-                    let entitiesList = new Bloodhound({
-                        datumTokenizer: Bloodhound.tokenizers.whitespace,
-                        queryTokenizer: Bloodhound.tokenizers.whitespace,
-                        local: entityNames
-                    });
-
-                    listInput.typeahead(null, {
-                        name: 'entitiesList',
-                        source: entitiesList
-                    });
-
-                    listContainer.show();
-                }
-            });
-        });
-
-        listInput.bind('typeahead:select', function (event, item) {
-            idInput.val(entityIdsByName[item]);
-        });
-    });
-</script>
+@endforeach

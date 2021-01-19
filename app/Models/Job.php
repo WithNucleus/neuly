@@ -186,14 +186,14 @@ class Job extends Model implements EntityContract
             //attributes
             'job_title'      => [
                 'type' => FieldsMapping::TYPE_STRING,
-                'label' => 'Job Title'
+                'label' => 'Job Title',
             ],
             'slug'      => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
             'job_description'   => [
                 'type' => FieldsMapping::TYPE_TEXT,
-                'label' => 'Job Description'
+                'label' => 'Job Description',
             ],
             'employment_type'      => [
                 'type' => FieldsMapping::TYPE_ENUM,
@@ -202,23 +202,25 @@ class Job extends Model implements EntityContract
             ],
             'posted_date'      => [
                 'type' => FieldsMapping::TYPE_DATE,
-                'label' => 'Posted date'
+                'label' => 'Posted date',
             ],
             'salary'      => [
                 'type' => FieldsMapping::TYPE_INTEGER,
             ],
             'hourly_rate'      => [
                 'type' => FieldsMapping::TYPE_INTEGER,
-                'label' => 'Hourly Rate'
+                'label' => 'Hourly Rate',
             ],
             //relations
             'owner'    => [
                 'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_ONE_N_MORPHABLE,
+                'relation'      => FieldsMapping::RELATION_ONE_ONE_MORPHABLE,
                 'relationMorphableTypes' => [
                     Company::class,
                     Investor::class,
                 ],
+                'morphableFieldId' => 'owner_id',
+                'morphableFieldType' => 'owner_type',
                 'relationField' => 'name',
             ],
             'locations' => [

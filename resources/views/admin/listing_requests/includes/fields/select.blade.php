@@ -6,8 +6,8 @@ if (isset($entity->{$field})) {
 }
 ?>
 <select name="{{ $field }}" class="form-control" {{ $isOriginalEntity ? 'disabled' : '' }}>
-    @foreach($options['values'] as $key => $value)
-        <option value="{{ $key }}" {{ $key == $currentValue ? 'selected' : '' }}>{{ $value }}</option>
+    @foreach($options['values'] as $value)
+        <option value="{{ $value }}" {{ $value == $currentValue ? 'selected' : '' }}>{{ $value }}</option>
     @endforeach
 </select>
 

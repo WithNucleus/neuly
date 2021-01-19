@@ -12,8 +12,10 @@ class FieldsMapping
     const TYPE_STRING = 'string';
     const TYPE_TEXT = 'text';
 
+    const RELATION_ONE_ONE = 'one_one';
     const RELATION_ONE_N = 'one_n';
     const RELATION_N_N = 'n_n';
+    const RELATION_ONE_ONE_MORPHABLE = 'one_one_morphable';
     const RELATION_ONE_N_MORPHABLE = 'one_n_morphable';
     const RELATION_N_N_MORPHABLE = 'n_n_morphable';
 
