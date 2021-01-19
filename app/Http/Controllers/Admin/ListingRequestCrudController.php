@@ -176,7 +176,7 @@ class ListingRequestCrudController extends CrudController
 
         foreach ($mapping as $field => $options) {
             //if sourceFlag set to 'original' - skip this field
-            if (isset($sourceFlags[$field]) && $sourceFlags[$field] == ListingRequestHelper::SOURCE_ORIGINAL) {
+            if ($sourceFlags[$field] === ListingRequestHelper::SOURCE_ORIGINAL) {
                 continue;
             }
 

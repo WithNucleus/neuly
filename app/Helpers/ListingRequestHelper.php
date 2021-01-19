@@ -38,7 +38,7 @@ class ListingRequestHelper
     {
         $entities = self::getAllowedEntities();
 
-        if (isset($entities[$type]) === false) {
+        if (! isset($entities[$type])) {
             throw new \Exception('Wrong entity type!');
         }
 
@@ -129,7 +129,7 @@ class ListingRequestHelper
      */
     public static function isEntitiesFieldDifferent($originalEntity, $requestData, $field, $options)
     {
-        if (isset($requestData->{$field}) === false) {
+        if (!isset($requestData->{$field})) {
             $requestData->{$field} = null;
         }
 

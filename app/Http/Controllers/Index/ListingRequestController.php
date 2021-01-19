@@ -81,13 +81,6 @@ class ListingRequestController extends Controller
 
         $additionalEntitiesRequested = [];
 
-//        if (isset($data['entity_company_new'])) {
-//            $additionalEntitiesRequested['company'] = $data['entity_company_new'];
-//        }
-//        if (isset($data['entity_investor_new'])) {
-//            $additionalEntitiesRequested['investor'] = $data['entity_investor_new'];
-//        }
-
         return view('discover.listing-requests.finish', [
             'additionalEntitiesRequested' => $additionalEntitiesRequested,
         ]);
