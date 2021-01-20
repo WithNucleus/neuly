@@ -46,7 +46,7 @@ Route::group([
     Route::crud('searchlog', 'SearchLogCrudController');
     Route::crud('companyvaluation', 'CompanyValuationCrudController');
     Route::crud('person-claim', 'ClaimPersonCrudController');
-    Route::get('person-claim/approve/{claim}', 'ClaimPersonCrudController@approve');
+    Route::get('person-claim/{claim}/approve', 'ClaimPersonCrudController@approve')->name('admin.person-claim.approve');
 
     Route::group([
         'prefix' => 'import/clinicaltrial',
