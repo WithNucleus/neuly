@@ -41,9 +41,11 @@ class ListingRequestCreated extends Notification
      */
     public function toMail($notifiable)
     {
+        $url = route('admin.listingrequest.show', $this->listingRequest->id);
+
         return (new MailMessage)
-            ->line('Listing request created for entity "' . $this->listingRequest->entity_name . '", entity type "' . $this->listingRequest->type . '"')
-            ->action('Show Listing Request', route('listingrequest.show', $this->listingRequest->id))
+            ->line('Listing request created for entity "'.$this->listingRequest->entity_name.'", entity type "'.$this->listingRequest->type.'"')
+            ->action('Show Listing Request', $url)
             ->line('Thank you for using our application!');
     }
 
@@ -53,7 +55,7 @@ class ListingRequestCreated extends Notification
      */
     public function toSlack($notifiable)
     {
-        $url = route('listingrequest.show', $this->listingRequest->id);
+        $url = route('admin.listingrequest.show', $this->listingRequest->id);
         $entityName = $this->listingRequest->entity_name;
         $entityType = $this->listingRequest->type;
 
@@ -63,7 +65,7 @@ class ListingRequestCreated extends Notification
                 $attachment->title('Show', $url)
                     ->fields([
                         'Entity Name' => $entityName,
-                        'Entity Type' => $entityType
+                        'Entity Type' => $entityType,
                     ]);
             });
     }
