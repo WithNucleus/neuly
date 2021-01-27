@@ -65,44 +65,70 @@ $dates = array(
         </div>
     </div>
     <div class="table-responsive mb-5">
-    <table class="table table-bordered">
-        <tr>
-            <th class="bg-light text-no-wrap lead-smaller">Condition or Disease</th>
-            <th class="bg-light text-no-wrap lead-smaller">Intervention / Treatment</th>
-            <th class="bg-light text-no-wrap lead-smaller">Phase</th>
-        </tr>
-        <tr>
-            <td>
-                @if($clinicaltrial->conditions->count() > 0)
-                    <ul class="mb-0">
-                        @foreach ($clinicaltrial->conditions as $item)
-                            <li>{{ $item->value }}</li>
-                        @endforeach
-                    </ul>
-                @endif
-            </td>
-            <td>
-                @if($clinicaltrial->interventions->count() > 0)
-                    <ul class="mb-0">
-                        @foreach ($clinicaltrial->interventions as $item)
-                            <li>{{ $item->value }}</li>
-                        @endforeach
-                    </ul>
-                @endif
-            </td>
-            <td>
-                @php
-                    $phases = explode('|', $clinicaltrial->phases)
-                @endphp
-                @foreach ($phases as $phase)
-                    <ul class="mb-0">
-                        <li>{{ $phase }}</li>
-                    </ul>
-                @endforeach
-            </td>
-        </tr>
-    </table>
+        <table class="table table-bordered">
+            <tr>
+                <th class="bg-light text-no-wrap lead-smaller">Condition or Disease</th>
+                <th class="bg-light text-no-wrap lead-smaller">Intervention / Treatment</th>
+                <th class="bg-light text-no-wrap lead-smaller">Phase</th>
+            </tr>
+            <tr>
+                <td>
+                    @if($clinicaltrial->conditions->count() > 0)
+                        <ul class="mb-0">
+                            @foreach ($clinicaltrial->conditions as $item)
+                                <li>{{ $item->value }}</li>
+                            @endforeach
+                        </ul>
+                    @endif
+                </td>
+                <td>
+                    @if($clinicaltrial->interventions->count() > 0)
+                        <ul class="mb-0">
+                            @foreach ($clinicaltrial->interventions as $item)
+                                <li>{{ $item->value }}</li>
+                            @endforeach
+                        </ul>
+                    @endif
+                </td>
+                <td>
+                    @php
+                        $phases = explode('|', $clinicaltrial->phases)
+                    @endphp
+                    @foreach ($phases as $phase)
+                        <ul class="mb-0">
+                            <li>{{ $phase }}</li>
+                        </ul>
+                    @endforeach
+                </td>
+            </tr>
+        </table>
     </div>
+
+    <style>
+        .has-arrow-icon.collapsed i {
+            transform: scaleY(-1);
+        }
+    </style>
+
+    @if($clinicaltrial->brief_summary != '' AND $clinicaltrial->brief_summary != 'Not applicable')
+        <div class="row mb-5">
+            <div class="col-12">
+                <h3 class="h4 font-normal border-bottom">Brief Summary</h3>
+                {!! $clinicaltrial->brief_summary !!}
+            </div>
+        </div>
+    @endif
+
+    @if($clinicaltrial->detailed_description != '' AND $clinicaltrial->detailed_description != 'Not applicable')
+        <div class="row mb-5">
+            <div class="col-12">
+                <h3 class="h4 font-normal border-bottom has-arrow-icon collapsed" data-toggle="collapse" href="#detailedDescription" role="button" aria-expanded="false" aria-controls="detailedDescription">Detailed Description <small class="float-right"><i class="far fa-angle-up"></i></small></h3>
+                <div class="collapse" id="detailedDescription">
+                    {!! $clinicaltrial->detailed_description !!}
+                </div>
+            </div>
+        </div>
+    @endif
 
     <div class="row mb-5">
     <div class="col-12 col-xl-6">

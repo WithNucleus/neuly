@@ -47,4 +47,16 @@ Route::group([
     Route::crud('companyvaluation', 'CompanyValuationCrudController');
     Route::crud('person-claim', 'ClaimPersonCrudController');
     Route::get('person-claim/approve/{claim}', 'ClaimPersonCrudController@approve');
+
+    Route::group([
+        'prefix' => 'import/clinicaltrial',
+        'namespace' => 'Import\ClinicalTrial',
+        'as' => 'admin.import.clinicaltrial.',
+        'middleware' => ['permission:import'],
+    ], function () {
+        Route::crud('parsing', 'ParsingController');
+        Route::post('parsing/bulkImport', 'ParsingController@bulkImport')->name('parsing.bulkImport');
+        Route::crud('parsing-results', 'ParsingResultsController');
+        Route::get('parsing-results/{id}/approve', 'ParsingResultsController@approve')->name('parsing-results.approve');
+    });
 }); // this should be the absolute last line of this file
