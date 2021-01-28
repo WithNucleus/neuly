@@ -44,7 +44,7 @@ class ListingRequestCreated extends Notification
         $url = route('admin.listingrequest.show', $this->listingRequest->id);
 
         return (new MailMessage)
-            ->line('Listing request created for entity "'.$this->listingRequest->entity_name.'", entity type "'.$this->listingRequest->type.'"')
+            ->line('Listing request created for entity "'.$this->listingRequest->entity_name.'", entity type "'.$this->listingRequest->entity_type.'"')
             ->action('Show Listing Request', $url)
             ->line('Thank you for using our application!');
     }
@@ -56,17 +56,15 @@ class ListingRequestCreated extends Notification
     public function toSlack($notifiable)
     {
         $url = route('admin.listingrequest.show', $this->listingRequest->id);
-        $entityName = $this->listingRequest->entity_name;
-        $entityType = $this->listingRequest->type;
+        $fields = [
+            'Entity Name' => $this->listingRequest->entity_name,
+            'Entity Type' => $this->listingRequest->entity_type,
+        ];
 
         return (new SlackMessage)
             ->content('Listing request created')
-            ->attachment(function ($attachment) use ($url, $entityName, $entityType) {
-                $attachment->title('Show', $url)
-                    ->fields([
-                        'Entity Name' => $entityName,
-                        'Entity Type' => $entityType,
-                    ]);
+            ->attachment(function ($attachment) use ($url, $fields) {
+                $attachment->title('Show', $url)->fields($fields);
             });
     }
 }

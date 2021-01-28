@@ -6,7 +6,7 @@ use App\Helpers\Entity\FieldsMapping;
     <div class="col-12">
         <div class="form-group">
             <label class="font-weight-bold">Slug</label>
-            <input class="form-control" type="text" name="slug" value="" readonly/>
+            <input class="form-control js-slug-field" type="text" name="slug" value="" required/>
         </div>
     </div>
 </div>

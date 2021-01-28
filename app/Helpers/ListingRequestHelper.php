@@ -129,7 +129,7 @@ class ListingRequestHelper
      */
     public static function isEntitiesFieldDifferent($originalEntity, $requestData, $field, $options)
     {
-        if (!isset($requestData->{$field})) {
+        if (! isset($requestData->{$field})) {
             $requestData->{$field} = null;
         }
 
@@ -153,8 +153,8 @@ class ListingRequestHelper
                 }
 
             case FieldsMapping::TYPE_DATE:
-                $originalValue = $originalEntity->{$field}->format(config('app.date_format'));
-                $requestValue = Carbon::create($requestData->{$field})->format(config('app.date_format'));
+                $originalValue = $originalEntity->{$field};
+                $requestValue = $requestData->{$field} !== null ? Carbon::create($requestData->{$field}) : $requestData->{$field};
 
                 return $originalValue != $requestValue;
 

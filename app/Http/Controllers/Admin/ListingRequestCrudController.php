@@ -10,6 +10,7 @@ use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\Widget;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 /**
  * Class ListingRequestCrudController.
@@ -148,8 +149,15 @@ class ListingRequestCrudController extends CrudController
         $this->crud->setOperation('Accept');
 
         $listingRequest = ListingRequest::findOrFail($id);
+        $entityClass = ListingRequestHelper::getEntityClassByType($listingRequest->entity_type);
 
-        $this->applyListingRequestData($listingRequest, $request);
+        if ($listingRequest->to_update_id === null) {
+            Validator::make($request->all(), [
+                'slug' => 'required|unique:'.$entityClass,
+            ])->validate();
+        }
+
+        $this->applyListingRequestData($request, $entityClass, $listingRequest->to_update_id);
 
         $this->data['crud'] = $this->crud;
         $this->data['message'] = 'Listing Request has been accepted successfully.';
@@ -159,24 +167,23 @@ class ListingRequestCrudController extends CrudController
         return view('admin.listing_requests.finish', $this->data);
     }
 
-    private function applyListingRequestData(ListingRequest $listingRequest, Request $request)
+    private function applyListingRequestData(Request $request, $entityClass, $toUpdateId = null)
     {
-        $entityClass = ListingRequestHelper::getEntityClassByType($listingRequest->entity_type);
-        $sourceFlags = [];
+        $mapping = $entityClass::getListingRequestMapping();
 
-        if ($listingRequest->to_update_id) {
-            $entity = $entityClass::findOrFail($listingRequest->to_update_id);
+        if ($toUpdateId) {
+            $entity = $entityClass::findOrFail($toUpdateId);
             $sourceFlags = $request->input('source');
         } else {
             $entity = new $entityClass;
+            $sourceFlags = [];
         }
 
-        $mapping = $entity::getListingRequestMapping();
         $relationsData = [];
 
         foreach ($mapping as $field => $options) {
             //if sourceFlag set to 'original' - skip this field
-            if ($sourceFlags[$field] === ListingRequestHelper::SOURCE_ORIGINAL) {
+            if ($sourceFlags !== [] && $sourceFlags[$field] === ListingRequestHelper::SOURCE_ORIGINAL) {
                 continue;
             }
 
@@ -210,23 +217,21 @@ class ListingRequestCrudController extends CrudController
      * @param object $entity
      * @param string $field
      */
-    private function handleImageUpload(Request $request, $entity, $field)
+    private function handleImageUpload(Request $request, $entity, $fieldName)
     {
-        $inputData = $request->{$field};
         $imageAction = $request->input('image_action');
-        $uploadedImage = $request->file('entity_image_uploaded');
         $imageImportSettings = $entity::getImageImportSettings();
-        $destinationPath = $imageImportSettings['folder'].DIRECTORY_SEPARATOR;
+        $destinationFolderPath = $imageImportSettings['folder'].DIRECTORY_SEPARATOR;
         $diskName = 'public';
 
         switch ($imageAction) {
             case 'shown':
-                $filePath = $inputData;
+                $filePath = $request->input($fieldName);
                 $fileName = $this->getFilenameFromPath($filePath);
-                $destinationFilePath = $destinationPath.$fileName;
+                $destinationFilePath = $destinationFolderPath.$fileName;
 
                 if (Storage::disk($diskName)->exists($filePath) === false) {
-                    $entity->{$field} = null;
+                    $entity->{$fieldName} = null;
                     break;
                 }
 
@@ -235,25 +240,25 @@ class ListingRequestCrudController extends CrudController
                 }
 
                 Storage::disk($diskName)->move($filePath, $destinationFilePath);
-                $entity->{$field} = $fileName;
+                $entity->{$fieldName} = $fileName;
                 break;
 
             case 'uploaded':
+                $uploadedImage = $request->file('entity_image_uploaded');
+
                 if (! $uploadedImage) {
-                    $entity->{$field} = null;
+                    $entity->{$fieldName} = null;
                     break;
                 }
 
                 $fileName = $uploadedImage->getClientOriginalName();
-                Storage::disk($diskName)->putFileAs($destinationPath, $uploadedImage, $fileName);
-                $entity->{$field} = $fileName;
+                Storage::disk($diskName)->putFileAs($destinationFolderPath, $uploadedImage, $fileName);
+                $entity->{$fieldName} = $fileName;
                 break;
 
-            case 'original':
-                break;
             case 'none':
             default:
-                $entity->{$field} = null;
+                $entity->{$fieldName} = null;
                 break;
         }
     }
