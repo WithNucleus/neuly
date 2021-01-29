@@ -12,5 +12,7 @@
   @php
     $default_error_message = "Sorry about that, but you tried to request this page by an unsupported method.";;
   @endphp
-  {!! isset($exception)? ($exception->getMessage()?$exception->getMessage():$default_error_message): $default_error_message !!}
+  @can('view logs')
+      {!! isset($exception)? ($exception->getMessage()?$exception->getMessage():$default_error_message): $default_error_message !!}
+  @endcan
 @endsection
