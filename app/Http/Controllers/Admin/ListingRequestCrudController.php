@@ -169,8 +169,6 @@ class ListingRequestCrudController extends CrudController
 
     private function applyListingRequestData(Request $request, $entityClass, $toUpdateId = null)
     {
-        $mapping = $entityClass::getListingRequestMapping();
-
         if ($toUpdateId) {
             $entity = $entityClass::findOrFail($toUpdateId);
             $sourceFlags = $request->input('source');
@@ -179,6 +177,7 @@ class ListingRequestCrudController extends CrudController
             $sourceFlags = [];
         }
 
+        $mapping = $entityClass::getListingRequestMapping();
         $relationsData = [];
 
         foreach ($mapping as $field => $options) {
@@ -188,10 +187,6 @@ class ListingRequestCrudController extends CrudController
             }
 
             $inputData = $request->input($field);
-
-            if (empty($inputData)) {
-                continue;
-            }
 
             switch ($options['type']) {
                 case FieldsMapping::TYPE_IMAGE:
@@ -204,6 +199,10 @@ class ListingRequestCrudController extends CrudController
                     $entity->{$field} = $inputData;
                     break;
             }
+        }
+
+        if ($request->has('slug')) {
+            $entity->slug = $request->input('slug');
         }
 
         $this->handleOneToOneRelationData($entity, $mapping, $relationsData);
@@ -219,6 +218,7 @@ class ListingRequestCrudController extends CrudController
      */
     private function handleImageUpload(Request $request, $entity, $fieldName)
     {
+        $filePath = $request->input($fieldName);
         $imageAction = $request->input('image_action');
         $imageImportSettings = $entity::getImageImportSettings();
         $destinationFolderPath = $imageImportSettings['folder'].DIRECTORY_SEPARATOR;
@@ -226,7 +226,6 @@ class ListingRequestCrudController extends CrudController
 
         switch ($imageAction) {
             case 'shown':
-                $filePath = $request->input($fieldName);
                 $fileName = $this->getFilenameFromPath($filePath);
                 $destinationFilePath = $destinationFolderPath.$fileName;
 
@@ -260,6 +259,11 @@ class ListingRequestCrudController extends CrudController
             default:
                 $entity->{$fieldName} = null;
                 break;
+        }
+
+        //clean request's image
+        if ($filePath !== null && Storage::disk($diskName)->exists($filePath)) {
+            Storage::disk($diskName)->delete($filePath);
         }
     }
 

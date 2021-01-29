@@ -39,6 +39,13 @@ class Investor extends Model implements EntityContract, EntityImageContract
     protected static $imageAttribute = 'logo';
     protected static $imageFolderPath = 'investors';
     protected static $imageFilenameAttribute = 'name';
+
+    protected static $typeValues = [
+        'Venture Capital',
+        'Private Equity',
+        'Private Individual',
+    ];
+
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS
@@ -63,6 +70,14 @@ class Investor extends Model implements EntityContract, EntityImageContract
         } else {
             return 'a ' . strtolower($this->type) . ' firm';
         }
+    }
+
+    /**
+     * @return array
+     */
+    public static function getTypeValues()
+    {
+        return self::$typeValues;
     }
 
     /*
@@ -148,8 +163,9 @@ class Investor extends Model implements EntityContract, EntityImageContract
             'website'   => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'type'      => [
-                'type' => FieldsMapping::TYPE_STRING,
+            'type' => [
+                'type' => FieldsMapping::TYPE_ENUM,
+                'values' => self::$typeValues,
             ],
             'logo'      => [
                 'type' => FieldsMapping::TYPE_IMAGE,

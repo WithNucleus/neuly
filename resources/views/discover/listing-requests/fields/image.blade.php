@@ -1,10 +1,11 @@
 <br>
+<p>
 @isset($entity)
     @if($entity->entityImageUrl)
         <img src="{{ $entity->entityImageUrl }}" style="max-width: 300px;" />
-        <br>
     @else
-        <p><span class="badge badge-secondary">No image</span></p>
+        <span class="badge badge-secondary">No image</span>
     @endif
 @endisset
-<input type="file" name="{{$field}}">
+</p>
+<p><input type="file" name="{{$field}}"></p>
