@@ -12,6 +12,7 @@ use App\Models\Traits\CrudShowEntityPageButton;
 use App\Models\Traits\OldSlugRedirectable;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -89,6 +90,11 @@ class Clinicaltrial extends Model implements EntityContract
         return $this->belongsToMany(CtStudyDesign::class, 'clinicaltrial_study_design');
     }
 
+    public function parsingResult()
+    {
+        return $this->hasOne(ClinicaltrialParsingResult::class);
+    }
+
     /**
      * Get all Sponsors and Collaborators combined together.
      *
@@ -111,6 +117,17 @@ class Clinicaltrial extends Model implements EntityContract
     | SCOPES
     |--------------------------------------------------------------------------
     */
+
+    public function scopeAvailableForParsing($query)
+    {
+        return $query
+            ->doesntHave('parsingResult')
+            ->where(function (Builder $query) {
+                return $query
+                    ->whereNull('brief_summary')
+                    ->orWhereNull('detailed_description');
+            });
+    }
 
     /*
     |--------------------------------------------------------------------------

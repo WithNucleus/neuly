@@ -1,7 +1,7 @@
 <div class="home-card-container px-5 mx-auto my-5 pb-5">
     <div class="row">
         <div class="mt-3 col-12 text-center">
-            <h2 class="h1 text-primary mb-0">How Neuly Can Help You</h2>
+            <h2 class="h1 mb-0">How Neuly Can Help You</h2>
             <p class="lead mb-4">We've made complicated data and information easy to understand.</p>
         </div>
     </div>
@@ -35,11 +35,13 @@
             <p class="mb-0">Understand industry data to help you make informed decisions.</p>
         </div>
     </div>
-    <div class="row">
-        <div class="col">
-            <p class="text-center">
-                <a href="{{ route('register') }}" class="btn btn-primary btn-lg">Join Neuly</a>
-            </p>
+    @guest
+        <div class="row">
+            <div class="col">
+                <p class="text-center">
+                    <a href="{{ route('register') }}" class="btn btn-primary btn-lg">Join Neuly</a>
+                </p>
+            </div>
         </div>
-    </div>
+    @endguest
 </div>

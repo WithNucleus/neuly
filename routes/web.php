@@ -151,6 +151,7 @@ Route::post('/jobs/apply', 'Index\JobApplicationController@apply')->name('discov
 
 // Clinical trials
 Route::get('/clinical-trials', 'Index\ClinicaltrialController@index')->name('discover.clinicaltrials');
+Route::get('/clinical-trials/recruiting', 'Index\RecruitingClinicalTrialController@index')->name('discover.clinicaltrials.recruiting');
 Route::get('/clinical-trials/{slug}', 'Index\ClinicaltrialController@show')->name('discover.clinicaltrials.show');
 
 // Listing Requests

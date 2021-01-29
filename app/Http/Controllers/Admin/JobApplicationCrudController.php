@@ -60,12 +60,10 @@ class JobApplicationCrudController extends CrudController
             'model'     => 'App\Models\Job',
         ]);
         $this->crud->addColumn([
-            'name'      => 'company',
-            'label'     => 'Organization',
-            'type'      => 'relationship',
-            'entity'    => 'company',
-            'attribute' => 'name',
-            'model'     => 'App\Models\Company',
+            'name'  => 'owner',
+            'label' => 'Owner', // Table column heading
+            'type'  => 'model_function',
+            'function_name' => 'getOwnerName',
         ]);
     }
 
@@ -94,10 +92,10 @@ class JobApplicationCrudController extends CrudController
             'function_name' => 'getJobLink'
         ]);
         $this->crud->addColumn([
-            'name'  => 'company_id',
-            'label' => 'Organization',
+            'name'  => 'owner',
+            'label' => 'Owner',
             'type'  => 'model_function',
-            'function_name' => 'getOrganizationLink'
+            'function_name' => 'getOwnerLink'
         ]);
         $this->crud->addColumn([
             'name'  => 'cover_letter',

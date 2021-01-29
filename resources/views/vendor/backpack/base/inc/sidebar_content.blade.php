@@ -132,6 +132,22 @@
 @endcan
 
 @can('import')
+    <li class="nav-item nav-dropdown">
+        <a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon la la-stethoscope"></i> Clinical Trials Parsing</a>
+        <ul class="nav-dropdown-items">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('admin.import.clinicaltrial.parsing.index') }}">
+                    <span>Entities</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('admin.import.clinicaltrial.parsing-results.index') }}">
+                    <span>Results</span>
+                </a>
+            </li>
+        </ul>
+    </li>
+
 	<li class="nav-item nav-dropdown">
 		<a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon la la-cloud-upload-alt"></i> Import</a>
 		<ul class="nav-dropdown-items">

@@ -1,4 +1,4 @@
-<div class="bg-dark bg-brains pt-5 mb-5 shadow-sm">
+<div class="bg-dark bg-brains pt-5 shadow-sm">
     <div class="container mt-4">
         <div class="row">
             <div class="col-12 text-center">
@@ -40,9 +40,7 @@
                     </a>
                 </div>
             </div>
-        </div>
 
-        <div class="card-deck">
             <div class="card home-who-is-card">
                 <div class="card-body text-center shadow-sm">
                     <a href="{{ route('discover.events') }}" class="text-dark">

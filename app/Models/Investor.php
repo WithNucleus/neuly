@@ -45,6 +45,14 @@ class Investor extends Model implements EntityContract, EntityImageContract
     |--------------------------------------------------------------------------
     */
 
+    protected static function booted()
+    {
+        static::deleting(function ($model) {
+            //remove polymorphic relation
+            $model->jobs()->delete();
+        });
+    }
+
     public function getShowLink() {
         return '<a href="' . route('discover.investors.show', $this->slug) . '">' . $this->name . '</a>';
     }

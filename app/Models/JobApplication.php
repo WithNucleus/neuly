@@ -41,25 +41,19 @@ class JobApplication extends Model
     }
 
     public function getApplicantEmail() {
-
-        $user = User::find($this->user_id);
-
-        return '<a href="mailto:' . $user->email . '">' . $user->email . '</a>';
-
+        return '<a href="mailto:' . $this->user->email . '">' . $this->user->email . '</a>';
     }
 
-    public function getOrganizationLink() {
+    public function getOwnerName() {
+        return $this->job->owner->name;
+    }
 
-        $company = Company::find($this->company_id);
-
-        return '<a href="' . route('company.show', $company->id) . '">' . $company->name . '</a>';
+    public function getOwnerLink() {
+        return '<a href="' . $this->job->ownerShowUrlAdmin . '">' . $this->job->owner->name . '</a>';
     }
 
     public function getJobLink() {
-
-        $job = Job::find($this->job_id);
-
-        return '<a href="' . route('job.show', $job->id) . '">' . $job->job_title . '</a>';
+        return '<a href="' . route('job.show', $this->job->id) . '">' . $this->job->job_title . '</a>';
     }
 
     public function getCoverLetter() {
@@ -77,19 +71,14 @@ class JobApplication extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    public function company()
-    {
-        return $this->belongsTo('App\Models\Company');
-    }
-
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo(User::class);
     }
 
     public function job()
     {
-        return $this->belongsTo('App\Models\Job', 'job_id');
+        return $this->belongsTo(Job::class);
     }
 
     /*
