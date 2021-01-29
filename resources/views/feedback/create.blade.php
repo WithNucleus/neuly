@@ -54,6 +54,7 @@
                                     <div class="form-group">
                                         <button class="btn btn-primary float-right" type="submit">submit</button>
                                     </div>
+                                    @honeypot
                                 </form>
                             </div>
                         </div>

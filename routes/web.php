@@ -203,7 +203,7 @@ Route::post('/search/clinicaltrials', 'index\SearchController@showClinicalTrials
 Route::get('/search/clinicaltrials/{term}', 'Index\SearchController@showClinicalTrialsResults')->name('search.clinicaltrials.term');
 
 // Feedback
-Route::group(['middleware' => 'auth'], function () {
+Route::group(['middleware' => 'spamprotection'], function () {
     Route::get('/feedback', 'FeedbackController@create')->name('feedback.create');
     Route::post('/feedback', 'FeedbackController@store')->name('feedback.store');
 });

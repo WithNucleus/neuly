@@ -28,6 +28,7 @@
         "laravel/ui": "^2.0",
         "sentry/sentry-laravel": "^1.8",
         "spatie/laravel-activitylog": "^3.14",
+        "spatie/laravel-honeypot": "2.2.0",
         "spatie/laravel-json-api-paginate": "^1.7",
         "spatie/laravel-permission": "^3.13",
         "spatie/laravel-query-builder": "^2.8",
