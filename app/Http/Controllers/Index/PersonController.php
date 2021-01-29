@@ -7,6 +7,7 @@ use App\Helpers\NotificationHelper;
 use App\Http\Controllers\Controller;
 use App\Models\RaisedClaim;
 use App\Notifications\PersonDeletionRequested;
+use App\Notifications\RaisedClaimCreated;
 use App\Repositories\FollowRepository;
 use Illuminate\Http\Request;
 use App\Models\Person;
@@ -126,11 +127,23 @@ class PersonController extends Controller
             return redirect()->route('user.person.index');
         }
 
+        $comment = $request->input('comment');
+
+        if ($person->email === null && $comment === null) {
+            $request->session()->flash('error', 'You need to left comment to claim this person.');
+
+            return redirect()->route('discover.people.show', ['slug' => $person->slug]);
+        }
+
         $claim = new RaisedClaim();
         $claim->user_id = $user->id;
         $claim->person_id = $person->id;
         $claim->verification_token = RaisedClaim::generateToken();
+        $claim->comment = $comment;
         $claim->save();
+
+        $notification = new RaisedClaimCreated($claim);
+        NotificationHelper::sendAdminNotifications($notification);
 
         $request->session()->flash('success', 'Your claim was raised.');
 

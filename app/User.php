@@ -61,6 +61,11 @@ class User extends Authenticatable implements MustVerifyEmail
         });
     }
 
+    public function getFullnameAttribute()
+    {
+        return $this->name . ' ' . $this->last_name;
+    }
+
     public function socialAuth()
     {
         return $this->hasMany(UserSocialAuth::class);
