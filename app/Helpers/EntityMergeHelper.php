@@ -24,6 +24,7 @@ class EntityMergeHelper
                 $view = 'text';
                 break;
             case FieldsMapping::TYPE_TEXT:
+            case FieldsMapping::TYPE_TEXT_EDITOR:
                 $view = 'textarea';
                 break;
             case FieldsMapping::TYPE_IMAGE:

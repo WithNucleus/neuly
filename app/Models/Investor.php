@@ -93,7 +93,6 @@ class Investor extends Model implements EntityContract, EntityImageContract
 
     public function companies() {
         return $this->belongsToMany('App\Models\Company', 'company_investor', 'investor_id', 'company_id')
-            ->withPivot(['type'])
             ->withTimestamps();
     }
 
@@ -156,6 +155,7 @@ class Investor extends Model implements EntityContract, EntityImageContract
             //attributes
             'name'      => [
                 'type' => FieldsMapping::TYPE_STRING,
+                'required' => true,
             ],
             'slug'      => [
                 'type' => FieldsMapping::TYPE_STRING,
@@ -180,16 +180,13 @@ class Investor extends Model implements EntityContract, EntityImageContract
                 'type'          => FieldsMapping::TYPE_RELATION,
                 'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
-                'pivotColumns'  => [
-                    'type'
-                ],
             ],
             'people'    => [
                 'type'          => FieldsMapping::TYPE_RELATION,
                 'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
                 'pivotColumns'  => [
-                    'role'
+                    'role',
                 ],
             ],
         ];
@@ -198,7 +195,7 @@ class Investor extends Model implements EntityContract, EntityImageContract
     public static function getListingRequestMapping()
     {
         $mapping = self::getFieldsMapping();
-        $skipFields = ['slug', 'companies', 'people'];
+        $skipFields = ['slug', 'people'];
 
         foreach ($skipFields as $field) {
             unset($mapping[$field]);

@@ -183,16 +183,29 @@ class Job extends Model implements EntityContract
     public static function getFieldsMapping()
     {
         return [
+            //this relation should be first in the fields order
+            'owner'    => [
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_ONE_ONE_MORPHABLE,
+                'relationMorphableTypes' => [
+                    Company::class,
+                    Investor::class,
+                ],
+                'morphableFieldId' => 'owner_id',
+                'morphableFieldType' => 'owner_type',
+                'relationField' => 'name',
+            ],
             //attributes
             'job_title'      => [
                 'type' => FieldsMapping::TYPE_STRING,
                 'label' => 'Job Title',
+                'required' => true,
             ],
             'slug'      => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
             'job_description'   => [
-                'type' => FieldsMapping::TYPE_TEXT,
+                'type' => FieldsMapping::TYPE_TEXT_EDITOR,
                 'label' => 'Job Description',
             ],
             'employment_type'      => [
@@ -212,17 +225,6 @@ class Job extends Model implements EntityContract
                 'label' => 'Hourly Rate',
             ],
             //relations
-            'owner'    => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_ONE_ONE_MORPHABLE,
-                'relationMorphableTypes' => [
-                    Company::class,
-                    Investor::class,
-                ],
-                'morphableFieldId' => 'owner_id',
-                'morphableFieldType' => 'owner_type',
-                'relationField' => 'name',
-            ],
             'locations' => [
                 'type'          => FieldsMapping::TYPE_RELATION,
                 'relation'      => FieldsMapping::RELATION_N_N,

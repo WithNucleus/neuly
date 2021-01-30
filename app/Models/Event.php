@@ -108,6 +108,7 @@ class Event extends Model implements EntityContract, EntityImageContract
             //attributes
             'name'             => [
                 'type' => FieldsMapping::TYPE_STRING,
+                'required' => true,
             ],
             'slug'             => [
                 'type' => FieldsMapping::TYPE_STRING,
@@ -125,7 +126,7 @@ class Event extends Model implements EntityContract, EntityImageContract
                 'type' => FieldsMapping::TYPE_STRING,
             ],
             'description'      => [
-                'type'  => FieldsMapping::TYPE_TEXT,
+                'type'  => FieldsMapping::TYPE_TEXT_EDITOR,
             ],
             'image'            => [
                 'type'  => FieldsMapping::TYPE_IMAGE,

@@ -96,12 +96,13 @@ class Research extends Model implements EntityContract
             //attributes
             'name'             => [
                 'type' => FieldsMapping::TYPE_STRING,
+                'required' => true,
             ],
             'slug'             => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
             'abstract'         => [
-                'type' => FieldsMapping::TYPE_TEXT,
+                'type' => FieldsMapping::TYPE_TEXT_EDITOR,
             ],
             'link'             => [
                 'type' => FieldsMapping::TYPE_STRING,
@@ -116,7 +117,7 @@ class Research extends Model implements EntityContract
                 'type' => FieldsMapping::TYPE_STRING,
             ],
             'resources'        => [
-                'type' => FieldsMapping::TYPE_TEXT,
+                'type' => FieldsMapping::TYPE_TEXT_EDITOR,
             ],
             //relations
             'focus'            => [

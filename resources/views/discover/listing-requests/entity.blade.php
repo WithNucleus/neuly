@@ -20,9 +20,13 @@ use App\Helpers\Entity\FieldsMapping;
                         <div class="card mt-3 shadow-sm">
                             <div class="card-body">
                                 <h1 class="text-center text-primary">Neuly Listing Request</h1>
+                                <p class="text-center lead">
                                 @isset($entity)
-                                    <p class="text-center lead">Update {{ $entityType }} "{{ $entity->name }}"</p>
+                                    Update {{ $entityType }} "{{ $entity->name }}"
+                                @else
+                                    Create {{ $entityType }}
                                 @endisset
+                                </p>
 
                                 <form method="post" action=" {{ route('listing.request.finish') }}"
                                       enctype="multipart/form-data">

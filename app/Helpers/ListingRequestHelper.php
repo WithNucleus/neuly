@@ -87,6 +87,8 @@ class ListingRequestHelper
                 return 'text';
             case FieldsMapping::TYPE_TEXT:
                 return 'textarea';
+            case FieldsMapping::TYPE_TEXT_EDITOR:
+                return 'textarea_editor';
             case FieldsMapping::TYPE_RELATION:
                 return in_array($options['relation'], $morphableRelationTypes) ? 'relation_morphable' : 'relation';
             default:

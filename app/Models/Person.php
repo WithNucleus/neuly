@@ -189,6 +189,7 @@ class Person extends Model implements EntityContract, EntityImageContract
             //attributes
             'name'            => [
                 'type' => FieldsMapping::TYPE_STRING,
+                'required' => true,
             ],
             'slug'            => [
                 'type' => FieldsMapping::TYPE_STRING,
@@ -207,12 +208,18 @@ class Person extends Model implements EntityContract, EntityImageContract
             ],
             'linkedin'        => [
                 'type' => FieldsMapping::TYPE_STRING,
+                'prefix' => 'https://www.linkedin.com/in/',
+                'placeholder' => 'username',
             ],
             'facebook'        => [
                 'type' => FieldsMapping::TYPE_STRING,
+                'prefix' => 'https://www.facebook.com/',
+                'placeholder' => 'username',
             ],
             'twitter'         => [
                 'type' => FieldsMapping::TYPE_STRING,
+                'prefix' => 'https://www.twitter.com/',
+                'placeholder' => 'username',
             ],
             'google_scholar'  => [
                 'type' => FieldsMapping::TYPE_STRING,
@@ -231,7 +238,7 @@ class Person extends Model implements EntityContract, EntityImageContract
                 'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
                 'pivotColumns'  => [
-                    'position'
+                    'position',
                 ],
             ],
             'investors'       => [
@@ -239,7 +246,7 @@ class Person extends Model implements EntityContract, EntityImageContract
                 'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
                 'pivotColumns'  => [
-                    'role'
+                    'role',
                 ],
             ],
             'research'        => [
@@ -263,11 +270,13 @@ class Person extends Model implements EntityContract, EntityImageContract
     public static function getListingRequestMapping()
     {
         $mapping = self::getFieldsMapping();
-        $skipFields = ['slug', 'companies', 'investors'];
+        $skipFields = ['slug', 'secondary_email', 'companies', 'investors'];
 
         foreach ($skipFields as $field) {
             unset($mapping[$field]);
         }
+
+        $mapping['email']['hideOriginal'] = true;
 
         return $mapping;
     }

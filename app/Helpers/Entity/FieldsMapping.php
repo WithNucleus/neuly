@@ -11,6 +11,7 @@ class FieldsMapping
     const TYPE_RELATION = 'relation';
     const TYPE_STRING = 'string';
     const TYPE_TEXT = 'text';
+    const TYPE_TEXT_EDITOR = 'text_editor';
 
     const RELATION_ONE_ONE = 'one_one';
     const RELATION_ONE_N = 'one_n';
