@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 /**
  * this are test routes for errors. These should be disabled after successfully testing those error pages.
  */
+Route::get('/test', 'Index\JobMapController@showMap');
+
 Route::get('/400', static function () {
     return abort(400);
 });
