@@ -18,7 +18,7 @@ class JobMapController extends Controller
     {
         $locationsByCountries = Location::byCountries();
         $jobsByCountries = $this->getJobsByCountries($locationsByCountries);
-        $countriesByCode = $this->getJobsMappingByCountryAndFocus($jobsByCountries, Focus::all());
+        $countriesByCode = $this->getJobsMappingByCountryAndFocus($jobsByCountries, Focus::drugs()->get());
 
         return view('discover.locations.maps.global-jobs', compact('countriesByCode'));
     }
@@ -60,6 +60,7 @@ class JobMapController extends Controller
         $jobsByCountriesAndFocus = [];
         foreach ($jobsByCountries as $alpha2code => $country) {
             $jobsByCountriesAndFocus[$alpha2code]['name'] = $country['name'];
+            $jobsByCountriesAndFocus[$alpha2code]['total'] = count($country['jobs']);
 
             foreach ($focus as $item) {
                 $jobsByCountriesAndFocus[$alpha2code]['focus'][$item->name] = $this->countJobsByFocusAndCountry($country['jobs'], $item->id);

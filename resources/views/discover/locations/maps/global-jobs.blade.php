@@ -78,7 +78,45 @@
         // Map
         var countries = {!! json_encode($countriesByCode) !!}
 
-        console.log(countries);
+        var values = [];
+
+        for(var index in countries) {
+            values[index] = countries[index].total;
+        }
+
+
+        $('#world-distribution-map').vectorMap({
+            map: 'world_merc',
+            series: {
+                regions: [{
+                    values: values,
+                    scale: ['#60c6a9', '#265dad'],
+                    normalizeFunction: 'polynomial',
+                    legend: {
+                        vertical: true
+                    }
+                }]
+            },
+            onRegionTipShow: function(event, label, code){
+                if(countries[code] !== undefined)
+                {
+
+                    var focus_entries = '';
+
+                    for(var item in countries[code]['focus']) {
+                        focus_entries += '<br><strong>' +item + ': ' + countries[code]['focus'][item] + '</strong>'
+                    }
+
+                    label.html(
+                        '<strong>' + label.html() + '</strong>'
+                        + focus_entries
+                        + '<br><strong>Total: ' + countries[code].total + '</strong>'
+                    );
+                } else {
+                    label.html(label.html());
+                }
+            },
+        });
     </script>
 @endsection
 

@@ -103,9 +103,11 @@ class Location extends Model implements EntityContract
     {
         $byCountries = [];
 
-        foreach (self::getCountries() as $alpha2code => $country) {
-            $byCountries[$alpha2code]['name'] = $country;
-            $byCountries[$alpha2code]['locations'] = self::where('alpha2code', '=', $alpha2code)->pluck('id')->toArray();
+        foreach (self::all() as $location) {
+            if (! array_key_exists($location->alpha2code, $byCountries)) {
+                $byCountries[$location->alpha2code]['name'] = $location->country;
+            }
+            $byCountries[$location->alpha2code]['locations'][] = $location->id;
         }
 
         return $byCountries;

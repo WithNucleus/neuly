@@ -79,7 +79,8 @@
     @if (Route::is('insights.distribution.countries.show') OR
          Route::is('insights.distribution.countries.focus.show') OR
          Route::is('discover.locations.maps.global') OR
-         Route::is('discover.locations.maps.country')
+         Route::is('discover.locations.maps.country') OR
+         Route::is('discover.jobs.map')
     )
         <script type="text/javascript" src="{{ asset('assets/jquery-jvectormap.min.js') }}"></script>
         <link rel="stylesheet" type="text/css" href="{{ asset('assets/jquery-jvectormap.css') }}"/>
