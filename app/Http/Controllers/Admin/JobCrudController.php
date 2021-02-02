@@ -164,7 +164,7 @@ class JobCrudController extends CrudController
             'type'  => 'date_picker',
             'label' => 'Posted Date',
             'date_picker_options' => [
-                'format' => config('app.date_input_format'),
+                'format' => config('app.datepicker_input_format'),
             ],
         ]);
         $this->crud->addField([
@@ -204,11 +204,7 @@ class JobCrudController extends CrudController
             'name'    => 'employment_type',
             'type'    => 'radio',
             'label'   => 'Employment Type',
-            'options' => [
-                'Full Time' => 'Full Time',
-                'Part Time' => 'Part Time',
-                'One Time'  => 'One Time',
-            ],
+            'options' => Job::getEmploymentTypeValues(),
             'inline'  => true,
         ]);
         $this->crud->addField([

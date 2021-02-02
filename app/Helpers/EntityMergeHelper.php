@@ -2,37 +2,35 @@
 
 namespace App\Helpers;
 
+use App\Helpers\Entity\FieldsMapping;
+
 class EntityMergeHelper
 {
     const SOURCE_MASTER    = 'master';
     const SOURCE_SECONDARY = 'secondary';
     const SOURCE_MERGE     = 'merge';
 
-    const TYPE_STRING   = 'string';
-    const TYPE_TEXT     = 'text';
-    const TYPE_IMAGE    = 'image';
-    const TYPE_RELATION = 'relation';
-
-    const RELATION_ONE_N = 'one_n';
-    const RELATION_N_N = 'n_n';
-
     /**
      * @param string $type
      * @return string
      */
-    public static function getFieldViewPathByType($type)
+    public static function getViewByFieldType($type)
     {
         switch ($type) {
-            case self::TYPE_STRING:
+            case FieldsMapping::TYPE_DATE:
+            case FieldsMapping::TYPE_ENUM:
+            case FieldsMapping::TYPE_INTEGER:
+            case FieldsMapping::TYPE_STRING:
                 $view = 'text';
                 break;
-            case self::TYPE_TEXT:
+            case FieldsMapping::TYPE_TEXT:
+            case FieldsMapping::TYPE_TEXT_EDITOR:
                 $view = 'textarea';
                 break;
-            case self::TYPE_IMAGE:
+            case FieldsMapping::TYPE_IMAGE:
                 $view = 'image';
                 break;
-            case self::TYPE_RELATION:
+            case FieldsMapping::TYPE_RELATION:
                 $view = 'relation';
                 break;
             default:
@@ -40,12 +38,7 @@ class EntityMergeHelper
                 break;
         }
 
-        return 'admin.entity_merge.fields.' . $view;
-    }
-
-    public static function makeLabelFromFieldName($name)
-    {
-        return ucwords(str_replace('_', ' ', $name));
+        return $view;
     }
 
 }

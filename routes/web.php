@@ -108,7 +108,7 @@ Route::get('/people/names.json', 'Index\PersonController@namesJson');
 Route::get('/person/{slug}', 'Index\PersonController@show')->name('discover.people.show');
 Route::post('/person/{slug}/claim', 'Index\PersonController@claim')->name('discover.people.claim');
 Route::get('/person/{slug}/requestDeletion', 'Index\PersonController@requestDeletion')->name('discover.people.requestDeletion');
-Route::post('/person/{slug}/requestDeletion', 'Index\PersonController@requestDeletionSubmit')->name('discover.people.requestDeletion');
+Route::post('/person/{slug}/requestDeletion', 'Index\PersonController@requestDeletionSubmit');
 
 // Research
 Route::get('/research', 'Index\ResearchController@index')->name('discover.research');
@@ -157,6 +157,7 @@ Route::get('/clinical-trials/{slug}', 'Index\ClinicaltrialController@show')->nam
 // Listing Requests
 Route::get('/listing', 'Index\ListingRequestController@index')->name('listing');
 Route::get('/listing/request', 'Index\ListingRequestController@request')->name('listing.request');
+Route::get('/listing/request/getEntityListJson', 'Index\ListingRequestController@getEntityListJson')->name('listing.request.getEntityListJson');
 Route::post('/listing/request', 'Index\ListingRequestController@submitRequest');
 Route::post('/listing/request/finish', 'Index\ListingRequestController@finishRequest')->name('listing.request.finish');
 

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Helpers\EntityMergeHelper;
+use App\Helpers\Entity\FieldsMapping;
 use App\Models\Contracts\EntityContract;
 use App\Models\Contracts\EntityImageContract;
 use App\Models\Traits\CrudShowEntityPageButton;
@@ -183,81 +183,102 @@ class Person extends Model implements EntityContract, EntityImageContract
     /**
      * @return array
      */
-    public static function getMergeMapping()
+    public static function getFieldsMapping()
     {
         return [
             //attributes
             'name'            => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
+                'required' => true,
             ],
             'slug'            => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             'email'           => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             'secondary_email' => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             'website'         => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             'photo'           => [
-                'type' => EntityMergeHelper::TYPE_IMAGE,
+                'type' => FieldsMapping::TYPE_IMAGE,
             ],
             'linkedin'        => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
+                'prefix' => 'https://www.linkedin.com/in/',
+                'placeholder' => 'username',
             ],
             'facebook'        => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
+                'prefix' => 'https://www.facebook.com/',
+                'placeholder' => 'username',
             ],
             'twitter'         => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
+                'prefix' => 'https://www.twitter.com/',
+                'placeholder' => 'username',
             ],
             'google_scholar'  => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             'bio'             => [
-                'type' => EntityMergeHelper::TYPE_TEXT,
+                'type' => FieldsMapping::TYPE_TEXT,
             ],
             //relations
             'locations'       => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_N_N,
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
             'companies'       => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_N_N,
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
                 'pivotColumns'  => [
-                    'position'
+                    'position',
                 ],
             ],
             'investors'       => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_N_N,
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
                 'pivotColumns'  => [
-                    'role'
+                    'role',
                 ],
             ],
             'research'        => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_N_N,
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
             'events'          => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_N_N,
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
             'clinicaltrials'  => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_N_N,
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'title',
             ],
         ];
+    }
+
+    public static function getListingRequestMapping()
+    {
+        $mapping = self::getFieldsMapping();
+        $skipFields = ['slug', 'secondary_email', 'companies', 'investors'];
+
+        foreach ($skipFields as $field) {
+            unset($mapping[$field]);
+        }
+
+        $mapping['email']['hideOriginal'] = true;
+
+        return $mapping;
     }
 
     public function getEmails() {

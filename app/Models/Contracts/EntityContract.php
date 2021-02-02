@@ -12,7 +12,7 @@ interface EntityContract
      *
      * To have possibility merge model attributes:
      * 'attribute_name' => [
-     *     'type' => EntityMergeHelper::TYPE_CONSTANT, // required
+     *     'type' => FieldsMapping::TYPE_CONSTANT, // required
      *     'label' => 'Custom label', // optional, attribute name used by default
      * ],
      *
@@ -20,12 +20,12 @@ interface EntityContract
      *
      * To have possibility merge model relations:
      * 'relation_name' => [
-     *     'type' => EntityMergeHelper::TYPE_RELATION, // required
+     *     'type' => FieldsMapping::TYPE_RELATION, // required
      *     'relationField' => 'field_name', // required, define which field's value to show from related model
      *     'label' => 'Custom label', // optional, relation name used by default
      * ],
      *
      * @return array
      */
-    public static function getMergeMapping();
+    public static function getFieldsMapping();
 }

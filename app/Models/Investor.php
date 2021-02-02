@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Helpers\EntityMergeHelper;
+use App\Helpers\Entity\FieldsMapping;
 use App\Models\Contracts\EntityContract;
 use App\Models\Contracts\EntityImageContract;
 use App\Models\Traits\CrudShowEntityPageButton;
@@ -39,6 +39,13 @@ class Investor extends Model implements EntityContract, EntityImageContract
     protected static $imageAttribute = 'logo';
     protected static $imageFolderPath = 'investors';
     protected static $imageFilenameAttribute = 'name';
+
+    protected static $typeValues = [
+        'Venture Capital',
+        'Private Equity',
+        'Private Individual',
+    ];
+
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS
@@ -65,6 +72,14 @@ class Investor extends Model implements EntityContract, EntityImageContract
         }
     }
 
+    /**
+     * @return array
+     */
+    public static function getTypeValues()
+    {
+        return self::$typeValues;
+    }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
@@ -78,7 +93,6 @@ class Investor extends Model implements EntityContract, EntityImageContract
 
     public function companies() {
         return $this->belongsToMany('App\Models\Company', 'company_investor', 'investor_id', 'company_id')
-            ->withPivot(['type'])
             ->withTimestamps();
     }
 
@@ -135,52 +149,58 @@ class Investor extends Model implements EntityContract, EntityImageContract
     /**
      * @return array
      */
-    public static function getMergeMapping()
+    public static function getFieldsMapping()
     {
         return [
             //attributes
             'name'      => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
+                'required' => true,
             ],
             'slug'      => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             'website'   => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
-            'type'      => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+            'type' => [
+                'type' => FieldsMapping::TYPE_ENUM,
+                'values' => self::$typeValues,
             ],
             'logo'      => [
-                'type' => EntityMergeHelper::TYPE_IMAGE,
+                'type' => FieldsMapping::TYPE_IMAGE,
             ],
             //relations
             'locations' => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_N_N,
-                'relationField' => 'name',
-            ],
-            'focus'     => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_N_N,
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
             'companies' => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_N_N,
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
-                'pivotColumns'  => [
-                    'type'
-                ],
             ],
             'people'    => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_N_N,
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
                 'pivotColumns'  => [
-                    'role'
+                    'role',
                 ],
             ],
         ];
+    }
+
+    public static function getListingRequestMapping()
+    {
+        $mapping = self::getFieldsMapping();
+        $skipFields = ['slug', 'people'];
+
+        foreach ($skipFields as $field) {
+            unset($mapping[$field]);
+        }
+
+        return $mapping;
     }
 }

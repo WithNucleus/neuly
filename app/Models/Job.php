@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Helpers\Entity\FieldsMapping;
+use App\Models\Contracts\EntityContract;
 use App\Models\Traits\CrudShowEntityPageButton;
 use App\Models\Traits\OldSlugRedirectable;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
@@ -9,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class Job extends Model
+class Job extends Model implements EntityContract
 {
     use CrudTrait;
     use OldSlugRedirectable;
@@ -44,6 +46,12 @@ class Job extends Model
     protected static $logUnguarded = true;
     protected static $logName = 'entities';
 
+    protected static $employmentTypes = [
+        'Full Time',
+        'Part Time',
+        'One Time',
+    ];
+
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS
@@ -52,8 +60,8 @@ class Job extends Model
 
     public static function generateUniqueSlug($name)
     {
-        $slug      = Str::slug($name);
-        $slugCount = Person::where('slug', $slug)->count();
+        $slug = Str::slug($name);
+        $slugCount = self::where('slug', $slug)->count();
 
         if ($slugCount > 0) {
             $slug = $slug . '-' . uniqid();
@@ -64,6 +72,14 @@ class Job extends Model
 
     public function getShowLink() {
         return '<a href="' . route('discover.jobs.show', $this->slug) . '">' . $this->job_title . '</a>';
+    }
+
+    /**
+     * @return array
+     */
+    public static function getEmploymentTypeValues()
+    {
+        return self::$employmentTypes;
     }
 
     /**
@@ -144,6 +160,11 @@ class Job extends Model
     |--------------------------------------------------------------------------
     */
 
+    public function getNameAttribute()
+    {
+        return $this->job_title;
+    }
+
     /*
     |--------------------------------------------------------------------------
     | MUTATORS
@@ -154,5 +175,78 @@ class Job extends Model
     {
         $this->attributes['job_title'] = $value;
         $this->attributes['slug'] = self::generateUniqueSlug($value);
+    }
+
+    /**
+     * @return array
+     */
+    public static function getFieldsMapping()
+    {
+        return [
+            //this relation should be first in the fields order
+            'owner'    => [
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_ONE_ONE_MORPHABLE,
+                'relationMorphableTypes' => [
+                    Company::class,
+                    Investor::class,
+                ],
+                'morphableFieldId' => 'owner_id',
+                'morphableFieldType' => 'owner_type',
+                'relationField' => 'name',
+            ],
+            //attributes
+            'job_title'      => [
+                'type' => FieldsMapping::TYPE_STRING,
+                'label' => 'Job Title',
+                'required' => true,
+            ],
+            'slug'      => [
+                'type' => FieldsMapping::TYPE_STRING,
+            ],
+            'job_description'   => [
+                'type' => FieldsMapping::TYPE_TEXT_EDITOR,
+                'label' => 'Job Description',
+            ],
+            'employment_type'      => [
+                'type' => FieldsMapping::TYPE_ENUM,
+                'label' => 'Type',
+                'values' => self::$employmentTypes,
+            ],
+            'posted_date'      => [
+                'type' => FieldsMapping::TYPE_DATE,
+                'label' => 'Posted date',
+            ],
+            'salary'      => [
+                'type' => FieldsMapping::TYPE_INTEGER,
+            ],
+            'hourly_rate'      => [
+                'type' => FieldsMapping::TYPE_INTEGER,
+                'label' => 'Hourly Rate',
+            ],
+            //relations
+            'locations' => [
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
+                'relationField' => 'name',
+            ],
+            'focus'     => [
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
+                'relationField' => 'name',
+            ],
+        ];
+    }
+
+    public static function getListingRequestMapping()
+    {
+        $mapping = self::getFieldsMapping();
+        $skipFields = ['slug'];
+
+        foreach ($skipFields as $field) {
+            unset($mapping[$field]);
+        }
+
+        return $mapping;
     }
 }
