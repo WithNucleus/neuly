@@ -61,11 +61,17 @@
 
     @include('discover.people.data')
 
-    <p class="mb-0 d-flex justify-content-between">
-        <small>Last updated: {{ Carbon\Carbon::parse($person->updated_at)->format('M d, Y') }}</small>
-{{--    TODO: after "Claim Person" functionality will be finished and merged - add condition to show this link only for unverified person --}}
-        <small><a href="{{ route('discover.people.requestDeletion', $person->slug) }}" class="text-danger">Request deletion</a></small>
-    </p>
+    <div class="row">
+        <div class="col-sm-6">
+            <small>Last updated: {{ Carbon\Carbon::parse($person->updated_at)->format('M d, Y') }}</small>
+        </div>
+        <div class="col-sm-6 text-right">
+            @include('discover.includes.update-listing-form', ['entity' => $person])
+
+            {{--    TODO: after "Claim Person" functionality will be finished and merged - add condition to show this link only for unverified person --}}
+            <small><a href="{{ route('discover.people.requestDeletion', $person->slug) }}" class="text-danger">Request deletion</a></small>
+        </div>
+    </div>
 
     @include('discover.includes.show-end')
 
