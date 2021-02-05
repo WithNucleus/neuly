@@ -36,6 +36,7 @@
 
 	@include('discover.organizations.data')
 
+    @auth
     <div class="row">
         <div class="col-sm-6">
             <small>Last updated: {{ Carbon\Carbon::parse($company->updated_at)->format('M d, Y') }}</small>
@@ -44,6 +45,7 @@
             @include('discover.includes.update-listing-form', ['entity' => $company])
         </div>
     </div>
+    @endauth
 
 	@include('discover.includes.show-end')
 
