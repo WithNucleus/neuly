@@ -61,6 +61,7 @@
 
     @include('discover.people.data')
 
+    @auth
     <div class="row">
         <div class="col-sm-6">
             <small>Last updated: {{ Carbon\Carbon::parse($person->updated_at)->format('M d, Y') }}</small>
@@ -68,10 +69,12 @@
         <div class="col-sm-6 text-right">
             @include('discover.includes.update-listing-form', ['entity' => $person])
 
-            {{--    TODO: after "Claim Person" functionality will be finished and merged - add condition to show this link only for unverified person --}}
+            @if($isVerified == false)
             <small><a href="{{ route('discover.people.requestDeletion', $person->slug) }}" class="text-danger">Request deletion</a></small>
+            @endif
         </div>
     </div>
+    @endauth
 
     @include('discover.includes.show-end')
 

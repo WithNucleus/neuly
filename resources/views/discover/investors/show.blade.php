@@ -24,20 +24,22 @@
         </p>
     @endif
 
-        <h1>{{ $investor->name }}</h1>
+    <h1>{{ $investor->name }}</h1>
 
-        @include('discover.includes.status-messages')
+    @include('discover.includes.status-messages')
 
-        @include('discover.investors.data')
+    @include('discover.investors.data')
 
-        <div class="row">
-            <div class="col-sm-6">
-                <small>Last updated: {{ Carbon\Carbon::parse($investor->updated_at)->format('M d, Y') }}</small>
-            </div>
-            <div class="col-sm-6 text-right">
-                @include('discover.includes.update-listing-form', ['entity' => $investor])
-            </div>
+    @auth
+    <div class="row">
+        <div class="col-sm-6">
+            <small>Last updated: {{ Carbon\Carbon::parse($investor->updated_at)->format('M d, Y') }}</small>
         </div>
+        <div class="col-sm-6 text-right">
+            @include('discover.includes.update-listing-form', ['entity' => $investor])
+        </div>
+    </div>
+    @endauth
 
     @include('discover.includes.show-end')
 

@@ -20,6 +20,7 @@
 
     @include('discover.events.data')
 
+    @auth
     <div class="row">
         <div class="col-sm-6">
             <small>Last updated: {{ Carbon\Carbon::parse($event->updated_at)->format('M d, Y') }}</small>
@@ -28,6 +29,7 @@
             @include('discover.includes.update-listing-form', ['entity' => $event])
         </div>
     </div>
+    @endauth
 
     @include('discover.includes.show-end')
 
