@@ -14,6 +14,7 @@ use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -127,6 +128,16 @@ class Clinicaltrial extends Model implements EntityContract
                     ->whereNull('brief_summary')
                     ->orWhereNull('detailed_description');
             });
+    }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param array $years
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeStartYear(Builder $query, ...$years)
+    {
+        return $query->whereIn(DB::raw('YEAR(start_date)'), $years);
     }
 
     /*
