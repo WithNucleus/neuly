@@ -112,6 +112,9 @@
                     <div class="col-12 col-lg-6 col-xl-4">
                         @include('discover.insights.widgets.location-top-by-jobs')
                     </div>
+                    <div class="col-12 col-lg-6 col-xl-4">
+                        @include('discover.insights.widgets.clinical-trial-historic')
+                    </div>
                 @endauth
 
                 @guest

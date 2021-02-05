@@ -58,7 +58,8 @@
             'valuation_min',
             'valuation_max',
             'age',
-            'gender'
+            'gender',
+            'year'
         ];
 
         allowedFilters.forEach(function (filterName) {

@@ -71,6 +71,7 @@ Route::group([
         Route::get('/location-top-by-jobs', 'LocationTopByJobsController@index')->name('location-top-by-jobs');
         Route::get('/clinical-trials/distribution/countries', 'ClinicalTrialDistributionController@show')->name('distribution.countries.show');
         Route::get('/clinical-trials/distribution/countries/focus', 'ClinicalTrialDistributionController@showWithFocus')->name('distribution.countries.focus.show');
+        Route::get('/clinical-trials-historic', 'ClinicalTrialHistoric@index')->name('clinical-trials-historic');
     });
 });
 
