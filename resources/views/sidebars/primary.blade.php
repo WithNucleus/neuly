@@ -87,6 +87,11 @@
                 @include('sidebars.insights.market-compare')
             @endif
 
+            @if(Route::is('discover.jobs.map'))
+                @include('sidebars.jobs.global-map')
+            @endif
+
+
         </div>
     </div>
 </nav>

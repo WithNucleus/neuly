@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Index;
 use App\Http\Controllers\Controller;
 use App\Models\Focus;
 use App\Models\Location;
+use App\Services\Metas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class JobMapController extends Controller
 {
@@ -16,11 +18,34 @@ class JobMapController extends Controller
      */
     public function showMap(Request $request)
     {
-        $locationsByCountries = Location::byCountries();
-        $jobsByCountries = $this->getJobsByCountries($locationsByCountries);
-        $countriesByCode = $this->getJobsMappingByCountryAndFocus($jobsByCountries, Focus::drugs()->get());
+        $filters_focus = [];
 
-        return view('discover.locations.maps.global-jobs', compact('countriesByCode'));
+        if ($request->has('filter') && array_key_exists('focus', $request->input('filter'))) {
+            $filters_focus = $this->getFilteredFocus($request->input('filter')['focus']);
+        }
+
+        $focus = Focus::drugs()->orderBy('name');
+
+        if ($filters_focus !== []) {
+            $focus->whereIn('name', $filters_focus);
+        }
+
+        $focus = $focus->get();
+
+        $sort = '';
+
+        if ($request->has('sort')) {
+            $sort = $request->input('sort');
+        }
+
+        $locationsByCountries = Location::byCountries($this->getOrderDirection(''));
+        $jobsByCountries = $this->getJobsByCountries($locationsByCountries);
+        $countriesByCode = $this->getJobsMappingByCountryAndFocus($jobsByCountries, $focus);
+
+        $focus = $focus->pluck('name');
+        $path = route('discover.jobs.map');
+
+        return view('discover.locations.maps.global-jobs', compact('countriesByCode', 'focus', 'filters_focus', 'path', 'sort'));
     }
 
     /**
@@ -81,5 +106,25 @@ class JobMapController extends Controller
                 ->whereIn('job_id', $jobs)
                 ->where('focus_id', '=', $focus)
                 ->selectRaw('COUNT(job_id) as jobs')->get('jobs')->toArray()[0]->jobs;
+    }
+
+    /**
+     * @param $filter
+     * @return false|string[]
+     */
+    private function getFilteredFocus($filter)
+    {
+        return explode('|', $filter);
+    }
+
+    private function getOrderDirection($sortParameter)
+    {
+        $sort = 'ASC';
+
+        if (Str::contains($sortParameter, '-')) {
+            $sort = 'DESC';
+        }
+
+        return $sort;
     }
 }

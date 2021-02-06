@@ -67,7 +67,28 @@
                 <div id="resizable-fullscreen-table-container">
                     <button id="close-full-screen-table" class="btn d-none mb-3 btn-dark text-uppercase"><i class="fas fa-times"></i> Close</button>
                     <div class="position-relative">
-                        add table here
+                        <table id="resizable-table-with-x-borders" class="table table-striped bg-white border-0">
+                            <thead class="font-size-large">
+                                <th scope="col" class="sticky-top text-no-wrap bg-dark text-light">Country</th>
+                                @foreach($focus as $name)
+                                    <th scope="col" class="sticky-top text-no-wrap bg-dark text-light">{{ $name }}</th>
+                                @endforeach
+                                <th scope="col" class="sticky-top text-no-wrap bg-dark text-light">Total</th>
+                            </thead>
+                            <tbody>
+                            @foreach($countriesByCode as $alpha2code => $item)
+                                <tr>
+                                    <td>
+                                        {{ $item['name'] }}
+                                    </td>
+                                    @foreach($item['focus'] as $name => $value)
+                                        <td>{{ $value }}</td>
+                                    @endforeach
+                                    <td><strong>{{ $item['total'] }}</strong></td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </main>

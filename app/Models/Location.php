@@ -99,11 +99,11 @@ class Location extends Model implements EntityContract
         return self::distinct('alpha2code')->pluck('country', 'alpha2code');
     }
 
-    public static function byCountries()
+    public static function byCountries($sort = 'ASC')
     {
         $byCountries = [];
 
-        foreach (self::all() as $location) {
+        foreach (self::orderBy('country', $sort)->get() as $location) {
             if (! array_key_exists($location->alpha2code, $byCountries)) {
                 $byCountries[$location->alpha2code]['name'] = $location->country;
             }
