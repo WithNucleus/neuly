@@ -70,7 +70,7 @@
                         <table id="resizable-table-with-x-borders" class="table table-striped bg-white border-0">
                             <thead class="font-size-large">
                                 <th scope="col" class="sticky-top text-no-wrap bg-dark text-light">Country</th>
-                                @foreach($focus as $name)
+                                @foreach($filters_focus as $name)
                                     <th scope="col" class="sticky-top text-no-wrap bg-dark text-light">{{ $name }}</th>
                                 @endforeach
                                 <th scope="col" class="sticky-top text-no-wrap bg-dark text-light">Total</th>

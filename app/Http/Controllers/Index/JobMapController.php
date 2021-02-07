@@ -16,36 +16,96 @@ class JobMapController extends Controller
      * Show.
      * @return \Illuminate\View\View
      */
-    public function showMap(Request $request)
+    public function showMap(Request $request): \Illuminate\View\View
+    {
+        $focus = Focus::drugs()->orderBy('name');
+        $focus_cats = $focus->pluck('name')->toArray();
+
+        $focus = $this->filterFocus($this->filterFocusValues($request), $focus);
+        $focus = $focus->get();
+
+        $sort = $this->getOrderDirection($this->getSortParameter($request));
+        $countriesByCode = $this->getCountriesResultByCode($sort, $focus);
+
+        $filters_focus = $focus->pluck('name')->toArray();
+        $path = route('discover.jobs.map');
+
+        return view('discover.jobs.maps.global', compact('countriesByCode',  'filters_focus', 'focus_cats', 'path', 'sort'));
+    }
+
+    /**
+     * @param $values
+     * @param $query
+     * @return mixed
+     */
+    private function filterFocus($values, $query)
+    {
+        if ($values !== []) {
+            $query = $query->whereIn('name', $values);
+        }
+
+        return $query;
+    }
+
+    /**
+     * @param $request
+     * @return array|false|string[]
+     */
+    private function filterFocusValues($request)
     {
         $filters_focus = [];
-
-        if ($request->has('filter') && array_key_exists('focus', $request->input('filter'))) {
+        if ($this->filterHasFocus($request)) {
             $filters_focus = $this->getFilteredFocus($request->input('filter')['focus']);
         }
 
-        $focus = Focus::drugs()->orderBy('name');
+        return $filters_focus;
+    }
 
-        if ($filters_focus !== []) {
-            $focus->whereIn('name', $filters_focus);
+    /**
+     * @param $request
+     * @return bool
+     */
+    private function filterHasFocus($request)
+    {
+        return $request->has('filter') && array_key_exists('focus', $request->input('filter'));
+    }
+
+    /**
+     * @param $filter
+     * @return false|string[]
+     */
+    private function getFilteredFocus($filter)
+    {
+        return explode('|', $filter);
+    }
+
+    /**
+     * @param $sortParameter
+     * @return string
+     */
+    private function getOrderDirection($sortParameter)
+    {
+        $sort = 'ASC';
+
+        if (Str::contains($sortParameter, '-')) {
+            $sort = 'DESC';
         }
 
-        $focus = $focus->get();
+        return $sort;
+    }
 
+    /**
+     * @param $request
+     * @return string
+     */
+    private function getSortParameter($request)
+    {
         $sort = '';
-
         if ($request->has('sort')) {
             $sort = $request->input('sort');
         }
 
-        $locationsByCountries = Location::byCountries($this->getOrderDirection(''));
-        $jobsByCountries = $this->getJobsByCountries($locationsByCountries);
-        $countriesByCode = $this->getJobsMappingByCountryAndFocus($jobsByCountries, $focus);
-
-        $focus = $focus->pluck('name');
-        $path = route('discover.jobs.map');
-
-        return view('discover.locations.maps.global-jobs', compact('countriesByCode', 'focus', 'filters_focus', 'path', 'sort'));
+        return $sort;
     }
 
     /**
@@ -109,22 +169,15 @@ class JobMapController extends Controller
     }
 
     /**
-     * @param $filter
-     * @return false|string[]
+     * @param $sort
+     * @param $focus
+     * @return array
      */
-    private function getFilteredFocus($filter)
+    private function getCountriesResultByCode($sort, $focus)
     {
-        return explode('|', $filter);
-    }
+        $locationsByCountries = Location::byCountries($sort);
+        $jobsByCountries = $this->getJobsByCountries($locationsByCountries);
 
-    private function getOrderDirection($sortParameter)
-    {
-        $sort = 'ASC';
-
-        if (Str::contains($sortParameter, '-')) {
-            $sort = 'DESC';
-        }
-
-        return $sort;
+        return $this->getJobsMappingByCountryAndFocus($jobsByCountries, $focus);
     }
 }
