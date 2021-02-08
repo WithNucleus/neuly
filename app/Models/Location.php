@@ -113,6 +113,20 @@ class Location extends Model implements EntityContract
         return $byCountries;
     }
 
+    public static function byRegions($country, $sort = 'ASC')
+    {
+        $byRegions = [];
+
+        foreach (self::where('country', '=', $country)->orderBy('region', $sort)->get() as $location) {
+            if (! array_key_exists($location->region_code, $byRegions)) {
+                $byRegions[$location->region_code]['name'] = $location->region;
+            }
+            $byRegions[$location->region_code]['locations'][] = $location->id;
+        }
+
+        return $byRegions;
+    }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS

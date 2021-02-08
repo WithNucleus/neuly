@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
  * this are test routes for errors. These should be disabled after successfully testing those error pages.
  */
 
-Route::get('/jobs/map', 'Index\JobMapController@showMap')->name('discover.jobs.map');
+Route::get('/test/{country}', 'Index\JobMapController@showCountry')->name('discover.jobs.map.country');
 
 Route::get('/400', static function () {
     return abort(400);
@@ -328,6 +328,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/user/person/search', 'Index\UserPersonController@search')->name('user.person.search');
 
     Route::get('/jobs/map', 'Index\JobMapController@showMap')->name('discover.jobs.map');
+    Route::get('/jobs/map/{country}', 'Index\JobMapController@showCountry')->name('discover.jobs.map.country');
+
 });
 
 // User Email Reset
