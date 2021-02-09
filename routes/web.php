@@ -179,6 +179,12 @@ Route::get('/events/{slug}', 'Index\EventController@show')->name('discover.event
 Route::get('/jobs', 'Index\JobController@index')->name('discover.jobs');
 Route::get('/jobs/embed-widget', 'Index\JobController@embedWidget')->name('discover.jobs.embedWidget');
 Route::get('/jobs/titles.json', 'Index\JobController@titlesJson')->name('discover.jobs.titlesJson');
+Route::group([
+    'middleware' => ['auth', 'verified']
+], function() {
+    Route::get('/jobs/map', 'Index\JobMapController@showMap')->name('discover.jobs.map');
+    Route::get('/jobs/map/{country}', 'Index\JobMapController@showCountry')->name('discover.jobs.map.country');
+});
 Route::get('/jobs/{slug}', 'Index\JobController@show')->name('discover.jobs.show');
 Route::get('/jobs/apply/{slug}', 'Index\JobApplicationController@index')->name('discover.jobs.apply');
 Route::post('/jobs/apply', 'Index\JobApplicationController@apply')->name('discover.jobs.applyProcess');
@@ -326,10 +332,6 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::post('/user/person/create/finish', 'Index\UserPersonController@storeSocialShowFinishStep')->name('user.person.finish.store');
 
     Route::get('/user/person/search', 'Index\UserPersonController@search')->name('user.person.search');
-
-    Route::get('/jobs/map', 'Index\JobMapController@showMap')->name('discover.jobs.map');
-    Route::get('/jobs/map/{country}', 'Index\JobMapController@showCountry')->name('discover.jobs.map.country');
-
 });
 
 // User Email Reset
