@@ -30,6 +30,20 @@ class Company extends Model implements EntityContract, EntityImageContract
     |--------------------------------------------------------------------------
     */
 
+    const OWNERSHIP = [
+        'Public Company',
+        'Privately Held',
+        'Educational Institution',
+        'Government Agency',
+        'Non-Profit',
+    ];
+
+    const COMPANY_TO_COMPANY_TYPES = [
+        'Full ownership',
+        'Investor',
+        'Partner',
+    ];
+
     protected $table = 'companies';
     protected $guarded = ['id'];
 
@@ -41,20 +55,6 @@ class Company extends Model implements EntityContract, EntityImageContract
     // log activity for all attributes, which not listed in $guarded array
     protected static $logUnguarded = true;
     protected static $logName = 'entities';
-
-    protected static $companyToCompanyTypes = [
-        'Full ownership',
-        'Investor',
-        'Partner'
-    ];
-
-    protected static $ownershipValues = [
-        'Public Company',
-        'Privately Held',
-        'Educational Institution',
-        'Government Agency',
-        'Non-Profit'
-    ];
 
     protected static $imageAttribute = 'logo';
     protected static $imageFolderPath = 'logos';
@@ -97,17 +97,9 @@ class Company extends Model implements EntityContract, EntityImageContract
     /**
      * @return array
      */
-    public static function getCompanyToCompanyTypes()
-    {
-        return self::$companyToCompanyTypes;
-    }
-
-    /**
-     * @return array
-     */
     public static function getOwnershipValues()
     {
-        return self::$ownershipValues;
+        return array_combine(self::OWNERSHIP, self::OWNERSHIP);
     }
 
     /**
@@ -278,7 +270,7 @@ class Company extends Model implements EntityContract, EntityImageContract
             'ownership'            => [
                 'type'  => FieldsMapping::TYPE_ENUM,
                 'label' => 'Type',
-                'values' => self::$ownershipValues,
+                'values' => self::getOwnershipValues(),
             ],
             'ticker_symbol'        => [
                 'type' => FieldsMapping::TYPE_STRING,

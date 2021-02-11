@@ -13,10 +13,10 @@ class SubsidiaryController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($id) {
-        $company       = Company::with(['parents', 'subsidiaries'])->findOrFail($id);
+        $company = Company::with(['parents', 'subsidiaries'])->findOrFail($id);
         $ignoreCompanyIds = $company->getParentsAndSubsidiariesIgnoredIds();
         $companiesList = Company::whereNotIn('id', $ignoreCompanyIds)->orderBy('name')->get();
-        $types         = Company::getCompanyToCompanyTypes();
+        $types = Company::COMPANY_TO_COMPANY_TYPES;
 
     	return view('admin.company.subsidiary', compact('company', 'companiesList', 'types'));
     }
