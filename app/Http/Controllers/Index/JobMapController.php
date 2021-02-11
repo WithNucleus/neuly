@@ -19,7 +19,7 @@ class JobMapController extends Controller
      */
     public function showMap(Request $request)
     {
-        $focus = Focus::drugs()->orderBy('name');
+        $focus = Focus::withJobs()->orderBy('name');
         $focus_cats = $focus->pluck('name')->toArray();
 
         $focus = $this->filterFocus($this->filterFocusValues($request), $focus);
