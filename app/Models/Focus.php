@@ -9,6 +9,7 @@ use App\Models\Traits\OldSlugRedirectable;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -41,37 +42,51 @@ class Focus extends Model implements EntityContract
     |--------------------------------------------------------------------------
     */
 
+    public static function withCompanies()
+    {
+        $focusIdsWithCompanies = DB::table('company_focus')->groupBy('focus_id')->pluck('focus_id');
+
+        return self::whereIn('id', $focusIdsWithCompanies);
+    }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
     |--------------------------------------------------------------------------
     */
 
-    public function companies() {
+    public function companies()
+    {
         return $this->belongsToMany('App\Models\Company', 'company_focus', 'focus_id', 'company_id')->withTimestamps();
     }
 
-    public function research() {
+    public function research()
+    {
         return $this->belongsToMany('App\Models\Research', 'focus_research', 'focus_id', 'research_id')->withTimestamps();
     }
 
-    public function jobs() {
+    public function jobs()
+    {
         return $this->belongsToMany('App\Models\Job', 'focus_job', 'focus_id', 'job_id')->withTimestamps();
     }
 
-    public function events() {
+    public function events()
+    {
         return $this->belongsToMany('App\Models\Event', 'event_focus', 'focus_id', 'event_id')->withTimestamps();
     }
 
-    public function newsarticles() {
+    public function newsarticles()
+    {
         return $this->belongsToMany('App\Models\NewsArticle', 'focus_news_article', 'focus_id', 'news_article_id')->withTimestamps();
     }
 
-    public function clinicaltrials() {
+    public function clinicaltrials()
+    {
         return $this->belongsToMany('App\Models\Clinicaltrial', 'clinicaltrial_focus', 'focus_id', 'clinicaltrial_id')->withTimestamps();
     }
 
-    public function importResults() {
+    public function importResults()
+    {
         return $this->hasMany('App\Models\ImportResult');
     }
 
@@ -92,8 +107,9 @@ class Focus extends Model implements EntityContract
     |--------------------------------------------------------------------------
     */
 
-    public function getShowLink() {
-        return '<a href="' . route('discover.focus.show', $this->slug) . '">' . $this->name . '</a>';
+    public function getShowLink()
+    {
+        return '<a href="'.route('discover.focus.show', $this->slug).'">'.$this->name.'</a>';
     }
 
     /*
@@ -102,7 +118,8 @@ class Focus extends Model implements EntityContract
     |--------------------------------------------------------------------------
     */
 
-    public function setNameAttribute($value) {
+    public function setNameAttribute($value)
+    {
         $this->attributes['name'] = $value;
         $this->attributes['slug'] = Str::slug($value);
     }
@@ -150,7 +167,7 @@ class Focus extends Model implements EntityContract
                 'type'          => FieldsMapping::TYPE_RELATION,
                 'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
-                'label'         => 'News Articles'
+                'label'         => 'News Articles',
             ],
             'clinicaltrials' => [
                 'type'          => FieldsMapping::TYPE_RELATION,

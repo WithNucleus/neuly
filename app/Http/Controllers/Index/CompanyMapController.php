@@ -16,7 +16,7 @@ class CompanyMapController extends Controller
      */
     public function showMap(Request $request)
     {
-        $focus = Focus::drugs()->orderBy('name');
+        $focus = Focus::withCompanies()->orderBy('name');
         $focus_cats = $focus->pluck('name')->toArray();
 
         $focus = $this->filterFocus($this->filterFocusValues($request), $focus);
