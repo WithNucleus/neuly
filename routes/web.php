@@ -13,11 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-/**
+/*
  * this are test routes for errors. These should be disabled after successfully testing those error pages.
  */
-
-Route::get('/test', 'Index\CompanyMapController@showMap');
 
 Route::get('/400', static function () {
     return abort(400);
@@ -133,6 +131,14 @@ Route::group([
 // Companies
 Route::get('/organizations', 'Index\CompanyController@index')->name('discover.organizations');
 Route::get('/organization/names.json', 'Index\CompanyController@namesJson');
+
+Route::group([
+    'middleware' => ['auth', 'verified'],
+], function () {
+    Route::get('/organization/map', 'Index\CompanyMapController@showMap')->name('discover.organizations.map');
+    Route::get('/organization/map/{country}', 'Index\CompanyMapController@showCountry')->name('discover.organizations.map.country');
+});
+
 Route::get('/organization/{slug}', 'Index\CompanyController@show')->name('discover.organizations.show');
 Route::get('/organization/{slug}/jobs', 'Index\CompanyController@jobs')->name('discover.organizations.jobs');
 Route::get('/organization/{slug}/events', 'Index\CompanyController@events')->name('discover.organizations.events');
@@ -197,7 +203,7 @@ Route::post('/listing/request/finish', 'Index\ListingRequestController@finishReq
 Route::get('/listing/request/getEntityListJson', 'Index\ListingRequestController@getEntityListJson')->name('listing.request.getEntityListJson');
 
 Route::get('/job-report-entry', 'Index\JobReportEntryController@index')->name('job-report-entry.index');
-Route::post('/job-report-entry', 'Index\JobReportEntryController@store')->name('job-report-entry.store');;
+Route::post('/job-report-entry', 'Index\JobReportEntryController@store')->name('job-report-entry.store');
 
 // Search
 Route::post('/search', 'Index\SearchController@search')->name('search');
@@ -273,13 +279,13 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
         Route::post('/follow-lists/validate-name', 'Dashboard\FollowListsController@validateName')->name('member.follow-lists.validateName');
         Route::resource('/follow-lists', 'Dashboard\FollowListsController', [
             'as' => 'member',
-            'except' => ['create']
+            'except' => ['create'],
         ]);
 
         // Follow
         Route::resource('/follow', 'Dashboard\FollowController', [
             'as' => 'member',
-            'except' => ['create', 'store', 'destroy']
+            'except' => ['create', 'store', 'destroy'],
         ]);
 
         Route::get('/notifications', 'NotificationController@index')->name('dashboard.notifications.index');
@@ -355,7 +361,6 @@ Route::group([
     Route::delete('/subsidiary/{child_id}', 'SubsidiaryController@remove')->name('subsidiary.remove');
 });
 
-
 Route::get('/admin/person/{id}/company', 'Admin\PersonCompanyController@index');
 Route::post('/admin/person/{id}/company', 'Admin\PersonCompanyController@add');
 
@@ -400,21 +405,21 @@ Route::post('/admin/import/failures/{id}/delete', 'Admin\Import\FailuresControll
 
 // Related Entities
 Route::group([
-    'middleware' => ['auth', 'role:Admin','permission:import'],
+    'middleware' => ['auth', 'role:Admin', 'permission:import'],
     'prefix'     => '/admin/import',
     'namespace'  => 'Admin\Import',
     'as'         => 'import.',
 ], function () {
     Route::group([
         'prefix' => '/related-entities',
-        'as'     => 'related-entities.'
+        'as'     => 'related-entities.',
     ], function () {
         Route::get('/', 'RelatedEntitiesController@index')->name('index');
 
         Route::group([
             'prefix' => '/locations',
             'namespace'  => 'RelatedEntities',
-            'as'     => 'locations.'
+            'as'     => 'locations.',
         ], function () {
             Route::get('/', 'LocationsController@index')->name('index');
             Route::post('/import', 'LocationsController@import')->name('import');
@@ -425,19 +430,18 @@ Route::group([
         Route::group([
             'prefix' => '/people-organization',
             'namespace'  => 'RelatedEntities',
-            'as'     => 'people-organization.'
+            'as'     => 'people-organization.',
         ], function () {
             Route::get('/', 'PeopleOrganizationController@index')->name('index');
             Route::post('/import', 'PeopleOrganizationController@import')->name('import');
             Route::get('/results/{id}', 'PeopleOrganizationController@results')->name('results');
             Route::get('/failures/{id}', 'PeopleOrganizationController@failures')->name('failures');
         });
-
     });
 
     Route::group([
         'prefix' => '/batch-images-upload',
-        'as'     => 'batch-images-upload.'
+        'as'     => 'batch-images-upload.',
     ], function () {
         Route::get('/', 'BatchImagesUploadController@index')->name('index');
         Route::post('/import', 'BatchImagesUploadController@import')->name('import');
@@ -481,12 +485,12 @@ Route::get('/members/{member_url}/{slug}', 'Dashboard\NoteController@showPublic'
 
 Route::group([
     'prefix' => 'embeds',
-    'as' => 'embeds.'
-], function() {
+    'as' => 'embeds.',
+], function () {
     Route::get('/jobs', 'Index\JobController@embedIndex')->name('jobs.index');
     Route::get('/events', 'Index\EventController@embedIndex')->name('events.index');
 });
 
-/** CATCH-ALL ROUTE for Backpack/PageManager - needs to be at the end of your routes.php file  **/
+/* CATCH-ALL ROUTE for Backpack/PageManager - needs to be at the end of your routes.php file  **/
 Route::get('{page}/{subs?}', ['uses' => '\App\Http\Controllers\PageController@index'])
     ->where(['page' => '^(((?=(?!admin))(?=(?!\/)).))*$', 'subs' => '.*']);
