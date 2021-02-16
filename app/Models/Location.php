@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use App\Helpers\Entity\FieldsMapping;
+use App\Helpers\NotificationHelper;
 use App\Models\Contracts\EntityContract;
 use App\Models\Traits\CrudShowEntityPageButton;
 use App\Models\Traits\OldSlugRedirectable;
+use App\Notifications\LocationMapCodesNotFound;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -40,6 +42,56 @@ class Location extends Model implements EntityContract
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
+
+    protected static function booted()
+    {
+        static::created(function ($model) {
+            $model->handleMapCodes();
+            $model->save();
+        });
+
+        static::updating(function ($model) {
+            $model->handleMapCodes(true);
+        });
+    }
+
+    /**
+     * @param bool $isUpdate
+     */
+    private function handleMapCodes($isUpdate = false)
+    {
+        $countryCodeNotFound = false;
+        $regionCodeNotFound = false;
+
+        if ($this->country && ($isUpdate === false || $this->country != $this->getOriginal('country'))) {
+            $country = Country::where('name', $this->country)->first();
+
+            if ($country) {
+                $this->alpha2code = $country->alpha2code;
+            } else {
+                $this->alpha2code = null;
+                $countryCodeNotFound = true;
+            }
+        }
+
+        if ($this->region && ($isUpdate === false || $this->region != $this->getOriginal('region'))) {
+            $locationWithRegionCode = self::where('country', $this->country)
+                ->where('region', $this->region)
+                ->whereNotNull('region_code')
+                ->first();
+
+            if ($locationWithRegionCode) {
+                $this->region_code = $locationWithRegionCode->region_code;
+            } else {
+                $this->region_code = null;
+                $regionCodeNotFound = true;
+            }
+        }
+
+        if ($countryCodeNotFound || $regionCodeNotFound) {
+            NotificationHelper::sendAdminNotifications(new LocationMapCodesNotFound($this, $countryCodeNotFound, $regionCodeNotFound));
+        }
+    }
 
     public function getShowLink() {
         return '<a href="' . route('discover.locations.show', $this->slug) . '">' . $this->name . '</a>';
