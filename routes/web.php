@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/test', 'Index\ClinicalTrialMapController@showMap');
+
 // Auth Routes for Front-End
 Route::group(['middleware' => 'firewall.all'], function () {
     Auth::routes(['verify' => true]);

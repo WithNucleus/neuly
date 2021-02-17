@@ -9,6 +9,7 @@ use App\Models\Traits\OldSlugRedirectable;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -40,6 +41,14 @@ class Focus extends Model implements EntityContract
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
+
+    public static function withClinicalTrials()
+    {
+        $focusIdsWithClinicaltrials = DB::table('clinicaltrial_focus')->groupBy('focus_id')->pluck('focus_id');
+
+        return self::whereIn('id', $focusIdsWithClinicaltrials);
+    }
+
 
     /*
     |--------------------------------------------------------------------------
