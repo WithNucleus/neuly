@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Index;
 
+use App\Helpers\MapHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Focus;
 use App\Models\Location;
@@ -26,7 +27,29 @@ class ClinicalTrialMapController extends Controller
         $sort = $this->getOrderDirection($this->getSortParameter($request));
         $countriesByCode = $this->getCountriesResultByCode($sort, $focus);
 
-        dd($countriesByCode);
+        $filters_focus = $focus->pluck('name')->toArray();
+        $path = route('discover.clinicaltrials.map');
+
+        return view('discover.clinicaltrials.maps.global', compact('countriesByCode', 'filters_focus', 'focus_cats', 'path', 'sort'));
+    }
+
+    public function showCountry(Request $request, $country)
+    {
+        $focus = Focus::drugs()->orderBy('name');
+        $focus_cats = $focus->pluck('name')->toArray();
+
+        $focus = $this->filterFocus($this->filterFocusValues($request), $focus);
+        $focus = $focus->get();
+
+        $sort = $this->getOrderDirection($this->getSortParameter($request));
+
+        $regionsByCode = $this->getCountryResult($country, $sort, $focus);
+
+        $filters_focus = $focus->pluck('name')->toArray();
+        $path = route('discover.clinicaltrials.map.country', $country);
+        $map = MapHelper::getCountryMap($country);
+
+        return view('discover.clinicaltrials.maps.country', compact('regionsByCode', 'filters_focus', 'focus_cats', 'path', 'sort', 'map', 'country'));
     }
 
     /**
@@ -124,6 +147,17 @@ class ClinicalTrialMapController extends Controller
                 ->toArray();
     }
 
+    public function getClinicalTrialsByRegions($locationsByRegions)
+    {
+        $trialsByRegion = [];
+        foreach ($locationsByRegions as $region_code => $region) {
+            $trialsByRegion[$region_code]['name'] = $region['name'];
+            $trialsByRegion[$region_code]['jobs'] = $this->getClinicalTrialsByLocations($region['locations']);
+        }
+
+        return $trialsByRegion;
+    }
+
     private function countClinicalTrialsByFocus($clinicaltrials, $focus)
     {
         return DB::table('clinicaltrial_focus')
@@ -146,7 +180,23 @@ class ClinicalTrialMapController extends Controller
                 $trialsByCountriesAndFocus[$alpha2code]['focus'][$item->name] = $this->countClinicalTrialsByFocus($country['clinicaltrials'], $item->id);
             }
         }
+
         return $trialsByCountriesAndFocus;
+    }
+
+    private function getClinicalTrialsMappingByRegionsAndFocus($jobsByRegions, $focus)
+    {
+        $trialsByByRegionsAndFocus = [];
+        foreach ($jobsByRegions as $region_code => $region) {
+            $trialsByByRegionsAndFocus[$region_code]['name'] = $region['name'];
+            $trialsByByRegionsAndFocus[$region_code]['total'] = count($region['jobs']);
+
+            foreach ($focus as $item) {
+                $trialsByByRegionsAndFocus[$region_code]['focus'][$item->name] = $this->countClinicalTrialsByFocus($region['jobs'], $item->id);
+            }
+        }
+
+        return $trialsByByRegionsAndFocus;
     }
 
     private function getCountriesResultByCode($sort, $focus)
@@ -155,5 +205,13 @@ class ClinicalTrialMapController extends Controller
         $trialsByCountries = $this->getClinicalTrialsByCountry($locationsByCountries);
 
         return $this->getClinicalTrialsMappingByCountriesAndFocus($trialsByCountries, $focus);
+    }
+
+    private function getCountryResult($country, $sort, $focus)
+    {
+        $locations = Location::byRegions($country, $sort);
+        $jobsByRegions = $this->getClinicalTrialsByRegions($locations);
+
+        return $this->getClinicalTrialsMappingByRegionsAndFocus($jobsByRegions, $focus);
     }
 }
