@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\LocationRequest;
+use App\Models\Country;
 use App\Models\Location;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
@@ -48,22 +49,22 @@ class LocationCrudController extends CrudController
         $this->crud->addColumn([
             'name' => 'name',
             'type' => 'text',
-            'label' => 'Location'
+            'label' => 'Location',
         ]);
         $this->crud->addColumn([
             'name' => 'city',
             'type' => 'text',
-            'label' => 'City'
+            'label' => 'City',
         ]);
         $this->crud->addColumn([
             'name' => 'region',
             'type' => 'text',
-            'label' => 'Region'
+            'label' => 'Region',
         ]);
         $this->crud->addColumn([
             'name' => 'country',
             'type' => 'text',
-            'label' => 'Country'
+            'label' => 'Country',
         ]);
     }
 
@@ -84,25 +85,29 @@ class LocationCrudController extends CrudController
     {
         CRUD::setValidation(LocationRequest::class);
 
+        $countries = Country::all()->pluck('name', 'name')->toArray();
+
         $this->crud->addField([
             'name' => 'city',
             'type' => 'text',
-            'label' => 'City'
+            'label' => 'City',
         ]);
         $this->crud->addField([
             'name' => 'region',
             'type' => 'text',
-            'label' => 'Region'
+            'label' => 'Region',
         ]);
         $this->crud->addField([
             'name' => 'country',
-            'type' => 'text',
-            'label' => 'Country'
+            'type' => 'select2_from_array',
+            'label' => 'Country',
+            'options' => [null => ''] + $countries,
+            'allows_null' => false,
         ]);
         $this->crud->addField([
             'name' => 'name',
             'type' => 'text',
-            'label' => 'Location (auto-populated)'
+            'label' => 'Location (auto-populated)',
         ]);
 
         Widget::add()
@@ -120,5 +125,15 @@ class LocationCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+        $this->crud->addField([
+            'name' => 'region_code',
+            'type' => 'text',
+            'label' => 'Region code',
+        ]);
+        $this->crud->addField([
+            'name' => 'alpha2code',
+            'type' => 'text',
+            'label' => 'Alpha2 code',
+        ]);
     }
 }
