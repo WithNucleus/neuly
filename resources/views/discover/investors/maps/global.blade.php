@@ -70,6 +70,10 @@
                         <table id="resizable-table-with-x-borders" class="table table-striped bg-white border-0">
                             <thead class="font-size-large">
                             <th scope="col" class="sticky-top text-no-wrap bg-dark text-light">Country</th>
+                            @foreach($filtered_types as $name)
+                                <th scope="col" class="sticky-top text-no-wrap bg-dark text-light">{{ $name }}</th>
+                            @endforeach
+                            <th scope="col" class="sticky-top text-no-wrap bg-dark text-light">Hiring</th>
                             <th scope="col" class="sticky-top text-no-wrap bg-dark text-light">Total</th>
                             </thead>
                             <tbody>
@@ -78,6 +82,10 @@
                                     <td>
                                         {{ $item['name'] }}
                                     </td>
+                                    @foreach($item['types'] as $name => $value)
+                                        <td>{{ $value }}</td>
+                                    @endforeach
+                                    <td>{{ $item['hiring'] }}</td>
                                     <td><strong>{{ $item['total'] }}</strong></td>
                                 </tr>
                             @endforeach
@@ -115,8 +123,16 @@
             onRegionTipShow: function(event, label, code){
                 if(countries[code] !== undefined)
                 {
+                    var type_entries = '';
+
+                    for(var item in countries[code]['types']) {
+                        type_entries += '<br><strong>' +item + ': ' + countries[code]['types'][item] + '</strong>'
+                    }
+
                     label.html(
                         '<strong>' + label.html() + '</strong>'
+                        + type_entries
+                        + '<br><strong>Hiring: ' + countries[code].hiring + '</strong>'
                         + '<br><strong>Total: ' + countries[code].total + '</strong>'
                     );
                 } else {

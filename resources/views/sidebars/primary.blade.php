@@ -90,6 +90,10 @@
             @if(Route::is('discover.clinicaltrials.recruiting'))
                 @include('sidebars.recruitingtrial')
             @endif
+
+                @if(Route::is('discover.investors.map') OR Route::is('discover.investors.map.country'))
+                    @include('sidebars.investors.global-map')
+                @endif
         </div>
     </div>
 </nav>
