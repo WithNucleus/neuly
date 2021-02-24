@@ -18,7 +18,7 @@ class CompanyMapController extends Controller
      */
     public function showMap(Request $request)
     {
-        $focus = Focus::withCompanies()->orderBy('name');
+        $focus = Focus::hasCompanies()->orderBy('name');
         $focus_cats = $focus->pluck('name')->toArray();
 
         $focus = $this->filterFocus($this->filterFocusValues($request), $focus);
@@ -37,11 +37,11 @@ class CompanyMapController extends Controller
     /**
      * @param Request $request
      * @param $country
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|void
      */
     public function showCountry(Request $request, $country)
     {
-        $focus = Focus::withCompanies()->orderBy('name');
+        $focus = Focus::hasCompanies()->orderBy('name');
         $focus_cats = $focus->pluck('name')->toArray();
 
         $focus = $this->filterFocus($this->filterFocusValues($request), $focus);
@@ -55,7 +55,9 @@ class CompanyMapController extends Controller
         $path = route('discover.organizations.map.country', $country);
         $map = MapHelper::getCountryMap($country);
 
-        //dd($regionsByCode);
+        if (! $map['show']) {
+            return abort(404);
+        }
 
         return view('discover.organizations.maps.country', compact('regionsByCode', 'filters_focus', 'focus_cats', 'path', 'sort', 'map', 'country'));
     }

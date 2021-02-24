@@ -42,13 +42,6 @@ class Focus extends Model implements EntityContract
     |--------------------------------------------------------------------------
     */
 
-    public static function withCompanies()
-    {
-        $focusIdsWithCompanies = DB::table('company_focus')->groupBy('focus_id')->pluck('focus_id');
-
-        return self::whereIn('id', $focusIdsWithCompanies);
-    }
-
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
@@ -99,6 +92,11 @@ class Focus extends Model implements EntityContract
     public function scopeDrugs($query)
     {
         return $query->where('type', self::TYPE_DRUG);
+    }
+
+    public function scopeHasCompanies($query)
+    {
+        return $query->whereHas('companies');
     }
 
     /*
