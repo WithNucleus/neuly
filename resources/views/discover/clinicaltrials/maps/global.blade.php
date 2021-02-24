@@ -23,7 +23,7 @@
 
                 @include('navbars.breadcrumb', [
                     'items' => [
-                        'Locations' => false,
+                        'Clinical Trials' => false,
                     ]
                 ])
 

@@ -23,7 +23,7 @@
 
                 @include('navbars.breadcrumb', [
                     'items' => [
-                        'Locations' => route('discover.locations.maps.global'),
+                        'Clinical Trials' => route('discover.clinicaltrials.map'),
                         $country => false
                     ]
                 ])

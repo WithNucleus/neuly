@@ -18,7 +18,7 @@ class ClinicalTrialMapController extends Controller
      */
     public function showMap(Request $request)
     {
-        $focus = Focus::withClinicalTrials()->orderBy('name');
+        $focus = Focus::hasClinicalTrials()->orderBy('name');
         $focus_cats = $focus->pluck('name')->toArray();
 
         $focus = $this->filterFocus($this->filterFocusValues($request), $focus);
@@ -35,7 +35,7 @@ class ClinicalTrialMapController extends Controller
 
     public function showCountry(Request $request, $country)
     {
-        $focus = Focus::drugs()->orderBy('name');
+        $focus = Focus::hasClinicalTrials()->orderBy('name');
         $focus_cats = $focus->pluck('name')->toArray();
 
         $focus = $this->filterFocus($this->filterFocusValues($request), $focus);
@@ -48,6 +48,10 @@ class ClinicalTrialMapController extends Controller
         $filters_focus = $focus->pluck('name')->toArray();
         $path = route('discover.clinicaltrials.map.country', $country);
         $map = MapHelper::getCountryMap($country);
+
+        if (! $map['show']) {
+            return abort(404);
+        }
 
         return view('discover.clinicaltrials.maps.country', compact('regionsByCode', 'filters_focus', 'focus_cats', 'path', 'sort', 'map', 'country'));
     }
