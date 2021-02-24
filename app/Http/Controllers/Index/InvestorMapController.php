@@ -47,6 +47,10 @@ class InvestorMapController extends Controller
         $path = route('discover.investors.map.country', $country);
         $map = MapHelper::getCountryMap($country);
 
+        if (! $map['show']) {
+            return abort(404);
+        }
+
         return view('discover.investors.maps.country', compact('regionsByCode', 'path', 'sort', 'map', 'country', 'type_cats', 'filtered_types'));
     }
 
