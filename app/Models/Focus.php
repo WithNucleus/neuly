@@ -42,13 +42,6 @@ class Focus extends Model implements EntityContract
     |--------------------------------------------------------------------------
     */
 
-    public static function withJobs()
-    {
-        $focusIdsWithJobs = DB::table('focus_job')->groupBy('focus_id')->pluck('focus_id');
-
-        return self::whereIn('id', $focusIdsWithJobs);
-    }
-
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
@@ -96,9 +89,22 @@ class Focus extends Model implements EntityContract
     |--------------------------------------------------------------------------
     */
 
+    /**
+     * @param $query
+     * @return mixed
+     */
     public function scopeDrugs($query)
     {
         return $query->where('type', self::TYPE_DRUG);
+    }
+
+    /**
+     * @param \Illuminate\Database\Query\Builder $query
+     * @return \Illuminate\Database\Query\Builder
+     */
+    public function scopeHasJobs($query)
+    {
+        return $query->whereHas('jobs');
     }
 
     /*

@@ -23,7 +23,7 @@
 
                 @include('navbars.breadcrumb', [
                     'items' => [
-                        'Locations' => false,
+                        'Jobs' => false,
                     ]
                 ])
 
@@ -39,7 +39,7 @@
                 @include('discover.includes.status-messages')
 
                 <div class="d-flex align-items-center justify-content-between">
-                    <h1>Locations Map</h1>
+                    <h1>Jobs Map</h1>
 
                     <div class="switch-view ml-auto mt-2 mb-3 my-md-0 d-flex">
                         <div class="btn-group" role="group" aria-label="Switch Location view">

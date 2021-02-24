@@ -19,7 +19,7 @@ class JobMapController extends Controller
      */
     public function showMap(Request $request)
     {
-        $focus = Focus::withJobs()->orderBy('name');
+        $focus = Focus::hasJobs()->orderBy('name');
         $focus_cats = $focus->pluck('name')->toArray();
 
         $focus = $this->filterFocus($this->filterFocusValues($request), $focus);
@@ -36,7 +36,7 @@ class JobMapController extends Controller
 
     public function showCountry(Request $request, $country)
     {
-        $focus = Focus::drugs()->orderBy('name');
+        $focus = Focus::hasJobs()->orderBy('name');
         $focus_cats = $focus->pluck('name')->toArray();
 
         $focus = $this->filterFocus($this->filterFocusValues($request), $focus);
@@ -50,7 +50,9 @@ class JobMapController extends Controller
         $path = route('discover.jobs.map.country', $country);
         $map = MapHelper::getCountryMap($country);
 
-        //dd($regionsByCode);
+        if (! $map['show']) {
+            return abort(404);
+        }
 
         return view('discover.jobs.maps.country', compact('regionsByCode', 'filters_focus', 'focus_cats', 'path', 'sort', 'map', 'country'));
     }
@@ -237,6 +239,7 @@ class JobMapController extends Controller
     {
         $locations = Location::byRegions($country, $sort);
         $jobsByRegions = $this->getJobsByRegions($locations);
+
         return $this->getJobsMappingByRegionsAndFocus($jobsByRegions, $focus);
     }
 }
