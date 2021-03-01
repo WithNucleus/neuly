@@ -5,27 +5,22 @@
 
 	<script>
 		window.onload = function () {
-
-			const city = document.getElementsByName('city');
-			const region = document.getElementsByName('region');
-			const country = document.getElementsByName('country');
-
-			var newName = '';
+			const city = document.getElementsByName('city')[0];
+			const region = document.getElementsByName('region')[0];
+			const country = document.getElementsByName('country')[0];
+			const fullName = document.getElementsByName('name')[0];
 
 			// Event Listeners
-			document.getElementsByName('city')[0].addEventListener('input', updateName);
-			document.getElementsByName('region')[0].addEventListener('input', updateName);
-			document.getElementsByName('country')[0].addEventListener('input', updateName);
+            city.addEventListener('input', updateName);
+            region.addEventListener('input', updateName);
+            //select2 use jQuery event handler
+            $(country).on('change', updateName);
 
 			function updateName(e) {
-
-				document.getElementsByName('name')[0].value = '';
-
-				var newName = '';
-
-				var cityValue = document.getElementsByName('city')[0].value;
-				var regionValue = document.getElementsByName('region')[0].value;
-				var countryValue = document.getElementsByName('country')[0].value;
+				let newName = '';
+                let cityValue = city.value;
+                let regionValue = region.value;
+                let countryValue = country.value;
 
 				if (cityValue) {
 					newName = cityValue + ', ';
@@ -39,13 +34,9 @@
 					newName = newName + countryValue;
 				}
 
-				// Update Name Field
-				document.getElementsByName('name')[0].value = newName;
-
+                fullName.value = newName;
 			}
-
 		}
-
 	</script>
 
 @includeWhen(!empty($widget['wrapper']), 'backpack::widgets.inc.wrapper_end')
