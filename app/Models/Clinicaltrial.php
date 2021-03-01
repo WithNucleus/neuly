@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Helpers\EntityMergeHelper;
+use App\Helpers\Entity\FieldsMapping;
 use App\Models\ClinicalTrialDetails\CtCondition;
 use App\Models\ClinicalTrialDetails\CtIntervention;
 use App\Models\ClinicalTrialDetails\CtOutcomeMeasure;
@@ -12,7 +12,9 @@ use App\Models\Traits\CrudShowEntityPageButton;
 use App\Models\Traits\OldSlugRedirectable;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -89,6 +91,11 @@ class Clinicaltrial extends Model implements EntityContract
         return $this->belongsToMany(CtStudyDesign::class, 'clinicaltrial_study_design');
     }
 
+    public function parsingResult()
+    {
+        return $this->hasOne(ClinicaltrialParsingResult::class);
+    }
+
     /**
      * Get all Sponsors and Collaborators combined together.
      *
@@ -111,6 +118,27 @@ class Clinicaltrial extends Model implements EntityContract
     | SCOPES
     |--------------------------------------------------------------------------
     */
+
+    public function scopeAvailableForParsing($query)
+    {
+        return $query
+            ->doesntHave('parsingResult')
+            ->where(function (Builder $query) {
+                return $query
+                    ->whereNull('brief_summary')
+                    ->orWhereNull('detailed_description');
+            });
+    }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param array $years
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeStartYear(Builder $query, ...$years)
+    {
+        return $query->whereIn(DB::raw('YEAR(start_date)'), $years);
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -148,111 +176,111 @@ class Clinicaltrial extends Model implements EntityContract
     /**
      * @return array
      */
-    public static function getMergeMapping()
+    public static function getFieldsMapping()
     {
         return [
             //attributes
             'title'                   => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             'slug'                    => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             'nct_number'              => [
-                'type'  => EntityMergeHelper::TYPE_STRING,
+                'type'  => FieldsMapping::TYPE_STRING,
                 'label' => 'NCT Number',
             ],
             'acronym'                 => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             'status'                  => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             'study_results'           => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             'gender'                  => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             'age'                     => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             'phases'                  => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             'enrollment'              => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             'funded_bys'              => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             'study_type'              => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             'other_ids'               => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             'start_date'              => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             'primary_completion_date' => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             'completion_date'         => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             'first_posted'            => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             'results_first_posted'    => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             'last_update_posted'      => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             'study_url'               => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             //relations
             'companies'               => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_N_N,
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
             'locations'               => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_N_N,
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
             'people'                  => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_N_N,
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
             'focus'                   => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_N_N,
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
             'conditions'              => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_ONE_N,
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_ONE_N,
                 'relationField' => 'value',
             ],
             'interventions'           => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_ONE_N,
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_ONE_N,
                 'relationField' => 'value',
             ],
             'outcomeMeasures'        => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_ONE_N,
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_ONE_N,
                 'relationField' => 'value',
                 'label'         => 'Outcome Measures',
             ],
             'studyDesigns'           => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_ONE_N,
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_ONE_N,
                 'relationField' => 'value',
                 'label'         => 'Study Designs',
             ],

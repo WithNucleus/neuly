@@ -25,7 +25,7 @@
             filters.push($(this).val());
         });
 
-        if(filterName === 'valuation_min' || filterName === 'valuation_max') {
+        if(filterName === 'valuation_min' || filterName === 'valuation_max' || filterName === 'age') {
             filters.push($("#filterSidebar input[name='" + filterName + "']").val());
         }
 
@@ -56,7 +56,10 @@
             'study_designs',
             'foundation_year',
             'valuation_min',
-            'valuation_max'
+            'valuation_max',
+            'age',
+            'gender',
+            'year'
         ];
 
         allowedFilters.forEach(function (filterName) {
@@ -203,6 +206,18 @@
 
             min_input.val(values[0]);
             max_input.val(values[1]);
+
+            get_filters_and_go();
+        })
+
+        $(".set-age-filter").on('click', function() {
+            let min_input = $("input[name=age]");
+
+            let values = slider.noUiSlider.get();
+
+            console.log(parseInt(values));
+
+            min_input.val(parseInt(values));
 
             get_filters_and_go();
         })

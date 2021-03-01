@@ -153,13 +153,7 @@ class CompanyCrudController extends CrudController
             'name'    => 'ownership',
             'type'    => 'radio',
             'label'   => 'Type',
-            'options' => [
-                'Public Company'          => 'Public Company',
-                'Privately Held'          => 'Privately Held',
-                'Educational Institution' => 'Educational Institution',
-                'Government Agency'       => 'Government Agency',
-                'Non-Profit'              => 'Non-Profit'
-            ],
+            'options' => Company::getOwnershipValues(),
             'inline'  => true,
         ]);
         $this->crud->addField([
@@ -217,7 +211,7 @@ class CompanyCrudController extends CrudController
             'type'  => 'date_picker',
             'label' => 'Founded Date',
             'date_picker_options' => [
-                'format' => config('app.date_input_format'),
+                'format' => config('app.datepicker_input_format'),
             ],
         ]);
         $this->crud->addField([
@@ -237,7 +231,7 @@ class CompanyCrudController extends CrudController
             'type'  => 'date_picker',
             'label' => 'Last Funding Date',
             'date_picker_options' => [
-                'format' => config('app.date_input_format'),
+                'format' => config('app.datepicker_input_format'),
             ],
         ]);
         $this->crud->addField([

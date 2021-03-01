@@ -1,3 +1,9 @@
+<?php
+
+use App\Helpers\ListingRequestHelper;
+use App\Helpers\Entity\FieldsMapping;
+
+?>
 @extends('layouts.app')
 
 @section('body-class', 'bg-light')
@@ -9,27 +15,47 @@
             <main id="content-main" role="main" class="col-md-8 col-lg-6 col-xl-5 mx-auto">
                 <div class="row">
                     <div class="col-12">
+                        @include('discover.includes.status-messages')
+
                         <div class="card mt-3 shadow-sm">
                             <div class="card-body">
                                 <h1 class="text-center text-primary">Neuly Listing Request</h1>
-                                @include('discover.includes.status-messages')
+                                <p class="text-center lead">
+                                @isset($entity)
+                                    Update {{ $entityType }} "{{ $entity->name }}"
+                                @else
+                                    Create {{ $entityType }}
+                                @endisset
+                                </p>
 
-                                <form method="post" action=" {{ route('listing.request.finish') }}" enctype="multipart/form-data" class="max-width-450">
+                                <form method="post" action=" {{ route('listing.request.finish') }}"
+                                      enctype="multipart/form-data">
                                     @csrf
-                                    @include('discover.listing-requests.entity-forms.'.$general['type'])
+
+                                    <input type="hidden" name="entity_type" value="{{ $entityType }}"/>
+                                    @isset($entity)
+                                        <input type="hidden" name="to_update_id" value="{{ $entity->id }}"/>
+                                    @endisset
+
+                                    @foreach($mapping as $field => $options)
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label
+                                                        class="font-weight-bold">{{ isset($options['label']) ? $options['label'] : FieldsMapping::makeLabelFromFieldName($field) }}</label>
+                                                    @include('discover.listing-requests.fields.' . ListingRequestHelper::getFieldViewByMappingOptions($options))
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
 
                                     <div class="form-group">
-                                        <label for="general_comment" class="font-weight-bold">Any additional info or comments?</label>
-                                        <textarea class="form-control" name="general_comment" rows="3"></textarea>
+                                        <label class="font-weight-bold">Any additional info or comments?</label>
+                                        <textarea class="form-control" name="comment" rows="3"></textarea>
                                     </div>
 
-                                    <input type="hidden" name="general_update" value="{{ $general['update'] }}" />
-                                    <input type="hidden" name="general_name" value="{{ $general['name'] }}" />
-                                    <input type="hidden" name="general_mail" value="{{ $general['mail'] }}" />
-                                    <input type="hidden" name="general_type" value="{{ $general['type'] }}" />
-
                                     <div class="form-group">
-                                        <button class="btn btn-primary float-right" type="submit">next</button>
+                                        <button class="btn btn-primary float-right" type="submit">send</button>
                                     </div>
                                 </form>
                             </div>
@@ -47,13 +73,78 @@
 @endsection
 
 @section('after_scripts')
-    <link rel="stylesheet" type="text/css" href="{{ asset('packages/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}"/>
-    <script type="text/javascript" src="{{ asset('packages/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
+    {{-- select2 --}}
+    <link href="{{ asset('packages/select2/dist/css/select2.min.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('packages/select2-bootstrap-theme/dist/select2-bootstrap.min.css') }}" rel="stylesheet"
+          type="text/css"/>
+    <script src="{{ asset('packages/select2/dist/js/select2.full.min.js') }}"></script>
+    {{-- datepicker --}}
+    <link rel="stylesheet" type="text/css"
+          href="{{ asset('packages/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}"/>
+    <script type="text/javascript"
+            src="{{ asset('packages/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
+    {{-- ckeditor --}}
+    <script src="{{ asset('packages/ckeditor/ckeditor.js') }}"></script>
+    <script src="{{ asset('packages/ckeditor/adapters/jquery.js') }}"></script>
+
     <script>
-        $(document).ready(function (){
+        $(document).ready(function () {
+            $('.select2').select2();
+
             $('.datepicker').datepicker({
-                format: '{{ config('app.date_input_format') }}'
+                format: '{{ config('app.datepicker_input_format') }}'
+            });
+
+            $('.ckeditor-min').ckeditor({
+                toolbarGroups: [
+                    {name: 'basicstyles', groups: ['basicstyles', 'cleanup']},
+                    {name: 'paragraph', groups: ['list', 'indent', 'blocks', 'align', 'bidi']},
+                    {name: 'styles'},
+                    {name: 'colors'}
+                ]
+            });
+
+            $('.js-morphable-input-type:checked').each(function () {
+                initMorphableSelect($(this), true);
+            });
+
+            $('.js-morphable-input-type').on('change', function () {
+                initMorphableSelect($(this))
             });
         });
+
+        function initMorphableSelect(toggleInput, selectCurrentValue = false) {
+            let allContainers = $(toggleInput.data('group')),
+                targetContainer = $(toggleInput.data('target')),
+                targetSelect = targetContainer.find('select'),
+                getListActionUrl = targetSelect.data('fetch-action'),
+                currentIdValue = targetSelect.data('current-value');
+
+            allContainers.hide();
+            allContainers.find('select').prop('disabled', true);
+            targetSelect.prop('disabled', false);
+            targetContainer.show();
+
+            if (targetSelect.hasClass('select2-hidden-accessible') === false) {
+                $.getJSON(getListActionUrl, function (response) {
+                    if (response.status === 'ok') {
+                        let dataArray = response.data;
+
+                        dataArray.forEach((el, i) => {
+                            dataArray[i].text = dataArray[i]['name'];
+                        });
+
+                        targetSelect.select2({
+                            data: dataArray
+                        });
+
+                        if (selectCurrentValue && currentIdValue) {
+                            targetSelect.val(currentIdValue);
+                            targetSelect.trigger('change')
+                        }
+                    }
+                });
+            }
+        }
     </script>
 @endsection

@@ -169,9 +169,9 @@ class JobMapController extends Controller
     private function getJobsByLocations($locations)
     {
         return DB::table('job_location')
-                ->whereIn('location_id', $locations)
-                ->pluck('job_id')
-                ->toArray();
+            ->whereIn('location_id', $locations)
+            ->pluck('job_id')
+            ->toArray();
     }
 
     /**
@@ -217,9 +217,9 @@ class JobMapController extends Controller
     private function countJobsByFocus($jobs, $focus)
     {
         return DB::table('focus_job')
-                ->whereIn('job_id', $jobs)
-                ->where('focus_id', '=', $focus)
-                ->selectRaw('COUNT(job_id) as jobs')->get('jobs')->toArray()[0]->jobs;
+            ->whereIn('job_id', $jobs)
+            ->where('focus_id', '=', $focus)
+            ->selectRaw('COUNT(job_id) as jobs')->get('jobs')->toArray()[0]->jobs;
     }
 
     /**

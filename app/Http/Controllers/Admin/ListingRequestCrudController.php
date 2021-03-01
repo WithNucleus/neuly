@@ -2,25 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\Entity\FieldsMapping;
 use App\Helpers\EntityHelper;
-use App\Http\Requests\ListingRequestRequest;
-use App\Models\Company;
-use App\Models\Event;
-use App\Models\Focus;
-use App\Models\Investor;
-use App\Models\Job;
+use App\Helpers\ListingRequestHelper;
 use App\Models\ListingRequest;
-use App\Models\Person;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
-use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Backpack\CRUD\app\Library\Widget;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 /**
- * Class ListingRequestCrudController
- * @package App\Http\Controllers\Admin
+ * Class ListingRequestCrudController.
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
 class ListingRequestCrudController extends CrudController
@@ -36,13 +29,13 @@ class ListingRequestCrudController extends CrudController
      */
     public function setup()
     {
-        if(!backpack_user()->can('manage listing requests')) {
+        if (! backpack_user()->can('manage listing requests')) {
             abort(403);
         }
 
-        CRUD::setModel(ListingRequest::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/listingrequest');
-        CRUD::setEntityNameStrings('listing request', 'listing requests');
+        $this->crud->setModel(ListingRequest::class);
+        $this->crud->setRoute(config('backpack.base.route_prefix').'/listingrequest');
+        $this->crud->setEntityNameStrings('listing request', 'listing requests');
     }
 
     /**
@@ -53,89 +46,51 @@ class ListingRequestCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::addClause('where', 'status', '=', 'open');
-        CRUD::addColumn(['name' => 'status', 'label' => 'Status', 'type' => 'string']);
-        CRUD::addColumn(['name' => 'type', 'label' => 'Type', 'type' => 'string']);
-        CRUD::addColumn(['name' => 'is_update', 'label' => 'Update?', 'type' => 'boolean']);
-        CRUD::addColumn(['name' => 'entity_name', 'label' => 'Entity',  'type' => 'string']);
-        CRUD::addColumn(['name' => 'name', 'label' => 'Submitted by', 'type' => 'string']);
-        CRUD::addColumn(['name' => 'created_at', 'label' => 'Request created', 'type' => 'date']);
-    }
-
-    /**
-     * Define what happens when the Create operation is loaded.
-     *
-     * @see https://backpackforlaravel.com/docs/crud-operation-create
-     * @retur void
-     */
-    protected function setupCreateOperation()
-    {
-        CRUD::setValidation(ListingRequestRequest::class);
+        $this->crud->addClause('where', 'status', '=', 'open');
+        $this->crud->addColumn(['name' => 'status', 'label' => 'Status', 'type' => 'string']);
+        $this->crud->addColumn(['name' => 'entity_type', 'label' => 'Type', 'type' => 'string']);
+        $this->crud->addColumn([
+            'name' => 'to_update_id',
+            'label' => 'Update?',
+            'type' => 'closure',
+            'function' => function ($entry) {
+                return $entry->to_update_id ? 'Yes' : 'No';
+            }, ]);
+        $this->crud->addColumn(['name' => 'entity_name', 'label' => 'Entity', 'type' => 'string']);
+        $this->crud->addColumn(['name' => 'name', 'label' => 'Submitted by', 'type' => 'string']);
+        $this->crud->addColumn(['name' => 'created_at', 'label' => 'Request created', 'type' => 'date']);
     }
 
     protected function setupShowOperation()
     {
-        $requestId = Route::current()->parameter('id');
-        $listingRequest = ListingRequest::find($requestId);
-        $entity = null;
+        $this->crud->setFromDb();
+        $this->crud->modifyColumn('to_update_id', [
+            'name' => 'to_update_id',
+            'label' => 'Update?',
+            'type' => 'closure',
+            'function' => function ($entry) {
+                return $entry->to_update_id ? 'Yes' : 'No';
+            }, ]);
+        $this->crud->removeColumn('status');
 
-        if ($listingRequest->is_update) {
-            $entity = $this->getEntityModel($listingRequest->type, $listingRequest->to_update_id);
+        $listingRequest = $this->crud->getCurrentEntry();
+        $entityClass = ListingRequestHelper::getEntityClassByType($listingRequest->entity_type);
+        $mapping = $entityClass::getListingRequestMapping();
+        $originalEntity = null;
+
+        if ($listingRequest->to_update_id) {
+            $originalEntity = $entityClass::findOrFail($listingRequest->to_update_id);
         }
+
+        $this->crud->addButtonFromModelFunction('line', 'accept', 'generateAcceptButton', 'beginning');
+        $this->crud->addButtonFromModelFunction('line', 'decline', 'generateDeclineButton', 'beginning');
 
         Widget::add([
-            'type' => 'view',
-            'view' => 'customwidget.show_original_entity',
-            'entity' => $entity,
-            'isUpdate' => $listingRequest->is_update,
-            'entityType' => $listingRequest->type,
+            'type'           => 'view',
+            'view'           => 'admin.listing_requests.widget.show_original_entity',
+            'originalEntity' => $originalEntity,
+            'mapping'        => $mapping,
         ])->to('after_content');
-
-        if ($entity != null OR $listingRequest->is_update == false) {
-            $this->crud->addButtonFromModelFunction('line', 'accept', 'generateAcceptButton', 'beginning');
-            $this->crud->addButtonFromModelFunction('line', 'decline', 'generateDeclineButton', 'beginning');
-        } else {
-            $this->crud->removeButton('delete');
-        }
-    }
-
-    /**
-     * Define what happens when the Update operation is loaded.
-     *
-     * @see https://backpackforlaravel.com/docs/crud-operation-update
-     * @return void
-     */
-    protected function setupUpdateOperation()
-    {
-        $this->setupCreateOperation();
-    }
-
-    protected function setupPublishRoutes($segment, $routeName, $controller)
-    {
-        Route::get($segment.'/{id}/publish', [
-            'as'        => $routeName.'.getPublish',
-            'uses'      => $controller.'@getPublishForm',
-            'operation' => 'publish',
-        ]);
-        Route::post($segment.'/{id}/publish', [
-            'as'        => $routeName.'.postPublish',
-            'uses'      => $controller.'@postPublishForm',
-            'operation' => 'publish',
-        ]);
-    }
-
-    protected function setupDeclineRoutes($segment, $routeName, $controller)
-    {
-        Route::get($segment.'/{id}/decline', [
-            'as'        => $routeName.'.getDecline',
-            'uses'      => $controller.'@getDeclineForm',
-            'operation' => 'decline',
-        ]);
-        Route::post($segment.'/{id}/decline', [
-            'as'        => $routeName.'.postdecline',
-            'uses'      => $controller.'@postDeclineForm',
-            'operation' => 'decline',
-        ]);
     }
 
     public function getDeclineForm($id)
@@ -146,385 +101,176 @@ class ListingRequestCrudController extends CrudController
         $this->data['crud'] = $this->crud;
         $this->data['title'] = 'Decline Listing Request';
 
-        return view('vendor.backpack.crud.listing_requests.decline', $this->data);
+        return view('admin.listing_requests.decline', $this->data);
     }
 
     public function postDeclineForm($id)
     {
         $this->crud->setOperation('Decline');
 
+        $listingRequest = ListingRequest::findOrFail($id);
+        $listingRequest->update(['status' => ListingRequest::STATUS_DECLINED]);
+
         $this->data['crud'] = $this->crud;
+        $this->data['message'] = 'Listing Request has been declined successfully.';
 
-        $listingRequest = ListingRequest::find($id);
-        $listingRequest->status = 'declined';
-        $listingRequest->save();
-
-        return view('vendor.backpack.crud.listing_requests.declined', $this->data);
+        return view('admin.listing_requests.finish', $this->data);
     }
 
-    public function getPublishForm($id)
+    public function getAcceptForm($id)
     {
-        $this->crud->setOperation('Publish');
+        $this->crud->setOperation('Accept');
 
         $listingRequest = ListingRequest::findOrFail($id);
-        $changes = $listingRequest->entity_data;
-        $entity = null;
+        $entityClass = ListingRequestHelper::getEntityClassByType($listingRequest->entity_type);
+        $relationValues = ListingRequestHelper::getEntityRelationValuesByType($listingRequest->entity_type);
+        $mapping = $entityClass::getListingRequestMapping();
+        $originalEntity = null;
 
-        if ($listingRequest->is_update) {
-            $entity = $this->getEntityModel($listingRequest->type, $listingRequest->to_update_id);
+        if ($listingRequest->to_update_id) {
+            $originalEntity = $entityClass::findOrFail($listingRequest->to_update_id);
         }
 
-        if ($listingRequest->type === 'job') {
-            $this->data['companies'] = Company::orderBy('name')->get();
-            $this->data['investors'] = Investor::orderBy('name')->get();
+        $this->data['crud'] = $this->crud;
+        $this->data['title'] = 'Accept Listing Request';
+        $this->data['id'] = $listingRequest->id;
+        $this->data['type'] = $listingRequest->entity_type;
+        $this->data['declineButton'] = $listingRequest->generateDeclineButton();
+        $this->data['requestData'] = $listingRequest->entity_data;
+        $this->data['relationValues'] = $relationValues;
+        $this->data['mapping'] = $mapping;
+        $this->data['originalEntity'] = $originalEntity;
 
-            if ($entity && isset($changes->owner_type) === false) {
-                $changes->owner_type = $entity->owner_type;
-                $changes->owner_id = $entity->owner_id;
+        return view('admin.listing_requests.accept', $this->data);
+    }
+
+    public function postAcceptForm(Request $request, $id)
+    {
+        $this->crud->setOperation('Accept');
+
+        $listingRequest = ListingRequest::findOrFail($id);
+        $entityClass = ListingRequestHelper::getEntityClassByType($listingRequest->entity_type);
+
+        if ($listingRequest->to_update_id === null) {
+            Validator::make($request->all(), [
+                'slug' => 'required|unique:'.$entityClass,
+            ])->validate();
+        }
+
+        $this->applyListingRequestData($request, $entityClass, $listingRequest->to_update_id);
+
+        $this->data['crud'] = $this->crud;
+        $this->data['message'] = 'Listing Request has been accepted successfully.';
+
+        $listingRequest->update(['status' => ListingRequest::STATUS_ACCEPTED]);
+
+        return view('admin.listing_requests.finish', $this->data);
+    }
+
+    private function applyListingRequestData(Request $request, $entityClass, $toUpdateId = null)
+    {
+        if ($toUpdateId) {
+            $entity = $entityClass::findOrFail($toUpdateId);
+            $sourceFlags = $request->input('source');
+        } else {
+            $entity = new $entityClass;
+            $sourceFlags = [];
+        }
+
+        $mapping = $entityClass::getListingRequestMapping();
+        $relationsData = [];
+
+        foreach ($mapping as $field => $options) {
+            //if sourceFlag set to 'original' - skip this field
+            if ($sourceFlags !== [] && $sourceFlags[$field] === ListingRequestHelper::SOURCE_ORIGINAL) {
+                continue;
+            }
+
+            $inputData = $request->input($field);
+
+            switch ($options['type']) {
+                case FieldsMapping::TYPE_IMAGE:
+                    $this->handleImageUpload($request, $entity, $field);
+                    break;
+                case FieldsMapping::TYPE_RELATION:
+                    $relationsData[$field] = $inputData;
+                    break;
+                default:
+                    $entity->{$field} = $inputData;
+                    break;
             }
         }
 
-        $focusCategories = Focus::orderBy('name')->get();
-        $focusIdsSelected = isset($changes->focus_ids) ? $changes->focus_ids : [];
-
-        $this->data['id'] = $listingRequest->id;
-        $this->data['type'] = $listingRequest->type;
-        $this->data['update'] = $listingRequest->is_update;
-        $this->data['changes'] = $changes;
-        $this->data['original'] = $entity;
-        $this->data['crud'] = $this->crud;
-        $this->data['title'] = 'Publish Listing Request';
-        $this->data['focusCategories'] = $focusCategories;
-        $this->data['focusIdsSelected'] = $focusIdsSelected;
-        $this->data['declineButton'] = $listingRequest->generateDeclineButton();
-
-        return view('vendor.backpack.crud.listing_requests.publish', $this->data);
-    }
-
-    public function postPublishForm(Request $request, $id)
-    {
-        $this->crud->setOperation('Publish');
-
-        $listingRequest = ListingRequest::findOrFail($id);
-        $data = $request->all();
-
-        if (!isset($data['entity_focus'])) {
-            $data['entity_focus'] = [];
+        if ($request->has('slug')) {
+            $entity->slug = $request->input('slug');
         }
 
-        $entity = null;
+        $this->handleOneToOneRelationData($entity, $mapping, $relationsData);
+        $entity->save();
 
-        if ($listingRequest->is_update) {
-            $entity = $this->getEntityModel($listingRequest->type, $listingRequest->to_update_id);
-        }
-
-        $entityData = $this->createDummyEntityData($listingRequest->type, $data);
-        $object = $this->saveDummyEntityData($listingRequest->type, $entityData, $entity);
-
-        $this->data['crud'] = $this->crud;
-        $this->data['object'] = $object;
-
-        $listingRequest->status = 'accepted';
-        $listingRequest->update();
-
-        return view('vendor.backpack.crud.listing_requests.finish', $this->data);
-    }
-
-    private function saveDummyEntityData($type, $data = [], $entity = null)
-    {
-        $object = $this->{'saveDummy'.$type}($data, $entity);
-
-        if($entity === null)
-        {
-            $object->save();
-        }
-        else
-        {
-            $object->update();
-        }
-
-        if (!empty($data['focus_ids']) && method_exists($object, 'focus')) {
-            $object->focus()->sync($data['focus_ids']);
-        }
-
-        return $object;
-    }
-
-    private function saveDummyOrganization($data, $entity = null) {
-        $organisation = $entity;
-
-        if($organisation === null)
-        {
-            $organisation = new Company();
-        }
-
-        $organisation->name = $data['name'];
-        $organisation->slug = $data['slug'];
-        $organisation->ownership = $data['ownership'];
-        $organisation->website = $data['website'];
-        $organisation->summary = $data['summary'];
-        $organisation->founded_date = $data['founded_date'];
-        $organisation->valuation = $data['valuation'];
-        $organisation->number_employees = $data['number_employees'];
-        $organisation->total_funding_amount = $data['total_funding_amount'];
-        $organisation->last_funding_date = $data['last_funding_date'];
-        $organisation->ticker_symbol = $data['ticker_symbol'];
-
-        if($data['logo'] !== null)
-        {
-            $organisation->logo = $data['logo'];
-        }
-
-        return $organisation;
-    }
-
-    private function saveDummyJob($data, $entity = null) {
-        $job = $entity;
-
-        if ($job === null) {
-            $job = new job();
-        }
-
-        $job->job_title       = $data['job_title'];
-        $job->slug            = $data['slug'];
-        $job->posted_date     = $data['posted_date'];
-        $job->salary          = $data['salary'];
-        $job->hourly_rate     = $data['hourly_rate'];
-        $job->employment_type = $data['employment_type'];
-        $job->job_description = $data['job_description'];
-        $job->owner_id        = $data['owner_id'];
-        $job->owner_type      = $data['owner_type'];
-
-        return $job;
-    }
-
-    private function saveDummyEvent($data, $entity = null) {
-        $event = $entity;
-
-        if($event === null)
-        {
-            $event = new Event();
-        }
-
-        $event->name = $data['name'];
-        $event->slug = $data['slug'];
-        $event->start_date = $data['start'];
-        $event->end_date = $data['end'];
-        $event->event_url = $data['website'];
-        $event->registration_url = $data['registration'];
-        $event->description = $data['description'];
-
-        return $event;
-    }
-
-    private function saveDummyInvestor($data, $entity = null) {
-        $investor = $entity;
-
-        if($investor === null)
-        {
-            $investor = new Investor();
-        }
-
-        $investor->name = $data['name'];
-        $investor->slug = $data['slug'];;
-        $investor->website = $data['website'];
-        $investor->type = $data['type'];
-
-        return $investor;
-    }
-
-    private function saveDummyPerson($data, $entity = null) {
-        $person = $entity;
-
-        if($person === null)
-        {
-            $person = new Person();
-        }
-
-        $person->name = $data['name'];
-        $person->slug = $data['slug'];
-        $person->email = $data['email'];
-        $person->website = $data['website'];
-        if($data['photo'] !== null)
-        {
-            $person->photo = $data['photo'];
-        }
-        $person->linkedin = $data['linkedin'];
-        $person->facebook = $data['facebook'];
-        $person->twitter = $data['twitter'];
-        $person->bio = $data['bio'];
-        $person->secondary_email = $data['secondary_email'];
-
-        return $person;
-    }
-
-    private function createDummyEntityData($type, $data)
-    {
-        return $this->{'createDummy'.$type}($data);
-    }
-
-    private function createDummyOrganization($data)
-    {
-        $logo = '';
-
-        switch($data['entity_what_logo'])
-        {
-            case 'shown':
-                $logo = $this->moveFile('logos', $data['entity_logo']);
-                break;
-            case 'new':
-                $logo = $this->handleFileUpload('logos', $data['entity_new_logo']);
-                break;
-            case 'none':
-                $logo = '';
-                break;
-            case 'original':
-                $logo = null;
-                break;
-        }
-
-        $resourceData = [
-            'name' => $data['entity_name'],
-            'slug' => $data['entity_slug'],
-            'ownership' => $data['entity_ownership'],
-            'website' => $data['entity_website'],
-            'summary' => $data['entity_summary'],
-            'founded_date' => $data['entity_founded_date'],
-            'valuation' => $data['entity_valuation'],
-            'number_employees' => $data['entity_number_employees'],
-            'total_funding_amount' => $data['entity_total_funding_amount'],
-            'last_funding_date' => $data['entity_last_funding_date'],
-            'ticker_symbol' => $data['entity_ticker'],
-            'focus_ids' => $data['entity_focus'],
-            'logo' => $logo
-        ];
-
-        return $resourceData;
-    }
-
-    private function createDummyEvent($data)
-    {
-        $resourceData = [
-            'name' => $data['entity_name'],
-            'slug' => $data['entity_slug'],
-            'website' => $data['entity_website'],
-            'registration' => $data['entity_registration'],
-            'start' => $data['entity_start'],
-            'end' => $data['entity_end'],
-            'description' => $data['entity_description'],
-            'focus_ids' => $data['entity_focus'],
-        ];
-
-        return $resourceData;
-    }
-
-    private function createDummyInvestor($data)
-    {
-        $resourceData = [
-            'name' => $data['entity_name'],
-            'slug' => $data['entity_slug'],
-            'website' => $data['entity_website'],
-            'type' => $data['entity_type']
-        ];
-
-        return $resourceData;
-    }
-
-    private function createDummyPerson($data)
-    {
-        $photo = '';
-
-        switch($data['entity_what_photo'])
-        {
-            case 'shown':
-                $photo = $this->moveFile('people', $data['entity_photo']);
-                break;
-            case 'new':
-                $photo = $this->handleFileUpload('people', $data['entity_new_photo']);
-                break;
-            case 'none':
-                $photo = '';
-                break;
-            case 'original':
-                $photo = null;
-                break;
-        }
-
-        $secondary_email = '';
-
-        if(array_key_exists('entity_secondary_email', $data))
-        {
-            $secondary_email = $data['entity_secondary_email'];
-        }
-
-        $resourceData = [
-            'name' => $data['entity_name'],
-            'slug' => $data['entity_slug'],
-            'email' => $data['entity_email'],
-            'website' => $data['entity_website'],
-            'linkedin' => $data['entity_linkedin'],
-            'facebook' => $data['entity_facebook'],
-            'twitter' => $data['entity_twitter'],
-            'bio' => $data['entity_bio'],
-            'secondary_email' => $secondary_email,
-            'photo' => $photo,
-        ];
-
-        return $resourceData;
-    }
-
-    private function createDummyJob($data)
-    {
-        return [
-            'job_title'       => $data['entity_job_title'],
-            'slug'            => $data['entity_slug'],
-            'posted_date'     => $data['entity_posted_date'],
-            'salary'          => $data['entity_salary'],
-            'hourly_rate'     => $data['entity_hourly_rate'],
-            'employment_type' => $data['entity_employment_type'],
-            'job_description' => $data['entity_job_description'],
-            'focus_ids'       => $data['entity_focus'],
-            'owner_id'        => $data['entity_owner_id'],
-            'owner_type'      => $data['entity_owner_type'],
-        ];
+        $this->handleManyToManyRelationData($entity, $mapping, $relationsData);
     }
 
     /**
-     * @param string $type
-     * @param int $id
-     * @return mixed
-     * @throws \Exception
+     * @param \Illuminate\Http\Request $request
+     * @param object $entity
+     * @param string $field
      */
-    private function getEntityModel($type, $id)
+    private function handleImageUpload(Request $request, $entity, $fieldName)
     {
-        $entityTypes = EntityHelper::getListingRequestEntities();
+        $filePath = $request->input($fieldName);
+        $imageAction = $request->input('image_action');
+        $imageImportSettings = $entity::getImageImportSettings();
+        $destinationFolderPath = $imageImportSettings['folder'].DIRECTORY_SEPARATOR;
+        $diskName = 'public';
 
-        if (isset($entityTypes[$type]) === false) {
-            throw new \Exception("Wrong entity type!");
+        switch ($imageAction) {
+            case 'shown':
+                $fileName = $this->getFilenameFromPath($filePath);
+                $destinationFilePath = $destinationFolderPath.$fileName;
+
+                if (Storage::disk($diskName)->exists($filePath) === false) {
+                    $entity->{$fieldName} = null;
+                    break;
+                }
+
+                if (Storage::disk($diskName)->exists($destinationFilePath) === true) {
+                    Storage::disk($diskName)->delete($destinationFilePath);
+                }
+
+                Storage::disk($diskName)->move($filePath, $destinationFilePath);
+                $entity->{$fieldName} = $fileName;
+                break;
+
+            case 'uploaded':
+                $uploadedImage = $request->file('entity_image_uploaded');
+
+                if (! $uploadedImage) {
+                    $entity->{$fieldName} = null;
+                    break;
+                }
+
+                $fileName = $uploadedImage->getClientOriginalName();
+                Storage::disk($diskName)->putFileAs($destinationFolderPath, $uploadedImage, $fileName);
+                $entity->{$fieldName} = $fileName;
+                break;
+
+            case 'none':
+            default:
+                $entity->{$fieldName} = null;
+                break;
         }
 
-        $entityClass = $entityTypes[$type];
-
-        return $entityClass::find($id);
+        //clean request's image
+        if ($filePath !== null && Storage::disk($diskName)->exists($filePath)) {
+            Storage::disk($diskName)->delete($filePath);
+        }
     }
 
-    private function handleFileUpload($path, $file)
-    {
-        $filepath = Storage::disk('public')->putFileAs($path, $file, $file->getClientOriginalName());
-
-        return $this->getFilenameFromPath($filepath);
-    }
-
-    private function moveFile($destinationPrefix, $filepath)
-    {
-        $filename        = $this->getFilenameFromPath($filepath);
-        $destinationPath = $destinationPrefix . DIRECTORY_SEPARATOR . $filename;
-
-        Storage::disk('public')->move($filepath, $destinationPath);
-
-        return $filename;
-    }
-
+    /**
+     * @param string $filepath
+     * @return string
+     */
     private function getFilenameFromPath($filepath)
     {
         $filepathParts = explode('/', $filepath);
@@ -532,8 +278,40 @@ class ListingRequestCrudController extends CrudController
         return array_pop($filepathParts);
     }
 
-    private function deleteTemporaryFile($path)
+    /**
+     * @param object $entity
+     * @param array $mapping
+     * @param array $relationsData
+     */
+    private function handleOneToOneRelationData($entity, $mapping, $relationsData)
     {
-        Storage::delete($path);
+        foreach ($relationsData as $key => $data) {
+            $options = $mapping[$key];
+
+            switch ($options['relation']) {
+                case FieldsMapping::RELATION_ONE_ONE:
+                    $entity->{$key} = $data;
+                    break;
+
+                case FieldsMapping::RELATION_ONE_ONE_MORPHABLE:
+                    $entity->{$options['morphableFieldId']} = $data['id'];
+                    $entity->{$options['morphableFieldType']} = EntityHelper::getClassByAlias($data['type']);
+                    break;
+            }
+        }
+    }
+
+    private function handleManyToManyRelationData($entity, $mapping, $relationsData)
+    {
+        foreach ($relationsData as $key => $data) {
+            $options = $mapping[$key];
+
+            switch ($options['relation']) {
+                case FieldsMapping::RELATION_N_N:
+                case FieldsMapping::RELATION_N_N_MORPHABLE:
+                    $entity->{$key}()->sync($data);
+                    break;
+            }
+        }
     }
 }

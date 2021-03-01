@@ -2,20 +2,16 @@
 
 namespace App\Http\Controllers;
 
-//use Backpack\PageManager\app\Models\Page;
 use App\Models\Page;
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 
 class PageController extends Controller
 {
     public function index($slug, $subs = null)
     {
-        $page = Page::findBySlug($slug);
+        $page = Page::findBySlugOrFail($slug);
 
-        if (!$page)
-        {
-            abort(404, 'Please go back to our <a href="'.url('').'">homepage</a>.');
+        if (view()->exists('pages.' . $page->template) === false) {
+            abort(404);
         }
 
         $this->data['page-title'] = $page->title;

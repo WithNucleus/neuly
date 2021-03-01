@@ -35,7 +35,21 @@ Route::group([
         Route::crud('ct_study_design', 'CtStudyDesignCrudController');
     });
 
-    Route::crud('listingrequest', 'ListingRequestCrudController');
+    Route::group([
+        'as' => 'admin.'
+    ], function () {
+        Route::crud('listingrequest', 'ListingRequestCrudController');
+        Route::group([
+            'prefix' => 'listingrequest',
+            'as' => 'listingrequest.'
+        ], function () {
+            Route::get('{id}/decline', 'ListingRequestCrudController@getDeclineForm')->name('decline');
+            Route::post('{id}/decline', 'ListingRequestCrudController@postDeclineForm');
+            Route::get('{id}/accept', 'ListingRequestCrudController@getAcceptForm')->name('accept');
+            Route::post('{id}/accept', 'ListingRequestCrudController@postAcceptForm');
+        });
+    });
+
     Route::crud('jobapplication', 'JobApplicationCrudController');
     Route::crud('redirect', 'RedirectCrudController');
     Route::crud('feedback', 'FeedbackCrudController');
@@ -46,5 +60,17 @@ Route::group([
     Route::crud('searchlog', 'SearchLogCrudController');
     Route::crud('companyvaluation', 'CompanyValuationCrudController');
     Route::crud('person-claim', 'ClaimPersonCrudController');
-    Route::get('person-claim/approve/{claim}', 'ClaimPersonCrudController@approve');
+    Route::get('person-claim/{claim}/approve', 'ClaimPersonCrudController@approve')->name('admin.person-claim.approve');
+
+    Route::group([
+        'prefix' => 'import/clinicaltrial',
+        'namespace' => 'Import\ClinicalTrial',
+        'as' => 'admin.import.clinicaltrial.',
+        'middleware' => ['permission:import'],
+    ], function () {
+        Route::crud('parsing', 'ParsingController');
+        Route::post('parsing/bulkImport', 'ParsingController@bulkImport')->name('parsing.bulkImport');
+        Route::crud('parsing-results', 'ParsingResultsController');
+        Route::get('parsing-results/{id}/approve', 'ParsingResultsController@approve')->name('parsing-results.approve');
+    });
 }); // this should be the absolute last line of this file

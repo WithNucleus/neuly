@@ -14,8 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/api/entities/list/{alias}', 'EntityDataController@getEntitiesListByAlias')->name('api.entities.list.byAlias');
+
 Route::post('/feedback', 'FeedbackController@apiStore')->name('feedback.api.store');
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+//Route::middleware('auth:api')->get('/user', function (Request $request) {
+//    return $request->user();
+//});

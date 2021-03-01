@@ -47,19 +47,16 @@ class ClaimPersonCrudController extends CrudController
     protected function setupListOperation()
     {
         CRUD::addColumn(['name' => 'person_id', 'label' => 'Person', 'type' => 'select', 'entity' => 'person', 'attribute' => 'name']);
-        CRUD::addColumn(['name' => 'user_id', 'label' => 'User Firstname', 'type' => 'model_function', 'function_name' => 'getUserName']);
+        CRUD::addColumn(['name' => 'user_id', 'label' => 'User', 'type' => 'select', 'entity' => 'user', 'attribute' => 'fullname']);
         CRUD::addColumn(['name' => 'verification_token', 'label' => 'Verification Token', 'type' => 'string']);
+        CRUD::addColumn(['name' => 'comment', 'label' => 'Comment', 'type' => 'text']);
         CRUD::addColumn(['name' => 'created_at', 'label' => 'Request created', 'type' => 'date']);
         CRUD::addButtonFromModelFunction('line', 'approve_claim', 'getApproveButton', 'beginning');
-
     }
 
     protected function setupShowOperation()
     {
-        CRUD::addColumn(['name' => 'person_id', 'label' => 'Person', 'type' => 'select', 'entity' => 'person', 'attribute' => 'name']);
-        CRUD::addColumn(['name' => 'user_id', 'label' => 'User Firstname', 'type' => 'model_function', 'function_name' => 'getUserName']);
-        CRUD::addColumn(['name' => 'verification_token', 'label' => 'Verification Token', 'type' => 'string']);
-        CRUD::addColumn(['name' => 'created_at', 'label' => 'Request created', 'type' => 'date']);
+        $this->setupListOperation();
     }
 
     /**
@@ -72,14 +69,6 @@ class ClaimPersonCrudController extends CrudController
     {
         CRUD::setValidation(PersonClaimRequest::class);
 
-        $users = User::all();
-        $userSelectArray = [];
-
-        foreach($users as $user)
-        {
-            $userSelectArray[$user->id] = $user->name . ' ' . $user->last_name;
-        }
-
         $this->crud->addField([
             'label'     => "Person",
             'type'      => 'select2',
@@ -90,15 +79,17 @@ class ClaimPersonCrudController extends CrudController
             'options'   => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
-            'model'     => "App\Models\Person", // foreign key model
         ]);
 
         $this->crud->addField([
-            'label'         => "User",
-            'type'          => 'select2_from_array',
-            'name'          => 'user_id',
-            'allows_null'   => false,
-            'options'       => $userSelectArray,
+            'label'     => "Person",
+            'type'      => 'select2',
+            'name'      => 'user_id',
+            'entity'    => 'user',
+            'attribute' => 'fullname',
+            'options'   => (function ($query) {
+                return $query->orderBy('name', 'ASC')->get();
+            }),
         ]);
 
         $this->crud->addField([

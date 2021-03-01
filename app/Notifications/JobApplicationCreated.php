@@ -44,8 +44,8 @@ class JobApplicationCreated extends Notification
         return (new MailMessage)
             ->subject('Job Application: ' . $this->jobApplication->job->job_title . ' - ' . $this->jobApplication->applicantName)
             ->markdown('emails.jobs.apply_notification', [
-                'organization' => $this->jobApplication->company->name,
                 'fullName'     => $this->jobApplication->applicantName,
+                'organization' => $this->jobApplication->job->owner->name,
                 'position'     => $this->jobApplication->job->job_title,
             ])
             ->attach(storage_path() . '/app/' . $this->jobApplication->resume)
@@ -60,7 +60,7 @@ class JobApplicationCreated extends Notification
     {
         $url          = route('jobapplication.show', $this->jobApplication->id);
         $applicant    = $this->jobApplication->applicantName;
-        $organization = $this->jobApplication->company->name;
+        $organization = $this->jobApplication->job->owner->name;
         $position     = $this->jobApplication->job->job_title;
 
         return (new SlackMessage)

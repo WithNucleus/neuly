@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
-use App\Helpers\EntityMergeHelper;
+use App\Helpers\Entity\FieldsMapping;
+use App\Helpers\NotificationHelper;
 use App\Models\Contracts\EntityContract;
 use App\Models\Traits\CrudShowEntityPageButton;
 use App\Models\Traits\OldSlugRedirectable;
+use App\Notifications\LocationMapCodesNotFound;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -41,9 +43,58 @@ class Location extends Model implements EntityContract
     |--------------------------------------------------------------------------
     */
 
-    public function getShowLink()
+    protected static function booted()
     {
-        return '<a href="'.route('discover.locations.show', $this->slug).'">'.$this->name.'</a>';
+        static::created(function ($model) {
+            $model->handleMapCodes();
+            $model->save();
+        });
+
+        static::updating(function ($model) {
+            $model->handleMapCodes(true);
+        });
+    }
+
+    /**
+     * @param bool $isUpdate
+     */
+    private function handleMapCodes($isUpdate = false)
+    {
+        $countryCodeNotFound = false;
+        $regionCodeNotFound = false;
+
+        if ($this->country && ($isUpdate === false || $this->country != $this->getOriginal('country'))) {
+            $country = Country::where('name', $this->country)->first();
+
+            if ($country) {
+                $this->alpha2code = $country->alpha2code;
+            } else {
+                $this->alpha2code = null;
+                $countryCodeNotFound = true;
+            }
+        }
+
+        if ($this->region && ($isUpdate === false || $this->region != $this->getOriginal('region'))) {
+            $locationWithRegionCode = self::where('country', $this->country)
+                ->where('region', $this->region)
+                ->whereNotNull('region_code')
+                ->first();
+
+            if ($locationWithRegionCode) {
+                $this->region_code = $locationWithRegionCode->region_code;
+            } else {
+                $this->region_code = null;
+                $regionCodeNotFound = true;
+            }
+        }
+
+        if ($countryCodeNotFound || $regionCodeNotFound) {
+            NotificationHelper::sendAdminNotifications(new LocationMapCodesNotFound($this, $countryCodeNotFound, $regionCodeNotFound));
+        }
+    }
+
+    public function getShowLink() {
+        return '<a href="' . route('discover.locations.show', $this->slug) . '">' . $this->name . '</a>';
     }
 
     /**
@@ -202,54 +253,54 @@ class Location extends Model implements EntityContract
     /**
      * @return array
      */
-    public static function getMergeMapping()
+    public static function getFieldsMapping()
     {
         return [
             //attributes
             'name'           => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             'slug'           => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             'city'           => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             'region'         => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             'country'        => [
-                'type' => EntityMergeHelper::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             //relations
             'companies'      => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_N_N,
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
             'people'         => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_N_N,
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
             'investors'      => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_N_N,
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
             'jobs'           => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_N_N,
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'job_title',
             ],
             'events'         => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_N_N,
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
             'clinicaltrials' => [
-                'type'          => EntityMergeHelper::TYPE_RELATION,
-                'relation'      => EntityMergeHelper::RELATION_N_N,
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'title',
             ],
         ];

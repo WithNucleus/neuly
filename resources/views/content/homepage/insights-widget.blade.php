@@ -1,8 +1,17 @@
-<div class="card bg-tertiary-hover shadow-sm mb-5">
-    <div class="card-body">
-        <a href="{{ route('discover.insights') }}" class="d-block text-decoration-none">
-            <h3 class="h2 text-primary">Insights, by Neuly</h3>
-            <p class="lead font-weight-bold text-dark mb-0">View our proprietary insights of the psychedelics industry.</p>
-        </a>
+@guest
+    <div class="card card-body shadow-sm text-center bg-white p-5 mb-4">
+        <h3 class="h1 text-primary">Neuly Insights</h3>
+        <p class="lead mb-4">Register for your free account to get access to all Neuly Insights.</p>
+        <p class="mb-1">
+            <a href="{{ route('register') }}" class="btn btn-lg btn-dark">Join Neuly</a>
+        </p>
     </div>
-</div>
+@else
+    <div class="card card-body shadow-sm text-center bg-white p-5 mb-4">
+        <h3 class="h1 text-primary">Neuly Insights</h3>
+        <p class="lead mb-4">View the latest insights from our psychedelics database.</p>
+        <p class="mb-1">
+            <a href="{{ route('discover.insights') }}" class="btn btn-lg btn-dark">View Insights</a>
+        </p>
+    </div>
+@endguest

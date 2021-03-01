@@ -12,5 +12,7 @@
 	@php
 	  $default_error_message = "Sorry about that, but there was an error on our side. If this is happening repeatedly please inform us.";
 	@endphp
-	{!! isset($exception)? ($exception->getMessage()?$exception->getMessage():$default_error_message): $default_error_message !!}
+    @can('view logs')
+        {!! isset($exception)? ($exception->getMessage()?$exception->getMessage():$default_error_message): $default_error_message !!}
+    @endcan
 @endsection

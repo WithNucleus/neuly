@@ -61,6 +61,13 @@
     'item_filters' => $filters_location
 ])
 
+@include('sidebars.filters.checkboxes-new', [
+    'label'     => 'Year',
+    'name'      => 'year',
+    'items'     => $years,
+    'item_filters' => $filters_year
+])
+
 {{-- @include('sidebars.filters.location', ['column' => '3']) --}}
 
 {{-- @include('sidebars.filters.textsearch', [

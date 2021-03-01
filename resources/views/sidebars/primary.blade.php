@@ -91,7 +91,9 @@
                 @include('sidebars.jobs.global-map')
             @endif
 
-
+            @if(Route::is('discover.clinicaltrials.recruiting'))
+                @include('sidebars.recruitingtrial')
+            @endif
         </div>
     </div>
 </nav>

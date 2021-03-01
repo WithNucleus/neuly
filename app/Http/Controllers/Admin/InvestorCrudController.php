@@ -115,11 +115,7 @@ class InvestorCrudController extends CrudController
             'name'    => 'type',
             'type'    => 'radio',
             'label'   => 'Type',
-            'options' => [
-                'Venture Capital'    => 'Venture Capital',
-                'Private Equity'     => 'Private Equity',
-                'Private Individual' => 'Private Individual',
-            ],
+            'options' => Investor::getTypeValues(),
             'inline'  => true,
         ]);
         $this->crud->addField([

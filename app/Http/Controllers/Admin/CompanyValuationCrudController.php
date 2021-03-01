@@ -128,7 +128,7 @@ class CompanyValuationCrudController extends CrudController
             'name'     => 'date',
             'type'     => 'date_picker',
             'date_picker_options' => [
-                'format' => config('app.date_input_format'),
+                'format' => config('app.datepicker_input_format'),
             ],
         ]);
         CRUD::addField([

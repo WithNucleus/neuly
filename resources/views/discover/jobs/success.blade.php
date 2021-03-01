@@ -11,10 +11,10 @@
 
                     <h1 class="h2 text-center text-primary page-title-default mb-4">Application Received</h1>
 
-                    <p class="lead">Hi {{ $name}}! We have received your application for <strong>{{ $position }}</strong> and will forward it to <strong>{{ $company }}</strong>.</p>
+                    <p class="lead">Hi {{ $user->name }}! We have received your application for <strong>{{ $job->job_title }}</strong> and will forward it to <strong>{{ $job->owner->name }}</strong>.</p>
 
                     <p class="text-center mb-0">
-                        <a href="/organizations" class="btn btn-dark">Return to Database</a>
+                        <a href="{{ route('discover.jobs') }}" class="btn btn-dark">Return to Database</a>
                     </p>
             </div>
         </div>

@@ -44,6 +44,7 @@ class ClinicaltrialController extends Controller
                 AllowedFilter::partial('interventions', 'interventions.value'),
                 AllowedFilter::partial('outcome_measures', 'outcomeMeasures.value'),
                 AllowedFilter::partial('study_designs', 'studyDesigns.value'),
+                AllowedFilter::scope('year', 'startYear', '|'),
             ])
             ->defaultSort('-start_date')
             ->allowedSorts([
@@ -55,6 +56,7 @@ class ClinicaltrialController extends Controller
             ->appends(request()->query());
 
     	$status = Clinicaltrial::pluck('status')->unique()->sort();
+        $years = Clinicaltrial::select(DB::raw('YEAR(start_date) as year'))->distinct()->orderBy('year', 'desc')->get()->pluck('year');
         $focus_cats = Focus::drugs()->orderBy('name')->get()->pluck('name');
         $locations = Location::select('country')
             ->join('clinicaltrial_location', 'locations.id', 'clinicaltrial_location.location_id')
@@ -68,6 +70,7 @@ class ClinicaltrialController extends Controller
         $filters_interventions = [];
         $filters_outcome_measures = [];
         $filters_study_designs = [];
+        $filters_year = [];
 
         if ($request->has('filter')) {
             $filterInput = $request->input('filter');
@@ -98,11 +101,16 @@ class ClinicaltrialController extends Controller
             if(isset($filter['study_designs'])) {
                 $filters_study_designs = $filter['study_designs'];
             }
+
+            if(isset($filter['year'])) {
+                $filters_year = $filter['year'];
+            }
         }
 
         return view('discover.clinicaltrials.index', compact(
             'clinicaltrials',
             'status',
+            'years',
             'focus_cats',
             'locations',
             'filters_companies',
@@ -110,7 +118,8 @@ class ClinicaltrialController extends Controller
             'filters_conditions',
             'filters_interventions',
             'filters_outcome_measures',
-            'filters_study_designs'
+            'filters_study_designs',
+            'filters_year'
         ));
     }
 

@@ -20,7 +20,6 @@
                             <li>Click the send verification email button.</li>
                             <li>Click on the verification link from the mail</li>
                         </ol>
-                        Your verification link will be valid for xx hours.
                         <br /><br />
 
                         <a href="{{ route('user.person.verify.email.send') }}" class="btn btn-primary mt-4">Send verification email</a>

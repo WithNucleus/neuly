@@ -43,12 +43,9 @@ class JobApplicationController extends Controller
     public function apply(JobApplicationRequest $request)
     {
         $user       = Auth::user();
-        $name       = $user->name;
         $job_id     = $request->input('job_id');
-        $company_id = $request->input('company_id');
 
-        $company  = Company::findOrFail($company_id)->name;
-        $position = Job::findOrFail($job_id)->job_title;
+        $job = Job::findOrFail($job_id);
 
         $resume_path       = null;
         $cover_letter_path = null;
@@ -67,14 +64,13 @@ class JobApplicationController extends Controller
         $attributes = [
             'user_id'      => $user->id,
             'job_id'       => $job_id,
-            'company_id'   => $company_id,
             'resume'       => $resume_path,
             'cover_letter' => $cover_letter_path
         ];
 
         JobApplication::create($attributes);
 
-        return view('discover.jobs.success', compact('name', 'company', 'position'));
+        return view('discover.jobs.success', compact('user', 'job'));
     }
 
     // Get Resume

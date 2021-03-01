@@ -71,6 +71,7 @@ Route::group([
         Route::get('/location-top-by-jobs', 'LocationTopByJobsController@index')->name('location-top-by-jobs');
         Route::get('/clinical-trials/distribution/countries', 'ClinicalTrialDistributionController@show')->name('distribution.countries.show');
         Route::get('/clinical-trials/distribution/countries/focus', 'ClinicalTrialDistributionController@showWithFocus')->name('distribution.countries.focus.show');
+        Route::get('/clinical-trials-historic', 'ClinicalTrialHistoric@index')->name('clinical-trials-historic');
     });
 });
 
@@ -106,9 +107,9 @@ Route::get('/organization/{slug}/events', 'Index\CompanyController@events')->nam
 Route::get('/people', 'Index\PersonController@index')->name('discover.people');
 Route::get('/people/names.json', 'Index\PersonController@namesJson');
 Route::get('/person/{slug}', 'Index\PersonController@show')->name('discover.people.show');
-Route::get('/person/{slug}/claim', 'Index\PersonController@claim')->name('discover.people.claim');
+Route::post('/person/{slug}/claim', 'Index\PersonController@claim')->name('discover.people.claim');
 Route::get('/person/{slug}/requestDeletion', 'Index\PersonController@requestDeletion')->name('discover.people.requestDeletion');
-Route::post('/person/{slug}/requestDeletion', 'Index\PersonController@requestDeletionSubmit')->name('discover.people.requestDeletion');
+Route::post('/person/{slug}/requestDeletion', 'Index\PersonController@requestDeletionSubmit');
 
 // Research
 Route::get('/research', 'Index\ResearchController@index')->name('discover.research');
@@ -157,6 +158,7 @@ Route::post('/jobs/apply', 'Index\JobApplicationController@apply')->name('discov
 
 // Clinical trials
 Route::get('/clinical-trials', 'Index\ClinicaltrialController@index')->name('discover.clinicaltrials');
+Route::get('/clinical-trials/recruiting', 'Index\RecruitingClinicalTrialController@index')->name('discover.clinicaltrials.recruiting');
 Route::get('/clinical-trials/{slug}', 'Index\ClinicaltrialController@show')->name('discover.clinicaltrials.show');
 
 // Listing Requests
@@ -164,13 +166,15 @@ Route::get('/listing', 'Index\ListingRequestController@index')->name('listing');
 Route::get('/listing/request', 'Index\ListingRequestController@request')->name('listing.request');
 Route::post('/listing/request', 'Index\ListingRequestController@submitRequest');
 Route::post('/listing/request/finish', 'Index\ListingRequestController@finishRequest')->name('listing.request.finish');
+Route::get('/listing/request/getEntityListJson', 'Index\ListingRequestController@getEntityListJson')->name('listing.request.getEntityListJson');
 
 Route::get('/job-report-entry', 'Index\JobReportEntryController@index')->name('job-report-entry.index');
 Route::post('/job-report-entry', 'Index\JobReportEntryController@store')->name('job-report-entry.store');;
 
 // Search
 Route::post('/search', 'Index\SearchController@search')->name('search');
-Route::get('/search/{term}', 'Index\SearchController@index')->name('search.index');
+Route::get('/search/{term}', 'Index\SearchController@index')->where('term', '(.*)')
+    ->name('search.index');
 
 Route::post('/search/organizations', 'index\SearchController@showOrganizationResults')->name('search.organizations');
 Route::post('/search/organizations/{term}', 'Index\SearchController@showOrganizationResults');
