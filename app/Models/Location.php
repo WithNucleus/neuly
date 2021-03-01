@@ -93,8 +93,9 @@ class Location extends Model implements EntityContract
         }
     }
 
-    public function getShowLink() {
-        return '<a href="' . route('discover.locations.show', $this->slug) . '">' . $this->name . '</a>';
+    public function getShowLink()
+    {
+        return '<a href="'.route('discover.locations.show', $this->slug).'">'.$this->name.'</a>';
     }
 
     /**
