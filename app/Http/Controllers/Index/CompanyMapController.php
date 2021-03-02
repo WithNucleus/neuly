@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Index;
 
 use App\Helpers\MapHelper;
 use App\Http\Controllers\Controller;
+use App\Models\Company;
 use App\Models\Focus;
 use App\Models\Location;
 use Illuminate\Http\Request;
@@ -24,14 +25,22 @@ class CompanyMapController extends Controller
         $focus = $this->filterFocus($this->filterFocusValues($request), $focus);
         $focus = $focus->get();
 
+        $filters_type = [];
+
+        if ($this->filterHasType($request)) {
+            $filters_type = $this->getFilteredOptions($request->input('filter')['type']);
+        }
+
+        $companies = $this->getCompaniesByTypes($filters_type);
+
         $sort = $this->getOrderDirection($this->getSortParameter($request));
-        $countriesByCode = $this->getCountriesResultByCode($sort, $focus);
+        $countriesByCode = $this->getCountriesResultByCode($sort, $focus, $companies);
 
         $filters_focus = $focus->pluck('name')->toArray();
 
         $path = route('discover.organizations.map');
 
-        return view('discover.organizations.maps.global', compact('countriesByCode', 'filters_focus', 'focus_cats', 'path', 'sort'));
+        return view('discover.organizations.maps.global', compact('countriesByCode', 'filters_focus', 'focus_cats', 'path', 'sort', 'filters_type'));
     }
 
     /**
@@ -47,9 +56,17 @@ class CompanyMapController extends Controller
         $focus = $this->filterFocus($this->filterFocusValues($request), $focus);
         $focus = $focus->get();
 
+        $filters_type = null;
+
+        if ($this->filterHasType($request)) {
+            $filters_type = $this->getFilteredOptions($request->input('filter')['type']);
+        }
+
+        $companies = $this->getCompaniesByTypes($filters_type);
+
         $sort = $this->getOrderDirection($this->getSortParameter($request));
 
-        $regionsByCode = $this->getCountryResult($country, $sort, $focus);
+        $regionsByCode = $this->getCountryResult($country, $sort, $focus, $companies);
 
         $filters_focus = $focus->pluck('name')->toArray();
         $path = route('discover.organizations.map.country', $country);
@@ -84,10 +101,19 @@ class CompanyMapController extends Controller
     {
         $filters_focus = [];
         if ($this->filterHasFocus($request)) {
-            $filters_focus = $this->getFilteredFocus($request->input('filter')['focus']);
+            $filters_focus = $this->getFilteredOptions($request->input('filter')['focus']);
         }
 
         return $filters_focus;
+    }
+
+    /**
+     * @param $filter
+     * @return false|string[]
+     */
+    private function getFilteredOptions($filter)
+    {
+        return explode('|', $filter);
     }
 
     /**
@@ -97,6 +123,24 @@ class CompanyMapController extends Controller
     private function filterHasFocus($request)
     {
         return $request->has('filter') && array_key_exists('focus', $request->input('filter'));
+    }
+
+    /**
+     * @param $request
+     * @return bool
+     */
+    private function filterHasType($request)
+    {
+        return $request->has('filter') && array_key_exists('type', $request->input('filter'));
+    }
+
+    /**
+     * @param $filter
+     * @return array
+     */
+    private function filteredTypeToArray($filter)
+    {
+        return $filter !== null ? [$filter] : [];
     }
 
     /**
@@ -132,35 +176,51 @@ class CompanyMapController extends Controller
      * @param $locations
      * @return array
      */
-    private function getCompaniesByLocations($locations)
+    private function getCompaniesByLocations($locations, $companies)
     {
         return DB::table('company_location')
                 ->whereIn('location_id', $locations)
+                ->whereIn('company_id', $companies)
                 ->pluck('company_id')
                 ->toArray();
+    }
+
+    private function getCompaniesByTypes($types = null)
+    {
+        $companies = [];
+
+        if ($types !== null) {
+            $companies = Company::whereIn('ownership', $types)
+                ->pluck('id')
+                ->toArray();
+        } else {
+            $companies = Company::all()->pluck('id')->toArray();
+        }
+
+        return $companies;
     }
 
     /**
      * @param $locationsByCountries
      * @return array
      */
-    private function getCompaniesByCountries($locationsByCountries)
+    private function getCompaniesByCountries($locationsByCountries, $companies)
     {
         $jobsByCountry = [];
         foreach ($locationsByCountries as $alpha2code => $country) {
             $jobsByCountry[$alpha2code]['name'] = $country['name'];
-            $jobsByCountry[$alpha2code]['companies'] = $this->getCompaniesByLocations($country['locations']);
+            $jobsByCountry[$alpha2code]['companies'] = $this->getCompaniesByLocations($country['locations'], $companies);
         }
 
         return $jobsByCountry;
     }
 
-    private function getCompaniesByRegions($locationsByRegions)
+    private function getCompaniesByRegions($locationsByRegions, $companies)
     {
         $companiesByRegion = [];
         foreach ($locationsByRegions as $region_code => $region) {
             $companiesByRegion[$region_code]['name'] = $region['name'];
-            $companiesByRegion[$region_code]['companies'] = $this->getCompaniesByLocations($region['locations']);
+            $companiesByRegion[$region_code]['companies'] = $this->getCompaniesByLocations($region['locations'], $companies);
         }
 
         return $companiesByRegion;
@@ -215,18 +275,18 @@ class CompanyMapController extends Controller
      * @param $focus
      * @return array
      */
-    private function getCountriesResultByCode($sort, $focus)
+    private function getCountriesResultByCode($sort, $focus, $companies)
     {
         $locationsByCountries = Location::byCountries($sort);
-        $companiesByCountries = $this->getCompaniesByCountries($locationsByCountries);
+        $companiesByCountries = $this->getCompaniesByCountries($locationsByCountries, $companies);
 
         return $this->getCompaniesMappingByCountriesAndFocus($companiesByCountries, $focus);
     }
 
-    public function getCountryResult($country, $sort, $focus)
+    public function getCountryResult($country, $sort, $focus, $companies)
     {
         $locations = Location::byRegions($country, $sort);
-        $companiesByRegions = $this->getCompaniesByRegions($locations);
+        $companiesByRegions = $this->getCompaniesByRegions($locations, $companies);
 
         return $this->getCompaniesMappingByRegionAndFocus($companiesByRegions, $focus);
     }
