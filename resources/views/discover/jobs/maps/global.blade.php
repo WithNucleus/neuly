@@ -137,6 +137,13 @@
                     label.html(label.html());
                 }
             },
+            onRegionClick: function(event, code){
+                var country = countries[code].country;
+                if(countries[code] !== undefined) {
+                    window.location.href = "/jobs/map/" + country;
+
+                }
+            }
         });
     </script>
 @endsection
