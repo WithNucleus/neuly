@@ -73,4 +73,18 @@ Route::group([
         Route::crud('parsing-results', 'ParsingResultsController');
         Route::get('parsing-results/{id}/approve', 'ParsingResultsController@approve')->name('parsing-results.approve');
     });
+
+    Route::group([
+        'prefix' => 'import/company',
+        'namespace' => 'Import\Company',
+        'as' => 'admin.import.company.',
+        'middleware' => ['permission:import'],
+    ], function () {
+        Route::crud('serpapi', 'SerpapiController');
+        Route::post('serpapi/bulkImport', 'SerpapiController@bulkImport')->name('serpapi.bulkImport');
+        Route::crud('serpapi-data', 'SerpapiDataController');
+        Route::get('serpapi-data/{id}/mark-as-reviewed', 'SerpapiDataController@markAsReviewed')->name('serpapi-data.markAsReviewed');
+        Route::get('serpapi-data/{id}/review', 'SerpapiDataController@review')->name('serpapi-data.review');
+        Route::post('serpapi-data/{id}/review', 'SerpapiDataController@reviewSubmit');
+    });
 }); // this should be the absolute last line of this file

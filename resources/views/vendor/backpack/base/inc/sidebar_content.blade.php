@@ -178,6 +178,22 @@
             </li>
 		</ul>
 	</li>
+
+    <li class="nav-item nav-dropdown">
+        <a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon la la-building"></i> Organization Serpapi</a>
+        <ul class="nav-dropdown-items">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('admin.import.company.serpapi.index') }}">
+                    <span>Entities</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('admin.import.company.serpapi-data.index') }}">
+                    <span>Results</span>
+                </a>
+            </li>
+        </ul>
+    </li>
 @endcan
 
 @can('manage listing requests')

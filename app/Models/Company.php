@@ -120,58 +120,74 @@ class Company extends Model implements EntityContract, EntityImageContract
     |--------------------------------------------------------------------------
     */
 
-    public function focus() {
+    public function focus()
+    {
         return $this->belongsToMany('App\Models\Focus', 'company_focus', 'company_id', 'focus_id')
-                    ->withTimestamps();
+            ->withTimestamps();
     }
 
-    public function people() {
+    public function people()
+    {
         return $this->belongsToMany('App\Models\Person', 'company_person', 'company_id', 'person_id')
-                    ->withPivot(['position'])
-                    ->withTimestamps();
+            ->withPivot(['position'])
+            ->withTimestamps();
     }
 
-    public function locations() {
+    public function locations()
+    {
         return $this->belongsToMany('App\Models\Location', 'company_location', 'company_id', 'location_id')
-                    ->withTimestamps();
+            ->withTimestamps();
     }
 
-    public function investors() {
+    public function investors()
+    {
         return $this->belongsToMany('App\Models\Investor', 'company_investor', 'company_id', 'investor_id')
-                    ->withTimestamps();
+            ->withTimestamps();
     }
 
-    public function research() {
+    public function research()
+    {
         return $this->belongsToMany('App\Models\Research', 'company_research', 'company_id', 'research_id')
-                    ->withTimestamps();
+            ->withTimestamps();
     }
 
-    public function jobs() {
+    public function jobs()
+    {
         return $this->morphMany(Job::class, 'owner');
     }
 
-    public function events() {
+    public function events()
+    {
         return $this->belongsToMany('App\Models\Event', 'company_event', 'company_id', 'event_id')
-                    ->withTimestamps();
+            ->withTimestamps();
     }
 
-    public function clinicaltrials() {
+    public function clinicaltrials()
+    {
         return $this->belongsToMany('App\Models\Clinicaltrial', 'clinicaltrial_company', 'company_id', 'clinicaltrial_id')
-                    ->withTimestamps();
+            ->withTimestamps();
     }
 
-    public function parents() {
+    public function parents()
+    {
         return $this->belongsToMany(self::class, 'company_company', 'child_id', 'parent_id')
             ->withPivot('type');
     }
 
-    public function subsidiaries() {
+    public function subsidiaries()
+    {
         return $this->belongsToMany(self::class, 'company_company', 'parent_id', 'child_id')
             ->withPivot('type');
     }
 
-    public function valuations() {
+    public function valuations()
+    {
         return $this->hasMany(CompanyValuation::class);
+    }
+
+    public function serpapiData()
+    {
+        return $this->hasOne(CompanySerpapiData::class);
     }
 
     /*
@@ -354,14 +370,26 @@ class Company extends Model implements EntityContract, EntityImageContract
                 'type'          => FieldsMapping::TYPE_RELATION,
                 'relation'      => FieldsMapping::RELATION_ONE_N,
                 'relationField' => ['date', 'amount'],
-            ]
+            ],
         ];
     }
 
     public static function getListingRequestMapping()
     {
         $mapping = self::getFieldsMapping();
-        $skipFields = ['slug', 'notes', 'jobs', 'people', 'investors','valuations'];
+        $skipFields = ['slug', 'notes', 'jobs', 'people', 'investors', 'valuations'];
+
+        foreach ($skipFields as $field) {
+            unset($mapping[$field]);
+        }
+
+        return $mapping;
+    }
+
+    public static function getImportSerpapiMapping()
+    {
+        $mapping = self::getFieldsMapping();
+        $skipFields = ['slug', 'logo', 'focus', 'locations', 'jobs', 'people', 'investors', 'research', 'events', 'clinicaltrials', 'valuations'];
 
         foreach ($skipFields as $field) {
             unset($mapping[$field]);

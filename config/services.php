@@ -59,6 +59,10 @@ return [
         'webhooks' => [
             'notifications' => 'https://hooks.slack.com/services/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',
         ],
-    ]
+    ],
+
+    'serpapi' => [
+        'private_api_key' => env('SERPAPI_PRIVATE_API_KEY')
+    ],
 
 ];
