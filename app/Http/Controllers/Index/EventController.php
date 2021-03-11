@@ -120,6 +120,9 @@ class EventController extends Controller
                 'image' => $event->image
             ])
             ->performedOn($event)
+            ->tap(function (Activity $activity) use ($request) {
+                $activity->ip = $request->ip();
+            })
             ->log($event->name);
 
         return view('discover.events.show', compact('event', 'related', 'metas', 'entity', 'isFollowed'));

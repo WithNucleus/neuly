@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Company;
 use App\Models\Focus;
 use App\Models\Job;
+use Spatie\Activitylog\Models\Activity;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -104,6 +105,9 @@ class CompanyController extends Controller
                 'image' => $company->logo
             ])
             ->performedOn($company)
+            ->tap(function (Activity $activity) use ($request) {
+                $activity->ip = $request->ip();
+            })
             ->log($company->name);
 
         return view('discover.organizations.show', compact('company', 'related', 'metas', 'entity', 'isFollowed'));

@@ -12,6 +12,7 @@ use App\Models\Company;
 use App\Services\Metas;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Spatie\Activitylog\Models\Activity;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -63,6 +64,9 @@ class JobController extends Controller
                 'slug' => $job->slug
             ])
             ->performedOn($job)
+            ->tap(function (Activity $activity) use ($request) {
+                $activity->ip = $request->ip();
+            })
             ->log($job->job_title);
 
         return view('discover.jobs.show', compact('job', 'related', 'metas', 'entity'));

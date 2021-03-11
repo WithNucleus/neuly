@@ -76,6 +76,9 @@ class FocusController extends Controller
                 'slug' => $focus->slug
             ])
             ->performedOn($focus)
+            ->tap(function (Activity $activity) use ($request) {
+                $activity->ip = $request->ip();
+            })
             ->log($focus->name);
 
         return view('discover.focus.show', compact('focus', 'focusCats', 'metas', 'entity', 'isFollowed'));
