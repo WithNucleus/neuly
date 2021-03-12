@@ -50,6 +50,7 @@ use App\Helpers\ListingRequestHelper;
                                 @include('admin.listing_requests.includes.fields.' . ListingRequestHelper::getFieldViewByMappingOptions($options), [
                                     'entity' => $company,
                                     'isOriginalEntity' => false,
+                                    'isAlternativeView' => true,
                                 ])
                             </div>
                         </div>

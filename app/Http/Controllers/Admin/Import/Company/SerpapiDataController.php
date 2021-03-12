@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin\Import\Company;
 
+use App\Helpers\Entity\FieldsMapping;
+use App\Helpers\ListingRequestHelper;
 use App\Models\Company;
 use App\Models\CompanySerpapiData;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
@@ -78,9 +80,11 @@ class SerpapiDataController extends CrudController
         $serpapiData = CompanySerpapiData::findOrFail($id);
         $company = Company::findOrFail($serpapiData->company_id);
         $fieldsMapping = Company::getImportSerpapiMapping();
+        $entityType = ListingRequestHelper::getEntityTypeByClass(Company::class);
+        $relationValues = ListingRequestHelper::getEntityRelationValuesByType($entityType);
 
         return view('admin.import.company-serpapi.review_form',
-            compact('serpapiData', 'company', 'fieldsMapping')
+            compact('serpapiData', 'company', 'fieldsMapping', 'relationValues')
         );
     }
 
@@ -110,12 +114,37 @@ class SerpapiDataController extends CrudController
      */
     private function applyCompanyData(Request $request, Company $company)
     {
-        $mapping = $company::getImportSerpapiMapping();
+        $fieldsMapping = $company::getImportSerpapiMapping();
+        $relationData = [];
 
-        foreach ($mapping as $field => $options) {
-            $company->{$field} = $request->input($field);
+        foreach ($fieldsMapping as $field => $options) {
+            $inputData = $request->input($field);
+
+            if ($options['type'] === FieldsMapping::TYPE_RELATION) {
+                $relationData[$field] = $inputData;
+            } else {
+                $company->{$field} = $inputData;
+            }
         }
 
         $company->save();
+        $this->applyRelationData($company, $relationData);
+    }
+
+    /**
+     * @param \App\Models\Company $company
+     * @param array $relationsData
+     */
+    private function applyRelationData(Company $company, $relationData)
+    {
+        $fieldsMapping = Company::getImportSerpapiMapping();
+
+        foreach ($relationData as $key => $data) {
+            $options = $fieldsMapping[$key];
+
+            if ($options['relation'] === FieldsMapping::RELATION_N_N) {
+                $company->{$key}()->sync($data);
+            }
+        }
     }
 }

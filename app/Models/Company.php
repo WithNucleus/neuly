@@ -335,16 +335,13 @@ class Company extends Model implements EntityContract, EntityImageContract
                 'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
                 'pivotColumns'  => [
-                    'position'
+                    'position',
                 ],
             ],
             'investors'            => [
                 'type'          => FieldsMapping::TYPE_RELATION,
                 'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
-                'pivotColumns'  => [
-                    'type'
-                ],
             ],
             'research'             => [
                 'type'          => FieldsMapping::TYPE_RELATION,
@@ -353,7 +350,7 @@ class Company extends Model implements EntityContract, EntityImageContract
             ],
             'jobs'                 => [
                 'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+                'relation'      => FieldsMapping::RELATION_ONE_N_MORPHABLE,
                 'relationField' => 'job_title',
             ],
             'events'               => [
@@ -377,7 +374,7 @@ class Company extends Model implements EntityContract, EntityImageContract
     public static function getListingRequestMapping()
     {
         $mapping = self::getFieldsMapping();
-        $skipFields = ['slug', 'notes', 'jobs', 'people', 'investors', 'valuations'];
+        $skipFields = ['slug', 'notes', 'jobs', 'people', 'valuations'];
 
         foreach ($skipFields as $field) {
             unset($mapping[$field]);
@@ -389,7 +386,7 @@ class Company extends Model implements EntityContract, EntityImageContract
     public static function getImportSerpapiMapping()
     {
         $mapping = self::getFieldsMapping();
-        $skipFields = ['slug', 'logo', 'focus', 'locations', 'jobs', 'people', 'investors', 'research', 'events', 'clinicaltrials', 'valuations'];
+        $skipFields = ['slug', 'logo', 'jobs', 'people', 'valuations'];
 
         foreach ($skipFields as $field) {
             unset($mapping[$field]);
