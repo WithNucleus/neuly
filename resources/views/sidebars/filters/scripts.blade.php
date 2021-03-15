@@ -59,7 +59,7 @@
             'valuation_max',
             'age',
             'gender',
-            'year'
+            'year',
         ];
 
         allowedFilters.forEach(function (filterName) {

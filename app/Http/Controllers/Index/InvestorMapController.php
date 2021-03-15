@@ -20,14 +20,16 @@ class InvestorMapController extends Controller
         $types = $this->filterTypes($this->filterTypeValues($request), $types);
         $types = $types->get('type');
 
+        $filters_hiring = [$this->filterHiringValue($request)];
+
         $sort = $this->getOrderDirection($this->getSortParameter($request));
-        $countriesByCode = $this->getCountriesResultByCode($sort, $types);
+        $countriesByCode = $this->getCountriesResultByCode($sort, $types, $filters_hiring[0]);
 
         $filtered_types = $types->pluck('type')->toArray();
 
         $path = route('discover.investors.map');
 
-        return view('discover.investors.maps.global', compact('countriesByCode', 'path', 'sort', 'type_cats', 'filtered_types'));
+        return view('discover.investors.maps.global', compact('countriesByCode', 'path', 'sort', 'type_cats', 'filtered_types', 'filters_hiring'));
     }
 
     public function showCountry(Request $request, $country)
@@ -40,7 +42,9 @@ class InvestorMapController extends Controller
 
         $sort = $this->getOrderDirection($this->getSortParameter($request));
 
-        $regionsByCode = $this->getCountryResult($country, $sort, $types);
+        $filters_hiring = [$this->filterHiringValue($request)];
+
+        $regionsByCode = $this->getCountryResult($country, $sort, $types, $filters_hiring[0]);
 
         $filtered_types = $types->pluck('type')->toArray();
 
@@ -82,6 +86,15 @@ class InvestorMapController extends Controller
         return $filters_focus;
     }
 
+    private function filterHiringValue($request)
+    {
+        if ($this->filterHasHiring($request)) {
+            return $request->input('filter')['hiring'];
+        }
+
+        return 'Both';
+    }
+
     /**
      * @param $request
      * @return bool
@@ -89,6 +102,11 @@ class InvestorMapController extends Controller
     private function filterHasTypes($request)
     {
         return $request->has('filter') && array_key_exists('type', $request->input('filter'));
+    }
+
+    private function filterHasHiring($request)
+    {
+        return $request->has('filter') && array_key_exists('hiring', $request->input('filter'));
     }
 
     /**
@@ -186,32 +204,40 @@ class InvestorMapController extends Controller
      * @param $focus
      * @return array
      */
-    private function getInvestorMappingByCountriesAndFocus($investorsByCountries, $types)
+    private function getInvestorMappingByCountriesAndFocus($investorsByCountries, $types, $hiring)
     {
         $investorsByCountriesAndTypes = [];
         foreach ($investorsByCountries as $alpha2code => $country) {
-            $investorsByCountriesAndTypes[$alpha2code]['name'] = $country['name'];
-            $investorsByCountriesAndTypes[$alpha2code]['hiring'] = count($this->getHiringInvestors($country['investors']));
-            $investorsByCountriesAndTypes[$alpha2code]['total'] = count($country['investors']);
+            $count = count($country['investors']);
+            $hiringCount = count($this->getHiringInvestors($country['investors']));
+            if ($count && $this->addByHiringFilter($hiring, $hiringCount)) {
+                $investorsByCountriesAndTypes[$alpha2code]['name'] = $country['name'];
+                $investorsByCountriesAndTypes[$alpha2code]['hiring'] = $hiringCount;
+                $investorsByCountriesAndTypes[$alpha2code]['total'] = $count;
 
-            foreach ($types as $item) {
-                $investorsByCountriesAndTypes[$alpha2code]['types'][$item->type] = $this->countInvestorsByType($country['investors'], $item->type);
+                foreach ($types as $item) {
+                    $investorsByCountriesAndTypes[$alpha2code]['types'][$item->type] = $this->countInvestorsByType($country['investors'], $item->type);
+                }
             }
         }
 
         return $investorsByCountriesAndTypes;
     }
 
-    private function getInvestorMappingByRegionsAndFocus($investorsByRegions, $types)
+    private function getInvestorMappingByRegionsAndFocus($investorsByRegions, $types, $hiring)
     {
         $investorsByRegionsAndTypes = [];
         foreach ($investorsByRegions as $region_code => $region) {
-            $investorsByRegionsAndTypes[$region_code]['name'] = $region['name'];
-            $investorsByRegionsAndTypes[$region_code]['hiring'] = count($this->getHiringInvestors($region['investors']));
-            $investorsByRegionsAndTypes[$region_code]['total'] = count($region['investors']);
+            $count = count($region['investors']);
+            $hiringCount = count($this->getHiringInvestors($region['investors']));
+            if ($count && $this->addByHiringFilter($hiring, $hiringCount)) {
+                $investorsByRegionsAndTypes[$region_code]['name'] = $region['name'];
+                $investorsByRegionsAndTypes[$region_code]['hiring'] = $hiringCount;
+                $investorsByRegionsAndTypes[$region_code]['total'] = $count;
 
-            foreach ($types as $item) {
-                $investorsByRegionsAndTypes[$region_code]['types'][$item->type] = $this->countInvestorsByType($region['investors'], $item->type);
+                foreach ($types as $item) {
+                    $investorsByRegionsAndTypes[$region_code]['types'][$item->type] = $this->countInvestorsByType($region['investors'], $item->type);
+                }
             }
         }
 
@@ -230,19 +256,24 @@ class InvestorMapController extends Controller
      * @param $sort
      * @return array
      */
-    private function getCountriesResultByCode($sort, $types)
+    private function getCountriesResultByCode($sort, $types, $hiring)
     {
         $locationsByCountries = Location::byCountries($sort);
         $investorsByCountries = $this->getInvestorsByCountries($locationsByCountries);
 
-        return $this->getInvestorMappingByCountriesAndFocus($investorsByCountries, $types);
+        return $this->getInvestorMappingByCountriesAndFocus($investorsByCountries, $types, $hiring);
     }
 
-    private function getCountryResult($country, $sort, $types)
+    private function getCountryResult($country, $sort, $types, $hiring)
     {
         $locations = Location::byRegions($country, $sort);
         $investorsByRegions = $this->getInvestorsByRegions($locations);
 
-        return $this->getInvestorMappingByRegionsAndFocus($investorsByRegions, $types);
+        return $this->getInvestorMappingByRegionsAndFocus($investorsByRegions, $types, $hiring);
+    }
+
+    private function addByHiringFilter($filter, $count)
+    {
+        return $filter === 'Both' || ($filter === 'Yes' && $count > 0) || ($filter === 'No' && $count === 0);
     }
 }
