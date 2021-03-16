@@ -6,16 +6,28 @@
 </li>
 
 @can('edit companies')
-	<li class='nav-item'>
-		<a class='nav-link' href='{{ backpack_url('company') }}'>
-			<i class='nav-icon la la-building'></i> Organizations
-		</a>
-	</li>
-
-    <li class='nav-item'>
-        <a class='nav-link' href='{{ backpack_url('companyvaluation') }}'>
-            <i class='nav-icon la la-dollar'></i> Organization Valuations
-        </a>
+    <li class="nav-item nav-dropdown">
+        <a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon la la-building"></i> Organizations</a>
+        <ul class="nav-dropdown-items">
+            <li class='nav-item'>
+                <a class='nav-link' href='{{ backpack_url('company') }}'>Organizations List</a>
+            </li>
+            <li class='nav-item'>
+                <a class='nav-link' href='{{ backpack_url('companyvaluation') }}'>Valuations</a>
+            </li>
+            @can('import')
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('admin.import.company.serpapi.index') }}">
+                        <span>Import Details</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('admin.import.company.serpapi-data.index') }}">
+                        <span>Import Results</span>
+                    </a>
+                </li>
+            @endcan
+        </ul>
     </li>
 @endcan
 
@@ -76,19 +88,19 @@
 @endcan
 
 @can('edit events')
-	<li class='nav-item'>
-		<a class='nav-link' href='{{ backpack_url('event') }}'>
-			<i class='nav-icon la la-calendar'></i> Events
-		</a>
-	</li>
-@endcan
-
-@can('edit event types')
-	<li class='nav-item'>
-		<a class='nav-link' href='{{ backpack_url('eventtype') }}'>
-			<i class='nav-icon la la-list'></i> Event Types
-		</a>
-	</li>
+    <li class="nav-item nav-dropdown">
+        <a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon la la-calendar"></i> Events</a>
+        <ul class="nav-dropdown-items">
+            <li class='nav-item'>
+                <a class='nav-link' href='{{ backpack_url('event') }}'>Events List</a>
+            </li>
+            @can('edit event types')
+                <li class='nav-item'>
+                    <a class='nav-link' href='{{ backpack_url('eventtype') }}'>Event Types</a>
+                </li>
+            @endcan
+        </ul>
+    </li>
 @endcan
 
 @can('edit news articles')
@@ -100,15 +112,15 @@
 @endcan
 
 @can('edit clinical trials')
-	<li class="nav-item">
-		<a class="nav-link" href="{{ backpack_url('clinicaltrial') }}">
-			<i class="nav-icon la la-stethoscope"></i> <span>Clinical Trials</span>
-		</a>
-	</li>
-
     <li class="nav-item nav-dropdown">
-        <a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon la la-list-alt"></i> Clinical Trial Details</a>
+        <a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon la la-stethoscope"></i> Clinical Trials</a>
         <ul class="nav-dropdown-items">
+            <li class='nav-item'>
+                <a class='nav-link' href='{{ backpack_url('clinicaltrial') }}'>Clinical Trials List</a>
+            </li>
+            <li class='nav-item'>
+                <a class='nav-link' href='{{ backpack_url('clinicaltrialphase') }}'>Phases</a>
+            </li>
             <li class='nav-item'>
                 <a class='nav-link' href='{{ backpack_url('ct_condition') }}'>Conditions</a>
             </li>
@@ -121,33 +133,23 @@
             <li class='nav-item'>
                 <a class='nav-link' href='{{ backpack_url('ct_study_design') }}'>Study Designs</a>
             </li>
+            @can('import')
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('admin.import.clinicaltrial.parsing.index') }}">
+                        <span>Import Details</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('admin.import.clinicaltrial.parsing-results.index') }}">
+                        <span>Import Results</span>
+                    </a>
+                </li>
+            @endcan
         </ul>
-    </li>
-
-    <li class="nav-item">
-        <a class="nav-link" href="{{ backpack_url('clinicaltrialphase') }}">
-            <i class="nav-icon la la-stopwatch"></i> Clinical Trial Phases
-        </a>
     </li>
 @endcan
 
 @can('import')
-    <li class="nav-item nav-dropdown">
-        <a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon la la-stethoscope"></i> Clinical Trials Parsing</a>
-        <ul class="nav-dropdown-items">
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('admin.import.clinicaltrial.parsing.index') }}">
-                    <span>Entities</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('admin.import.clinicaltrial.parsing-results.index') }}">
-                    <span>Results</span>
-                </a>
-            </li>
-        </ul>
-    </li>
-
 	<li class="nav-item nav-dropdown">
 		<a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon la la-cloud-upload-alt"></i> Import</a>
 		<ul class="nav-dropdown-items">
@@ -168,7 +170,7 @@
 			</li>
             <li class="nav-item">
                 <a class='nav-link' href='{{ route('import.batch-images-upload.index') }}'>
-                    <i class='nav-icon la la-images'></i> Batch Images Upload
+                    <i class='nav-icon la la-images'></i> Image Upload
                 </a>
             </li>
             <li class="nav-item">
@@ -178,22 +180,6 @@
             </li>
 		</ul>
 	</li>
-
-    <li class="nav-item nav-dropdown">
-        <a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon la la-building"></i> Organization Serpapi</a>
-        <ul class="nav-dropdown-items">
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('admin.import.company.serpapi.index') }}">
-                    <span>Entities</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('admin.import.company.serpapi-data.index') }}">
-                    <span>Results</span>
-                </a>
-            </li>
-        </ul>
-    </li>
 @endcan
 
 @can('manage listing requests')
