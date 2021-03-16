@@ -189,7 +189,7 @@ class CompanyMapController extends Controller
     {
         $companies = [];
 
-        if ($types !== null) {
+        if ($types !== null && $types !== []) {
             $companies = Company::whereIn('ownership', $types)
                 ->pluck('id')
                 ->toArray();
