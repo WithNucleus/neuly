@@ -99,6 +99,14 @@ Route::group([
 // Companies
 Route::get('/organizations', 'Index\CompanyController@index')->name('discover.organizations');
 Route::get('/organization/names.json', 'Index\CompanyController@namesJson');
+
+Route::group([
+    'middleware' => ['auth', 'verified'],
+], function () {
+    Route::get('/organization/map', 'Index\CompanyMapController@showMap')->name('discover.organizations.map');
+    Route::get('/organization/map/{country}', 'Index\CompanyMapController@showCountry')->name('discover.organizations.map.country');
+});
+
 Route::get('/organization/{slug}', 'Index\CompanyController@show')->name('discover.organizations.show');
 Route::get('/organization/{slug}/jobs', 'Index\CompanyController@jobs')->name('discover.organizations.jobs');
 Route::get('/organization/{slug}/events', 'Index\CompanyController@events')->name('discover.organizations.events');

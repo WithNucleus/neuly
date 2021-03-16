@@ -95,6 +95,10 @@
                 @include('sidebars.recruitingtrial')
             @endif
 
+            @if(Route::is('discover.organizations.map') OR Route::is('discover.organizations.map.country'))
+                @include('sidebars.organizations.global-map')
+            @endif
+
             @if(Route::is('discover.investors.map') OR Route::is('discover.investors.map.country'))
                 @include('sidebars.investors.global-map')
             @endif

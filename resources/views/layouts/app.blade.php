@@ -85,6 +85,8 @@
          Route::is('insights.distribution.countries.focus.show') OR
          Route::is('discover.locations.maps.global') OR
          Route::is('discover.locations.maps.country') OR
+         Route::is('discover.organizations.map') OR
+         Route::is('discover.organizations.map.country') OR
          Route::is('discover.jobs.map') OR
          Route::is('discover.jobs.map.country') OR
          Route::is('discover.investors.map') OR
