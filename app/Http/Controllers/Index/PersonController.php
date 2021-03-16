@@ -100,6 +100,9 @@ class PersonController extends Controller
                 'slug' => $person->slug
             ])
             ->performedOn($person)
+            ->tap(function (Activity $activity) use ($request) {
+                $activity->ip = $request->ip();
+            })
             ->log($person->name);
 
         return view('discover.people.show', compact('person', 'metas', 'entity', 'isFollowed', 'isVerified'));

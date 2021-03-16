@@ -85,6 +85,9 @@ class ResearchController extends Controller
                 'slug' => $research->slug
             ])
             ->performedOn($research)
+            ->tap(function (Activity $activity) use ($request) {
+                $activity->ip = $request->ip();
+            })
             ->log($research->name);
 
         return view('discover.research.show', compact('research','related', 'metas', 'entity', 'resources', 'isFollowed'));

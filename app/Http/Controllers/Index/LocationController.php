@@ -83,6 +83,9 @@ class LocationController extends Controller
                 'slug' => $location->slug
             ])
             ->performedOn($location)
+            ->tap(function (Activity $activity) use ($request) {
+                $activity->ip = $request->ip();
+            })
             ->log($location->name);
 
         return view('discover.locations.show', compact('location', 'metas', 'entity', 'isFollowed'));

@@ -7,6 +7,7 @@ use App\Repositories\FollowRepository;
 use Illuminate\Http\Request;
 use App\Models\Focus;
 use App\Models\Clinicaltrial;
+use Spatie\Activitylog\Models\Activity;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
@@ -149,6 +150,9 @@ class ClinicaltrialController extends Controller
                 'slug' => $clinicaltrial->slug
             ])
             ->performedOn($clinicaltrial)
+            ->tap(function (Activity $activity) use ($request) {
+                $activity->ip = $request->ip();
+            })
             ->log($clinicaltrial->title);
 
         return view('discover.clinicaltrials.show', compact('clinicaltrial', 'entity', 'isFollowed'));

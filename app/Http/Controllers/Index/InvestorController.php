@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\Investor;
 use App\Models\Location;
 use App\Services\Metas;
+use Spatie\Activitylog\Models\Activity;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -92,6 +93,9 @@ class InvestorController extends Controller
                 'image' => $investor->logo
             ])
             ->performedOn($investor)
+            ->tap(function (Activity $activity) use ($request) {
+                $activity->ip = $request->ip();
+            })
             ->log($investor->name);
 
         return view('discover.investors.show', compact('investor', 'metas', 'entity', 'isFollowed'));
