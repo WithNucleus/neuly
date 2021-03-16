@@ -11,9 +11,9 @@ use App\Notifications\LocationMapCodesNotFound;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Location extends Model implements EntityContract
@@ -93,8 +93,9 @@ class Location extends Model implements EntityContract
         }
     }
 
-    public function getShowLink() {
-        return '<a href="' . route('discover.locations.show', $this->slug) . '">' . $this->name . '</a>';
+    public function getShowLink()
+    {
+        return '<a href="'.route('discover.locations.show', $this->slug).'">'.$this->name.'</a>';
     }
 
     /**
@@ -106,10 +107,10 @@ class Location extends Model implements EntityContract
     public static function findOrCreateLocation($country, $region, $city = '')
     {
         if ($city) {
-            $name = $city . ', ' . $region . ', ' . $country;
+            $name = $city.', '.$region.', '.$country;
             $slug = Str::slug($name);
 
-            $location = Location::where('slug', $slug)
+            $location = self::where('slug', $slug)
                 ->orWhere(function ($query) use ($region, $city, $country) {
                     $query->where('country', $country)
                         ->where('region', $region)
@@ -117,10 +118,10 @@ class Location extends Model implements EntityContract
                 })
                 ->first();
         } else {
-            $name = $region . ', ' . $country;
+            $name = $region.', '.$country;
             $slug = Str::slug($name);
 
-            $location = Location::where('slug', $slug)
+            $location = self::where('slug', $slug)
                 ->orWhere('name', $name)
                 ->first();
         }
@@ -130,20 +131,52 @@ class Location extends Model implements EntityContract
         }
 
         try {
-            $location = Location::create([
+            $location = self::create([
                 'name'    => $name,
                 'slug'    => $slug,
                 'city'    => $city,
                 'region'  => $region,
-                'country' => $country
+                'country' => $country,
             ]);
 
             return $location;
-
         } catch (QueryException $e) {
-            $error_message = 'Error on findOrCreateLocation()' . "\n" . $e;
+            $error_message = 'Error on findOrCreateLocation()'."\n".$e;
             Log::error($error_message);
         }
+    }
+
+    public static function getCountries()
+    {
+        return self::distinct('alpha2code')->pluck('country', 'alpha2code');
+    }
+
+    public static function byCountries($sort = 'ASC')
+    {
+        $byCountries = [];
+
+        foreach (self::orderBy('country', $sort)->get() as $location) {
+            if (! array_key_exists($location->alpha2code, $byCountries)) {
+                $byCountries[$location->alpha2code]['name'] = $location->country;
+            }
+            $byCountries[$location->alpha2code]['locations'][] = $location->id;
+        }
+
+        return $byCountries;
+    }
+
+    public static function byRegions($country, $sort = 'ASC')
+    {
+        $byRegions = [];
+
+        foreach (self::where('country', '=', $country)->orderBy('region', $sort)->get() as $location) {
+            if (! array_key_exists($location->region_code, $byRegions)) {
+                $byRegions[$location->region_code]['name'] = $location->region;
+            }
+            $byRegions[$location->region_code]['locations'][] = $location->id;
+        }
+
+        return $byRegions;
     }
 
     /*
@@ -152,32 +185,38 @@ class Location extends Model implements EntityContract
     |--------------------------------------------------------------------------
     */
 
-    public function companies() {
+    public function companies()
+    {
         return $this->belongsToMany('App\Models\Company', 'company_location', 'location_id', 'company_id')
             ->withTimestamps();
     }
 
-    public function people() {
+    public function people()
+    {
         return $this->belongsToMany('App\Models\Person', 'location_person', 'location_id', 'person_id')
             ->withTimestamps();
     }
 
-    public function investors() {
+    public function investors()
+    {
         return $this->belongsToMany('App\Models\Investor', 'investor_location', 'location_id', 'investor_id')
             ->withTimestamps();
     }
 
-    public function jobs() {
+    public function jobs()
+    {
         return $this->belongsToMany('App\Models\Job', 'job_location', 'location_id', 'job_id')
             ->withTimestamps();
     }
 
-    public function events() {
+    public function events()
+    {
         return $this->belongsToMany('App\Models\Event', 'event_location', 'location_id', 'event_id')
             ->withTimestamps();
     }
 
-    public function clinicaltrials() {
+    public function clinicaltrials()
+    {
         return $this->belongsToMany('App\Models\Clinicaltrial', 'clinicaltrial_location', 'location_id', 'clinicaltrial_id')
             ->withTimestamps();
     }
@@ -206,7 +245,8 @@ class Location extends Model implements EntityContract
     |--------------------------------------------------------------------------
     */
 
-    public function setNameAttribute($value) {
+    public function setNameAttribute($value)
+    {
         $this->attributes['name'] = $value;
         $this->attributes['slug'] = Str::slug($value);
     }

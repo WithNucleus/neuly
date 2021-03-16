@@ -153,7 +153,16 @@ Route::post('/jobs/apply', 'Index\JobApplicationController@apply')->name('discov
 // Clinical trials
 Route::get('/clinical-trials', 'Index\ClinicaltrialController@index')->name('discover.clinicaltrials');
 Route::get('/clinical-trials/recruiting', 'Index\RecruitingClinicalTrialController@index')->name('discover.clinicaltrials.recruiting');
+
+Route::group([
+    'middleware' => ['auth', 'verified']
+], function () {
+    Route::get('/clinical-trials/map', 'Index\ClinicalTrialMapController@showMap')->name('discover.clinicaltrials.map');
+    Route::get('/clinical-trials/map/{country}', 'Index\ClinicalTrialMapController@showCountry')->name('discover.clinicaltrials.map.country');
+});
+
 Route::get('/clinical-trials/{slug}', 'Index\ClinicaltrialController@show')->name('discover.clinicaltrials.show');
+
 
 // Listing Requests
 Route::get('/listing', 'Index\ListingRequestController@index')->name('listing');
