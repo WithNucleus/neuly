@@ -9,6 +9,7 @@ use App\Models\Traits\OldSlugRedirectable;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -40,6 +41,7 @@ class Focus extends Model implements EntityContract
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
+
 
     /*
     |--------------------------------------------------------------------------
@@ -84,6 +86,11 @@ class Focus extends Model implements EntityContract
     public function scopeDrugs($query)
     {
         return $query->where('type', self::TYPE_DRUG);
+    }
+
+    public function scopeHasClinicaltrials($query)
+    {
+        return $query->whereHas('clinicaltrials');
     }
 
     /*
