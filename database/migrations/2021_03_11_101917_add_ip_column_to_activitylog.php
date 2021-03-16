@@ -14,7 +14,7 @@ class AddIpColumnToActivitylog extends Migration
     public function up()
     {
         Schema::connection(config('activitylog.database_connection'))->table(config('activitylog.table_name'), function (Blueprint $table) {
-            $table->string('ip', 39)->nullable(); //support ipv4 and ipv6
+            $table->string('ip', 39)->nullable()->after('causer_type'); //support ipv4 and ipv6
         });
     }
 

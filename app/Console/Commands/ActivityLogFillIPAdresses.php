@@ -38,8 +38,7 @@ class ActivityLogFillIPAdresses extends Command
      */
     public function handle()
     {
-        $fixedRows = 0;
-        $activities = Activity::whereNull('ip')->limit(5000)->get();
+        $activities = Activity::where('log_name', 'pageview')->whereNull('ip')->limit(5000)->get();
 
         foreach ($activities as $activity) {
             if ($activity->properties->has('ip')) {
@@ -51,11 +50,12 @@ class ActivityLogFillIPAdresses extends Command
             $activity->save();
         }
 
-        $this->info('IPs of '.$activities->count().' where filled successfully');
+        $this->info($activities->count() . ' IPs were processed');
 
-        if (Activity::whereNull('ip')->count() > 0) {
-            $this->info('Starting filling IPs on next chunk of activities');
-            $this->handle();
+        $left_to_process = Activity::where('log_name', 'pageview')->whereNull('ip')->count();
+
+        if ($left_to_process > 0) {
+            $this->info('There are ' . $left_to_process . ' activity records left to parse');
         }
 
         return 0;
