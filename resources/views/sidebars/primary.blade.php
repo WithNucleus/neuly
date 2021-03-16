@@ -87,6 +87,10 @@
                 @include('sidebars.insights.market-compare')
             @endif
 
+            @if(Route::is('discover.jobs.map') OR Route::is('discover.jobs.map.country'))
+                @include('sidebars.jobs.global-map')
+            @endif
+
             @if(Route::is('discover.clinicaltrials.recruiting'))
                 @include('sidebars.recruitingtrial')
             @endif
