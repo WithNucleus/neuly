@@ -42,6 +42,7 @@ class Focus extends Model implements EntityContract
     |--------------------------------------------------------------------------
     */
 
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
@@ -105,6 +106,11 @@ class Focus extends Model implements EntityContract
     public function scopeHasJobs($query)
     {
         return $query->whereHas('jobs');
+    }
+
+    public function scopeHasClinicaltrials($query)
+    {
+        return $query->whereHas('clinicaltrials');
     }
 
     /*

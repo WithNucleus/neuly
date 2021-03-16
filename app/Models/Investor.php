@@ -29,6 +29,12 @@ class Investor extends Model implements EntityContract, EntityImageContract
     |--------------------------------------------------------------------------
     */
 
+    const TYPE = [
+        'Venture Capital',
+        'Private Equity',
+        'Private Individual',
+    ];
+
     protected $table = 'investors';
     protected $guarded = ['id'];
 
@@ -39,12 +45,6 @@ class Investor extends Model implements EntityContract, EntityImageContract
     protected static $imageAttribute = 'logo';
     protected static $imageFolderPath = 'investors';
     protected static $imageFilenameAttribute = 'name';
-
-    protected static $typeValues = [
-        'Venture Capital',
-        'Private Equity',
-        'Private Individual',
-    ];
 
     /*
     |--------------------------------------------------------------------------
@@ -77,7 +77,7 @@ class Investor extends Model implements EntityContract, EntityImageContract
      */
     public static function getTypeValues()
     {
-        return self::$typeValues;
+        return array_combine(self::TYPE, self::TYPE);
     }
 
     /*
@@ -165,7 +165,7 @@ class Investor extends Model implements EntityContract, EntityImageContract
             ],
             'type' => [
                 'type' => FieldsMapping::TYPE_ENUM,
-                'values' => self::$typeValues,
+                'values' => self::getTypeValues(),
             ],
             'logo'      => [
                 'type' => FieldsMapping::TYPE_IMAGE,

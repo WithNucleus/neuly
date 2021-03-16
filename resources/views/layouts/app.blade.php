@@ -86,7 +86,11 @@
          Route::is('discover.locations.maps.global') OR
          Route::is('discover.locations.maps.country') OR
          Route::is('discover.jobs.map') OR
-         Route::is('discover.jobs.map.country')
+         Route::is('discover.jobs.map.country') OR
+         Route::is('discover.investors.map') OR
+         Route::is('discover.investors.map.country') OR
+         Route::is('discover.clinicaltrials.map') OR
+         Route::is('discover.clinicaltrials.map.country')
     )
         <script type="text/javascript" src="{{ asset('assets/jquery-jvectormap.min.js') }}"></script>
         <link rel="stylesheet" type="text/css" href="{{ asset('assets/jquery-jvectormap.css') }}"/>

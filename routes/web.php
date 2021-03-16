@@ -119,6 +119,12 @@ Route::get('/research/{slug}', 'Index\ResearchController@show')->name('discover.
 // Investors
 Route::get('/investors', 'Index\InvestorController@index')->name('discover.investors');
 Route::get('/investor/names.json', 'Index\InvestorController@namesJson');
+Route::group([
+    'middleware' => ['auth', 'verified'],
+], function () {
+    Route::get('/investors/map', 'Index\InvestorMapController@showMap')->name('discover.investors.map');
+    Route::get('/investors/map/{country}', 'Index\InvestorMapController@showCountry')->name('discover.investors.map.country');
+});
 Route::get('/investor/{slug}', 'Index\InvestorController@show')->name('discover.investors.show');
 Route::get('/investor/{slug}/jobs', 'Index\InvestorController@jobs')->name('discover.investors.jobs');
 
@@ -159,7 +165,16 @@ Route::post('/jobs/apply', 'Index\JobApplicationController@apply')->name('discov
 // Clinical trials
 Route::get('/clinical-trials', 'Index\ClinicaltrialController@index')->name('discover.clinicaltrials');
 Route::get('/clinical-trials/recruiting', 'Index\RecruitingClinicalTrialController@index')->name('discover.clinicaltrials.recruiting');
+
+Route::group([
+    'middleware' => ['auth', 'verified']
+], function () {
+    Route::get('/clinical-trials/map', 'Index\ClinicalTrialMapController@showMap')->name('discover.clinicaltrials.map');
+    Route::get('/clinical-trials/map/{country}', 'Index\ClinicalTrialMapController@showCountry')->name('discover.clinicaltrials.map.country');
+});
+
 Route::get('/clinical-trials/{slug}', 'Index\ClinicaltrialController@show')->name('discover.clinicaltrials.show');
+
 
 // Listing Requests
 Route::get('/listing', 'Index\ListingRequestController@index')->name('listing');
@@ -169,7 +184,7 @@ Route::post('/listing/request/finish', 'Index\ListingRequestController@finishReq
 Route::get('/listing/request/getEntityListJson', 'Index\ListingRequestController@getEntityListJson')->name('listing.request.getEntityListJson');
 
 Route::get('/job-report-entry', 'Index\JobReportEntryController@index')->name('job-report-entry.index');
-Route::post('/job-report-entry', 'Index\JobReportEntryController@store')->name('job-report-entry.store');;
+Route::post('/job-report-entry', 'Index\JobReportEntryController@store')->name('job-report-entry.store');
 
 // Search
 Route::post('/search', 'Index\SearchController@search')->name('search');
@@ -245,13 +260,13 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
         Route::post('/follow-lists/validate-name', 'Dashboard\FollowListsController@validateName')->name('member.follow-lists.validateName');
         Route::resource('/follow-lists', 'Dashboard\FollowListsController', [
             'as' => 'member',
-            'except' => ['create']
+            'except' => ['create'],
         ]);
 
         // Follow
         Route::resource('/follow', 'Dashboard\FollowController', [
             'as' => 'member',
-            'except' => ['create', 'store', 'destroy']
+            'except' => ['create', 'store', 'destroy'],
         ]);
 
         Route::get('/notifications', 'NotificationController@index')->name('dashboard.notifications.index');
@@ -327,7 +342,6 @@ Route::group([
     Route::delete('/subsidiary/{child_id}', 'SubsidiaryController@remove')->name('subsidiary.remove');
 });
 
-
 Route::get('/admin/person/{id}/company', 'Admin\PersonCompanyController@index');
 Route::post('/admin/person/{id}/company', 'Admin\PersonCompanyController@add');
 
@@ -372,21 +386,21 @@ Route::post('/admin/import/failures/{id}/delete', 'Admin\Import\FailuresControll
 
 // Related Entities
 Route::group([
-    'middleware' => ['auth', 'role:Admin','permission:import'],
+    'middleware' => ['auth', 'role:Admin', 'permission:import'],
     'prefix'     => '/admin/import',
     'namespace'  => 'Admin\Import',
     'as'         => 'import.',
 ], function () {
     Route::group([
         'prefix' => '/related-entities',
-        'as'     => 'related-entities.'
+        'as'     => 'related-entities.',
     ], function () {
         Route::get('/', 'RelatedEntitiesController@index')->name('index');
 
         Route::group([
             'prefix' => '/locations',
             'namespace'  => 'RelatedEntities',
-            'as'     => 'locations.'
+            'as'     => 'locations.',
         ], function () {
             Route::get('/', 'LocationsController@index')->name('index');
             Route::post('/import', 'LocationsController@import')->name('import');
@@ -397,19 +411,18 @@ Route::group([
         Route::group([
             'prefix' => '/people-organization',
             'namespace'  => 'RelatedEntities',
-            'as'     => 'people-organization.'
+            'as'     => 'people-organization.',
         ], function () {
             Route::get('/', 'PeopleOrganizationController@index')->name('index');
             Route::post('/import', 'PeopleOrganizationController@import')->name('import');
             Route::get('/results/{id}', 'PeopleOrganizationController@results')->name('results');
             Route::get('/failures/{id}', 'PeopleOrganizationController@failures')->name('failures');
         });
-
     });
 
     Route::group([
         'prefix' => '/batch-images-upload',
-        'as'     => 'batch-images-upload.'
+        'as'     => 'batch-images-upload.',
     ], function () {
         Route::get('/', 'BatchImagesUploadController@index')->name('index');
         Route::post('/import', 'BatchImagesUploadController@import')->name('import');
@@ -453,12 +466,12 @@ Route::get('/members/{member_url}/{slug}', 'Dashboard\NoteController@showPublic'
 
 Route::group([
     'prefix' => 'embeds',
-    'as' => 'embeds.'
-], function() {
+    'as' => 'embeds.',
+], function () {
     Route::get('/jobs', 'Index\JobController@embedIndex')->name('jobs.index');
     Route::get('/events', 'Index\EventController@embedIndex')->name('events.index');
 });
 
-/** CATCH-ALL ROUTE for Backpack/PageManager - needs to be at the end of your routes.php file  **/
+/* CATCH-ALL ROUTE for Backpack/PageManager - needs to be at the end of your routes.php file  **/
 Route::get('{page}/{subs?}', ['uses' => '\App\Http\Controllers\PageController@index'])
     ->where(['page' => '^(((?=(?!admin))(?=(?!\/)).))*$', 'subs' => '.*']);
