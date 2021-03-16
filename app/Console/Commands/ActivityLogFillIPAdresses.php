@@ -42,7 +42,7 @@ class ActivityLogFillIPAdresses extends Command
         $activities = Activity::whereNull('ip')->limit(5000)->get();
 
         foreach ($activities as $activity) {
-            if ($activity->properties->contains('ip')) {
+            if ($activity->properties->has('ip')) {
                 $activity->ip = $activity->properties['ip'];
             } else {
                 $activity->ip = 'unknown';
