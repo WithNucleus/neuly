@@ -27,6 +27,7 @@
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.0",
         "sentry/sentry-laravel": "^1.8",
+        "serpapi/google-search-results-php": "^2.0",
         "spatie/laravel-activitylog": "^3.14",
         "spatie/laravel-honeypot": "2.2.0",
         "spatie/laravel-json-api-paginate": "^1.7",

@@ -1,8 +1,10 @@
 <?php
+$isOriginalEntity = isset($isOriginalEntity) ? $isOriginalEntity : false;
+$isAlternativeView = isset($isAlternativeView) ? $isAlternativeView : false;
 $currentValues = [];
 
 if (!empty($entity->{$field})) {
-    if ($isOriginalEntity) {
+    if ($isOriginalEntity || $isAlternativeView) {
         $currentValues = $entity->{$field}->pluck('id')->toArray();
     } else {
         $currentValues = $entity->{$field};
