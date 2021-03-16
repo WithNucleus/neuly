@@ -10,6 +10,7 @@ use App\Models\ClinicalTrialDetails\CtIntervention;
 use App\Models\ClinicalTrialDetails\CtOutcomeMeasure;
 use App\Models\ClinicalTrialDetails\CtStudyDesign;
 use App\Models\Company;
+use App\Models\Investor;
 use App\Models\Person;
 use App\Models\Location;
 use App\Models\Focus;
@@ -52,7 +53,8 @@ class SearchSuggestionsController extends Controller
         $people           = Person::all()->pluck('slug', 'name')->toArray();
         $locations        = Location::all()->pluck('slug', 'name')->toArray();
         $clinicalTrials   = Clinicaltrial::all()->pluck('slug', 'title')->toArray();
-        $focuses            = Focus::all();
+        $focuses          = Focus::all();
+        $investors        = Investor::all()->pluck('slug', 'name')->toArray();
         $focusesWithAliases = [];
 
         foreach ($focuses as $focus) {
@@ -64,7 +66,7 @@ class SearchSuggestionsController extends Controller
             }
         }
 
-        $everything = array_merge($companies, $people, $locations, $clinicalTrials, $focusesWithAliases);
+        $everything = array_merge($companies, $people, $locations, $clinicalTrials, $focusesWithAliases, $investors);
         $results    = [];
 
         foreach ($everything as $name => $slug) {

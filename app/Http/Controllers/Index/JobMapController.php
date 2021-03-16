@@ -2,108 +2,295 @@
 
 namespace App\Http\Controllers\Index;
 
+use App\Helpers\MapHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Focus;
+use App\Models\Job;
 use App\Models\Location;
+use App\Services\Metas;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class JobMapController extends Controller
 {
-    private $focusIds;
-    private $focusNames;
-
-    public function __construct()
-    {
-        $this->focusIds = Focus::pluck('id');
-        $this->focusNames = Focus::pluck('name', 'id');
-    }
-
+    /**
+     * Show.
+     * @return \Illuminate\View\View
+     */
     public function showMap(Request $request)
     {
-        $locationsQuery = Location::whereNotNull('alpha2code');
+        $focus = Focus::hasJobs()->orderBy('name');
+        $focus_cats = $focus->pluck('name')->toArray();
 
-        $locations = $locationsQuery
-            ->orderBy('country')
-            ->get()
-            ->groupBy('alpha2code')
+        $focus = $this->filterFocus($this->filterFocusValues($request), $focus);
+        $focus = $focus->get();
+
+        $sort = $this->getOrderDirection($this->getSortParameter($request));
+
+        $filters_type = null;
+
+        if ($this->filterHasType($request)) {
+            $filters_type = $request->input('filter')['type'];
+        }
+
+        $jobs = $this->getJobsByEmploymentType($filters_type);
+
+        $countriesByCode = $this->getCountriesResultByCode($sort, $focus, $jobs);
+
+        $filters_focus = $focus->pluck('name')->toArray();
+
+        $filters_type = $this->filteredTypeToArray($filters_type);
+
+        $path = route('discover.jobs.map');
+
+        return view('discover.jobs.maps.global', compact('countriesByCode', 'filters_focus', 'focus_cats', 'path', 'sort', 'filters_type'));
+    }
+
+    public function showCountry(Request $request, $country)
+    {
+        $focus = Focus::hasJobs()->orderBy('name');
+        $focus_cats = $focus->pluck('name')->toArray();
+
+        $focus = $this->filterFocus($this->filterFocusValues($request), $focus);
+        $focus = $focus->get();
+
+        $sort = $this->getOrderDirection($this->getSortParameter($request));
+
+        $filters_type = null;
+
+        if ($this->filterHasType($request)) {
+            $filters_type = $request->input('filter')['type'];
+        }
+
+        $jobs = $this->getJobsByEmploymentType($filters_type);
+
+        $regionsByCode = $this->getCountryResult($country, $sort, $focus, $jobs);
+
+        $filters_focus = $focus->pluck('name')->toArray();
+        $path = route('discover.jobs.map.country', $country);
+        $map = MapHelper::getCountryMap($country);
+
+        $filters_type = $this->filteredTypeToArray($filters_type);
+
+        if (! $map['show']) {
+            return abort(404);
+        }
+
+        return view('discover.jobs.maps.country', compact('regionsByCode', 'filters_focus', 'focus_cats', 'path', 'sort', 'map', 'country', 'filters_type'));
+    }
+
+    /**
+     * @param $values
+     * @param $query
+     * @return mixed
+     */
+    private function filterFocus($values, $query)
+    {
+        if ($values !== []) {
+            $query = $query->whereIn('name', $values);
+        }
+
+        return $query;
+    }
+
+    /**
+     * @param $request
+     * @return array|false|string[]
+     */
+    private function filterFocusValues($request)
+    {
+        $filters_focus = [];
+        if ($this->filterHasFocus($request)) {
+            $filters_focus = $this->getFilteredFocus($request->input('filter')['focus']);
+        }
+
+        return $filters_focus;
+    }
+
+    /**
+     * @param $request
+     * @return bool
+     */
+    private function filterHasFocus($request)
+    {
+        return $request->has('filter') && array_key_exists('focus', $request->input('filter'));
+    }
+
+    private function filterHasType($request)
+    {
+        return $request->has('filter') && array_key_exists('type', $request->input('filter'));
+    }
+
+    /**
+     * @param $filter
+     * @return false|string[]
+     */
+    private function getFilteredFocus($filter)
+    {
+        return explode('|', $filter);
+    }
+
+    private function filteredTypeToArray($filter)
+    {
+        return $filter !== null ? [$filter] : [];
+    }
+
+    /**
+     * @param $sortParameter
+     * @return string
+     */
+    private function getOrderDirection($sortParameter)
+    {
+        $sort = 'ASC';
+
+        if (Str::contains($sortParameter, '-')) {
+            $sort = 'DESC';
+        }
+
+        return $sort;
+    }
+
+    /**
+     * @param $request
+     * @return string
+     */
+    private function getSortParameter($request)
+    {
+        $sort = '';
+        if ($request->has('sort')) {
+            $sort = $request->input('sort');
+        }
+
+        return $sort;
+    }
+
+    /**
+     * @param $locationsByCountries
+     * @return array
+     */
+    private function getJobsByCountries($locationsByCountries, $jobs)
+    {
+        $jobsByCountry = [];
+        foreach ($locationsByCountries as $alpha2code => $country) {
+            $jobsByCountry[$alpha2code]['name'] = $country['name'];
+            $jobsByCountry[$alpha2code]['jobs'] = $this->getJobsByLocations($country['locations'], $jobs);
+        }
+
+        return $jobsByCountry;
+    }
+
+    /**
+     * @param $locationsByRegions
+     * @return mixed
+     */
+    public function getJobsByRegions($locationsByRegions, $jobs)
+    {
+        $jobsByRegion = [];
+        foreach ($locationsByRegions as $region_code => $region) {
+            $jobsByRegion[$region_code]['name'] = $region['name'];
+            $jobsByRegion[$region_code]['jobs'] = $this->getJobsByLocations($region['locations'], $jobs);
+        }
+
+        return $jobsByRegion;
+    }
+
+    /**
+     * @param null $type
+     * @return mixed
+     */
+    private function getJobsByEmploymentType($type = null)
+    {
+        $jobs = [];
+
+        if ($type !== null) {
+            $jobs = Job::where('employment_type', '=', $type)->pluck('id')->toArray();
+        } else {
+            $jobs = Job::all()->pluck('id')->toArray();
+        }
+
+        return $jobs;
+    }
+
+    /**
+     * @param $locations
+     * @return array
+     */
+    private function getJobsByLocations($locations, $jobs)
+    {
+        return DB::table('job_location')
+            ->whereIn('location_id', $locations)
+            ->whereIn('job_id', $jobs)
+            ->pluck('job_id')
             ->toArray();
-
-        $locationsByCountries = $this->getLocationsOfCountries($locations);
-        $jobsByCountries = $this->getJobsOfCountries($locationsByCountries);
-        $countriesByCode = $this->buildJobByFocusData($jobsByCountries);
-
-
-        return view('discover.locations.maps.advanced-global', compact('countriesByCode'));
     }
 
-    private function getLocationsOfCountries($countries)
+    /**
+     * @param $jobsByCountries
+     * @param $focus
+     * @return array
+     */
+    private function getJobsMappingByCountriesAndFocus($jobsByCountries, $focus)
     {
-        $countries_locations = [];
+        $jobsByCountriesAndFocus = [];
+        foreach ($jobsByCountries as $alpha2code => $country) {
+            $jobsByCountriesAndFocus[$alpha2code]['name'] = $country['name'];
+            $jobsByCountriesAndFocus[$alpha2code]['total'] = count($country['jobs']);
 
-        foreach ($countries as $alpha2code => $locations) {
-            $country_locations = [];
-            foreach ($locations as $location) {
-                $country_locations[] = $location['id'];
-            }
-            $countries_locations[$alpha2code] = $country_locations;
-        }
-
-        return $countries_locations;
-    }
-
-    private function getJobsOfCountries($locationsByCountries)
-    {
-        $jobsByCountries = [];
-        foreach ($locationsByCountries as $country => $locations) {
-            $jobsByCountries[$country] = $this->getJobIdsByLocationIds($locations);
-        }
-
-        return $jobsByCountries;
-    }
-
-    private function getJobIdsByLocationIds($locations)
-    {
-        return DB::table('job_location')->whereIn('location_id', $locations)->pluck('job_id')->toArray();
-    }
-
-    private function getJobCountByFocus($focus, $jobs)
-    {
-        return DB::table('focus_job')->whereIn('job_id', $jobs)->whereIn('focus_id', $focus)->groupBy('focus_id')->select(DB::raw('count(job_id) as jobs, focus_id'))->get();
-    }
-
-    private function buildJobByFocusData($jobsByCountries)
-    {
-        $countryFocusCount = [];
-
-        foreach ($jobsByCountries as $country => $jobs) {
-            $countryFocusCount[$country] = $this->buildItemResultEntry($this->getJobCountByFocus($this->focusIds, $jobs));
-            $countryFocusCount[$country]['Total'] = count($jobs);
-        }
-
-        return $countryFocusCount;
-    }
-
-    private function buildItemResultEntry($focusCounts)
-    {
-        $mappedFocusCount = [];
-
-        foreach ($this->focusNames as $focusId => $focusName) {
-            $mappedFocusCount[$focusName] = $this->getFocusCount($focusId, $focusCounts);
-        }
-
-        return $mappedFocusCount;
-    }
-
-    private function getFocusCount($focusId, $focusCounts)
-    {
-        foreach ($focusCounts as $focusCount) {
-            if ($focusCount->focus_id === $focusId) {
-                return $focusCount->jobs;
+            foreach ($focus as $item) {
+                $jobsByCountriesAndFocus[$alpha2code]['focus'][$item->name] = $this->countJobsByFocus($country['jobs'], $item->id);
             }
         }
 
-        return 0;
+        return $jobsByCountriesAndFocus;
+    }
+
+    private function getJobsMappingByRegionsAndFocus($jobsByRegions, $focus)
+    {
+        $jobsByRegionsAndFocus = [];
+        foreach ($jobsByRegions as $region_code => $region) {
+            $jobsByRegionsAndFocus[$region_code]['name'] = $region['name'];
+            $jobsByRegionsAndFocus[$region_code]['total'] = count($region['jobs']);
+
+            foreach ($focus as $item) {
+                $jobsByRegionsAndFocus[$region_code]['focus'][$item->name] = $this->countJobsByFocus($region['jobs'], $item->id);
+            }
+        }
+
+        return $jobsByRegionsAndFocus;
+    }
+
+    /**
+     * @param $jobs
+     * @param $focus
+     * @return \Illuminate\Support\Collection
+     */
+    private function countJobsByFocus($jobs, $focus)
+    {
+        return DB::table('focus_job')
+            ->whereIn('job_id', $jobs)
+            ->where('focus_id', '=', $focus)
+            ->selectRaw('COUNT(job_id) as jobs')->get('jobs')->toArray()[0]->jobs;
+    }
+
+    /**
+     * @param $sort
+     * @param $focus
+     * @return array
+     */
+    private function getCountriesResultByCode($sort, $focus, $jobs)
+    {
+        $locationsByCountries = Location::byCountries($sort);
+        $jobsByCountries = $this->getJobsByCountries($locationsByCountries, $jobs);
+
+        return $this->getJobsMappingByCountriesAndFocus($jobsByCountries, $focus);
+    }
+
+    private function getCountryResult($country, $sort, $focus, $jobs)
+    {
+        $locations = Location::byRegions($country, $sort);
+        $jobsByRegions = $this->getJobsByRegions($locations, $jobs);
+
+        return $this->getJobsMappingByRegionsAndFocus($jobsByRegions, $focus);
     }
 }

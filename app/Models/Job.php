@@ -24,6 +24,12 @@ class Job extends Model implements EntityContract
     |--------------------------------------------------------------------------
     */
 
+    const EMPLOYMENT_TYPE = [
+        'Full Time',
+        'Part Time',
+        'One Time',
+    ];
+
     protected $table = 'jobs';
     protected $guarded = ['id'];
     protected $fillable = [
@@ -45,12 +51,6 @@ class Job extends Model implements EntityContract
     // log activity for all attributes, which not listed in $guarded array
     protected static $logUnguarded = true;
     protected static $logName = 'entities';
-
-    protected static $employmentTypes = [
-        'Full Time',
-        'Part Time',
-        'One Time',
-    ];
 
     /*
     |--------------------------------------------------------------------------
@@ -79,7 +79,7 @@ class Job extends Model implements EntityContract
      */
     public static function getEmploymentTypeValues()
     {
-        return self::$employmentTypes;
+        return array_combine(self::EMPLOYMENT_TYPE, self::EMPLOYMENT_TYPE);
     }
 
     /**
@@ -211,7 +211,7 @@ class Job extends Model implements EntityContract
             'employment_type'      => [
                 'type' => FieldsMapping::TYPE_ENUM,
                 'label' => 'Type',
-                'values' => self::$employmentTypes,
+                'values' => self::getEmploymentTypeValues(),
             ],
             'posted_date'      => [
                 'type' => FieldsMapping::TYPE_DATE,

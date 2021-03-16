@@ -89,6 +89,10 @@ class Focus extends Model implements EntityContract
     |--------------------------------------------------------------------------
     */
 
+    /**
+     * @param $query
+     * @return mixed
+     */
     public function scopeDrugs($query)
     {
         return $query->where('type', self::TYPE_DRUG);
@@ -97,6 +101,20 @@ class Focus extends Model implements EntityContract
     public function scopeHasCompanies($query)
     {
         return $query->whereHas('companies');
+    }
+
+    /**
+     * @param \Illuminate\Database\Query\Builder $query
+     * @return \Illuminate\Database\Query\Builder
+     */
+    public function scopeHasJobs($query)
+    {
+        return $query->whereHas('jobs');
+    }
+
+    public function scopeHasClinicaltrials($query)
+    {
+        return $query->whereHas('clinicaltrials');
     }
 
     /*

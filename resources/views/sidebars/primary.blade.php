@@ -87,13 +87,25 @@
                 @include('sidebars.insights.market-compare')
             @endif
 
+            @if(Route::is('discover.jobs.map') OR Route::is('discover.jobs.map.country'))
+                @include('sidebars.jobs.global-map')
+            @endif
+
             @if(Route::is('discover.clinicaltrials.recruiting'))
                 @include('sidebars.recruitingtrial')
             @endif
 
-                @if(Route::is('discover.organizations.map') OR Route::is('discover.organizations.map.country'))
-                    @include('sidebars.organizations.global-map')
-                @endif
+            @if(Route::is('discover.organizations.map') OR Route::is('discover.organizations.map.country'))
+                @include('sidebars.organizations.global-map')
+            @endif
+
+            @if(Route::is('discover.investors.map') OR Route::is('discover.investors.map.country'))
+                @include('sidebars.investors.global-map')
+            @endif
+
+            @if(Route::is('discover.clinicaltrials.map') OR Route::is('discover.clinicaltrials.map.country'))
+                @include('sidebars.clinicaltrials.global-map')
+            @endif
         </div>
     </div>
 </nav>
