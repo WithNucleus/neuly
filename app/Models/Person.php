@@ -105,6 +105,12 @@ class Person extends Model implements EntityContract, EntityImageContract
         }
     }
 
+    public function getInstagram() {
+        if ($this->instagram != null) {
+            return '<a href="https://www.instagram.com/' . $this->instagram . '" target="_blank" rel="noopener noreferrer"><i class="lab la-instagram"></i> ' . $this->instagram . '</a>';
+        }
+    }
+
     public function getShowLink() {
         return '<a href="' . route('discover.people.show', $this->slug) . '">' . $this->name . '</a>';
     }
