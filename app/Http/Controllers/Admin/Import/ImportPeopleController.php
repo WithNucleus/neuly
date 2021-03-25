@@ -19,10 +19,19 @@ class ImportPeopleController extends Controller
         $this->middleware(['role:Admin','permission:import']);
     }
 
+    /**
+     * Show the page for importing people records from CSV files
+     *
+     */
     public function index() {
         return view('admin.import.people.index');
     }
 
+    /**
+     * Processes the CSV upload for people import
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function process(Request $request) {
 
         $records  = array_map('str_getcsv', file($request->file('csv')));
@@ -41,6 +50,12 @@ class ImportPeopleController extends Controller
         return view('admin.import.people.results', compact('results'));
     }
 
+    /**
+     * Process each CSV record
+     * @param $record
+     * @param $headings
+     * @return array
+     */
     private function processRecords($record, $headings) {
 
         $thisResult = [];

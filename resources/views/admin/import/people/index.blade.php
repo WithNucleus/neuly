@@ -12,7 +12,7 @@
     <div class="row">
         <div class="col-12 col-md-6 col-lg-4">
             <div class="card card-body">
-                <form action="{{ route('importPeople.process') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.import.people.process') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
                     <p class="font-weight-bold">Column names in the CSV must match the database</p>
