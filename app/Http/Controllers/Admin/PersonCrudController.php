@@ -139,6 +139,11 @@ class PersonCrudController extends CrudController
             'function_name' => 'getTwitter'
         ]);
         $this->crud->addColumn([
+            'name'          => 'instagram',
+            'type'          => 'model_function',
+            'function_name' => 'getInstagram'
+        ]);
+        $this->crud->addColumn([
             'label'     => 'Organizations',
             'type'      => 'select_multiple',
             'name'      => 'companies',
@@ -238,6 +243,22 @@ class PersonCrudController extends CrudController
             'type' => 'text',
             'label' => 'Twitter',
             'prefix'     => "https://www.twitter.com/",
+        ]);
+        $this->crud->addField([
+            'name' => 'instagram',
+            'type' => 'text',
+            'label' => 'Instagram',
+            'prefix'     => "https://www.instagram.com/",
+        ]);
+        $this->crud->addField([
+            'name' => 'twitter_followers',
+            'type' => 'text',
+            'label' => 'Twitter Followers',
+        ]);
+        $this->crud->addField([
+            'name' => 'instagram_followers',
+            'type' => 'text',
+            'label' => 'Instagram Followers',
         ]);
         $this->crud->addField([
             'name' => 'bio',
