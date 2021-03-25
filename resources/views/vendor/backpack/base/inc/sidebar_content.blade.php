@@ -32,11 +32,17 @@
 @endcan
 
 @can('edit people')
-	<li class='nav-item'>
-		<a class='nav-link' href='{{ backpack_url('person') }}'>
-			<i class='nav-icon la la-user'></i> People
-		</a>
-	</li>
+    <li class="nav-item nav-dropdown">
+        <a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon la la-user"></i> People</a>
+        <ul class="nav-dropdown-items">
+            <li class='nav-item'>
+                <a class='nav-link' href='{{ backpack_url('person') }}'>People List</a>
+            </li>
+            <li class='nav-item'>
+                <a class='nav-link' href='{{ route('admin.import.people') }}'>Import People</a>
+            </li>
+        </ul>
+    </li>
 @endcan
 
 @can('edit investors')
