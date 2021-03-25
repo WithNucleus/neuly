@@ -87,4 +87,7 @@ Route::group([
         Route::get('serpapi-data/{id}/review', 'SerpapiDataController@review')->name('serpapi-data.review');
         Route::post('serpapi-data/{id}/review', 'SerpapiDataController@reviewSubmit');
     });
+
+    Route::get('/import-people', 'Import\ImportPeopleController@index')->name('importPeople');
+    Route::post('/import-people', 'Import\ImportPeopleController@process')->name('importPeople.process');
 }); // this should be the absolute last line of this file
