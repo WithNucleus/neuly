@@ -54,6 +54,8 @@ class InvestmentFundController extends Controller
             ->withCount('investors', 'focus', 'locations', 'people', 'jobs', 'events', 'clinicaltrials')
             ->first();
 
+        $companyName = $company->name;
+
         $companyChart = [
             'name' => $company->name,
             'value' => 10,
@@ -96,7 +98,7 @@ class InvestmentFundController extends Controller
 
         $chartData = json_encode($chartData);
 
-        return view('discover.insights.investment-fund.organization', compact('chartData', 'filter'));
+        return view('discover.insights.investment-fund.organization', compact('chartData', 'filter', 'companyName'));
 
     }
 

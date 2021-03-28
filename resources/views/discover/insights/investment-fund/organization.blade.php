@@ -23,7 +23,9 @@
 
                 @include('navbars.breadcrumb', [
                     'items' => [
-                        'Insights' => false,
+                        'Insights' => route('discover.insights'),
+                        'Investment Funds' => route('insights.investment-funds'),
+                        $companyName => false
                     ]
                 ])
 
