@@ -87,121 +87,92 @@
 
             am4core.useTheme(am4themes_animated);
 
-            var chart = am4core.create("investmentFundChart", am4plugins_forceDirected.ForceDirectedTree);
+            let chart = am4core.create("investmentFundChart", am4plugins_forceDirected.ForceDirectedTree);
 
-            var investorSeries = chart.series.push(new am4plugins_forceDirected.ForceDirectedSeries());
-            investorSeries.dataFields.linkWith = "linkWith";
-            investorSeries.dataFields.name = "name";
-            investorSeries.dataFields.id = "name";
-            investorSeries.dataFields.value = "value";
-            investorSeries.dataFields.children = "children";
+            let companySeries = chart.series.push(new am4plugins_forceDirected.ForceDirectedSeries());
+            companySeries.dataFields.linkWith = "linkWith";
+            companySeries.dataFields.name = "name";
+            companySeries.dataFields.id = "name";
+            companySeries.dataFields.value = "value";
+            companySeries.dataFields.children = "children";
 
-            investorSeries.fontSize = 8;
-            investorSeries.linkWithStrength = 0;
+            companySeries.fontSize = 12;
+            companySeries.linkWithStrength = 0;
 
-            var nodeTemplate = investorSeries.nodes.template;
-            nodeTemplate.tooltipText = "{name}";
-            nodeTemplate.fillOpacity = 1;
-            nodeTemplate.label.hideOversized = true;
-            nodeTemplate.label.truncate = true;
+            let investorTemplate = companySeries.nodes.template;
+            investorTemplate.tooltipText = "{name}";
+            investorTemplate.fillOpacity = 1;
+            investorTemplate.label.hideOversized = true;
+            investorTemplate.label.truncate = true;
 
-            var linkTemplate = investorSeries.links.template;
-            linkTemplate.strokeWidth = 2;
+            let investorLinkTemplate = companySeries.links.template;
+            investorLinkTemplate.strokeWidth = 2;
 
-            var linkHoverState = linkTemplate.states.create("hover");
-            linkHoverState.properties.strokeOpacity = 1;
-            linkHoverState.properties.strokeWidth = 3;
+            let investorLinkHoverState = investorLinkTemplate.states.create("hover");
+            investorLinkHoverState.properties.strokeOpacity = 1;
+            investorLinkHoverState.properties.strokeWidth = 3;
 
-            nodeTemplate.events.on("over", function (event) {
-                var dataItem = event.target.dataItem;
+            investorTemplate.events.on("over", function (event) {
+                let dataItem = event.target.dataItem;
                 dataItem.childLinks.each(function (link) {
                     link.isHover = true;
                 })
             });
 
-            nodeTemplate.events.on("out", function (event) {
-                var dataItem = event.target.dataItem;
+            investorTemplate.events.on("out", function (event) {
+                let dataItem = event.target.dataItem;
                 dataItem.childLinks.each(function (link) {
                     link.isHover = false;
                 })
             });
 
             // logos
-            investorSeries.nodes.template.circle.disabled = true;
-            var icon = investorSeries.nodes.template.createChild(am4core.Image);
-            icon.propertyFields.href = "image";
-            icon.horizontalCenter = "middle";
-            icon.verticalCenter = "middle";
+            companySeries.nodes.template.circle.disabled = true;
+            let investorIcon = companySeries.nodes.template.createChild(am4core.Image);
+            investorIcon.propertyFields.href = "image";
+            investorIcon.horizontalCenter = "middle";
+            investorIcon.verticalCenter = "middle";
 
             if (window.innerWidth < 768) {
-                icon.width = 30;
-                icon.height = 30;
-                investorSeries.maxLevels = 1;
+                investorIcon.width = 40;
+                investorIcon.height = 40;
+                companySeries.maxLevels = 1;
             } else if(window.innerWidth < 1600) {
-                icon.width = 40;
-                icon.height = 40;
+                investorIcon.width = 60;
+                investorIcon.height = 60;
             } else {
-                icon.width = 60;
-                icon.height = 60;
+                investorIcon.width = 80;
+                investorIcon.height = 80;
             }
 
-            investorSeries.data = {!! $chartData !!};
+            companySeries.data = {!! $chartData !!};
 
             // on data item click
-            investorSeries.nodes.template.events.on("hit", function(event) {
-                event.target.isActive = true;
-                chart.zoomToDataItem(event.target.dataItem, 2, false);
+            companySeries.nodes.template.events.on("hit", function(event) {
 
-                if (event.target.dataItem.dataContext.type == 'company') {
+                if (event.target.dataItem.dataContext.listing_url !== '') {
+                    event.target.isActive = true;
+                    chart.zoomToDataItem(event.target.dataItem, 2, false);
 
                     // setup modal content
                     let modalContent = "<img src='" + event.target.dataItem.dataContext.image + "' alt='' width='140' class='mx-auto mb-2'><br>";
 
-                    modalContent += '<p class="lead text-center"><strong>' + event.target.dataItem.dataContext.name + '</strong></p>';
-                    modalContent += '<p class="text-left"><i class="fad fa-building text-quaternary fa-fw"></i> ' + event.target.dataItem.dataContext.ownership + '<br>';
-
-                    modalContent += '<i class="fad fa-hands-usd fa-fw text-info"></i> ' + event.target.dataItem.dataContext.investors_count;
-
-                    if (event.target.dataItem.dataContext.investors_count === 1) {
-                        modalContent += ' Investor';
-                    } else {
-                        modalContent += ' Investors';
-                    }
-
-                    modalContent += '<br><i class="fad fa-flask text-secondarydark fa-fw"></i> ' + event.target.dataItem.dataContext.focus_list;
+                    modalContent += '<p class="lead text-center mb-0"><strong>' + event.target.dataItem.dataContext.name + '</strong></p>';
 
                     modalContent += '</p><p class="text-center mb-0">';
-                    modalContent += '<a href="' + event.target.dataItem.dataContext.chart_url + '" class="btn btn-sm btn-primary mr-3">View More</a>';
+
+                    if (event.target.dataItem.dataContext.chart_url !== '') {
+                        modalContent += '<a href="' + event.target.dataItem.dataContext.chart_url + '" class="btn btn-sm btn-primary mr-3">View Chart</a>';
+                    }
+
                     modalContent += '<a href="' + event.target.dataItem.dataContext.listing_url + '" class="btn btn-sm btn-dark">View Listing</a></p>';
 
                     chart.openModal(modalContent);
                 }
             });
 
-            // chart filter
-            let chartFilter = '{{ $filter }}';
-
-            // start collapsed
-            if (chartFilter === 'all') {
-                investorSeries.maxLevels = 1;
-            }
-
-            if (chartFilter !== 'all') {
-                // Close other nodes when one is opened
-                investorSeries.nodes.template.events.on("hit", function(ev) {
-                    var targetNode = ev.target;
-                    if (targetNode.isActive) {
-                        investorSeries.nodes.each(function(node) {
-                            if (targetNode !== node && node.isActive && targetNode.dataItem.level == node.dataItem.level) {
-                                node.isActive = false;
-                            }
-                        });
-                    }
-                });
-            }
-
-            investorSeries.centerStrength = 1;
             chart.zoomable = true;
+            chart.legend = new am4charts.Legend();
 
             // Custom Chart Controls
             let resetZoomTrigger = document.getElementById('resetZoom');
@@ -213,7 +184,7 @@
             let expandAllTrigger = document.getElementById('expandAll');
             expandAllTrigger.addEventListener('click', function(event){
                 event.preventDefault();
-                investorSeries.nodes.each(function(node) {
+                companySeries.nodes.each(function(node) {
                     node.isActive = true;
                 });
                 chart.zoomOut();
@@ -222,9 +193,17 @@
             let collapseAllTrigger = document.getElementById('collapseAll');
             collapseAllTrigger.addEventListener('click', function(event){
                 event.preventDefault();
-                investorSeries.nodes.each(function(node) {
-                    node.isActive = false;
+                companySeries.nodes.each(function(node) {
+
+                    if (node.dataItem.level === 0) {
+                        node.isActive = true;
+                    } else if(node.dataItem.level === 1) {
+                        node.isActive = false;
+                    } else {
+                        node.isActive = false;
+                    }
                 });
+
                 chart.zoomOut();
             });
 
