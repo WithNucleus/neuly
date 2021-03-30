@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\LocationRequest;
 use App\Models\Country;
 use App\Models\Location;
+use App\Models\LocationsGeocoding;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Backpack\CRUD\app\Library\Widget;
@@ -66,6 +67,11 @@ class LocationCrudController extends CrudController
             'type' => 'text',
             'label' => 'Country',
         ]);
+
+        $this->crud->allowAccess('locationsGeocoding');
+        $this->crud->totalLocationsForGeocoding = Location::emptyCoordinates()->count();
+        $this->crud->geocodingCanBeStarted = LocationsGeocoding::canBeStarted();
+        $this->crud->addButtonFromView('top', 'runGeocoding', 'location.run_geocoding', 'end');
     }
 
     protected function setupShowOperation()
@@ -108,6 +114,14 @@ class LocationCrudController extends CrudController
             'name' => 'name',
             'type' => 'text',
             'label' => 'Location (auto-populated)',
+        ]);
+        $this->crud->addField([
+            'name' => 'latitude',
+            'type' => 'number',
+        ]);
+        $this->crud->addField([
+            'name' => 'longitude',
+            'type' => 'number',
         ]);
 
         Widget::add()

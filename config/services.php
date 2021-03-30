@@ -62,7 +62,12 @@ return [
     ],
 
     'serpapi' => [
-        'private_api_key' => env('SERPAPI_PRIVATE_API_KEY')
+        'private_api_key' => env('SERPAPI_PRIVATE_API_KEY'),
+    ],
+
+    'opencage' => [
+        'api_key' => env('OPENCAGE_API_KEY'),
+        'requests_per_day' => env('OPENCAGE_REQUESTS_PER_DAY', 2500),
     ],
 
 ];

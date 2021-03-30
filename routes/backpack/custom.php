@@ -18,6 +18,8 @@ Route::group([
     Route::crud('focus', 'FocusCrudController');
     Route::crud('person', 'PersonCrudController');
     Route::crud('location', 'LocationCrudController');
+    Route::crud('location-geocoding', 'LocationGeocodingCrudController');
+    Route::get('location-geocoding/run', 'LocationGeocodingCrudController@runGeocoding')->name('admin.location-geocoding.run');
     Route::crud('investor', 'InvestorCrudController');
     Route::crud('research', 'ResearchCrudController');
     Route::crud('job', 'JobCrudController');
