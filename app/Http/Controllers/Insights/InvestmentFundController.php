@@ -15,16 +15,16 @@ class InvestmentFundController extends Controller
      * @param Request $request
      * @return View
      */
-    public function index(Request $request) {
-
-        $investors = Investor::has('companies')->withCount('companies')->orderBy('companies_count', 'desc')->with('companies');
-
-        $companiesList = $this->getCompanies();
+    public function index(Request $request)
+    {
+        $investors = Investor::withCount('companies')
+            ->having('companies_count', '>', 0)
+            ->orderBy('companies_count', 'desc');
 
         if ($request->has('top-ten')) {
             $investors = $investors->take(10)->get();
             $filter = 'top-ten';
-        } elseif($request->has('all')) {
+        } elseif ($request->has('all')) {
             $investors = $investors->get();
             $filter = 'all';
         } else {
@@ -32,8 +32,7 @@ class InvestmentFundController extends Controller
             $filter = 'top-five';
         }
 
-        $investorChart = $this->processInvestor($investors, $companiesList);
-
+        $investorChart = $this->processInvestor($investors);
         $chartData = json_encode($investorChart);
 
         return view('discover.insights.investment-fund.index', compact('chartData', 'filter'));
@@ -104,51 +103,70 @@ class InvestmentFundController extends Controller
 
     /**
      * Process the investors and their companies
-     * @param $investors
-     * @param $companiesList
+     * @param \Illuminate\Database\Eloquent\Collection $investors
      * @return array
      */
-    private function processInvestor($investors, $companiesList) {
+    private function processInvestor($investors) {
 
         $investorChart = [];
+        $investorIds = $investors->pluck('id')->toArray();
+        $relatedCompanies = $this->getRelatedCompanies($investorIds);
 
         foreach ($investors as $investor) {
-
+            $childrenCompanies = isset($relatedCompanies[$investor->id]) ? $relatedCompanies[$investor->id] : [];
             $investorData = [
                 'name' => $investor->name,
                 'value' => $investor->companies_count,
                 'image' => $investor->entityImageUrl,
-                'type' => 'investor'
+                'type' => 'investor',
+                'children' => $childrenCompanies,
             ];
-
-            if ($investor->companies_count > 0) {
-
-                $investorData['children'] = [];
-
-                foreach ($investor->companies as $company) {
-
-                    $companyData = [
-                        'name' => $company->name,
-                        'value' => 3,
-                        'image' => $company->entityImageUrl,
-                        'type' => 'company',
-                        'ownership' => $company->ownership,
-                        'listing_url' => route('discover.organizations.show', $company->slug),
-                        'chart_url' => route('insights.investment-funds.organization', $company->slug),
-                        'investors_count' => $companiesList[$company->name]['investors'],
-                        'focus_list' => $companiesList[$company->name]['focus']
-                    ];
-
-                    array_push($investorData['children'], $companyData);
-                }
-
-            }
 
             array_push($investorChart, $investorData);
         }
 
         return $investorChart;
+    }
 
+    /**
+     * @param $investorIds
+     * @return array
+     */
+    private function getRelatedCompanies($investorIds)
+    {
+        $companies = Company::whereHas('investors', function ($query) use ($investorIds) {
+            return $query->whereIn('investors.id', $investorIds);
+        })
+            ->with('investors')
+            ->with('focus')
+            ->get();
+
+        $companiesByInvestorId = [];
+
+        foreach ($companies as $company) {
+            $focusList = implode(' / ', $company->focus->pluck('name')->toArray());
+            $companyData = [
+                'name' => $company->name,
+                'value' => 3,
+                'image' => $company->entityImageUrl,
+                'type' => 'company',
+                'ownership' => $company->ownership,
+                'listing_url' => route('discover.organizations.show', $company->slug),
+                'chart_url' => route('insights.investment-funds.organization', $company->slug),
+                'investors_count' => $company->investors->count(),
+                'focus_list' => $focusList,
+            ];
+
+            $companyInvestorIds = $company->investors->pluck('id')->toArray();
+
+            foreach ($investorIds as $investorId) {
+                if (in_array($investorId, $companyInvestorIds)) {
+                    $companiesByInvestorId[$investorId][] = $companyData;
+                }
+            }
+        }
+
+        return $companiesByInvestorId;
     }
 
     private function processCompanyRelationship($companyChart, $company, $model, $model_count) {
@@ -186,36 +204,6 @@ class InvestmentFundController extends Controller
         array_push($companyChart['children'], $companyData);
 
         return $companyChart;
-    }
-
-    /**
-     * Get Companies who have Investors
-     * @return array
-     */
-    private function getCompanies() {
-
-        $companies = Company::has('investors')->with('focus')->withCount('investors')->get();
-
-        $companiesList = [];
-
-        foreach ($companies as $company) {
-
-            $focusList = '';
-
-            foreach ($company->focus as $focus) {
-                $focusList .= $focus->name . ' / ';
-            }
-
-            $focusList = rtrim($focusList, ' / ');
-
-            $companyData = [
-                'investors' => $company->investors_count,
-                'focus' => $focusList
-            ];
-
-            $companiesList[$company->name] = $companyData;
-        }
-        return $companiesList;
     }
 
 }
