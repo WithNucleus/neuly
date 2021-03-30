@@ -72,6 +72,8 @@ Route::group([
         Route::get('/clinical-trials/distribution/countries', 'ClinicalTrialDistributionController@show')->name('distribution.countries.show');
         Route::get('/clinical-trials/distribution/countries/focus', 'ClinicalTrialDistributionController@showWithFocus')->name('distribution.countries.focus.show');
         Route::get('/clinical-trials-historic', 'ClinicalTrialHistoric@index')->name('clinical-trials-historic');
+        Route::get('/investment-funds', 'InvestmentFundController@index')->name('investment-funds');
+        Route::get('/investment-funds/organization/{slug}', 'InvestmentFundController@organizationChart')->name('investment-funds.organization');
     });
 });
 
