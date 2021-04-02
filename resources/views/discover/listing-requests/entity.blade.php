@@ -27,6 +27,7 @@ use App\Helpers\Entity\FieldsMapping;
                                     Create {{ $entityType }}
                                 @endisset
                                 </p>
+                                <p class="text-center">Use the form below to add or update information for this {{ $entityType }}.</p>
 
                                 <form method="post" action=" {{ route('listing.request.finish') }}"
                                       enctype="multipart/form-data">
@@ -50,7 +51,7 @@ use App\Helpers\Entity\FieldsMapping;
                                     @endforeach
 
                                     <div class="form-group">
-                                        <label class="font-weight-bold">Any additional info or comments?</label>
+                                        <label class="font-weight-bold">Any additional info about this {{ $entityType }} or comments for the Neuly team?</label>
                                         <textarea class="form-control" name="comment" rows="3"></textarea>
                                     </div>
 
