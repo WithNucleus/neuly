@@ -3,16 +3,16 @@
 namespace App\Jobs\Import\ClinicalTrial;
 
 use App\Helpers\StringHelper;
+use App\Models\Clinicaltrial;
 use App\Models\ImportFailure;
+use App\Models\ImportResult;
+use App\Models\Location;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use App\Models\Clinicaltrial;
-use App\Models\ImportResult;
-use App\Models\Location;
 use Illuminate\Support\Facades\Log;
 
 class ProcessLocation implements ShouldQueue
@@ -53,8 +53,8 @@ class ProcessLocation implements ShouldQueue
     public function __construct(Clinicaltrial $clinicaltrial, ImportResult $importResult, $locations)
     {
         $this->clinicaltrial = $clinicaltrial;
-        $this->importResult  = $importResult;
-        $this->locations     = $this->mapLocationParts($locations);
+        $this->importResult = $importResult;
+        $this->locations = $this->mapLocationParts($locations);
     }
 
     /**
@@ -67,9 +67,17 @@ class ProcessLocation implements ShouldQueue
         $locationIds = [];
 
         foreach ($this->locations as $locationData) {
-            $location = Location::findOrCreateLocation(
-                $locationData['country'], $locationData['region'], $locationData['city']
-            );
+            $query = Location::where('country', $locationData['country']);
+
+            if ($locationData['region']) {
+                $query->where('region', $locationData['region']);
+            }
+
+            if ($locationData['city']) {
+                $query->where('city', $locationData['city']);
+            }
+
+            $location = $query->first();
 
             if ($location) {
                 $locationIds[] = $location->id;
@@ -100,8 +108,8 @@ class ProcessLocation implements ShouldQueue
             if ($locationParts !== []) {
                 $newLocation['country'] = ($locationParts[0] == 'United States') ? 'USA' : $locationParts[0];
                 // Not sure on the format so take what is hopefully the country and region
-                $newLocation['region']  = isset($locationParts[1]) ? $locationParts[1] : '';
-                $newLocation['city']  = isset($locationParts[2]) ? $locationParts[2] : '';
+                $newLocation['region'] = isset($locationParts[1]) ? $locationParts[1] : '';
+                $newLocation['city'] = isset($locationParts[2]) ? $locationParts[2] : '';
 
                 $mappedLocations[] = $newLocation;
             }
@@ -121,7 +129,7 @@ class ProcessLocation implements ShouldQueue
             'import_value' => $location->name,
         ];
 
-        if (!isset($this->importMessages[$nctNumber])) {
+        if (! isset($this->importMessages[$nctNumber])) {
             $this->importMessages[$nctNumber] = [
                 'clinicaltrial_id' => $this->clinicaltrial->id,
                 'messages' => [$message],
@@ -151,7 +159,7 @@ class ProcessLocation implements ShouldQueue
     {
         $oldMessages = json_decode($this->importResult->location_messages, true);
 
-        if (!empty($oldMessages)) {
+        if (! empty($oldMessages)) {
             $this->importMessages = array_merge($this->importMessages, $oldMessages);
         }
 
@@ -169,7 +177,7 @@ class ProcessLocation implements ShouldQueue
         }
 
         $failedRecords = [];
-        $datetime      = Carbon::now();
+        $datetime = Carbon::now();
 
         foreach ($this->importFailedRecords as $record) {
             $this->logError($record);
@@ -192,9 +200,8 @@ class ProcessLocation implements ShouldQueue
     private function logError($record)
     {
         Log::error(
-            $this->clinicaltrial->nct_number . ' ' . $this->clinicaltrial->title . ':\n' .
-            'Did not create or find a location.' . '\n' . json_encode($record)
+            $this->clinicaltrial->nct_number.' '.$this->clinicaltrial->title.':\n'.
+            'Did not create or find a location.'.'\n'.json_encode($record)
         );
     }
-
 }
