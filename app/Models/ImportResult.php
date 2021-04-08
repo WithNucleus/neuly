@@ -20,6 +20,10 @@ class ImportResult extends Model
 	protected $table = 'import_results';
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'options' => 'array',
+    ];
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS

@@ -80,10 +80,14 @@ class ProcessSponsorCollaborators
         $this->importResult = $importResult;
         $this->values = $values;
 
-        $importSettings = ImportSetting::find(1);
+        $useOrganisationMapping = isset($importResult->options['useOrganisationMapping']) ? (bool) $importResult->options['useOrganisationMapping'] : false;
 
-        if (!empty($importSettings) && !empty($importSettings->mapping_organisation)) {
-            $this->companyMappingSettings = $importSettings->mapping_organisation;
+        if ($useOrganisationMapping) {
+            $importSettings = ImportSetting::find(1);
+
+            if ($importSettings && !empty($importSettings->mapping_organisation)) {
+                $this->companyMappingSettings = $importSettings->mapping_organisation;
+            }
         }
 
         $this->existedCompanyNames = Company::all()->pluck('name', 'id')->toArray();
