@@ -5,15 +5,17 @@ namespace App\Jobs;
 use App\Models\Location;
 use App\Models\LocationsGeocoding;
 use Carbon\Carbon;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use OpenCage\Geocoder\Geocoder;
 
-class SearchLocationGeocoding
+class SearchLocationGeocoding implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private $locationGeocoding;
 
