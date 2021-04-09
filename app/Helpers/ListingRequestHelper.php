@@ -154,6 +154,9 @@ class ListingRequestHelper
                     return count($difference) > 0;
                 }
 
+            case FieldsMapping::TYPE_IMAGE:
+                return $requestData->{$field} !== null ? $originalEntity->{$field} != $requestData->{$field} : false;
+
             case FieldsMapping::TYPE_DATE:
                 $originalValue = $originalEntity->{$field};
                 $requestValue = $requestData->{$field} !== null ? Carbon::create($requestData->{$field}) : $requestData->{$field};
@@ -161,7 +164,6 @@ class ListingRequestHelper
                 return $originalValue != $requestValue;
 
             default:
-
                 return $originalEntity->{$field} != $requestData->{$field};
         }
     }
