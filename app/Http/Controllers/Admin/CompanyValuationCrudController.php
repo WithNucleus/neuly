@@ -187,6 +187,7 @@ class CompanyValuationCrudController extends CrudController
 
         if ($relatedInvestorIds) {
             $companyValuation->company->investors()->syncWithoutDetaching($relatedInvestorIds);
+            $companyValuation->company->touch();
         }
     }
 }

@@ -303,6 +303,8 @@ class ListingRequestCrudController extends CrudController
 
     private function handleManyToManyRelationData($entity, $mapping, $relationsData)
     {
+        $entityUpdated = false;
+
         foreach ($relationsData as $key => $data) {
             $options = $mapping[$key];
 
@@ -310,8 +312,13 @@ class ListingRequestCrudController extends CrudController
                 case FieldsMapping::RELATION_N_N:
                 case FieldsMapping::RELATION_N_N_MORPHABLE:
                     $entity->{$key}()->sync($data);
+                    $entityUpdated = true;
                     break;
             }
+        }
+
+        if ($entityUpdated) {
+            $entity->touch();
         }
     }
 }

@@ -35,6 +35,7 @@ class ParentController extends Controller
         $company->parents()->attach($parentCompany->id, [
             'type' => $request->input('type'),
         ]);
+        $company->touch();
 
         return redirect()->back();
     }
@@ -48,6 +49,7 @@ class ParentController extends Controller
     {
         $company = Company::findOrFail($id);
         $company->parents()->detach($parentId);
+        $company->touch();
 
         return redirect()->back();
     }

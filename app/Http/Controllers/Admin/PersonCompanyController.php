@@ -42,6 +42,7 @@ class PersonCompanyController extends Controller
         $person->companies()->attach($company->id, [
             'position' => $request->input('position'),
         ]);
+        $person->touch();
 
         $title_company = $company->name . ' added a new person';
         $title_person = $person->name . ' added to an organization';

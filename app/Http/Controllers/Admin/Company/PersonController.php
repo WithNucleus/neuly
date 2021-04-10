@@ -44,6 +44,8 @@ class PersonController extends Controller
         $company->people()->attach($person->id, [
             'position' => $request->input('position'),
         ]);
+        $company->touch();
+
         return redirect()->back();
     }
 
@@ -65,6 +67,7 @@ class PersonController extends Controller
         SendNotification::dispatch($person, $title, $description, 'people');
 
         $company->people()->detach($person_id);
+        $company->touch();
 
         return redirect()->back();
     }

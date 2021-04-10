@@ -35,6 +35,7 @@ class SubsidiaryController extends Controller
         $company->subsidiaries()->attach($subsidiaryCompany->id, [
             'type' => $request->input('type'),
         ]);
+        $company->touch();
 
         return redirect()->back();
     }
@@ -48,6 +49,7 @@ class SubsidiaryController extends Controller
     {
         $company = Company::findOrFail($id);
         $company->subsidiaries()->detach($subsidiaryId);
+        $company->touch();
 
         return redirect()->back();
     }

@@ -47,6 +47,7 @@ class InvestorPersonController extends Controller
         $investor->people()->attach($person->id, [
             'role' => $request->input('role'),
         ]);
+        $investor->touch();
 
         $request->session()->flash('success', 'Successfully added ' . $person->name);
 
@@ -70,6 +71,7 @@ class InvestorPersonController extends Controller
         $investor = Investor::findOrFail($investor_id);
 
         $investor->people()->detach($person_id);
+        $investor->touch();
 
         $request->session()->flash('success', 'Successfully removed ' . $person->name);
 

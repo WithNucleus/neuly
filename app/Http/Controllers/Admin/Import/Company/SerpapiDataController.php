@@ -138,13 +138,19 @@ class SerpapiDataController extends CrudController
     private function applyRelationData(Company $company, $relationData)
     {
         $fieldsMapping = Company::getImportSerpapiMapping();
+        $companyUpdated = false;
 
         foreach ($relationData as $key => $data) {
             $options = $fieldsMapping[$key];
 
             if ($options['relation'] === FieldsMapping::RELATION_N_N) {
                 $company->{$key}()->sync($data);
+                $companyUpdated = true;
             }
+        }
+
+        if ($companyUpdated) {
+            $company->touch();
         }
     }
 }
