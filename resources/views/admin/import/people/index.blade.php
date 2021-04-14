@@ -9,13 +9,21 @@
 @endsection
 
 @section('content')
+    @include('admin.includes.status-messages')
+
     <div class="row">
         <div class="col-12 col-md-6 col-lg-4">
             <div class="card card-body">
                 <form action="{{ route('admin.import.people.process') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
-                    <p class="font-weight-bold">Column names in the CSV must match the database</p>
+                    <p class="mb-0">
+                        <strong>Requirements</strong>
+                    </p>
+                    <ul>
+                        <li>CSV should contain at least one of "id" and "name" columns.</li>
+                        <li>All column names in the CSV must match the database.</li>
+                    </ul>
 
                     <div class="form-group">
                         <label for="csv">File</label>

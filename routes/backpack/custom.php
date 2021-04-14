@@ -62,32 +62,45 @@ Route::group([
     Route::crud('person-claim', 'ClaimPersonCrudController');
     Route::get('person-claim/{claim}/approve', 'ClaimPersonCrudController@approve')->name('admin.person-claim.approve');
 
+    // imports group
     Route::group([
-        'prefix' => 'import/clinicaltrial',
-        'namespace' => 'Import\ClinicalTrial',
-        'as' => 'admin.import.clinicaltrial.',
+        'prefix' => 'import',
+        'namespace' => 'Import',
+        'as' => 'admin.import.',
         'middleware' => ['permission:import'],
     ], function () {
-        Route::crud('parsing', 'ParsingController');
-        Route::post('parsing/bulkImport', 'ParsingController@bulkImport')->name('parsing.bulkImport');
-        Route::crud('parsing-results', 'ParsingResultsController');
-        Route::get('parsing-results/{id}/approve', 'ParsingResultsController@approve')->name('parsing-results.approve');
-    });
 
-    Route::group([
-        'prefix' => 'import/company',
-        'namespace' => 'Import\Company',
-        'as' => 'admin.import.company.',
-        'middleware' => ['permission:import'],
-    ], function () {
-        Route::crud('serpapi', 'SerpapiController');
-        Route::post('serpapi/bulkImport', 'SerpapiController@bulkImport')->name('serpapi.bulkImport');
-        Route::crud('serpapi-data', 'SerpapiDataController');
-        Route::get('serpapi-data/{id}/mark-as-reviewed', 'SerpapiDataController@markAsReviewed')->name('serpapi-data.markAsReviewed');
-        Route::get('serpapi-data/{id}/review', 'SerpapiDataController@review')->name('serpapi-data.review');
-        Route::post('serpapi-data/{id}/review', 'SerpapiDataController@reviewSubmit');
-    });
+        Route::group([
+            'prefix' => 'clinicaltrial',
+            'namespace' => 'ClinicalTrial',
+            'as' => 'clinicaltrial.',
+        ], function () {
+            Route::crud('parsing', 'ParsingController');
+            Route::post('parsing/bulkImport', 'ParsingController@bulkImport')->name('parsing.bulkImport');
+            Route::crud('parsing-results', 'ParsingResultsController');
+            Route::get('parsing-results/{id}/approve', 'ParsingResultsController@approve')->name('parsing-results.approve');
+        });
 
-    Route::get('/import-people', 'Import\ImportPeopleController@index')->name('admin.import.people');
-    Route::post('/import-people', 'Import\ImportPeopleController@process')->name('admin.import.people.process');
+        Route::group([
+            'prefix' => 'company',
+            'namespace' => 'Company',
+            'as' => 'company.',
+        ], function () {
+            Route::crud('serpapi', 'SerpapiController');
+            Route::post('serpapi/bulkImport', 'SerpapiController@bulkImport')->name('serpapi.bulkImport');
+            Route::crud('serpapi-data', 'SerpapiDataController');
+            Route::get('serpapi-data/{id}/mark-as-reviewed', 'SerpapiDataController@markAsReviewed')->name('serpapi-data.markAsReviewed');
+            Route::get('serpapi-data/{id}/review', 'SerpapiDataController@review')->name('serpapi-data.review');
+            Route::post('serpapi-data/{id}/review', 'SerpapiDataController@reviewSubmit');
+        });
+
+        Route::group([
+            'prefix' => 'people',
+            'as' => 'people.',
+        ], function () {
+            Route::get('/', 'PeopleController@index')->name('index');
+            Route::post('/process', 'PeopleController@process')->name('process');
+        });
+
+    });
 }); // this should be the absolute last line of this file

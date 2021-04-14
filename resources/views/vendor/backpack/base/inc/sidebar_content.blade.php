@@ -39,7 +39,7 @@
                 <a class='nav-link' href='{{ backpack_url('person') }}'>People List</a>
             </li>
             <li class='nav-item'>
-                <a class='nav-link' href='{{ route('admin.import.people') }}'>Import People</a>
+                <a class='nav-link' href='{{ route('admin.import.people.index') }}'>Import People</a>
             </li>
         </ul>
     </li>
