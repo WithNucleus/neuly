@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Helpers\Import\CriticalTrial;
+namespace App\Helpers\Import\ClinicalTrial;
 
 use App\Models\Clinicaltrial;
 use App\Models\Company;
