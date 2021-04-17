@@ -10,8 +10,7 @@ use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Prologue\Alerts\Facades\Alert;
 
 /**
- * Class LocationCrudController
- * @package App\Http\Controllers\Admin
+ * Class LocationCrudController.
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
 class LocationGeocodingCrudController extends CrudController
@@ -27,12 +26,12 @@ class LocationGeocodingCrudController extends CrudController
      */
     public function setup()
     {
-        if (!backpack_user()->can('edit locations')) {
+        if (! backpack_user()->can('edit locations')) {
             abort(404);
         }
 
         CRUD::setModel(LocationsGeocoding::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/location-geocoding');
+        CRUD::setRoute(config('backpack.base.route_prefix').'/location-geocoding');
         CRUD::setEntityNameStrings('location geocoding', 'locations geocoding');
     }
 
@@ -92,16 +91,18 @@ class LocationGeocodingCrudController extends CrudController
     public function runGeocoding()
     {
         $limit = config('services.opencage.requests_per_day');
-        $locations = Location::emptyCoordinates()->limit($limit)->pluck('name', 'id');
 
-        if ($locations !== []) {
-            $geocoding = new LocationsGeocoding;
-            $geocoding->payload = $locations;
-            $geocoding->save();
+        Location::emptyCoordinates()
+            ->limit($limit)
+            ->chunk(30, function ($locations) {
+                $geocoding = new LocationsGeocoding;
+                $geocoding->payload = $locations->pluck('name', 'id');
+                $geocoding->save();
 
-            SearchLocationGeocoding::dispatch($geocoding);
-            Alert::success('Geocoding was started successfully!')->flash();
-        }
+                SearchLocationGeocoding::dispatch($geocoding);
+            });
+
+        Alert::success('Geocoding was started successfully!')->flash();
 
         return redirect()->route('location-geocoding.index');
     }
