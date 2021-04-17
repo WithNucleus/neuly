@@ -233,6 +233,11 @@ class Location extends Model implements EntityContract
     |--------------------------------------------------------------------------
     */
 
+    public function scopeEmptyCoordinates($query)
+    {
+        return $query->whereNull('latitude')->orWhereNull('longitude');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | ACCESSORS

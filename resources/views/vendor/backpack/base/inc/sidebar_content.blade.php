@@ -67,6 +67,11 @@
 			<i class='nav-icon la la-campground'></i> Locations
 		</a>
 	</li>
+    <li class='nav-item'>
+        <a class='nav-link' href='{{ backpack_url('location-geocoding') }}'>
+            <i class='nav-icon la la-search-location'></i> Locations Geocoding
+        </a>
+    </li>
 @endcan
 
 @can('edit jobs')
