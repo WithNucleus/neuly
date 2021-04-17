@@ -8,7 +8,6 @@ use App\Models\ImportFailure;
 use App\Models\ImportResult;
 use App\Models\ImportSetting;
 use App\Models\Person;
-
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -56,13 +55,13 @@ class ProcessSponsorCollaborators
     private $companyMappingSettings = [];
 
     /**
-     * Company names mapped as id => name
+     * Company names mapped as [id => name].
      * @var array
      */
     private $existedCompanyNames = [];
 
     /**
-     * Person names mapped as id => name
+     * Person names mapped as [id => name].
      * @var array
      */
     private $existedPersonNames = [];
@@ -78,17 +77,21 @@ class ProcessSponsorCollaborators
     public function __construct(Clinicaltrial $clinicaltrial, ImportResult $importResult, array $values)
     {
         $this->clinicaltrial = $clinicaltrial;
-        $this->importResult  = $importResult;
-        $this->values        = $values;
+        $this->importResult = $importResult;
+        $this->values = $values;
 
-        $importSettings = ImportSetting::find(1);
+        $useOrganisationMapping = isset($importResult->options['useOrganisationMapping']) ? (bool) $importResult->options['useOrganisationMapping'] : false;
 
-        if (!empty($importSettings) && !empty($importSettings->mapping_organisation)) {
-            $this->companyMappingSettings = $importSettings->mapping_organisation;
+        if ($useOrganisationMapping) {
+            $importSettings = ImportSetting::find(1);
+
+            if ($importSettings && !empty($importSettings->mapping_organisation)) {
+                $this->companyMappingSettings = $importSettings->mapping_organisation;
+            }
         }
 
         $this->existedCompanyNames = Company::all()->pluck('name', 'id')->toArray();
-        $this->existedPersonNames  = Person::all()->pluck('name', 'id')->toArray();
+        $this->existedPersonNames = Person::all()->pluck('name', 'id')->toArray();
     }
 
     /**
@@ -98,13 +101,12 @@ class ProcessSponsorCollaborators
      */
     public function handle()
     {
-        $companyIds     = [];
-        $personIds      = [];
+        $companyIds = [];
+        $personIds = [];
 
         foreach ($this->values as $value) {
-
             if ($this->checkValueInMappingOrganisationSettings($value)) {
-                $company      = Company::firstOrCreate(['name' => $value]);
+                $company = Company::firstOrCreate(['name' => $value]);
                 $companyIds[] = $company->id;
 
                 $this->addCompanyMessage($company->id, $value);
@@ -138,7 +140,8 @@ class ProcessSponsorCollaborators
      * @param string $value
      * @return bool
      */
-    private function checkValueInMappingOrganisationSettings($value) {
+    private function checkValueInMappingOrganisationSettings($value)
+    {
         foreach ($this->companyMappingSettings as $mappingKeyword) {
             if (stripos($value, $mappingKeyword) !== false) {
                 return true;
@@ -152,7 +155,8 @@ class ProcessSponsorCollaborators
      * @param string $value
      * @return int|bool
      */
-    private function checkValueInExistingCompanies($value) {
+    private function checkValueInExistingCompanies($value)
+    {
         foreach ($this->existedCompanyNames as $id => $name) {
             if ($value == $name) {
                 return $id;
@@ -166,8 +170,9 @@ class ProcessSponsorCollaborators
      * @param \App\Models\Company $company
      * @return void
      */
-    private function addNewCompanyName(Company $company) {
-        if (!in_array($company->name, $this->existedCompanyNames)) {
+    private function addNewCompanyName(Company $company)
+    {
+        if (! in_array($company->name, $this->existedCompanyNames)) {
             $this->existedCompanyNames[$company->id] = $company->name;
         }
     }
@@ -176,7 +181,8 @@ class ProcessSponsorCollaborators
      * @param string $value
      * @return int|bool
      */
-    private function checkValueInExistingPersons($value) {
+    private function checkValueInExistingPersons($value)
+    {
         foreach ($this->existedPersonNames as $id => $name) {
             if ($value == $name) {
                 return $id;
@@ -194,11 +200,11 @@ class ProcessSponsorCollaborators
     {
         $nctNumber = $this->clinicaltrial->nct_number;
         $message = [
-            'import_id'    => $companyId,
+            'import_id' => $companyId,
             'import_value' => $value,
         ];
 
-        if (!isset($this->importCompanyMessages[$nctNumber])) {
+        if (! isset($this->importCompanyMessages[$nctNumber])) {
             $this->importCompanyMessages[$nctNumber] = [
                 'clinicaltrial_id' => $this->clinicaltrial->id,
                 'messages' => [$message],
@@ -206,7 +212,6 @@ class ProcessSponsorCollaborators
         } else {
             $this->importCompanyMessages[$nctNumber]['messages'][] = $message;
         }
-
     }
 
     /**
@@ -217,11 +222,11 @@ class ProcessSponsorCollaborators
     {
         $nctNumber = $this->clinicaltrial->nct_number;
         $message = [
-            'import_id'    => $personId,
+            'import_id' => $personId,
             'import_value' => $value,
         ];
 
-        if (!isset($this->importPersonMessages[$nctNumber])) {
+        if (! isset($this->importPersonMessages[$nctNumber])) {
             $this->importPersonMessages[$nctNumber] = [
                 'clinicaltrial_id' => $this->clinicaltrial->id,
                 'messages' => [$message],
@@ -238,8 +243,8 @@ class ProcessSponsorCollaborators
     {
         $this->importFailedRecords[] = [
             'nct_number' => $this->clinicaltrial->nct_number,
-            'value'       => $value,
-            'info'       => 'Failed',
+            'value' => $value,
+            'info' => 'Failed',
         ];
     }
 
@@ -249,18 +254,18 @@ class ProcessSponsorCollaborators
     private function saveImportMessages()
     {
         $oldCompanyMessages = json_decode($this->importResult->company_messages, true);
-        $oldPeopleMessages  = json_decode($this->importResult->people_messages, true);
+        $oldPeopleMessages = json_decode($this->importResult->people_messages, true);
 
-        if (!empty($oldCompanyMessages)) {
+        if (! empty($oldCompanyMessages)) {
             $this->importCompanyMessages = array_merge($this->importCompanyMessages, $oldCompanyMessages);
         }
 
-        if (!empty($oldPeopleMessages)) {
+        if (! empty($oldPeopleMessages)) {
             $this->importPersonMessages = array_merge($this->importPersonMessages, $oldPeopleMessages);
         }
 
         $this->importResult->company_messages = json_encode($this->importCompanyMessages);
-        $this->importResult->people_messages = json_encode($this->importPersonMessages);;
+        $this->importResult->people_messages = json_encode($this->importPersonMessages);
         $this->importResult->save();
     }
 
@@ -274,17 +279,17 @@ class ProcessSponsorCollaborators
         }
 
         $failedRecords = [];
-        $datetime      = Carbon::now();
+        $datetime = Carbon::now();
 
         foreach ($this->importFailedRecords as $record) {
             $this->logError($record);
 
             $failedRecords[] = [
                 'import_result_id' => $this->importResult->id,
-                'type'             => ImportFailure::TYPE_SPONSOR_COLLABORATORS,
-                'details'          => json_encode($record),
-                'created_at'       => $datetime,
-                'updated_at'       => $datetime,
+                'type' => ImportFailure::TYPE_SPONSOR_COLLABORATORS,
+                'details' => json_encode($record),
+                'created_at' => $datetime,
+                'updated_at' => $datetime,
             ];
         }
 
@@ -297,9 +302,8 @@ class ProcessSponsorCollaborators
     private function logError($record)
     {
         Log::error(
-            $this->clinicaltrial->nct_number . ' ' . $this->clinicaltrial->title . "\n" .
-            'Did not create or find a organisation/person.' . "\n" . json_encode($record)
+            $this->clinicaltrial->nct_number.' '.$this->clinicaltrial->title."\n".
+            'Did not create or find a organisation/person.'."\n".json_encode($record)
         );
     }
-
 }

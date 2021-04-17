@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Helpers\Import\CriticalTrial;
+namespace App\Helpers\Import\ClinicalTrial;
 
 use App\Models\Clinicaltrial;
 use App\Models\Company;
@@ -11,7 +11,6 @@ use Illuminate\Support\Str;
 
 class ImportFailureCorrector
 {
-
     /**
      * @param \App\Models\ImportFailure $importFailure
      * @param array $requestArray
@@ -38,27 +37,27 @@ class ImportFailureCorrector
     }
 
     /**
-     * Update or create new Company/Person entity from ImportFailure and attach to Clinicaltrial
+     * Update or create new Company/Person entity from ImportFailure and attach to Clinicaltrial.
      *
      * @param \App\Models\ImportFailure $importFailure
      * @param array $requestArray
      * @return bool
      */
-    private static function correctSponsorCollaborators($importFailure, $requestArray) {
-        $isSuccess      = false;
+    private static function correctSponsorCollaborators($importFailure, $requestArray)
+    {
+        $isSuccess = false;
         $modelClassName = $requestArray['model'];
-        $nctNumber      = $importFailure->details['nct_number'];
-        $importValue    = $importFailure->details['value'];
+        $nctNumber = $importFailure->details['nct_number'];
+        $importValue = $importFailure->details['value'];
 
         try {
             $clinicaltrial = Clinicaltrial::where('nct_number', $nctNumber)->firstOrFail();
-
 
             if ($modelClassName === Company::class) {
                 $company = Company::updateOrCreate([
                     'name' => $importValue,
                 ], [
-                    'slug' => Str::slug($importValue)
+                    'slug' => Str::slug($importValue),
                 ]);
 
                 $clinicaltrial->companies()->syncWithoutDetaching($company->id);
@@ -67,9 +66,9 @@ class ImportFailureCorrector
 
             if ($modelClassName === Person::class) {
                 $person = Person::updateOrCreate([
-                    'name' => $importValue
+                    'name' => $importValue,
                 ], [
-                    'slug' => Person::generateUniqueSlug($importValue)
+                    'slug' => Person::generateUniqueSlug($importValue),
                 ]);
 
                 $clinicaltrial->people()->syncWithoutDetaching($person->id);
@@ -77,8 +76,8 @@ class ImportFailureCorrector
             }
         } catch (\Throwable $e) {
             Log::error(
-                "Unable to resolve ImportFailure [id = {$importFailure->id}, nct_number = {$nctNumber}].\n" .
-                "ErrorMessage: " . $e->getMessage()
+                "Unable to resolve ImportFailure [id = {$importFailure->id}, nct_number = {$nctNumber}].\n".
+                'ErrorMessage: '.$e->getMessage()
             );
         }
 
@@ -86,7 +85,7 @@ class ImportFailureCorrector
     }
 
     /**
-     * Update or create new Location entity from ImportFailure and attach to Clinicaltrial
+     * Update or create new Location entity from ImportFailure and attach to Clinicaltrial.
      *
      * @param \App\Models\ImportFailure $importFailure
      * @param array $requestArray
@@ -94,26 +93,26 @@ class ImportFailureCorrector
      */
     private static function correctLocations($importFailure, $requestArray)
     {
-        $isSuccess      = false;
-        $nctNumber      = $importFailure->details['nct_number'];
-        $modelClassName = $requestArray['model'];
-        $country        = $requestArray['country'];
-        $region         = $requestArray['region'];
-        $city           = $requestArray['city'];
+        $isSuccess = false;
+        $nctNumber = $importFailure->details['nct_number'];
 
         try {
             $clinicaltrial = Clinicaltrial::where('nct_number', $nctNumber)->firstOrFail();
 
-            if ($modelClassName === Location::class) {
-                $location = Location::findOrCreateLocation($country, $region, $city);
+            if ($requestArray['model'] === Location::class) {
+                if (isset($requestArray['location_id'])) {
+                    $location = Location::findOrFail($requestArray['location_id']);
+                } else {
+                    $location = Location::findOrCreateLocation($requestArray['country'], $requestArray['region'], $requestArray['city']);
+                }
 
                 $clinicaltrial->locations()->syncWithoutDetaching($location->id);
                 $isSuccess = true;
             }
         } catch (\Throwable $e) {
             Log::error(
-                "Unable to resolve ImportFailure [id = {$importFailure->id}, nct_number = {$nctNumber}].\n" .
-                "ErrorMessage: " . $e->getMessage()
+                "Unable to resolve ImportFailure [id = {$importFailure->id}, nct_number = {$nctNumber}].\n".
+                'ErrorMessage: '.$e->getMessage()
             );
         }
 

@@ -46,9 +46,10 @@ class ClinicalTrialController extends Controller
         	'csv' => 'required|mimes:csv,txt',
     	]);
 
-        $focusId            = $request->input('focus_id');
+        $focusId = $request->input('focus_id');
+        $useOrganisationMapping = $request->input('organisation_mapping');
         $clinicaltrialCache = [];
-        $dateColumns        = [
+        $dateColumns = [
             'start_date',
             'primary_completion_date',
             'completion_date',
@@ -63,7 +64,10 @@ class ClinicalTrialController extends Controller
             'entity'   => 'Clinical Trials',
             'csv'      => json_encode($records),
             'user_id'  => Auth::id(),
-            'focus_id' => $focusId
+            'focus_id' => $focusId,
+            'options'  => [
+                'useOrganisationMapping' => $useOrganisationMapping,
+            ],
         ];
         $importResult     = ImportResult::create($importAttributes);
 

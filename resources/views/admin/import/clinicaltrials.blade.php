@@ -58,6 +58,13 @@
                                 <label id="csv-label" class="custom-file-label" for="csv">Choose file</label>
                             </div>
                         </div>
+
+                        <div class="col-12 col-md-6 mt-2">
+                            <div class="form-group  form-check">
+                                <input class="form-check-input" type="checkbox" name="organisation_mapping" id="organisation_mapping" value="1">
+                                <label for="organisation_mapping" class="form-check-label font-weight-bold">Use organisation mapping settings</label>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="form-group">

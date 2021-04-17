@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin\Import;
 
 use App\Helpers\Import\BatchImageUpload\ImportFailureCorrector as BatchImageUploadCorrector;
-use App\Helpers\Import\CriticalTrial\ImportFailureCorrector as ClinicalTrialCorrector;
+use App\Helpers\Import\ClinicalTrial\ImportFailureCorrector as ClinicalTrialCorrector;
 use App\Helpers\Import\RelatedEntities\ImportFailureCorrector as RelatedEntitiesCorrector;
 use App\Helpers\StringHelper;
 use App\Http\Controllers\Controller;
@@ -45,7 +45,6 @@ class FailuresController extends Controller
             foreach ($failures as $failure) {
                 if (!empty($failure->details['import_value'])) {
                     $locationParts = StringHelper::explodeAndFilterEmpty($failure->details['import_value'], ',');
-                    $locationParts = array_reverse($locationParts);
 
                     $failure->location_parts = [
                         'country' => $locationParts[0],
