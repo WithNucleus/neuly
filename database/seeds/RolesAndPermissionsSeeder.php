@@ -45,7 +45,7 @@ class RolesAndPermissionsSeeder extends Seeder
         );
 
         foreach ($permissions as $permission) {
-            Permission::create(['name' => $permission]);
+            Permission::updateOrCreate(['name' => $permission]);
         }
 
         // Create admin role
