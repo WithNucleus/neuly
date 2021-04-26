@@ -42,6 +42,7 @@ class PersonInvestorController extends Controller
         $person->investors()->attach($investor->id, [
             'role' => $request->input('role'),
         ]);
+        $person->touch();
 
         $title_investor = $investor->name . ' added a person';
         $title_person = $person->name . ' was added an investor';

@@ -185,6 +185,7 @@ class EntityMergeController extends Controller
         }
 
         $masterEntity->{$relationName}()->syncWithoutDetaching($relationData);
+        $masterEntity->touch();
 
         return $masterEntity;
     }
