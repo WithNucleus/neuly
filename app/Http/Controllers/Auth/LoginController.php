@@ -8,6 +8,7 @@ use App\Models\UserSocialAuth;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
@@ -41,7 +42,7 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
+        $this->middleware('guest')->except('logout', 'handleProviderCallback');
     }
 
     /**
@@ -87,14 +88,30 @@ class LoginController extends Controller
     {
         try {
             if (!UserSocialAuth::isProviderAllowed($provider)) {
-                throw new \Exception();
+                throw new \Exception('Social provider not allowed.');
             }
 
             $socialiteUser = Socialite::driver($provider)->user();
-            $user          = User::whereHas('socialAuth', function ($query) use ($provider, $socialiteUser) {
-                    $query->where('provider_name', $provider)
-                        ->where('provider_id', $socialiteUser->getId());
-                })->first();
+
+            //if already logged in user want to connect social account
+            if ($user = Auth::user()) {
+                $socialAuth = new UserSocialAuth();
+                $socialAuth->user_id = $user->id;
+                $socialAuth->provider_name = $provider;
+                $socialAuth->provider_id = $socialiteUser->getId();
+                $socialAuth->email = $socialiteUser->getEmail();
+                $socialAuth->save();
+
+                return redirect()
+                    ->route('user.settings.social')
+                    ->with('success', 'Social account for ' . ucfirst($provider) . ' was connected successfully!');
+            }
+
+            //regular auth with social account
+            $user = User::whereHas('socialAuth', function ($query) use ($provider, $socialiteUser) {
+                $query->where('provider_name', $provider)
+                    ->where('provider_id', $socialiteUser->getId());
+            })->first();
 
             if (!$user) {
                 $name = $socialiteUser->getName();
