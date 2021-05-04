@@ -74,6 +74,8 @@ Route::group([
         Route::get('/clinical-trials-historic', 'ClinicalTrialHistoric@index')->name('clinical-trials-historic');
         Route::get('/investment-funds', 'InvestmentFundController@index')->name('investment-funds');
         Route::get('/investment-funds/organization/{slug}', 'InvestmentFundController@organizationChart')->name('investment-funds.organization');
+
+        Route::get('/non-profits', 'NonProfitFocuscontroller@chart')->name('nonprofits.chart');
     });
 });
 
