@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Insights;
 use App\Http\Controllers\Controller;
 use App\Models\Company;
 use App\Models\Focus;
+use App\Models\Person;
 use Illuminate\Support\Facades\DB;
 
 class NonProfitFocusController extends Controller
@@ -24,6 +25,7 @@ class NonProfitFocusController extends Controller
     private function processFocusChildren($focuses) {
 
         $chartData = [];
+        $otherFocusData = [];
 
         foreach ($focuses as $focus) {
 
@@ -32,7 +34,8 @@ class NonProfitFocusController extends Controller
             $focusData = [
                 'name' => $focus->name,
                 'value' => $focus->companies->count(),
-                'image' => ''
+                'image' => asset('images/focus/' . $focus->slug . '.svg'),
+                'type' => 'focus'
             ];
 
             $children = [];
@@ -44,20 +47,38 @@ class NonProfitFocusController extends Controller
 
                 array_push($children, [
                     'name' => $nonprofit->name,
-                    'image' => $nonprofit->entityImageUrl,
+                    'image' => asset($nonprofit->entityImageUrl),
                     'value' => 1,
                     'url' => route('discover.organizations.show', $nonprofit->slug),
                     'location' => $locationString,
                     'focus' => $focusString,
+                    'type' => 'company'
                 ]);
 
             }
 
             $focusData['children'] = $children;
 
-            array_push($chartData, $focusData);
+//            array_push($chartData, $focusData);
+
+            if ($focus->companies->count() >= 5) {
+                array_push($chartData, $focusData);
+            } else {
+                array_push($otherFocusData, $focusData);
+            }
 
         }
+
+        // Add Other Focus Groups
+        $otherFocus = [
+            'name' => 'Other',
+            'value' => 4,
+            'image' => asset('images/focus/other.svg'),
+            'children' => $otherFocusData,
+            'type' => 'focus'
+        ];
+
+        array_push($chartData, $otherFocus);
 
         return $chartData;
     }

@@ -93,6 +93,7 @@
             chart.dataFields.focus = "focus";
             chart.dataFields.location = "location";
             chart.dataFields.children = "children";
+            chart.dataFields.type = "type";
             chart.homeText = "Non-Profits by Focus";
 
             // enable navigation
@@ -106,16 +107,32 @@
             level1_column.stroke = am4core.color("#fff");
             level1_column.strokeWidth = 5;
             level1_column.strokeOpacity = 1;
+            level1_column.column.fill = am4core.color("#A7ABDD");
             level1_column.tooltipText = "{name}: {value} Non-profits";
+            level1Series.tooltip.getFillFromObject = false;
+            level1Series.tooltip.background.fill = am4core.color("#7076c8");
 
             level1Series.bulletsContainer.hiddenState.properties.opacity = 0;
             level1Series.bulletsContainer.hiddenState.properties.visible = false;
 
-            let level1_bullet = level1Series.bullets.push(new am4charts.LabelBullet());
-            level1_bullet.locationY = 0.5;
-            level1_bullet.locationX = 0.5;
-            level1_bullet.label.text = "{name}";
-            level1_bullet.label.fill = am4core.color("#fff");
+            let level1Image = level1Series.columns.template.createChild(
+                am4core.Image
+            );
+            level1Image.opacity = .6;
+            level1Image.align = "center";
+            level1Image.valign = "middle";
+            level1Image.width = am4core.percent(70);
+            level1Image.height = am4core.percent(70);
+
+            // add adapter for href to load correct image
+            level1Image.adapter.add("href", (href, target) => {
+                let dataItem = target.parent.dataItem;
+                if (dataItem) {
+                    return (
+                        dataItem.treeMapDataItem.image
+                    );
+                }
+            });
 
             // create hover state
             let hoverState = level1Series.columns.template.states.create("hover");
@@ -153,15 +170,72 @@
                 let dataItem = target.parent.dataItem;
                 if (dataItem) {
                     return (
-                        "https://neuly.test/" + dataItem.treeMapDataItem.image
+                        dataItem.treeMapDataItem.image
+                    );
+                }
+            });
+
+            // level 3
+            let level3Series = chart.seriesTemplates.create("2");
+
+            level3Series.columns.template.adapter.add("fill", function(fill, target) { return fill; });
+
+            let level3_column = level3Series.columns.template;
+            level3_column.column.cornerRadius(5, 5, 5, 5);
+            level3_column.fillOpacity = 1;
+            level3_column.column.fill = am4core.color("#fff");
+            level3_column.stroke = am4core.color("#ccc");
+            level3_column.strokeWidth = 5;
+            level3_column.strokeOpacity = 1;
+            level3_column.tooltipText = "{name}";
+
+            let level3Image = level3Series.columns.template.createChild(
+                am4core.Image
+            );
+            level3Image.opacity = 1;
+            level3Image.align = "center";
+            level3Image.valign = "middle";
+            level3Image.width = am4core.percent(80);
+            level3Image.height = am4core.percent(80);
+
+            // add adapter for href to load correct image
+            level3Image.adapter.add("href", (href, target) => {
+                let dataItem = target.parent.dataItem;
+                if (dataItem) {
+                    return (
+                        dataItem.treeMapDataItem.image
                     );
                 }
             });
 
             // On Click - Level 1
-            level2Series.columns.template.events.on('hit', function(event) {
+            level1Series.columns.template.events.on('hit', function(event) {
                 console.log(event.target.dataItem.dataContext.name);
+            });
 
+            // On Click - Level 2
+            level2Series.columns.template.events.on('hit', function(event) {
+
+                console.log(event.target.dataItem.dataContext.name);
+                console.log(event.target.dataItem.dataContext.type);
+
+                if (event.target.dataItem.dataContext.type === 'company') {
+                    getModal(event);
+                }
+            });
+
+            // On Click - Level 3
+            level3Series.columns.template.events.on('hit', function(event) {
+
+                console.log(event.target.dataItem.dataContext.name);
+                console.log(event.target.dataItem.dataContext.type);
+
+                if (event.target.dataItem.dataContext.type === 'company') {
+                    getModal(event);
+                }
+            });
+
+            function getModal(event) {
                 // setup modal content
                 let modalContent = "<img src='" + event.target.dataItem.dataContext.image + "' alt='' width='140' class='mx-auto mb-2'><br>";
 
@@ -177,7 +251,7 @@
                 modalContent += '<p class="mt-3"><a href="' + event.target.dataItem.dataContext.url + '" class="btn btn-sm btn-primary">View Listing</a></p>';
 
                 chart.openModal(modalContent);
-            });
+            }
 
         }); // end am4core.ready()
     </script>
