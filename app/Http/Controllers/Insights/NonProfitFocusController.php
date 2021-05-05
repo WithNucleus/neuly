@@ -3,31 +3,36 @@
 namespace App\Http\Controllers\Insights;
 
 use App\Http\Controllers\Controller;
-use App\Models\Company;
 use App\Models\Focus;
-use App\Models\Person;
-use Illuminate\Support\Facades\DB;
 
 class NonProfitFocusController extends Controller
 {
+    /**
+     * Shows the Non-Profit Focus Chart
+     */
     public function chart() {
 
-        $focuses = Focus::with(['companies' => function ($query) {
-            $query->nonprofits();
+        $focusGroups = Focus::with(['companies' => function ($query) {
+            $query->nonprofits()->withCount('jobs', 'events', 'clinicaltrials', 'people');
         }, 'companies.locations:name', 'companies.focus:name'])
             ->get();
 
-        $chartData = json_encode($this->processFocusChildren($focuses));
+        $chartData = json_encode($this->processFocusChildren($focusGroups));
 
         return view('discover.insights.nonprofits.focus-chart', compact('chartData'));
     }
 
-    private function processFocusChildren($focuses) {
+    /**
+     * Process each Focus's children for the chart
+     * @param $focusGroups
+     * @return array
+     */
+    private function processFocusChildren($focusGroups) {
 
         $chartData = [];
         $otherFocusData = [];
 
-        foreach ($focuses as $focus) {
+        foreach ($focusGroups as $focus) {
 
             $nonprofits = $focus->companies;
 
@@ -35,7 +40,8 @@ class NonProfitFocusController extends Controller
                 'name' => $focus->name,
                 'value' => $focus->companies->count(),
                 'image' => asset('images/focus/' . $focus->slug . '.svg'),
-                'type' => 'focus'
+                'type' => 'focus',
+                'color' => '#A7ABDD'
             ];
 
             $children = [];
@@ -50,16 +56,20 @@ class NonProfitFocusController extends Controller
                     'image' => asset($nonprofit->entityImageUrl),
                     'value' => 1,
                     'url' => route('discover.organizations.show', $nonprofit->slug),
+                    'insightUrl' => route('insights.investment-funds.organization', $nonprofit->slug),
                     'location' => $locationString,
                     'focus' => $focusString,
-                    'type' => 'company'
+                    'type' => 'company',
+                    'color' => '#fff',
+                    'jobs' => $nonprofit->jobs_count,
+                    'events' => $nonprofit->events_count,
+                    'clinicalTrials' => $nonprofit->clinicaltrials_count,
+                    'people' => $nonprofit->people_count,
                 ]);
 
             }
 
             $focusData['children'] = $children;
-
-//            array_push($chartData, $focusData);
 
             if ($focus->companies->count() >= 5) {
                 array_push($chartData, $focusData);
@@ -69,13 +79,13 @@ class NonProfitFocusController extends Controller
 
         }
 
-        // Add Other Focus Groups
         $otherFocus = [
             'name' => 'Other',
             'value' => 4,
             'image' => asset('images/focus/other.svg'),
             'children' => $otherFocusData,
-            'type' => 'focus'
+            'type' => 'focus',
+            'color' => '#A7ABDD'
         ];
 
         array_push($chartData, $otherFocus);
