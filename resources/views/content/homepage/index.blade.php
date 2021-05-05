@@ -36,12 +36,14 @@
                 <div class="row">
                     <div class="col-12 col-md-6">
                         @include('content.homepage.news')
+                        @include('discover.insights.widgets.nonprofits-by-focus-chart')
                         @include('discover.insights.widgets.organizations-by-type')
 
                     </div>
 
                     <div class="col-12 col-md-6">
                         @include('content.homepage.insights-widget')
+                        @include('discover.insights.widgets.investment-funds')
                         @include('discover.insights.widgets.companies-by-focus-drug')
                         @include('discover.insights.widgets.top-ten-locations')
                     </div>
