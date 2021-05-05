@@ -246,7 +246,7 @@
                     modalContent += '<p class="text-left mb-1"><i class="fad fa-stethoscope text-quaternary fa-fw"></i> ' + event.target.dataItem.dataContext.clinicalTrialsCount + ' Clinical Trials</p>';
                 }
 
-                modalContent += '<p class="mt-3"><a href="' + event.target.dataItem.dataContext.url + '" class="btn btn-sm btn-primary mx-2">View Listing</a><a href="' + event.target.dataItem.dataContext.insightUrl + '" class="btn btn-sm btn-primary mx-2">View Insight Chart</a></p>';
+                modalContent += '<p class="mt-3"><a href="' + event.target.dataItem.dataContext.url + '" class="btn btn-sm btn-primary m-2" target="_blank" rel="noopener noreferrer">View Listing</a><a href="' + event.target.dataItem.dataContext.insightUrl + '" class="btn btn-sm btn-primary m-2" target="_blank" rel="noopener noreferrer">View Insight Chart</a></p>';
 
                 modalContent += "</div>";
                 chart.openModal(modalContent);
