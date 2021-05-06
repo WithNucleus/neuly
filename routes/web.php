@@ -75,6 +75,7 @@ Route::group([
         Route::get('/investment-funds', 'InvestmentFundController@index')->name('investment-funds');
         Route::get('/investment-funds/organization/{slug}', 'InvestmentFundController@organizationChart')->name('investment-funds.organization');
         Route::get('/non-profits', 'NonProfitFocusController@chart')->name('nonprofits.focus-chart');
+        Route::get('/educational-organizations', 'EducationalOrganizationsMapController@map')->name('educational-organizations.map');
     });
 });
 

@@ -222,6 +222,14 @@ class Company extends Model implements EntityContract, EntityImageContract
         return $query->where('ownership', 'Non-Profit');
     }
 
+    /**
+     * @param \Illuminate\Database\Query\Builder $query
+     * @return \Illuminate\Database\Query\Builder
+     */
+    public function scopeEducational($query) {
+        return $query->where('ownership', 'Educational Institution');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | ACCESSORS
