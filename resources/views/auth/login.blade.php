@@ -93,7 +93,8 @@
                         </div>
 
                         <p class="text-center mt-3 font-weight-bold mb-0">
-                            Don't have an account? <a href="{{ route('register') }}">Signup here.</a>
+                            Don't have an account? <br>
+                            <a href="{{ route('register') }}">Signup here</a> for free to get full access.
                         </p>
                     </form>
 
