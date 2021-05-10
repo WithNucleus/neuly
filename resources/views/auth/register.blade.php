@@ -10,7 +10,7 @@
     <div class="bg-light shadow-sm p-3 p-md-4 p-lg-5">
         <div class="row">
             <div class="col-12">
-                <h1 class="h2 text-center text-primary page-title-default mb-4">Join {{ config('app.name', 'Neuly') }}</h1>
+                <h1 class="h2 text-center text-primary page-title-default mb-4">Signup for a free {{ config('app.name', 'Neuly') }} account</h1>
             </div>
             <div class="col-12 col-lg-6">
                 <form method="POST" action="{{ route('register') }}">

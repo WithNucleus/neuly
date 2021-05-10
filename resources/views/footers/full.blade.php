@@ -10,7 +10,7 @@
             <div class="col-12 col-md-6 col-lg-4">
                 <p class="description">Transparent information for entrepreneurs, investors, researchers, scientists, educators, policy makers, and anyone interested in the psychedelic industry.</p>
                 <p class="terms">
-                    <a href="/terms-of-use">Terms of Use</a> | <a href="/privacy-policy">Privacy Policy</a> | &copy; 2020 Neuly
+                    <a href="/terms-of-use">Terms of Use</a> | <a href="/privacy-policy">Privacy Policy</a> | &copy; {{ date('Y') }} Neuly
                 </p>
                 <p class="mb-0">
                     <a href="/listing/request" class="font-weight-bold">Request Listing</a>

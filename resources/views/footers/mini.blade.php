@@ -9,7 +9,7 @@
                     <a href="/privacy-policy" class="text-dark">Privacy Policy</a>
                 </p>
                 <p class="terms mb-0">
-                	&copy; 2020 Neuly
+                	&copy; {{ date('Y') }} Neuly
                 </p>
             </div>
         </div>
