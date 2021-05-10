@@ -51,7 +51,7 @@ class InvestmentFundController extends Controller
         $company = Company::where('slug', $slug)
             ->with('investors', 'focus', 'locations', 'people', 'jobs', 'events', 'clinicaltrials')
             ->withCount('investors', 'focus', 'locations', 'people', 'jobs', 'events', 'clinicaltrials')
-            ->first();
+            ->firstOrFail();
 
         $companyName = $company->name;
 
