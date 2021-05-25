@@ -69,15 +69,19 @@
                             </p>
                         </div>
                     </div>
-
-                    <div class="col-12 col-lg-6 col-xl-4">
-                        @include('discover.insights.widgets.investment-funds')
-                    </div>
-
-                    <div class="col-12 col-lg-6 col-xl-4">
-                        @include('discover.insights.widgets.nonprofits-by-focus-chart')
-                    </div>
                 @endauth
+
+                <div class="col-12 col-lg-6 col-xl-4">
+                    @include('discover.insights.widgets.investment-funds')
+                </div>
+
+                <div class="col-12 col-lg-6 col-xl-4">
+                    @include('discover.insights.widgets.nonprofits-by-focus-chart')
+                </div>
+
+                <div class="col-12 col-lg-6 col-xl-4">
+                    @include('discover.insights.widgets.educational-organizations')
+                </div>
 
                 <div class="col-12 col-lg-6 col-xl-4">
                     @include('discover.insights.widgets.organizations-by-type')
