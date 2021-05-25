@@ -35,7 +35,7 @@ class EducationalOrganizationsMapController extends Controller
                 'name' => $organization->name,
                 'url' => route('discover.organizations.show', $organization->slug),
                 'insightUrl' => route('insights.investment-funds.organization', $organization->slug),
-                'image' => url('/') . $organization->EntityImageUrl,
+                'image' => url($organization->EntityImageUrl),
                 'value' => 1,
                 'focus' => $focusString,
                 'clinicalTrialsCount' => $organization->clinicaltrials_count,
