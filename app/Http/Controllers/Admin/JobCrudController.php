@@ -187,6 +187,7 @@ class JobCrudController extends CrudController
             'type'  => 'select2_morph_1_n',
             'label' => 'Owner',
             'showAsterisk' => true,
+            'model' => false, //hack for backpack's handle of polymorphic 1-n relations
             'data' => [
                 'companies' => [
                     'label' => 'Company',
