@@ -7,6 +7,7 @@ use App\Models\JobReportEntry;
 use App\Models\ListingRequest;
 use Illuminate\Support\ServiceProvider;
 use Spatie\QueryBuilder\QueryBuilderRequest;
+use Illuminate\Pagination\Paginator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -17,7 +18,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        Paginator::useBootstrap();
     }
 
     /**
