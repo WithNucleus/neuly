@@ -97,12 +97,15 @@ class ResearchController extends Controller
 
             $attributes = array(
                 'name' => $result->title,
-                'abstract' => $result->snippet,
                 'link' => $result->link,
                 // 'publish_date' => '',
                 'publication_info' => $result->publication_info->summary,
                 'api_identifier' => $result->result_id,
             );
+
+            if (property_exists($result, 'snippet')) {
+                $attributes['abstract'] = $result->snippet;
+            }
 
             // If Has Resources
             if (property_exists($result, 'resources')) {
