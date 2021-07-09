@@ -162,6 +162,7 @@ Route::get('/events/{slug}', 'Index\EventController@show')->name('discover.event
 
 // Jobs
 Route::get('/jobs', 'Index\JobController@index')->name('discover.jobs');
+Route::get('/archived-jobs', 'Index\JobController@archive')->name('discover.jobs-archive');
 Route::get('/jobs/embed-widget', 'Index\JobController@embedWidget')->name('discover.jobs.embedWidget');
 Route::get('/jobs/titles.json', 'Index\JobController@titlesJson')->name('discover.jobs.titlesJson');
 Route::group([

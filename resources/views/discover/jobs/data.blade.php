@@ -9,7 +9,9 @@
 			</p>
 
             <p class="text-center">
-            	<a href="{{ route('discover.jobs.apply', $job->slug) }}" class="d-inline-block btn btn-lg btn-danger mt-2" style="white-space: nowrap;">Apply Now</a>
+                @if ($job->status == 'open')
+            	    <a href="{{ route('discover.jobs.apply', $job->slug) }}" class="d-inline-block btn btn-lg btn-danger mt-2" style="white-space: nowrap;">Apply Now</a>
+                @endif
             </p>
 
 		</div>

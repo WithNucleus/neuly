@@ -6,7 +6,7 @@
         <div class="full-width-show-view">
 
             <div class="page-title-default d-md-flex justify-content-between">
-                <h1 class="mb-0 mr-5">Jobs</h1>
+                <h1 class="mb-0 mr-5">Jobs @if(Route::is('discover.jobs-archive')) Archive @endif</h1>
 
                 <span class="lead-smaller align-self-end pb-1">
                     Showing {{ $jobs->total() }} Jobs
@@ -15,6 +15,10 @@
 
             @if(Route::is('embeds.jobs.index'))
                 @include('sidebars.embeds')
+            @endif
+
+            @if(Route::is('discover.jobs-archive'))
+                <p class="my-3 text-secondarydark font-weight-bold">These job listings are no longer active or it's been a long time since they were posted. We're keeping them up so you can see how the industry has been hiring.</p>
             @endif
 
             {{-- Sorting --}}

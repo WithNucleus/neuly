@@ -46,7 +46,7 @@
                 @include('sidebars.people')
             @endif
 
-            @if(Route::is('discover.jobs') OR Route::is('discover.jobs.show') OR Route::is('embeds.jobs.index'))
+            @if(Route::is('discover.jobs') OR Route::is('discover.jobs.show') OR Route::is('embeds.jobs.index') OR Route::is('discover.jobs-archive'))
                 @include('sidebars.jobs')
             @endif
 

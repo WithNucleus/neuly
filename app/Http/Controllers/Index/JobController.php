@@ -27,11 +27,18 @@ class JobController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('query_filters')->only('index', 'embedIndex');
+        $this->middleware('query_filters')->only('index', 'archive', 'embedIndex');
     }
 
     public function index(Request $request) {
-        $data = $this->getIndexData($request);
+        $data = $this->getIndexData($request, 'open');
+        $data['metas'] = Metas::fromPage($request->path());
+
+        return view('discover.jobs.index', $data);
+    }
+
+    public function archive(Request $request) {
+        $data = $this->getIndexData($request, 'archived');
         $data['metas'] = Metas::fromPage($request->path());
 
         return view('discover.jobs.index', $data);
@@ -83,7 +90,7 @@ class JobController extends Controller
 
     public function embedIndex(Request $request)
     {
-        $data = $this->getIndexData($request);
+        $data = $this->getIndexData($request, 'open');
 
         return view('discover.jobs.embed-index', $data);
     }
@@ -95,10 +102,11 @@ class JobController extends Controller
         return response()->json($data, Response::HTTP_OK);
     }
 
-    private function getIndexData(Request $request)
+    private function getIndexData(Request $request, $jobStatus)
     {
         $jobs = QueryBuilder::for(Job::class)
             ->with('owner')
+            ->where('status', $jobStatus)
             ->allowedFilters([
                 AllowedFilter::exact('type', 'employment_type'),
                 AllowedFilter::exact('title', 'job_title'),
