@@ -20,7 +20,7 @@
 
         <div class="row">
             <div class="col-12 breadcrumbs-container bg-white shadow-sm">
-                    
+
                 @include('discover.includes.breadcrumbs.index')
 
             </div>
@@ -36,7 +36,7 @@
                     <div class="col-lg-4 mb-3 flex-wrap">
                         <div class="card h-100">
                             <div class="card-body shadow-sm">
-                                <div class="qm-indexsummary"> 
+                                <div class="qm-indexsummary">
                                     <div data-qmod-tool="indexsummary" data-qmod-params='{ "symbol":"^GPI@PSY" }' class="qtool">
                                         <div class="ball-loader">
                                             <div class="ball-loader-ball ball1"></div>
@@ -69,7 +69,7 @@
                         <div class="card h-100">
                             <div class="card-body shadow-sm">
                                 <div class="qm-wrap-indexconstituents">
-                                    <div data-qmod-tool="indexconstituents" data-qmod-params='{ "symbol":"^GPI@PSY" }' class="qtool">
+                                    <div data-qmod-tool="indexconstituents" data-qmod-params='{ "symbol":"^GPI@PSY","colVisible":[true,true,true,true,true,true,true,true,true,true,true,true,true,false]}' class="qtool">
                                         <div class="ball-loader">
                                             <div class="ball-loader-ball ball1"></div>
                                             <div class="ball-loader-ball ball2"></div>
