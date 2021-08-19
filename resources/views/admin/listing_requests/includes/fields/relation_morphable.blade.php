@@ -38,7 +38,7 @@ if (!empty($entity->{$field})) {
 @else
     <div class="row mb-2">
         <div class="col-sm-12">
-            @foreach($relationMorphableTypes as $type => $className)
+            @foreach($relationMorphableTypes as $type => $relationClass)
                 <div class="form-check form-check-inline">
                     <input id="{{$field}}-{{$type}}-type" class="form-check-input js-morphable-input-type" type="radio"
                            name="{{$field}}[type]" value="{{$type}}" {{ $currentType == $type ? 'checked' : '' }}

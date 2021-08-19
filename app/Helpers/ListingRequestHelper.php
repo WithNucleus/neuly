@@ -3,6 +3,11 @@
 namespace App\Helpers;
 
 use App\Helpers\Entity\FieldsMapping;
+use App\Http\Requests\CompanyRequest;
+use App\Http\Requests\EventRequest;
+use App\Http\Requests\InvestorRequest;
+use App\Http\Requests\JobRequest;
+use App\Http\Requests\PersonRequest;
 use App\Models\Company;
 use App\Models\Event;
 use App\Models\Investor;
@@ -94,6 +99,40 @@ class ListingRequestHelper
             default:
                 return 'error';
         }
+    }
+
+    /**
+     * @param string $class
+     * @return array
+     * @throws \Exception
+     */
+    public static function getRulesByEntityClass($class)
+    {
+        $allowedRequestsArray = [
+            Event::class => EventRequest::class,
+            Investor::class => InvestorRequest::class,
+            Job::class => JobRequest::class,
+            Company::class => CompanyRequest::class,
+            Person::class => PersonRequest::class,
+        ];
+
+        $requestClass = isset($allowedRequestsArray[$class]) ? $allowedRequestsArray[$class] : false;
+
+        if (! $requestClass) {
+            throw new \Exception('Request class for entity "'.$class.'" not found!');
+        }
+
+        $rules = (new $requestClass)->rules();
+
+        //modify rules array for Job entity to handle morphable relation for Listing Request form
+        if ($requestClass === JobRequest::class) {
+            unset($rules['owner_id'], $rules['owner_type']);
+
+            $rules['owner.id'] = 'required';
+            $rules['owner.type'] = 'required';
+        }
+
+        return $rules;
     }
 
     /**
