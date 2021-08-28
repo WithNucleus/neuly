@@ -18,11 +18,19 @@
         </div>
     </div>
 
+    @if ($job->status == 'archived')
+        <p class="my-3 text-secondarydark font-weight-bold">
+            This job listing is no longer active or it's been a long time since it was posted.
+        </p>
+    @endif
+
     @include('discover.jobs.data')
 
     @auth
         <p class="mt-2 mb-0 mr-2">
-            <a href="{{ route('discover.jobs.apply', $job->slug) }}" class="btn btn-lg btn-danger">Apply Now</a>
+            @if ($job->status == App\Models\Job::STATUS_OPEN)
+                <a href="{{ route('discover.jobs.apply', $job->slug) }}" class="btn btn-lg btn-danger">Apply Now</a>
+            @endif
         </p>
     @endauth
 

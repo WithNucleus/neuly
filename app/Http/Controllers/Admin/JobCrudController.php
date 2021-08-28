@@ -70,10 +70,17 @@ class JobCrudController extends CrudController
             'type' => 'text',
             'label' => 'Job Title'
         ]);
+
         $this->crud->addColumn([
             'name' => 'posted_date',
             'type' => 'date',
             'label' => 'Posted Date'
+        ]);
+
+        $this->crud->addColumn([
+            'name' => 'status',
+            'type' => 'text',
+            'label' => 'Status'
         ]);
 
         $this->crud->addColumn([
@@ -155,11 +162,13 @@ class JobCrudController extends CrudController
             'type'  => 'text',
             'label' => 'Job Title'
         ]);
+
         $this->crud->addField([
             'name'  => 'slug',
             'type'  => 'text',
             'label' => 'Page Slug'
         ]);
+
         $this->crud->addField([
             'name'  => 'posted_date',
             'type'  => 'date_picker',
@@ -168,12 +177,21 @@ class JobCrudController extends CrudController
                 'format' => config('app.datepicker_input_format'),
             ],
         ]);
+
+        $this->crud->addField([
+            'name'    => 'status',
+            'type'    => 'select_from_array',
+            'label'   => 'Status',
+            'options' => Job::getStatusValues(),
+        ]);
+
         $this->crud->addField([
             'name'   => 'salary',
             'label'  => 'Salary',
             'type'   => 'number',
             'prefix' => "$",
         ]);
+
         $this->crud->addField([
             'name'       => 'hourly_rate',
             'label'      => 'Hourly Rate',
@@ -209,6 +227,7 @@ class JobCrudController extends CrudController
             'options' => Job::getEmploymentTypeValues(),
             'inline'  => true,
         ]);
+
         $this->crud->addField([
             'label'     => "Locations",
             'type'      => 'select2_multiple',
@@ -221,6 +240,7 @@ class JobCrudController extends CrudController
             }),
             'model'     => "App\Models\Location",
         ]);
+
         $this->crud->addField([
             'label'     => "Focus",
             'type'      => 'select2_multiple',
@@ -233,6 +253,7 @@ class JobCrudController extends CrudController
             }),
             'model'     => "App\Models\Focus",
         ]);
+
         $this->crud->addField([
             'name'  => 'job_description',
             'type'  => 'wysiwyg',
