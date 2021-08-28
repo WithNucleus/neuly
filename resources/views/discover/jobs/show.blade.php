@@ -28,7 +28,7 @@
 
     @auth
         <p class="mt-2 mb-0 mr-2">
-            @if ($job->status == 'open')
+            @if ($job->status == App\Models\Job::STATUS_OPEN)
                 <a href="{{ route('discover.jobs.apply', $job->slug) }}" class="btn btn-lg btn-danger">Apply Now</a>
             @endif
         </p>

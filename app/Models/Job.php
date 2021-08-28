@@ -30,10 +30,8 @@ class Job extends Model implements EntityContract
         'One Time',
     ];
 
-    const STATUS = [
-        'open' => 'Open',
-        'archived' => 'Archived',
-    ];
+    const STATUS_OPEN = 'open';
+    const STATUS_ARCHIVED = 'archived';
 
     protected $table = 'jobs';
     protected $guarded = ['id'];
@@ -122,7 +120,10 @@ class Job extends Model implements EntityContract
      */
     public static function getStatusValues()
     {
-        return self::STATUS;
+        return [
+            self::STATUS_OPEN => 'Open',
+            self::STATUS_ARCHIVED => 'Archived',
+        ];
     }
 
     /*
