@@ -36,7 +36,7 @@ class HomeController extends Controller
             ->orderBy('start_date', 'asc')
             ->take(3)
             ->get();
-        $jobs          = Job::orderBy('posted_date', 'desc')->take(3)->get();
+        $jobs          = Job::where('status', Job::STATUS_OPEN)->orderBy('posted_date', 'desc')->take(3)->get();
         $news_articles = NewsArticle::orderBy('date', 'desc')->take(3)->get();
         $metas         = Metas::fromPage($request->path());
         $count_recruiting_trials = Clinicaltrial::where('status', 'Recruiting')->count();
