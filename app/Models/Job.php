@@ -168,6 +168,13 @@ class Job extends Model implements EntityContract
     | SCOPES
     |--------------------------------------------------------------------------
     */
+    /**
+     * @param \Illuminate\Database\Query\Builder $query
+     * @return \Illuminate\Database\Query\Builder
+     */
+    public function scopeOpen($query) {
+        return $query->where('status', self::STATUS_OPEN);
+    }
 
     /*
     |--------------------------------------------------------------------------
