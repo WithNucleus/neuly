@@ -12,9 +12,12 @@
         <div class="list-group list-group-flush">
             @forelse($jobs as $job)
                 <div class="list-group-item">
-                    
-                        <p class="lead-smaller mb-0">
+
+                        <p class="lead-smaller mb-0 d-flex align-items-center">
                            <a href="{{ route('discover.jobs.show', $job->slug) }}">{{ $job->job_title }}</a>
+                            @if ($job->status === App\Models\Job::STATUS_ARCHIVED)
+                                <span class="badge badge-secondary ml-3">Archived</span>
+                            @endif
                         </p>
 
                         <div>
@@ -44,7 +47,7 @@
                                 @endforeach
                             </div>
                         @endif
-                    
+
                 </div>
             @empty
                 No jobs

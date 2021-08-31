@@ -75,7 +75,9 @@ class CompanyController extends Controller
                 'people',
                 'locations',
                 'investors',
-                'jobs',
+                'jobs' => function ($query) {
+                    $query->open();
+                },
                 'events',
                 'clinicaltrials',
                 'parents',
