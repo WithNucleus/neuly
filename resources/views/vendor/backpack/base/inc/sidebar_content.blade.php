@@ -308,3 +308,11 @@
         </a>
     </li>
 @endcan
+
+@can('manage ranked lists')
+    <li class='nav-item'>
+        <a class='nav-link' href='{{ backpack_url('rankedList') }}'>
+            <i class='nav-icon la la-list-ol'></i> Ranked Lists
+        </a>
+    </li>
+@endcan

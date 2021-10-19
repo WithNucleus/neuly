@@ -18,8 +18,6 @@ Route::group([
     Route::crud('focus', 'FocusCrudController');
     Route::crud('person', 'PersonCrudController');
     Route::crud('location', 'LocationCrudController');
-    Route::crud('location-geocoding', 'LocationGeocodingCrudController');
-    Route::get('location-geocoding/run', 'LocationGeocodingCrudController@runGeocoding')->name('admin.location-geocoding.run');
     Route::crud('investor', 'InvestorCrudController');
     Route::crud('research', 'ResearchCrudController');
     Route::crud('job', 'JobCrudController');
@@ -27,6 +25,25 @@ Route::group([
     Route::crud('eventtype', 'EventTypeCrudController');
     Route::crud('newsarticle', 'NewsArticleCrudController');
     Route::crud('clinicaltrial', 'ClinicaltrialCrudController');
+    Route::crud('jobapplication', 'JobApplicationCrudController');
+    Route::crud('redirect', 'RedirectCrudController');
+    Route::crud('feedback', 'FeedbackCrudController');
+    Route::crud('clinicaltrialphase', 'ClinicaltrialPhaseCrudController');
+    Route::crud('log-embed', 'LogEmbedCrudController');
+    Route::crud('insightRequest', 'InsightRequestCrudController');
+    Route::crud('jobreportentries', 'JobReportEntryCrudController');
+    Route::crud('searchlog', 'SearchLogCrudController');
+    Route::crud('companyvaluation', 'CompanyValuationCrudController');
+    Route::crud('rankedList', 'RankedListCrudController');
+    Route::post('rankedList/{id}/addEntity', 'RankedListCrudController@addEntity')->name('admin.rankedList.addEntity');
+    Route::post('rankedList/{id}/removeEntity', 'RankedListCrudController@removeEntity')->name('admin.rankedList.removeEntity');
+    Route::post('rankedList/{id}/updateEntities', 'RankedListCrudController@updateEntities')->name('admin.rankedList.updateEntities');
+
+    Route::crud('location-geocoding', 'LocationGeocodingCrudController');
+    Route::get('location-geocoding/run', 'LocationGeocodingCrudController@runGeocoding')->name('admin.location-geocoding.run');
+
+    Route::crud('person-claim', 'ClaimPersonCrudController');
+    Route::get('person-claim/{claim}/approve', 'ClaimPersonCrudController@approve')->name('admin.person-claim.approve');
 
     Route::group([
         'namespace'  => 'ClinicalTrialDetails',
@@ -51,18 +68,6 @@ Route::group([
             Route::post('{id}/accept', 'ListingRequestCrudController@postAcceptForm');
         });
     });
-
-    Route::crud('jobapplication', 'JobApplicationCrudController');
-    Route::crud('redirect', 'RedirectCrudController');
-    Route::crud('feedback', 'FeedbackCrudController');
-    Route::crud('clinicaltrialphase', 'ClinicaltrialPhaseCrudController');
-    Route::crud('log-embed', 'LogEmbedCrudController');
-    Route::crud('insightRequest', 'InsightRequestCrudController');
-    Route::crud('jobreportentries', 'JobReportEntryCrudController');
-    Route::crud('searchlog', 'SearchLogCrudController');
-    Route::crud('companyvaluation', 'CompanyValuationCrudController');
-    Route::crud('person-claim', 'ClaimPersonCrudController');
-    Route::get('person-claim/{claim}/approve', 'ClaimPersonCrudController@approve')->name('admin.person-claim.approve');
 
     // imports group
     Route::group([
