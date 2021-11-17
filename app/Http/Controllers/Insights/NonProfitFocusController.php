@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Insights;
 
 use App\Http\Controllers\Controller;
+use App\Models\Company;
 use App\Models\Focus;
 
 class NonProfitFocusController extends Controller
@@ -22,12 +23,33 @@ class NonProfitFocusController extends Controller
         return view('discover.insights.nonprofits.focus-chart', compact('chartData'));
     }
 
+    public function tableData() {
+
+        $nonProfits = Company::nonprofits()->with(['focus', 'locations'])->get()->toArray();
+        $tableData = [];
+
+        foreach ($nonProfits as $nonProfit) {
+
+            $locations = $this->relationshipsToString($nonProfit['locations']);
+            $focuses = $this->relationshipsToString($nonProfit['focus']);
+
+            array_push($tableData, [
+                'name' => $nonProfit['name'],
+                'region' => $locations,
+                'focus' => $focuses
+            ]);
+        }
+
+        return json_encode($tableData);
+    }
+
     /**
      * Process each Focus's children for the chart
      * @param $focusGroups
      * @return array
      */
-    private function processFocusChildren($focusGroups) {
+    private function processFocusChildren($focusGroups): array
+    {
 
         $chartData = [];
         $otherFocusData = [];
@@ -91,5 +113,21 @@ class NonProfitFocusController extends Controller
         array_push($chartData, $otherFocus);
 
         return $chartData;
+    }
+
+    /**
+     * Turn an array of relationships into a string
+     * @param $relationshipArray
+     * @return string
+     */
+    private function relationshipsToString($relationshipArray): string
+    {
+        $array = [];
+
+        foreach ($relationshipArray as $relationship) {
+            array_push($array, $relationship['name']);
+        }
+
+        return implode(' / ', $array);
     }
 }
