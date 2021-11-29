@@ -226,45 +226,48 @@ Route::group(['middleware' => 'spamprotection'], function () {
 
 Route::group([
     'middleware' => ['limitedAccess', 'verifiedIfAuthorized'],
-    'prefix' => '/dashboard'
 ], function () {
-    Route::get('/', 'Dashboard\DashboardController@index')->name('member.dashboard');
+    Route::group([
+        'prefix' => '/dashboard',
+    ], function () {
+        Route::get('/', 'Dashboard\DashboardController@index')->name('member.dashboard');
+        Route::post('/updateWidgetsOrder', 'Dashboard\DashboardController@updateWidgetsOrder')->name('member.dashboard.updateWidgetsOrder');
 
-    // Notes
-    Route::get('/add-note', 'Dashboard\NoteController@create')->name('member.notes.create');
-    Route::post('/add-note', 'Dashboard\NoteController@store')->name('member.notes.store');
-    Route::post('/validate-note', 'Dashboard\NoteController@checkSlug')->name('member.notes.validate');
-    Route::get('/edit-note/{slug}', 'Dashboard\NoteController@edit')->name('member.notes.edit');
-    Route::get('/notes/{id}/destroy', 'Dashboard\NoteController@destroy')->name('member.notes.destroy');
-    Route::post('/edit-note/{id}', 'Dashboard\NoteController@update')->name('member.notes.update');
-    Route::get('/notes', 'Dashboard\NoteController@index')->name('member.notes.index');
-    Route::get('/notes/{slug}', 'Dashboard\NoteController@show')->name('member.notes.show');
+        // Notes
+        Route::get('/add-note', 'Dashboard\NoteController@create')->name('member.notes.create');
+        Route::post('/add-note', 'Dashboard\NoteController@store')->name('member.notes.store');
+        Route::post('/validate-note', 'Dashboard\NoteController@checkSlug')->name('member.notes.validate');
+        Route::get('/edit-note/{slug}', 'Dashboard\NoteController@edit')->name('member.notes.edit');
+        Route::get('/notes/{id}/destroy', 'Dashboard\NoteController@destroy')->name('member.notes.destroy');
+        Route::post('/edit-note/{id}', 'Dashboard\NoteController@update')->name('member.notes.update');
+        Route::get('/notes', 'Dashboard\NoteController@index')->name('member.notes.index');
+        Route::get('/notes/{slug}', 'Dashboard\NoteController@show')->name('member.notes.show');
 
-    // Follow lists
-    Route::post('/follow-lists/ajax-store', 'Dashboard\FollowListsController@ajaxStore')->name('member.follow-lists.ajaxStore');
-    Route::post('/follow-lists/validate-name', 'Dashboard\FollowListsController@validateName')->name('member.follow-lists.validateName');
-    Route::resource('/follow-lists', 'Dashboard\FollowListsController', [
-        'as' => 'member',
-        'except' => ['create'],
-    ]);
+        // Follow lists
+        Route::post('/follow-lists/ajax-store', 'Dashboard\FollowListsController@ajaxStore')->name('member.follow-lists.ajaxStore');
+        Route::post('/follow-lists/validate-name', 'Dashboard\FollowListsController@validateName')->name('member.follow-lists.validateName');
+        Route::resource('/follow-lists', 'Dashboard\FollowListsController', [
+            'as' => 'member',
+            'except' => ['create'],
+        ]);
 
-    // Follow
-    Route::resource('/follow', 'Dashboard\FollowController', [
-        'as' => 'member',
-        'except' => ['create', 'store', 'destroy'],
-    ]);
+        // Follow
+        Route::resource('/follow', 'Dashboard\FollowController', [
+            'as' => 'member',
+            'except' => ['create', 'store', 'destroy'],
+        ]);
+        Route::get('/follow//get-modal/{id}/{type}', 'Dashboard\FollowController@getModal')->name('member.follow.getModal');
+        Route::post('/follow/attach', 'Dashboard\FollowController@attach')->name('member.follow.attach');
+        Route::post('/follow/detach', 'Dashboard\FollowController@detach')->name('member.follow.detach');
+    });
 
+    // Notifications
+    //TODO change name to remove 'dashboard' and add name to un-named routes
     Route::get('/notifications', 'NotificationController@index')->name('dashboard.notifications.index');
     Route::get('/notifications/read', 'NotificationController@setReadAll');
     Route::get('/notifications/{notification}', 'NotificationController@show')->name('dashboard.notifications.show');
     Route::get('/notifications/{notification}/read', 'NotificationController@setRead');
 
-    // Follow / Unfollow actions
-    Route::get('/follow//get-modal/{id}/{type}', 'Dashboard\FollowController@getModal')->name('member.follow.getModal');
-    Route::post('/follow/attach', 'Dashboard\FollowController@attach')->name('member.follow.attach');
-    Route::post('/follow/detach', 'Dashboard\FollowController@detach')->name('member.follow.detach');
-
-    // Notifications
     Route::get('/user/notifications', 'NotificationController@getNotificationsByAuthedUser');
     Route::get('/user/notifications/unread', 'NotificationController@getUnreadNotificationsCountByAuthedUser');
 

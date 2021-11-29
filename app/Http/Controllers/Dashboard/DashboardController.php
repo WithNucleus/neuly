@@ -6,15 +6,33 @@ use App\Http\Controllers\Controller;
 use App\Models\Follow;
 use App\Models\FollowList;
 use App\Models\MemberNote;
+use App\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Models\Activity;
 
 class DashboardController extends Controller
 {
+    /**
+     * @var string[]
+     */
+    private $defaultWidgetsOrder = [
+        'following',
+        'notes',
+        'recent',
+    ];
+
     // Member Dashboard Page
     public function index()
     {
+        $user = auth()->user();
+        $widgetsOrder = $this->defaultWidgetsOrder;
+
+        if ($user->dashboard_widgets_order !== null) {
+            $widgetsOrder = $user->dashboard_widgets_order;
+        }
+
         $lastActivityIdsByType = Activity::select(DB::raw('MAX(id) AS id, MAX(created_at) AS created_at'))
             ->where('causer_id', Auth::id())
             ->where('causer_type', 'App\User')
@@ -47,6 +65,21 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        return view('members.dashboard', compact('notes', 'recently_viewed', 'followLists', 'follows'));
+        return view('members.dashboard', compact('notes', 'recently_viewed', 'followLists', 'follows', 'widgetsOrder'));
+    }
+
+    public function updateWidgetsOrder(Request $request)
+    {
+        $user = $request->user();
+        $newWidgetsOrder = $request->input('order');
+
+        foreach ($this->defaultWidgetsOrder as $widget) {
+            if (! in_array($widget, $newWidgetsOrder)) {
+                $newWidgetsOrder[] = $widget;
+            }
+        }
+
+        $user->dashboard_widgets_order = $newWidgetsOrder;
+        $user->save();
     }
 }
