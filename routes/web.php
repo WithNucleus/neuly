@@ -13,18 +13,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Auth Routes for Front-End
 Route::group(['middleware' => 'firewall.all'], function () {
     Auth::routes(['verify' => true]);
     Route::get('login/{provider}', 'Auth\LoginController@redirectToProvider')->name('login.social');
     Route::get('login/{provider}/callback', 'Auth\LoginController@handleProviderCallback');
 });
 
-Route::get('/register/success', 'Auth\MessagesController@thanks')->name('register.success');
-Route::get('/limited-access', 'Auth\MessagesController@limited')->name('limited-access');
+Route::get('/register/success', 'Auth\MessagesController@registerSuccess')->name('register.success');
+Route::get('/welcome', 'Auth\MessagesController@limitedAccess')->middleware('guest')->name('limitedAccess');
 
 Route::get('/', 'Content\HomeController@index')->name('index');
-Route::get('/home', 'Content\HomeController@index')->name('home');
 Route::get('/about', 'Content\AboutController@index')->name('about');
 
 //Insights main page

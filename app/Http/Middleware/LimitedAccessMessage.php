@@ -17,7 +17,7 @@ class LimitedAccessMessage
     public function handle($request, Closure $next)
     {
         if (Auth::check() === false) {
-            return redirect()->route('limited-access');
+            return redirect()->route('limitedAccess');
         }
 
         return $next($request);
