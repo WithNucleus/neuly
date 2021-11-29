@@ -12,14 +12,9 @@ use Spatie\Activitylog\Models\Activity;
 
 class DashboardController extends Controller
 {
-	// Member Dashboard Page
-    public function index() {
-
-        // If Not Logged In - Show Dashboard Benefits
-        if (!Auth::check()) {
-            return view('members.dashboard-loggedout');
-        }
-
+    // Member Dashboard Page
+    public function index()
+    {
         $lastActivityIdsByType = Activity::select(DB::raw('MAX(id) AS id, MAX(created_at) AS created_at'))
             ->where('causer_id', Auth::id())
             ->where('causer_type', 'App\User')
@@ -48,11 +43,10 @@ class DashboardController extends Controller
             ->get();
 
         $notes = MemberNote::where('user_id', Auth::id())
-                ->orderBy('updated_at', 'desc')
-                ->take(5)
-                ->get();
+            ->orderBy('updated_at', 'desc')
+            ->take(5)
+            ->get();
 
-    	return view('members.dashboard', compact('notes', 'recently_viewed', 'followLists', 'follows'));
-
+        return view('members.dashboard', compact('notes', 'recently_viewed', 'followLists', 'follows'));
     }
 }
