@@ -39,9 +39,9 @@ Route::group([
 //Insights
 Route::group([
     'middleware' => ['limitedAccess', 'verifiedIfAuthorized'],
-    'prefix'     => '/insights',
-    'namespace'  => 'Insights',
-    'as'         => 'insights.',
+    'prefix' => '/insights',
+    'namespace' => 'Insights',
+    'as' => 'insights.',
 ], function () {
     Route::get('/companies-by-type', 'CompaniesByTypeController@index')->name('companies-by-type');
     Route::get('/top-ten-locations', 'TopTenLocationsController@index')->name('top-ten-locations');
@@ -72,9 +72,9 @@ Route::group([
 
 // Search Suggestions
 Route::group([
-    'prefix'     => '/searchassets',
-    'namespace'  => 'Index',
-    'as'         => 'searchassets.',
+    'prefix' => '/searchassets',
+    'namespace' => 'Index',
+    'as' => 'searchassets.',
 ], function () {
     Route::get('/everything.json', 'SearchSuggestionsController@everything')->name('everything');
     Route::get('/researchAuthors.json', 'SearchSuggestionsController@researchAuthors')->name('researchAuthors');
@@ -227,7 +227,7 @@ Route::group(['middleware' => 'spamprotection'], function () {
 /* MEMBER DASHBOARD */
 
 Route::group([
-    'middleware' => ['limitedAccess','verifiedIfAuthorized'],
+    'middleware' => ['limitedAccess', 'verifiedIfAuthorized'],
     'prefix' => '/dashboard'
 ], function () {
     Route::get('/', 'Dashboard\DashboardController@index')->name('member.dashboard');
@@ -306,145 +306,7 @@ Route::group([
 // User Email Reset
 Route::get('/user/retake/{token}', 'Index\UserRetakeController@index')->name('user.retake');
 
-/* SPECIAL ADMIN CONTROLLERS */
-Route::group([
-    'prefix'     => '/admin/company/{company_id}',
-    'namespace'  => 'Admin\Company',
-    'as'         => 'admin.company.',
-    'middleware' => ['permission:edit companies'],
-], function () {
-    Route::get('/person', 'PersonController@index')->name('person.index');
-    Route::post('/person', 'PersonController@store')->name('person.store');
-    Route::get('/person/{person_id}', 'PersonController@remove')->name('person.remove');
-
-    Route::get('/parent', 'ParentController@index')->name('parent.index');
-    Route::post('/parent', 'ParentController@store')->name('parent.store');
-    Route::delete('/parent/{parent_id}', 'ParentController@remove')->name('parent.remove');
-
-    Route::get('/subsidiary', 'SubsidiaryController@index')->name('subsidiary.index');
-    Route::post('/subsidiary', 'SubsidiaryController@store')->name('subsidiary.store');
-    Route::delete('/subsidiary/{child_id}', 'SubsidiaryController@remove')->name('subsidiary.remove');
-});
-
-Route::get('/admin/person/{id}/company', 'Admin\PersonCompanyController@index');
-Route::post('/admin/person/{id}/company', 'Admin\PersonCompanyController@add');
-
-Route::get('/admin/investor/{id}/person', 'Admin\InvestorPersonController@index');
-Route::post('/admin/investor/{id}/person', 'Admin\InvestorPersonController@add');
-Route::get('/admin/investor/{investor_id}/person/{person_id}/remove', 'Admin\InvestorPersonController@remove')->name('investorperson.remove');
-
-Route::get('/admin/person/{id}/investor', 'Admin\PersonInvestorController@index');
-Route::post('/admin/person/{id}/investor', 'Admin\PersonInvestorController@add');
-
-// Import Clinical Trials
-Route::get('/admin/import/clinicaltrials', 'Admin\Import\ClinicalTrialController@importClinicaltrials')
-    ->name('import.clinicaltrials');
-Route::post('/admin/import/clinicaltrials', 'Admin\Import\ClinicalTrialController@processClinicaltrials')
-    ->name('import.clinicaltrials.process');
-
-//Import Settings
-Route::get('/admin/import/settings', 'Admin\Import\SettingsController@index')
-    ->name('import.settings.index');
-Route::post('/admin/import/settings', 'Admin\Import\SettingsController@update')
-    ->name('import.settings.update');
-
-// Import Research
-Route::get('/admin/import/research', 'Admin\Import\ResearchController@start')
-    ->name('import.research');
-
-Route::post('/admin/import/research', 'Admin\Import\ResearchController@search')
-    ->name('import.research.process');
-
-Route::post('/admin/import/research/save', 'Admin\Import\ResearchController@import')
-    ->name('import.research.save');
-
-// Import Results Show
-Route::get('/admin/import/results/{id}', 'Admin\Import\ResultsController@showResults')
-    ->name('import.results');
-
-//Fix Import Failure
-Route::post('/admin/import/failures/{id}/fix', 'Admin\Import\FailuresController@fix')
-    ->name('import.failures.fix');
-Route::post('/admin/import/failures/{id}/delete', 'Admin\Import\FailuresController@delete')
-    ->name('import.failures.delete');
-
-// Related Entities
-Route::group([
-    'middleware' => ['auth', 'role:Admin', 'permission:import'],
-    'prefix'     => '/admin/import',
-    'namespace'  => 'Admin\Import',
-    'as'         => 'import.',
-], function () {
-    Route::group([
-        'prefix' => '/related-entities',
-        'as'     => 'related-entities.',
-    ], function () {
-        Route::get('/', 'RelatedEntitiesController@index')->name('index');
-
-        Route::group([
-            'prefix' => '/locations',
-            'namespace'  => 'RelatedEntities',
-            'as'     => 'locations.',
-        ], function () {
-            Route::get('/', 'LocationsController@index')->name('index');
-            Route::post('/import', 'LocationsController@import')->name('import');
-            Route::get('/results/{id}', 'LocationsController@results')->name('results');
-            Route::get('/failures/{id}', 'LocationsController@failures')->name('failures');
-        });
-
-        Route::group([
-            'prefix' => '/people-organization',
-            'namespace'  => 'RelatedEntities',
-            'as'     => 'people-organization.',
-        ], function () {
-            Route::get('/', 'PeopleOrganizationController@index')->name('index');
-            Route::post('/import', 'PeopleOrganizationController@import')->name('import');
-            Route::get('/results/{id}', 'PeopleOrganizationController@results')->name('results');
-            Route::get('/failures/{id}', 'PeopleOrganizationController@failures')->name('failures');
-        });
-    });
-
-    Route::group([
-        'prefix' => '/batch-images-upload',
-        'as'     => 'batch-images-upload.',
-    ], function () {
-        Route::get('/', 'BatchImagesUploadController@index')->name('index');
-        Route::post('/import', 'BatchImagesUploadController@import')->name('import');
-        Route::get('/results/{id}', 'BatchImagesUploadController@results')->name('results');
-        Route::get('/failures/{id}', 'BatchImagesUploadController@failures')->name('failures');
-    });
-});
-
-//Import Failures List
-Route::get('/admin/import/{id}/failures', 'Admin\Import\ResultsController@showFailures')
-    ->name('import.failures');
-Route::get('/admin/import/{id}/failures/{type}', 'Admin\Import\FailuresController@showByType')
-    ->name('import.failures.showByType');
-
-// Job Application Files
-Route::get('/admin/jobapps/{id}/resume', 'Index\JobApplicationController@getResume')->name('jobsapp.resume');
-Route::get('/admin/jobapps/{id}/coverletter', 'Index\JobApplicationController@getCoverLetter')->name('jobsapp.coverletter');
-
-// Admin Routes
-Route::group([
-    'prefix'     => 'admin',
-    'middleware' => ['role:Admin'],
-    'namespace'  => 'Admin',
-], function () {
-    // Entity Merge
-    Route::group(['prefix' => 'entity-merge'], function () {
-        Route::get('/', 'EntityMergeController@index')
-            ->name('admin.entityMerge');
-        Route::get('/get-list', 'EntityMergeController@getEntityListJson')
-            ->name('admin.entityMerge.getEntityListJson');
-        Route::get('/get-entity-form', 'EntityMergeController@getEntityForm')
-            ->name('admin.entityMerge.getEntityForm');
-        Route::post('/merge', 'EntityMergeController@merge')
-            ->name('admin.entityMerge.merge');
-    });
-});
-
-/* MEMBERS - PUBLIC ROUTES */
+// Members public routes for sharing
 Route::get('/members/{member_url}/lists/{slug}', 'Dashboard\FollowListsController@showPublic')->name('members.follow-lists.public');
 Route::get('/members/{member_url}/{slug}', 'Dashboard\NoteController@showPublic')->name('members.public.note');
 
@@ -455,6 +317,9 @@ Route::group([
     Route::get('/jobs', 'Index\JobController@embedIndex')->name('jobs.index');
     Route::get('/events', 'Index\EventController@embedIndex')->name('events.index');
 });
+
+//SPECIAL ADMIN ROUTES
+require __DIR__.'/admin.php';
 
 /* CATCH-ALL ROUTE for Backpack/PageManager - needs to be at the end of your routes.php file  **/
 Route::get('{page}', ['uses' => '\App\Http\Controllers\PageController@index'])

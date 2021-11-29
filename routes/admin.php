@@ -1,0 +1,153 @@
+<?php
+use Illuminate\Support\Facades\Route;
+
+Route::group([
+    'middleware' => ['auth'],
+    'prefix' => '/admin',
+    'namespace' => 'Admin',
+    'as' => 'admin.',
+], function () {
+    Route::group([
+        'middleware' => 'role:Admin',
+    ], function () {
+        // Related Entities
+        Route::get('/person/{id}/company', 'PersonCompanyController@index');
+        Route::post('/person/{id}/company', 'PersonCompanyController@add');
+
+        Route::get('/investor/{id}/person', 'InvestorPersonController@index');
+        Route::post('/investor/{id}/person', 'InvestorPersonController@add');
+        Route::get('/investor/{investor_id}/person/{person_id}/remove', 'Admin\InvestorPersonController@remove')->name('investorperson.remove');
+
+        Route::get('/person/{id}/investor', 'PersonInvestorController@index');
+        Route::post('/person/{id}/investor', 'PersonInvestorController@add');
+
+        // Entity Merge
+        Route::group([
+            'prefix' => 'entity-merge',
+        ], function () {
+            Route::get('/', 'EntityMergeController@index')
+                ->name('entityMerge');
+            Route::get('/get-list', 'EntityMergeController@getEntityListJson')
+                ->name('entityMerge.getEntityListJson');
+            Route::get('/get-entity-form', 'EntityMergeController@getEntityForm')
+                ->name('entityMerge.getEntityForm');
+            Route::post('/merge', 'EntityMergeController@merge')
+                ->name('entityMerge.merge');
+        });
+    });
+
+    Route::group([
+        'prefix' => '/company/{company_id}',
+        'namespace' => 'Company',
+        'as' => 'company.',
+        'middleware' => 'permission:edit companies',
+    ], function () {
+        Route::get('/person', 'PersonController@index')->name('person.index');
+        Route::post('/person', 'PersonController@store')->name('person.store');
+        Route::get('/person/{person_id}', 'PersonController@remove')->name('person.remove');
+
+        Route::get('/parent', 'ParentController@index')->name('parent.index');
+        Route::post('/parent', 'ParentController@store')->name('parent.store');
+        Route::delete('/parent/{parent_id}', 'ParentController@remove')->name('parent.remove');
+
+        Route::get('/subsidiary', 'SubsidiaryController@index')->name('subsidiary.index');
+        Route::post('/subsidiary', 'SubsidiaryController@store')->name('subsidiary.store');
+        Route::delete('/subsidiary/{child_id}', 'SubsidiaryController@remove')->name('subsidiary.remove');
+    });
+
+});
+
+//TODO update route's names to match 'admin.' pattern and move to common admin group
+Route::group([
+    'middleware' => ['permission:import'],
+    'prefix' => '/admin/import',
+    'namespace' => 'Admin\Import',
+    'as' => 'import.',
+], function () {
+
+    // Import Clinical Trials
+    Route::get('/clinicaltrials', 'ClinicalTrialController@importClinicaltrials')
+        ->name('clinicaltrials');
+    Route::post('/clinicaltrials', 'ClinicalTrialController@processClinicaltrials')
+        ->name('clinicaltrials.process');
+
+    //Import Settings
+    Route::get('/settings', 'SettingsController@index')
+        ->name('settings.index');
+    Route::post('/settings', 'SettingsController@update')
+        ->name('settings.update');
+
+    // Import Research
+    Route::get('/research', 'ResearchController@start')
+        ->name('research');
+    Route::post('/research', 'ResearchController@search')
+        ->name('research.process');
+    Route::post('/research/save', 'ResearchController@import')
+        ->name('research.save');
+
+    // Import Results Show
+    Route::get('/results/{id}', 'ResultsController@showResults')
+        ->name('results');
+
+    //Fix Import Failure
+    Route::post('/failures/{id}/fix', 'FailuresController@fix')
+        ->name('failures.fix');
+    Route::post('/failures/{id}/delete', 'FailuresController@delete')
+        ->name('failures.delete');
+
+    //Import Failures List
+    Route::get('/{id}/failures', 'ResultsController@showFailures')
+        ->name('failures');
+    Route::get('/{id}/failures/{type}', 'FailuresController@showByType')
+        ->name('failures.showByType');
+
+    Route::group([
+        'prefix' => '/related-entities',
+        'as' => 'related-entities.',
+    ], function () {
+        Route::get('/', 'RelatedEntitiesController@index')->name('index');
+
+        Route::group([
+            'prefix' => '/locations',
+            'namespace' => 'RelatedEntities',
+            'as' => 'locations.',
+        ], function () {
+            Route::get('/', 'LocationsController@index')->name('index');
+            Route::post('/import', 'LocationsController@import')->name('import');
+            Route::get('/results/{id}', 'LocationsController@results')->name('results');
+            Route::get('/failures/{id}', 'LocationsController@failures')->name('failures');
+        });
+
+        Route::group([
+            'prefix' => '/people-organization',
+            'namespace' => 'RelatedEntities',
+            'as' => 'people-organization.',
+        ], function () {
+            Route::get('/', 'PeopleOrganizationController@index')->name('index');
+            Route::post('/import', 'PeopleOrganizationController@import')->name('import');
+            Route::get('/results/{id}', 'PeopleOrganizationController@results')->name('results');
+            Route::get('/failures/{id}', 'PeopleOrganizationController@failures')->name('failures');
+        });
+    });
+
+    Route::group([
+        'prefix' => '/batch-images-upload',
+        'as' => 'batch-images-upload.',
+    ], function () {
+        Route::get('/', 'BatchImagesUploadController@index')->name('index');
+        Route::post('/import', 'BatchImagesUploadController@import')->name('import');
+        Route::get('/results/{id}', 'BatchImagesUploadController@results')->name('results');
+        Route::get('/failures/{id}', 'BatchImagesUploadController@failures')->name('failures');
+    });
+});
+
+//TODO update route's names and middleware to match 'admin' pattern and move to common admin group
+//TODO check if it possible to move methods tos Admin namespace and controller
+Route::group([
+    'middleware' => ['auth'],
+    'prefix' => '/admin',
+], function () {
+    //Job Application Files
+    Route::get('/jobapps/{id}/resume', 'Index\JobApplicationController@getResume')->name('jobsapp.resume');
+    Route::get('/jobapps/{id}/coverletter', 'Index\JobApplicationController@getCoverLetter')->name('jobsapp.coverletter');
+});
