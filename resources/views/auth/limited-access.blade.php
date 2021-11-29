@@ -37,7 +37,7 @@
                     <p class="lead mt-4 col-xl-9 mx-auto">Register for your free membership to access the entire database, view unique insights, and utilize your personal dashboard</p>
 
                     <p class="mt-4 text-center">
-                        <a href="{{ route('register') }}" class="btn btn-lg btn-primary text-uppercase">Register</a>
+                        <a href="{{ route('register') }}" class="btn btn-lg btn-primary text-uppercase">Register</a> or <a href="{{ route('login') }}" class="btn btn-lg btn-primary text-uppercase">Login</a>
                     </p>
 
                     <p class="mt-4 text-center">

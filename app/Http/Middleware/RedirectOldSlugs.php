@@ -10,8 +10,8 @@ class RedirectOldSlugs
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure                  $next
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure $next
      *
      * @return mixed
      */
@@ -20,20 +20,20 @@ class RedirectOldSlugs
         $response = $next($request);
 
         if ($this->needsRedirect($request, $response)) {
-            $slug      = $request->route()->slug;
-            $redirect  = Redirect::where('old_slug', $slug)->firstOrFail();
-            $newSlug   = $redirect->redirectable->slug;
+            $slug = $request->route()->slug;
+            $redirect = Redirect::where('old_slug', $slug)->firstOrFail();
+            $newSlug = $redirect->redirectable->slug;
             $routeName = $request->route()->getName();
 
             if ($routeName) {
-                $params         = $request->route()->parameters();
+                $params = $request->route()->parameters();
                 $params['slug'] = $newSlug;
 
                 return redirect()->route($routeName, $params, 301);
             }
 
             $routePath = $request->getPathInfo();
-            $newRoute  = str_replace($slug, $newSlug, $routePath);
+            $newRoute = str_replace($slug, $newSlug, $routePath);
 
             return redirect($newRoute, 301);
         }
@@ -44,13 +44,15 @@ class RedirectOldSlugs
     /**
      * Check if request need redirect
      *
-     * @param  \Illuminate\Http\Request   $request
-     * @param  \Illuminate\Http\Response  $response
+     * @param \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Response|\Illuminate\View\View $response
      *
      * @return bool
      */
     private function needsRedirect($request, $response)
     {
-        return $response->getStatusCode() === 404 && $request->route()->hasParameter('slug');
+        return $response instanceof \Illuminate\Http\Response
+            && $response->getStatusCode() === 404
+            && $request->route()->hasParameter('slug');
     }
 }
