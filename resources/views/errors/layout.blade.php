@@ -106,7 +106,7 @@
 					@yield('description')
 				</div>
 				<div class="error_description text-muted">
-					<a href="javascript:history.back()">Go back</a> or <a href="{{ route('home') }}">go home</a>
+					<a href="javascript:history.back()">Go back</a> or <a href="{{ route('index') }}">go home</a>
 				</div>
 			@else
                 <div class="error_title">
@@ -116,7 +116,7 @@
                     @yield('description')
                 </div>
                 <div class="error_action">
-                    Please <a href="javascript:history.back()">go back</a> or return to <a href="{{ route('home') }}">our homepage</a>.
+                    Please <a href="javascript:history.back()">go back</a> or return to <a href="{{ route('index') }}">our homepage</a>.
                 </div>
                 <div class="error_feedback">
                     You got the feeling that something is a bit off?<br /> Please contact us via our <a href="{{ route('feedback.create') }}">feedback form</a>.

@@ -7,12 +7,12 @@ use Illuminate\Http\Request;
 
 class MessagesController extends Controller
 {
-    /* Success for Registering Page */
-    public function thanks() {
+    public function registerSuccess()
+    {
         return view('auth.thanks');
     }
 
-    public function limited()
+    public function limitedAccess()
     {
         return view('auth.limited-access');
     }
