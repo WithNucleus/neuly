@@ -47,20 +47,14 @@ class Focus extends Model implements EntityContract
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+    public function clinicaltrials()
+    {
+        return $this->belongsToMany('App\Models\Clinicaltrial', 'clinicaltrial_focus', 'focus_id', 'clinicaltrial_id')->withTimestamps();
+    }
 
     public function companies()
     {
         return $this->belongsToMany('App\Models\Company', 'company_focus', 'focus_id', 'company_id')->withTimestamps();
-    }
-
-    public function research()
-    {
-        return $this->belongsToMany('App\Models\Research', 'focus_research', 'focus_id', 'research_id')->withTimestamps();
-    }
-
-    public function jobs()
-    {
-        return $this->belongsToMany('App\Models\Job', 'focus_job', 'focus_id', 'job_id')->withTimestamps();
     }
 
     public function events()
@@ -68,19 +62,29 @@ class Focus extends Model implements EntityContract
         return $this->belongsToMany('App\Models\Event', 'event_focus', 'focus_id', 'event_id')->withTimestamps();
     }
 
+    public function importResults()
+    {
+        return $this->hasMany('App\Models\ImportResult');
+    }
+
+    public function jobs()
+    {
+        return $this->belongsToMany('App\Models\Job', 'focus_job', 'focus_id', 'job_id')->withTimestamps();
+    }
+
     public function newsarticles()
     {
         return $this->belongsToMany('App\Models\NewsArticle', 'focus_news_article', 'focus_id', 'news_article_id')->withTimestamps();
     }
 
-    public function clinicaltrials()
+    public function people()
     {
-        return $this->belongsToMany('App\Models\Clinicaltrial', 'clinicaltrial_focus', 'focus_id', 'clinicaltrial_id')->withTimestamps();
+        return $this->belongsToMany(Person::class, 'focus_person', 'focus_id', 'person_id');
     }
 
-    public function importResults()
+    public function research()
     {
-        return $this->hasMany('App\Models\ImportResult');
+        return $this->belongsToMany('App\Models\Research', 'focus_research', 'focus_id', 'research_id')->withTimestamps();
     }
 
     /*
@@ -154,7 +158,17 @@ class Focus extends Model implements EntityContract
                 'type' => FieldsMapping::TYPE_STRING,
             ],
             //relations
+            'clinicaltrials' => [
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
+                'relationField' => 'title',
+            ],
             'companies'      => [
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
+                'relationField' => 'name',
+            ],
+            'events'         => [
                 'type'          => FieldsMapping::TYPE_RELATION,
                 'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
@@ -164,20 +178,10 @@ class Focus extends Model implements EntityContract
                 'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
-            'research'       => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
-                'relationField' => 'name',
-            ],
             'jobs'           => [
                 'type'          => FieldsMapping::TYPE_RELATION,
                 'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'job_title',
-            ],
-            'events'         => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
-                'relationField' => 'name',
             ],
             'newsarticles'   => [
                 'type'          => FieldsMapping::TYPE_RELATION,
@@ -185,10 +189,15 @@ class Focus extends Model implements EntityContract
                 'relationField' => 'name',
                 'label'         => 'News Articles',
             ],
-            'clinicaltrials' => [
+            'people'       => [
                 'type'          => FieldsMapping::TYPE_RELATION,
                 'relation'      => FieldsMapping::RELATION_N_N,
-                'relationField' => 'title',
+                'relationField' => 'name',
+            ],
+            'research'       => [
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
+                'relationField' => 'name',
             ],
         ];
     }
