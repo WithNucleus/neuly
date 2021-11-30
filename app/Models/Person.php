@@ -33,14 +33,14 @@ class Person extends Model implements EntityContract, EntityImageContract
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'people';
+    protected $table   = 'people';
     protected $guarded = ['id'];
 
     // log activity for all attributes, which not listed in $guarded array
     protected static $logUnguarded = true;
 
-    protected static $imageAttribute = 'photo';
-    protected static $imageFolderPath = 'people';
+    protected static $imageAttribute         = 'photo';
+    protected static $imageFolderPath        = 'people';
     protected static $imageFilenameAttribute = 'id';
 
     /*
@@ -51,7 +51,7 @@ class Person extends Model implements EntityContract, EntityImageContract
 
     public static function generateUniqueSlug($name)
     {
-        $slug      = Str::slug($name);
+        $slug = Str::slug($name);
         $slugCount = Person::where('slug', $slug)->count();
 
         if ($slugCount > 0) {
@@ -61,7 +61,8 @@ class Person extends Model implements EntityContract, EntityImageContract
         return $slug;
     }
 
-    public static function findOrCreatePerson($name, $google_scholar) {
+    public static function findOrCreatePerson($name, $google_scholar)
+    {
 
         $person = Person::where('name', $name)
             ->orWhere('google_scholar', $google_scholar)
@@ -73,8 +74,8 @@ class Person extends Model implements EntityContract, EntityImageContract
 
         try {
             $person = Person::create([
-                'name'           => $name,
-                'slug'           => self::generateUniqueSlug($name),
+                'name' => $name,
+                'slug' => self::generateUniqueSlug($name),
                 'google_scholar' => $google_scholar,
             ]);
 
@@ -87,31 +88,36 @@ class Person extends Model implements EntityContract, EntityImageContract
         }
     }
 
-    public function getLinkedIn() {
+    public function getLinkedIn()
+    {
         if ($this->linkedin != null) {
             return '<a href="https://www.linkedin.com/in/' . $this->linkedin . '" target="_blank" rel="noopener noreferrer"><i class="lab la-linkedin-in"></i> ' . $this->linkedin . '</a>';
         }
     }
 
-    public function getFacebook() {
+    public function getFacebook()
+    {
         if ($this->facebook != null) {
             return '<a href="https://www.facebook.com/' . $this->facebook . '" target="_blank" rel="noopener noreferrer"><i class="lab la-facebook-f"></i> ' . $this->facebook . '</a>';
         }
     }
 
-    public function getTwitter() {
+    public function getTwitter()
+    {
         if ($this->twitter != null) {
             return '<a href="https://www.twitter.com/' . $this->twitter . '" target="_blank" rel="noopener noreferrer"><i class="lab la-twitter"></i> ' . $this->twitter . '</a>';
         }
     }
 
-    public function getInstagram() {
+    public function getInstagram()
+    {
         if ($this->instagram != null) {
             return '<a href="https://www.instagram.com/' . $this->instagram . '" target="_blank" rel="noopener noreferrer"><i class="lab la-instagram"></i> ' . $this->instagram . '</a>';
         }
     }
 
-    public function getShowLink() {
+    public function getShowLink()
+    {
         return '<a href="' . route('discover.people.show', $this->slug) . '">' . $this->name . '</a>';
     }
 
@@ -121,36 +127,47 @@ class Person extends Model implements EntityContract, EntityImageContract
     |--------------------------------------------------------------------------
     */
 
-    public function companies() {
+    public function companies()
+    {
         return $this->belongsToMany('App\Models\Company', 'company_person', 'person_id', 'company_id')
-                    ->withPivot(['position'])
-                    ->withTimestamps();
+            ->withPivot(['position'])
+            ->withTimestamps();
     }
 
-    public function locations() {
+    public function focus()
+    {
+        return $this->belongsToMany(Focus::class, 'focus_person', 'person_id', 'focus_id');
+    }
+
+    public function locations()
+    {
         return $this->belongsToMany('App\Models\Location', 'location_person', 'person_id', 'location_id')
             ->withTimestamps();
     }
 
-    public function investors() {
+    public function investors()
+    {
         return $this->belongsToMany('App\Models\Investor', 'investor_person', 'person_id', 'investor_id')
-                    ->withPivot(['role'])
-                    ->withTimestamps();
+            ->withPivot(['role'])
+            ->withTimestamps();
     }
 
-    public function research() {
+    public function research()
+    {
         return $this->belongsToMany('App\Models\Research', 'person_research', 'person_id', 'research_id')
-                    ->withTimestamps();
+            ->withTimestamps();
     }
 
-    public function events() {
+    public function events()
+    {
         return $this->belongsToMany('App\Models\Event', 'event_person', 'person_id', 'event_id')
-                    ->withTimestamps();
+            ->withTimestamps();
     }
 
-    public function clinicaltrials() {
+    public function clinicaltrials()
+    {
         return $this->belongsToMany('App\Models\Clinicaltrial', 'clinicaltrial_person', 'person_id', 'clinicaltrial_id')
-                    ->withTimestamps();
+            ->withTimestamps();
     }
 
     public function relatedUser()
@@ -166,7 +183,7 @@ class Person extends Model implements EntityContract, EntityImageContract
 
     public function scopePublic($query)
     {
-       return $query->where('visibilty', '=', 'public');
+        return $query->where('visibilty', '=', 'public');
     }
 
     /*
@@ -193,81 +210,94 @@ class Person extends Model implements EntityContract, EntityImageContract
     {
         return [
             //attributes
-            'name'            => [
+            'name' => [
                 'type' => FieldsMapping::TYPE_STRING,
                 'required' => true,
             ],
-            'slug'            => [
+            'slug' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'email'           => [
+            'email' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
             'secondary_email' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'website'         => [
+            'job_type' => [
+                'type' => FieldsMapping::TYPE_ENUM,
+                'values' => self::getJobTypeValues(),
+                'required' => false,
+            ],
+            'byline' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'photo'           => [
+            'website' => [
+                'type' => FieldsMapping::TYPE_STRING,
+            ],
+            'photo' => [
                 'type' => FieldsMapping::TYPE_IMAGE,
             ],
-            'linkedin'        => [
+            'linkedin' => [
                 'type' => FieldsMapping::TYPE_STRING,
                 'prefix' => 'https://www.linkedin.com/in/',
                 'placeholder' => 'username',
             ],
-            'facebook'        => [
+            'facebook' => [
                 'type' => FieldsMapping::TYPE_STRING,
                 'prefix' => 'https://www.facebook.com/',
                 'placeholder' => 'username',
             ],
-            'twitter'         => [
+            'twitter' => [
                 'type' => FieldsMapping::TYPE_STRING,
                 'prefix' => 'https://www.twitter.com/',
                 'placeholder' => 'username',
             ],
-            'google_scholar'  => [
+            'google_scholar' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'bio'             => [
+            'bio' => [
                 'type' => FieldsMapping::TYPE_TEXT,
             ],
             //relations
-            'locations'       => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'locations' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
-            'companies'       => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'focus' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
-                'pivotColumns'  => [
+            ],
+            'companies' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
+                'relationField' => 'name',
+                'pivotColumns' => [
                     'position',
                 ],
             ],
-            'investors'       => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'investors' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
-                'pivotColumns'  => [
+                'pivotColumns' => [
                     'role',
                 ],
             ],
-            'research'        => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'research' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
-            'events'          => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'events' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
-            'clinicaltrials'  => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'clinicaltrials' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'title',
             ],
         ];
@@ -287,7 +317,15 @@ class Person extends Model implements EntityContract, EntityImageContract
         return $mapping;
     }
 
-    public function getEmails() {
+    public static function getJobTypeValues()
+    {
+        $jobTypes = config('static.person_job_types');
+        sort($jobTypes);
+        return array_combine($jobTypes, $jobTypes);
+    }
+
+    public function getEmails()
+    {
         $personEmails = [];
 
         if ($this->email) {
@@ -305,30 +343,27 @@ class Person extends Model implements EntityContract, EntityImageContract
     {
         $social = [];
 
-        if($this->linkedin !== null)
-        {
+        if ($this->linkedin !== null) {
             $social[] = 'linkedin';
         }
 
-        if($this->facebook !== null)
-        {
+        if ($this->facebook !== null) {
             $social[] = 'facebook';
         }
 
-        if($this->twitter !== null)
-        {
+        if ($this->twitter !== null) {
             $social[] = 'twitter';
         }
 
-        if($this->google_scholar !== null)
-        {
+        if ($this->google_scholar !== null) {
             $social[] = 'google';
         }
 
         return $social;
     }
 
-    public function canBeViewed() {
+    public function canBeViewed()
+    {
         return $this->visibility === 'public' || Auth::check();
     }
 }
