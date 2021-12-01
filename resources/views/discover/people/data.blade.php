@@ -2,6 +2,20 @@
 	<div class="col-12 col-md-8 col-lg-7">
 
 		@auth
+            @if($person->job_type)
+                <p class="mb-2">
+                    <strong>Job type:</strong><br>
+                    {{ $person->job_type }}
+                </p>
+            @endif
+
+            @if($person->byline)
+                <p class="mb-2">
+                    <strong>Byline:</strong><br>
+                    {{ $person->byline }}
+                </p>
+            @endif
+
 			@if($person->website != '')
 				<p class="mb-2">
 					<strong>Website:</strong><br>
@@ -82,6 +96,15 @@
 					@endforeach
 				</ul>
 			@endif
+
+            @if($person->focus->count() > 0)
+                <p class="mb-2">
+                    <strong>Focus:</strong><br>
+                    @foreach ($person->focus as $focus)
+                        <a href="{{ route('discover.focus.show', $focus->slug) }}">{{ $focus->name }}</a>@if (!$loop->last)<br>@endif
+                    @endforeach
+                </p>
+            @endif
 
 			@if($person->bio != '')
 				<p class="mb-0">

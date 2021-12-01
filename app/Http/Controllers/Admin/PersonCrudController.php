@@ -11,8 +11,7 @@ use Backpack\CRUD\app\Library\Widget;
 use Illuminate\Support\Facades\Route;
 
 /**
- * Class PersonCrudController
- * @package App\Http\Controllers\Admin
+ * Class PersonCrudController.
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
 class PersonCrudController extends CrudController
@@ -30,12 +29,12 @@ class PersonCrudController extends CrudController
      */
     public function setup()
     {
-        if(!backpack_user()->can('edit people')) {
+        if (! backpack_user()->can('edit people')) {
             abort(404);
         }
 
         CRUD::setModel(Person::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/person');
+        CRUD::setRoute(config('backpack.base.route_prefix').'/person');
         CRUD::setEntityNameStrings('person', 'people');
     }
 
@@ -49,47 +48,58 @@ class PersonCrudController extends CrudController
     {
         $this->crud->addColumn(['name' => 'name']);
         $this->crud->addColumn([
-           'label'     => 'Organizations',
-           'type'      => 'select_multiple',
-           'name'      => 'companies',
-           'entity'    => 'companies',
-           'attribute' => 'name',
-           'model'     => 'App\Models\Company',
-           'options'   => (function ($query) {
+            'label' => 'Organizations',
+            'type' => 'select_multiple',
+            'name' => 'companies',
+            'entity' => 'companies',
+            'attribute' => 'name',
+            'model' => 'App\Models\Company',
+            'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
         ]);
         $this->crud->addColumn([
-           'label'     => 'Investors',
-           'type'      => 'select_multiple',
-           'name'      => 'investors',
-           'entity'    => 'investors',
-           'attribute' => 'name',
-           'model'     => 'App\Models\Investor',
-           'options'   => (function ($query) {
+            'label' => 'Investors',
+            'type' => 'select_multiple',
+            'name' => 'investors',
+            'entity' => 'investors',
+            'attribute' => 'name',
+            'model' => 'App\Models\Investor',
+            'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
         ]);
         $this->crud->addColumn([
-           'label'     => 'Locations',
-           'type'      => 'select_multiple',
-           'name'      => 'locations',
-           'entity'    => 'locations',
-           'attribute' => 'name',
-           'model'     => 'App\Models\Location',
-           'options'   => (function ($query) {
+            'label' => 'Locations',
+            'type' => 'select_multiple',
+            'name' => 'locations',
+            'entity' => 'locations',
+            'attribute' => 'name',
+            'model' => 'App\Models\Location',
+            'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
         ]);
         $this->crud->addColumn([
-            'label'    => 'Created',
-            'type'     => 'date',
-            'name'     => 'created_at',
+            'label' => 'Focus',
+            'type' => 'select_multiple',
+            'name' => 'focus',
+            'entity' => 'focus',
+            'attribute' => 'name',
+            'model' => 'App\Models\Focus',
+            'options' => (function ($query) {
+                return $query->orderBy('name', 'ASC')->get();
+            }),
         ]);
         $this->crud->addColumn([
-            'label'    => 'Updated',
-            'type'     => 'date',
-            'name'     => 'updated_at',
+            'label' => 'Created',
+            'type' => 'date',
+            'name' => 'created_at',
+        ]);
+        $this->crud->addColumn([
+            'label' => 'Updated',
+            'type' => 'date',
+            'name' => 'updated_at',
         ]);
     }
 
@@ -99,89 +109,110 @@ class PersonCrudController extends CrudController
         $person = Person::find($personId);
 
         Widget::add([
-            'type'   => 'view',
-            'view'   => 'customwidget.person_show_widget',
-            'person' => $person
+            'type' => 'view',
+            'view' => 'customwidget.person_show_widget',
+            'person' => $person,
         ])->to('before_content');
 
         $this->crud->addColumn([
-            'name'          => 'name',
-            'type'          => 'model_function',
-            'function_name' => 'getShowLink'
+            'name' => 'name',
+            'type' => 'model_function',
+            'function_name' => 'getShowLink',
         ]);
         $this->crud->addColumn([
-            'name'  => 'email',
-            'type'  => 'email',
-            'label' => 'Email'
+            'name' => 'email',
+            'type' => 'email',
+            'label' => 'Email',
         ]);
         $this->crud->addColumn([
-            'name'  => 'secondary_email',
-            'type'  => 'email',
-            'label' => 'Secondary email'
+            'name' => 'secondary_email',
+            'type' => 'email',
+            'label' => 'Secondary email',
         ]);
         $this->crud->addColumn([
-            'name'  => 'website',
-            'type'  => 'text',
-            'label' => 'Website'
+            'name' => 'job_type',
+            'type' => 'text',
+            'label' => 'Job type',
         ]);
         $this->crud->addColumn([
-            'name'          => 'linkedin',
-            'type'          => 'model_function',
-            'function_name' => 'getLinkedIn'
+            'name' => 'byline',
+            'type' => 'text',
+            'label' => 'Byline',
         ]);
         $this->crud->addColumn([
-            'name'          => 'facebook',
-            'type'          => 'model_function',
-            'function_name' => 'getFacebook'
+            'name' => 'website',
+            'type' => 'text',
+            'label' => 'Website',
         ]);
         $this->crud->addColumn([
-            'name'          => 'twitter',
-            'type'          => 'model_function',
-            'function_name' => 'getTwitter'
+            'name' => 'linkedin',
+            'type' => 'model_function',
+            'function_name' => 'getLinkedIn',
         ]);
         $this->crud->addColumn([
-            'name'          => 'instagram',
-            'type'          => 'model_function',
-            'function_name' => 'getInstagram'
+            'name' => 'facebook',
+            'type' => 'model_function',
+            'function_name' => 'getFacebook',
         ]);
         $this->crud->addColumn([
-            'label'     => 'Organizations',
-            'type'      => 'select_multiple',
-            'name'      => 'companies',
-            'entity'    => 'companies',
+            'name' => 'twitter',
+            'type' => 'model_function',
+            'function_name' => 'getTwitter',
+        ]);
+        $this->crud->addColumn([
+            'name' => 'instagram',
+            'type' => 'model_function',
+            'function_name' => 'getInstagram',
+        ]);
+        $this->crud->addColumn([
+            'label' => 'Organizations',
+            'type' => 'select_multiple',
+            'name' => 'companies',
+            'entity' => 'companies',
             'attribute' => 'name',
-            'model'     => 'App\Models\Company',
-            'options'   => (function ($query) {
+            'model' => 'App\Models\Company',
+            'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
         ]);
         $this->crud->addColumn([
-            'label'     => 'Locations',
-            'type'      => 'select_multiple',
-            'name'      => 'locations',
-            'entity'    => 'locations',
+            'label' => 'Locations',
+            'type' => 'select_multiple',
+            'name' => 'locations',
+            'entity' => 'locations',
             'attribute' => 'name',
-            'model'     => 'App\Models\Location',
-            'options'   => (function ($query) {
+            'model' => 'App\Models\Location',
+            'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
         ]);
         $this->crud->addColumn([
-            'label'     => 'Investors',
-            'type'      => 'select_multiple',
-            'name'      => 'investors',
-            'entity'    => 'investors',
+            'label' => 'Investors',
+            'type' => 'select_multiple',
+            'name' => 'investors',
+            'entity' => 'investors',
             'attribute' => 'name',
-            'model'     => 'App\Models\Investor',
-            'options'   => (function ($query) {
+            'model' => 'App\Models\Investor',
+            'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
         ]);
         $this->crud->addColumn([
-            'label'  => "Photo",
-            'name'   => "photo",
-            'type'   => 'image',
-            'prefix' => Person::getImageUrlPrefix()
+            'label' => 'Focus',
+            'type' => 'select_multiple',
+            'name' => 'focus',
+            'entity' => 'focus',
+            'attribute' => 'name',
+            'model' => 'App\Models\Focus',
+            'options' => (function ($query) {
+                return $query->orderBy('name', 'ASC')->get();
+            }),
+        ]);
+        $this->crud->addColumn([
+            'label' => 'Photo',
+            'name' => 'photo',
+            'type' => 'image',
+            'prefix' => Person::getImageUrlPrefix(),
         ]);
 
         $this->crud->addButtonFromModelFunction('line', 'show_entity', 'getShowEntityPageButton', 'beginning');
@@ -195,61 +226,76 @@ class PersonCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
+        $jobTypes = config('static.person_job_types');
+        sort($jobTypes);
+        $jobTypeOptions = array_combine($jobTypes, $jobTypes);
+
         CRUD::setValidation(PersonRequest::class);
 
         Widget::add([
             'type' => 'view',
-            'view' => 'customwidget.updateSlug'
+            'view' => 'customwidget.updateSlug',
         ])->to('after_content');
 
         $this->crud->addField([
             'name' => 'name',
             'type' => 'text',
-            'label' => 'Name'
+            'label' => 'Name',
         ]);
         $this->crud->addField([
             'name' => 'slug',
             'type' => 'text',
-            'label' => 'Page Slug'
+            'label' => 'Page Slug',
         ]);
         $this->crud->addField([
             'name' => 'email',
             'type' => 'text',
-            'label' => 'Email'
+            'label' => 'Email',
         ]);
         $this->crud->addField([
             'name' => 'secondary_email',
             'type' => 'text',
-            'label' => 'Secondary email'
+            'label' => 'Secondary email',
+        ]);
+        $this->crud->addField([
+            'name' => 'job_type',
+            'type' => 'select2_from_array',
+            'label' => 'Job type',
+            'options' => $jobTypeOptions,
+        ]);
+        $this->crud->addField([
+            'name' => 'byline',
+            'type' => 'text',
+            'label' => 'Byline',
         ]);
         $this->crud->addField([
             'name' => 'website',
             'type' => 'text',
-            'label' => 'Website'
+            'label' => 'Website',
         ]);
         $this->crud->addField([
             'name' => 'linkedin',
             'type' => 'text',
             'label' => 'Linked In',
-            'prefix'     => "https://www.linkedin.com/in/",
+            'prefix' => 'https://www.linkedin.com/in/',
         ]);
         $this->crud->addField([
             'name' => 'facebook',
             'type' => 'text',
             'label' => 'Facebook',
-            'prefix'     => "https://www.facebook.com/",
+            'prefix' => 'https://www.facebook.com/',
         ]);
         $this->crud->addField([
             'name' => 'twitter',
             'type' => 'text',
             'label' => 'Twitter',
-            'prefix'     => "https://www.twitter.com/",
+            'prefix' => 'https://www.twitter.com/',
         ]);
         $this->crud->addField([
             'name' => 'instagram',
             'type' => 'text',
             'label' => 'Instagram',
-            'prefix'     => "https://www.instagram.com/",
+            'prefix' => 'https://www.instagram.com/',
         ]);
         $this->crud->addField([
             'name' => 'twitter_followers',
@@ -267,16 +313,27 @@ class PersonCrudController extends CrudController
             'label' => 'Bio',
         ]);
         $this->crud->addField([
-            'label'     => "Locations",
-            'type'      => 'select2_multiple',
-            'name'      => 'locations',
-            'entity'    => 'locations',
+            'label' => 'Locations',
+            'type' => 'select2_multiple',
+            'name' => 'locations',
+            'entity' => 'locations',
             'attribute' => 'name',
-            'pivot'     => true,
-            'options'   => (function ($query) {
+            'pivot' => true,
+            'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
-            'model'     => "App\Models\Location",
+            'model' => "App\Models\Location",
+        ]);
+        $this->crud->addField([
+            'label' => 'Focus',
+            'type' => 'select2_multiple',
+            'name' => 'focus',
+            'entity' => 'focus',
+            'attribute' => 'name',
+            'model' => "App\Models\Focus",
+            'options' => (function ($query) {
+                return $query->orderBy('name', 'ASC')->get();
+            }),
         ]);
     }
 
@@ -289,13 +346,13 @@ class PersonCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->crud->addField([
-            'label'        => "Photo",
-            'name'         => "photo",
-            'type'         => 'image',
-            'upload'       => true,
-            'crop'         => true,
+            'label' => 'Photo',
+            'name' => 'photo',
+            'type' => 'image',
+            'upload' => true,
+            'crop' => true,
             'aspect_ratio' => 1,
-            'disk'         => 'local',
+            'disk' => 'local',
         ]);
 
         $this->setupCreateOperation();
