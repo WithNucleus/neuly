@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Laravel\Scout\Searchable;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Location extends Model implements EntityContract
@@ -23,6 +24,7 @@ class Location extends Model implements EntityContract
     use OldSlugRedirectable;
     use LogsActivity;
     use CrudShowEntityPageButton;
+    use Searchable;
 
     /*
     |--------------------------------------------------------------------------
@@ -177,6 +179,41 @@ class Location extends Model implements EntityContract
         }
 
         return $byRegions;
+    }
+
+    /**
+     * Searchable Fields
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        $array = $this->transform($this->toArray());
+
+        $array['companies'] = $this->companies->map(function ($data) {
+            return $data['name'];
+        })->toArray();
+
+        $array['people'] = $this->people->map(function ($data) {
+            return $data['name'];
+        })->toArray();
+
+        $array['investors'] = $this->investors->map(function ($data) {
+            return $data['name'];
+        })->toArray();
+
+        $array['jobs'] = $this->jobs->map(function ($data) {
+            return $data['job_title'];
+        })->toArray();
+
+        $array['events'] = $this->events->map(function ($data) {
+            return $data['name'];
+        })->toArray();
+
+        $array['clinicaltrials'] = $this->clinicaltrials->map(function ($data) {
+            return $data['title'];
+        })->toArray();
+
+        return $array;
     }
 
     /*

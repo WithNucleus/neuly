@@ -10,7 +10,9 @@ use App\Models\Traits\EntityImage;
 use App\Models\Traits\OldSlugRedirectable;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Event extends Model implements EntityContract, EntityImageContract
@@ -21,6 +23,7 @@ class Event extends Model implements EntityContract, EntityImageContract
     use LogsActivity;
     use CrudShowEntityPageButton;
     use EntityImage;
+    use Searchable;
 
     /*
     |--------------------------------------------------------------------------
@@ -49,6 +52,40 @@ class Event extends Model implements EntityContract, EntityImageContract
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
+
+    /**
+     * Searchable Fields
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        $array = $this->transform($this->toArray());
+
+        $array['companies'] = $this->companies->map(function ($data) {
+            return $data['name'];
+        })->toArray();
+
+        $array['focus'] = $this->focus->map(function ($data) {
+            return $data['name'];
+        })->toArray();
+
+        $array['locations'] = $this->locations->map(function ($data) {
+            return $data['name'];
+        })->toArray();
+
+        $array['people'] = $this->people->map(function ($data) {
+            return $data['name'];
+        })->toArray();
+
+        $array['eventTypes'] = $this->eventTypes->map(function ($data) {
+            return $data['name'];
+        })->toArray();
+
+        $array['start_date'] = Carbon::parse($this->start_date)->format('Y-m-d');
+        $array['end_date'] = Carbon::parse($this->end_date)->format('Y-m-d');
+
+        return $array;
+    }
 
     /*
     |--------------------------------------------------------------------------

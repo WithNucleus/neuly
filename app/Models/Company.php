@@ -13,6 +13,7 @@ use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Laravel\Scout\Searchable;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Company extends Model implements EntityContract, EntityImageContract
@@ -23,6 +24,7 @@ class Company extends Model implements EntityContract, EntityImageContract
     use LogsActivity;
     use CrudShowEntityPageButton;
     use EntityImage;
+    use Searchable;
 
     /*
     |--------------------------------------------------------------------------
@@ -112,6 +114,66 @@ class Company extends Model implements EntityContract, EntityImageContract
             $this->parents->pluck('id')->toArray(),
             $this->subsidiaries->pluck('id')->toArray()
         );
+    }
+
+    /**
+     * Searchable Fields
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        $array = $this->transform($this->toArray());
+
+        $array['focus'] = $this->focus->map(function ($data) {
+            return $data['name'];
+        })->toArray();
+
+        $array['people'] = $this->people->map(function ($data) {
+            return $data['name'];
+        })->toArray();
+
+        $array['locations'] = $this->locations->map(function ($data) {
+            return $data['name'];
+        })->toArray();
+
+        $array['countries'] = $this->locations->map(function ($data) {
+            return $data['country'];
+        })->unique()->toArray();
+
+        $array['investors'] = $this->investors->map(function ($data) {
+            return $data['name'];
+        })->toArray();
+
+        $array['research'] = $this->research->map(function ($data) {
+            return $data['name'];
+        })->toArray();
+
+        $array['jobs'] = $this->jobs->map(function ($data) {
+            return $data['job_title'];
+        })->toArray();
+
+        $array['clinicaltrials'] = $this->clinicaltrials->map(function ($data) {
+            return $data['title'];
+        })->toArray();
+
+        $array['events'] = $this->events->map(function ($data) {
+            return $data['name'];
+        })->toArray();
+
+        $array['parentOrganizations'] = $this->parents->map(function ($data) {
+            return $data['name'];
+        })->toArray();
+
+        $array['subsidiaries'] = $this->subsidiaries->map(function ($data) {
+            return $data['name'];
+        })->toArray();
+
+        unset($array['focus_description']);
+        unset($array['location']);
+        unset($array['contact_info']);
+        unset($array['notes']);
+
+        return $array;
     }
 
     /*

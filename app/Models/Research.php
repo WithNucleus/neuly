@@ -10,6 +10,7 @@ use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Laravel\Scout\Searchable;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Research extends Model implements EntityContract
@@ -19,6 +20,7 @@ class Research extends Model implements EntityContract
     use OldSlugRedirectable;
     use LogsActivity;
     use CrudShowEntityPageButton;
+    use Searchable;
 
     /*
     |--------------------------------------------------------------------------
@@ -41,6 +43,29 @@ class Research extends Model implements EntityContract
 
     public function getShowLink() {
         return '<a href="' . route('discover.research.show', $this->slug) . '">' . $this->name . '</a>';
+    }
+
+    /**
+     * Searchable Fields
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        $array = $this->transform($this->toArray());
+
+        $array['companies'] = $this->companies->map(function ($data) {
+            return $data['name'];
+        })->toArray();
+
+        $array['focus'] = $this->focus->map(function ($data) {
+            return $data['name'];
+        })->toArray();
+
+        $array['people'] = $this->people->map(function ($data) {
+            return $data['name'];
+        })->toArray();
+
+        return $array;
     }
 
     /*

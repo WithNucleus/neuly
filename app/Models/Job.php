@@ -9,6 +9,7 @@ use App\Models\Traits\OldSlugRedirectable;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Laravel\Scout\Searchable;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Job extends Model implements EntityContract
@@ -17,6 +18,7 @@ class Job extends Model implements EntityContract
     use OldSlugRedirectable;
     use LogsActivity;
     use CrudShowEntityPageButton;
+    use Searchable;
 
     /*
     |--------------------------------------------------------------------------
@@ -124,6 +126,27 @@ class Job extends Model implements EntityContract
             self::STATUS_OPEN => 'Open',
             self::STATUS_ARCHIVED => 'Archived',
         ];
+    }
+
+    /**
+     * Searchable Fields
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        $array = $this->transform($this->toArray());
+
+        $array['owner_name'] = $this->owner->name;
+
+        $array['locations'] = $this->locations->map(function ($data) {
+            return $data['name'];
+        })->toArray();
+
+        $array['focus'] = $this->focus->map(function ($data) {
+            return $data['name'];
+        })->toArray();
+
+        return $array;
     }
 
     /*
