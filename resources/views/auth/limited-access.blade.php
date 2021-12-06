@@ -18,13 +18,6 @@
             @include('navbars.tabs-mobile')
         </div>
 
-        <div class="row">
-            <div class="col-12 breadcrumbs-container bg-white shadow-sm">
-
-                @include('discover.includes.breadcrumbs.member-dashboard')
-
-            </div>
-        </div>
     </div>
 
     <div class="container">
@@ -38,6 +31,8 @@
 
                     <p class="mt-4 text-center">
                         <a href="{{ route('register') }}" class="btn btn-lg btn-primary text-uppercase">Register</a>
+                        <span class="h4"> or </span>
+                        <a href="{{ route('login') }}" class="btn btn-lg btn-primary text-uppercase">Login</a>
                     </p>
 
                     <p class="mt-4 text-center">

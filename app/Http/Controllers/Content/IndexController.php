@@ -14,15 +14,8 @@ class IndexController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    public function index()
     {
-        // $this->middleware('auth');
-        // $this->middleware('neuly.membership');
-    }
-
-    public function index() {
-
-    	return view('discover.index.pubco');
-
+        return view('discover.index.pubco');
     }
 }

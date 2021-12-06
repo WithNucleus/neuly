@@ -7,48 +7,62 @@
     @include('members.includes.dashboard-begin')
 
     @include('members.includes.status-messages')
+    <style>
+        .dashboard-sortable-grid .drag-handle {
+            position: absolute;
+            right: 15px;
+            top: 0;
+            font-size: 2rem;
+            visibility: hidden;
+            cursor: move;
+        }
+        .dashboard-sortable-grid > div:hover .drag-handle {
+            visibility: visible;
+        }
+    </style>
 
-    <div class="row">
-        <div class="col-12 col-md-6 col-xl-4 mb-5">
-            <h1 class="h2">
-                <a href="{{ route('member.follow-lists.index') }}" class="text-dark"><i class="fad fa-star text-secondary mr-2"></i>Following</a>
-            </h1>
-            <div class="p-4 bg-white shadow-sm">
-                <p class="lead mb-1">Lists</p>
-                @include('members.data.follow-lists', ['lists' => $followLists, 'show_more' => true, 'shadow' => false])
-
-                <p class="lead mt-4 mb-1">Recently Added</p>
-                @include('members.data.follows', [
-                    'show_more' => true,
-                    'shadow' => false,
-                    'show_action_items' => false,
-                    'show_list_name' => false
-                ])
-            </div>
-        </div>
-
-        <div class="col-12 col-md-6 col-xl-4 mb-5">
-            <h1 class="h2">
-                <a href="{{ route('member.notes.index') }}" class="text-dark"><i class="fad fa-file-edit text-secondary mr-2"></i>Notes</a>
-            </h1>
-            <div class="p-4 bg-white shadow-sm">
-                <p class="lead mb-1">Recent Notes</p>
-                @include('members.data.notes', ['shadow' => false, 'show_more' => true])
-            </div>
-        </div>
-
-        <div class="col-12 col-md-6 col-xl-4 mb-5">
-            <h1 class="h2">
-                <span class="text-dark"><i class="fad fa-clock text-secondary"></i> Recently Viewed</span>
-            </h1>
-            <div class="p-4 bg-white shadow-sm">
-                @include('members.data.recently-viewed', ['shadow' => false, 'show_more' => false])
-            </div>
-        </div>
+    <div class="row dashboard-sortable-grid">
+        @foreach($widgetsOrder as $widget)
+            @if($widget == 'following')
+                <div class="col-12 col-md-6 col-xl-4 mb-5" data-name="following">
+                    <span class="drag-handle pull-right text-secondary"><i class="fa fa-arrows-alt"></i></span>
+                    @include('members.dashboard-widgets.following')
+                </div>
+            @elseif($widget == 'notes')
+                <div class="col-12 col-md-6 col-xl-4 mb-5" data-name="notes">
+                    <span class="drag-handle pull-right text-secondary"><i class="fa fa-arrows-alt"></i></span>
+                    @include('members.dashboard-widgets.notes')
+                </div>
+            @elseif($widget == 'recent')
+                <div class="col-12 col-md-6 col-xl-4 mb-5" data-name="recent">
+                    <span class="drag-handle pull-right text-secondary"><i class="fa fa-arrows-alt"></i></span>
+                    @include('members.dashboard-widgets.recent')
+                </div>
+            @endif
+        @endforeach
     </div>
 
     @include('members.includes.dashboard-end')
 
     <script src="{{ asset('js/formValidation.js') }}"></script>
 
+@endsection
+
+@section('after_scripts')
+<script>
+    $( function() {
+        $('.dashboard-sortable-grid').sortable({
+            handle: '.drag-handle',
+            update: function( event, ui ) {
+                let widgetsOrder = [];
+
+                $(this).children().each(function (){
+                    widgetsOrder.push($(this).data('name'));
+                });
+
+                $.post('{{ route('member.dashboard.updateWidgetsOrder') }}', { order: widgetsOrder});
+            }
+        });
+    } );
+</script>
 @endsection

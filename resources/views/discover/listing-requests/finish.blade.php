@@ -27,7 +27,7 @@
                                 </div>
                             @else
                                 <p class="text-center">
-                                    <a href="{{ route('home') }}" class="btn btn-dark">Back to Neuly</a>
+                                    <a href="{{ route('index') }}" class="btn btn-dark">Back to Neuly</a>
                                 </p>
                             @endif
                         </div>

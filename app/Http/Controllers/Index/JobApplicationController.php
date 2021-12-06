@@ -21,7 +21,6 @@ class JobApplicationController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        // $this->middleware('neuly.membership');
         $this->middleware(['role:Admin','permission:view job applications'])->only('getResume', 'getCoverLetter');
     }
 

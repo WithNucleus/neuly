@@ -2,7 +2,7 @@
     <div class="container py-5">
         <div class="row">
             <div class="col-12">
-                <img src="{{ asset('images/neuly-logo-dark.png') }}" alt="Neuly" width="120" class="mb-1 mr-2"> <span class="font-weight-bold">v 1.0</span>
+                <img src="{{ asset('images/neuly-logo-dark.png') }}" alt="Neuly" width="120" class="mb-1 mr-2">
             </div>
         </div>
         <div class="row">
@@ -19,12 +19,12 @@
                     <a href="{{ route('job-report-entry.index') }}" class="font-weight-bold">Jobs Report</a>
                 </p>
                 <p class="mb-0">
-                    <a href="{{ route('discover.organizations.jobs', 'neuly') }}" class="font-weight-bold text-info">We're Hiring!</a>
+                    <a href="{{ route('discover.organizations.jobs', 'neuly') }}" class="font-weight-bold">We're Hiring!</a>
                 </p>
             </div>
 
             <div class="col-12 col-md-6 col-lg-3 offset-lg-1 mt-4 mt-md-0">
-                <p class="title mb-1 font-weight-bold text-uppercase text-info pr-4">Discover</p>
+                <p class="title mb-1 font-weight-bold text-uppercase pr-4">Discover</p>
                 <div class="d-flex">
                     <ul class="plain-list mb-0">
                         <li><a href="{{ route('discover.organizations') }}">Organizations</a></li>
@@ -46,7 +46,7 @@
 
             <div class="col-12 col-md-6 col-lg-3 offset-lg-1 mt-4 mt-lg-0">
                 <ul class="plain-list mb-0">
-                    <li class="title mb-1 font-weight-bold text-uppercase text-info pr-4">Helpful Links</li>
+                    <li class="title mb-1 font-weight-bold text-uppercase pr-4">Helpful Links</li>
                     <li><a href="/about">About Neuly</a></li>
                     <li><a href="/what-data-is-included">What Data is Included</a></li>
                     <li>Create a Profile <span class="badge badge-info">Coming soon!</span></li>
