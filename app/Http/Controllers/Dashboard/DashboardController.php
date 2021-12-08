@@ -21,6 +21,7 @@ class DashboardController extends Controller
         'following',
         'notes',
         'recent',
+        'team',
     ];
 
     // Member Dashboard Page
@@ -65,7 +66,29 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        return view('members.dashboard', compact('notes', 'recently_viewed', 'followLists', 'follows', 'widgetsOrder'));
+        $teamOwner = null;
+        $teamMembers = [];
+        $invitations = [];
+
+        if ($user->hasRole('Team owner')) {
+            $invitations = $user->teamInvitations()->get();
+            $teamMembers = $user->teamMembers()->get();
+        } elseif ($user->hasRole('Team member')) {
+            $teamOwner = $user->getTeamOwner();
+            $teamMembers = $teamOwner->teamMembers()->get();
+        }
+
+        return view('members.dashboard', compact(
+            'user',
+            'notes',
+            'recently_viewed',
+            'followLists',
+            'follows',
+            'widgetsOrder',
+            'teamOwner',
+            'teamMembers',
+            'invitations'
+        ));
     }
 
     public function updateWidgetsOrder(Request $request)
@@ -74,7 +97,7 @@ class DashboardController extends Controller
         $newWidgetsOrder = $request->input('order');
 
         foreach ($this->defaultWidgetsOrder as $widget) {
-            if (! in_array($widget, $newWidgetsOrder)) {
+            if (!in_array($widget, $newWidgetsOrder)) {
                 $newWidgetsOrder[] = $widget;
             }
         }
