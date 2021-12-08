@@ -19,15 +19,25 @@ trait SearchableEntity {
         $array = $this->transform($this->toArray());
 
         /**
+         * Rename Fields
+         *  @requires $currentName => $newName
+         *  e.g. job_title => name
+         */
+        if (property_exists($this, 'searchableRenamedFields')) {
+            foreach ($this->searchableRenamedFields as $currentName => $newName) {
+                $array[$newName] = $this->{$currentName};
+                unset($array[$currentName]);
+            }
+        }
+
+        /**
          * Relationships
          *  @requires $relationName => $fieldName
          *  e.g. companies => name
          */
         if (property_exists($this, 'searchableRelationships')) {
             foreach ($this->searchableRelationships as $relationName => $fieldName) {
-
                 if ($relationName === 'locations') {
-
                     $array[$relationName] = $this->{$relationName}->map(function ($data) {
                         return [
                             'name' => $data['name'],
@@ -36,13 +46,10 @@ trait SearchableEntity {
                             'country' => $data['country']
                         ];
                     })->toArray();
-
                 } else {
-
                     $array[$relationName] = $this->{$relationName}->map(function ($data) use ($fieldName) {
                         return $data[$fieldName];
                     })->toArray();
-
                 }
             }
         }

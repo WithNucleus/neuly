@@ -47,6 +47,10 @@ class Clinicaltrial extends Model implements EntityContract
         'people' => 'name',
     ];
 
+    private $searchableRenamedFields = [
+        'title' => 'name'
+    ];
+
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS

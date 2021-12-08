@@ -71,6 +71,10 @@ class Job extends Model implements EntityContract
         'posted_date'
     ];
 
+    private $searchableRenamedFields = [
+        'job_title' => 'name'
+    ];
+
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS
