@@ -31,7 +31,9 @@ $("select.discover").change(function(){
 		window.location.replace("/insights");
 	} else if (value == 'index') {
 		window.location.replace("/psychedelic-index");
-	}
+	} else if (value == 'news') {
+        window.location.replace("/news");
+    }
 
 
 });

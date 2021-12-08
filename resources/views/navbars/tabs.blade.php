@@ -1,9 +1,11 @@
 <ul class="nav nav-tabs discover-tabs">
-    <li class="nav-item">
-        <a class="nav-link @if(Request::is('dashboard') OR Request::is('dashboard/*')) active @endif "href="{{ route('member.dashboard') }}">
-            <span class="icon mr-1"><i class="fad fa-home"></i></span>Dashboard
-        </a>
-    </li>
+    @if(Request::is('dashboard') OR Request::is('dashboard/*'))
+        <li class="nav-item">
+            <a class="nav-link active" href="{{ route('member.dashboard') }}">
+                <i class="fad fa-home"></i>
+            </a>
+        </li>
+    @endif
     <li class="nav-item">
         <a class="nav-link @if(Route::is('discover.organizations') OR Route::is('discover.organizations.show')) active @endif" href="{{ route('discover.organizations') }}">
             <span class="icon mr-1"><i class="fad fa-building"></i></span>Organizations
@@ -52,6 +54,11 @@
     <li class="nav-item">
         <a class="nav-link {{ stripos(Route::currentRouteName(), 'discover.jobs') !== false ? 'active' : '' }}" href="{{ route('discover.jobs') }}">
             <span class="icon mr-1"><i class="fad fa-briefcase"></i></span>Jobs
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {{ stripos(Route::currentRouteName(), 'discover.news') !== false ? 'active' : '' }}" href="{{ route('discover.news') }}">
+            <span class="icon mr-1"><i class="fad fa-newspaper"></i></span>News
         </a>
     </li>
     <li class="nav-item">

@@ -24,14 +24,15 @@
                 <div class="dropdown-menu dropdown-menu-anchor-right" aria-labelledby="navbarDropdownExplore">
                     <a class="dropdown-item" href="{{ route('discover.organizations') }}"><i class="fad fa-building fa-fw"></i> Organizations</a>
                     <a class="dropdown-item" href="{{ route('discover.people') }}"><i class="fad fa-users fa-fw"></i> People</a>
-                    <a class="dropdown-item" href="{{ route('discover.research') }}"><i class="fad fa-microscope fa-fw"></i> Research</a>
+                    <a class="dropdown-item" href="{{ route('discover.investors') }}"><i class="fad fa-hands-usd fa-fw"></i> Investors</a>
                     <a class="dropdown-item" href="{{ route('discover.locations.maps.global') }}"><i class="fad fa-map-pin fa-fw"></i> Locations</a>
                     <a class="dropdown-item" href="{{ route('discover.focus') }}"><i class="fad fa-tags fa-fw"></i> Focus</a>
-                    <a class="dropdown-item" href="{{ route('discover.events') }}"><i class="fad fa-calendar fa-fw"></i> Events</a>
-                    <a class="dropdown-item" href="{{ route('discover.jobs') }}"><i class="fad fa-briefcase fa-fw"></i> Jobs</a>
+                    <a class="dropdown-item" href="{{ route('discover.research') }}"><i class="fad fa-microscope fa-fw"></i> Research</a>
                     <a class="dropdown-item" href="{{ route('discover.clinicaltrials') }}"><i class="fad fa-stethoscope fa-fw"></i> Clinical Trials</a>
                     <a class="dropdown-item" href="{{ route('discover.index') }}"><i class="fad fa-chart-area fa-fw"></i> Pubco Index</a>
-                    <a class="dropdown-item" href="{{ route('discover.investors') }}"><i class="fad fa-hands-usd fa-fw"></i> Investors</a>
+                    <a class="dropdown-item" href="{{ route('discover.events') }}"><i class="fad fa-calendar fa-fw"></i> Events</a>
+                    <a class="dropdown-item" href="{{ route('discover.jobs') }}"><i class="fad fa-briefcase fa-fw"></i> Jobs</a>
+                    <a class="dropdown-item" href="{{ route('discover.news') }}"><i class="fad fa-newspaper fa-fw"></i> News</a>
                 </div>
             </li>
 
