@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Dashboard\TeamController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -266,6 +267,17 @@ Route::group([
         Route::get('/follow//get-modal/{id}/{type}', 'Dashboard\FollowController@getModal')->name('member.follow.getModal');
         Route::post('/follow/attach', 'Dashboard\FollowController@attach')->name('member.follow.attach');
         Route::post('/follow/detach', 'Dashboard\FollowController@detach')->name('member.follow.detach');
+
+        // Team
+        Route::group([
+            'prefix' => '/team',
+            'as' => 'member.team.',
+        ], function () {
+            Route::get('/', [TeamController::class, 'index'])->name('index');
+            Route::post('/invite', [TeamController::class, 'invite'])->name('invite');
+            Route::delete('/invitation/{invitation_id}', [TeamController::class, 'removeInvitation'])->name('removeInvitation');
+            Route::delete('/member/{member_id}', [TeamController::class, 'removeMember'])->name('removeMember');
+        });
     });
 
     // Notifications

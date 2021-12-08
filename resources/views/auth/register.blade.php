@@ -16,6 +16,28 @@
                 <form method="POST" action="{{ route('register') }}">
                     @csrf
 
+                    @if($teamOwner)
+                    <input type="hidden" name="team_owner_id" value="{{ $teamOwner->id }}" />
+                    <input type="hidden" name="role" value="Team member" />
+
+                    <p class="help-block">Register as team member by invitation from {{ $teamOwner->fullname }}</p>
+                    @else
+                    <div class="form-group row">
+                        <div class="col-12 col-md-6 mb-3 mb-md-0">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" id="radioUserRole1" name="role" value="Subscriber" checked
+                                       onchange="document.getElementById('socialAuth').style.visibility = 'visible';">
+                                <label class="form-check-label" for="radioUserRole1">Subscriber</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" id="radioUserRole2" name="role" value="Team owner"
+                                       onchange="document.getElementById('socialAuth').style.visibility = 'hidden';">
+                                <label class="form-check-label" for="radioUserRole2">Team</label>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+
                     <div class="form-group row">
                         <div class="col-12 col-md-6 mb-3 mb-md-0">
                             <label for="name" class="font-weight-bold">First Name</label>
@@ -46,7 +68,9 @@
                         <div class="col-12">
                             <label for="email" class="font-weight-bold">{{ __('Email Address') }}</label>
 
-                            <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
+                            <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
+                                   name="email" value="{{ $invitedEmail ? $invitedEmail : old('email') }}" required
+                                   autocomplete="email" {{ $invitedEmail ? 'readonly' : '' }}>
 
                             @error('email')
                                 <span class="invalid-feedback" role="alert">
@@ -84,12 +108,14 @@
                     </div>
                 </form>
 
-                <div class="row mt-3">
+                @if($teamOwner === null)
+                <div id="socialAuth" class="row mt-3">
                     <div class="col-12 text-center">
                         <p class="mb-1">Or signup with</p>
                         @include('auth.includes.social-auth-buttons')
                     </div>
                 </div>
+                @endif
             </div>
             <div class="col-lg-6 mt-5 mt-lg-3 pl-lg-5">
                 <ul class="plain-list">
