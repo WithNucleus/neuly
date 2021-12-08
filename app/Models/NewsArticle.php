@@ -31,6 +31,8 @@ class NewsArticle extends Model implements EntityImageContract
         'date' => 'date',
     ];
 
+    private $searchableModelName = 'News Article';
+
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS

@@ -51,6 +51,8 @@ class Clinicaltrial extends Model implements EntityContract
         'title' => 'name'
     ];
 
+    private $searchableModelName = 'Clinical Trial';
+
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS

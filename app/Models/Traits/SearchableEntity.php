@@ -19,6 +19,15 @@ trait SearchableEntity {
         $array = $this->transform($this->toArray());
 
         /**
+         * Adds model type as a field, with optional renaming
+         */
+        if (property_exists($this, 'searchableModelName')) {
+            $array['model_type'] = $this->searchableModelName;
+        } else {
+            $array['model_type'] = class_basename($this);
+        }
+
+        /**
          * Rename Fields
          *  @requires $currentName => $newName
          *  e.g. job_title => name

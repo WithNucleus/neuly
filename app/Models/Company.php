@@ -82,6 +82,8 @@ class Company extends Model implements EntityContract, EntityImageContract
         'notes',
     ];
 
+    private $searchableModelName = 'Organization';
+
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS
