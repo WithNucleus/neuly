@@ -134,4 +134,15 @@ return [
         'key' => env('MEILISEARCH_KEY', null),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | SCOUT IMAGE URL PREFIX
+    |--------------------------------------------------------------------------
+    |
+    | The URL prefix for image files if the model has EntityImageContract.
+    |
+    */
+
+    'image_url_prefix' => env('SCOUT_IMAGE_URL_PREFIX', 'https://neuly.com')
+
 ];

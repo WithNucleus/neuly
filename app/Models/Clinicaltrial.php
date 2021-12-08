@@ -10,13 +10,13 @@ use App\Models\ClinicalTrialDetails\CtStudyDesign;
 use App\Models\Contracts\EntityContract;
 use App\Models\Traits\CrudShowEntityPageButton;
 use App\Models\Traits\OldSlugRedirectable;
+use App\Models\Traits\SearchableEntity;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Laravel\Scout\Searchable;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Clinicaltrial extends Model implements EntityContract
@@ -26,7 +26,7 @@ class Clinicaltrial extends Model implements EntityContract
     use OldSlugRedirectable;
     use LogsActivity;
     use CrudShowEntityPageButton;
-    use Searchable;
+    use SearchableEntity;
 
     /*
     |--------------------------------------------------------------------------
@@ -41,34 +41,17 @@ class Clinicaltrial extends Model implements EntityContract
     protected static $logUnguarded = true;
     protected static $logName = 'entities';
 
+    private $searchableRelationships = [
+        'companies' => 'name',
+        'focus' => 'name',
+        'people' => 'name',
+    ];
+
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
-
-    /**
-     * Searchable Fields
-     * @return array
-     */
-    public function toSearchableArray()
-    {
-        $array = $this->transform($this->toArray());
-
-        $array['companies'] = $this->companies->map(function ($data) {
-            return $data['name'];
-        })->toArray();
-
-        $array['focus'] = $this->focus->map(function ($data) {
-            return $data['name'];
-        })->toArray();
-
-        $array['people'] = $this->people->map(function ($data) {
-            return $data['name'];
-        })->toArray();
-
-        return $array;
-    }
 
     /*
     |--------------------------------------------------------------------------

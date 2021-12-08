@@ -8,11 +8,11 @@ use App\Models\Contracts\EntityImageContract;
 use App\Models\Traits\CrudShowEntityPageButton;
 use App\Models\Traits\EntityImage;
 use App\Models\Traits\OldSlugRedirectable;
+use App\Models\Traits\SearchableEntity;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
-use Laravel\Scout\Searchable;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Investor extends Model implements EntityContract, EntityImageContract
@@ -23,7 +23,7 @@ class Investor extends Model implements EntityContract, EntityImageContract
     use LogsActivity;
     use CrudShowEntityPageButton;
     use EntityImage;
-    use Searchable;
+    use SearchableEntity;
 
     /*
     |--------------------------------------------------------------------------
@@ -47,6 +47,13 @@ class Investor extends Model implements EntityContract, EntityImageContract
     protected static $imageAttribute = 'logo';
     protected static $imageFolderPath = 'investors';
     protected static $imageFilenameAttribute = 'name';
+
+    private $searchableRelationships = [
+        'companies' => 'name',
+        'jobs' => 'name',
+        'locations' => 'name',
+        'people' => 'name',
+    ];
 
     /*
     |--------------------------------------------------------------------------
@@ -80,33 +87,6 @@ class Investor extends Model implements EntityContract, EntityImageContract
     public static function getTypeValues()
     {
         return array_combine(self::TYPE, self::TYPE);
-    }
-
-    /**
-     * Searchable Fields
-     * @return array
-     */
-    public function toSearchableArray()
-    {
-        $array = $this->transform($this->toArray());
-
-        $array['companies'] = $this->companies->map(function ($data) {
-            return $data['name'];
-        })->toArray();
-
-        $array['jobs'] = $this->jobs->map(function ($data) {
-            return $data['job_title'];
-        })->toArray();
-
-        $array['locations'] = $this->locations->map(function ($data) {
-            return $data['name'];
-        })->toArray();
-
-        $array['people'] = $this->people->map(function ($data) {
-            return $data['name'];
-        })->toArray();
-
-        return $array;
     }
 
     /*

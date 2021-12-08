@@ -8,11 +8,10 @@ use App\Models\Contracts\EntityImageContract;
 use App\Models\Traits\CrudShowEntityPageButton;
 use App\Models\Traits\EntityImage;
 use App\Models\Traits\OldSlugRedirectable;
+use App\Models\Traits\SearchableEntity;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Laravel\Scout\Searchable;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Event extends Model implements EntityContract, EntityImageContract
@@ -23,7 +22,7 @@ class Event extends Model implements EntityContract, EntityImageContract
     use LogsActivity;
     use CrudShowEntityPageButton;
     use EntityImage;
-    use Searchable;
+    use SearchableEntity;
 
     /*
     |--------------------------------------------------------------------------
@@ -47,45 +46,24 @@ class Event extends Model implements EntityContract, EntityImageContract
     protected static $imageFolderPath = 'events';
     protected static $imageFilenameAttribute = 'name';
 
+    private $searchableRelationships = [
+        'companies' => 'name',
+        'focus' => 'name',
+        'locations' => 'name',
+        'people' => 'name',
+        'eventTypes' => 'name',
+    ];
+
+    private $searchableDateFields = [
+        'start_date',
+        'end_date',
+    ];
+
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
-
-    /**
-     * Searchable Fields
-     * @return array
-     */
-    public function toSearchableArray()
-    {
-        $array = $this->transform($this->toArray());
-
-        $array['companies'] = $this->companies->map(function ($data) {
-            return $data['name'];
-        })->toArray();
-
-        $array['focus'] = $this->focus->map(function ($data) {
-            return $data['name'];
-        })->toArray();
-
-        $array['locations'] = $this->locations->map(function ($data) {
-            return $data['name'];
-        })->toArray();
-
-        $array['people'] = $this->people->map(function ($data) {
-            return $data['name'];
-        })->toArray();
-
-        $array['eventTypes'] = $this->eventTypes->map(function ($data) {
-            return $data['name'];
-        })->toArray();
-
-        $array['start_date'] = Carbon::parse($this->start_date)->format('Y-m-d');
-        $array['end_date'] = Carbon::parse($this->end_date)->format('Y-m-d');
-
-        return $array;
-    }
 
     /*
     |--------------------------------------------------------------------------

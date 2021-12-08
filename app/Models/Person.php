@@ -8,6 +8,7 @@ use App\Models\Contracts\EntityImageContract;
 use App\Models\Traits\CrudShowEntityPageButton;
 use App\Models\Traits\OldSlugRedirectable;
 use App\Models\Traits\EntityImage;
+use App\Models\Traits\SearchableEntity;
 use App\Traits\HasFollowers;
 use App\User;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
@@ -16,7 +17,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Log;
-use Laravel\Scout\Searchable;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Person extends Model implements EntityContract, EntityImageContract
@@ -27,7 +27,7 @@ class Person extends Model implements EntityContract, EntityImageContract
     use LogsActivity;
     use CrudShowEntityPageButton;
     use EntityImage;
-    use Searchable;
+    use SearchableEntity;
 
     /*
     |--------------------------------------------------------------------------
@@ -44,6 +44,24 @@ class Person extends Model implements EntityContract, EntityImageContract
     protected static $imageAttribute         = 'photo';
     protected static $imageFolderPath        = 'people';
     protected static $imageFilenameAttribute = 'id';
+
+    private $searchableRelationships = [
+        'companies' => 'name',
+        'focus' => 'name',
+        'locations' => 'name',
+        'investors' => 'name',
+        'research' => 'name',
+        'events' => 'name',
+        'clinicaltrials' => 'title',
+    ];
+
+    private $searchableSkippedFields = [
+        'email',
+        'twitter_followers',
+        'instagram_followers',
+        'secondary_email',
+        'visibility'
+    ];
 
     /*
     |--------------------------------------------------------------------------
@@ -121,45 +139,6 @@ class Person extends Model implements EntityContract, EntityImageContract
     public function getShowLink()
     {
         return '<a href="' . route('discover.people.show', $this->slug) . '">' . $this->name . '</a>';
-    }
-
-    /**
-     * Searchable Fields
-     * @return array
-     */
-    public function toSearchableArray()
-    {
-        $array = $this->transform($this->toArray());
-
-        $array['companies'] = $this->companies->map(function ($data) {
-            return $data['name'];
-        })->toArray();
-
-        $array['focus'] = $this->focus->map(function ($data) {
-            return $data['name'];
-        })->toArray();
-
-        $array['locations'] = $this->locations->map(function ($data) {
-            return $data['name'];
-        })->toArray();
-
-        $array['investors'] = $this->investors->map(function ($data) {
-            return $data['name'];
-        })->toArray();
-
-        $array['research'] = $this->research->map(function ($data) {
-            return $data['name'];
-        })->toArray();
-
-        $array['events'] = $this->events->map(function ($data) {
-            return $data['name'];
-        })->toArray();
-
-        $array['clinicaltrials'] = $this->clinicaltrials->map(function ($data) {
-            return $data['title'];
-        })->toArray();
-
-        return $array;
     }
 
     /*
