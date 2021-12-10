@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\EventsController;
+use App\Http\Controllers\Api\JobsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,6 +19,11 @@ Route::get('/api/entities/list/{alias}', 'EntityDataController@getEntitiesListBy
 
 Route::post('/feedback', 'FeedbackController@apiStore')->name('feedback.api.store');
 
-//Route::middleware('auth:api')->get('/user', function (Request $request) {
-//    return $request->user();
-//});
+Route::group([
+    'middleware' => 'auth:api',
+    'as' => 'api.',
+], function () {
+    Route::get('/jobs', [JobsController::class, 'index'])->name('jobs.index');
+    Route::get('/events', [EventsController::class, 'index'])->name('events.index');
+});
+
