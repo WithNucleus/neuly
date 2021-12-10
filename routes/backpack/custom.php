@@ -45,6 +45,8 @@ Route::group([
     Route::crud('person-claim', 'ClaimPersonCrudController');
     Route::get('person-claim/{claim}/approve', 'ClaimPersonCrudController@approve')->name('admin.person-claim.approve');
 
+    Route::crud('api-user', 'ApiUserCrudController');
+
     Route::group([
         'namespace'  => 'ClinicalTrialDetails',
     ], function (){
