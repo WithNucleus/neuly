@@ -8,6 +8,7 @@ use App\Models\Contracts\EntityImageContract;
 use App\Models\Traits\CrudShowEntityPageButton;
 use App\Models\Traits\EntityImage;
 use App\Models\Traits\OldSlugRedirectable;
+use App\Models\Traits\SearchableEntity;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -22,6 +23,7 @@ class Investor extends Model implements EntityContract, EntityImageContract
     use LogsActivity;
     use CrudShowEntityPageButton;
     use EntityImage;
+    use SearchableEntity;
 
     /*
     |--------------------------------------------------------------------------
@@ -45,6 +47,13 @@ class Investor extends Model implements EntityContract, EntityImageContract
     protected static $imageAttribute = 'logo';
     protected static $imageFolderPath = 'investors';
     protected static $imageFilenameAttribute = 'name';
+
+    private $searchableRelationships = [
+        'companies' => 'name',
+        'jobs' => 'name',
+        'locations' => 'name',
+        'people' => 'name',
+    ];
 
     /*
     |--------------------------------------------------------------------------

@@ -8,6 +8,7 @@ use App\Models\Contracts\EntityImageContract;
 use App\Models\Traits\CrudShowEntityPageButton;
 use App\Models\Traits\OldSlugRedirectable;
 use App\Models\Traits\EntityImage;
+use App\Models\Traits\SearchableEntity;
 use App\Traits\HasFollowers;
 use App\User;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
@@ -26,6 +27,7 @@ class Person extends Model implements EntityContract, EntityImageContract
     use LogsActivity;
     use CrudShowEntityPageButton;
     use EntityImage;
+    use SearchableEntity;
 
     /*
     |--------------------------------------------------------------------------
@@ -42,6 +44,24 @@ class Person extends Model implements EntityContract, EntityImageContract
     protected static $imageAttribute         = 'photo';
     protected static $imageFolderPath        = 'people';
     protected static $imageFilenameAttribute = 'id';
+
+    private $searchableRelationships = [
+        'companies' => 'name',
+        'focus' => 'name',
+        'locations' => 'name',
+        'investors' => 'name',
+        'research' => 'name',
+        'events' => 'name',
+        'clinicaltrials' => 'title',
+    ];
+
+    private $searchableSkippedFields = [
+        'email',
+        'twitter_followers',
+        'instagram_followers',
+        'secondary_email',
+        'visibility'
+    ];
 
     /*
     |--------------------------------------------------------------------------
