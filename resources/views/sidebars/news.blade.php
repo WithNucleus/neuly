@@ -1,7 +1,7 @@
 @include('sidebars.filters.checkboxes-new', [
     'label'     => 'Focus',
     'name'      => 'focus',
-    'items'     => $focus_cats,
+    'items'     => $focusCategories,
     'item_filters' => $filters_focus
 ])
 

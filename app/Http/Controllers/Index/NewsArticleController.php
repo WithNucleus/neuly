@@ -34,9 +34,9 @@ class NewsArticleController extends Controller
             ->paginate(20)
             ->appends(request()->query());
 
-        $focus_cats = Focus::has('newsarticles', '>' , 0)->with('newsarticles')->get()->pluck('name')->unique()->sort();
+        $focusCategories = Focus::has('newsarticles', '>' , 0)->pluck('name')->unique()->sort();
 
-        return view('discover.news.index', compact('newsArticles', 'focus_cats'));
+        return view('discover.news.index', compact('newsArticles', 'focusCategories'));
 
     }
 }
