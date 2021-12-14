@@ -106,7 +106,7 @@ class EventController extends Controller
             'image'         => '',
         ));
 
-        $related = $this->getReltaedEntities($event);
+        $related = $this->getRelatedEntities($event);
 
         $entity = 'events';
         $isFollowed = (bool) count(FollowRepository::fromuser(Event::class, $event->id));
@@ -197,7 +197,7 @@ class EventController extends Controller
         ];
     }
 
-    private function getReltaedEntities(Event $event)
+    private function getRelatedEntities(Event $event)
     {
         $focuses = $event->focus->pluck('id');
 
