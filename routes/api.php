@@ -20,7 +20,7 @@ Route::get('/api/entities/list/{alias}', 'EntityDataController@getEntitiesListBy
 Route::post('/feedback', 'FeedbackController@apiStore')->name('feedback.api.store');
 
 Route::group([
-    'middleware' => 'auth:api',
+    'middleware' => ['api.auth:api'],
     'as' => 'api.',
 ], function () {
     Route::get('/jobs', [JobsController::class, 'index'])->name('jobs.index');
