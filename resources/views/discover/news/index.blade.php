@@ -74,8 +74,8 @@
 
                                 <span class="mr-3">
                                     <i class="fad fa-map-marker-alt text-info"></i>
-                                    @foreach ($filters_focus as $location)
-                                        {{ $location }}
+                                    @foreach ($filters_focus as $focus)
+                                        {{ $focus }}
                                         @if (!$loop->last) <strong class="text-info">/</strong> @endif
                                     @endforeach
                                 </span>
