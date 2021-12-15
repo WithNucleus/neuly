@@ -54,7 +54,6 @@ class UserPersonController extends Controller
         ]);
 
         $person = Auth::user()->relatedPerson;
-        $person->visibility = $request->has('visibility') ? $request->input('visibility') : $person->visibility;
         $person->name = $request->has('name') ? $request->input('name') : $person->name;
         $person->bio = $request->has('name') ? strip_tags($request->input('bio')) : $person->bio;
 
@@ -103,7 +102,7 @@ class UserPersonController extends Controller
         $request->validate([
             'name' => 'required'
         ]);
-        
+
         $user = Auth::user();
         $person = new Person();
         $person->visibility = $request->has('visibility') ? $request->input('visibility') : $person->visibility;
