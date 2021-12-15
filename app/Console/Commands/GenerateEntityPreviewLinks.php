@@ -49,7 +49,7 @@ class GenerateEntityPreviewLinks extends Command
 
         foreach ($allowedEntities as $entity) {
 
-            $entities = $entity::pending()->whereNull('visibility_code')->get();
+            $entities = $entity::notPublic()->whereNull('visibility_code')->get();
 
             foreach ($entities as $entityItem) {
                 $entityItem->visibility_code = Str::random(40);

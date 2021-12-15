@@ -88,7 +88,7 @@ class CompanyController extends Controller
             ->where('slug', $slug)
             ->firstOrFail();
 
-        if(!$company->hasVisibilityCode($request->input('preview'))) {
+        if (!$company->isPublic() AND !$company->validateVisibilityCode($request->input('preview'))) {
             abort(404);
         }
 

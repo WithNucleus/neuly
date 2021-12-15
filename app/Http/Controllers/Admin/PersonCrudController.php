@@ -335,6 +335,18 @@ class PersonCrudController extends CrudController
                 return $query->orderBy('name', 'ASC')->get();
             }),
         ]);
+        $this->crud->addField([
+            'name'    => 'visibility',
+            'type'    => 'radio',
+            'label'   => 'Visibility',
+            'options' => Person::getVisibilityValues(),
+            'inline'  => true,
+        ]);
+        $this->crud->addField([
+            'name'  => 'visibility_code',
+            'type'  => 'text',
+            'label' => 'Visibility Code'
+        ]);
     }
 
     /**

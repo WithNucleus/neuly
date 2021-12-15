@@ -45,6 +45,9 @@ class VisibilityOptionsForCompaniesAndPeople extends Migration
         Schema::table('people', function (Blueprint $table) {
             $table->dropColumn('visibility');
             $table->dropColumn('visibility_code');
+        });
+
+        Schema::table('people', function (Blueprint $table) {
             $table->enum('visibility', ['neuly', 'public'])->default('public');
         });
     }

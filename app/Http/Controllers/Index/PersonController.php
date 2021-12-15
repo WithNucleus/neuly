@@ -38,17 +38,10 @@ class PersonController extends Controller
 
     // Public / Private Index for Homepage
     public function index(Request $request) {
-        $visibility = ['public'];
-
-        if(Auth::check())
-        {
-            $visibility[] = 'neuly';
-        }
 
         // Get People
         $people = QueryBuilder::for(Person::class)
             ->public()
-            ->whereIn('visibility', $visibility)
             ->with('companies')
             ->allowedFilters([
                 'name',
@@ -78,7 +71,7 @@ class PersonController extends Controller
         // Get Person
         $person = Person::where('slug', $slug)->firstOrFail();
 
-        if(!$person->hasVisibilityCode($request->input('preview'))) {
+        if (!$person->isPublic() AND !$person->validateVisibilityCode($request->input('preview'))) {
             abort(404);
         }
 

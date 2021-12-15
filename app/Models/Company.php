@@ -47,6 +47,11 @@ class Company extends Model implements EntityContract, EntityImageContract
         'Partner',
     ];
 
+    const VISIBILITY_TYPES = [
+        'public',
+        'pending'
+    ];
+
     protected $table = 'companies';
     protected $guarded = ['id'];
 
@@ -134,7 +139,16 @@ class Company extends Model implements EntityContract, EntityImageContract
         );
     }
 
-    public function hasVisibilityCode($visibility_code): bool
+    public static function getVisibilityValues(): array
+    {
+        return array_combine(self::VISIBILITY_TYPES, self::VISIBILITY_TYPES);
+    }
+
+    public function isPublic() {
+        return $this->visibility === 'public';
+    }
+
+    public function validateVisibilityCode($visibility_code): bool
     {
         return $this->visibility_code === $visibility_code;
     }
@@ -255,9 +269,9 @@ class Company extends Model implements EntityContract, EntityImageContract
         return $query->where('ownership', 'Educational Institution');
     }
 
-    public function scopePending($query)
+    public function scopeNotPublic($query)
     {
-        return $query->where('visibility', '=', 'pending');
+        return $query->where('visibility', '!=', 'public');
     }
 
     public function scopePublic($query)
