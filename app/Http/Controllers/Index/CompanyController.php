@@ -37,6 +37,7 @@ class CompanyController extends Controller
     public function index(Request $request) {
 
         $companies = QueryBuilder::for(Company::class)
+            ->public()
             ->with('focus')
             ->allowedFilters([
                 'name',
@@ -86,6 +87,10 @@ class CompanyController extends Controller
             ])
             ->where('slug', $slug)
             ->firstOrFail();
+
+        if(!$company->hasVisibilityCode($request->input('preview'))) {
+            abort(404);
+        }
 
         $metas = Metas::process(array(
             'title'         => $company->name,

@@ -13,6 +13,7 @@ use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -98,12 +99,13 @@ class Company extends Model implements EntityContract, EntityImageContract
         });
     }
 
-    public function getShowLink() {
+    public function getShowLink(): string
+    {
         return '<a href="' . route('discover.organizations.show', $this->slug) . '">' . $this->name . '</a>';
     }
 
-    public function getTypeDescription() {
-
+    public function getTypeDescription(): string
+    {
         if ($this->ownership === 'Privately Held' OR $this->ownership === 'Non-Profit') {
 
             return 'a ' . strtolower($this->ownership) . ' organization';
@@ -118,24 +120,23 @@ class Company extends Model implements EntityContract, EntityImageContract
         }
     }
 
-    /**
-     * @return array
-     */
-    public static function getOwnershipValues()
+    public static function getOwnershipValues(): array
     {
         return array_combine(self::OWNERSHIP, self::OWNERSHIP);
     }
 
-    /**
-     * @return array
-     */
-    public function getParentsAndSubsidiariesIgnoredIds()
+    public function getParentsAndSubsidiariesIgnoredIds(): array
     {
         return array_merge(
             [$this->id],
             $this->parents->pluck('id')->toArray(),
             $this->subsidiaries->pluck('id')->toArray()
         );
+    }
+
+    public function hasVisibilityCode($visibility_code): bool
+    {
+        return $this->visibility_code === $visibility_code;
     }
 
     /*
@@ -252,6 +253,16 @@ class Company extends Model implements EntityContract, EntityImageContract
      */
     public function scopeEducational($query) {
         return $query->where('ownership', 'Educational Institution');
+    }
+
+    public function scopePending($query)
+    {
+        return $query->where('visibility', '=', 'pending');
+    }
+
+    public function scopePublic($query)
+    {
+        return $query->where('visibility', '=', 'public');
     }
 
     /*

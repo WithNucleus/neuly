@@ -201,9 +201,14 @@ class Person extends Model implements EntityContract, EntityImageContract
     |--------------------------------------------------------------------------
     */
 
+    public function scopePending($query)
+    {
+        return $query->where('visibility', '=', 'pending');
+    }
+
     public function scopePublic($query)
     {
-        return $query->where('visibilty', '=', 'public');
+        return $query->where('visibility', '=', 'public');
     }
 
     /*
@@ -382,8 +387,8 @@ class Person extends Model implements EntityContract, EntityImageContract
         return $social;
     }
 
-    public function canBeViewed()
+    public function hasVisibilityCode($visibility_code): bool
     {
-        return $this->visibility === 'public' || Auth::check();
+        return $this->visibility === 'public' || $this->visibility_code === $visibility_code;
     }
 }

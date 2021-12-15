@@ -13,6 +13,11 @@ $entityId = $entity->getKey();
     <input type="hidden" name="entity_type" value="{{$entityType}}"/>
     <input type="hidden" name="is_update" value="1"/>
     <input type="hidden" name="to_update_id" value="{{$entityId}}"/>
-    <button type="submit" class="btn btn-link btn-sm p-0">Update this listing</button>
+    @isset($preview)
+        <input type="hidden" name="preview_request" value="{{$preview}}"/>
+        <button type="submit" class="btn btn-info">Approve &amp; Update This Listing</button>
+    @else
+        <button type="submit" class="btn btn-link btn-sm p-0">Update this listing</button>
+    @endisset
 </form>
 

@@ -61,20 +61,24 @@
 
     @include('discover.people.data')
 
-    @auth
-    <div class="row">
-        <div class="col-sm-6">
-            <small>Last updated: {{ Carbon\Carbon::parse($person->updated_at)->format('M d, Y') }}</small>
-        </div>
-        <div class="col-sm-6 text-right">
-            @include('discover.includes.update-listing-form', ['entity' => $person])
+    @isset($preview)
+        @include('discover.includes.update-listing-form', ['entity' => $person])
+    @else
+        @auth
+            <div class="row">
+                <div class="col-sm-6">
+                    <small>Last updated: {{ Carbon\Carbon::parse($person->updated_at)->format('M d, Y') }}</small>
+                </div>
+                <div class="col-sm-6 text-right">
+                    @include('discover.includes.update-listing-form', ['entity' => $person])
 
-            @if($isVerified == false)
-            <small><a href="{{ route('discover.people.requestDeletion', $person->slug) }}" class="text-danger">Request deletion</a></small>
-            @endif
-        </div>
-    </div>
-    @endauth
+                    @if($isVerified == false)
+                        <small><a href="{{ route('discover.people.requestDeletion', $person->slug) }}" class="text-danger">Request deletion</a></small>
+                    @endif
+                </div>
+            </div>
+        @endauth
+    @endisset
 
     @include('discover.includes.show-end')
 

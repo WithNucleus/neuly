@@ -47,6 +47,7 @@ class PersonController extends Controller
 
         // Get People
         $people = QueryBuilder::for(Person::class)
+            ->public()
             ->whereIn('visibility', $visibility)
             ->with('companies')
             ->allowedFilters([
@@ -77,7 +78,7 @@ class PersonController extends Controller
         // Get Person
         $person = Person::where('slug', $slug)->firstOrFail();
 
-        if(!$person->canBeViewed()) {
+        if(!$person->hasVisibilityCode($request->input('preview'))) {
             abort(404);
         }
 
