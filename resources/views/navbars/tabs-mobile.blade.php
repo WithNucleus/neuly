@@ -57,6 +57,11 @@
                     selected
                 @endif
             >Jobs</option>
+            <option value="news"
+                    @if(Route::is('discover.news'))
+                    selected
+                @endif
+            >News</option>
             <option value="insights"
                 @if(Route::is('discover.insights') OR Request::is('insights/*'))
                     selected

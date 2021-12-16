@@ -14,14 +14,15 @@
     <ul class="plain-list mb-2">
         <li><a href="{{ route('discover.organizations') }}">Organizations</a></li>
         <li><a href="{{ route('discover.people') }}">People</a></li>
-        <li><a href="{{ route('discover.research') }}">Research</a></li>
+        <li><a href="{{ route('discover.investors') }}">Investors</a></li>
         <li><a href="{{ route('discover.locations') }}">Locations</a></li>
         <li><a href="{{ route('discover.focus') }}">Focus</a></li>
-        <li><a href="{{ route('discover.events') }}">Events</a></li>
-        <li><a href="{{ route('discover.jobs') }}">Jobs</a></li>
+        <li><a href="{{ route('discover.research') }}">Research</a></li>
         <li><a href="{{ route('discover.clinicaltrials') }}">Clinical Trials</a></li>
         <li><a href="{{ route('discover.index') }}">Pubco Index</a></li>
-        <li><a href="{{ route('discover.investors') }}">Investors</a></li>
+        <li><a href="{{ route('discover.events') }}">Events</a></li>
+        <li><a href="{{ route('discover.jobs') }}">Jobs</a></li>
+        <li><a href="{{ route('discover.news') }}">News</a></li>
         <li><a href="{{ route('discover.insights') }}">Insights</a></li>
     </ul>
 

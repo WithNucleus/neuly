@@ -165,6 +165,9 @@ Route::group([
     Route::get('/clinical-trials/map/{country}', 'Index\ClinicalTrialMapController@showCountry')->name('discover.clinicaltrials.map.country');
     Route::get('/clinical-trials/{slug}', 'Index\ClinicaltrialController@show')->name('discover.clinicaltrials.show');
 
+    // News Articles
+    Route::get('/news', 'Index\NewsArticleController@index')->name('discover.news');
+
     // Listing Requests
     Route::get('/listing', 'Index\ListingRequestController@index')->name('listing');
     Route::get('/listing/request', 'Index\ListingRequestController@request')->name('listing.request');

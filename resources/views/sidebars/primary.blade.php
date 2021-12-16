@@ -106,6 +106,10 @@
             @if(Route::is('discover.clinicaltrials.map') OR Route::is('discover.clinicaltrials.map.country'))
                 @include('sidebars.clinicaltrials.global-map')
             @endif
+
+            @if(Route::is('discover.news'))
+                @include('sidebars.news')
+            @endif
         </div>
     </div>
 </nav>
