@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -102,14 +103,12 @@ Route::group([
     Route::get('/organizations', 'Index\CompanyController@index')->name('discover.organizations');
     Route::get('/organization/map', 'Index\CompanyMapController@showMap')->name('discover.organizations.map');
     Route::get('/organization/map/{country}', 'Index\CompanyMapController@showCountry')->name('discover.organizations.map.country');
-    Route::get('/organization/{slug}', 'Index\CompanyController@show')->name('discover.organizations.show');
     Route::get('/organization/{slug}/jobs', 'Index\CompanyController@jobs')->name('discover.organizations.jobs');
     Route::get('/organization/{slug}/events', 'Index\CompanyController@events')->name('discover.organizations.events');
 
     // People
     Route::get('/people', 'Index\PersonController@index')->name('discover.people');
     Route::get('/people/names.json', 'Index\PersonController@namesJson');
-    Route::get('/person/{slug}', 'Index\PersonController@show')->name('discover.people.show');
     Route::post('/person/{slug}/claim', 'Index\PersonController@claim')->name('discover.people.claim');
     Route::get('/person/{slug}/requestDeletion', 'Index\PersonController@requestDeletion')->name('discover.people.requestDeletion');
     Route::post('/person/{slug}/requestDeletion', 'Index\PersonController@requestDeletionSubmit');
@@ -168,8 +167,6 @@ Route::group([
     // Listing Requests
     Route::get('/listing', 'Index\ListingRequestController@index')->name('listing');
     Route::get('/listing/request', 'Index\ListingRequestController@request')->name('listing.request');
-    Route::post('/listing/request', 'Index\ListingRequestController@submitRequest');
-    Route::post('/listing/request/finish', 'Index\ListingRequestController@finishRequest')->name('listing.request.finish');
     Route::get('/listing/request/getEntityListJson', 'Index\ListingRequestController@getEntityListJson')->name('listing.request.getEntityListJson');
 
     Route::get('/job-report-entry', 'Index\JobReportEntryController@index')->name('job-report-entry.index');
@@ -214,6 +211,21 @@ Route::group([
 
     Route::post('/search/clinicaltrials', 'index\SearchController@showClinicalTrialsResults')->name('search.clinicaltrials');
     Route::get('/search/clinicaltrials/{term}', 'Index\SearchController@showClinicalTrialsResults')->name('search.clinicaltrials.term');
+});
+
+// check specific routes for preview action
+Route::group([
+    'middleware' => ['entityPreview', 'limitedAccess', 'verifiedIfAuthorized'],
+], function () {
+    Route::get('/organization/{slug}', 'Index\CompanyController@show')->name('discover.organizations.show');
+    Route::get('/person/{slug}', 'Index\PersonController@show')->name('discover.people.show');
+});
+
+Route::group([
+    'middleware' => ['listingRequestPreview', 'limitedAccess', 'verifiedIfAuthorized'],
+], function () {
+    Route::post('/listing/request', 'Index\ListingRequestController@submitRequest');
+    Route::post('/listing/request/finish', 'Index\ListingRequestController@finishRequest')->name('listing.request.finish');
 });
 
 // Feedback
