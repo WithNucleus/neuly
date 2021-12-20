@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Index;
 
 use App\Helpers\ClaimPersonHelper;
 use App\Helpers\NotificationHelper;
+use App\Helpers\PagePreviewHelper;
 use App\Http\Controllers\Controller;
 use App\Mail\VerifyClaimedPersonMail;
 use App\Models\RaisedClaim;
@@ -67,20 +68,16 @@ class PersonController extends Controller
 
         // Get Person
         $person = Person::where('slug', $slug)->firstOrFail();
-
+        $preview = $request->input('preview');
         // Check Visibility
-        if ($person->visibility === 'public') {
-            if (!Auth::check()) {
-                return redirect()->route('limitedAccess');
+        $previewResult = PagePreviewHelper::checkEntityPreview($request, $person);
+
+        if ($previewResult['canView'] === false) {
+            if ($previewResult['redirectToRoute']) {
+                return redirect()->route($previewResult['redirectToRoute']);
             }
-        } else {
-            if ($request->has('preview')) {
-                if ($person->validateVisibilityCode($request->input('preview')) === false) {
-                    abort(404);
-                }
-            } else {
-                abort(404);
-            }
+
+            abort(404);
         }
 
         $metas = Metas::process(array(
@@ -107,7 +104,7 @@ class PersonController extends Controller
             })
             ->log($person->name);
 
-        return view('discover.people.show', compact('person', 'metas', 'entity', 'isFollowed', 'isVerified'));
+        return view('discover.people.show', compact('person', 'metas', 'entity', 'isFollowed', 'isVerified', 'preview'));
     }
 
     public function namesJson()

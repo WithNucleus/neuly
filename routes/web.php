@@ -213,20 +213,12 @@ Route::group([
     Route::get('/search/clinicaltrials/{term}', 'Index\SearchController@showClinicalTrialsResults')->name('search.clinicaltrials.term');
 });
 
-// check specific routes for preview action
-Route::group([
-    'middleware' => ['entityPreview', 'verifiedIfAuthorized'],
-], function () {
-    Route::get('/organization/{slug}', 'Index\CompanyController@show')->name('discover.organizations.show');
-    Route::get('/person/{slug}', 'Index\PersonController@show')->name('discover.people.show');
-});
-
-Route::group([
-    'middleware' => ['listingRequestPreview', 'verifiedIfAuthorized'],
-], function () {
-    Route::post('/listing/request', 'Index\ListingRequestController@submitRequest');
-    Route::post('/listing/request/finish', 'Index\ListingRequestController@finishRequest')->name('listing.request.finish');
-});
+// show entity routes with preview feature
+Route::get('/organization/{slug}', 'Index\CompanyController@show')->name('discover.organizations.show');
+Route::get('/person/{slug}', 'Index\PersonController@show')->name('discover.people.show');
+// listing request routes with preview check
+Route::post('/listing/request', 'Index\ListingRequestController@submitRequest');
+Route::post('/listing/request/finish', 'Index\ListingRequestController@finishRequest')->name('listing.request.finish');
 
 // Feedback
 Route::group(['middleware' => 'spamprotection'], function () {

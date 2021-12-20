@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Index;
 
+use App\Helpers\PagePreviewHelper;
 use App\Http\Controllers\Controller;
 use App\Repositories\FollowRepository;
 use Illuminate\Http\Request;
@@ -89,18 +90,15 @@ class CompanyController extends Controller
             ->firstOrFail();
 
         // Check Visibility
-        if ($company->visibility === 'public') {
-            if (!Auth::check()) {
-                return redirect()->route('limitedAccess');
+        $preview = $request->input('preview');
+        $previewResult = PagePreviewHelper::checkEntityPreview($request, $company);
+
+        if ($previewResult['canView'] === false) {
+            if ($previewResult['redirectToRoute']) {
+                return redirect()->route($previewResult['redirectToRoute']);
             }
-        } else {
-            if ($request->has('preview')) {
-                if ($company->validateVisibilityCode($request->input('preview')) === false) {
-                    abort(404);
-                }
-            } else {
-                abort(404);
-            }
+
+            abort(404);
         }
 
         $metas = Metas::process(array(
@@ -128,7 +126,7 @@ class CompanyController extends Controller
             })
             ->log($company->name);
 
-        return view('discover.organizations.show', compact('company', 'related', 'metas', 'entity', 'isFollowed'));
+        return view('discover.organizations.show', compact('company', 'related', 'metas', 'entity', 'isFollowed', 'preview'));
     }
 
     public function namesJson()
