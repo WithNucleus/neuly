@@ -11,7 +11,9 @@ use App\Models\Traits\OldSlugRedirectable;
 use App\Models\Traits\SearchableEntity;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Event extends Model implements EntityContract, EntityImageContract
@@ -96,6 +98,11 @@ class Event extends Model implements EntityContract, EntityImageContract
     | SCOPES
     |--------------------------------------------------------------------------
     */
+
+    public function scopeUpcoming(Builder $query)
+    {
+        return $query->where('start_date', '>=', Carbon::now(config('app.timezone')));
+    }
 
     /*
     |--------------------------------------------------------------------------

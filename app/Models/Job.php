@@ -134,6 +134,11 @@ class Job extends Model implements EntityContract
         return null;
     }
 
+    public function getOwnerNameAttribute()
+    {
+        return $this->owner ? $this->owner->name : null;
+    }
+
     /**
      * @return array
      */
