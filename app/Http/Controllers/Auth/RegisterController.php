@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Team;
 use App\Models\TeamInvitation;
 use App\Providers\RouteServiceProvider;
 use App\User;
@@ -51,22 +52,23 @@ class RegisterController extends Controller
      */
     public function showRegistrationForm(Request $request)
     {
-        $invitedEmail = null;
-        $teamOwner = null;
-        $code = $request->get('code');
+        $invitation = null;
+        $invitedByName = null;
 
-        if ($code) {
+        if ($code = $request->get('code')) {
             $invitation = TeamInvitation::where('code', $code)->first();
 
             if ($invitation) {
-                $teamOwner = User::find($invitation->user_id);
-                $invitedEmail = $invitation->email;
+                $team = Team::with('owner')->find($invitation->team_id);
+                $invitedByName = $team->owner->fullname;
+            } else {
+                Session::flash('error', 'Invitation code is invalid.');
             }
         }
 
         return view('auth.register', [
-            'invitedEmail' => $invitedEmail,
-            'teamOwner' => $teamOwner,
+            'invitation' => $invitation,
+            'invitedByName' => $invitedByName,
         ]);
     }
 
@@ -78,13 +80,19 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-        return Validator::make($data, [
+        $rules = [
             'role' => 'required',
             'name' => ['required', 'string', 'min:2', 'max:255'],
             'last_name' => ['required', 'string', 'min:2', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
+        ];
+
+        if ($data['role'] == 'Team owner') {
+            $rules['team_name'] = ['required', 'string', 'min:2', 'max:255'];
+        }
+
+        return Validator::make($data, $rules);
     }
 
     /**
@@ -102,11 +110,20 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
         ])->assignRole($data['role']);
 
-        if (isset($data['team_owner_id'])) {
-            $teamOwner = User::find($data['team_owner_id']);
-            $teamOwner->addMember($user);
+        //registered as team
+        if ($user->hasRole('Team owner')) {
+            Team::create([
+                'owner_id' => $user->id,
+                'name' => $data['team_name'],
+            ]);
+        }
 
-            TeamInvitation::where('user_id', $teamOwner->id)
+        //registered as team member by invitation
+        if (isset($data['team_id'])) {
+            $team = Team::findOrFail($data['team_id']);
+            $team->addMember($user);
+
+            TeamInvitation::where('team_id', $team->id)
                 ->where('email', $user->email)
                 ->delete();
         }

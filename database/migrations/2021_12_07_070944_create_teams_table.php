@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Spatie\Permission\Models\Role;
 
-class CreateUserTeamsTable extends Migration
+class CreateTeamsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,26 +14,21 @@ class CreateUserTeamsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_teams', function (Blueprint $table) {
+        Schema::create('teams', function (Blueprint $table) {
+            $table->id();
             $table->unsignedBigInteger('owner_id');
-            $table->unsignedBigInteger('member_id');
+            $table->string('name');
             $table->timestamps();
 
-            $table->primary(['owner_id', 'member_id']);
             $table->foreign('owner_id')
-                ->references('id')
-                ->on('users')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
-            $table->foreign('member_id')
                 ->references('id')
                 ->on('users')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
         });
 
+
         Role::create(['name' => 'Team owner']);
-        Role::create(['name' => 'Team member']);
     }
 
     /**
@@ -43,8 +38,8 @@ class CreateUserTeamsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_teams');
+        Schema::dropIfExists('teams');
 
-        Role::whereIn('name', ['Team owner', 'Team member'])->delete();
+        Role::where('name', 'Team owner')->delete();
     }
 }

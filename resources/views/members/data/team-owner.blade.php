@@ -1,8 +1,11 @@
-@if($teamMembers->count() + $invitations->count() < 10)
+<h4>{{ $team->name }}</h4>
+@if($team->members->count() + $team->invitations->count() < 9)
     <div class="row">
         <div class="col-12">
             <form action="{{ route('member.team.invite') }}" method="post">
                 @csrf
+                <input type="hidden" name="team_id" value="{{ $team->id }}">
+
                 <div class="input-group mb-2">
                     <input type="email" name="email" class="form-control" placeholder="Email" aria-label="Email"
                            aria-describedby="basic-addon2" required>
@@ -18,16 +21,16 @@
 <div class="row">
     <div class="col-12">
         <p class="lead mb-1">Members</p>
-        @if ($teamMembers->count() > 0)
+        @if ($team->members->count() > 0)
             <ul class="list-group mb-2">
-                @foreach ($teamMembers as $member)
+                @foreach ($team->members as $member)
                     <li class="list-group-item">
-                        <p class="lead font-weight-bold mb-0"> {{ $member->name }}</p>
+                        <p class="lead font-weight-bold mb-0"> {{ $member->fullname }}</p>
 
                         <div class="d-flex flex-wrap justify-content-between">
                             <div class="left-side font-size-small">
                                 <i class="fad fa-clock"></i>
-                                Registered {{ \Carbon\Carbon::parse($member->created_at)->diffForHumans() }}
+                                Registered {{ \Carbon\Carbon::parse($member->pivot->created_at)->diffForHumans() }}
                             </div>
 
                             <form class="right-side font-size-small d-inline-block" method="post"
@@ -48,12 +51,12 @@
     </div>
 </div>
 
-@if($invitations->count() > 0)
+@if($team->invitations->count() > 0)
     <div class="row">
         <div class="col-12">
             <p class="lead mb-1">Invitations</p>
             <ul class="list-group mb-2">
-                @foreach($invitations as $invitation)
+                @foreach($team->invitations as $invitation)
                     <li class="list-group-item">
                         <div class="d-flex flex-wrap justify-content-between">
                             <div class="left-side font-size-small">

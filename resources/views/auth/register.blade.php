@@ -16,27 +16,40 @@
                 <form method="POST" action="{{ route('register') }}">
                     @csrf
 
-                    @if($teamOwner)
-                    <input type="hidden" name="team_owner_id" value="{{ $teamOwner->id }}" />
+                    @if($invitation)
+                    <input type="hidden" name="team_id" value="{{ $invitation->team_id }}" />
                     <input type="hidden" name="role" value="Team member" />
 
-                    <p class="help-block">Register as team member by invitation from {{ $teamOwner->fullname }}</p>
+                    <p class="help-block">Register as team member by invitation from {{ $invitedByName }}</p>
                     @else
                     <div class="form-group row">
                         <div class="col-12 col-md-6 mb-3 mb-md-0">
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" id="radioUserRole1" name="role" value="Subscriber" checked
-                                       onchange="document.getElementById('socialAuth').style.visibility = 'visible';">
+                                       onchange="document.getElementById('social-auth-block').style.visibility = 'visible'; document.getElementById('team-block').style.display = 'none';">
                                 <label class="form-check-label" for="radioUserRole1">Subscriber</label>
                             </div>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" id="radioUserRole2" name="role" value="Team owner"
-                                       onchange="document.getElementById('socialAuth').style.visibility = 'hidden';">
-                                <label class="form-check-label" for="radioUserRole2">Team</label>
+                                       onchange="document.getElementById('social-auth-block').style.visibility = 'hidden'; document.getElementById('team-block').style.display = 'block';">
+                                <label class="form-check-label" for="radioUserRole2">Team <i class="fa fa-question-circle text-secondarydark" data-toggle="tooltip" data-placement="top" title="Need to bring your team to Neuly? Collaborative features coming soon!"></i> </label>
                             </div>
                         </div>
                     </div>
                     @endif
+
+                    <div id="team-block" class="form-group row" style="display: none;">
+                        <div class="col-12 mb-3 mb-md-0">
+                            <label for="team_name" class="font-weight-bold">Team Name</label>
+                            <input id="team_name" type="text" class="form-control @error('team_name') is-invalid @enderror" name="team_name" value="{{ old('team_name') }}" />
+
+                            @error('team_name')
+                            <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                    </div>
 
                     <div class="form-group row">
                         <div class="col-12 col-md-6 mb-3 mb-md-0">
@@ -69,8 +82,8 @@
                             <label for="email" class="font-weight-bold">{{ __('Email Address') }}</label>
 
                             <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
-                                   name="email" value="{{ $invitedEmail ? $invitedEmail : old('email') }}" required
-                                   autocomplete="email" {{ $invitedEmail ? 'readonly' : '' }}>
+                                   name="email" value="{{ $invitation ? $invitation->email : old('email') }}" required
+                                   autocomplete="email" {{ $invitation ? 'readonly' : '' }}>
 
                             @error('email')
                                 <span class="invalid-feedback" role="alert">
@@ -108,8 +121,8 @@
                     </div>
                 </form>
 
-                @if($teamOwner === null)
-                <div id="socialAuth" class="row mt-3">
+                @if($invitation === null)
+                <div id="social-auth-block" class="row mt-3">
                     <div class="col-12 text-center">
                         <p class="mb-1">Or signup with</p>
                         @include('auth.includes.social-auth-buttons')

@@ -25,6 +25,7 @@ class TeamInvitationRequest extends FormRequest
     public function rules()
     {
         return [
+            'team_id' => 'required',
             'email' => 'required|email|unique:team_invitations,email',
         ];
     }
