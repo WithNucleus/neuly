@@ -5,6 +5,7 @@ namespace App;
 use App\Models\FollowList;
 use App\Models\Person;
 use App\Models\RaisedClaim;
+use App\Models\Team;
 use App\Models\TeamInvitation;
 use App\Models\UserSocialAuth;
 use App\Traits\CanFollow;
@@ -92,23 +93,13 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(TeamInvitation::class);
     }
 
-    public function teamMembers()
+    public function ownedTeam()
     {
-        return $this->belongsToMany(self::class, 'user_teams', 'owner_id', 'member_id');
+        return $this->hasOne(Team::class, 'owner_id');
     }
 
-    public function addMember(self $user)
+    public function team()
     {
-        $this->teamMembers()->attach($user->id);
-    }
-
-    public function removeMember(self $user)
-    {
-        $this->teamMembers()->detach($user->id);
-    }
-
-    public function getTeamOwner()
-    {
-        return $this->belongsToMany(self::class, 'user_teams', 'member_id', 'owner_id')->first();
+        return $this->belongsToMany(Team::class);
     }
 }

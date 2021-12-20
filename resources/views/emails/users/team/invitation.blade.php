@@ -1,10 +1,10 @@
 @component('mail::message')
 Hello,
 
-You have been invited to join team on Neuly by {{ $inviterName }}. Use link below to sign up.
+You have been invited by {{ $inviterName }} to join team "{{ $teamName }}" on Neuly. Use link below to sign up.
 
 @component('mail::button', ['url' => $url])
-Register
+Join team
 @endcomponent
 
 Have a great week!<br>
