@@ -144,7 +144,8 @@ class Company extends Model implements EntityContract, EntityImageContract
         return array_combine(self::VISIBILITY_TYPES, self::VISIBILITY_TYPES);
     }
 
-    public function isPublic() {
+    public function isPublic(): bool
+    {
         return $this->visibility === 'public';
     }
 

@@ -12,15 +12,12 @@ use App\Notifications\RaisedClaimCreated;
 use App\Repositories\FollowRepository;
 use Illuminate\Http\Request;
 use App\Models\Person;
-use App\Models\Company;
 use App\Models\Location;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Session;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\AllowedFilter;
-use Illuminate\Support\Facades\DB;
 use App\Services\Metas;
 use Spatie\Activitylog\Models\Activity;
 
@@ -71,8 +68,19 @@ class PersonController extends Controller
         // Get Person
         $person = Person::where('slug', $slug)->firstOrFail();
 
-        if (!$person->isPublic() AND !$person->validateVisibilityCode($request->input('preview'))) {
-            abort(404);
+        // Check Visibility
+        if ($person->visibility === 'public') {
+            if (!Auth::check()) {
+                return redirect()->route('limitedAccess');
+            }
+        } else {
+            if ($request->has('preview')) {
+                if ($person->validateVisibilityCode($request->input('preview')) === false) {
+                    abort(404);
+                }
+            } else {
+                abort(404);
+            }
         }
 
         $metas = Metas::process(array(

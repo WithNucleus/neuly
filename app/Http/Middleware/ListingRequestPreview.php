@@ -6,6 +6,7 @@ use App\Models\Company;
 use App\Models\Person;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ListingRequestPreview
 {
@@ -18,14 +19,21 @@ class ListingRequestPreview
      */
     public function handle(Request $request, Closure $next)
     {
-        $previewRequest = [
-            'type' => $request->input('entity_type'),
-            'id' => $request->input('to_update_id'),
-            'code' => $request->input('preview_request')
-        ];
+        if ($request->has('preview_request')) {
 
-        if ($this->checkEntityPreviewCode($previewRequest) === true) {
-            view()->share('previewRequest', $previewRequest);
+            $previewRequest = [
+                'type' => $request->input('entity_type'),
+                'id' => $request->input('to_update_id'),
+                'code' => $request->input('preview_request')
+            ];
+
+            if ($this->checkEntityPreviewCode($previewRequest) === true) {
+                view()->share('previewRequest', $previewRequest);
+                return $next($request);
+            }
+        }
+
+        if (Auth::check()) {
             return $next($request);
         }
 

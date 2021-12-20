@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Helpers\Entity\FieldsMapping;
 use App\Helpers\EntityHelper;
 use App\Helpers\ListingRequestHelper;
+use App\Models\Company;
 use App\Models\ListingRequest;
+use App\Models\Person;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\Widget;
 use Illuminate\Http\Request;
@@ -206,6 +208,16 @@ class ListingRequestCrudController extends CrudController
 
         if ($request->has('slug')) {
             $entity->slug = $request->input('slug');
+        }
+
+        $entitiesWithVisibility = [
+            Company::class,
+            Person::class,
+        ];
+
+        if (in_array($entityClass, $entitiesWithVisibility)) {
+            $entity->visibility = 'public';
+            $entity->visibility_code = NULL;
         }
 
         $this->handleOneToOneRelationData($entity, $mapping, $relationsData);

@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class EntityPreview
 {
@@ -17,8 +18,12 @@ class EntityPreview
     public function handle(Request $request, Closure $next)
     {
 
-        if ($request->input('preview')) {
+        if ($request->has('preview')) {
             view()->share('preview', $request->input('preview'));
+            return $next($request);
+        }
+
+        if (Auth::check()) {
             return $next($request);
         }
 

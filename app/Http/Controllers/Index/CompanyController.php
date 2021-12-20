@@ -8,13 +8,13 @@ use Illuminate\Http\Request;
 use App\Models\Company;
 use App\Models\Focus;
 use App\Models\Job;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\AllowedFilter;
 use App\Services\Metas;
 use Illuminate\Support\Facades\DB;
-use Auth;
 
 class CompanyController extends Controller
 {
@@ -68,7 +68,7 @@ class CompanyController extends Controller
      * Show Company
      *
      * @param $slug
-     * @return View
+     * @return mixed
      */
     public function show(Request $request, $slug) {
 
@@ -88,8 +88,19 @@ class CompanyController extends Controller
             ->where('slug', $slug)
             ->firstOrFail();
 
-        if (!$company->isPublic() AND !$company->validateVisibilityCode($request->input('preview'))) {
-            abort(404);
+        // Check Visibility
+        if ($company->visibility === 'public') {
+            if (!Auth::check()) {
+                return redirect()->route('limitedAccess');
+            }
+        } else {
+            if ($request->has('preview')) {
+                if ($company->validateVisibilityCode($request->input('preview')) === false) {
+                    abort(404);
+                }
+            } else {
+                abort(404);
+            }
         }
 
         $metas = Metas::process(array(

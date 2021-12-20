@@ -51,25 +51,27 @@ use App\Helpers\Entity\FieldsMapping;
                                     @endforeach
 
                                     @isset($previewRequest)
-                                        <input type="hidden" name="entity_type" value="{{ $previewRequest['type'] }}">
-                                        <input type="hidden" name="to_update_id" value="{{ $previewRequest['id'] }}">
-                                        <input type="hidden" name="preview_request" value="{{ $previewRequest['code'] }}">
+                                        @guest
+                                            <input type="hidden" name="entity_type" value="{{ $previewRequest['type'] }}">
+                                            <input type="hidden" name="to_update_id" value="{{ $previewRequest['id'] }}">
+                                            <input type="hidden" name="preview_request" value="{{ $previewRequest['code'] }}">
 
-                                        <div class="form-group">
-                                            <p class="font-weight-bold lead mb-0">
-                                                Your Info
-                                            </p>
-                                            <div class="row">
-                                                <div class="col-12 col-md-6">
-                                                    <label for="user_name">Name</label>
-                                                    <input type="text" name="user_name" class="form-control" required>
-                                                </div>
-                                                <div class="col-12 col-md-6">
-                                                    <label for="user_email">Email</label>
-                                                    <input type="text" name="user_email" class="form-control" required>
+                                            <div class="form-group">
+                                                <p class="font-weight-bold lead mb-0">
+                                                    Your Info
+                                                </p>
+                                                <div class="row">
+                                                    <div class="col-12 col-md-6">
+                                                        <label for="user_name">Name</label>
+                                                        <input type="text" name="user_name" class="form-control" required>
+                                                    </div>
+                                                    <div class="col-12 col-md-6">
+                                                        <label for="user_email">Email</label>
+                                                        <input type="text" name="user_email" class="form-control" required>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        @endguest
                                     @endisset
 
                                     <div class="form-group">
