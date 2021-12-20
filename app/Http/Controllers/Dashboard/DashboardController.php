@@ -32,6 +32,9 @@ class DashboardController extends Controller
 
         if ($user->dashboard_widgets_order !== null) {
             $widgetsOrder = $user->dashboard_widgets_order;
+
+            $widgetsDiff = array_diff($this->defaultWidgetsOrder, $widgetsOrder);
+            $widgetsOrder = array_merge($widgetsOrder, $widgetsDiff);
         }
 
         $lastActivityIdsByType = Activity::select(DB::raw('MAX(id) AS id, MAX(created_at) AS created_at'))
@@ -66,16 +69,12 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        $teamOwner = null;
-        $teamMembers = [];
-        $invitations = [];
+        $team = null;
 
         if ($user->hasRole('Team owner')) {
-            $invitations = $user->teamInvitations()->get();
-            $teamMembers = $user->teamMembers()->get();
+            $team = $user->ownedTeam()->with(['members', 'invitations'])->first();
         } elseif ($user->hasRole('Team member')) {
-            $teamOwner = $user->getTeamOwner();
-            $teamMembers = $teamOwner->teamMembers()->get();
+            $team = $user->team()->with(['members', 'owner'])->first();
         }
 
         return view('members.dashboard', compact(
@@ -85,9 +84,7 @@ class DashboardController extends Controller
             'followLists',
             'follows',
             'widgetsOrder',
-            'teamOwner',
-            'teamMembers',
-            'invitations'
+            'team',
         ));
     }
 

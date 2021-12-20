@@ -12,6 +12,11 @@ class TeamInvitationMail extends Mailable
     /**
      * @var string
      */
+    private $teamName;
+
+    /**
+     * @var string
+     */
     private $inviterName;
 
     /**
@@ -24,8 +29,9 @@ class TeamInvitationMail extends Mailable
      *
      * @return void
      */
-    public function __construct($inviterName, $invitationCode)
+    public function __construct($teamName, $inviterName, $invitationCode)
     {
+        $this->teamName = $teamName;
         $this->inviterName = $inviterName;
         $this->invitationCode = $invitationCode;
     }
@@ -39,8 +45,9 @@ class TeamInvitationMail extends Mailable
     {
         return $this->markdown('emails.users.team.invitation')
             ->with([
+                'teamName' => $this->teamName,
                 'inviterName' => $this->inviterName,
-                'url' => route('register', ['code' => $this->invitationCode])
+                'url' => route('invitation.show', ['code' => $this->invitationCode])
             ])
             ->subject('You have been invited to join the Neuly team.');
     }

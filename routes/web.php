@@ -23,6 +23,9 @@ Route::group(['middleware' => 'firewall.all'], function () {
 Route::get('/register/success', 'Auth\MessagesController@registerSuccess')->name('register.success');
 Route::get('/welcome', 'Auth\MessagesController@limitedAccess')->middleware('guest')->name('limitedAccess');
 
+Route::get('/invitation', 'InvitationController@show')->name('invitation.show');
+Route::post('/invitation', 'InvitationController@accept')->name('invitation.accept');
+
 Route::get('/', 'Content\HomeController@index')->name('index');
 Route::get('/about', 'Content\AboutController@index')->name('about');
 
@@ -267,9 +270,12 @@ Route::group([
             'as' => 'member.team.',
         ], function () {
             Route::get('/', [TeamController::class, 'index'])->name('index');
+            Route::post('/create', [TeamController::class, 'create'])->name('create');
             Route::post('/invite', [TeamController::class, 'invite'])->name('invite');
             Route::delete('/invitation/{invitation_id}', [TeamController::class, 'removeInvitation'])->name('removeInvitation');
             Route::delete('/member/{member_id}', [TeamController::class, 'removeMember'])->name('removeMember');
+
+            Route::post('/{teamId}/leave', [TeamController::class, 'leaveTeam'])->name('leave');
         });
     });
 
