@@ -215,14 +215,14 @@ Route::group([
 
 // check specific routes for preview action
 Route::group([
-    'middleware' => ['entityPreview', 'limitedAccess', 'verifiedIfAuthorized'],
+    'middleware' => ['entityPreview', 'verifiedIfAuthorized'],
 ], function () {
     Route::get('/organization/{slug}', 'Index\CompanyController@show')->name('discover.organizations.show');
     Route::get('/person/{slug}', 'Index\PersonController@show')->name('discover.people.show');
 });
 
 Route::group([
-    'middleware' => ['listingRequestPreview', 'limitedAccess', 'verifiedIfAuthorized'],
+    'middleware' => ['listingRequestPreview', 'verifiedIfAuthorized'],
 ], function () {
     Route::post('/listing/request', 'Index\ListingRequestController@submitRequest');
     Route::post('/listing/request/finish', 'Index\ListingRequestController@finishRequest')->name('listing.request.finish');
