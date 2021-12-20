@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Index;
 
 use App\Helpers\ClaimPersonHelper;
 use App\Helpers\NotificationHelper;
+use App\Helpers\PagePreviewHelper;
 use App\Http\Controllers\Controller;
 use App\Mail\VerifyClaimedPersonMail;
 use App\Models\RaisedClaim;
@@ -12,15 +13,12 @@ use App\Notifications\RaisedClaimCreated;
 use App\Repositories\FollowRepository;
 use Illuminate\Http\Request;
 use App\Models\Person;
-use App\Models\Company;
 use App\Models\Location;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Session;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\AllowedFilter;
-use Illuminate\Support\Facades\DB;
 use App\Services\Metas;
 use Spatie\Activitylog\Models\Activity;
 
@@ -38,16 +36,10 @@ class PersonController extends Controller
 
     // Public / Private Index for Homepage
     public function index(Request $request) {
-        $visibility = ['public'];
-
-        if(Auth::check())
-        {
-            $visibility[] = 'neuly';
-        }
 
         // Get People
         $people = QueryBuilder::for(Person::class)
-            ->whereIn('visibility', $visibility)
+            ->public()
             ->with('companies')
             ->allowedFilters([
                 'name',
@@ -76,8 +68,15 @@ class PersonController extends Controller
 
         // Get Person
         $person = Person::where('slug', $slug)->firstOrFail();
+        $preview = $request->input('preview');
+        // Check Visibility
+        $previewResult = PagePreviewHelper::checkEntityPreview($request, $person);
 
-        if(!$person->canBeViewed()) {
+        if ($previewResult['canView'] === false) {
+            if ($previewResult['redirectToRoute']) {
+                return redirect()->route($previewResult['redirectToRoute']);
+            }
+
             abort(404);
         }
 
@@ -105,7 +104,7 @@ class PersonController extends Controller
             })
             ->log($person->name);
 
-        return view('discover.people.show', compact('person', 'metas', 'entity', 'isFollowed', 'isVerified'));
+        return view('discover.people.show', compact('person', 'metas', 'entity', 'isFollowed', 'isVerified', 'preview'));
     }
 
     public function namesJson()

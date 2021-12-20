@@ -139,6 +139,18 @@ class CompanyCrudController extends CrudController
         ]);
 
         $this->crud->addButtonFromModelFunction('line', 'show_entity', 'getShowEntityPageButton', 'beginning');
+
+        $this->crud->addColumn([
+            'name' => 'visibility',
+            'type' => 'text',
+            'label' => 'Visibility'
+        ]);
+
+        $this->crud->addColumn([
+            'name' => 'visibility_code',
+            'type' => 'text',
+            'label' => 'Visibility Code'
+        ]);
     }
 
     protected function setupCreateOperation()
@@ -258,6 +270,18 @@ class CompanyCrudController extends CrudController
             'crop'         => true,
             'aspect_ratio' => 0,
             'prefix'       => Company::getImageUrlPrefix(),
+        ]);
+        $this->crud->addField([
+            'name'    => 'visibility',
+            'type'    => 'radio',
+            'label'   => 'Visibility',
+            'options' => Company::getVisibilityValues(),
+            'inline'  => true,
+        ]);
+        $this->crud->addField([
+            'name'  => 'visibility_code',
+            'type'  => 'text',
+            'label' => 'Visibility Code'
         ]);
     }
 

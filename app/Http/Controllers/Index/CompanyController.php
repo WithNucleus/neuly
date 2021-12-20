@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers\Index;
 
+use App\Helpers\PagePreviewHelper;
 use App\Http\Controllers\Controller;
 use App\Repositories\FollowRepository;
 use Illuminate\Http\Request;
 use App\Models\Company;
 use App\Models\Focus;
 use App\Models\Job;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\AllowedFilter;
 use App\Services\Metas;
 use Illuminate\Support\Facades\DB;
-use Auth;
 
 class CompanyController extends Controller
 {
@@ -37,6 +38,7 @@ class CompanyController extends Controller
     public function index(Request $request) {
 
         $companies = QueryBuilder::for(Company::class)
+            ->public()
             ->with('focus')
             ->allowedFilters([
                 'name',
@@ -67,7 +69,7 @@ class CompanyController extends Controller
      * Show Company
      *
      * @param $slug
-     * @return View
+     * @return mixed
      */
     public function show(Request $request, $slug) {
 
@@ -86,6 +88,18 @@ class CompanyController extends Controller
             ])
             ->where('slug', $slug)
             ->firstOrFail();
+
+        // Check Visibility
+        $preview = $request->input('preview');
+        $previewResult = PagePreviewHelper::checkEntityPreview($request, $company);
+
+        if ($previewResult['canView'] === false) {
+            if ($previewResult['redirectToRoute']) {
+                return redirect()->route($previewResult['redirectToRoute']);
+            }
+
+            abort(404);
+        }
 
         $metas = Metas::process(array(
             'title'         => $company->name,
@@ -112,7 +126,7 @@ class CompanyController extends Controller
             })
             ->log($company->name);
 
-        return view('discover.organizations.show', compact('company', 'related', 'metas', 'entity', 'isFollowed'));
+        return view('discover.organizations.show', compact('company', 'related', 'metas', 'entity', 'isFollowed', 'preview'));
     }
 
     public function namesJson()

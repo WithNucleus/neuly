@@ -49,8 +49,8 @@ class SearchSuggestionsController extends Controller
      */
     public function everything() {
 
-        $companies        = Company::all()->pluck('slug', 'name')->toArray();
-        $people           = Person::all()->pluck('slug', 'name')->toArray();
+        $companies        = Company::public()->pluck('slug', 'name')->toArray();
+        $people           = Person::public()->pluck('slug', 'name')->toArray();
         $locations        = Location::all()->pluck('slug', 'name')->toArray();
         $clinicalTrials   = Clinicaltrial::all()->pluck('slug', 'title')->toArray();
         $focuses          = Focus::all();

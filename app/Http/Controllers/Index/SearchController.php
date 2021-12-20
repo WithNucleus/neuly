@@ -251,7 +251,7 @@ class SearchController extends Controller
      */
     private function getOrganizationsQuery(string $term)
     {
-        return Company::where('name', 'like', '%' . $term . '%');
+        return Company::public()->where('name', 'like', '%' . $term . '%');
     }
 
     /**
@@ -260,7 +260,7 @@ class SearchController extends Controller
      */
     private function getExactOrganizationsQuery(string $term)
     {
-        return Company::where('name', $term);
+        return Company::public()->where('name', $term);
     }
 
     /**
@@ -269,7 +269,7 @@ class SearchController extends Controller
      */
     private function getPeopleQuery(string $term)
     {
-        return Person::where('name', 'like', '%' . $term . '%');
+        return Person::public()->where('name', 'like', '%' . $term . '%');
     }
 
     /**
@@ -278,7 +278,7 @@ class SearchController extends Controller
      */
     private function getExactPeopleQuery(string $term)
     {
-        return Person::where('name', $term);
+        return Person::public()->where('name', $term);
     }
 
     /**

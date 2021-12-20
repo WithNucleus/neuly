@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Index;
 
 use App\Helpers\Entity\FieldsMapping;
 use App\Helpers\ListingRequestHelper;
+use App\Helpers\PagePreviewHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Job;
 use App\Models\ListingRequest;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class ListingRequestController extends Controller
@@ -29,6 +31,8 @@ class ListingRequestController extends Controller
 
     public function submitRequest(Request $request)
     {
+        $this->checkPreviewPossibility($request);
+
         $entityType = $request->input('entity_type');
         $isUpdate = $request->input('is_update');
         $toUpdateId = $request->input('to_update_id');
@@ -56,6 +60,8 @@ class ListingRequestController extends Controller
 
     public function finishRequest(Request $request)
     {
+        $this->checkPreviewPossibility($request);
+
         $entityType = $request->input('entity_type');
         $entityTypes = ListingRequestHelper::getAllowedEntities();
 
@@ -70,8 +76,15 @@ class ListingRequestController extends Controller
         $requestData = $this->handleFilesUpload($entityClass, $requestData);
 
         $listingRequest = new ListingRequest();
-        $listingRequest->email = $user->email;
-        $listingRequest->name = $user->name;
+
+        if (Auth::user()) {
+            $listingRequest->email = $user->email;
+            $listingRequest->name = $user->name;
+        } else {
+            $listingRequest->email = $request->input('user_email');
+            $listingRequest->name = $request->input('user_name');
+        }
+
         $listingRequest->entity_type = $entityType;
         $listingRequest->entity_data = $requestData;
         $listingRequest->entity_name = $entityName;
@@ -122,5 +135,18 @@ class ListingRequestController extends Controller
         }
 
         return $requestData;
+    }
+
+    private function checkPreviewPossibility($request)
+    {
+        $previewResult = PagePreviewHelper::checkListingRequestPreview($request);
+
+        if ($previewResult['canView'] === false) {
+            if ($previewResult['redirectToRoute']) {
+                return redirect()->route($previewResult['redirectToRoute']);
+            }
+
+            abort(404);
+        }
     }
 }

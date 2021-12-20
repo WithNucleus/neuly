@@ -35,6 +35,11 @@ class Person extends Model implements EntityContract, EntityImageContract
     |--------------------------------------------------------------------------
     */
 
+    const VISIBILITY_TYPES = [
+        'public',
+        'pending'
+    ];
+
     protected $table   = 'people';
     protected $guarded = ['id'];
 
@@ -141,6 +146,21 @@ class Person extends Model implements EntityContract, EntityImageContract
         return '<a href="' . route('discover.people.show', $this->slug) . '">' . $this->name . '</a>';
     }
 
+    public static function getVisibilityValues(): array
+    {
+        return array_combine(self::VISIBILITY_TYPES, self::VISIBILITY_TYPES);
+    }
+
+    public function isPublic(): bool
+    {
+        return $this->visibility === 'public';
+    }
+
+    public function validateVisibilityCode($visibility_code): bool
+    {
+        return $this->visibility_code === $visibility_code;
+    }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
@@ -201,9 +221,14 @@ class Person extends Model implements EntityContract, EntityImageContract
     |--------------------------------------------------------------------------
     */
 
+    public function scopeNotPublic($query)
+    {
+        return $query->where('visibility', '!=', 'public');
+    }
+
     public function scopePublic($query)
     {
-        return $query->where('visibilty', '=', 'public');
+        return $query->where('visibility', '=', 'public');
     }
 
     /*
@@ -380,10 +405,5 @@ class Person extends Model implements EntityContract, EntityImageContract
         }
 
         return $social;
-    }
-
-    public function canBeViewed()
-    {
-        return $this->visibility === 'public' || Auth::check();
     }
 }
