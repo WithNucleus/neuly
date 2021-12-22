@@ -22,7 +22,9 @@
                         </p>
                         <ul>
                             <li>One CSV file per Entity type</li>
-                            <li>Allowed columns: {{ implode(', ', $allowedColumns) }}</li>
+                            <li>Allowed columns: <b>{{ implode(', ', $allowedColumns) }}</b></li>
+                            <li>Location should be in format: <b>Country, State (optional), City (optional)</b>.</li>
+                            <li>Several locations can be separated by "|" sign within one cell.</li>
                         </ul>
 
                         @include('admin.includes.status-messages')
