@@ -29,7 +29,7 @@ class PeopleController extends Controller
         $nameIndex = array_search('name', $headings);
         $results = [];
 
-        if (!$idIndex && !$nameIndex) {
+        if ($idIndex === false && $nameIndex === false) {
             return back()->with('error', 'Incorrect header format: at least one of the "id" and "name" columns is required!');
         }
 
@@ -48,8 +48,8 @@ class PeopleController extends Controller
      */
     private function processRecord($record, $headings, $idIndex, $nameIndex)
     {
-        $id = $record[$idIndex];
-        $name = $record[$nameIndex];
+        $id = $idIndex !== false ? $record[$idIndex] : null;
+        $name = $nameIndex !== false ? $record[$nameIndex] : null;
         $recordMapped = array_combine($headings, array_map('trim', $record));
 
         if (empty($id) && empty($name)) {
@@ -67,11 +67,22 @@ class PeopleController extends Controller
             return $value != '' && $key != 'id';
         }, ARRAY_FILTER_USE_BOTH);
 
-        if ($id) {
-            return $this->processRecordById($id, $attributes, $recordMapped);
-        }
+        try {
+            if ($id) {
+                return $this->processRecordById($id, $attributes, $recordMapped);
+            }
 
-        return $this->processRecordByName($name, $attributes, $recordMapped);
+            return $this->processRecordByName($name, $attributes, $recordMapped);
+        } catch (\Exception $exception) {
+            return [
+                'record' => $recordMapped,
+                'status' => 'Failed',
+                'type' => null,
+                'slug' => null,
+                'name' => null,
+                'error' => $exception->getMessage(),
+            ];
+        }
     }
 
     private function processRecordById($id, $attributes, $record)
@@ -116,11 +127,8 @@ class PeopleController extends Controller
                 'name' => $person->name,
                 'error' => null,
             ];
-        }
-
-        try {
+        } else {
             $attributes['slug'] = Person::generateUniqueSlug($name);
-
             $person = Person::create($attributes);
 
             return [
@@ -130,15 +138,6 @@ class PeopleController extends Controller
                 'slug' => $person->slug,
                 'name' => $person->name,
                 'error' => null,
-            ];
-        } catch (\Exception $exception) {
-            return [
-                'record' => $record,
-                'status' => 'Failed',
-                'type' => null,
-                'slug' => null,
-                'name' => null,
-                'error' => $exception->getMessage(),
             ];
         }
     }
