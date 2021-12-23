@@ -11,9 +11,8 @@ use Illuminate\Support\Facades\Auth;
 
 class LocationsController extends Controller
 {
-    private $allowedColumns = [
+    private $requiredColumns = [
         'id',
-        'name',
         'locations'
     ];
 
@@ -21,10 +20,10 @@ class LocationsController extends Controller
     {
         $importResults  = ImportResult::relatedEntitiesLocations()->latest()->take(20)->get();
         $entityTypes    = EntityHelper::getLocationRelatedEntities();
-        $allowedColumns = $this->allowedColumns;
+        $requiredColumns = $this->requiredColumns;
 
         return view('admin.import.related-entities.locations.index',
-            compact('entityTypes', 'importResults', 'allowedColumns'));
+            compact('entityTypes', 'importResults', 'requiredColumns'));
     }
 
     public function import(LocationsRequest $request)
@@ -39,26 +38,26 @@ class LocationsController extends Controller
             'user_id' => Auth::id(),
         ]);
 
-        $headings      = array_shift($records);
+        $headings = array_map('strtolower', array_shift($records));
         $columnIndexes = [];
 
-        foreach ($headings as $index => $column) {
-            $lowerColumn = strtolower($column);
+        foreach ($this->requiredColumns as $column) {
+            $columnIndex = array_search($column, $headings);
 
-            if (in_array($lowerColumn, $this->allowedColumns) === false) {
+            if ($columnIndex === false) {
                 return redirect()
                     ->back()
-                    ->with('error', "Column '$column' is not allowed!");
+                    ->with('error', "Incorrect header format: column '$column' is missed!");
             }
 
-            $columnIndexes[$lowerColumn] = $index;
+            $columnIndexes[$column] = $columnIndex;
         }
 
         foreach ($records as $record) {
             $entityId  = $record[$columnIndexes['id']];
             $locations = explode('|', $record[$columnIndexes['locations']]);
 
-            if ($locations !== []) {
+            if (!empty($entityId) && $locations !== []) {
                 ProcessLocation::dispatch($importResult, $entityClass, $entityId, $locations);
             }
         }
