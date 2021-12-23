@@ -31,15 +31,6 @@
             </p>
         @endif
 
-        @if($company->locations->count() > 0)
-            <p class="mb-2">
-                <strong>Location:</strong><br>
-                @foreach ($company->locations as $location)
-                    <a href="{{ route('discover.locations.show', $location->slug) }}">{{ $location->name }}</a> @if (!$loop->last)<br>@endif
-                @endforeach
-            </p>
-        @endif
-
         @if($company->investors->count() > 0)
             <p class="mb-2">
                 <strong>Investors:</strong><br>
@@ -157,13 +148,68 @@
 	</div>
 </div>
 
-<div class="row">
+<div class="row my-4">
 	<div class="col-12">
         @if($company->summary != '')
-            <p class="mb-2 mt-3">
+            <p>
                 <strong>Summary:</strong><br>
                 {{ $company->summary }}
             </p>
         @endif
 	</div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        @if($company->companyBranches->count() > 0)
+            <div class="row mb-2">
+                <div class="col-12">
+                    <strong>Locations:</strong>
+                </div>
+                @foreach ($company->companyBranches as $branch)
+                    <div class="col-12 col-md-6 col-lg-4 mb-2 pr-3">
+                        <address>
+                            @if ($branch->address != '')
+                                {{ $branch->address }}
+                                @if ($branch->address2 != '')
+                                    {{ $branch->address2 }}
+                                @endif<br>
+                            @endif
+
+                            @if ($branch->location)
+                                {{ $branch->location->name }}
+                            @else
+                                @if ($branch->city != '')
+                                    {{ $branch->city }}
+                                @endif
+
+                                @if ($branch->state != '')
+                                    {{ $branch->state }}
+                                @endif
+
+                                @if ($branch->zip != '')
+                                    {{ $branch->zip }}
+                                @endif
+                            @endif
+
+                            @if ($branch->phone != '')
+                                <span class="d-block">
+                                    <a href="tel:{{ $branch->phone }}"><i class="fa fa-phone-square-alt mr-1 text-primary"></i>{{ $branch->phone }}</a>
+                                </span>
+                            @endif
+                        </address>
+                    </div>
+                @endforeach
+            </div>
+        @else
+            @if($company->locations->count() > 0)
+                <p class="mb-2">
+                    <strong>Location:</strong><br>
+                    @foreach ($company->locations as $location)
+                        <a href="{{ route('discover.locations.show', $location->slug) }}">{{ $location->name }}</a> @if (!$loop->last)<br>@endif
+                    @endforeach
+                </p>
+            @endif
+        @endif
+    </div>
 </div>

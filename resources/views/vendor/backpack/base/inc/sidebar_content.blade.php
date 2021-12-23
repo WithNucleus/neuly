@@ -15,6 +15,9 @@
             <li class='nav-item'>
                 <a class='nav-link' href='{{ backpack_url('companyvaluation') }}'>Valuations</a>
             </li>
+            <li class='nav-item'>
+                <a class='nav-link' href='{{ backpack_url('companybranch') }}'>Branches</a>
+            </li>
             @can('import')
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('admin.import.company.serpapi.index') }}">

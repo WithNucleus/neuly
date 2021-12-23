@@ -38,6 +38,7 @@ class CompanyCrudController extends CrudController
 
     protected function setupListOperation()
     {
+        $this->crud->addColumn(['name' => 'id', 'type' => 'text', 'label' => 'ID']);
         $this->crud->addColumn(['name' => 'name', 'type' => 'text', 'label' => 'Name']);
 
         $this->crud->addColumn([
@@ -150,6 +151,24 @@ class CompanyCrudController extends CrudController
             'name' => 'visibility_code',
             'type' => 'text',
             'label' => 'Visibility Code'
+        ]);
+
+        $this->crud->addColumn([
+            'name' => 'facebook',
+            'type' => 'text',
+            'label' => 'Facebook'
+        ]);
+
+        $this->crud->addColumn([
+            'name' => 'instagram',
+            'type' => 'text',
+            'label' => 'Instagram'
+        ]);
+
+        $this->crud->addColumn([
+            'name' => 'linkedin',
+            'type' => 'text',
+            'label' => 'LinkedIn'
         ]);
     }
 
@@ -282,6 +301,21 @@ class CompanyCrudController extends CrudController
             'name'  => 'visibility_code',
             'type'  => 'text',
             'label' => 'Visibility Code'
+        ]);
+        $this->crud->addField([
+            'name' => 'facebook',
+            'type' => 'text',
+            'label' => 'Facebook'
+        ]);
+        $this->crud->addField([
+            'name' => 'instagram',
+            'type' => 'text',
+            'label' => 'Instagram'
+        ]);
+        $this->crud->addField([
+            'name' => 'linkedin',
+            'type' => 'text',
+            'label' => 'LinkedIn'
         ]);
     }
 
