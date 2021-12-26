@@ -1,6 +1,24 @@
 <div class="row">
 	<div class="col-12 col-md-8 col-lg-7">
 
+        @if($company->website != '')
+            <p class="mb-2 lead">
+                <a href="{{ $company->website }}" target="_blank" rel="noopener noreferrer">{{ $company->website }}</a>
+            </p>
+        @endif
+
+         <div class="d-flex flex-wrap align-items-center">
+             @if ($company->linkedin)
+                 <a href="https://www.linkedin.com/in/{{ $company->linkedin }}" target="_blank" rel="noopener noreferrer" class="mr-2 mb-2"><i class="fab fa-linkedin fa-2x"></i></a>
+             @endif
+             @if ($company->instagram)
+                 <a href="https://www.instagram.com/{{ $company->instagram }}" target="_blank" rel="noopener noreferrer" class="mr-2 mb-2"><i class="fab fa-instagram fa-2x"></i></a>
+             @endif
+             @if ($company->facebook)
+                 <a href="https://www.facebook.com/{{ $company->facebook }}" target="_blank" rel="noopener noreferrer" class="mr-2 mb-2"><i class="fab fa-facebook fa-2x"></i></a>
+             @endif
+         </div>
+
         @if($company->ownership != '')
             <p class="mb-2">
                 <strong>Type:</strong><br>
@@ -14,13 +32,6 @@
                 <a href="{{ route('discover.focus.show', $item->slug) }}">{{ $item->name }}</a>@if (!$loop->last),@endif
             @endforeach
         </p>
-
-        @if($company->website != '')
-            <p class="mb-2">
-                <strong>Website:</strong><br>
-                <a href="{{ $company->website }}" target="_blank" rel="noopener noreferrer">{{ $company->website }}</a>
-            </p>
-        @endif
 
         @if($company->people->count() > 0)
             <p class="mb-2">
