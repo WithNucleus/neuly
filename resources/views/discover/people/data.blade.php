@@ -132,6 +132,9 @@
             @if ($person->facebook)
                 <a href="https://www.facebook.com/{{ $person->facebook }}" target="_blank" rel="noopener noreferrer" class="mx-1"><i class="fab fa-facebook fa-2x"></i></a>
             @endif
+            @if ($person->instagram)
+                <a href="https://www.instagram.com/{{ $person->instagram }}" target="_blank" rel="noopener noreferrer" class="mx-1"><i class="fab fa-instagram fa-2x"></i></a>
+            @endif
         </p>
 	</div>
 </div>
