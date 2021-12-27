@@ -16,7 +16,7 @@ Route::group([
 
         Route::get('/investor/{id}/person', 'InvestorPersonController@index');
         Route::post('/investor/{id}/person', 'InvestorPersonController@add');
-        Route::get('/investor/{investor_id}/person/{person_id}/remove', 'Admin\InvestorPersonController@remove')->name('investorperson.remove');
+        Route::get('/investor/{investor_id}/person/{person_id}/remove', 'InvestorPersonController@remove')->name('investorperson.remove');
 
         Route::get('/person/{id}/investor', 'PersonInvestorController@index');
         Route::post('/person/{id}/investor', 'PersonInvestorController@add');

@@ -58,7 +58,7 @@
                             <a href="/admin/investor/{{ $investor->id }}/show">
                                 {{ $investor->name }} ({{ $investor->getOriginal('pivot_role') }})
                             </a>
-                            <a class="small" onclick="return confirm_action()" href="{{ route('investorperson.remove', ['investor_id' => $investor->id, 'person_id' => $widget['person']->id]) }}">
+                            <a class="small" onclick="return confirm_action()" href="{{ route('admin.investorperson.remove', ['investor_id' => $investor->id, 'person_id' => $widget['person']->id]) }}">
                                 <i class="la la-trash"></i> Remove
                             </a>
                         </div>
