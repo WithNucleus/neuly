@@ -35,31 +35,9 @@ class CompanyController extends Controller
      * @return View
      */
     public function index(Request $request) {
-
-        $companies = QueryBuilder::for(Company::class)
-            ->with('focus')
-            ->allowedFilters([
-                'name',
-                AllowedFilter::partial('locations', 'locations.name'),
-                AllowedFilter::partial('focus', 'focus.name'),
-                AllowedFilter::exact('type', 'ownership'),
-                AllowedFilter::scope('hiring', 'hasJobs'),
-                AllowedFilter::scope('upcoming_events', 'hasUpcomingEvents'),
-            ])
-            ->defaultSort('name')
-            ->allowedSorts([
-                'name',
-                AllowedSort::field('date', 'created_at'),
-                AllowedSort::field('type', 'ownership'),
-            ])
-            ->paginate(12)
-            ->appends(request()->query());
-
-        $focus_cats = Focus::has('companies', '>' , 0)->with('companies')->get()->pluck('name')->unique()->sort();
-
         $metas = Metas::fromPage($request->path());
 
-        return view('discover.organizations.index', compact('companies', 'focus_cats', 'metas'));
+        return view('discover.organizations.search', compact('metas'));
 
     }
 
