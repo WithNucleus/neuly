@@ -21,8 +21,8 @@ class CreateCompanyBranchesTable extends Migration
             $table->string('address')->nullable();
             $table->string('address2')->nullable();
             $table->string('hours')->nullable();
-            $table->foreign('company_id')->references('id')->on('companies');
-            $table->foreign('location_id')->references('id')->on('locations');
+            $table->foreign('company_id')->references('id')->on('companies')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('location_id')->references('id')->on('locations')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }
