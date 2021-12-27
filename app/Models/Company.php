@@ -365,6 +365,15 @@ class Company extends Model implements EntityContract, EntityImageContract
             'website'              => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
+            'facebook'              => [
+                'type' => FieldsMapping::TYPE_STRING,
+            ],
+            'instagram'              => [
+                'type' => FieldsMapping::TYPE_STRING,
+            ],
+            'linkedin'              => [
+                'type' => FieldsMapping::TYPE_STRING,
+            ],
             'founded_date'         => [
                 'type' => FieldsMapping::TYPE_DATE,
             ],

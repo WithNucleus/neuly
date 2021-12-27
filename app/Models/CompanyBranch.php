@@ -52,6 +52,32 @@ class CompanyBranch extends Model
     |--------------------------------------------------------------------------
     */
 
+    public function getFullAddressAttribute(): string
+    {
+        $address = '';
+
+        if ($this->address != '') {
+            $address .= $this->address;
+        }
+
+        if ($this->address2 != '') {
+            $address .= " " . $this->address2;
+        }
+
+        if ($this->location) {
+            $address .= "<br>" . $this->location->name;
+        }
+
+        return $address;
+    }
+
+    public function getFullAddressForGoogleAttribute(): string
+    {
+        $addressForGoogle = str_replace(',', '', $this->fullAddress);
+        $addressForGoogle = str_replace('<br>', '+', $addressForGoogle);
+        return str_replace(' ', '+', $addressForGoogle);
+    }
+
     /*
     |--------------------------------------------------------------------------
     | MUTATORS

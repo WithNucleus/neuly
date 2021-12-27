@@ -64,29 +64,9 @@
                     <strong>Locations:</strong>
                 </div>
                 @foreach ($company->companyBranches as $branch)
-                    <?php
-                    $address = '';
-
-                    if ($branch->address != '') {
-                        $address .= $branch->address;
-                    }
-
-                    if ($branch->address2 != '') {
-                        $address .= " " . $branch->address2;
-                    }
-
-                    if ($branch->location) {
-                        $address .= "<br>" . $branch->location->name;
-                    }
-
-                    $addressForGoogle = str_replace(',', '', $address);
-                    $addressForGoogle = str_replace('<br>', '+', $addressForGoogle);
-                    $addressForGoogle = str_replace(' ', '+', $addressForGoogle);
-                    ?>
-
                     <div class="col-12 col-md-6 col-lg-4 mb-2 pr-3 mb-4">
                         <address class="mb-1">
-                            <a href="https://google.com/maps/place/{{ $addressForGoogle }}" target="_blank" rel="noopener noreferrer">{!! $address !!}</a>
+                            <a href="https://google.com/maps/place/{!! $branch->fullAddressForGoogle !!}" target="_blank" rel="noopener noreferrer">{!! $branch->fullAddress !!}</a>
                         </address>
                         @if ($branch->phone != '')
                             <span class="d-block">
