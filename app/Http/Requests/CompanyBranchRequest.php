@@ -27,9 +27,7 @@ class CompanyBranchRequest extends FormRequest
     {
         return [
             'company_id' => 'required',
-            'city' => 'required_without:state,zip',
-            'state' => 'required_without:city,zip',
-            'zip' => 'required_without:city,state',
+            'location_id' => 'required',
         ];
     }
 

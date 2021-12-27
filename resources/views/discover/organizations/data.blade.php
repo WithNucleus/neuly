@@ -77,18 +77,6 @@
 
                     if ($branch->location) {
                         $address .= "<br>" . $branch->location->name;
-                    } else {
-                        if ($branch->city != '') {
-                            $address .= "<br>" . $branch->city;
-                        }
-
-                        if ($branch->state != '') {
-                            $address .= " " . $branch->state;
-                        }
-
-                        if ($branch->zip != '') {
-                            $address .= " " . $branch->zip;
-                        }
                     }
 
                     $addressForGoogle = str_replace(',', '', $address);
@@ -96,7 +84,7 @@
                     $addressForGoogle = str_replace(' ', '+', $addressForGoogle);
                     ?>
 
-                    <div class="col-12 col-md-6 col-lg-4 mb-2 pr-3">
+                    <div class="col-12 col-md-6 col-lg-4 mb-2 pr-3 mb-4">
                         <address class="mb-1">
                             <a href="https://google.com/maps/place/{{ $addressForGoogle }}" target="_blank" rel="noopener noreferrer">{!! $address !!}</a>
                         </address>

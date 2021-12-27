@@ -128,24 +128,6 @@ class CompanyBranchCrudController extends CrudController
         ]);
 
         $this->crud->addField([
-            'name' => 'city',
-            'type' => 'text',
-            'label' => 'City'
-        ]);
-
-        $this->crud->addField([
-            'name' => 'state',
-            'type' => 'text',
-            'label' => 'State'
-        ]);
-
-        $this->crud->addField([
-            'name' => 'zip',
-            'type' => 'text',
-            'label' => 'Zip Code'
-        ]);
-
-        $this->crud->addField([
             'name' => 'phone',
             'type' => 'text',
             'label' => 'Phone'
