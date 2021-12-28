@@ -6,14 +6,13 @@ use App\Helpers\Entity\FieldsMapping;
 use App\Models\Contracts\EntityContract;
 use App\Models\Contracts\EntityImageContract;
 use App\Models\Traits\CrudShowEntityPageButton;
+use App\Models\Traits\HasEntityContent;
 use App\Models\Traits\OldSlugRedirectable;
 use App\Models\Traits\EntityImage;
 use App\Models\Traits\SearchableEntity;
 use App\Traits\HasFollowers;
-use App\User;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Log;
@@ -28,6 +27,7 @@ class Person extends Model implements EntityContract, EntityImageContract
     use CrudShowEntityPageButton;
     use EntityImage;
     use SearchableEntity;
+    use HasEntityContent;
 
     /*
     |--------------------------------------------------------------------------

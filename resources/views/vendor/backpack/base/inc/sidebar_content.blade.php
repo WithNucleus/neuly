@@ -234,6 +234,14 @@
     </li>
 @endcan
 
+@can('edit companies')
+    <li class='nav-item'>
+        <a class='nav-link' href='{{ backpack_url('entitycontent') }}'>
+            <i class='nav-icon la la-file-alt'></i> Entity Content
+        </a>
+    </li>
+@endcan
+
 @can('view backups')
 	<li class='nav-item'>
 		<a class='nav-link' href='{{ backpack_url('backup') }}'>
