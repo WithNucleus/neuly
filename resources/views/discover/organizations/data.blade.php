@@ -166,4 +166,11 @@
             </p>
         @endif
 	</div>
+
+    @foreach ($company->content as $entityContent)
+        <div class="col-12 mb-3">
+            <strong>{{ $entityContent->name }}</strong><br>
+            {!! nl2br(e($entityContent->content)) !!}
+        </div>
+    @endforeach
 </div>

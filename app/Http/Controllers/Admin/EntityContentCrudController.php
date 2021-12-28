@@ -60,13 +60,27 @@ class EntityContentCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
-        CRUD::setValidation(EntityContentRequest::class);
+        $this->crud->setValidation(EntityContentRequest::class);
 
-        CRUD::field('entity_id');
-        CRUD::field('entity_type');
-        CRUD::field('name');
-        CRUD::field('content');
-        CRUD::field('order');
+        $this->crud->addField([
+            'name'  => 'name',
+            'type'  => 'text',
+            'label' => 'Name'
+        ]);
+
+        $this->crud->addField([
+            'name'  => 'content',
+            'type'  => 'textarea',
+            'label' => 'Content'
+        ]);
+
+        $this->crud->addField([
+            'name'  => 'order',
+            'type'  => 'number',
+            'label' => 'Order'
+        ]);
+
+        // TODO -- Add the entity morph fields
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:
