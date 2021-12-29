@@ -85,6 +85,7 @@ class CompanyController extends Controller
                 'parents',
                 'subsidiaries',
                 'valuations',
+                'content'
             ])
             ->where('slug', $slug)
             ->firstOrFail();

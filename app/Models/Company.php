@@ -7,6 +7,7 @@ use App\Models\Contracts\EntityContract;
 use App\Models\Contracts\EntityImageContract;
 use App\Models\Traits\CrudShowEntityPageButton;
 use App\Models\Traits\EntityImage;
+use App\Models\Traits\HasEntityContent;
 use App\Models\Traits\OldSlugRedirectable;
 use App\Models\Traits\SearchableEntity;
 use App\Traits\HasFollowers;
@@ -26,6 +27,7 @@ class Company extends Model implements EntityContract, EntityImageContract
     use CrudShowEntityPageButton;
     use EntityImage;
     use SearchableEntity;
+    use HasEntityContent;
 
     /*
     |--------------------------------------------------------------------------
