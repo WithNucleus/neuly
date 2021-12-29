@@ -169,10 +169,10 @@
 </div>
 
 <div class="row">
-    @foreach ($company->content as $entityContent)
-        <div class="col-12 mb-3">
-            <strong>{{ $entityContent->name }}</strong><br>
-            {!! nl2br(e($entityContent->content)) !!}
+    @foreach ($company->content as $content)
+        <div class="col-12 col-lg-7 mb-3">
+            <strong>{{ $content->name }}</strong><br>
+            {!! $content->formattedContent !!}
         </div>
     @endforeach
 </div>

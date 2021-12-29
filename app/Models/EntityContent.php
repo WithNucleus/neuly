@@ -55,6 +55,10 @@ class EntityContent extends Model
     | ACCESSORS
     |--------------------------------------------------------------------------
     */
+    public function getFormattedContentAttribute(): string
+    {
+        return nl2br(e($this->content));
+    }
 
     /*
     |--------------------------------------------------------------------------

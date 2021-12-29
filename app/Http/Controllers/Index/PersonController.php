@@ -67,7 +67,19 @@ class PersonController extends Controller
     public function show(Request $request, $slug) {
 
         // Get Person
-        $person = Person::where('slug', $slug)->firstOrFail();
+        $person = Person::where('slug', $slug)
+            ->with([
+                'content',
+                'companies',
+                'focus',
+                'locations',
+                'investors',
+                'research',
+                'events',
+                'clinicaltrials',
+            ])
+            ->firstOrFail();
+
         $preview = $request->input('preview');
         // Check Visibility
         $previewResult = PagePreviewHelper::checkEntityPreview($request, $person);
