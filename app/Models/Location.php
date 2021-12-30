@@ -7,6 +7,7 @@ use App\Helpers\NotificationHelper;
 use App\Models\Contracts\EntityContract;
 use App\Models\Traits\CrudShowEntityPageButton;
 use App\Models\Traits\OldSlugRedirectable;
+use App\Models\Traits\SearchableEntity;
 use App\Notifications\LocationMapCodesNotFound;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
@@ -23,6 +24,7 @@ class Location extends Model implements EntityContract
     use OldSlugRedirectable;
     use LogsActivity;
     use CrudShowEntityPageButton;
+    use SearchableEntity;
 
     /*
     |--------------------------------------------------------------------------
@@ -36,6 +38,15 @@ class Location extends Model implements EntityContract
     // log activity for all attributes, which not listed in $guarded array
     protected static $logUnguarded = true;
     protected static $logName = 'entities';
+
+    private $searchableRelationships = [
+        'people' => 'name',
+        'companies' => 'name',
+        'investors' => 'name',
+        'jobs' => 'job_title',
+        'clinicaltrials' => 'title',
+        'events' => 'name',
+    ];
 
     /*
     |--------------------------------------------------------------------------

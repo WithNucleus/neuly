@@ -32,7 +32,6 @@ class DashboardController extends Controller
 
         if ($user->dashboard_widgets_order !== null) {
             $widgetsOrder = $user->dashboard_widgets_order;
-
             $widgetsDiff = array_diff($this->defaultWidgetsOrder, $widgetsOrder);
             $widgetsOrder = array_merge($widgetsOrder, $widgetsDiff);
         }

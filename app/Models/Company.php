@@ -8,6 +8,7 @@ use App\Models\Contracts\EntityImageContract;
 use App\Models\Traits\CrudShowEntityPageButton;
 use App\Models\Traits\EntityImage;
 use App\Models\Traits\OldSlugRedirectable;
+use App\Models\Traits\SearchableEntity;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Carbon\Carbon;
@@ -23,6 +24,7 @@ class Company extends Model implements EntityContract, EntityImageContract
     use LogsActivity;
     use CrudShowEntityPageButton;
     use EntityImage;
+    use SearchableEntity;
 
     /*
     |--------------------------------------------------------------------------
@@ -59,6 +61,28 @@ class Company extends Model implements EntityContract, EntityImageContract
     protected static $imageAttribute = 'logo';
     protected static $imageFolderPath = 'logos';
     protected static $imageFilenameAttribute = 'name';
+
+    private $searchableRelationships = [
+        'focus' => 'name',
+        'people' => 'name',
+        'locations' => 'name',
+        'investors' => 'name',
+        'research' => 'name',
+        'clinicaltrials' => 'title',
+        'events' => 'name',
+        'parents' => 'name',
+        'subsidiaries' => 'name',
+        'jobs' => 'job_title',
+    ];
+
+    private $searchableSkippedFields = [
+        'focus_description',
+        'location',
+        'contact_info',
+        'notes',
+    ];
+
+    private $searchableModelName = 'Organization';
 
     /*
     |--------------------------------------------------------------------------

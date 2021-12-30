@@ -6,6 +6,7 @@ use App\Helpers\Entity\FieldsMapping;
 use App\Models\Contracts\EntityContract;
 use App\Models\Traits\CrudShowEntityPageButton;
 use App\Models\Traits\OldSlugRedirectable;
+use App\Models\Traits\SearchableEntity;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -17,6 +18,7 @@ class Job extends Model implements EntityContract
     use OldSlugRedirectable;
     use LogsActivity;
     use CrudShowEntityPageButton;
+    use SearchableEntity;
 
     /*
     |--------------------------------------------------------------------------
@@ -55,6 +57,23 @@ class Job extends Model implements EntityContract
     // log activity for all attributes, which not listed in $guarded array
     protected static $logUnguarded = true;
     protected static $logName = 'entities';
+
+    private $searchableRelationships = [
+        'locations' => 'name',
+        'focus' => 'name',
+    ];
+
+    private $searchableMorphs = [
+        'owner' => 'name'
+    ];
+
+    private $searchableDateFields = [
+        'posted_date'
+    ];
+
+    private $searchableRenamedFields = [
+        'job_title' => 'name'
+    ];
 
     /*
     |--------------------------------------------------------------------------

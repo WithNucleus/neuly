@@ -10,6 +10,7 @@ use App\Models\ClinicalTrialDetails\CtStudyDesign;
 use App\Models\Contracts\EntityContract;
 use App\Models\Traits\CrudShowEntityPageButton;
 use App\Models\Traits\OldSlugRedirectable;
+use App\Models\Traits\SearchableEntity;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Builder;
@@ -25,6 +26,7 @@ class Clinicaltrial extends Model implements EntityContract
     use OldSlugRedirectable;
     use LogsActivity;
     use CrudShowEntityPageButton;
+    use SearchableEntity;
 
     /*
     |--------------------------------------------------------------------------
@@ -38,6 +40,18 @@ class Clinicaltrial extends Model implements EntityContract
     // log activity for all attributes, which not listed in $guarded array
     protected static $logUnguarded = true;
     protected static $logName = 'entities';
+
+    private $searchableRelationships = [
+        'companies' => 'name',
+        'focus' => 'name',
+        'people' => 'name',
+    ];
+
+    private $searchableRenamedFields = [
+        'title' => 'name'
+    ];
+
+    private $searchableModelName = 'Clinical Trial';
 
     /*
     |--------------------------------------------------------------------------

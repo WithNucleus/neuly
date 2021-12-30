@@ -4,7 +4,7 @@
         <p class="lead-larger">Interested in participating in a clinical trial as a patient or healthy volunteer? Browse, filter, and search through
             {{ $count_recruiting_trials }} clinical trials that are actively recruiting to find a match for you.</p>
         <p>
-            <a href="{{ route('discover.clinicaltrials.recruiting') }}" class="btn btn-lg btn-secondarydark">View Recruiting Clinical Trials</a>
+            <a href="{{ route('discover.clinicaltrials.recruiting') }}" class="btn btn-lg btn-info">View Recruiting Clinical Trials</a>
         </p>
     </div>
 </div>

@@ -2,7 +2,7 @@
     <div class="container mt-4">
         <div class="row">
             <div class="col-12 text-center">
-                <h2 class="h1 text-info">Who is Neuly For?</h2>
+                <h2 class="h1 text-white">Who is Neuly For?</h2>
                 <p class="lead-larger mb-3 text-light font-normal">
                     Entrepreneurs, investors, researchers, scientists, educators, policy makers, and anyone interested in the psychedelics industry.
                 </p>
