@@ -55,7 +55,30 @@ Route::group([
         Route::delete('/subsidiary/{child_id}', 'SubsidiaryController@remove')->name('subsidiary.remove');
     });
 
+    Route::group([
+        'prefix' => '/nav-tiles',
+        'as' => 'nav-tiles.',
+        'namespace' => 'NavigationTiles',
+        'middleware' => 'permission:manage navigation tiles',
+    ], function () {
+        Route::get('/', 'NavigationTileController@index')->name('index');
+        Route::get('/create', 'NavigationTileController@create')->name('create');
+        Route::post('/create', 'NavigationTileController@store')->name('store');
+        Route::get('/{id}', 'NavigationTileController@edit')->name('edit');
+        Route::post('/{id}', 'NavigationTileController@update')->name('update');
+        Route::get('/clone/{id}', 'NavigationTileController@clone')->name('clone');
+        Route::post('/delete/{id}', 'NavigationTileController@delete')->name('delete');
+
+        Route::post('/reorder/{id}', 'NavigationTileController@reorder')->name('items.reorder');
+
+        Route::post('/item/{id}', 'NavigationTileItemController@store')->name('items.store');
+        Route::post('/update-item/{id}', 'NavigationTileItemController@update')->name('items.update');
+        Route::post('/delete-item/{id}', 'NavigationTileItemController@delete')->name('items.delete');
+    });
 });
+
+Route::get('/nav-tiles/{slug}.js', 'Admin\NavigationTiles\NavigationTileController@script')->name('nav-tiles.script');
+Route::get('/nav-tiles/{slug}.css', 'Admin\NavigationTiles\NavigationTileController@style')->name('nav-tiles.style');
 
 //TODO update route's names to match 'admin.' pattern and move to common admin group
 Route::group([
