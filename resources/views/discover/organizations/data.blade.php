@@ -30,13 +30,13 @@
 
             <div class="d-flex flex-wrap align-items-center justify-content-center">
                 @if ($company->linkedin)
-                    <a href="https://www.linkedin.com/in/{{ $company->linkedin }}" target="_blank" rel="noopener noreferrer" class="mx-1 mb-2"><i class="fab fa-linkedin fa-2x"></i></a>
+                    <a href="{{ $company->linkedin }}" target="_blank" rel="noopener noreferrer" class="mx-1 mb-2"><i class="fab fa-linkedin fa-2x"></i></a>
                 @endif
                 @if ($company->instagram)
-                    <a href="https://www.instagram.com/{{ $company->instagram }}" target="_blank" rel="noopener noreferrer" class="mx-1 mb-2"><i class="fab fa-instagram fa-2x"></i></a>
+                    <a href="{{ $company->instagram }}" target="_blank" rel="noopener noreferrer" class="mx-1 mb-2"><i class="fab fa-instagram fa-2x"></i></a>
                 @endif
                 @if ($company->facebook)
-                    <a href="https://www.facebook.com/{{ $company->facebook }}" target="_blank" rel="noopener noreferrer" class="mx-1 mb-2"><i class="fab fa-facebook fa-2x"></i></a>
+                    <a href="{{ $company->facebook }}" target="_blank" rel="noopener noreferrer" class="mx-1 mb-2"><i class="fab fa-facebook fa-2x"></i></a>
                 @endif
             </div>
         </div>
