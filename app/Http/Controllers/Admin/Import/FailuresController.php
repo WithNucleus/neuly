@@ -46,7 +46,7 @@ class FailuresController extends Controller
                     $locationParts = StringHelper::explodeAndFilterEmpty($failure->details['import_value'], ',');
 
                     $failure->location_parts = [
-                        'country' => $locationParts[0],
+                        'country' => isset($locationParts[0]) ? $locationParts[0] : '',
                         'region'  => isset($locationParts[1]) ? $locationParts[1] : '',
                         'city'    => isset($locationParts[2]) ? $locationParts[2] : '',
                     ];
