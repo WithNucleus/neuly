@@ -36,14 +36,16 @@ class CreateNavTilesTable extends Migration
             $table->timestamps();
         });
 
+        $permissions = [];
+
         foreach ($this->newPermissions as $permission) {
-            Permission::updateOrCreate(['name' => $permission]);
+            $permissions[] = Permission::updateOrCreate(['name' => $permission]);
         }
 
         $adminRole = Role::where('name', 'Admin')->first();
 
         if ($adminRole !== null) {
-            $adminRole->givePermissionTo($this->newPermissions);
+            $adminRole->givePermissionTo($permissions);
         }
     }
 
