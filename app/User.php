@@ -2,21 +2,22 @@
 
 namespace App;
 
-use App\Models\UserSocialAuth;
 use App\Models\FollowList;
 use App\Models\Person;
 use App\Models\RaisedClaim;
+use App\Models\Team;
+use App\Models\TeamInvitation;
+use App\Models\UserSocialAuth;
 use App\Traits\CanFollow;
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Yadahan\AuthenticationLog\AuthenticationLogable;
 use Spatie\Permission\Traits\HasRoles;
-use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Yadahan\AuthenticationLog\AuthenticationLogable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-
     use Notifiable;
     use HasRoles;
     use CrudTrait;
@@ -29,7 +30,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'last_name', 'email', 'password', 'member_url', 'email_verified_at'
+        'name', 'last_name', 'email', 'password', 'member_url', 'email_verified_at',
     ];
 
     /**
@@ -57,14 +58,14 @@ class User extends Authenticatable implements MustVerifyEmail
             FollowList::create([
                 'name' => 'Favorites',
                 'slug' => 'favorites',
-                'user_id' => $user->id
+                'user_id' => $user->id,
             ]);
         });
     }
 
     public function getFullnameAttribute()
     {
-        return $this->name . ' ' . $this->last_name;
+        return $this->name.' '.$this->last_name;
     }
 
     public function socialAuth()
@@ -85,5 +86,20 @@ class User extends Authenticatable implements MustVerifyEmail
     public function hasRaisedClaimBefore()
     {
         return $this->raisedClaim()->exists();
+    }
+
+    public function teamInvitations()
+    {
+        return $this->hasMany(TeamInvitation::class);
+    }
+
+    public function ownedTeam()
+    {
+        return $this->hasOne(Team::class, 'owner_id');
+    }
+
+    public function team()
+    {
+        return $this->belongsToMany(Team::class);
     }
 }

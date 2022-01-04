@@ -62,6 +62,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'Editor' => ['edit companies', 'admin login', 'edit investors', 'edit people'],
             'Professional' => [],
             'Enterprise' => [],
+            'Team owner' => [],
+            'Team member' => [],
         );
 
         foreach ($roles as $roleName => $permissions) {

@@ -21,6 +21,7 @@ class DashboardController extends Controller
         'following',
         'notes',
         'recent',
+        'team',
     ];
 
     // Member Dashboard Page
@@ -31,6 +32,9 @@ class DashboardController extends Controller
 
         if ($user->dashboard_widgets_order !== null) {
             $widgetsOrder = $user->dashboard_widgets_order;
+
+            $widgetsDiff = array_diff($this->defaultWidgetsOrder, $widgetsOrder);
+            $widgetsOrder = array_merge($widgetsOrder, $widgetsDiff);
         }
 
         $lastActivityIdsByType = Activity::select(DB::raw('MAX(id) AS id, MAX(created_at) AS created_at'))
@@ -65,7 +69,23 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        return view('members.dashboard', compact('notes', 'recently_viewed', 'followLists', 'follows', 'widgetsOrder'));
+        $team = null;
+
+        if ($user->hasRole('Team owner')) {
+            $team = $user->ownedTeam()->with(['members', 'invitations'])->first();
+        } elseif ($user->hasRole('Team member')) {
+            $team = $user->team()->with(['members', 'owner'])->first();
+        }
+
+        return view('members.dashboard', compact(
+            'user',
+            'notes',
+            'recently_viewed',
+            'followLists',
+            'follows',
+            'widgetsOrder',
+            'team',
+        ));
     }
 
     public function updateWidgetsOrder(Request $request)
@@ -74,7 +94,7 @@ class DashboardController extends Controller
         $newWidgetsOrder = $request->input('order');
 
         foreach ($this->defaultWidgetsOrder as $widget) {
-            if (! in_array($widget, $newWidgetsOrder)) {
+            if (!in_array($widget, $newWidgetsOrder)) {
                 $newWidgetsOrder[] = $widget;
             }
         }

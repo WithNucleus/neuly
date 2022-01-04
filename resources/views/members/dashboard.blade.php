@@ -38,6 +38,11 @@
                     <span class="drag-handle pull-right text-secondary"><i class="fa fa-arrows-alt"></i></span>
                     @include('members.dashboard-widgets.recent')
                 </div>
+            @elseif($widget == 'team')
+                <div class="col-12 col-md-6 col-xl-4 mb-5" data-name="team">
+                    <span class="drag-handle pull-right text-secondary"><i class="fa fa-arrows-alt"></i></span>
+                    @include('members.dashboard-widgets.team')
+                </div>
             @endif
         @endforeach
     </div>
