@@ -1,0 +1,147 @@
+/* Color Variables */
+$menuBg: #212529;
+$menuLinkColor: #fefefe;
+$menuLinkHoverColor: #fefefe;
+
+$buttonBg: #212529;
+
+$titleColor: #6bbca4;
+$titleBorder: #06c;
+
+$badgeBg: #f0f600;
+$badgeColor: #212529;
+
+/* Styles */
+.nucleus-nav-tile {
+    position: fixed;
+    bottom: .25rem;
+    right: .25rem;
+    z-index: 149;
+
+    .btn {
+        min-width: 45px;
+        color: $menuLinkColor;
+        background-color: $buttonBg;
+        border: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        user-select: none;
+        padding: .5rem;
+        font-size: 1rem;
+        line-height: 1.6;
+        border-radius: 0.25rem;
+        transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+        -webkit-appearance: button;
+        margin: 0;
+
+        img {
+            width: 24px;
+            height: auto;
+        }
+    }
+
+    .btn:hover {
+        cursor: pointer;
+    }
+
+    .btn:focus {
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(66, 70, 73, 0.5);
+    }
+
+    .sr-only {
+        border: 0;
+        clip: rect(0, 0, 0, 0);
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+    }
+}
+
+#nucleus-nav-menu {
+    position: fixed;
+    bottom: 3.3rem;
+    right: .25rem;
+    z-index: 150;
+    background: $menuBg;
+    color: $menuLinkColor;
+    padding: 1rem;
+    box-shadow: 0 0.125rem 0.25rem rgb(0 0 0 / 8%);
+    border-radius: 0.25rem;
+
+    ul.nav-links {
+        list-style: none;
+        margin: 0 0 .75rem 0;
+        padding: 0;
+        width: auto;
+    }
+
+    ul.nav-links:last-of-type {
+        margin-bottom: 0;
+    }
+
+    a {
+        color: $menuLinkColor;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    .nav-link-item {
+        margin-left: 0;
+        width: auto;
+        padding: .15rem 0;
+        font-size: 1rem;
+    }
+
+    .title {
+        font-weight: 700;
+        text-transform: uppercase;
+        color: $titleColor;
+        border-bottom: 2px solid $titleBorder;
+        font-size: 1.1rem;
+        letter-spacing: 1px;
+        padding: 0;
+        margin: 0 0 .5rem 0;
+    }
+
+    .badge {
+        display: inline-block;
+        padding: 0.25em 0.4em;
+        margin-left: .5rem;
+        font-size: 75%;
+        font-weight: 700;
+        line-height: 1;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: baseline;
+        border-radius: 0.25rem;
+        background-color: $badgeBg;
+        color: $badgeColor;
+        transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+}
+
+@media (max-height: 730px) {
+    #nucleus-nav-menu {
+        max-height: 70vh;
+        overflow-y: scroll;
+    }
+}
+
+#nucleus-nav-menu-backdrop {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    z-index: 148;
+    background: rgba(#000, .5);
+}
