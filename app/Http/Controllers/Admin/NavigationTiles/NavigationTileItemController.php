@@ -15,9 +15,17 @@ class NavigationTileItemController extends Controller
      */
     public function store($id, StoreNavigationTileItemRequest $request): \Illuminate\Http\RedirectResponse
     {
-        $navigationTile = NavigationTile::findOrFail($id);
+        $navigationTile = NavigationTile::with('navItems')->findOrFail($id);
+
         $attributes = $request->all();
         $attributes['navigation_tile_id'] = $navigationTile->id;
+
+        if ($navigationTile->navItems->last()) {
+            $attributes['order'] = $navigationTile->navItems->last()->order + 1;
+        } else {
+            $attributes['order'] = 1;
+        }
+
         $navItem = NavigationTileItem::create($attributes);
         return redirect()->route('admin.nav-tiles.edit', $id)->with('navigationTileItemSuccess', 'Added ' . $navItem->name . '!');
     }

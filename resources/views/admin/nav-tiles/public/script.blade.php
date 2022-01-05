@@ -68,7 +68,7 @@ function nucleusNavTile() {
             element.className = "nav-link-item";
 
             // URL
-            if (navTileItem.hasOwnProperty('url')) {
+            if (navTileItem.url !== null) {
                 let linkElement = document.createElement('a');
                 linkElement.setAttribute('href', navTileItem.url);
                 linkElement.setAttribute('target', '_blank');
@@ -80,7 +80,7 @@ function nucleusNavTile() {
             }
 
             // Badge
-            if (navTileItem.hasOwnProperty('badge')) {
+            if (navTileItem.badge !== null) {
                 let badgeElement = document.createElement('span');
                 badgeElement.className = "badge";
                 badgeElement.appendChild(document.createTextNode(navTileItem.badge));

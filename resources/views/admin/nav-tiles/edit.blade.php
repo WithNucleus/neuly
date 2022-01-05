@@ -18,7 +18,7 @@
         </div>
     </div>
 
-<script src="https://neuly.test/nav-tiles/{{ $navigationTile->slug }}.js" type="text/javascript"></script>
+<script src="{{ route('nav-tiles.script', $navigationTile->slug) }}" type="text/javascript"></script>
 <script type="text/javascript" src="{{ asset('assets/sortable.min.js') }}"></script>
 <script>
     $(document).ready(function () {

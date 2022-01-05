@@ -21,7 +21,7 @@ class NavigationTile extends Model
     const BADGE_BG = '#f0f600';
     const BADGE_COLOR = '#212529';
 
-    public function items(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function navItems(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(NavigationTileItem::class)->orderBy('order', 'asc')->orderBy('name', 'asc');
     }

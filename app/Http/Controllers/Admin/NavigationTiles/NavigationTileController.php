@@ -40,7 +40,7 @@ class NavigationTileController extends Controller
      * View with form to edit a Navigation Tile & form to add links
      */
     public function edit($id) {
-        $navigationTile = NavigationTile::with('items')->findOrFail($id);
+        $navigationTile = NavigationTile::with('navItems')->findOrFail($id);
         return view('admin.nav-tiles.edit', compact('navigationTile'));
     }
 
@@ -57,13 +57,13 @@ class NavigationTileController extends Controller
 
     public function clone($id): \Illuminate\Http\RedirectResponse
     {
-        $oldNavTile = NavigationTile::with(['items'])->findOrFail($id);
+        $oldNavTile = NavigationTile::with('navItems')->findOrFail($id);
 
         $newNavTile = $oldNavTile->replicate();
         $newNavTile->name = $oldNavTile->name . ' ' . uniqid();
         $newNavTile->save();
 
-        foreach ($oldNavTile->items as $item) {
+        foreach ($oldNavTile->navItems as $item) {
             $newItem = $item->replicate();
             $newItem->navigation_tile_id = $newNavTile->id;
             $newItem->save();
@@ -134,29 +134,11 @@ class NavigationTileController extends Controller
      */
     public function script($slug): \Illuminate\Http\Response
     {
-        $navigationTile = NavigationTile::with('items')->where('slug', $slug)->firstOrFail();
+        $navigationTile = NavigationTile::with('navItems')->where('slug', $slug)->firstOrFail();
 
-        $navItems = [];
+        $navItems = $navigationTile->navItems->keyBy('order')->toArray();
 
-        foreach ($navigationTile->items as $item) {
-
-            $attributes = [
-                'name' => $item->name,
-                'type' => $item->type
-            ];
-
-            if ($item->url != '') {
-                $attributes['url'] = $item->url;
-            }
-
-            if ($item->badge != '') {
-                $attributes['badge'] = $item->badge;
-            }
-
-            $navItems[$item->order] = $attributes;
-        }
-
-        return response()->view('admin.nav-tiles.nav-tile', compact('navigationTile', 'navItems'))
+        return response()->view('admin.nav-tiles.public.script', compact('navigationTile', 'navItems'))
             ->header('Content-Type', 'application/javascript');
     }
 
@@ -167,7 +149,7 @@ class NavigationTileController extends Controller
     {
         $navigationTile = NavigationTile::where('slug', $slug)->firstOrFail();
 
-        return response()->view('admin.nav-tiles._tile-style', compact('navigationTile'))
+        return response()->view('admin.nav-tiles.public.style', compact('navigationTile'))
             ->header('Content-Type', 'text/css');
     }
 }

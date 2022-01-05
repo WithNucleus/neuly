@@ -1,4 +1,4 @@
-@if ($navigationTile->items->count() > 0)
+@if ($navigationTile->navItems->count() > 0)
     <div class="d-flex align-items-center justify-content-between mb-2">
         <h2 class="h5 mb-0">Nav Items <small class="ml-2">(drag to reorder)</small></h2>
         <button class="btn btn-sm btn-primary js-save-link-order" data-action="{{ route('admin.nav-tiles.items.reorder', $navigationTile->id) }}">Save Order</button>
@@ -28,7 +28,7 @@
     </div>
 
     <ol id="sortable-links">
-        @foreach($navigationTile->items as $item)
+        @foreach($navigationTile->navItems as $item)
             <li class="nav-tile-item" data-nav-link-id="{{ $item->id }}">
                 <div class="d-flex justify-content-between align-items-center">
                     <span class="{{ $item->type }}">

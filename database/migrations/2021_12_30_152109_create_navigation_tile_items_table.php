@@ -20,7 +20,7 @@ class CreateNavigationTileItemsTable extends Migration
             $table->string('url')->nullable();
             $table->string('type')->default('link');
             $table->string('badge')->nullable();
-            $table->integer('order')->default(1);
+            $table->integer('order');
             $table->foreign('navigation_tile_id')->references('id')->on('navigation_tiles')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
