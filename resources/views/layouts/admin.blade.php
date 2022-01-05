@@ -25,5 +25,12 @@
     <div id="app">
         @yield('content')
     </div>
+    <script>
+        $(document).ready(function () {
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip()
+            });
+        });
+    </script>
 </body>
 </html>

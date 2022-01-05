@@ -332,3 +332,11 @@
         </a>
     </li>
 @endcan
+
+@can('manage navigation tiles')
+    <li class='nav-item'>
+        <a class='nav-link' href='{{ route('admin.nav-tiles.index') }}'>
+            <i class='nav-icon la la-compass'></i> Navigation Tiles
+        </a>
+    </li>
+@endcan

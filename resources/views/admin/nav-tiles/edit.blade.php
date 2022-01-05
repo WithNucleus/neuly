@@ -10,6 +10,17 @@
         <div class="row">
             <div class="col-12 col-lg-5">
                 @include('admin.nav-tiles._edit-form')
+                <div class="my-4">
+                    <h3 class="h5">Code</h3>
+                    <div class="d-flex align-items-center">
+                        <div class="form-control w-auto">
+                            {{ route('nav-tiles.script', $navigationTile->slug) }}
+                        </div>
+                        <div class="flex-shrink-0">
+                            @include('admin.nav-tiles._get-code-btn')
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="col-12 col-lg-5 offset-lg-1">
                 @include('admin.nav-tiles.items.items-list')
