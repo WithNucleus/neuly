@@ -1,0 +1,11 @@
+.search-modal {
+    overflow-y: hidden;
+    .modal-dialog {
+        max-height: 90vh;
+        height: 90vh;
+
+       .tab-pane {
+           overflow: scroll;
+       }
+    }
+}
