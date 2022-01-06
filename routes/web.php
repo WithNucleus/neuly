@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Dashboard\TeamController;
+use App\Http\Controllers\ExternalScriptController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -181,7 +183,7 @@ Route::group([
 
     // Search
     Route::post('/search', 'Index\SearchController@search')->name('search');
-    Route::get('/search/{term}', 'Index\SearchController@index')->where('term', '(.*)')
+    Route::get('/search/{term?}', 'Index\SearchController@index')->where('term', '(.*)')
         ->name('search.index');
 
     Route::post('/search/organizations', 'index\SearchController@showOrganizationResults')->name('search.organizations');
@@ -336,6 +338,8 @@ Route::group([
     Route::get('/jobs', 'Index\JobController@embedIndex')->name('jobs.index');
     Route::get('/events', 'Index\EventController@embedIndex')->name('events.index');
 });
+
+Route::get('/js/external/embedSearch.js', [ExternalScriptController::class, 'embedSearch'])->name('js.embedSearch');
 
 //SPECIAL ADMIN ROUTES
 require __DIR__.'/admin.php';
