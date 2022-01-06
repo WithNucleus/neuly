@@ -1,6 +1,4 @@
 /node_modules
-/public/js
-/public/css
 /public/hot
 /public/storage
 /storage/*.key
@@ -16,5 +14,3 @@ yarn-error.log
 .DS_Store
 /storage/backups
 .idea/
-
-.php_cs.cache
