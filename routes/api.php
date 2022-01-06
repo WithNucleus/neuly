@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\EventsController;
 use App\Http\Controllers\Api\JobsController;
+use App\Http\Controllers\Api\SearchController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,5 +26,7 @@ Route::group([
 ], function () {
     Route::get('/jobs', [JobsController::class, 'index'])->name('jobs.index');
     Route::get('/events', [EventsController::class, 'index'])->name('events.index');
+
+    Route::get('/search/suggestions', [SearchController::class, 'suggestions'])->name('search.suggestions');
 });
 

@@ -20,15 +20,19 @@ class SearchController extends Controller
     /**
      * General search handler
      *
-     * @param string $term
+     * @param string|null $term
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index(string $term)
+    public function index($term = null)
     {
         $limit        = 10;
         $results      = [];
         $exactResults = [];
         $searchTerm   = $this->getSearchTerm($term);
+
+        if ($searchTerm === null) {
+            abort(404);
+        }
 
         $this->logSearchTerm($searchTerm);
 
