@@ -273,3 +273,4 @@ require('./bootstrap');
 require('./notifications');
 require('./insights');
 import Cookies from 'js-cookie';
+require('./global-search');
