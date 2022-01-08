@@ -27,6 +27,7 @@ class DataFeedRequest extends FormRequest
     {
         return [
             'name' => 'required|min:3|max:255',
+            'url' => 'required|url',
             'feed_type' => 'required',
             'media_type' => 'required',
             'source_category' => 'required',

@@ -16,6 +16,7 @@ class CreateMediaItemsTable extends Migration
         Schema::create('media_items', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('status')->default('Pending');
             $table->string('media_type')->nullable();
             $table->string('url', 500)->nullable();
             $table->text('summary')->nullable();

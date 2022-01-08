@@ -20,6 +20,7 @@ class CreateDataFeedsTable extends Migration
             $table->string('feed_type');
             $table->string('source_category');
             $table->string('media_type');
+            $table->string('status')->default('Active');
             $table->timestamps();
         });
     }

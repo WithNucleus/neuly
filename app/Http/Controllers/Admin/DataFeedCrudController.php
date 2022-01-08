@@ -3,18 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\DataFeedRequest;
+use App\Jobs\DataFeeds\GetRssFeed;
 use App\Models\DataFeed;
-use App\Models\MediaItem;
-use App\Models\Person;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Backpack\CRUD\app\Library\Widget;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
-use SimplePie;
-use Stevebauman\Purify\Facades\Purify;
-use Symfony\Component\VarDumper\Cloner\Data;
-use Vedmant\FeedReader\Facades\FeedReader;
 
 /**
  * Class DataFeedCrudController
@@ -126,6 +120,14 @@ class DataFeedCrudController extends CrudController
             'allows_null'  => false,
         ]);
 
+        $this->crud->addField([
+            'name'    => 'status',
+            'type'    => 'select2_from_array',
+            'label'   => 'Status',
+            'options' => DataFeed::getStatuses(),
+            'allows_null'  => false,
+        ]);
+
         CRUD::setFromDb(); // fields
 
         /**
@@ -152,100 +154,11 @@ class DataFeedCrudController extends CrudController
     public function getFeedItems($id): \Illuminate\Http\RedirectResponse
     {
         $dataFeed = DataFeed::findOrFail($id);
-        $feed = $this->setupSimplePieFeed($dataFeed);
-        $feedName = $this->formatFeedName($feed->get_title());
 
-        foreach ($feed->get_items() as $item) {
-
-            $date = Carbon::parse($item->get_date())->format('Y-m-d');
-            $feedImage = $feed->get_image_url();
-
-            $title = $item->get_title();
-            $description = Purify::clean($item->get_content());
-
-            $summary = $this->formatFeedItemSummary($item->get_content(), $feedName, $title);
-
-            $attributes = [
-                'name' => $title,
-                'type' => 'Article',
-                'url' => $item->get_link(),
-                'summary' => $summary,
-                'content' => $description,
-                'icon_url' => $feedImage,
-                'source_type' => DataFeed::class,
-                'source_id' => $dataFeed->id,
-                'date' => $date
-            ];
-
-            MediaItem::updateOrCreate(
-                [
-                    'url' => $item->get_link(),
-                    'source_type' => DataFeed::class,
-                    'source_id' => $dataFeed->id,
-                ],
-                $attributes
-            );
-
+        if ($dataFeed->feed_type == DataFeed::FEED_TYPE_RSS) {
+            GetRssFeed::dispatch($dataFeed);
         }
 
         return redirect()->route('admin.datafeed.show', $id);
-    }
-
-    private function setupSimplePieFeed($dataFeed): SimplePie
-    {
-        $feed = new SimplePie();
-        $feed->set_feed_url($dataFeed->url . '?format=xml');
-        $feed->set_useragent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36');
-        $feed->set_cache_location(storage_path() . '/rss-feeds');
-
-        $stripHtmlTags = $feed->strip_htmltags;
-        array_splice($stripHtmlTags, array_search('iframe', $stripHtmlTags), 1);
-
-        $feed->strip_htmltags($stripHtmlTags);
-
-        $feed->init();
-        $feed->handle_content_type();
-
-        return $feed;
-    }
-
-    private function formatFeedName($originalName): string
-    {
-
-        $feedName = html_entity_decode($originalName, ENT_QUOTES | ENT_HTML5, 'UTF-8');
-
-        $charactersToReplace = [
-            '–' => '-'
-        ];
-
-        foreach ($charactersToReplace as $old => $new) {
-            $feedName = str_replace($old, $new, $feedName);
-        }
-
-        return $feedName;
-    }
-
-    private function formatFeedItemSummary($content, $feedName, $title): string
-    {
-        $summary = str_replace(["\r", "\n"], '', Purify::clean($content));
-        $summary = strip_tags($summary, ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']);
-
-        $summary = str_replace(['</p>', '</h1>', '</h2>', '</h3>', '</h4>', '</h5>', '</h6>'], ' ', $summary);
-        $summary = str_replace(['<p>', '<h1>', '<h2>', '<h3>', '<h4>', '<h5>', '<h6>'], '', $summary);
-
-        $stringsToRemove = [
-            'The post ' . $title . ' appeared first on ' . $feedName . '.',
-            'The article ' . $title . ' was originally published on ' . $feedName . '.',
-            'Continue reading ' . $title
-        ];
-
-        $summary = str_replace($stringsToRemove, '', $summary);
-
-        if (strlen($summary) > 300) {
-            $summary = wordwrap($summary, 300);
-            $summary = substr($summary, 0, strpos($summary, "\n")) . '...';
-        }
-
-        return $summary;
     }
 }

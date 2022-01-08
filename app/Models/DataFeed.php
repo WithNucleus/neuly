@@ -16,15 +16,12 @@ class DataFeed extends Model
     */
 
     protected $table = 'data_feeds';
-    // protected $primaryKey = 'id';
-    // public $timestamps = false;
     protected $guarded = ['id'];
-    // protected $fillable = [];
-    // protected $hidden = [];
-    // protected $dates = [];
+
+    const FEED_TYPE_RSS = 'RSS';
 
     const FEED_TYPES = [
-        'RSS'
+        self::FEED_TYPE_RSS
     ];
 
     const SOURCE_CATEGORIES = [
@@ -42,6 +39,14 @@ class DataFeed extends Model
         'Image',
         'Video',
         'Mixed',
+    ];
+
+    const STATUS_ACTIVE = 'Active';
+    const STATUS_INACTIVE = 'Inactive';
+
+    const STATUSES = [
+        self::STATUS_ACTIVE,
+        self::STATUS_INACTIVE,
     ];
 
     /*
@@ -62,6 +67,11 @@ class DataFeed extends Model
     public static function getSourceCategories(): array
     {
         return array_combine(self::SOURCE_CATEGORIES, self::SOURCE_CATEGORIES);
+    }
+
+    public static function getStatuses(): array
+    {
+        return array_combine(self::STATUSES, self::STATUSES);
     }
 
     /*
