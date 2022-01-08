@@ -38,12 +38,6 @@ $(function() {
         instantsearch.widgets.configure({
             hitsPerPage: 6,
         }),
-        instantsearch.widgets.searchBox({
-            container: '#companies #searchbox',
-            templates: {
-                submit: '<i class="fad fa-search fa-lg"></i>',
-            },
-        }),
         instantsearch.widgets.clearRefinements({
             container: '#companies #reset',
 
@@ -160,12 +154,6 @@ $(function() {
         instantsearch.widgets.configure({
             hitsPerPage: 6,
         }),
-        instantsearch.widgets.searchBox({
-            container: '#people #searchbox',
-            templates: {
-                submit: '<i class="fad fa-search fa-lg"></i>',
-            },
-        }),
         instantsearch.widgets.clearRefinements({
             container: '#people #reset',
         }),
@@ -242,12 +230,6 @@ $(function() {
     investorSearch.addWidgets([
         instantsearch.widgets.configure({
             hitsPerPage: 6,
-        }),
-        instantsearch.widgets.searchBox({
-            container: '#investors #searchbox',
-            templates: {
-                submit: '<i class="fad fa-search fa-lg"></i>',
-            },
         }),
         instantsearch.widgets.clearRefinements({
             container: '#investors #reset',
@@ -340,12 +322,6 @@ $(function() {
         instantsearch.widgets.configure({
             hitsPerPage: 4,
         }),
-        instantsearch.widgets.searchBox({
-            container: '#research #searchbox',
-            templates: {
-                submit: '<i class="fad fa-search fa-lg"></i>',
-            },
-        }),
         instantsearch.widgets.clearRefinements({
             container: '#research #reset',
 
@@ -430,12 +406,6 @@ $(function() {
     clinicalTrialsSearch.addWidgets([
         instantsearch.widgets.configure({
             hitsPerPage: 4,
-        }),
-        instantsearch.widgets.searchBox({
-            container: '#clinical-trials #searchbox',
-            templates: {
-                submit: '<i class="fad fa-search fa-lg"></i>',
-            },
         }),
         instantsearch.widgets.clearRefinements({
             container: '#clinical-trials #reset',
@@ -527,12 +497,6 @@ $(function() {
     eventsSearch.addWidgets([
         instantsearch.widgets.configure({
             hitsPerPage: 4,
-        }),
-        instantsearch.widgets.searchBox({
-            container: '#events #searchbox',
-            templates: {
-                submit: '<i class="fad fa-search fa-lg"></i>',
-            },
         }),
         instantsearch.widgets.clearRefinements({
             container: '#events #reset',
@@ -626,12 +590,6 @@ $(function() {
         instantsearch.widgets.configure({
             hitsPerPage: 4,
         }),
-        instantsearch.widgets.searchBox({
-            container: '#jobs #searchbox',
-            templates: {
-                submit: '<i class="fad fa-search fa-lg"></i>',
-            },
-        }),
         instantsearch.widgets.clearRefinements({
             container: '#jobs #reset',
 
@@ -695,4 +653,16 @@ $(function() {
     ]);
 
     jobsSearch.start();
+
+    $('#search-button').on('click', function(e) {
+        var query = $('#search-input').val().trim();
+
+        companySearch.helper.setQuery(query).search();
+        peopleSearch.helper.setQuery(query).search();
+        investorSearch.helper.setQuery(query).search();
+        researchSearch.helper.setQuery(query).search();
+        clinicalTrialsSearch.helper.setQuery(query).search();
+        eventsSearch.helper.setQuery(query).search();
+        jobsSearch.helper.setQuery(query).search();
+    });
 });
