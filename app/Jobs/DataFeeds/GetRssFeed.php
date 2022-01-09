@@ -57,10 +57,12 @@ class GetRssFeed implements ShouldQueue
 
             $summary = $this->formatFeedItemSummary($item->get_content(), $feedName, $title);
 
+            $url = $this->formatUrl($item->get_link());
+
             $attributes = [
                 'name' => $title,
                 'type' => 'Article',
-                'url' => $item->get_link(),
+                'url' => $url,
                 'summary' => $summary,
                 'content' => $description,
                 'icon_url' => $feedImage,
@@ -106,8 +108,7 @@ class GetRssFeed implements ShouldQueue
 
     private function formatFeedName($originalName): string
     {
-
-        $feedName = html_entity_decode($originalName, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $feedName = html_entity_decode(strip_tags($originalName), ENT_QUOTES | ENT_HTML5, 'UTF-8');
 
         $charactersToReplace = [
             '–' => '-'
@@ -118,6 +119,19 @@ class GetRssFeed implements ShouldQueue
         }
 
         return $feedName;
+    }
+
+    private function formatUrl($originalUrl): string
+    {
+
+        $partsToReplace = [
+            'https://www.google.com/url?rct=j&amp;sa=t&amp;url='
+        ];
+
+        $url = str_replace($partsToReplace, '', $originalUrl);
+        $urlArray = explode('&', $url);
+
+        return $urlArray[0];
     }
 
     private function formatFeedItemSummary($content, $feedName, $title): string

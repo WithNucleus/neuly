@@ -56,16 +56,20 @@ Route::group([
     });
 
     // Data Feed
-    Route::crud('datafeed', 'DataFeedCrudController');
     Route::group([
-        'prefix' => '/datafeed',
-        'as' => 'datafeed.',
-    ], function () {
-        Route::get('/{id}/get', 'DataFeedCrudController@getFeedItems')->name('get');
-    });
+        'middleware' => 'permission:import',
+    ], function() {
+        Route::crud('datafeed', 'DataFeedCrudController');
+        Route::group([
+            'prefix' => '/datafeed',
+            'as' => 'datafeed.',
+        ], function () {
+            Route::get('/{id}/get', 'DataFeedCrudController@getFeedItems')->name('get');
+        });
 
-    // Media Items
-    Route::crud('media-item', 'MediaItemCrudController');
+        // Media Items
+        Route::crud('media-item', 'MediaItemCrudController');
+    });
 
 });
 

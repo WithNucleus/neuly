@@ -39,7 +39,56 @@ class MediaItemCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        $this->crud->addColumn([
+            'name'    => 'name',
+            'label'   => 'Name',
+            'type'    => 'text',
+        ]);
+
+        $this->crud->addColumn([
+            'name'    => 'url',
+            'label'   => 'URL',
+            'type'    => 'text',
+            'wrapper' => [
+                'element' => 'a',
+                'href' => function ($crud, $column, $entry, $related_key) {
+                    return $entry->url;
+                },
+                    'target' => '_blank',
+                    'rel'=> 'noopener noreferrer'
+            ],
+        ]);
+
+        $this->crud->addColumn([
+            'name'    => 'status',
+            'label'   => 'Status',
+            'type'    => 'text',
+        ]);
+
+        $this->crud->addColumn([
+            'name'    => 'media_type',
+            'label'   => 'Media Type',
+            'type'    => 'text',
+        ]);
+
+        $this->crud->addColumn([
+            'name'    => 'source',
+            'label'   => 'Source',
+            'type'    => 'relationship',
+        ]);
+
+        $this->crud->addColumn([
+            'name'    => 'created_at',
+            'label'   => 'Created',
+            'type'    => 'date',
+        ]);
+
         CRUD::setFromDb(); // columns
+    }
+
+    protected function setupShowOperation()
+    {
+        $this->setupListOperation();
     }
 
     /**

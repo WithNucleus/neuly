@@ -9,6 +9,7 @@ use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Backpack\CRUD\app\Library\Widget;
 use Illuminate\Support\Facades\Route;
+use Prologue\Alerts\Facades\Alert;
 
 /**
  * Class DataFeedCrudController
@@ -157,6 +158,7 @@ class DataFeedCrudController extends CrudController
 
         if ($dataFeed->feed_type == DataFeed::FEED_TYPE_RSS) {
             GetRssFeed::dispatch($dataFeed);
+            Alert::add('success', 'Getting RSS feed...')->flash();
         }
 
         return redirect()->route('admin.datafeed.show', $id);
