@@ -69,7 +69,7 @@ return [
 
         'HTML.Allowed' => 'h1,h2,h3,h4,h5,h6,b,strong,i,em,a[href|title],ul,ol,li,p[style],br,span,img[width|height|alt|src],iframe[width|height|src|frameborder]',
         'HTML.SafeIframe'  => true,
-        'URI.SafeIframeRegexp' => '%^(http://|https://|//)(www.youtube.com/embed/|player.vimeo.com/video/|player.simplecast.com)%',
+        'URI.SafeIframeRegexp' => '%^(http://|https://|//)(www.youtube.com/embed/|player.vimeo.com/video/|player.simplecast.com|open.spotify.com|html5-player.libsyn.com)%',
 
         /*
         |--------------------------------------------------------------------------

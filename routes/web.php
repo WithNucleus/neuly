@@ -218,6 +218,13 @@ Route::group([
 
     Route::post('/search/clinicaltrials', 'index\SearchController@showClinicalTrialsResults')->name('search.clinicaltrials');
     Route::get('/search/clinicaltrials/{term}', 'Index\SearchController@showClinicalTrialsResults')->name('search.clinicaltrials.term');
+
+    // Media Items -- Listings
+    Route::get('/podcasts', 'Index\DataFeeds\PodcastController@index')->name('discover.podcasts');
+    Route::get('/podcasts/{slug}', 'Index\DataFeeds\PodcastController@show')->name('discover.podcasts.show');
+
+    Route::get('/books', 'Index\DataFeeds\BookController@index')->name('discover.nooks');
+//    Route::get('/podcasts/{slug}', 'Index\DataFeeds\PodcastController@show')->name('discover.podcasts.show');
 });
 
 // show entity routes with preview feature

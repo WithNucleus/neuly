@@ -49,40 +49,46 @@ class GetRssFeed implements ShouldQueue
 
         foreach ($feed->get_items() as $item) {
 
-            $date = Carbon::parse($item->get_date())->format('Y-m-d');
-            $feedImage = $feed->get_image_url();
-
-            $title = $item->get_title();
-            $description = Purify::clean($item->get_content());
-
-            $summary = $this->formatFeedItemSummary($item->get_content(), $feedName, $title);
-
             $url = $this->formatUrl($item->get_link());
 
-            $attributes = [
-                'name' => $title,
-                'type' => 'Article',
-                'url' => $url,
-                'summary' => $summary,
-                'content' => $description,
-                'icon_url' => $feedImage,
-                'source_type' => DataFeed::class,
-                'source_id' => $dataFeed->id,
-                'date' => $date,
-                'media_type' => $mediaType
-            ];
+            $existingMedia = MediaItem::where('url', $url)
+                ->where('source_type', DataFeed::class)
+                ->where('source_id', $dataFeed->id)
+                ->first();
 
-            try {
-                MediaItem::updateOrCreate(
-                    [
-                        'url' => $item->get_link(),
-                        'source_type' => DataFeed::class,
-                        'source_id' => $dataFeed->id,
-                    ],
-                    $attributes
-                );
-            } catch (Throwable $exception) {
-                Log::warning('Error during GetRssFeed' , [$exception->getMessage()]);
+            if (!$existingMedia) {
+                Log::info('no media - creating new');
+
+                $date = Carbon::parse($item->get_date())->format('Y-m-d');
+                $feedImage = $feed->get_image_url();
+
+                $title = strip_tags($item->get_title());
+                $description = Purify::clean($item->get_content());
+
+                // TODO: Include embed if Listen Notes?
+
+                $summary = $this->formatFeedItemSummary($item->get_content(), $feedName, $title);
+
+                $attributes = [
+                    'name' => $title,
+                    'type' => 'Article',
+                    'url' => $url,
+                    'summary' => $summary,
+                    'content' => $description,
+                    'icon_url' => $feedImage,
+                    'source_type' => DataFeed::class,
+                    'source_id' => $dataFeed->id,
+                    'date' => $date,
+                    'media_type' => $mediaType
+                ];
+
+                try {
+                    MediaItem::create($attributes);
+                } catch (Throwable $exception) {
+                    Log::warning('Error during GetRssFeed' , [$exception->getMessage()]);
+                }
+            } else {
+                Log::info('has media - skipping!');
             }
 
         }
@@ -108,10 +114,10 @@ class GetRssFeed implements ShouldQueue
 
     private function formatFeedName($originalName): string
     {
-        $feedName = html_entity_decode(strip_tags($originalName), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $feedName = html_entity_decode($originalName, ENT_QUOTES | ENT_HTML5, 'UTF-8');
 
         $charactersToReplace = [
-            '–' => '-'
+            '–' => '-',
         ];
 
         foreach ($charactersToReplace as $old => $new) {
@@ -123,7 +129,6 @@ class GetRssFeed implements ShouldQueue
 
     private function formatUrl($originalUrl): string
     {
-
         $partsToReplace = [
             'https://www.google.com/url?rct=j&amp;sa=t&amp;url='
         ];

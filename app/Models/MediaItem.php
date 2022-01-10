@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Contracts\MediaTypesContract;
+use App\Models\Traits\HasMediaTypes;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 
-class MediaItem extends Model
+class MediaItem extends Model implements MediaTypesContract
 {
-    use CrudTrait;
+    use CrudTrait, HasMediaTypes;
 
     /*
     |--------------------------------------------------------------------------

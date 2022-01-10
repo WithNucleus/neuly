@@ -16,11 +16,13 @@ class CreateDataFeedsTable extends Migration
         Schema::create('data_feeds', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
+            $table->string('slug')->unique();
             $table->string('url')->unique();
             $table->string('feed_type');
             $table->string('source_category');
             $table->string('media_type');
             $table->string('status')->default('Active');
+            $table->text('summary')->nullable();
             $table->timestamps();
         });
     }

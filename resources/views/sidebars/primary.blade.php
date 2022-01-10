@@ -110,6 +110,10 @@
             @if(Route::is('discover.news'))
                 @include('sidebars.news')
             @endif
+
+            @if(Route::is('discover.podcasts'))
+                @include('sidebars.data-feeds.podcasts')
+            @endif
         </div>
     </div>
 </nav>

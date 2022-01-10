@@ -44,7 +44,43 @@ class DataFeedCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::setFromDb(); // columns
+
+        $this->crud->addColumn([
+            'name'  => 'name',
+            'label' => 'Title',
+            'type'  => 'text'
+        ]);
+
+        $this->crud->addColumn([
+            'name'  => 'url',
+            'label' => 'URL',
+            'type'  => 'text'
+        ]);
+
+        $this->crud->addColumn([
+            'name'  => 'feed_type',
+            'label' => 'Feed Type',
+            'type'  => 'text'
+        ]);
+
+        $this->crud->addColumn([
+            'name'  => 'source_category',
+            'label' => 'Source Category',
+            'type'  => 'text'
+        ]);
+
+        $this->crud->addColumn([
+            'name'  => 'status',
+            'label' => 'Status',
+            'type'  => 'text'
+        ]);
+
+        $this->crud->addColumn([
+            'name'  => 'media_type',
+            'label' => 'Media Type',
+            'type'  => 'text'
+        ]);
+
         $this->crud->query->withCount('mediaItems');
         $this->crud->addColumn([
             'name'      => 'media_items_count', // name of relationship method in the model
@@ -129,7 +165,13 @@ class DataFeedCrudController extends CrudController
             'allows_null'  => false,
         ]);
 
-        CRUD::setFromDb(); // fields
+        $this->crud->addField([
+            'name'  => 'summary',
+            'label' => 'Summary',
+            'type'  => 'textarea'
+        ]);
+
+//        CRUD::setFromDb(); // fields
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:

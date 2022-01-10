@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Contracts\MediaTypesContract;
+use App\Models\Traits\HasMediaTypes;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
-class DataFeed extends Model
+class DataFeed extends Model implements MediaTypesContract
 {
-    use CrudTrait;
+    use CrudTrait, HasMediaTypes;
 
     /*
     |--------------------------------------------------------------------------
@@ -31,14 +34,8 @@ class DataFeed extends Model
         'Non-Profit',
         'Video',
         'Mindfulness',
-        'Google Alert'
-    ];
-
-    const MEDIA_TYPES = [
-        'Article',
-        'Image',
-        'Video',
-        'Mixed',
+        'Google Alert',
+        'Podcast'
     ];
 
     const STATUS_ACTIVE = 'Active';
@@ -54,14 +51,10 @@ class DataFeed extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
+
     public static function getFeedTypes(): array
     {
         return array_combine(self::FEED_TYPES, self::FEED_TYPES);
-    }
-
-    public static function getMediaTypes(): array
-    {
-        return array_combine(self::MEDIA_TYPES, self::MEDIA_TYPES);
     }
 
     public static function getSourceCategories(): array
@@ -101,4 +94,9 @@ class DataFeed extends Model
     | MUTATORS
     |--------------------------------------------------------------------------
     */
+    public function setNameAttribute($name)
+    {
+        $this->attributes['name'] = $name;
+        $this->attributes['slug'] = Str::slug($name);
+    }
 }
