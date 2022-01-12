@@ -22,16 +22,6 @@
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link @if(Route::is('discover.locations') OR Route::is('discover.locations.*')) active @endif "href="{{ route('discover.locations.maps.global') }}">
-            <span class="icon mr-1"><i class="fad fa-map-pin"></i></span>Locations
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link @if(Route::is('discover.focus') OR Route::is('discover.focus.show')) active @endif "href="{{ route('discover.focus') }}">
-            <span class="icon mr-1"><i class="fad fa-tags"></i></span>Focus
-        </a>
-    </li>
-    <li class="nav-item">
         <a class="nav-link @if(Route::is('discover.research') OR Route::is('discover.research.show')) active @endif "href="/research">
             <span class="icon mr-1"><i class="fad fa-microscope"></i></span>Research
         </a>
@@ -62,7 +52,17 @@
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link @if(Request::is('insights/*') OR Route::is('discover.insights')) active @endif "href="{{ route('discover.insights') }}">
+        <a class="nav-link @if(Route::is('discover.books')) active @endif " href="{{ route('discover.books') }}">
+            <span class="icon mr-1"><i class="fad fa-book"></i></span>Books
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @if(Route::is('discover.podcasts')) active @endif " href="{{ route('discover.podcasts') }}">
+            <span class="icon mr-1"><i class="fad fa-podcast"></i></span>Podcasts
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @if(Request::is('insights/*') OR Route::is('discover.insights')) active @endif " href="{{ route('discover.insights') }}">
             <span class="icon mr-1"><i class="fad fa-head-side-brain"></i></span>Insights
         </a>
     </li>

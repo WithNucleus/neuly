@@ -78,12 +78,18 @@ class MediaItemCrudController extends CrudController
         ]);
 
         $this->crud->addColumn([
+            'name'    => 'focus',
+            'label'   => 'Focus',
+            'type'    => 'relationship',
+        ]);
+
+        $this->crud->addColumn([
             'name'    => 'created_at',
             'label'   => 'Created',
             'type'    => 'date',
         ]);
 
-        CRUD::setFromDb(); // columns
+//        CRUD::setFromDb(); // columns
     }
 
     protected function setupShowOperation()
@@ -100,6 +106,44 @@ class MediaItemCrudController extends CrudController
     protected function setupCreateOperation()
     {
         CRUD::setValidation(MediaItemRequest::class);
+
+        $this->crud->addField([
+            'name'    => 'name',
+            'label'   => 'Name',
+            'type'    => 'text',
+        ]);
+
+        $this->crud->addField([
+            'name'    => 'url',
+            'label'   => 'URL',
+            'type'    => 'url',
+        ]);
+
+        $this->crud->addField([
+            'name'    => 'status',
+            'label'   => 'Status',
+            'type'    => 'text',
+        ]);
+
+        $this->crud->addField([
+            'name'    => 'media_type',
+            'label'   => 'Media Type',
+            'type'    => 'text',
+        ]);
+
+
+        $this->crud->addField([
+            'label'     => "Focus",
+            'type'      => 'select2_multiple',
+            'name'      => 'focus',
+            'entity'    => 'focus',
+            'attribute' => 'name',
+            'pivot'   => true,
+            'options' => (function ($query) {
+                return $query->orderBy('name', 'ASC')->get();
+            }),
+            'model'   => "App\Models\Focus",
+        ]);
 
         CRUD::setFromDb(); // fields
 

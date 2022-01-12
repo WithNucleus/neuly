@@ -72,6 +72,11 @@ class Focus extends Model implements EntityContract
         return $this->belongsToMany('App\Models\Job', 'focus_job', 'focus_id', 'job_id')->withTimestamps();
     }
 
+    public function mediaItems(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany('App\Models\MediaItem', 'focus_media_item', 'focus_id', 'media_item_id');
+    }
+
     public function newsarticles()
     {
         return $this->belongsToMany('App\Models\NewsArticle', 'focus_news_article', 'focus_id', 'news_article_id')->withTimestamps();

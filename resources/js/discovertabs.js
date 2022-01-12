@@ -33,6 +33,10 @@ $("select.discover").change(function(){
 		window.location.replace("/psychedelic-index");
 	} else if (value == 'news') {
         window.location.replace("/news");
+    } else if (value == 'books') {
+        window.location.replace("/books");
+    } else if (value == 'podcasts') {
+        window.location.replace("/podcasts");
     }
 
 

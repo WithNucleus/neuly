@@ -114,6 +114,10 @@
             @if(Route::is('discover.podcasts'))
                 @include('sidebars.data-feeds.podcasts')
             @endif
+
+            @if(Route::is('discover.books'))
+                @include('sidebars.data-feeds.books')
+            @endif
         </div>
     </div>
 </nav>

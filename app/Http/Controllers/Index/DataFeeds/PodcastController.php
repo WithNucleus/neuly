@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Index\DataFeeds;
 
 use App\Http\Controllers\Controller;
+use App\Models\Contracts\MediaTypesContract;
 use App\Models\DataFeed;
+use App\Models\Focus;
 use App\Models\MediaItem;
+use Illuminate\Database\Eloquent\Builder;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class PodcastController extends Controller
@@ -16,13 +19,17 @@ class PodcastController extends Controller
 
     public function index()
     {
-        $podcasts = QueryBuilder::for(DataFeed::podcasts())
+        $podcasts = QueryBuilder::for(DataFeed::podcasts()->active())
             ->allowedSorts(['name'])
             ->defaultSort('name')
             ->paginate(20)
             ->appends(request()->query());
 
-        return view('discover.data-feeds.podcasts.index', compact('podcasts'));
+        $focus_cats = Focus::whereHas('mediaItems', function (Builder $query) {
+            $query->where('media_type', MediaTypesContract::MEDIA_TYPE_PODCAST);
+        })->orderBy('name')->pluck('name')->toArray();
+
+        return view('discover.data-feeds.podcasts.index', compact('podcasts', 'focus_cats'));
     }
 
     public function show($slug)

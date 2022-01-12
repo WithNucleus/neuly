@@ -223,7 +223,7 @@ Route::group([
     Route::get('/podcasts', 'Index\DataFeeds\PodcastController@index')->name('discover.podcasts');
     Route::get('/podcasts/{slug}', 'Index\DataFeeds\PodcastController@show')->name('discover.podcasts.show');
 
-    Route::get('/books', 'Index\DataFeeds\BookController@index')->name('discover.nooks');
+    Route::get('/books', 'Index\DataFeeds\BookController@index')->name('discover.books');
 //    Route::get('/podcasts/{slug}', 'Index\DataFeeds\PodcastController@show')->name('discover.podcasts.show');
 });
 

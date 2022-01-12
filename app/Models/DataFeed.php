@@ -51,7 +51,6 @@ class DataFeed extends Model implements MediaTypesContract
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
-
     public static function getFeedTypes(): array
     {
         return array_combine(self::FEED_TYPES, self::FEED_TYPES);
@@ -82,6 +81,10 @@ class DataFeed extends Model implements MediaTypesContract
     | SCOPES
     |--------------------------------------------------------------------------
     */
+    public function scopeActive($query)
+    {
+        $query->where('status', self::STATUS_ACTIVE);
+    }
 
     /*
     |--------------------------------------------------------------------------

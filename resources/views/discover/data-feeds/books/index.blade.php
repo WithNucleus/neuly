@@ -58,6 +58,12 @@
                                     <div class="d-inline sort-name text-uppercase">
 
                                         @include('discover.includes.filters.sort-button-default', [
+                                            'asc' => 'date',
+                                            'desc' => '-date',
+                                            'label' => 'Date'
+                                        ])
+
+                                        @include('discover.includes.filters.sort-button', [
                                             'asc' => 'name',
                                             'desc' => '-name',
                                             'label' => 'Name'
@@ -84,6 +90,43 @@
                             <?php endif; ?>
 
                             {{-- Books --}}
+{{--                            <div class="row">--}}
+{{--                                @forelse($books as $book)--}}
+{{--                                    <div class="col-12 col-md-6 mb-5">--}}
+{{--                                        <div class="flex-fill h-100">--}}
+{{--                                            <div class="card h-100 bg-white shadow-sm p-4 px-5">--}}
+{{--                                                <h2 class="h4">--}}
+{{--                                                    <a href="{{ $book->url }}" target="_blank" rel="noopener noreferrer">--}}
+{{--                                                        {{ $book->name }}--}}
+{{--                                                    </a>--}}
+{{--                                                </h2>--}}
+{{--                                                <p class="lead mb-2 text-muted">--}}
+{{--                                                    {{ \Carbon\Carbon::parse($book->date)->format('Y') }}--}}
+{{--                                                    <span class="mx-2">&bull;</span>--}}
+{{--                                                    {{ $book->summary }}--}}
+{{--                                                </p>--}}
+{{--                                                @if($book->focus->count() > 0)--}}
+{{--                                                    <p class="lead mb-2 text-secondarydark">--}}
+{{--                                                        <i class="fad fa-flask"></i>--}}
+{{--                                                        @foreach ($book->focus as $item)--}}
+{{--                                                            {{ $item->name }}@if (!$loop->last) / @endif--}}
+{{--                                                        @endforeach--}}
+{{--                                                    </p>--}}
+{{--                                                @endif--}}
+{{--                                                <div class="text-left">--}}
+{{--                                                    {{ $book->content }}--}}
+{{--                                                </div>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                @empty--}}
+{{--                                    <div class="w-100">--}}
+{{--                                        <p class="lead mb-0">--}}
+{{--                                            No books match your search criteria.--}}
+{{--                                        </p>--}}
+{{--                                    </div>--}}
+{{--                                @endforelse--}}
+{{--                            </div>--}}
                             <ul class="list-group list-group-flush mb-4 shadow-sm">
                                 @forelse($books as $book)
                                     <li class="list-group-item py-4">
@@ -97,13 +140,20 @@
                                             <span class="mx-2">&bull;</span>
                                             {{ $book->summary }}
                                         </p>
+                                        @if($book->focus->count() > 0)
+                                            <p class="lead mb-2 text-secondarydark">
+                                                <i class="fad fa-flask"></i>
+                                                @foreach ($book->focus as $item)
+                                                    {{ $item->name }}@if (!$loop->last) / @endif
+                                                @endforeach
+                                            </p>
+                                        @endif
                                         <div class="text-left">
                                             {{ $book->content }}
                                         </div>
                                     </li>
-
                                 @empty
-                                    <li class="w-100">
+                                    <li class="list-group-item py-4">
                                         <p class="lead mb-0">
                                             No books match your search criteria.
                                         </p>

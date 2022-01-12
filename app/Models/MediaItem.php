@@ -16,26 +16,38 @@ class MediaItem extends Model implements MediaTypesContract
     | GLOBAL VARIABLES
     |--------------------------------------------------------------------------
     */
+    const STATUS_PUBLIC = 'Public';
+    const STATUS_PENDING = 'Pending';
+
+    const STATUSES = [
+        self::STATUS_PUBLIC,
+        self::STATUS_PENDING
+    ];
 
     protected $table = 'media_items';
-    // protected $primaryKey = 'id';
-    // public $timestamps = false;
     protected $guarded = ['id'];
-    // protected $fillable = [];
-    // protected $hidden = [];
-    // protected $dates = [];
+     protected $dates = ['date'];
 
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
+    public static function getStatuses(): array
+    {
+        return array_combine(self::STATUSES, self::STATUSES);
+    }
 
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+    public function focus()
+    {
+        return $this->belongsToMany(Focus::class, 'focus_media_item', 'media_item_id', 'focus_id');
+    }
+
     public function source(): \Illuminate\Database\Eloquent\Relations\MorphTo
     {
         return $this->morphTo();
@@ -46,6 +58,10 @@ class MediaItem extends Model implements MediaTypesContract
     | SCOPES
     |--------------------------------------------------------------------------
     */
+    public function scopePublic($query)
+    {
+        $query->where('status', self::STATUS_PUBLIC);
+    }
 
     /*
     |--------------------------------------------------------------------------
