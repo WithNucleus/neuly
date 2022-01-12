@@ -32,11 +32,6 @@
         </a>
     </li>
     <li class="nav-item">
-        <a href="{{ route('discover.index') }}" class="nav-link @if(Route::is('discover.index')) active @endif">
-            <span class="icon mr-1"><i class="fad fa-chart-area"></i></span>Pubco Index
-        </a>
-    </li>
-    <li class="nav-item">
         <a class="nav-link {{ stripos(Route::currentRouteName(), 'discover.events') !== false ? 'active' : '' }}" href="{{ route('discover.events') }}">
             <span class="icon mr-1"><i class="fad fa-calendar"></i></span>Events
         </a>
@@ -59,6 +54,11 @@
     <li class="nav-item">
         <a class="nav-link @if(Route::is('discover.podcasts')) active @endif " href="{{ route('discover.podcasts') }}">
             <span class="icon mr-1"><i class="fad fa-podcast"></i></span>Podcasts
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @if(Route::is('discover.courses')) active @endif " href="{{ route('discover.courses') }}">
+            <span class="icon mr-1"><i class="fad fa-book-reader"></i></span>Courses
         </a>
     </li>
     <li class="nav-item">

@@ -167,6 +167,11 @@ class Company extends Model implements EntityContract, EntityImageContract
         return $this->hasMany(CompanyBranch::class);
     }
 
+    public function courses(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Course::class);
+    }
+
     public function focus(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany('App\Models\Focus', 'company_focus', 'company_id', 'focus_id')

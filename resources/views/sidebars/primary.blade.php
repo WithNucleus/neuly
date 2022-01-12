@@ -118,6 +118,10 @@
             @if(Route::is('discover.books'))
                 @include('sidebars.data-feeds.books')
             @endif
+
+            @if(Route::is('discover.courses'))
+                @include('sidebars.courses')
+            @endif
         </div>
     </div>
 </nav>

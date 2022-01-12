@@ -72,6 +72,11 @@
                     selected
                 @endif
             >Podcasts</option>
+            <option value="courses"
+                    @if(Route::is('discover.courses'))
+                    selected
+                @endif
+            >Courses</option>
             <option value="insights"
                 @if(Route::is('discover.insights') OR Request::is('insights/*'))
                     selected

@@ -69,6 +69,9 @@ Route::group([
 
         // Media Items
         Route::crud('media-item', 'MediaItemCrudController');
+
+        // Courses
+        Route::crud('course', 'CourseCrudController');
     });
 
 });

@@ -102,6 +102,13 @@ class QueryFilters
             $filter_upcoming_events = 0;
         }
 
+        // If people
+        if (isset($request->query('filter')['education'])) {
+            $filter_education_credits = explode('|', $request->query('filter')['education']);
+        } else {
+            $filter_education_credits = array();
+        }
+
         // Share with Blade
         view()->share('filters', $filters);
         view()->share('sort', $sort_string);
@@ -116,6 +123,7 @@ class QueryFilters
         view()->share('filters_type', $type_array);
         view()->share('filter_hiring', $filter_hiring);
         view()->share('filter_upcoming_events', $filter_upcoming_events);
+        view()->share('filter_education_credits', $filter_education_credits);
         view()->share('path', $path);
 
         // Return Next Request

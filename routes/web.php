@@ -222,9 +222,9 @@ Route::group([
     // Media Items -- Listings
     Route::get('/podcasts', 'Index\DataFeeds\PodcastController@index')->name('discover.podcasts');
     Route::get('/podcasts/{slug}', 'Index\DataFeeds\PodcastController@show')->name('discover.podcasts.show');
-
     Route::get('/books', 'Index\DataFeeds\BookController@index')->name('discover.books');
-//    Route::get('/podcasts/{slug}', 'Index\DataFeeds\PodcastController@show')->name('discover.podcasts.show');
+
+    Route::get('/courses', 'Index\CourseController@index')->name('discover.courses');
 });
 
 // show entity routes with preview feature
