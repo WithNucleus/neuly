@@ -8,6 +8,7 @@ use App\Models\Focus;
 use App\Models\Course;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class CourseController extends Controller
@@ -22,7 +23,10 @@ class CourseController extends Controller
         $courses = QueryBuilder::for(Course::class)
             ->where('schedule', '!=', Course::SCHEDULE_PAST)
             ->with(['focus'])
-            ->allowedSorts(['name'])
+            ->allowedSorts([
+                'name',
+                AllowedSort::field('price', 'lowest_cost'),
+                ])
             ->defaultSort('name')
             ->allowedFilters([
                 AllowedFilter::partial('focus', 'focus.name'),

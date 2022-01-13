@@ -63,6 +63,12 @@
                                             'label' => 'Name'
                                         ])
 
+                                        @include('discover.includes.filters.sort-button', [
+                                            'asc' => 'price',
+                                            'desc' => '-price',
+                                            'label' => 'Price'
+                                        ])
+
                                     </div>
                                 </div>
                             @endisset
@@ -88,18 +94,18 @@
                                     <div class="col-12 col-md-6 col-xl-4 mb-5">
                                         <div class="card shadow-sm h-100 p-4 d-flex flex-column justify-content-between">
                                             <div>
-                                                <div class="d-flex align-items-start">
-                                                    <h2 class="h4 mb-2">
-                                                        <a href="{{ $course->url }}" target="_blank" rel="noopener noreferrer">
-                                                            {{ $course->name }}
-                                                        </a>
-                                                    </h2>
-                                                    @if ($course->education_credits != '')
-                                                        <span class="badge badge-info ml-2">
+                                                <h2 class="h4 mb-2">
+                                                    <a href="{{ $course->url }}" target="_blank" rel="noopener noreferrer">
+                                                        {{ $course->name }}
+                                                    </a>
+                                                </h2>
+                                                @if ($course->education_credits != '')
+                                                    <p class="lead mb-2">
+                                                        <span class="badge badge-info">
                                                             {{ $course->education_credits }}
                                                         </span>
-                                                    @endif
-                                                </div>
+                                                    </p>
+                                                @endif
                                                 @if($course->companies->count() > 0)
                                                     <p class="lead text-muted mb-2">
                                                         @foreach ($course->companies as $item)

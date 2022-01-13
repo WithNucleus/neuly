@@ -167,9 +167,15 @@ class CourseCrudController extends CrudController
         ]);
 
         $this->crud->addField([
-            'name'    => 'cost',
-            'label'   => 'Cost',
-            'type'    => 'text',
+            'name'    => 'lowest_cost',
+            'label'   => 'Lowest Cost',
+            'type'    => 'number',
+        ]);
+
+        $this->crud->addField([
+            'name'    => 'highest_cost',
+            'label'   => 'Highest Cost',
+            'type'    => 'number',
         ]);
 
         $this->crud->addField([

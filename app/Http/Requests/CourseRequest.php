@@ -29,7 +29,8 @@ class CourseRequest extends FormRequest
             'name' => 'required|min:3|max:255',
             'summary' => 'required',
             'url' => 'required|url',
-            'type' => 'required'
+            'type' => 'required',
+            'lowest_cost' => 'required'
         ];
     }
 

@@ -93,8 +93,8 @@ class Course extends Model
         return nl2br(e($this->summary));
     }
 
-    public function getFormattedCostAttribute() {
-
+    public function getFormattedCostAttribute(): string
+    {
         $lowestCost = $this->lowest_cost;
         $highestCost = $this->highest_cost;
 

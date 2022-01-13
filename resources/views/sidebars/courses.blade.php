@@ -13,7 +13,7 @@
 ])
 
 @include('sidebars.filters.checkboxes-new', [
-    'label'     => 'CE Credits',
+    'label'     => 'Education Credits',
     'name'      => 'education_credits',
     'items'     => ['CE', 'CME', 'CPD'],
     'item_filters' => $filter_education_credits
