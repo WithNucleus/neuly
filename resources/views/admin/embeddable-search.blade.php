@@ -13,20 +13,21 @@
     <div class="row mt-4">
         <div class="col-12 col-md-8">
             <div class="card card-body">
-                <ul>
-                    <li>Paste this code to the end of the web page (jQuery library is required).</li>
-                    <li>Replace <code>$('input[type=text]')</code> jQuery selector with your text input selector.</li>
-                    <li>Replace <code>API_ACCESS_TOKEN</code> with active Neuly API access token.</li>
-                </ul>
 
+                <p>Place this code of the button which will open search window:</p>
 <pre style="padding: 10px; background-color: lightgrey;">
-&lt;link href="{{ url('/') }}/css/external/embedSearch.css" rel="stylesheet" type="text/css"&gt;
-&lt;script src="{{ route('js.embedSearch') }}"&gt;&lt;/script&gt;
-&lt;script&gt;
-    $('input[type=text]').neulyEmbedSearch('API_ACCESS_TOKEN');
-&lt;/script&gt;
+&lt;button id="nes-open-modal-btn" class="nes-open-modal-btn"&gt;Search&lt;/button&gt;
 </pre>
 
+                <p>Paste this code to the end of the web page (<b>jQuery library is required</b>):</p>
+<pre style="padding: 10px; background-color: lightgrey;">
+&lt;link href="{{ asset('/css/external/embed-search.css') }}" rel="stylesheet" type="text/css"&gt;
+&lt;script src="{{ asset('/js/external/embed-search.js') }}"&gt;&lt;/script&gt;
+&lt;script&gt;
+    $('#nes-open-modal-btn').neulyEmbedSearch();
+&lt;/script&gt;
+</pre>
+                <p>You can use your own button and initialize <code>neulyEmbedSearch()</code> for it with jQuery selector.</p>
             </div>
         </div>
     </div>

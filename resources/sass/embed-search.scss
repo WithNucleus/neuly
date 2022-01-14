@@ -1,0 +1,319 @@
+@import '~bootstrap/scss/bootstrap';
+
+.nes-open-modal-btn {
+    display: inline-block;
+    font-weight: 400;
+    color: #212529;
+    text-align: center;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    outline: none;
+    background-color: transparent;
+    border: 1px solid transparent;
+    padding: 0.375rem 0.75rem;
+    font-size: medium;
+    line-height: 1.6;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    background-color: rgba(107, 188, 164, 0.75);
+}
+
+.nes-open-modal-btn:hover {
+    background-color: rgba(107, 188, 164, 1);
+}
+
+.nes-modal {
+    overflow: hidden;
+    padding: 0 !important;
+    font-size: medium !important;
+
+    .modal-dialog {
+        max-height: 100vh;
+        height: 100vh;
+        max-width: 100vw;
+        width: 100vw;
+        margin: 0 !important;
+
+        .modal-content {
+            overflow: hidden;
+            max-height: 100vh;
+            height: 100vh;
+            max-width: 100vw;
+            width: 100vw;
+            border: 0;
+            border-radius: 0;
+
+            .modal-body {
+                padding: 0;
+
+                .navbar {
+                    border-radius: 0;
+
+                    .close {
+                        margin-left: auto;
+                        color: #fff;
+                        opacity: 1;
+                        text-shadow: none;
+                        outline: none;
+                    }
+
+                    .navbar-brand img {
+                        max-height: 40px;
+                    }
+
+                    .nes-main-input {
+                        color: #fff;
+                        position: relative;
+                        vertical-align: top;
+                        background-color: transparent;
+                    }
+
+                    .nes-submit-button {
+                        background-color: #6BBCA4BF;
+                    }
+
+                    .nes-submit-button:hover {
+                        background-color: #6BBCA4;
+                    }
+                }
+
+                label {
+                    font-weight: normal;
+                }
+
+                input, button {
+                    font-size: medium;
+                }
+
+                .fade.show,
+                .fade.active {
+                    opacity: 1 !important;
+                }
+
+                .content {
+                    padding: 10px;
+                }
+
+                .items-wrapper {
+                    height: calc(100vh - 160px);
+                    overflow-y: auto;
+
+                    a {
+                        font-size: medium;
+                    }
+                }
+
+                .logo-is-contained {
+                    width: 150px;
+                    height: 150px;
+                    margin-left: auto;
+                    margin-right: auto;
+                    background-size: contain;
+                    background-position: 50%;
+                    background-repeat: no-repeat;
+                    display: flex;
+                    align-content: center;
+                    justify-content: center;
+                    flex-direction: column;
+                }
+
+                .person-photo-small {
+                    width: 100px;
+                    height: 100px;
+                }
+                .person-photo-large, .person-photo-small {
+                    margin-left: auto;
+                    margin-right: auto;
+                    margin-bottom: 0.5rem;
+                    border-radius: 100%;
+                    background: #f8f9fa;
+                    background-size: cover;
+                    background-position: 50%;
+                    background-repeat: no-repeat;
+                }
+            }
+        }
+
+        .tab-content {
+            height: calc(100vh - 120px);
+
+            .tab-pane {
+                height: calc(100vh - 120px);
+                overflow: hidden;
+            }
+
+            .search-content-row {
+                height: calc(100vh - 120px);
+                align-items: stretch;
+
+                .sidebar-sticky {
+                    height: calc(100vh - 160px);
+                }
+            }
+        }
+    }
+
+    .nes-filter-item {
+        margin-bottom: 1rem;
+    }
+
+    .sidebar-sticky {
+        overflow-y: auto;
+    }
+
+    //instantsearch custom styles
+    .filter-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .ais-ClearRefinements {
+            display: flex;
+            align-items: center;
+
+            .ais-ClearRefinements-button {
+                font-size: .8rem;
+                line-height: 1.2rem;
+                font-weight: 400;
+                color: #275dad;
+                background: none;
+                border: 0;
+            }
+        }
+    }
+
+    .ais-RefinementList {
+        .ais-RefinementList-list {
+            list-style: none;
+            padding-left: 0;
+
+            .ais-RefinementList-item {
+                position: relative;
+                display: block;
+                min-height: 1.6rem;
+
+                .ais-RefinementList-label {
+                    .ais-RefinementList-count {
+                        color: #fff;
+                        background-color: #176f55;
+                        padding: 0.25em 0.6em;
+                        border-radius: 10rem;
+                        font-size: 75%;
+                        font-weight: 700;
+                        line-height: 1;
+                        text-align: center;
+                        white-space: nowrap;
+                        vertical-align: baseline;
+                        min-width: 30px;
+                        display: inline-block;
+                    }
+                }
+            }
+        }
+
+        .ais-RefinementList-showMore {
+            color: #176f55;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: .875rem;
+            line-height: 1.5;
+            border-radius: 0.2rem;
+            background: none;
+            border: 0;
+            position: relative;
+
+            &:before {
+                content: "\f339";
+                position: absolute;
+                font-family: 'Font Awesome 5 Duotone';
+                font-weight: 900;
+                right: -10px;
+            }
+
+            &:after {
+                content: "\10f339";
+                position: absolute;
+                font-family: 'Font Awesome 5 Duotone';
+                font-weight: 900;
+                right: -10px;
+                color: #a3c3b9;
+            }
+        }
+    }
+
+    .ais-RefinementList-labelText,
+    .ais-ToggleRefinement-labelText {
+        margin-left: 8px;
+    }
+
+    .ais-SearchBox {
+        margin-bottom: 8px;
+
+        .ais-SearchBox-form {
+            display: flex;
+            align-items: center;
+
+            .ais-SearchBox-input {
+                display: block;
+                width: 100%;
+                height: calc(1.6em + 0.75rem + 2px);
+                padding: 0.375rem 0.75rem;
+                font-size: 1rem;
+                font-weight: 400;
+                line-height: 1.6;
+                color: #495057;
+                background-clip: padding-box;
+                border: 1px solid #ced4da;
+                border-radius: 0.25rem;
+                transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+                position: relative;
+                vertical-align: top;
+                background-color: transparent;
+            }
+
+            .ais-SearchBox-submit,
+            .ais-SearchBox-reset {
+                user-select: none;
+                background: none;
+                padding: 0.375rem 0.75rem;
+                font-size: 1rem;
+                line-height: 1.6;
+                transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+                border: 0;
+            }
+        }
+    }
+
+    .ais-Hits-list {
+        list-style: none;
+        padding-left: 0;
+
+        .ais-Hits-item {
+
+            .lead {
+                min-height: 64px;
+            }
+
+            .list-group-item {
+                .spacer:last-of-type {
+                    display: none;
+                }
+            }
+        }
+    }
+
+    .ais-Pagination {
+        .ais-Pagination-list {
+            display: flex;
+            list-style: none;
+        }
+    }
+
+    .nes-sort-by {
+        height: 32px;
+        margin: 16px 0;
+    }
+}
