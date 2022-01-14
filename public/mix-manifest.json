@@ -7,5 +7,7 @@
     "/js/discovertabs.js": "/js/discovertabs.js?id=409b30119592e13fdc30",
     "/js/formValidation.js": "/js/formValidation.js?id=d2c93b1897cb61acf894",
     "/js/home-hero.js": "/js/home-hero.js?id=3e2acc0f2b6c52f910f9",
-    "/js/nav-tiles.js": "/js/nav-tiles.js?id=4495adaff4459f5b1947"
+    "/js/nav-tiles.js": "/js/nav-tiles.js?id=4495adaff4459f5b1947",
+    "/css/external/embed-search.css": "/css/external/embed-search.css?id=ba65b9b464eb3b5e550e",
+    "/js/external/embed-search.js": "/js/external/embed-search.js?id=1277475fe6337b4ef503"
 }
