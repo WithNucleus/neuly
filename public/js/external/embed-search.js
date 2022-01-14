@@ -11503,7 +11503,7 @@ var searchModalId = '#neulyEmbedSearchModal';
   $.fn.neulyEmbedSearch = function () {
     var searchButton = $(this); //TODO make domain dynamic
 
-    var mainDomain = 'https://staging.neuly.com/';
+    var mainDomain = 'https://staging.neuly.com';
     $.get(mainDomain + '/js/external/embedSearch/template', function (template) {
       $('body').append(template);
       var searchModal = $(searchModalId);
