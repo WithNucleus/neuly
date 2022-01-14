@@ -351,6 +351,8 @@ Route::group([
     Route::get('/events', 'Index\EventController@embedIndex')->name('events.index');
 });
 
+Route::get('/js/external/embedSearch/template', [ExternalScriptController::class, 'getSearchModalTemplate'])->name('js.embedSearch.template');
+
 //SPECIAL ADMIN ROUTES
 require __DIR__.'/admin.php';
 
