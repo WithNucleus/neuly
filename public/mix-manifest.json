@@ -1,9 +1,11 @@
 {
-    "/js/app.js": "/js/app.js?id=0585407b9b316f4aa5d2",
-    "/css/app.css": "/css/app.css?id=a85ad4764c1e48a10a60",
-    "/css/index-qm.css": "/css/index-qm.css?id=fcee45688bd83ba8b2c4",
-    "/css/datatables.css": "/css/datatables.css?id=162dc97e79967c25afce",
-    "/js/discovertabs.js": "/js/discovertabs.js?id=9cc63e8ea8b4f074eaec",
-    "/js/formValidation.js": "/js/formValidation.js?id=d2c93b1897cb61acf894",
-    "/js/home-hero.js": "/js/home-hero.js?id=3e2acc0f2b6c52f910f9"
+    "/js/app.js": "/js/app.js?id=994cf03187aa6b0e92bc",
+    "/css/app.css": "/css/app.css?id=1b01c8e5a898c1e2e726",
+    "/css/index-qm.css": "/css/index-qm.css?id=7cdaf848e87327b5ab05",
+    "/css/datatables.css": "/css/datatables.css?id=9ffd26f169b40e9b35d9",
+    "/css/external/embed-search.css": "/css/external/embed-search.css?id=ba65b9b464eb3b5e550e",
+    "/js/discovertabs.js": "/js/discovertabs.js?id=ef30c6f24fece969f007",
+    "/js/external/embed-search.js": "/js/external/embed-search.js?id=7e515b43db0bebc506d8",
+    "/js/formValidation.js": "/js/formValidation.js?id=dc63235ecd54b92246b0",
+    "/js/home-hero.js": "/js/home-hero.js?id=1258bc0d216108a604d2"
 }
