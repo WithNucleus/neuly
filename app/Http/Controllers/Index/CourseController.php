@@ -3,10 +3,8 @@
 namespace App\Http\Controllers\Index;
 
 use App\Http\Controllers\Controller;
-use App\Models\Contracts\MediaTypesContract;
 use App\Models\Focus;
 use App\Models\Course;
-use Illuminate\Database\Eloquent\Builder;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;

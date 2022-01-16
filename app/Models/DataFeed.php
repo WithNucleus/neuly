@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
-use App\Models\Contracts\MediaTypesContract;
 use App\Models\Traits\HasMediaTypes;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-class DataFeed extends Model implements MediaTypesContract
+class DataFeed extends Model
 {
     use CrudTrait, HasMediaTypes;
 

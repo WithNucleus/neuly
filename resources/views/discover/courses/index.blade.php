@@ -139,7 +139,7 @@
                                         </div>
                                     </div>
                                 @empty
-                                    <div class="list-group-item py-4">
+                                    <div class="col-12 card shadow-sm h-100 p-4">
                                         <p class="lead mb-0">
                                             No courses match your search criteria.
                                         </p>

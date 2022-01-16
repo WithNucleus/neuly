@@ -49,48 +49,48 @@ class GetRssFeed implements ShouldQueue
 
         foreach ($feed->get_items() as $item) {
 
-            $url = $this->formatUrl($item->get_link());
+            try {
+                $url = $this->formatUrl($item->get_link());
 
-            $existingMedia = MediaItem::where('url', $url)
-                ->where('source_type', DataFeed::class)
-                ->where('source_id', $dataFeed->id)
-                ->first();
+                $existingMedia = MediaItem::where('url', $url)
+                    ->where('source_type', DataFeed::class)
+                    ->where('source_id', $dataFeed->id)
+                    ->first();
 
-            if (!$existingMedia) {
-                Log::info('no media - creating new');
+                if (!$existingMedia) {
 
-                $date = Carbon::parse($item->get_date())->format('Y-m-d');
-                $feedImage = $feed->get_image_url();
+                    $date = Carbon::parse($item->get_date())->format('Y-m-d');
+                    $feedImage = $feed->get_image_url();
 
-                $title = strip_tags($item->get_title());
-                $description = Purify::clean($item->get_content());
+                    $title = strip_tags($item->get_title());
+                    $description = Purify::clean($item->get_content());
 
-                // TODO: Include embed if Listen Notes?
+                    // TODO: Include embed if Listen Notes?
 
-                $summary = $this->formatFeedItemSummary($item->get_content(), $feedName, $title);
+                    $summary = $this->formatFeedItemSummary($item->get_content(), $feedName, $title);
 
-                $attributes = [
-                    'name' => $title,
-                    'type' => 'Article',
-                    'url' => $url,
-                    'summary' => $summary,
-                    'content' => $description,
-                    'icon_url' => $feedImage,
-                    'source_type' => DataFeed::class,
-                    'source_id' => $dataFeed->id,
-                    'date' => $date,
-                    'media_type' => $mediaType
-                ];
+                    $attributes = [
+                        'name' => $title,
+                        'type' => 'Article',
+                        'url' => $url,
+                        'summary' => $summary,
+                        'content' => $description,
+                        'icon_url' => $feedImage,
+                        'source_type' => DataFeed::class,
+                        'source_id' => $dataFeed->id,
+                        'date' => $date,
+                        'media_type' => $mediaType
+                    ];
 
-                try {
                     MediaItem::create($attributes);
-                } catch (Throwable $exception) {
-                    Log::warning('Error during GetRssFeed' , [$exception->getMessage()]);
-                }
-            } else {
-                Log::info('has media - skipping!');
-            }
 
+                } else {
+                    Log::info('Media Item exists - skipping import' . "\n" . $url);
+                }
+
+            } catch (Throwable $exception) {
+                Log::warning('Error during GetRssFeed' , [$exception->getMessage()]);
+            }
         }
     }
 

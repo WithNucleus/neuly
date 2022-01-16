@@ -2,7 +2,7 @@
 
 namespace App\Models\Traits;
 
-use App\Models\Contracts\MediaTypesContract;
+use App\Enum\MediaTypes;
 
 trait HasMediaTypes {
 
@@ -13,7 +13,7 @@ trait HasMediaTypes {
     */
     public static function getMediaTypes(): array
     {
-        return array_combine(MediaTypesContract::MEDIA_TYPES, MediaTypesContract::MEDIA_TYPES);
+        return array_combine(MediaTypes::MEDIA_TYPES, MediaTypes::MEDIA_TYPES);
     }
 
     /*
@@ -23,32 +23,32 @@ trait HasMediaTypes {
     */
     public function scopeArticles($query)
     {
-        $query->where('media_type', MediaTypesContract::MEDIA_TYPE_ARTICLE);
+        $query->where('media_type', MediaTypes::MEDIA_TYPE_ARTICLE);
     }
 
     public function scopeBooks($query)
     {
-        $query->where('media_type', MediaTypesContract::MEDIA_TYPE_BOOK);
+        $query->where('media_type', MediaTypes::MEDIA_TYPE_BOOK);
     }
 
     public function scopeImages($query)
     {
-        $query->where('media_type', MediaTypesContract::MEDIA_TYPE_IMAGE);
+        $query->where('media_type', MediaTypes::MEDIA_TYPE_IMAGE);
     }
 
     public function scopeMixed($query)
     {
-        $query->where('media_type', MediaTypesContract::MEDIA_TYPE_MIXED);
+        $query->where('media_type', MediaTypes::MEDIA_TYPE_MIXED);
     }
 
     public function scopePodcasts($query)
     {
-        $query->where('media_type', MediaTypesContract::MEDIA_TYPE_PODCAST);
+        $query->where('media_type', MediaTypes::MEDIA_TYPE_PODCAST);
     }
 
     public function scopeVideos($query)
     {
-        $query->where('media_type', MediaTypesContract::MEDIA_TYPE_VIDEO);
+        $query->where('media_type', MediaTypes::MEDIA_TYPE_VIDEO);
     }
 
 }

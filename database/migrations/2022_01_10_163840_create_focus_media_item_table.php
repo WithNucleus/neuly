@@ -14,8 +14,8 @@ class CreateFocusMediaItemTable extends Migration
     public function up()
     {
         Schema::create('focus_media_item', function (Blueprint $table) {
-            $table->unsignedBigInteger('focus_id');
-            $table->unsignedBigInteger('media_item_id');
+            $table->foreignId('focus_id')->constrained('focus')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('media_item_id')->constrained('media_items')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

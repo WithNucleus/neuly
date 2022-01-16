@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Models\Contracts;
+namespace App\Enum;
 
-interface MediaTypesContract {
-
+class MediaTypes {
     const MEDIA_TYPE_ARTICLE = 'Article';
     const MEDIA_TYPE_IMAGE = 'Image';
     const MEDIA_TYPE_VIDEO = 'Video';
@@ -19,5 +18,4 @@ interface MediaTypesContract {
         self::MEDIA_TYPE_PODCAST,
         self::MEDIA_TYPE_BOOK
     ];
-
 }

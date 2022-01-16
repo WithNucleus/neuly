@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Index\DataFeeds;
 
+use App\Enum\MediaTypes;
 use App\Http\Controllers\Controller;
-use App\Models\Contracts\MediaTypesContract;
 use App\Models\DataFeed;
 use App\Models\Focus;
 use App\Models\MediaItem;
@@ -26,7 +26,7 @@ class PodcastController extends Controller
             ->appends(request()->query());
 
         $focus_cats = Focus::whereHas('mediaItems', function (Builder $query) {
-            $query->where('media_type', MediaTypesContract::MEDIA_TYPE_PODCAST);
+            $query->where('media_type', MediaTypes::MEDIA_TYPE_PODCAST);
         })->orderBy('name')->pluck('name')->toArray();
 
         return view('discover.data-feeds.podcasts.index', compact('podcasts', 'focus_cats'));
