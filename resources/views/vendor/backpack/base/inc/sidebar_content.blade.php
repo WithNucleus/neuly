@@ -192,6 +192,21 @@
                     <i class='nav-icon la la-cog'></i> Import Settings
                 </a>
             </li>
+            <li class='nav-item'>
+                <a class='nav-link' href='{{ backpack_url('datafeed') }}'>
+                    <i class='nav-icon la la-rss'></i> Data Feeds
+                </a>
+            </li>
+            <li class='nav-item'>
+                <a class='nav-link' href='{{ backpack_url('media-item') }}'>
+                    <i class='nav-icon la la-photo-video'></i> Media Items
+                </a>
+            </li>
+            <li class='nav-item'>
+                <a class='nav-link' href='{{ backpack_url('course') }}'>
+                    <i class='nav-icon la la-book-reader'></i> Courses
+                </a>
+            </li>
 		</ul>
 	</li>
 @endcan

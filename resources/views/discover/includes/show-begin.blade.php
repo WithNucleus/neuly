@@ -73,6 +73,10 @@
 
                 @include('discover.includes.breadcrumbs.investor-jobs')
 
+            @elseif (Route::is('discover.podcasts.show'))
+
+                @include('discover.includes.breadcrumbs.podcast-show')
+
             @endif
 
         </div>

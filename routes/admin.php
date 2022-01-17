@@ -55,6 +55,25 @@ Route::group([
         Route::delete('/subsidiary/{child_id}', 'SubsidiaryController@remove')->name('subsidiary.remove');
     });
 
+    // Data Feed
+    Route::group([
+        'middleware' => 'permission:import',
+    ], function() {
+        Route::crud('datafeed', 'DataFeedCrudController');
+        Route::group([
+            'prefix' => '/datafeed',
+            'as' => 'datafeed.',
+        ], function () {
+            Route::get('/{id}/get', 'DataFeedCrudController@getFeedItems')->name('get');
+        });
+
+        // Media Items
+        Route::crud('media-item', 'MediaItemCrudController');
+
+        // Courses
+        Route::crud('course', 'CourseCrudController');
+    });
+
     Route::group([
         'prefix' => '/nav-tiles',
         'as' => 'nav-tiles.',
@@ -162,6 +181,7 @@ Route::group([
         Route::get('/results/{id}', 'BatchImagesUploadController@results')->name('results');
         Route::get('/failures/{id}', 'BatchImagesUploadController@failures')->name('failures');
     });
+
 });
 
 //TODO update route's names and middleware to match 'admin' pattern and move to common admin group

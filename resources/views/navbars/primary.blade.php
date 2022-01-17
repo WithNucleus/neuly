@@ -33,6 +33,9 @@
                     <a class="dropdown-item" href="{{ route('discover.events') }}"><i class="fad fa-calendar fa-fw"></i> Events</a>
                     <a class="dropdown-item" href="{{ route('discover.jobs') }}"><i class="fad fa-briefcase fa-fw"></i> Jobs</a>
                     <a class="dropdown-item" href="{{ route('discover.news') }}"><i class="fad fa-newspaper fa-fw"></i> News</a>
+                    <a class="dropdown-item" href="{{ route('discover.books') }}"><i class="fad fa-book fa-fw"></i> Books</a>
+                    <a class="dropdown-item" href="{{ route('discover.podcasts') }}"><i class="fad fa-podcast fa-fw"></i> Podcasts</a>
+                    <a class="dropdown-item" href="{{ route('discover.courses') }}"><i class="fad fa-book-reader fa-fw"></i> Courses</a>
                 </div>
             </li>
 

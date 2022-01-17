@@ -60,6 +60,7 @@
             'age',
             'gender',
             'year',
+            'education_credits'
         ];
 
         allowedFilters.forEach(function (filterName) {
