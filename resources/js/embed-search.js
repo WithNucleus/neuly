@@ -8,7 +8,8 @@ const searchModalId = '#neulyEmbedSearchModal';
     $.fn.neulyEmbedSearch = function() {
         let searchButton = $(this);
         //TODO make domain dynamic
-        const mainDomain = 'https://staging.neuly.com';
+        const mainDomain = 'http://neuly.loc';
+        // const mainDomain = 'https://staging.neuly.com';
 
         $.get(mainDomain + '/js/external/embedSearch/template', function(template) {
             $('body').append(template);
@@ -18,11 +19,13 @@ const searchModalId = '#neulyEmbedSearchModal';
             searchButton.on('click', function(e) {
                 e.preventDefault();
                 searchModal.fadeIn();
+                $('body').css('overflow', 'hidden');
             });
 
             searchModal.find('.nes-btn-close').on('click', function(e) {
                 e.preventDefault();
                 searchModal.fadeOut();
+                $('body').css('overflow', 'visible');
             });
 
             const searchClient = algoliasearch('2WZKZJIBUG', '686437b222f70e8cdbbba3899ea1f93d');
@@ -109,7 +112,6 @@ const searchModalId = '#neulyEmbedSearchModal';
                         filterSelectors.reset
                     ]),
                 }),
-
                 instantsearch.widgets.hits({
                     container: getElementBySelectorsArray([
                         sectionSelectors.companies,
@@ -135,67 +137,6 @@ const searchModalId = '#neulyEmbedSearchModal';
                 `,
                     },
                 }),
-                instantsearch.widgets.refinementList({
-                    container: getElementBySelectorsArray([
-                        sectionSelectors.companies,
-                        filterSelectors.type
-                    ]),
-                    attribute: 'ownership'
-                }),
-
-                instantsearch.widgets.refinementList({
-                    container: getElementBySelectorsArray([
-                        sectionSelectors.companies,
-                        filterSelectors.focus
-                    ]),
-                    attribute: 'focus',
-                    showMore: true,
-                }),
-
-                instantsearch.widgets.refinementList({
-                    container: getElementBySelectorsArray([
-                        sectionSelectors.companies,
-                        filterSelectors.countries
-                    ]),
-                    attribute: 'locations.country',
-                    showMore: false,
-                    searchable: true,
-                    searchablePlaceholder: 'e.g. United States',
-                }),
-
-                instantsearch.widgets.refinementList({
-                    container: getElementBySelectorsArray([
-                        sectionSelectors.companies,
-                        filterSelectors.locations
-                    ]),
-                    attribute: 'locations.name',
-                    showMore: false,
-                    searchable: true,
-                    searchablePlaceholder: 'e.g. New York',
-                }),
-
-                instantsearch.widgets.toggleRefinement({
-                    container: getElementBySelectorsArray([
-                        sectionSelectors.companies,
-                        filterSelectors.hasEvents
-                    ]),
-                    attribute: 'events',
-                    templates: {
-                        labelText: 'Upcoming Events',
-                    },
-                }),
-
-                instantsearch.widgets.toggleRefinement({
-                    container: getElementBySelectorsArray([
-                        sectionSelectors.companies,
-                        filterSelectors.hasJobs
-                    ]),
-                    attribute: 'jobs',
-                    templates: {
-                        labelText: 'Now Hiring',
-                    },
-                }),
-
                 instantsearch.widgets.pagination({
                     container: getElementBySelectorsArray([
                         sectionSelectors.companies,
@@ -209,6 +150,60 @@ const searchModalId = '#neulyEmbedSearchModal';
                         link: ['page-link'],
                     },
                 }),
+                instantsearch.widgets.refinementList({
+                    container: getElementBySelectorsArray([
+                        sectionSelectors.companies,
+                        filterSelectors.focus
+                    ]),
+                    attribute: 'focus',
+                }),
+                // instantsearch.widgets.refinementList({
+                //     container: getElementBySelectorsArray([
+                //         sectionSelectors.companies,
+                //         filterSelectors.type
+                //     ]),
+                //     attribute: 'ownership'
+                // }),
+                // instantsearch.widgets.refinementList({
+                //     container: getElementBySelectorsArray([
+                //         sectionSelectors.companies,
+                //         filterSelectors.countries
+                //     ]),
+                //     attribute: 'locations.country',
+                //     showMore: false,
+                //     searchable: true,
+                //     searchablePlaceholder: 'e.g. United States',
+                // }),
+                // instantsearch.widgets.refinementList({
+                //     container: getElementBySelectorsArray([
+                //         sectionSelectors.companies,
+                //         filterSelectors.locations
+                //     ]),
+                //     attribute: 'locations.name',
+                //     showMore: false,
+                //     searchable: true,
+                //     searchablePlaceholder: 'e.g. New York',
+                // }),
+                // instantsearch.widgets.toggleRefinement({
+                //     container: getElementBySelectorsArray([
+                //         sectionSelectors.companies,
+                //         filterSelectors.hasEvents
+                //     ]),
+                //     attribute: 'events',
+                //     templates: {
+                //         labelText: 'Upcoming Events',
+                //     },
+                // }),
+                // instantsearch.widgets.toggleRefinement({
+                //     container: getElementBySelectorsArray([
+                //         sectionSelectors.companies,
+                //         filterSelectors.hasJobs
+                //     ]),
+                //     attribute: 'jobs',
+                //     templates: {
+                //         labelText: 'Now Hiring',
+                //     },
+                // }),
             ]);
 
             companySearch.start();
@@ -263,17 +258,6 @@ const searchModalId = '#neulyEmbedSearchModal';
                 `,
                     },
                 }),
-                instantsearch.widgets.refinementList({
-                    container: getElementBySelectorsArray([
-                        sectionSelectors.people,
-                        filterSelectors.countries,
-                    ]),
-                    attribute: 'locations.country',
-                    showMore: false,
-                    searchable: true,
-                    searchablePlaceholder: 'e.g. United States',
-                }),
-
                 instantsearch.widgets.pagination({
                     container: getElementBySelectorsArray([
                         sectionSelectors.people,
@@ -287,6 +271,23 @@ const searchModalId = '#neulyEmbedSearchModal';
                         link: ['page-link'],
                     },
                 }),
+                instantsearch.widgets.refinementList({
+                    container: getElementBySelectorsArray([
+                        sectionSelectors.people,
+                        filterSelectors.focus
+                    ]),
+                    attribute: 'focus',
+                }),
+                // instantsearch.widgets.refinementList({
+                //     container: getElementBySelectorsArray([
+                //         sectionSelectors.people,
+                //         filterSelectors.countries,
+                //     ]),
+                //     attribute: 'locations.country',
+                //     showMore: false,
+                //     searchable: true,
+                //     searchablePlaceholder: 'e.g. United States',
+                // }),
             ]);
 
             peopleSearch.start();
@@ -294,7 +295,7 @@ const searchModalId = '#neulyEmbedSearchModal';
             /**
              * Investor search
              */
-
+/*
             const investorSearch = instantsearch({
                 indexName: searchIndexes.investors,
                 searchClient,
@@ -387,11 +388,11 @@ const searchModalId = '#neulyEmbedSearchModal';
             ]);
 
             investorSearch.start();
-
+*/
             /**
              * Research search
              */
-
+/*
             const researchSearch = instantsearch({
                 indexName: searchIndexes.research,
                 searchClient,
@@ -478,11 +479,11 @@ const searchModalId = '#neulyEmbedSearchModal';
             ]);
 
             researchSearch.start();
-
+*/
             /**
              * Clinical Trial search
              */
-
+/*
             const clinicalTrialsSearch = instantsearch({
                 indexName: searchIndexes.clinicaltrials,
                 searchClient,
@@ -577,11 +578,11 @@ const searchModalId = '#neulyEmbedSearchModal';
             ]);
 
             clinicalTrialsSearch.start();
-
+*/
             /**
              * Event search
              */
-
+/*
             const eventsSearch = instantsearch({
                 indexName: searchIndexes.events,
                 searchClient,
@@ -677,11 +678,11 @@ const searchModalId = '#neulyEmbedSearchModal';
             ]);
 
             eventsSearch.start();
-
+*/
             /**
              * Jobs search
              */
-
+/*
             const jobsSearch = instantsearch({
                 indexName: searchIndexes.jobs,
                 searchClient,
@@ -765,17 +766,17 @@ const searchModalId = '#neulyEmbedSearchModal';
             ]);
 
             jobsSearch.start();
-
+*/
             $('.nes-submit-button').on('click', function(e) {
                 var query = $('.nes-main-input').val().trim();
 
                 companySearch.helper.setQuery(query).search();
                 peopleSearch.helper.setQuery(query).search();
-                investorSearch.helper.setQuery(query).search();
-                researchSearch.helper.setQuery(query).search();
-                clinicalTrialsSearch.helper.setQuery(query).search();
-                eventsSearch.helper.setQuery(query).search();
-                jobsSearch.helper.setQuery(query).search();
+                // investorSearch.helper.setQuery(query).search();
+                // researchSearch.helper.setQuery(query).search();
+                // clinicalTrialsSearch.helper.setQuery(query).search();
+                // eventsSearch.helper.setQuery(query).search();
+                // jobsSearch.helper.setQuery(query).search();
             });
         });
     };
