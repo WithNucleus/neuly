@@ -57,10 +57,16 @@
                                     <strong class="text-uppercase mr-3 text-black-50">Sort by:</strong>
                                     <div class="d-inline sort-name text-uppercase">
 
-                                        @include('discover.includes.filters.sort-button-default', [
+                                        @include('discover.includes.filters.sort-button-default-asc', [
                                             'asc' => 'name',
                                             'desc' => '-name',
                                             'label' => 'Name'
+                                        ])
+
+                                        @include('discover.includes.filters.sort-button', [
+                                            'asc' => 'episodes',
+                                            'desc' => '-episodes',
+                                            'label' => 'Number of Episodes'
                                         ])
 
                                     </div>
@@ -87,9 +93,18 @@
                             <ul class="list-group list-group-flush mb-4 shadow-sm">
                                 @forelse($podcasts as $podcast)
                                     <li class="list-group-item py-4">
-                                        <span class="lead mb-0 d-block">
+                                        <h3 class="h4">
                                             <a href="{{ route('discover.podcasts.show', $podcast->slug) }}">{{ $podcast->name }}</a>
-                                        </span>
+                                        </h3>
+                                        <div class="lead text-muted my-1">
+                                            <i class="fad fa-podcast"></i> {{ $podcast->media_items_count }} episodes
+                                            <span class="mx-2">&bull;</span>
+                                            @foreach ($podcast->mediaItems as $episode)
+                                                @if ($loop->first)
+                                                    <i class="fad fa-calendar"></i> {{ \Carbon\Carbon::parse($episode->date)->diffForHumans() }}
+                                                @endif
+                                            @endforeach
+                                        </div>
                                         <span class="d-block">
                                             {{ $podcast->summary }}
                                         </span>
