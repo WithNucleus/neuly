@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Models\DataFeed;
 use App\Models\Focus;
 use App\Models\MediaItem;
-use App\Services\SortByMediaItemDate;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;

@@ -74,7 +74,7 @@ class Kernel extends ConsoleKernel
                 Log::critical('Data Feeds - Google Alerts failed');
             })
             ->onSuccess(function() {
-                Log::info('Data Feeds - Google Alerts failed successful');
+                Log::info('Data Feeds - Google Alerts successful');
             });
 
         // Data Feed - All
