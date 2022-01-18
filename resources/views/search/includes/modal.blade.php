@@ -19,7 +19,7 @@
                             <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">All</a>
                         </li>-->
                         <li class="nav-item">
-                            <a class="nav-link" id="companies-tab" data-toggle="tab" href="#companies" role="tab" aria-controls="companies" aria-selected="false">Organizations</a>
+                            <a class="nav-link active" id="companies-tab" data-toggle="tab" href="#companies" role="tab" aria-controls="companies" aria-selected="true">Organizations</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="people-tab" data-toggle="tab" href="#people" role="tab" aria-controls="people" aria-selected="false">People</a>
