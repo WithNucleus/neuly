@@ -6,9 +6,11 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        @auth
         <div class="ml-3 mr-auto d-none d-lg-block d-xl-block d-xxl-block">
             <button class="btn global-search-button global-search-trigger ml-2 my-2 my-sm-0" title="Search Neuly" data-toggle="modal" data-target="#searchModal"><i class="far fa-search"></i></button>
         </div>
+        @endauth
         <div class="ml-3 mr-auto d-lg-none">
             <form class="global-search-form form-inline mt-3 mt-lg-0" method="post" action="{{ route('search') }}">
                 @csrf
