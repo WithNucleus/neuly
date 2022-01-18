@@ -48,6 +48,7 @@ Route::group([
     Route::get('person-claim/{claim}/approve', 'ClaimPersonCrudController@approve')->name('admin.person-claim.approve');
 
     Route::crud('api-user', 'ApiUserCrudController');
+    Route::crud('embeddable-search-widget', 'EmbeddableSearchWidgetCrudController');
 
     Route::group([
         'namespace'  => 'ClinicalTrialDetails',

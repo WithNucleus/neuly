@@ -11500,11 +11500,11 @@ __webpack_require__(/*! bootstrap/js/src/tab */ "./node_modules/bootstrap/js/src
 var searchModalId = '#neulyEmbedSearchModal';
 
 (function ($) {
-  $.fn.neulyEmbedSearch = function () {
+  $.fn.neulyEmbedSearch = function (code) {
     var searchButton = $(this); //TODO make domain dynamic
 
     var mainDomain = 'https://staging.neuly.com';
-    $.get(mainDomain + '/js/external/embedSearch/template', function (template) {
+    $.get(mainDomain + '/js/external/embedSearch/template/' + code, function (template) {
       $('body').append(template);
       var searchModal = $(searchModalId);
       searchButton.on('click', function (e) {
@@ -11525,7 +11525,8 @@ var searchModalId = '#neulyEmbedSearchModal';
         research: 'research',
         clinicaltrials: 'clinicaltrials',
         events: 'events',
-        jobs: 'jobs'
+        jobs: 'jobs',
+        newsArticles: 'news_articles'
       };
       var sectionSelectors = {
         main: '.nes-section-main',
@@ -11533,9 +11534,10 @@ var searchModalId = '#neulyEmbedSearchModal';
         people: '.nes-section-people',
         investors: '.nes-section-investors',
         research: '.nes-section-research',
-        clinicalTrials: '.nes-section-clinical-trials',
+        clinicaltrials: '.nes-section-clinical-trials',
         events: '.nes-section-events',
-        jobs: '.nes-section-jobs'
+        jobs: '.nes-section-jobs',
+        newsArticles: '.nes-section-news-articles'
       };
       var filterSelectors = {
         hasEvents: '.nes-filter-has-events',
@@ -11547,7 +11549,8 @@ var searchModalId = '#neulyEmbedSearchModal';
         people: '.nes-filter-people',
         companies: '.nes-filter-companies',
         status: '.nes-filter-status',
-        reset: '.nes-filter-reset'
+        reset: '.nes-filter-reset',
+        filterItem: '.nes-filter-item'
       };
       var widgetSelectors = {
         stats: '.nes-stats',
@@ -11555,6 +11558,7 @@ var searchModalId = '#neulyEmbedSearchModal';
         sort: '.nes-sort-by',
         pagination: '.nes-pagination'
       };
+      var searchInstances = [];
 
       function makeSelectorFromArray(selectors) {
         return selectors.join(' ');
@@ -11576,626 +11580,467 @@ var searchModalId = '#neulyEmbedSearchModal';
        */
 
 
-      var companySearch = instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default()({
-        indexName: searchIndexes.companies,
-        searchClient: searchClient
-      });
-      var renderCompaniesStats = instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.connectors.connectStats(createStatsWidget(sectionSelectors.companies));
-      companySearch.addWidgets([renderCompaniesStats(), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.configure({
-        hitsPerPage: 6,
-        facetFilters: [['focus:Therapy', 'focus:Coaching', 'focus:Retreat', 'focus:Clinic']]
-      }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.clearRefinements({
-        container: getElementBySelectorsArray([sectionSelectors.companies, filterSelectors.reset])
-      }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.hits({
-        container: getElementBySelectorsArray([sectionSelectors.companies, widgetSelectors.hits]),
-        cssClasses: {
-          list: ['d-flex', 'flex-wrap'],
-          item: ['col-12', 'col-md-6', 'col-xl-4', 'mb-5']
-        },
-        templates: {
-          item: "\n                <div class=\"card shadow-sm\">\n                    <div class=\"pt-4 text-center\">\n                        <a href=\"" + mainDomain + "/organization/{{ slug }}\" class=\"text-decoration-none\">\n                            <div class=\"logo-is-contained\" style=\"background-image: url('{{ logo }}')\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"\" data-original-title=\"{{ name }}\"></div>\n                        </a>\n                        <p class=\"my-3 lead\">\n                            <a href=\"" + mainDomain + "/organization/{{ slug }}\" class=\"text-decoration-none\">{{ name }}</a>\n                        </p>\n\n                    </div>\n                </div>\n                "
-        }
-      }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.pagination({
-        container: getElementBySelectorsArray([sectionSelectors.companies, widgetSelectors.pagination]),
-        cssClasses: {
-          list: ['pagination'],
-          item: ['page-item'],
-          selectedItem: ['active'],
-          disabledItem: ['disabled'],
-          link: ['page-link']
-        }
-      }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.refinementList({
-        container: getElementBySelectorsArray([sectionSelectors.companies, filterSelectors.focus]),
-        attribute: 'focus'
-      }) // instantsearch.widgets.refinementList({
-      //     container: getElementBySelectorsArray([
-      //         sectionSelectors.companies,
-      //         filterSelectors.type
-      //     ]),
-      //     attribute: 'ownership'
-      // }),
-      // instantsearch.widgets.refinementList({
-      //     container: getElementBySelectorsArray([
-      //         sectionSelectors.companies,
-      //         filterSelectors.countries
-      //     ]),
-      //     attribute: 'locations.country',
-      //     showMore: false,
-      //     searchable: true,
-      //     searchablePlaceholder: 'e.g. United States',
-      // }),
-      // instantsearch.widgets.refinementList({
-      //     container: getElementBySelectorsArray([
-      //         sectionSelectors.companies,
-      //         filterSelectors.locations
-      //     ]),
-      //     attribute: 'locations.name',
-      //     showMore: false,
-      //     searchable: true,
-      //     searchablePlaceholder: 'e.g. New York',
-      // }),
-      // instantsearch.widgets.toggleRefinement({
-      //     container: getElementBySelectorsArray([
-      //         sectionSelectors.companies,
-      //         filterSelectors.hasEvents
-      //     ]),
-      //     attribute: 'events',
-      //     templates: {
-      //         labelText: 'Upcoming Events',
-      //     },
-      // }),
-      // instantsearch.widgets.toggleRefinement({
-      //     container: getElementBySelectorsArray([
-      //         sectionSelectors.companies,
-      //         filterSelectors.hasJobs
-      //     ]),
-      //     attribute: 'jobs',
-      //     templates: {
-      //         labelText: 'Now Hiring',
-      //     },
-      // }),
-      ]);
-      companySearch.start();
+      if (document.querySelector(sectionSelectors.companies) !== null) {
+        var companiesFilterItemsSelector = makeSelectorFromArray([sectionSelectors.companies, filterSelectors.filterItem]);
+        var companiesFilterItems = document.querySelectorAll(companiesFilterItemsSelector);
+        var companiesPrefilters = [];
+        companiesFilterItems.forEach(function (filterItem) {
+          if (typeof filterItem.dataset.name !== 'undefined' && typeof filterItem.dataset.prefilter !== 'undefined') {
+            var name = filterItem.dataset.name;
+            var prefilters = JSON.parse(filterItem.dataset.prefilter);
+
+            for (var key in prefilters) {
+              companiesPrefilters.push(name + ':' + prefilters[key]);
+            }
+          }
+        });
+        var companySearch = instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default()({
+          indexName: searchIndexes.companies,
+          searchClient: searchClient
+        });
+        var renderCompaniesStats = instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.connectors.connectStats(createStatsWidget(sectionSelectors.companies));
+        companySearch.addWidgets([renderCompaniesStats(), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.configure({
+          hitsPerPage: 6,
+          facetFilters: [companiesPrefilters]
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.clearRefinements({
+          container: getElementBySelectorsArray([sectionSelectors.companies, filterSelectors.reset])
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.hits({
+          container: getElementBySelectorsArray([sectionSelectors.companies, widgetSelectors.hits]),
+          cssClasses: {
+            list: ['d-flex', 'flex-wrap'],
+            item: ['col-12', 'col-md-6', 'col-xl-4', 'mb-5']
+          },
+          templates: {
+            item: "\n                <div class=\"card shadow-sm\">\n                    <div class=\"pt-4 text-center\">\n                        <a href=\"" + mainDomain + "/organization/{{ slug }}\" class=\"text-decoration-none\">\n                            <div class=\"logo-is-contained\" style=\"background-image: url('{{ logo }}')\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"\" data-original-title=\"{{ name }}\"></div>\n                        </a>\n                        <p class=\"my-3 lead\">\n                            <a href=\"" + mainDomain + "/organization/{{ slug }}\" class=\"text-decoration-none\">{{ name }}</a>\n                        </p>\n\n                    </div>\n                </div>\n                "
+          }
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.pagination({
+          container: getElementBySelectorsArray([sectionSelectors.companies, widgetSelectors.pagination]),
+          cssClasses: {
+            list: ['pagination'],
+            item: ['page-item'],
+            selectedItem: ['active'],
+            disabledItem: ['disabled'],
+            link: ['page-link']
+          }
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.refinementList({
+          container: getElementBySelectorsArray([sectionSelectors.companies, filterSelectors.focus]),
+          attribute: 'focus'
+        }) // instantsearch.widgets.refinementList({
+        //     container: getElementBySelectorsArray([
+        //         sectionSelectors.companies,
+        //         filterSelectors.type
+        //     ]),
+        //     attribute: 'ownership'
+        // }),
+        // instantsearch.widgets.refinementList({
+        //     container: getElementBySelectorsArray([
+        //         sectionSelectors.companies,
+        //         filterSelectors.countries
+        //     ]),
+        //     attribute: 'locations.country',
+        //     showMore: false,
+        //     searchable: true,
+        //     searchablePlaceholder: 'e.g. United States',
+        // }),
+        // instantsearch.widgets.refinementList({
+        //     container: getElementBySelectorsArray([
+        //         sectionSelectors.companies,
+        //         filterSelectors.locations
+        //     ]),
+        //     attribute: 'locations.name',
+        //     showMore: false,
+        //     searchable: true,
+        //     searchablePlaceholder: 'e.g. New York',
+        // }),
+        // instantsearch.widgets.toggleRefinement({
+        //     container: getElementBySelectorsArray([
+        //         sectionSelectors.companies,
+        //         filterSelectors.hasEvents
+        //     ]),
+        //     attribute: 'events',
+        //     templates: {
+        //         labelText: 'Upcoming Events',
+        //     },
+        // }),
+        // instantsearch.widgets.toggleRefinement({
+        //     container: getElementBySelectorsArray([
+        //         sectionSelectors.companies,
+        //         filterSelectors.hasJobs
+        //     ]),
+        //     attribute: 'jobs',
+        //     templates: {
+        //         labelText: 'Now Hiring',
+        //     },
+        // }),
+        ]);
+        companySearch.start();
+        searchInstances.push(companySearch);
+      }
       /**
        * People search
        */
 
-      var peopleSearch = instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default()({
-        indexName: searchIndexes.people,
-        searchClient: searchClient
-      });
-      var renderPeopleStats = instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.connectors.connectStats(createStatsWidget(sectionSelectors.people));
-      peopleSearch.addWidgets([renderPeopleStats(), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.configure({
-        hitsPerPage: 6,
-        facetFilters: [['focus:Therapy', 'focus:Coaching', 'focus:Retreat', 'focus:Clinic']]
-      }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.clearRefinements({
-        container: getElementBySelectorsArray([sectionSelectors.people, filterSelectors.reset])
-      }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.hits({
-        container: getElementBySelectorsArray([sectionSelectors.people, widgetSelectors.hits]),
-        cssClasses: {
-          list: ['d-flex', 'flex-wrap'],
-          item: ['col-12', 'col-md-6', 'col-xl-4', 'mb-5']
-        },
-        templates: {
-          item: "\n                <div class=\"card shadow-sm\">\n                    <div class=\"pt-4 text-center\">\n                        <a href=\"" + mainDomain + "/person/{{ slug }}\" class=\"text-decoration-none\">\n                            <div class=\"person-photo-small shadow-sm\" style=\"background-image: url('{{ photo }}')\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"\" data-original-title=\"{{ name }}\"></div>\n                        </a>\n                        <p class=\"my-3 lead\">\n                            <a href=\"" + mainDomain + "/person/{{ slug }}\" class=\"text-decoration-none\">{{ name }}</a>\n                        </p>\n\n                    </div>\n                </div>\n                "
-        }
-      }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.pagination({
-        container: getElementBySelectorsArray([sectionSelectors.people, widgetSelectors.pagination]),
-        cssClasses: {
-          list: ['pagination'],
-          item: ['page-item'],
-          selectedItem: ['active'],
-          disabledItem: ['disabled'],
-          link: ['page-link']
-        }
-      }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.refinementList({
-        container: getElementBySelectorsArray([sectionSelectors.people, filterSelectors.focus]),
-        attribute: 'focus'
-      }) // instantsearch.widgets.refinementList({
-      //     container: getElementBySelectorsArray([
-      //         sectionSelectors.people,
-      //         filterSelectors.countries,
-      //     ]),
-      //     attribute: 'locations.country',
-      //     showMore: false,
-      //     searchable: true,
-      //     searchablePlaceholder: 'e.g. United States',
-      // }),
-      ]);
-      peopleSearch.start();
+
+      if (document.querySelector(sectionSelectors.people) !== null) {
+        var peopleFilterItemsSelector = makeSelectorFromArray([sectionSelectors.people, filterSelectors.filterItem]);
+        var peopleFilterItems = document.querySelectorAll(peopleFilterItemsSelector);
+        var peoplePrefilters = [];
+        peopleFilterItems.forEach(function (filterItem) {
+          if (typeof filterItem.dataset.name !== 'undefined' && typeof filterItem.dataset.prefilter !== 'undefined') {
+            var name = filterItem.dataset.name;
+            var prefilters = JSON.parse(filterItem.dataset.prefilter);
+
+            for (var key in prefilters) {
+              peoplePrefilters.push(name + ':' + prefilters[key]);
+            }
+          }
+        });
+        var peopleSearch = instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default()({
+          indexName: searchIndexes.people,
+          searchClient: searchClient
+        });
+        var renderPeopleStats = instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.connectors.connectStats(createStatsWidget(sectionSelectors.people));
+        peopleSearch.addWidgets([renderPeopleStats(), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.configure({
+          hitsPerPage: 6,
+          facetFilters: [peoplePrefilters]
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.clearRefinements({
+          container: getElementBySelectorsArray([sectionSelectors.people, filterSelectors.reset])
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.hits({
+          container: getElementBySelectorsArray([sectionSelectors.people, widgetSelectors.hits]),
+          cssClasses: {
+            list: ['d-flex', 'flex-wrap'],
+            item: ['col-12', 'col-md-6', 'col-xl-4', 'mb-5']
+          },
+          templates: {
+            item: "\n                <div class=\"card shadow-sm\">\n                    <div class=\"pt-4 text-center\">\n                        <a href=\"" + mainDomain + "/person/{{ slug }}\" class=\"text-decoration-none\">\n                            <div class=\"person-photo-small shadow-sm\" style=\"background-image: url('{{ photo }}')\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"\" data-original-title=\"{{ name }}\"></div>\n                        </a>\n                        <p class=\"my-3 lead\">\n                            <a href=\"" + mainDomain + "/person/{{ slug }}\" class=\"text-decoration-none\">{{ name }}</a>\n                        </p>\n\n                    </div>\n                </div>\n                "
+          }
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.pagination({
+          container: getElementBySelectorsArray([sectionSelectors.people, widgetSelectors.pagination]),
+          cssClasses: {
+            list: ['pagination'],
+            item: ['page-item'],
+            selectedItem: ['active'],
+            disabledItem: ['disabled'],
+            link: ['page-link']
+          }
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.refinementList({
+          container: getElementBySelectorsArray([sectionSelectors.people, filterSelectors.focus]),
+          attribute: 'focus'
+        }) // instantsearch.widgets.refinementList({
+        //     container: getElementBySelectorsArray([
+        //         sectionSelectors.people,
+        //         filterSelectors.countries,
+        //     ]),
+        //     attribute: 'locations.country',
+        //     showMore: false,
+        //     searchable: true,
+        //     searchablePlaceholder: 'e.g. United States',
+        // }),
+        ]);
+        peopleSearch.start();
+        searchInstances.push(peopleSearch);
+      }
       /**
        * Investor search
        */
 
-      /*
-                  const investorSearch = instantsearch({
-                      indexName: searchIndexes.investors,
-                      searchClient,
-                  });
-      
-      
-                  const renderInvestorsStats = instantsearch.connectors.connectStats(
-                      createStatsWidget(sectionSelectors.investors)
-                  );
-      
-                  investorSearch.addWidgets([
-                      renderInvestorsStats(),
-                      instantsearch.widgets.configure({
-                          hitsPerPage: 6,
-                      }),
-                      instantsearch.widgets.clearRefinements({
-                          container: getElementBySelectorsArray([
-                              sectionSelectors.investors,
-                              filterSelectors.reset,
-                          ]),
-                      }),
-      
-                      instantsearch.widgets.hits({
-                          container: getElementBySelectorsArray([
-                              sectionSelectors.investors,
-                              widgetSelectors.hits,
-                          ]),
-                          cssClasses: {
-                              list: ['d-flex', 'flex-wrap'],
-                              item: ['col-12', 'col-md-6', 'col-xl-4', 'mb-5'],
-                          },
-                          templates: {
-                              item: `
-                          <div class="card shadow-sm">
-                              <div class="pt-4 text-center">
-                                  <a href="`+ mainDomain +`/investor/{{ slug }}" class="text-decoration-none">
-                                      <div class="logo-is-contained" style="background-image: url('{{ logo }}')" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ name }}"></div>
-                                  </a>
-                                  <p class="my-3 lead">
-                                      <a href="`+ mainDomain +`/investor/{{ slug }}" class="text-decoration-none">{{ name }}</a>
-                                  </p>
-                              </div>
-                          </div>
-                          `,
-                          },
-                      }),
-                      instantsearch.widgets.refinementList({
-                          container: getElementBySelectorsArray([
-                              sectionSelectors.investors,
-                              filterSelectors.countries,
-                          ]),
-                          attribute: 'locations.country',
-                          showMore: false,
-                          searchable: true,
-                          searchablePlaceholder: 'e.g. United States',
-                      }),
-      
-                      instantsearch.widgets.refinementList({
-                          container: getElementBySelectorsArray([
-                              sectionSelectors.investors,
-                              filterSelectors.type,
-                          ]),
-                          attribute: 'type'
-                      }),
-      
-                      instantsearch.widgets.pagination({
-                          container: getElementBySelectorsArray([
-                              sectionSelectors.investors,
-                              widgetSelectors.pagination,
-                          ]),
-                          cssClasses: {
-                              list: ['pagination'],
-                              item: ['page-item'],
-                              selectedItem: ['active'],
-                              disabledItem: ['disabled'],
-                              link: ['page-link'],
-                          },
-                      }),
-      
-                      instantsearch.widgets.toggleRefinement({
-                          container: getElementBySelectorsArray([
-                              sectionSelectors.investors,
-                              filterSelectors.hasJobs,
-                          ]),
-                          attribute: 'jobs',
-                          templates: {
-                              labelText: 'Now Hiring',
-                          },
-                      }),
-                  ]);
-      
-                  investorSearch.start();
-      */
 
+      if (document.querySelector(sectionSelectors.investors) !== null) {
+        var investorSearch = instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default()({
+          indexName: searchIndexes.investors,
+          searchClient: searchClient
+        });
+        var renderInvestorsStats = instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.connectors.connectStats(createStatsWidget(sectionSelectors.investors));
+        investorSearch.addWidgets([renderInvestorsStats(), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.configure({
+          hitsPerPage: 6
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.clearRefinements({
+          container: getElementBySelectorsArray([sectionSelectors.investors, filterSelectors.reset])
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.hits({
+          container: getElementBySelectorsArray([sectionSelectors.investors, widgetSelectors.hits]),
+          cssClasses: {
+            list: ['d-flex', 'flex-wrap'],
+            item: ['col-12', 'col-md-6', 'col-xl-4', 'mb-5']
+          },
+          templates: {
+            item: "\n                    <div class=\"card shadow-sm\">\n                        <div class=\"pt-4 text-center\">\n                            <a href=\"" + mainDomain + "/investor/{{ slug }}\" class=\"text-decoration-none\">\n                                <div class=\"logo-is-contained\" style=\"background-image: url('{{ logo }}')\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"\" data-original-title=\"{{ name }}\"></div>\n                            </a>\n                            <p class=\"my-3 lead\">\n                                <a href=\"" + mainDomain + "/investor/{{ slug }}\" class=\"text-decoration-none\">{{ name }}</a>\n                            </p>\n                        </div>\n                    </div>\n                    "
+          }
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.refinementList({
+          container: getElementBySelectorsArray([sectionSelectors.investors, filterSelectors.countries]),
+          attribute: 'locations.country',
+          showMore: false,
+          searchable: true,
+          searchablePlaceholder: 'e.g. United States'
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.refinementList({
+          container: getElementBySelectorsArray([sectionSelectors.investors, filterSelectors.type]),
+          attribute: 'type'
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.pagination({
+          container: getElementBySelectorsArray([sectionSelectors.investors, widgetSelectors.pagination]),
+          cssClasses: {
+            list: ['pagination'],
+            item: ['page-item'],
+            selectedItem: ['active'],
+            disabledItem: ['disabled'],
+            link: ['page-link']
+          }
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.toggleRefinement({
+          container: getElementBySelectorsArray([sectionSelectors.investors, filterSelectors.hasJobs]),
+          attribute: 'jobs',
+          templates: {
+            labelText: 'Now Hiring'
+          }
+        })]);
+        investorSearch.start();
+        searchInstances.push(investorSearch);
+      }
       /**
        * Research search
        */
 
-      /*
-                  const researchSearch = instantsearch({
-                      indexName: searchIndexes.research,
-                      searchClient,
-                  });
-      
-                  const renderResearchStats = instantsearch.connectors.connectStats(
-                      createStatsWidget(sectionSelectors.research)
-                  );
-      
-                  researchSearch.addWidgets([
-                      renderResearchStats(),
-                      instantsearch.widgets.configure({
-                          hitsPerPage: 4,
-                      }),
-                      instantsearch.widgets.clearRefinements({
-                          container: getElementBySelectorsArray([
-                              sectionSelectors.research,
-                              filterSelectors.reset,
-                          ]),
-                      }),
-      
-                      instantsearch.widgets.hits({
-                          container: getElementBySelectorsArray([
-                              sectionSelectors.research,
-                              widgetSelectors.hits,
-                          ]),
-                          cssClasses: {
-                              list: ['d-flex', 'flex-wrap'],
-                              item: ['col-12', 'mb-5'],
-                          },
-                          templates: {
-                              item: `
-                          <div class="card shadow-sm">
-                              <div class="p-3">
-                                  <p class="lead">
-                                      <a href="`+ mainDomain +`/research/{{ slug }}" class="text-decoration-none">{{ name }}</a>
-                                  </p>
-                              </div>
-                          </div>
-                          `,
-                          },
-                      }),
-                      instantsearch.widgets.refinementList({
-                          container: getElementBySelectorsArray([
-                              sectionSelectors.research,
-                              filterSelectors.people,
-                          ]),
-                          attribute: 'people',
-                          showMore: false,
-                          searchable: true,
-                      }),
-      
-                      instantsearch.widgets.refinementList({
-                          container: getElementBySelectorsArray([
-                              sectionSelectors.research,
-                              filterSelectors.focus,
-                          ]),
-                          attribute: 'focus',
-                          showMore: true,
-                      }),
-      
-                      instantsearch.widgets.refinementList({
-                          container: getElementBySelectorsArray([
-                              sectionSelectors.research,
-                              filterSelectors.companies,
-                          ]),
-                          attribute: 'companies',
-                          showMore: true,
-                      }),
-      
-                      instantsearch.widgets.pagination({
-                          container: getElementBySelectorsArray([
-                              sectionSelectors.research,
-                              widgetSelectors.pagination,
-                          ]),
-                          cssClasses: {
-                              list: ['pagination'],
-                              item: ['page-item'],
-                              selectedItem: ['active'],
-                              disabledItem: ['disabled'],
-                              link: ['page-link'],
-                          },
-                      }),
-                  ]);
-      
-                  researchSearch.start();
-      */
 
+      if (document.querySelector(sectionSelectors.research) !== null) {
+        var researchSearch = instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default()({
+          indexName: searchIndexes.research,
+          searchClient: searchClient
+        });
+        var renderResearchStats = instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.connectors.connectStats(createStatsWidget(sectionSelectors.research));
+        researchSearch.addWidgets([renderResearchStats(), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.configure({
+          hitsPerPage: 4
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.clearRefinements({
+          container: getElementBySelectorsArray([sectionSelectors.research, filterSelectors.reset])
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.hits({
+          container: getElementBySelectorsArray([sectionSelectors.research, widgetSelectors.hits]),
+          cssClasses: {
+            list: ['d-flex', 'flex-wrap'],
+            item: ['col-12', 'mb-5']
+          },
+          templates: {
+            item: "\n                    <div class=\"card shadow-sm\">\n                        <div class=\"p-3\">\n                            <p class=\"lead\">\n                                <a href=\"" + mainDomain + "/research/{{ slug }}\" class=\"text-decoration-none\">{{ name }}</a>\n                            </p>\n                        </div>\n                    </div>\n                    "
+          }
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.refinementList({
+          container: getElementBySelectorsArray([sectionSelectors.research, filterSelectors.people]),
+          attribute: 'people',
+          showMore: false,
+          searchable: true
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.refinementList({
+          container: getElementBySelectorsArray([sectionSelectors.research, filterSelectors.focus]),
+          attribute: 'focus',
+          showMore: true
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.refinementList({
+          container: getElementBySelectorsArray([sectionSelectors.research, filterSelectors.companies]),
+          attribute: 'companies',
+          showMore: true
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.pagination({
+          container: getElementBySelectorsArray([sectionSelectors.research, widgetSelectors.pagination]),
+          cssClasses: {
+            list: ['pagination'],
+            item: ['page-item'],
+            selectedItem: ['active'],
+            disabledItem: ['disabled'],
+            link: ['page-link']
+          }
+        })]);
+        researchSearch.start();
+        searchInstances.push(researchSearch);
+      }
       /**
        * Clinical Trial search
        */
 
-      /*
-                  const clinicalTrialsSearch = instantsearch({
-                      indexName: searchIndexes.clinicaltrials,
-                      searchClient,
-                  });
-      
-                  const renderClinicalTrialStats = instantsearch.connectors.connectStats(
-                      createStatsWidget(sectionSelectors.clinicalTrials)
-                  );
-      
-                  clinicalTrialsSearch.addWidgets([
-                      renderClinicalTrialStats(),
-                      instantsearch.widgets.configure({
-                          hitsPerPage: 4,
-                      }),
-                      instantsearch.widgets.clearRefinements({
-                          container: getElementBySelectorsArray([
-                              sectionSelectors.clinicalTrials,
-                              filterSelectors.reset,
-                          ]),
-                      }),
-                      instantsearch.widgets.hits({
-                          container: getElementBySelectorsArray([
-                              sectionSelectors.clinicalTrials,
-                              widgetSelectors.hits,
-                          ]),
-                          cssClasses: {
-                              list: ['d-flex', 'flex-wrap'],
-                              item: ['col-12', 'mb-5'],
-                          },
-                          templates: {
-                              item: `
-                          <div class="card shadow-sm">
-                              <div class="p-3">
-                                  <p class="lead">
-                                      <a href="` + mainDomain + `/research/{{ slug }}" class="text-decoration-none">{{ name }}</a>
-                                  </p>
-                              </div>
-                          </div>
-                          `,
-                          },
-                      }),
-                      instantsearch.widgets.refinementList({
-                          container: getElementBySelectorsArray([
-                              sectionSelectors.clinicalTrials,
-                              filterSelectors.focus,
-                          ]),
-                          attribute: 'focus',
-                          showMore: true,
-                      }),
-      
-                      instantsearch.widgets.refinementList({
-                          container: getElementBySelectorsArray([
-                              sectionSelectors.clinicalTrials,
-                              filterSelectors.companies,
-                          ]),
-                          attribute: 'companies',
-                          showMore: true,
-                      }),
-      
-                      instantsearch.widgets.refinementList({
-                          container: getElementBySelectorsArray([
-                              sectionSelectors.clinicalTrials,
-                              filterSelectors.status,
-                          ]),
-                          attribute: 'status',
-                          showMore: true,
-                      }),
-      
-                      instantsearch.widgets.refinementList({
-                          container: getElementBySelectorsArray([
-                              sectionSelectors.clinicalTrials,
-                              filterSelectors.people,
-                          ]),
-                          attribute: 'people',
-                          showMore: false,
-                          searchable: true,
-                      }),
-      
-                      instantsearch.widgets.pagination({
-                          container: getElementBySelectorsArray([
-                              sectionSelectors.clinicalTrials,
-                              widgetSelectors.pagination,
-                          ]),
-                          cssClasses: {
-                              list: ['pagination'],
-                              item: ['page-item'],
-                              selectedItem: ['active'],
-                              disabledItem: ['disabled'],
-                              link: ['page-link'],
-                          },
-                      }),
-                  ]);
-      
-                  clinicalTrialsSearch.start();
-      */
 
+      console.log(document.querySelector(sectionSelectors.clinicaltrials));
+
+      if (document.querySelector(sectionSelectors.clinicaltrials) !== null) {
+        var clinicalTrialsSearch = instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default()({
+          indexName: searchIndexes.clinicaltrials,
+          searchClient: searchClient
+        });
+        var renderClinicalTrialStats = instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.connectors.connectStats(createStatsWidget(sectionSelectors.clinicaltrials));
+        clinicalTrialsSearch.addWidgets([renderClinicalTrialStats(), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.configure({
+          hitsPerPage: 4
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.clearRefinements({
+          container: getElementBySelectorsArray([sectionSelectors.clinicaltrials, filterSelectors.reset])
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.hits({
+          container: getElementBySelectorsArray([sectionSelectors.clinicaltrials, widgetSelectors.hits]),
+          cssClasses: {
+            list: ['d-flex', 'flex-wrap'],
+            item: ['col-12', 'mb-5']
+          },
+          templates: {
+            item: "\n                    <div class=\"card shadow-sm\">\n                        <div class=\"p-3\">\n                            <p class=\"lead\">\n                                <a href=\"" + mainDomain + "/research/{{ slug }}\" class=\"text-decoration-none\">{{ name }}</a>\n                            </p>\n                        </div>\n                    </div>\n                    "
+          }
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.refinementList({
+          container: getElementBySelectorsArray([sectionSelectors.clinicaltrials, filterSelectors.focus]),
+          attribute: 'focus',
+          showMore: true
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.refinementList({
+          container: getElementBySelectorsArray([sectionSelectors.clinicaltrials, filterSelectors.companies]),
+          attribute: 'companies',
+          showMore: true
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.refinementList({
+          container: getElementBySelectorsArray([sectionSelectors.clinicaltrials, filterSelectors.status]),
+          attribute: 'status',
+          showMore: true
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.refinementList({
+          container: getElementBySelectorsArray([sectionSelectors.clinicaltrials, filterSelectors.people]),
+          attribute: 'people',
+          showMore: false,
+          searchable: true
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.pagination({
+          container: getElementBySelectorsArray([sectionSelectors.clinicaltrials, widgetSelectors.pagination]),
+          cssClasses: {
+            list: ['pagination'],
+            item: ['page-item'],
+            selectedItem: ['active'],
+            disabledItem: ['disabled'],
+            link: ['page-link']
+          }
+        })]);
+        clinicalTrialsSearch.start();
+        searchInstances.push(clinicalTrialsSearch);
+      }
       /**
        * Event search
        */
 
-      /*
-                  const eventsSearch = instantsearch({
-                      indexName: searchIndexes.events,
-                      searchClient,
-                  });
-      
-                  const renderEventsStats = instantsearch.connectors.connectStats(
-                      createStatsWidget(sectionSelectors.events)
-                  );
-      
-                  eventsSearch.addWidgets([
-                      renderEventsStats(),
-                      instantsearch.widgets.configure({
-                          hitsPerPage: 4,
-                      }),
-                      instantsearch.widgets.clearRefinements({
-                          container: getElementBySelectorsArray([
-                              sectionSelectors.events,
-                              filterSelectors.reset,
-                          ]),
-                      }),
-                      instantsearch.widgets.hits({
-                          container: getElementBySelectorsArray([
-                              sectionSelectors.events,
-                              widgetSelectors.hits,
-                          ]),
-                          cssClasses: {
-                              list: ['d-flex', 'flex-wrap'],
-                              item: ['col-12', 'mb-5'],
-                          },
-                          templates: {
-                              item: `
-                          <div class="card shadow-sm">
-                              <div class="p-3">
-                                  <p class="lead">
-                                      <a href="` + mainDomain + `/event/{{ slug }}" class="text-decoration-none">{{ name }}</a>
-                                  </p>
-                              </div>
-                          </div>
-                          `,
-                          },
-                      }),
-                      instantsearch.widgets.refinementList({
-                          container: getElementBySelectorsArray([
-                              sectionSelectors.events,
-                              filterSelectors.focus,
-                          ]),
-                          attribute: 'focus',
-                          showMore: true,
-                      }),
-      
-                      instantsearch.widgets.refinementList({
-                          container: getElementBySelectorsArray([
-                              sectionSelectors.events,
-                              filterSelectors.companies,
-                          ]),
-                          attribute: 'companies',
-                          showMore: true,
-                      }),
-      
-                      instantsearch.widgets.refinementList({
-                          container: getElementBySelectorsArray([
-                              sectionSelectors.events,
-                              filterSelectors.type,
-                          ]),
-                          attribute: 'eventTypes',
-                          showMore: true,
-                      }),
-      
-                      instantsearch.widgets.refinementList({
-                          container: getElementBySelectorsArray([
-                              sectionSelectors.events,
-                              filterSelectors.countries,
-                          ]),
-                          attribute: 'locations.country',
-                          showMore: false,
-                          searchable: true,
-                          searchablePlaceholder: 'e.g. United States',
-                      }),
-      
-                      instantsearch.widgets.pagination({
-                          container: getElementBySelectorsArray([
-                              sectionSelectors.events,
-                              widgetSelectors.pagination,
-                          ]),
-                          cssClasses: {
-                              list: ['pagination'],
-                              item: ['page-item'],
-                              selectedItem: ['active'],
-                              disabledItem: ['disabled'],
-                              link: ['page-link'],
-                          },
-                      }),
-                  ]);
-      
-                  eventsSearch.start();
-      */
 
+      if (document.querySelector(sectionSelectors.events) !== null) {
+        var eventsSearch = instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default()({
+          indexName: searchIndexes.events,
+          searchClient: searchClient
+        });
+        var renderEventsStats = instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.connectors.connectStats(createStatsWidget(sectionSelectors.events));
+        eventsSearch.addWidgets([renderEventsStats(), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.configure({
+          hitsPerPage: 4
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.clearRefinements({
+          container: getElementBySelectorsArray([sectionSelectors.events, filterSelectors.reset])
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.hits({
+          container: getElementBySelectorsArray([sectionSelectors.events, widgetSelectors.hits]),
+          cssClasses: {
+            list: ['d-flex', 'flex-wrap'],
+            item: ['col-12', 'mb-5']
+          },
+          templates: {
+            item: "\n                    <div class=\"card shadow-sm\">\n                        <div class=\"p-3\">\n                            <p class=\"lead\">\n                                <a href=\"" + mainDomain + "/event/{{ slug }}\" class=\"text-decoration-none\">{{ name }}</a>\n                            </p>\n                        </div>\n                    </div>\n                    "
+          }
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.refinementList({
+          container: getElementBySelectorsArray([sectionSelectors.events, filterSelectors.focus]),
+          attribute: 'focus',
+          showMore: true
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.refinementList({
+          container: getElementBySelectorsArray([sectionSelectors.events, filterSelectors.companies]),
+          attribute: 'companies',
+          showMore: true
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.refinementList({
+          container: getElementBySelectorsArray([sectionSelectors.events, filterSelectors.type]),
+          attribute: 'eventTypes',
+          showMore: true
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.refinementList({
+          container: getElementBySelectorsArray([sectionSelectors.events, filterSelectors.countries]),
+          attribute: 'locations.country',
+          showMore: false,
+          searchable: true,
+          searchablePlaceholder: 'e.g. United States'
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.pagination({
+          container: getElementBySelectorsArray([sectionSelectors.events, widgetSelectors.pagination]),
+          cssClasses: {
+            list: ['pagination'],
+            item: ['page-item'],
+            selectedItem: ['active'],
+            disabledItem: ['disabled'],
+            link: ['page-link']
+          }
+        })]);
+        eventsSearch.start();
+        searchInstances.push(eventsSearch);
+      }
       /**
        * Jobs search
        */
 
-      /*
-                  const jobsSearch = instantsearch({
-                      indexName: searchIndexes.jobs,
-                      searchClient,
-                  });
-      
-                  const renderJobsStats = instantsearch.connectors.connectStats(
-                      createStatsWidget(sectionSelectors.jobs)
-                  );
-      
-                  jobsSearch.addWidgets([
-                      renderJobsStats(),
-                      instantsearch.widgets.configure({
-                          hitsPerPage: 4,
-                      }),
-                      instantsearch.widgets.clearRefinements({
-                          container: getElementBySelectorsArray([
-                              sectionSelectors.jobs,
-                              filterSelectors.reset,
-                          ]),
-                      }),
-                      instantsearch.widgets.hits({
-                          container: getElementBySelectorsArray([
-                              sectionSelectors.jobs,
-                              widgetSelectors.hits,
-                          ]),
-                          cssClasses: {
-                              list: ['d-flex', 'flex-wrap'],
-                              item: ['col-12', 'mb-5'],
-                          },
-                          templates: {
-                              item: `
-                          <div class="card shadow-sm">
-                              <div class="p-3">
-                                  <p class="lead">
-                                      <a href="` + mainDomain + `/jobs/{{ slug }}" class="text-decoration-none">{{ name }}</a>
-                                  </p>
-                              </div>
-                          </div>
-                          `,
-                          },
-                      }),
-                      instantsearch.widgets.refinementList({
-                          container: getElementBySelectorsArray([
-                              sectionSelectors.jobs,
-                              filterSelectors.countries,
-                          ]),
-                          attribute: 'locations.country',
-                          showMore: false,
-                          searchable: true,
-                          searchablePlaceholder: 'e.g. United States',
-                      }),
-                      instantsearch.widgets.refinementList({
-                          container: getElementBySelectorsArray([
-                              sectionSelectors.jobs,
-                              filterSelectors.type,
-                          ]),
-                          attribute: 'employment_type',
-                          showMore: true,
-                      }),
-                      instantsearch.widgets.refinementList({
-                          container: getElementBySelectorsArray([
-                              sectionSelectors.jobs,
-                              filterSelectors.companies,
-                          ]),
-                          attribute: 'owner',
-                          showMore: true,
-                      }),
-                      instantsearch.widgets.pagination({
-                          container: getElementBySelectorsArray([
-                              sectionSelectors.jobs,
-                              widgetSelectors.pagination,
-                          ]),
-                          cssClasses: {
-                              list: ['pagination'],
-                              item: ['page-item'],
-                              selectedItem: ['active'],
-                              disabledItem: ['disabled'],
-                              link: ['page-link'],
-                          },
-                      }),
-                  ]);
-      
-                  jobsSearch.start();
-      */
+
+      if (document.querySelector(sectionSelectors.jobs) !== null) {
+        var jobsSearch = instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default()({
+          indexName: searchIndexes.jobs,
+          searchClient: searchClient
+        });
+        var renderJobsStats = instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.connectors.connectStats(createStatsWidget(sectionSelectors.jobs));
+        jobsSearch.addWidgets([renderJobsStats(), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.configure({
+          hitsPerPage: 4
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.clearRefinements({
+          container: getElementBySelectorsArray([sectionSelectors.jobs, filterSelectors.reset])
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.hits({
+          container: getElementBySelectorsArray([sectionSelectors.jobs, widgetSelectors.hits]),
+          cssClasses: {
+            list: ['d-flex', 'flex-wrap'],
+            item: ['col-12', 'mb-5']
+          },
+          templates: {
+            item: "\n                    <div class=\"card shadow-sm\">\n                        <div class=\"p-3\">\n                            <p class=\"lead\">\n                                <a href=\"" + mainDomain + "/jobs/{{ slug }}\" class=\"text-decoration-none\">{{ name }}</a>\n                            </p>\n                        </div>\n                    </div>\n                    "
+          }
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.refinementList({
+          container: getElementBySelectorsArray([sectionSelectors.jobs, filterSelectors.countries]),
+          attribute: 'locations.country',
+          showMore: false,
+          searchable: true,
+          searchablePlaceholder: 'e.g. United States'
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.refinementList({
+          container: getElementBySelectorsArray([sectionSelectors.jobs, filterSelectors.type]),
+          attribute: 'employment_type',
+          showMore: true
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.refinementList({
+          container: getElementBySelectorsArray([sectionSelectors.jobs, filterSelectors.companies]),
+          attribute: 'owner',
+          showMore: true
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.pagination({
+          container: getElementBySelectorsArray([sectionSelectors.jobs, widgetSelectors.pagination]),
+          cssClasses: {
+            list: ['pagination'],
+            item: ['page-item'],
+            selectedItem: ['active'],
+            disabledItem: ['disabled'],
+            link: ['page-link']
+          }
+        })]);
+        jobsSearch.start();
+        searchInstances.push(jobsSearch);
+      }
+
+      if (document.querySelector(sectionSelectors.newsArticles) !== null) {
+        var newsArticlesSearch = instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default()({
+          indexName: searchIndexes.newsArticles,
+          searchClient: searchClient
+        });
+        var renderNewsArticlesStats = instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.connectors.connectStats(createStatsWidget(sectionSelectors.newsArticles));
+        newsArticlesSearch.addWidgets([renderNewsArticlesStats(), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.configure({
+          hitsPerPage: 4
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.hits({
+          container: getElementBySelectorsArray([sectionSelectors.newsArticles, widgetSelectors.hits]),
+          cssClasses: {
+            list: ['d-flex', 'flex-wrap'],
+            item: ['col-12', 'mb-5']
+          },
+          templates: {
+            item: "\n                    <div class=\"card shadow-sm\">\n                        <div class=\"p-3\">\n                            <p class=\"lead\">\n                                <a href=\"{{ url }}\" class=\"text-decoration-none\">{{ name }}</a>\n                            </p>\n                        </div>\n                    </div>\n                    "
+          }
+        }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.pagination({
+          container: getElementBySelectorsArray([sectionSelectors.newsArticles, widgetSelectors.pagination]),
+          cssClasses: {
+            list: ['pagination'],
+            item: ['page-item'],
+            selectedItem: ['active'],
+            disabledItem: ['disabled'],
+            link: ['page-link']
+          }
+        })]);
+        newsArticlesSearch.start();
+        searchInstances.push(newsArticlesSearch);
+      }
 
       $('.nes-submit-button').on('click', function (e) {
         var query = $('.nes-main-input').val().trim();
-        companySearch.helper.setQuery(query).search();
-        peopleSearch.helper.setQuery(query).search(); // investorSearch.helper.setQuery(query).search();
-        // researchSearch.helper.setQuery(query).search();
-        // clinicalTrialsSearch.helper.setQuery(query).search();
-        // eventsSearch.helper.setQuery(query).search();
-        // jobsSearch.helper.setQuery(query).search();
+        searchInstances.forEach(function (instance) {
+          instance.helper.setQuery(query).search();
+        });
       });
     });
   };
