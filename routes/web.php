@@ -97,6 +97,9 @@ Route::group([
 //Other searches
 Route::get('/organization/names.json', 'Index\CompanyController@namesJson');
 
+// Non-Auth Gate
+Route::get('/clinical-trials/recruiting', 'Index\RecruitingClinicalTrialController@index')->name('discover.clinicaltrials.recruiting');
+
 //Global group for registered and verified users only
 Route::group([
     'middleware' => ['limitedAccess', 'verifiedIfAuthorized'],
@@ -163,7 +166,6 @@ Route::group([
 
     // Clinical trials
     Route::get('/clinical-trials', 'Index\ClinicaltrialController@index')->name('discover.clinicaltrials');
-    Route::get('/clinical-trials/recruiting', 'Index\RecruitingClinicalTrialController@index')->name('discover.clinicaltrials.recruiting');
     Route::get('/clinical-trials/map', 'Index\ClinicalTrialMapController@showMap')->name('discover.clinicaltrials.map');
     Route::get('/clinical-trials/map/{country}', 'Index\ClinicalTrialMapController@showCountry')->name('discover.clinicaltrials.map.country');
     Route::get('/clinical-trials/{slug}', 'Index\ClinicaltrialController@show')->name('discover.clinicaltrials.show');
