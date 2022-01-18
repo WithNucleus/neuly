@@ -45,7 +45,7 @@
                             ToDo
                         </div>-->
                         <!-- Organizations -->
-                        <div class="tab-pane fade" id="companies" role="tabpanel" aria-labelledby="companies-tab">
+                        <div class="tab-pane fade show active" id="companies" role="tabpanel" aria-labelledby="companies-tab">
                             <div class="row search-content-row">
                                 <div class="col-3 bg-light">
                                     <div class="title clearfix">
