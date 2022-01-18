@@ -34,11 +34,14 @@ class PodcastController extends Controller
 
     public function show($slug)
     {
-        $feed = DataFeed::where('slug', $slug)->with(['mediaItems' => function ($query) {
-            $query->podcasts();
-        }])->firstOrFail();
+        $feed = DataFeed::where('slug', $slug)->firstOrFail();
 
         $episodes = QueryBuilder::for(MediaItem::podcasts()->where('source_id', $feed->id))
+            ->allowedSorts([
+                'name',
+                'date'
+            ])
+            ->defaultSort('-date')
             ->paginate(20)
             ->appends(request()->query());
 
