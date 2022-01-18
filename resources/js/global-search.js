@@ -14,6 +14,7 @@ $('#searchModal .btn-close').on('click', function(e) {
 
 $(function() {
     const searchClient = algoliasearch('2WZKZJIBUG', '686437b222f70e8cdbbba3899ea1f93d');
+    const instantSearchRouter = instantsearch.routers.history();
 
     /**
      * Define Company based search
@@ -21,6 +22,7 @@ $(function() {
 
     const companySearch = instantsearch({
         indexName: 'companies',
+        routing: instantSearchRouter,
         searchClient,
     });
 
@@ -137,6 +139,7 @@ $(function() {
 
     const peopleSearch = instantsearch({
         indexName: 'people',
+        routing: instantSearchRouter,
         searchClient,
     });
 
@@ -214,6 +217,7 @@ $(function() {
 
     const investorSearch = instantsearch({
         indexName: 'investors',
+        routing: instantSearchRouter,
         searchClient,
     });
 
@@ -305,6 +309,7 @@ $(function() {
 
     const researchSearch = instantsearch({
         indexName: 'research',
+        routing: instantSearchRouter,
         searchClient,
     });
 
@@ -390,6 +395,7 @@ $(function() {
 
     const clinicalTrialsSearch = instantsearch({
         indexName: 'clinicaltrials',
+        routing: instantSearchRouter,
         searchClient,
     });
 
@@ -481,6 +487,7 @@ $(function() {
 
     const eventsSearch = instantsearch({
         indexName: 'events',
+        routing: instantSearchRouter,
         searchClient,
     });
 
@@ -573,6 +580,7 @@ $(function() {
 
     const jobsSearch = instantsearch({
         indexName: 'jobs',
+        routing: instantSearchRouter,
         searchClient,
     });
 
@@ -654,9 +662,50 @@ $(function() {
 
     jobsSearch.start();
 
-    $('#search-button').on('click', function(e) {
-        var query = $('#search-input').val().trim();
+    // Set the InstantSearch index UI state from external events.
+    function setInstantSearchUiState(indexUiState) {
+        companySearch.setUiState(uiState => ({
+            ...uiState,
+            ['companies']: {
+                ...uiState['companies'],
+                // We reset the page when the search state changes.
+                page: 1,
+                ...indexUiState,
+            },
+        }))
+    }
 
+    function getInstantSearchUiState() {
+        const uiState = instantSearchRouter.read()
+
+        return (uiState && uiState['companies']) || {}
+    }
+
+    const searchPageState = getInstantSearchUiState();
+
+    const querySuggestionsPlugin = createQuerySuggestionsPlugin({
+        searchClient,
+        indexName: 'general_query_suggestions',
+        transformSource({ source }) {
+            return {
+                ...source,
+                sourceId: 'querySuggestionsPlugin',
+                onSelect({ setIsOpen, setQuery, item, event }) {
+                    setSearchQuery(item.name);
+                    setQuery(item.name);
+                },
+                templates: {
+                    item(params) {
+                        const { item } = params;
+                        return item.name;
+                    },
+                },
+            };
+        },
+    });
+
+    function setSearchQuery(query)
+    {
         companySearch.helper.setQuery(query).search();
         peopleSearch.helper.setQuery(query).search();
         investorSearch.helper.setQuery(query).search();
@@ -664,5 +713,30 @@ $(function() {
         clinicalTrialsSearch.helper.setQuery(query).search();
         eventsSearch.helper.setQuery(query).search();
         jobsSearch.helper.setQuery(query).search();
+    }
+
+    autocomplete({
+        container: '#autocomplete',
+        placeholder: 'Search for products',
+        detachedMediaQuery: 'none',
+        plugins: [querySuggestionsPlugin],
+        openOnFocus: true,
+        initialState: {
+            query: searchPageState.query || '',
+        },
+        onSubmit({ state }) {
+            setInstantSearchUiState({ query: state.query });
+            setSearchQuery(state.query);
+        },
+        onReset() {
+            setInstantSearchUiState({ query: '' });
+            setSearchQuery('');
+        },
+        onStateChange({ prevState, state }) {
+            if (prevState.query !== state.query) {
+                setInstantSearchUiState({ query: state.query });
+                setSearchQuery(state.query);
+            }
+        },
     });
 });

@@ -3,11 +3,14 @@
         <div class="modal-content">
             <div class="modal-body">
                 <nav class="navbar navbar-dark bg-dark flex-xl-nowrap shadow navbar-expand-lg">
-                    <span class="navbar-brand ml-3"><img src="http://neuly.local/images/neuly-logo-dark.png" alt="Neuly"></span>
+                    <span class="navbar-brand ml-3"><img src="/images/neuly-logo-dark.png" alt="Neuly"></span>
                     <div class="ml-3 mr-auto d-flex">
+                        <div id="autocomplete"></div>
+                    </div>
+                    <!--<div class="ml-3 mr-auto d-flex">
                         <input id="search-input" class="form-control global-search-input search-field" name="search" type="search" placeholder="Discover organizations, people, research..." aria-label="Search" autocomplete="off" spellcheck="false" dir="auto" style="position: relative; vertical-align: top; background-color: transparent;">
                         <button id="search-button" class="btn global-search-button ml-2 my-2 my-sm-0" type="submit" title="Search Neuly"><i class="far fa-search"></i></button>
-                    </div>
+                    </div>-->
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                 </nav>
                 <div class="content">
