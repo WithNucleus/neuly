@@ -114,8 +114,8 @@
     @yield('content')
 </div>
 <script>
-    let ALGOLIA_APP_ID = '{{ env('ALGOLIA_APP_ID') }}';
-    let ALGOLIA_SECRET = '{{ env('ALGOLIA_SECRET') }}';
+    let ALGOLIA_APP_ID = '2WZKZJIBUG';
+    let ALGOLIA_SECRET = '686437b222f70e8cdbbba3899ea1f93d';
 </script>
 <script src="https://cdn.jsdelivr.net/npm/algoliasearch@4.5.1/dist/algoliasearch.umd.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@4.8.3/dist/instantsearch.production.min.js" integrity="sha256-LAGhRRdtVoD6RLo2qDQsU2mp+XVSciKRC8XPOBWmofM=" crossorigin="anonymous"></script>
