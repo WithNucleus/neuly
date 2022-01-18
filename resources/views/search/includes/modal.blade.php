@@ -15,9 +15,9 @@
                 </nav>
                 <div class="content">
                     <ul class="nav nav-tabs mb-2" id="myTab" role="tablist">
-                        <li class="nav-item">
+                        <!--<li class="nav-item">
                             <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">All</a>
-                        </li>
+                        </li>-->
                         <li class="nav-item">
                             <a class="nav-link" id="companies-tab" data-toggle="tab" href="#companies" role="tab" aria-controls="companies" aria-selected="false">Organizations</a>
                         </li>
@@ -41,9 +41,9 @@
                         </li>
                     </ul>
                     <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <!--<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                             ToDo
-                        </div>
+                        </div>-->
                         <!-- Organizations -->
                         <div class="tab-pane fade" id="companies" role="tabpanel" aria-labelledby="companies-tab">
                             <div class="row search-content-row">

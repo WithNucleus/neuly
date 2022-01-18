@@ -717,7 +717,7 @@ $(function() {
 
     autocomplete({
         container: '#autocomplete',
-        placeholder: 'Search for products',
+        placeholder: 'Search',
         detachedMediaQuery: 'none',
         plugins: [querySuggestionsPlugin],
         openOnFocus: true,
