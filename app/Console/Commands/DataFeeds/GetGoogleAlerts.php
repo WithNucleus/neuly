@@ -1,26 +1,26 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\DataFeeds;
 
 use App\Jobs\DataFeeds\GetRssFeed;
 use App\Models\DataFeed;
 use Illuminate\Console\Command;
 
-class GetDataFeeds extends Command
+class GetGoogleAlerts extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'dataFeeds:getAll';
+    protected $signature = 'dataFeeds:googleAlerts';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Dispatches a job to get all active feeds';
+    protected $description = 'Dispatches a job to get all Google Alerts';
 
     /**
      * Create a new command instance.
@@ -39,12 +39,10 @@ class GetDataFeeds extends Command
      */
     public function handle()
     {
-        $dataFeeds = DataFeed::where('status', DataFeed::STATUS_ACTIVE)->get();
+        $dataFeeds = DataFeed::googleAlerts()->where('status', DataFeed::STATUS_ACTIVE)->get();
 
         foreach ($dataFeeds as $dataFeed) {
-            if ($dataFeed->feed_type == DataFeed::FEED_TYPE_RSS) {
-                GetRssFeed::dispatch($dataFeed);
-            }
+            GetRssFeed::dispatch($dataFeed);
         }
 
         return 0;

@@ -51,7 +51,6 @@ class Kernel extends ConsoleKernel
             });
 
         // Send E-Mail Notifications
-
         $schedule
             ->job(new SendEmailNotifications())
             ->weeklyOn(3, '12:00');
@@ -65,6 +64,28 @@ class Kernel extends ConsoleKernel
             })
             ->onSuccess(function() {
                 Log::info('Cleaning unverified users Succeeded!');
+            });
+
+        // Data Feeds - Google Alerts
+        $schedule
+            ->command('dataFeeds:googleAlerts')
+            ->hourlyAt(15)
+            ->onFailure(function() {
+                Log::critical('Data Feeds - Google Alerts failed');
+            })
+            ->onSuccess(function() {
+                Log::info('Data Feeds - Google Alerts failed successful');
+            });
+
+        // Data Feed - All
+        $schedule
+            ->command('dataFeeds:getAll')
+            ->everySixHours()
+            ->onFailure(function() {
+                Log::critical('Data Feeds - Google Alerts failed');
+            })
+            ->onSuccess(function() {
+                Log::info('Data Feeds - Google Alerts failed successful');
             });
     }
 
