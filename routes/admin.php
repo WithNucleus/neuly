@@ -34,8 +34,6 @@ Route::group([
             Route::post('/merge', 'EntityMergeController@merge')
                 ->name('entityMerge.merge');
         });
-
-        Route::get('embeddable-search', 'EmbeddableSearchController@index')->name('embeddable-search.index');
     });
 
     Route::group([
