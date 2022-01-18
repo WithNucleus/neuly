@@ -104,6 +104,9 @@ const searchModalId = '#neulyEmbedSearchModal';
                 renderCompaniesStats(),
                 instantsearch.widgets.configure({
                     hitsPerPage: 6,
+                    facetFilters: [
+                        ['focus:Therapy', 'focus:Coaching', 'focus:Retreat', 'focus:Clinic']
+                    ],
                 }),
                 instantsearch.widgets.clearRefinements({
                     container: getElementBySelectorsArray([
@@ -224,6 +227,9 @@ const searchModalId = '#neulyEmbedSearchModal';
                 renderPeopleStats(),
                 instantsearch.widgets.configure({
                     hitsPerPage: 6,
+                    facetFilters: [
+                        ['focus:Therapy', 'focus:Coaching', 'focus:Retreat', 'focus:Clinic']
+                    ],
                 }),
                 instantsearch.widgets.clearRefinements({
                     container: getElementBySelectorsArray([
