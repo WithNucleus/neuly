@@ -11582,7 +11582,8 @@ var searchModalId = '#neulyEmbedSearchModal';
       });
       var renderCompaniesStats = instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.connectors.connectStats(createStatsWidget(sectionSelectors.companies));
       companySearch.addWidgets([renderCompaniesStats(), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.configure({
-        hitsPerPage: 6
+        hitsPerPage: 6,
+        facetFilters: [['focus:Therapy', 'focus:Coaching', 'focus:Retreat', 'focus:Clinic']]
       }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.clearRefinements({
         container: getElementBySelectorsArray([sectionSelectors.companies, filterSelectors.reset])
       }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.hits({
@@ -11665,7 +11666,8 @@ var searchModalId = '#neulyEmbedSearchModal';
       });
       var renderPeopleStats = instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.connectors.connectStats(createStatsWidget(sectionSelectors.people));
       peopleSearch.addWidgets([renderPeopleStats(), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.configure({
-        hitsPerPage: 6
+        hitsPerPage: 6,
+        facetFilters: [['focus:Therapy', 'focus:Coaching', 'focus:Retreat', 'focus:Clinic']]
       }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.clearRefinements({
         container: getElementBySelectorsArray([sectionSelectors.people, filterSelectors.reset])
       }), instantsearch_js_dist_instantsearch_production_min__WEBPACK_IMPORTED_MODULE_1___default.a.widgets.hits({
