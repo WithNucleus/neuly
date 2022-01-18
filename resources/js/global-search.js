@@ -105,7 +105,7 @@ $(function() {
 
         instantsearch.widgets.toggleRefinement({
             container: '#companies #has-events',
-            attribute: 'events',
+            attribute: 'hasEvents',
             templates: {
                 labelText: 'Upcoming Events',
             },
@@ -113,7 +113,7 @@ $(function() {
 
         instantsearch.widgets.toggleRefinement({
             container: '#companies #has-jobs',
-            attribute: 'jobs',
+            attribute: 'hasJobs',
             templates: {
                 labelText: 'Now Hiring',
             },
@@ -294,7 +294,7 @@ $(function() {
 
         instantsearch.widgets.toggleRefinement({
             container: '#investors #has-jobs',
-            attribute: 'jobs',
+            attribute: 'hasJobs',
             templates: {
                 labelText: 'Now Hiring',
             },
