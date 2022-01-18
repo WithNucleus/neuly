@@ -27,7 +27,7 @@
         @endif
         @isset($filters['focus'])
             <div class="h4">Focus:</div>
-            <div class="nes-filter-item nes-filter-focus"></div>
+            <div class="nes-filter-item nes-filter-focus" data-name="focus" @isset($filters['focus']['prefilter']) data-prefilter='{{ json_encode($filters['focus']['prefilter'], JSON_FORCE_OBJECT) }}' @endisset></div>
         @endisset
         @isset($filters['people'])
             <div class="h4">{{ isset($labels['people']) ? $labels['people'] : 'People' }}:</div>
