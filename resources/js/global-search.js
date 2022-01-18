@@ -13,7 +13,7 @@ $('#searchModal .btn-close').on('click', function(e) {
 
 
 $(function() {
-    const searchClient = algoliasearch('2WZKZJIBUG', '686437b222f70e8cdbbba3899ea1f93d');
+    const searchClient = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_SECRET);
     const instantSearchRouter = instantsearch.routers.history();
 
     /**
