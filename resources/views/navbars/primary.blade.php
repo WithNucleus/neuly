@@ -36,6 +36,7 @@
                     <a class="dropdown-item" href="{{ route('discover.books') }}"><i class="fad fa-book fa-fw"></i> Books</a>
                     <a class="dropdown-item" href="{{ route('discover.podcasts') }}"><i class="fad fa-podcast fa-fw"></i> Podcasts</a>
                     <a class="dropdown-item" href="{{ route('discover.courses') }}"><i class="fad fa-book-reader fa-fw"></i> Courses</a>
+                    <a class="dropdown-item" href="{{ route('discover.videos') }}"><i class="fad fa-film fa-fw"></i> Videos</a>
                 </div>
             </li>
 

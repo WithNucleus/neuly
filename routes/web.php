@@ -99,6 +99,11 @@ Route::get('/organization/names.json', 'Index\CompanyController@namesJson');
 
 // Non-Auth Gate
 Route::get('/clinical-trials/recruiting', 'Index\RecruitingClinicalTrialController@index')->name('discover.clinicaltrials.recruiting');
+Route::get('/videos', 'Index\DataFeeds\VideoController@index')->name('discover.videos');
+Route::get('/podcasts', 'Index\DataFeeds\PodcastController@index')->name('discover.podcasts');
+Route::get('/podcasts/{slug}', 'Index\DataFeeds\PodcastController@show')->name('discover.podcasts.show');
+Route::get('/books', 'Index\DataFeeds\BookController@index')->name('discover.books');
+Route::get('/courses', 'Index\CourseController@index')->name('discover.courses');
 
 //Global group for registered and verified users only
 Route::group([
@@ -220,13 +225,6 @@ Route::group([
 
     Route::post('/search/clinicaltrials', 'index\SearchController@showClinicalTrialsResults')->name('search.clinicaltrials');
     Route::get('/search/clinicaltrials/{term}', 'Index\SearchController@showClinicalTrialsResults')->name('search.clinicaltrials.term');
-
-    // Media Items -- Listings
-    Route::get('/podcasts', 'Index\DataFeeds\PodcastController@index')->name('discover.podcasts');
-    Route::get('/podcasts/{slug}', 'Index\DataFeeds\PodcastController@show')->name('discover.podcasts.show');
-    Route::get('/books', 'Index\DataFeeds\BookController@index')->name('discover.books');
-
-    Route::get('/courses', 'Index\CourseController@index')->name('discover.courses');
 });
 
 // show entity routes with preview feature

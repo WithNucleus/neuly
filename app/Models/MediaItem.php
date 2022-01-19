@@ -42,7 +42,7 @@ class MediaItem extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    public function focus()
+    public function focus(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Focus::class, 'focus_media_item', 'media_item_id', 'focus_id');
     }

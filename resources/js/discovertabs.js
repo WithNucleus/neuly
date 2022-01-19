@@ -39,6 +39,8 @@ $("select.discover").change(function(){
         window.location.replace("/podcasts");
     } else if (value == 'courses') {
         window.location.replace("/courses");
+    } else if (value == 'videos') {
+        window.location.replace("/videos");
     }
 
 
