@@ -61,6 +61,13 @@
             <span class="icon mr-1"><i class="fad fa-book-reader"></i></span>Courses
         </a>
     </li>
+    @if(Route::is('discover.videos'))
+        <li class="nav-item">
+            <a class="nav-link active" href="{{ route('discover.videos') }}">
+                <span class="icon mr-1"><i class="fad fa-film"></i></span>Videos
+            </a>
+        </li>
+    @endif
     <li class="nav-item">
         <a class="nav-link @if(Request::is('insights/*') OR Route::is('discover.insights')) active @endif " href="{{ route('discover.insights') }}">
             <span class="icon mr-1"><i class="fad fa-head-side-brain"></i></span>Insights
