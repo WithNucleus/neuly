@@ -10990,6 +10990,17 @@ a.text-dark:focus {
 
 .nes-modal .modal-dialog .modal-content .modal-body .navbar .navbar-brand img {
   max-height: 40px;
+  max-width: 100px;
+}
+
+@media screen and (max-width: 576px) {
+  .nes-modal .modal-dialog .modal-content .modal-body .navbar .close {
+    font-size: x-large;
+  }
+
+  .nes-modal .modal-dialog .modal-content .modal-body .navbar .navbar-brand img {
+    max-width: 40px;
+  }
 }
 
 .nes-modal .modal-dialog .modal-content .modal-body .navbar .nes-main-input {
@@ -11089,6 +11100,49 @@ a.text-dark:focus {
 
 .nes-modal .sidebar-sticky {
   overflow-y: auto;
+}
+
+.nes-modal .nes-sidenav-open {
+  font-size: medium;
+  margin: 1rem 1.5rem;
+  background-color: #6BBCA4;
+  display: none;
+}
+
+@media screen and (max-width: 576px) {
+  .nes-modal .nes-sidenav-open {
+    display: inline-block;
+  }
+
+  .nes-modal .nes-sidenav {
+    padding: 0;
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    overflow-x: hidden;
+    transition: 0.5s;
+  }
+
+  .nes-modal .nes-sidenav .title {
+    margin-top: 30px;
+    padding: 0 1rem;
+  }
+
+  .nes-modal .nes-sidenav .nes-sidenav-close {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    font-size: 36px;
+    margin-left: 50px;
+    color: black;
+  }
+
+  .nes-modal .nes-sidenav .sidebar-sticky {
+    padding: 0 1rem;
+  }
 }
 
 .nes-modal .filter-title {
@@ -11228,6 +11282,13 @@ a.text-dark:focus {
 .nes-modal .ais-Pagination .ais-Pagination-list {
   display: flex;
   list-style: none;
+  justify-content: center;
+}
+
+@media screen and (max-width: 576px) {
+  .nes-modal .nes-pagination {
+    margin-bottom: 5rem;
+  }
 }
 
 .nes-modal .nes-sort-by {

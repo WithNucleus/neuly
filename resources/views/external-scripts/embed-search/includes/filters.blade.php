@@ -1,4 +1,6 @@
-<div class="col-3 bg-light nes-filter">
+<a href="#" class="btn btn-default nes-sidenav-open">Filters</a>
+<div class="col-sm-3 col-xs-12 bg-light nes-sidenav nes-filter">
+    <a href="#" class="nes-sidenav-close visible-xs">&times;</a>
     <div class="title clearfix">
         <div class="h3 border-bottom pb-2 filter-title">
             Filters
@@ -43,3 +45,4 @@
         @endisset
     </div>
 </div>
+

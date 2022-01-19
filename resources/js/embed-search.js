@@ -1,16 +1,15 @@
 require('bootstrap/js/src/tab');
+require('bootstrap/js/src/dropdown');
 import algoliasearch from 'algoliasearch/lite';
 import instantsearch from 'instantsearch.js/dist/instantsearch.production.min';
 
 const searchModalId = '#neulyEmbedSearchModal';
 
 (function($) {
-    $.fn.neulyEmbedSearch = function(code) {
+    $.fn.neulyEmbedSearch = function(baseUrl, widgetCode) {
         let searchButton = $(this);
-        //TODO make domain dynamic
-        const mainDomain = 'https://staging.neuly.com';
 
-        $.get(mainDomain + '/js/external/embedSearch/template/' + code, function(template) {
+        $.get(baseUrl + '/js/external/embedSearch/template/' + widgetCode, function(template) {
             $('body').append(template);
 
             let searchModal = $(searchModalId);
@@ -25,6 +24,16 @@ const searchModalId = '#neulyEmbedSearchModal';
                 e.preventDefault();
                 searchModal.fadeOut();
                 $('body').css('overflow', 'visible');
+            });
+
+            searchModal.find('.nes-sidenav-open').on('click', function(e) {
+                e.preventDefault();
+                $(this).parent().find('.nes-sidenav').css('width', '100%');
+            });
+
+            searchModal.find('.nes-sidenav-close').on('click', function(e) {
+                e.preventDefault();
+                $(this).parent('.nes-sidenav').css('width', '0');
             });
 
             const searchClient = algoliasearch('2WZKZJIBUG', '686437b222f70e8cdbbba3899ea1f93d');
@@ -146,11 +155,11 @@ const searchModalId = '#neulyEmbedSearchModal';
                             item: `
                 <div class="card shadow-sm">
                     <div class="pt-4 text-center">
-                        <a href="` + mainDomain + `/organization/{{ slug }}" class="text-decoration-none">
+                        <a href="` + baseUrl + `/organization/{{ slug }}" class="text-decoration-none">
                             <div class="logo-is-contained" style="background-image: url('{{ logo }}')" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ name }}"></div>
                         </a>
                         <p class="my-3 lead">
-                            <a href="` + mainDomain + `/organization/{{ slug }}" class="text-decoration-none">{{ name }}</a>
+                            <a href="` + baseUrl + `/organization/{{ slug }}" class="text-decoration-none">{{ name }}</a>
                         </p>
 
                     </div>
@@ -284,11 +293,11 @@ const searchModalId = '#neulyEmbedSearchModal';
                             item: `
                 <div class="card shadow-sm">
                     <div class="pt-4 text-center">
-                        <a href="` + mainDomain + `/person/{{ slug }}" class="text-decoration-none">
+                        <a href="` + baseUrl + `/person/{{ slug }}" class="text-decoration-none">
                             <div class="person-photo-small shadow-sm" style="background-image: url('{{ photo }}')" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ name }}"></div>
                         </a>
                         <p class="my-3 lead">
-                            <a href="` + mainDomain + `/person/{{ slug }}" class="text-decoration-none">{{ name }}</a>
+                            <a href="` + baseUrl + `/person/{{ slug }}" class="text-decoration-none">{{ name }}</a>
                         </p>
 
                     </div>
@@ -370,11 +379,11 @@ const searchModalId = '#neulyEmbedSearchModal';
                             item: `
                     <div class="card shadow-sm">
                         <div class="pt-4 text-center">
-                            <a href="` + mainDomain + `/investor/{{ slug }}" class="text-decoration-none">
+                            <a href="` + baseUrl + `/investor/{{ slug }}" class="text-decoration-none">
                                 <div class="logo-is-contained" style="background-image: url('{{ logo }}')" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ name }}"></div>
                             </a>
                             <p class="my-3 lead">
-                                <a href="` + mainDomain + `/investor/{{ slug }}" class="text-decoration-none">{{ name }}</a>
+                                <a href="` + baseUrl + `/investor/{{ slug }}" class="text-decoration-none">{{ name }}</a>
                             </p>
                         </div>
                     </div>
@@ -468,7 +477,7 @@ const searchModalId = '#neulyEmbedSearchModal';
                     <div class="card shadow-sm">
                         <div class="p-3">
                             <p class="lead">
-                                <a href="` + mainDomain + `/research/{{ slug }}" class="text-decoration-none">{{ name }}</a>
+                                <a href="` + baseUrl + `/research/{{ slug }}" class="text-decoration-none">{{ name }}</a>
                             </p>
                         </div>
                     </div>
@@ -524,8 +533,6 @@ const searchModalId = '#neulyEmbedSearchModal';
             /**
              * Clinical Trial search
              */
-
-            console.log(document.querySelector(sectionSelectors.clinicaltrials));
             if (document.querySelector(sectionSelectors.clinicaltrials) !== null) {
                 const clinicalTrialsSearch = instantsearch({
                     indexName: searchIndexes.clinicaltrials,
@@ -561,7 +568,7 @@ const searchModalId = '#neulyEmbedSearchModal';
                     <div class="card shadow-sm">
                         <div class="p-3">
                             <p class="lead">
-                                <a href="` + mainDomain + `/research/{{ slug }}" class="text-decoration-none">{{ name }}</a>
+                                <a href="` + baseUrl + `/research/{{ slug }}" class="text-decoration-none">{{ name }}</a>
                             </p>
                         </div>
                     </div>
@@ -661,7 +668,7 @@ const searchModalId = '#neulyEmbedSearchModal';
                     <div class="card shadow-sm">
                         <div class="p-3">
                             <p class="lead">
-                                <a href="` + mainDomain + `/event/{{ slug }}" class="text-decoration-none">{{ name }}</a>
+                                <a href="` + baseUrl + `/event/{{ slug }}" class="text-decoration-none">{{ name }}</a>
                             </p>
                         </div>
                     </div>
@@ -763,7 +770,7 @@ const searchModalId = '#neulyEmbedSearchModal';
                     <div class="card shadow-sm">
                         <div class="p-3">
                             <p class="lead">
-                                <a href="` + mainDomain + `/jobs/{{ slug }}" class="text-decoration-none">{{ name }}</a>
+                                <a href="` + baseUrl + `/jobs/{{ slug }}" class="text-decoration-none">{{ name }}</a>
                             </p>
                         </div>
                     </div>
