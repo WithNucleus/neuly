@@ -55,11 +55,11 @@ $(function() {
                 item: `
                     <div class="card shadow-sm">
                         <div class="pt-4 text-center">
-                            <a href="https://neuly.com/organization/{{ slug }}" class="text-decoration-none">
+                            <a href="https://app.neuly.com/organization/{{ slug }}" class="text-decoration-none">
                                 <div class="logo-is-contained" style="background-image: url('{{ logo }}')" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ name }}"></div>
                             </a>
                             <p class="my-3 lead">
-                                <a href="https://neuly.com/organization/{{ slug }}" class="text-decoration-none">{{ name }}</a>
+                                <a href="https://app.neuly.com/organization/{{ slug }}" class="text-decoration-none">{{ name }}</a>
                             </p>
 
                         </div>
@@ -107,7 +107,6 @@ $(function() {
             container: '#companies #has-events',
             attribute: 'hasEvents',
             on: 1,
-            off: 0,
             templates: {
                 labelText: 'Upcoming Events',
             },
@@ -117,7 +116,6 @@ $(function() {
             container: '#companies #has-jobs',
             attribute: 'hasJobs',
             on: 1,
-            off: 0,
             templates: {
                 labelText: 'Now Hiring',
             },
@@ -175,11 +173,11 @@ $(function() {
                 item: `
                     <div class="card shadow-sm">
                         <div class="pt-4 text-center">
-                            <a href="https://neuly.com/person/{{ slug }}" class="text-decoration-none">
+                            <a href="https://app.neuly.com/person/{{ slug }}" class="text-decoration-none">
                                 <div class="person-photo-small shadow-sm" style="background-image: url('{{ photo }}')" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ name }}"></div>
                             </a>
                             <p class="my-3 lead">
-                                <a href="https://neuly.com/person/{{ slug }}" class="text-decoration-none">{{ name }}</a>
+                                <a href="https://app.neuly.com/person/{{ slug }}" class="text-decoration-none">{{ name }}</a>
                             </p>
 
                         </div>
@@ -254,11 +252,11 @@ $(function() {
                 item: `
                     <div class="card shadow-sm">
                         <div class="pt-4 text-center">
-                            <a href="https://neuly.com/investor/{{ slug }}" class="text-decoration-none">
+                            <a href="https://app.neuly.com/investor/{{ slug }}" class="text-decoration-none">
                                 <div class="logo-is-contained" style="background-image: url('{{ logo }}')" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ name }}"></div>
                             </a>
                             <p class="my-3 lead">
-                                <a href="https://neuly.com/investor/{{ slug }}" class="text-decoration-none">{{ name }}</a>
+                                <a href="https://app.neuly.com/investor/{{ slug }}" class="text-decoration-none">{{ name }}</a>
                             </p>
 
                         </div>
@@ -300,7 +298,6 @@ $(function() {
             container: '#investors #has-jobs',
             attribute: 'hasJobs',
             on: 1,
-            off: 0,
             templates: {
                 labelText: 'Now Hiring',
             },
@@ -349,7 +346,7 @@ $(function() {
                     <div class="card shadow-sm">
                         <div class="p-3">
                             <p class="lead">
-                                <a href="https://neuly.com/research/{{ slug }}" class="text-decoration-none">{{ name }}</a>
+                                <a href="https://app.neuly.com/research/{{ slug }}" class="text-decoration-none">{{ name }}</a>
                             </p>
                         </div>
                     </div>
@@ -435,7 +432,7 @@ $(function() {
                     <div class="card shadow-sm">
                         <div class="p-3">
                             <p class="lead">
-                                <a href="https://neuly.com/research/{{ slug }}" class="text-decoration-none">{{ name }}</a>
+                                <a href="https://app.neuly.com/research/{{ slug }}" class="text-decoration-none">{{ name }}</a>
                             </p>
                         </div>
                     </div>
@@ -527,7 +524,7 @@ $(function() {
                     <div class="card shadow-sm">
                         <div class="p-3">
                             <p class="lead">
-                                <a href="https://neuly.com/event/{{ slug }}" class="text-decoration-none">{{ name }}</a>
+                                <a href="https://app.neuly.com/event/{{ slug }}" class="text-decoration-none">{{ name }}</a>
                             </p>
                         </div>
                     </div>
@@ -620,7 +617,7 @@ $(function() {
                     <div class="card shadow-sm">
                         <div class="p-3">
                             <p class="lead">
-                                <a href="https://neuly.com/jobs/{{ slug }}" class="text-decoration-none">{{ name }}</a>
+                                <a href="https://app.neuly.com/jobs/{{ slug }}" class="text-decoration-none">{{ name }}</a>
                             </p>
                         </div>
                     </div>
