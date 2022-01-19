@@ -7,7 +7,7 @@ use App\Models\EmbeddableSearchWidget;
         <div class="modal-content">
             <div class="modal-body">
                 <nav class="navbar navbar-dark bg-dark flex-xl-nowrap shadow navbar-expand-lg">
-                    <span class="navbar-brand ml-3">
+                    <span class="navbar-brand">
                         @if($widget->logo)
                             <img src="{{ asset('storage/embed_search_widget/' . $widget->logo) }}" alt="Nucleus">
                         @else
@@ -18,7 +18,7 @@ use App\Models\EmbeddableSearchWidget;
                         <input class="nes-main-input form-control search-field" name="search"
                                type="search" placeholder="Search..."
                                aria-label="Search" autocomplete="off" spellcheck="false" dir="auto">
-                        <button class="nes-submit-button btn ml-2 my-2 my-sm-0" type="submit"
+                        <button class="btn nes-submit-button ml-2" type="submit"
                                 title="Search">&#128269
                         </button>
                     </div>
@@ -26,6 +26,58 @@ use App\Models\EmbeddableSearchWidget;
                             aria-hidden="true">&#x2715</span></button>
                 </nav>
                 <div class="content">
+{{--                    <div class="dropdown visible-xs">--}}
+{{--                        <button class="btn dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">--}}
+{{--                            Menu--}}
+{{--                        </button>--}}
+{{--                        <div class="dropdown-menu">--}}
+{{--                            @foreach($widget->tabs as $tab)--}}
+{{--                                @if($tab == EmbeddableSearchWidget::TAB_MAIN)--}}
+{{--                                    <a class="nav-link nes-main-tab {{ $activeTab == $tab ? 'active' : '' }}" data-toggle="tab" href=".nes-main-section"--}}
+{{--                                       role="tab" aria-controls="main" aria-selected="true">All</a>--}}
+{{--                                @endif--}}
+{{--                                @if($tab == EmbeddableSearchWidget::TAB_COMPANIES)--}}
+{{--                                        <a class="nav-link nes-companies-tab {{ $activeTab == $tab ? 'active' : '' }}" data-toggle="tab"--}}
+{{--                                           href=".nes-section-companies"--}}
+{{--                                           role="tab" aria-controls="companies" aria-selected="false">Organizations</a>--}}
+{{--                                @endif--}}
+{{--                                @if($tab == EmbeddableSearchWidget::TAB_PEOPLE)--}}
+{{--                                        <a class="nav-link nes-people-tab {{ $activeTab == $tab ? 'active' : '' }}" data-toggle="tab" href=".nes-section-people"--}}
+{{--                                           role="tab"--}}
+{{--                                           aria-controls="people" aria-selected="false">People</a>--}}
+{{--                                @endif--}}
+{{--                                @if($tab == EmbeddableSearchWidget::TAB_INVESTORS)--}}
+{{--                                        <a class="nav-link nes-investors-tab {{ $activeTab == $tab ? 'active' : '' }}" data-toggle="tab"--}}
+{{--                                           href=".nes-section-investors"--}}
+{{--                                           role="tab" aria-controls="investors" aria-selected="false">Investors</a>--}}
+{{--                                @endif--}}
+{{--                                @if($tab == EmbeddableSearchWidget::TAB_RESEARCH)--}}
+{{--                                        <a class="nav-link nes-research-tab {{ $activeTab == $tab ? 'active' : '' }}" data-toggle="tab" href=".nes-section-research"--}}
+{{--                                           role="tab" aria-controls="research" aria-selected="false">Research</a>--}}
+{{--                                @endif--}}
+{{--                                @if($tab == EmbeddableSearchWidget::TAB_CLINICAL_TRIALS)--}}
+{{--                                        <a class="nav-link nes-clinical-trials-tab {{ $activeTab == $tab ? 'active' : '' }}" data-toggle="tab"--}}
+{{--                                           href=".nes-section-clinical-trials" role="tab" aria-controls="clinical-trials"--}}
+{{--                                           aria-selected="false">Clinical Trials</a>--}}
+{{--                                @endif--}}
+{{--                                @if($tab == EmbeddableSearchWidget::TAB_EVENTS)--}}
+{{--                                        <a class="nav-link nes-events-tab {{ $activeTab == $tab ? 'active' : '' }}" data-toggle="tab" href=".nes-section-events"--}}
+{{--                                           role="tab"--}}
+{{--                                           aria-controls="events" aria-selected="false">Events</a>--}}
+{{--                                @endif--}}
+{{--                                @if($tab == EmbeddableSearchWidget::TAB_JOBS)--}}
+{{--                                        <a class="nav-link nes-jobs-tab {{ $activeTab == $tab ? 'active' : '' }}" data-toggle="tab" href=".nes-section-jobs"--}}
+{{--                                           role="tab"--}}
+{{--                                           aria-controls="jobs" aria-selected="false">Jobs</a>--}}
+{{--                                @endif--}}
+{{--                                @if($tab == EmbeddableSearchWidget::TAB_NEWS_ARTICLES)--}}
+{{--                                        <a class="nav-link nes-news-articles-tab {{ $activeTab == $tab ? 'active' : '' }}" data-toggle="tab" href=".nes-section-news-articles"--}}
+{{--                                           role="tab"--}}
+{{--                                           aria-controls="news-articles" aria-selected="false">News Articles</a>--}}
+{{--                                @endif--}}
+{{--                            @endforeach--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
                     <ul class="nav nav-tabs mb-2" role="tablist">
                         @foreach($widget->tabs as $tab)
                             @if($tab == EmbeddableSearchWidget::TAB_MAIN)
