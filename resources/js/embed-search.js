@@ -17,13 +17,13 @@ const searchModalId = '#neulyEmbedSearchModal';
             searchButton.on('click', function(e) {
                 e.preventDefault();
                 searchModal.fadeIn();
-                $('body').css('overflow', 'hidden');
+                $('body').css('overflow', 'hidden').css('height', '0');
             });
 
             searchModal.find('.nes-btn-close').on('click', function(e) {
                 e.preventDefault();
                 searchModal.fadeOut();
-                $('body').css('overflow', 'visible');
+                $('body').css('overflow', 'visible').css('height', 'auto');
             });
 
             searchModal.find('.nes-sidenav-open').on('click', function(e) {

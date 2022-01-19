@@ -31,6 +31,31 @@
     font-size: medium !important;
     z-index: 99999;
 
+    ul, ol {
+        margin: 0;
+        padding: 0;
+    }
+
+    select, textarea, input {
+        margin: 0;
+    }
+
+    button, button[type="submit"] {
+        color: #000;
+        border-color: transparent;
+        background-color: transparent;
+        margin: 0;
+        text-shadow: none;
+        box-shadow: none;
+        border-radius: 0;
+
+        :hover {
+            text-shadow: none;
+            box-shadow: none;
+            margin: 0;
+        }
+    }
+
     .modal-dialog {
         max-height: 100vh;
         height: 100vh;
