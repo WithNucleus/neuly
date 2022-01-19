@@ -11,6 +11,13 @@ const mix = require('laravel-mix');
  |
  */
 
+//disable creating LICENSE files when run in production mode
+mix.options({
+    terser: {
+        extractComments: false,
+    }
+});
+
 // Mix JavaScript
 mix
 	.js('resources/js/app.js', 'public/js')
