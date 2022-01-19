@@ -152,8 +152,6 @@ class Company extends Model implements EntityContract, EntityImageContract
 
         return $array;
     }
-    }
-    }
 
     /*
     |--------------------------------------------------------------------------
