@@ -187,33 +187,33 @@ const searchModalId = '#neulyEmbedSearchModal';
                         ]),
                         attribute: 'focus',
                     }),
-                    // instantsearch.widgets.refinementList({
-                    //     container: getElementBySelectorsArray([
-                    //         sectionSelectors.companies,
-                    //         filterSelectors.type
-                    //     ]),
-                    //     attribute: 'ownership'
-                    // }),
-                    // instantsearch.widgets.refinementList({
-                    //     container: getElementBySelectorsArray([
-                    //         sectionSelectors.companies,
-                    //         filterSelectors.countries
-                    //     ]),
-                    //     attribute: 'locations.country',
-                    //     showMore: false,
-                    //     searchable: true,
-                    //     searchablePlaceholder: 'e.g. United States',
-                    // }),
-                    // instantsearch.widgets.refinementList({
-                    //     container: getElementBySelectorsArray([
-                    //         sectionSelectors.companies,
-                    //         filterSelectors.locations
-                    //     ]),
-                    //     attribute: 'locations.name',
-                    //     showMore: false,
-                    //     searchable: true,
-                    //     searchablePlaceholder: 'e.g. New York',
-                    // }),
+                    instantsearch.widgets.refinementList({
+                        container: getElementBySelectorsArray([
+                            sectionSelectors.companies,
+                            filterSelectors.type
+                        ]),
+                        attribute: 'ownership'
+                    }),
+                    instantsearch.widgets.refinementList({
+                        container: getElementBySelectorsArray([
+                            sectionSelectors.companies,
+                            filterSelectors.countries
+                        ]),
+                        attribute: 'locations.country',
+                        showMore: false,
+                        searchable: true,
+                        searchablePlaceholder: 'e.g. United States',
+                    }),
+                    instantsearch.widgets.refinementList({
+                        container: getElementBySelectorsArray([
+                            sectionSelectors.companies,
+                            filterSelectors.locations
+                        ]),
+                        attribute: 'locations.name',
+                        showMore: false,
+                        searchable: true,
+                        searchablePlaceholder: 'e.g. New York',
+                    }),
                     // instantsearch.widgets.toggleRefinement({
                     //     container: getElementBySelectorsArray([
                     //         sectionSelectors.companies,
@@ -325,16 +325,16 @@ const searchModalId = '#neulyEmbedSearchModal';
                         ]),
                         attribute: 'focus',
                     }),
-                    // instantsearch.widgets.refinementList({
-                    //     container: getElementBySelectorsArray([
-                    //         sectionSelectors.people,
-                    //         filterSelectors.countries,
-                    //     ]),
-                    //     attribute: 'locations.country',
-                    //     showMore: false,
-                    //     searchable: true,
-                    //     searchablePlaceholder: 'e.g. United States',
-                    // }),
+                    instantsearch.widgets.refinementList({
+                        container: getElementBySelectorsArray([
+                            sectionSelectors.people,
+                            filterSelectors.countries,
+                        ]),
+                        attribute: 'locations.country',
+                        showMore: false,
+                        searchable: true,
+                        searchablePlaceholder: 'e.g. United States',
+                    }),
                 ]);
 
                 peopleSearch.start();
@@ -422,17 +422,16 @@ const searchModalId = '#neulyEmbedSearchModal';
                             link: ['page-link'],
                         },
                     }),
-
-                    instantsearch.widgets.toggleRefinement({
-                        container: getElementBySelectorsArray([
-                            sectionSelectors.investors,
-                            filterSelectors.hasJobs,
-                        ]),
-                        attribute: 'jobs',
-                        templates: {
-                            labelText: 'Now Hiring',
-                        },
-                    }),
+                    // instantsearch.widgets.toggleRefinement({
+                    //     container: getElementBySelectorsArray([
+                    //         sectionSelectors.investors,
+                    //         filterSelectors.hasJobs,
+                    //     ]),
+                    //     attribute: 'jobs',
+                    //     templates: {
+                    //         labelText: 'Now Hiring',
+                    //     },
+                    // }),
                 ]);
 
                 investorSearch.start();
