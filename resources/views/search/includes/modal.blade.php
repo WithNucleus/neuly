@@ -55,8 +55,8 @@
                                         </div>
                                     </div>
                                     <div class="sidebar-sticky collapse">
-                                        <div id="has-events"></div>
-                                        <div id="has-jobs" class="mb-3"></div>
+                                        <div id="has-events" style="display: none;"></div>
+                                        <div id="has-jobs" style="display: none;" class="mb-3"></div>
                                         <div class="h4">Type:</div>
                                         <div id="type" class="mb-3"></div>
                                         <div class="h4">Locations:</div>
@@ -140,7 +140,7 @@
                                         </div>
                                     </div>
                                     <div class="sidebar-sticky collapse">
-                                        <div id="has-jobs" class="mb-3"></div>
+                                        <div id="has-jobs" style="display: none;" class="mb-3"></div>
                                         <div class="h4">Type:</div>
                                         <div id="type" class="mb-3"></div>
                                         <div class="h4">Locations:</div>
