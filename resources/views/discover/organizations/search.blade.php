@@ -87,12 +87,10 @@
     </div>
     <script>
         const searchClient = algoliasearch('2WZKZJIBUG', '686437b222f70e8cdbbba3899ea1f93d');
-
         const search = instantsearch({
             indexName: 'companies',
             searchClient,
         });
-
         const renderStats = (renderOptions, isFirstRender) => {
             const { nbHits } = renderOptions;
 
@@ -128,11 +126,11 @@
                     item: `
                     <div class="card shadow-sm">
                         <div class="pt-4 text-center">
-                            <a href="https://neuly.com/organization/@{{ slug }}" class="text-decoration-none">
+                            <a href="https:/app./neuly.com/organization/@{{ slug }}" class="text-decoration-none">
                                 <div class="logo-is-contained" style="background-image: url('@{{ logo }}')" data-toggle="tooltip" data-placement="top" title="" data-original-title="@{{ name }}"></div>
                             </a>
                             <p class="my-3 lead">
-                                <a href="https://neuly.com/organization/@{{ slug }}" class="text-decoration-none">@{{ name }}</a>
+                                <a href="https://app.neuly.com/organization/@{{ slug }}" class="text-decoration-none">@{{ name }}</a>
                             </p>
                             <ul class="list-group list-group-flush text-left border-top">
                                 <li class="list-group-item">
@@ -192,7 +190,8 @@
 
             instantsearch.widgets.toggleRefinement({
                 container: '#events',
-                attribute: 'events',
+                attribute: 'hasEvents',
+                on: 1,
                 templates: {
                     labelText: 'Upcoming Events',
                 },
@@ -200,7 +199,8 @@
 
             instantsearch.widgets.toggleRefinement({
                 container: '#jobs',
-                attribute: 'jobs',
+                attribute: 'hasJobs',
+                on: 1,
                 templates: {
                     labelText: 'Now Hiring',
                 },
