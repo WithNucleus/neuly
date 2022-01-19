@@ -3,6 +3,7 @@
 use App\Http\Controllers\Dashboard\TeamController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ExternalScriptController;
 
 /*
 |--------------------------------------------------------------------------
@@ -350,6 +351,8 @@ Route::group([
     Route::get('/jobs', 'Index\JobController@embedIndex')->name('jobs.index');
     Route::get('/events', 'Index\EventController@embedIndex')->name('events.index');
 });
+
+Route::get('/js/external/embedSearch/template/{code}', [ExternalScriptController::class, 'getSearchModalTemplate'])->name('js.embedSearch.template');
 
 //SPECIAL ADMIN ROUTES
 require __DIR__.'/admin.php';
