@@ -1,6 +1,6 @@
 <a href="#" class="btn btn-default nes-sidenav-open">Filters</a>
 <div class="col-sm-3 col-xs-12 bg-light nes-sidenav nes-filter">
-    <a href="#" class="nes-sidenav-close visible-xs">&times;</a>
+    <a href="#" class="nes-sidenav-close">&times;</a>
     <div class="title clearfix">
         <div class="h3 border-bottom pb-2 filter-title">
             Filters
