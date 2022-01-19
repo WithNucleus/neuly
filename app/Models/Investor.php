@@ -89,20 +89,6 @@ class Investor extends Model implements EntityContract, EntityImageContract
         return array_combine(self::TYPE, self::TYPE);
     }
 
-    /**
-     * Get the indexable data array for the model.
-     *
-     * @return array
-     */
-    public function toSearchableArray()
-    {
-        $array = $this->toArray();
-
-        $array['hasJobs'] = ($this->jobs->count()) ? 1 : 0;
-
-        return $array;
-    }
-
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
