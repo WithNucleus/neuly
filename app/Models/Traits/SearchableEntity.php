@@ -2,7 +2,9 @@
 
 namespace App\Models\Traits;
 
+use App\Models\Company;
 use App\Models\Contracts\EntityImageContract;
+use App\Models\Investor;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Laravel\Scout\Searchable;
@@ -91,6 +93,15 @@ trait SearchableEntity {
          */
         if ($this instanceof EntityImageContract) {
             $array[self::$imageAttribute] = config('scout.image_url_prefix') . $this->entityImageUrl;
+        }
+
+        if ($this instanceof Company) {
+            $array['hasJobs'] = ($this->jobs->count()) ? 1 : 0;
+            $array['hasEvents'] = ($this->events->count()) ? 1 : 0;
+        }
+
+        if ($this instanceof Investor) {
+            $array['hasJobs'] = ($this->jobs->count()) ? 1 : 0;
         }
 
         /**
