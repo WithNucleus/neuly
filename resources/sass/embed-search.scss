@@ -29,6 +29,7 @@
     overflow: hidden;
     padding: 0 !important;
     font-size: medium !important;
+    z-index: 99999;
 
     .modal-dialog {
         max-height: 100vh;
@@ -58,6 +59,8 @@
                         opacity: 1;
                         text-shadow: none;
                         outline: none;
+                        font-size: large;
+                        padding: 1rem;
                     }
 
                     .navbar-brand img {
@@ -76,15 +79,34 @@
                     }
 
                     .nes-main-input {
+                        height: auto;
+                        margin: 0;
                         color: #fff;
                         position: relative;
                         vertical-align: top;
                         background-color: transparent;
+                        box-shadow: none;
+                        border-radius: 0.25rem;
+
+
+                        :hover {
+                            box-shadow: none;
+                        }
                     }
 
                     .nes-submit-button {
+                        margin: 0;
+                        vertical-align: top;
                         background-color: #6BBCA4BF;
+                        box-shadow: none;
+                        text-shadow: none;
+                        border-radius: 0.25rem;
+
+                        :hover {
+                            box-shadow: none;
+                        }
                     }
+
 
                     .nes-submit-button:hover {
                         background-color: #6BBCA4;
@@ -378,5 +400,11 @@
     .nes-sort-by {
         height: 32px;
         margin: 16px 0;
+    }
+}
+
+@media screen and (min-width: 576px) {
+    .nes-sidenav-close {
+        display: none;
     }
 }
