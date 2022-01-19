@@ -26,6 +26,8 @@ class DataFeed extends Model
         self::FEED_TYPE_RSS
     ];
 
+    const SOURCE_GOOGLE_ALERT = 'Google Alert';
+
     const SOURCE_CATEGORIES = [
         'Media Outlet',
         'News',
@@ -33,7 +35,7 @@ class DataFeed extends Model
         'Non-Profit',
         'Video',
         'Mindfulness',
-        'Google Alert',
+        self::SOURCE_GOOGLE_ALERT,
         'Podcast'
     ];
 
@@ -83,6 +85,11 @@ class DataFeed extends Model
     public function scopeActive($query)
     {
         $query->where('status', self::STATUS_ACTIVE);
+    }
+
+    public function scopeGoogleAlerts($query)
+    {
+        $query->where('source_category', self::SOURCE_GOOGLE_ALERT);
     }
 
     /*

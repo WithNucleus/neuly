@@ -84,6 +84,12 @@ class MediaItemCrudController extends CrudController
         ]);
 
         $this->crud->addColumn([
+            'name'    => 'date',
+            'label'   => 'Publish Date',
+            'type'    => 'date',
+        ]);
+
+        $this->crud->addColumn([
             'name'    => 'created_at',
             'label'   => 'Created',
             'type'    => 'date',

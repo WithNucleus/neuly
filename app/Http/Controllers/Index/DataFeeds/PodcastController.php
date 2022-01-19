@@ -8,6 +8,7 @@ use App\Models\DataFeed;
 use App\Models\Focus;
 use App\Models\MediaItem;
 use Illuminate\Database\Eloquent\Builder;
+use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class PodcastController extends Controller
@@ -20,7 +21,17 @@ class PodcastController extends Controller
     public function index()
     {
         $podcasts = QueryBuilder::for(DataFeed::podcasts()->active())
-            ->allowedSorts(['name'])
+            ->with([
+                'mediaItems' => function ($query) {
+                    $query->orderBy('date', 'DESC');
+                }
+            ])
+            ->withCount(['mediaItems'])
+            ->allowedIncludes(['mediaItems'])
+            ->allowedSorts([
+                'name',
+                AllowedSort::field('episodes', 'media_items_count'),
+            ])
             ->defaultSort('name')
             ->paginate(20)
             ->appends(request()->query());
@@ -34,11 +45,14 @@ class PodcastController extends Controller
 
     public function show($slug)
     {
-        $feed = DataFeed::where('slug', $slug)->with(['mediaItems' => function ($query) {
-            $query->podcasts();
-        }])->firstOrFail();
+        $feed = DataFeed::where('slug', $slug)->firstOrFail();
 
         $episodes = QueryBuilder::for(MediaItem::podcasts()->where('source_id', $feed->id))
+            ->allowedSorts([
+                'name',
+                'date',
+            ])
+            ->defaultSort('-date')
             ->paginate(20)
             ->appends(request()->query());
 
