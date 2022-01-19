@@ -8,6 +8,7 @@ use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Backpack\CRUD\app\Library\Widget;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 
 /**
@@ -158,20 +159,20 @@ class EmbeddableSearchWidgetCrudController extends CrudController
     private function getHelpBlockHtml()
     {
         return '
-<p>Place this code of the button which will open search window:</p>
+<p>1. Place this code of the button which will open search window:</p>
 <pre style="padding: 10px; background-color: lightgrey;">
 &lt;button id="nes-open-modal-btn" class="nes-open-modal-btn"&gt;Search&lt;/button&gt;
 </pre>
-<p>Paste this code to the end of the web page (after jQuery library which is required):</p>
+<p>2. Paste this code to the end of the web page (after jQuery library which is required):</p>
 <pre style="padding: 10px; background-color: lightgrey;">
 &lt;link href="' . asset('/css/external/embed-search.css') . '" rel="stylesheet" type="text/css"&gt;
 &lt;script src="'. asset('/js/external/embed-search.js') .'"&gt;&lt;/script&gt;
 &lt;script&gt;
-    $("#nes-open-modal-btn").neulyEmbedSearch("{{widget code}}");
+    $("#nes-open-modal-btn").neulyEmbedSearch("' . URL::to('/') . '","{{widget code}}");
 &lt;/script&gt;
 </pre>
-<p>Replace <code>{{widget code}}</code> with the "Code" value of the widget.</p>
-<p>You can use your own button and initialize <code>neulyEmbedSearch()</code> for it with jQuery selector.</p>
+<p>3. Replace <code>{{widget code}}</code> with the "Code" value of the widget.</p>
+<p>4. (optional) You can use your custom link/button and initialize <code>neulyEmbedSearch()</code> for it with jQuery selector.</p>
 ';
     }
 }

@@ -62,6 +62,17 @@
 
                     .navbar-brand img {
                         max-height: 40px;
+                        max-width: 100px;
+                    }
+
+                    @media screen and (max-width: 576px) {
+                        .close {
+                            font-size: x-large;
+                        }
+
+                        .navbar-brand img {
+                            max-width: 40px;
+                        }
                     }
 
                     .nes-main-input {
@@ -162,6 +173,49 @@
 
     .sidebar-sticky {
         overflow-y: auto;
+    }
+
+    .nes-sidenav-open {
+        font-size: medium;
+        margin: 1rem 1.5rem;
+        background-color: #6BBCA4;
+        display: none;
+    }
+
+    @media screen and (max-width: 576px) {
+        .nes-sidenav-open {
+            display: inline-block;
+        }
+
+        .nes-sidenav {
+            padding: 0;
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 9999;
+            top: 0;
+            left: 0;
+            overflow-x: hidden;
+            transition: 0.5s;
+
+            .title {
+                margin-top: 30px;
+                padding: 0 1rem;
+            }
+
+            .nes-sidenav-close {
+                position: absolute;
+                top: 0;
+                right: 10px;
+                font-size: 36px;
+                margin-left: 50px;
+                color: black;
+            }
+
+            .sidebar-sticky {
+                padding: 0 1rem;
+            }
+        }
     }
 
     //instantsearch custom styles
@@ -305,10 +359,19 @@
         }
     }
 
+
+
     .ais-Pagination {
         .ais-Pagination-list {
             display: flex;
             list-style: none;
+            justify-content: center;
+        }
+    }
+
+    @media screen and (max-width: 576px) {
+        .nes-pagination {
+            margin-bottom: 5rem;
         }
     }
 
