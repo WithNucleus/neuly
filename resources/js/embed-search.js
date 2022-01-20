@@ -214,26 +214,28 @@ const searchModalId = '#neulyEmbedSearchModal';
                         searchable: true,
                         searchablePlaceholder: 'e.g. New York',
                     }),
-                    // instantsearch.widgets.toggleRefinement({
-                    //     container: getElementBySelectorsArray([
-                    //         sectionSelectors.companies,
-                    //         filterSelectors.hasEvents
-                    //     ]),
-                    //     attribute: 'events',
-                    //     templates: {
-                    //         labelText: 'Upcoming Events',
-                    //     },
-                    // }),
-                    // instantsearch.widgets.toggleRefinement({
-                    //     container: getElementBySelectorsArray([
-                    //         sectionSelectors.companies,
-                    //         filterSelectors.hasJobs
-                    //     ]),
-                    //     attribute: 'jobs',
-                    //     templates: {
-                    //         labelText: 'Now Hiring',
-                    //     },
-                    // }),
+                    instantsearch.widgets.toggleRefinement({
+                        container: getElementBySelectorsArray([
+                            sectionSelectors.companies,
+                            filterSelectors.hasEvents
+                        ]),
+                        attribute: 'hasEvents',
+                        on: 1,
+                        templates: {
+                            labelText: 'Upcoming Events',
+                        },
+                    }),
+                    instantsearch.widgets.toggleRefinement({
+                        container: getElementBySelectorsArray([
+                            sectionSelectors.companies,
+                            filterSelectors.hasJobs
+                        ]),
+                        attribute: 'hasJobs',
+                        on: 1,
+                        templates: {
+                            labelText: 'Now Hiring',
+                        },
+                    }),
                 ]);
 
                 companySearch.start();
@@ -422,16 +424,17 @@ const searchModalId = '#neulyEmbedSearchModal';
                             link: ['page-link'],
                         },
                     }),
-                    // instantsearch.widgets.toggleRefinement({
-                    //     container: getElementBySelectorsArray([
-                    //         sectionSelectors.investors,
-                    //         filterSelectors.hasJobs,
-                    //     ]),
-                    //     attribute: 'jobs',
-                    //     templates: {
-                    //         labelText: 'Now Hiring',
-                    //     },
-                    // }),
+                    instantsearch.widgets.toggleRefinement({
+                        container: getElementBySelectorsArray([
+                            sectionSelectors.investors,
+                            filterSelectors.hasJobs,
+                        ]),
+                        attribute: 'hasJobs',
+                        on: 1,
+                        templates: {
+                            labelText: 'Now Hiring',
+                        },
+                    }),
                 ]);
 
                 investorSearch.start();
