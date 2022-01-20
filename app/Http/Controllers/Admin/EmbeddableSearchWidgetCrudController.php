@@ -119,6 +119,8 @@ class EmbeddableSearchWidgetCrudController extends CrudController
                 'type' => [],
                 'countries' => [],
                 'locations' => [],
+                'hasJobs' => [],
+                'hasEvents' => [],
             ],
             'people' => [
                 'focus' => [],
@@ -127,6 +129,7 @@ class EmbeddableSearchWidgetCrudController extends CrudController
             'investors' => [
                 'type' => [],
                 'countries' => [],
+                'hasJobs' => [],
             ],
             'research' => [
                 'focus' => [],
@@ -146,9 +149,9 @@ class EmbeddableSearchWidgetCrudController extends CrudController
                 'companies' => [],
             ],
             'jobs' => [
-                'type' => true,
-                'countries' => true,
-                'companies' => true,
+                'type' => [],
+                'countries' => [],
+                'companies' => [],
             ],
         ];
 

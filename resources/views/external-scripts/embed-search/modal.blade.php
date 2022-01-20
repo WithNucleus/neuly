@@ -14,13 +14,9 @@ use App\Models\EmbeddableSearchWidget;
                             <img src="{{ asset('images/nucleus-logo-white.png') }}" alt="Nucleus">
                         @endif
                     </span>
+
                     <div class="ml-3 mr-auto d-flex">
-                        <input class="nes-main-input form-control search-field" name="search"
-                               type="search" placeholder="Search..."
-                               aria-label="Search" autocomplete="off" spellcheck="false" dir="auto">
-                        <button class="btn nes-submit-button ml-2" type="submit"
-                                title="Search">&#128269
-                        </button>
+                        <div class="nes-autocomplete-container"></div>
                     </div>
                     <button type="button" class="close nes-btn-close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&#x2715</span></button>
@@ -107,16 +103,6 @@ use App\Models\EmbeddableSearchWidget;
                                                 'filters' => $widget->filters[EmbeddableSearchWidget::TAB_COMPANIES]
                                             ])
                                         @endif
-{{--                                        @include('external-scripts.embed-search.includes.filters', [--}}
-{{--                                            'filters' => [--}}
-{{--                                                'has-events' => true,--}}
-{{--                                                'has-jobs' => true,--}}
-{{--                                                'type' => true,--}}
-{{--                                                'countries' => true,--}}
-{{--                                                'locations' => true,--}}
-{{--                                                'focus' => true,--}}
-{{--                                            ]--}}
-{{--                                        ])--}}
                                         @include('external-scripts.embed-search.includes.data-section', ['title' => 'Organizations'])
                                     </div>
                                 </div>
@@ -130,12 +116,6 @@ use App\Models\EmbeddableSearchWidget;
                                                 'filters' => $widget->filters[EmbeddableSearchWidget::TAB_PEOPLE]
                                             ])
                                         @endif
-{{--                                        @include('external-scripts.embed-search.includes.filters', [--}}
-{{--                                            'filters' => [--}}
-{{--                                                'focus' => true,--}}
-{{--                                                'countries' => true,--}}
-{{--                                            ]--}}
-{{--                                        ])--}}
                                         @include('external-scripts.embed-search.includes.data-section', ['title' => 'People'])
                                     </div>
                                 </div>
@@ -149,13 +129,6 @@ use App\Models\EmbeddableSearchWidget;
                                                 'filters' => $widget->filters[EmbeddableSearchWidget::TAB_INVESTORS]
                                             ])
                                         @endif
-{{--                                        @include('external-scripts.embed-search.includes.filters', [--}}
-{{--                                            'filters' => [--}}
-{{--                                                'has-jobs' => true,--}}
-{{--                                                'type' => true,--}}
-{{--                                                'countries' => true,--}}
-{{--                                            ]--}}
-{{--                                        ])--}}
                                         @include('external-scripts.embed-search.includes.data-section', ['title' => 'Investors'])
                                     </div>
                                 </div>
@@ -169,13 +142,6 @@ use App\Models\EmbeddableSearchWidget;
                                                 'filters' => $widget->filters[EmbeddableSearchWidget::TAB_RESEARCH]
                                             ])
                                         @endif
-{{--                                        @include('external-scripts.embed-search.includes.filters', [--}}
-{{--                                            'filters' => [--}}
-{{--                                                'focus' => true,--}}
-{{--                                                'companies' => true,--}}
-{{--                                                'people' => true,--}}
-{{--                                            ]--}}
-{{--                                        ])--}}
                                         @include('external-scripts.embed-search.includes.data-section', ['title' => 'Research'])
                                     </div>
                                 </div>
@@ -190,15 +156,6 @@ use App\Models\EmbeddableSearchWidget;
                                                 'labels' => ['people' => 'Researches']
                                             ])
                                         @endif
-{{--                                        @include('external-scripts.embed-search.includes.filters', [--}}
-{{--                                            'filters' => [--}}
-{{--                                                'focus' => true,--}}
-{{--                                                'people' => true,--}}
-{{--                                                'companies' => true,--}}
-{{--                                                'status' => true,--}}
-{{--                                            ],--}}
-{{--                                            'labels' => ['people' => 'Researches']--}}
-{{--                                        ])--}}
                                         @include('external-scripts.embed-search.includes.data-section', ['title' => 'Clinical Trials'])
                                     </div>
                                 </div>
@@ -212,14 +169,6 @@ use App\Models\EmbeddableSearchWidget;
                                                 'filters' => $widget->filters[EmbeddableSearchWidget::TAB_EVENTS]
                                             ])
                                         @endif
-{{--                                        @include('external-scripts.embed-search.includes.filters', [--}}
-{{--                                            'filters' => [--}}
-{{--                                                'type' => true,--}}
-{{--                                                'countries' => true,--}}
-{{--                                                'focus' => true,--}}
-{{--                                                'companies' => true,--}}
-{{--                                            ]--}}
-{{--                                        ])--}}
                                         @include('external-scripts.embed-search.includes.data-section', ['title' => 'Events'])
                                     </div>
                                 </div>
@@ -233,14 +182,6 @@ use App\Models\EmbeddableSearchWidget;
                                                  'labels' => ['companies' => 'Owner']
                                             ])
                                         @endif
-{{--                                        @include('external-scripts.embed-search.includes.filters', [--}}
-{{--                                            'filters' => [--}}
-{{--                                                'type' => true,--}}
-{{--                                                'countries' => true,--}}
-{{--                                                'companies' => true,--}}
-{{--                                            ],--}}
-{{--                                            'labels' => ['companies' => 'Owner']--}}
-{{--                                        ])--}}
                                         @include('external-scripts.embed-search.includes.data-section', ['title' => 'Jobs'])
                                     </div>
                                 </div>
