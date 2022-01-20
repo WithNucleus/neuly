@@ -2,6 +2,8 @@ require('bootstrap/js/src/tab');
 require('bootstrap/js/src/dropdown');
 import algoliasearch from 'algoliasearch/lite';
 import instantsearch from 'instantsearch.js/dist/instantsearch.production.min';
+import { autocomplete } from '@algolia/autocomplete-js';
+import { createQuerySuggestionsPlugin } from '@algolia/autocomplete-plugin-query-suggestions';
 
 const searchModalId = '#neulyEmbedSearchModal';
 
@@ -37,6 +39,7 @@ const searchModalId = '#neulyEmbedSearchModal';
             });
 
             const searchClient = algoliasearch('2WZKZJIBUG', '686437b222f70e8cdbbba3899ea1f93d');
+            const instantSearchRouter = instantsearch.routers.history();
             const searchIndexes = {
                 companies: 'companies',
                 people: 'people',
@@ -121,6 +124,7 @@ const searchModalId = '#neulyEmbedSearchModal';
 
                 const companySearch = instantsearch({
                     indexName: searchIndexes.companies,
+                    routing: instantSearchRouter,
                     searchClient,
                 });
 
@@ -187,53 +191,55 @@ const searchModalId = '#neulyEmbedSearchModal';
                         ]),
                         attribute: 'focus',
                     }),
-                    // instantsearch.widgets.refinementList({
-                    //     container: getElementBySelectorsArray([
-                    //         sectionSelectors.companies,
-                    //         filterSelectors.type
-                    //     ]),
-                    //     attribute: 'ownership'
-                    // }),
-                    // instantsearch.widgets.refinementList({
-                    //     container: getElementBySelectorsArray([
-                    //         sectionSelectors.companies,
-                    //         filterSelectors.countries
-                    //     ]),
-                    //     attribute: 'locations.country',
-                    //     showMore: false,
-                    //     searchable: true,
-                    //     searchablePlaceholder: 'e.g. United States',
-                    // }),
-                    // instantsearch.widgets.refinementList({
-                    //     container: getElementBySelectorsArray([
-                    //         sectionSelectors.companies,
-                    //         filterSelectors.locations
-                    //     ]),
-                    //     attribute: 'locations.name',
-                    //     showMore: false,
-                    //     searchable: true,
-                    //     searchablePlaceholder: 'e.g. New York',
-                    // }),
-                    // instantsearch.widgets.toggleRefinement({
-                    //     container: getElementBySelectorsArray([
-                    //         sectionSelectors.companies,
-                    //         filterSelectors.hasEvents
-                    //     ]),
-                    //     attribute: 'events',
-                    //     templates: {
-                    //         labelText: 'Upcoming Events',
-                    //     },
-                    // }),
-                    // instantsearch.widgets.toggleRefinement({
-                    //     container: getElementBySelectorsArray([
-                    //         sectionSelectors.companies,
-                    //         filterSelectors.hasJobs
-                    //     ]),
-                    //     attribute: 'jobs',
-                    //     templates: {
-                    //         labelText: 'Now Hiring',
-                    //     },
-                    // }),
+                    instantsearch.widgets.refinementList({
+                        container: getElementBySelectorsArray([
+                            sectionSelectors.companies,
+                            filterSelectors.type
+                        ]),
+                        attribute: 'ownership'
+                    }),
+                    instantsearch.widgets.refinementList({
+                        container: getElementBySelectorsArray([
+                            sectionSelectors.companies,
+                            filterSelectors.countries
+                        ]),
+                        attribute: 'locations.country',
+                        showMore: false,
+                        searchable: true,
+                        searchablePlaceholder: 'e.g. United States',
+                    }),
+                    instantsearch.widgets.refinementList({
+                        container: getElementBySelectorsArray([
+                            sectionSelectors.companies,
+                            filterSelectors.locations
+                        ]),
+                        attribute: 'locations.name',
+                        showMore: false,
+                        searchable: true,
+                        searchablePlaceholder: 'e.g. New York',
+                    }),
+                    instantsearch.widgets.toggleRefinement({
+                        container: getElementBySelectorsArray([
+                            sectionSelectors.companies,
+                            filterSelectors.hasEvents
+                        ]),
+                        attribute: 'hasEvents',
+                        on: 1,
+                        templates: {
+                            labelText: 'Upcoming Events',
+                        },
+                    }),
+                    instantsearch.widgets.toggleRefinement({
+                        container: getElementBySelectorsArray([
+                            sectionSelectors.companies,
+                            filterSelectors.hasJobs
+                        ]),
+                        attribute: 'hasJobs',
+                        on: 1,
+                        templates: {
+                            labelText: 'Now Hiring',
+                        },
+                    }),
                 ]);
 
                 companySearch.start();
@@ -260,6 +266,7 @@ const searchModalId = '#neulyEmbedSearchModal';
 
                 const peopleSearch = instantsearch({
                     indexName: searchIndexes.people,
+                    routing: instantSearchRouter,
                     searchClient,
                 });
 
@@ -325,16 +332,16 @@ const searchModalId = '#neulyEmbedSearchModal';
                         ]),
                         attribute: 'focus',
                     }),
-                    // instantsearch.widgets.refinementList({
-                    //     container: getElementBySelectorsArray([
-                    //         sectionSelectors.people,
-                    //         filterSelectors.countries,
-                    //     ]),
-                    //     attribute: 'locations.country',
-                    //     showMore: false,
-                    //     searchable: true,
-                    //     searchablePlaceholder: 'e.g. United States',
-                    // }),
+                    instantsearch.widgets.refinementList({
+                        container: getElementBySelectorsArray([
+                            sectionSelectors.people,
+                            filterSelectors.countries,
+                        ]),
+                        attribute: 'locations.country',
+                        showMore: false,
+                        searchable: true,
+                        searchablePlaceholder: 'e.g. United States',
+                    }),
                 ]);
 
                 peopleSearch.start();
@@ -346,6 +353,7 @@ const searchModalId = '#neulyEmbedSearchModal';
             if (document.querySelector(sectionSelectors.investors) !== null) {
                 const investorSearch = instantsearch({
                     indexName: searchIndexes.investors,
+                    routing: instantSearchRouter,
                     searchClient,
                 });
 
@@ -422,13 +430,13 @@ const searchModalId = '#neulyEmbedSearchModal';
                             link: ['page-link'],
                         },
                     }),
-
                     instantsearch.widgets.toggleRefinement({
                         container: getElementBySelectorsArray([
                             sectionSelectors.investors,
                             filterSelectors.hasJobs,
                         ]),
-                        attribute: 'jobs',
+                        attribute: 'hasJobs',
+                        on: 1,
                         templates: {
                             labelText: 'Now Hiring',
                         },
@@ -444,6 +452,7 @@ const searchModalId = '#neulyEmbedSearchModal';
             if (document.querySelector(sectionSelectors.research) !== null) {
                 const researchSearch = instantsearch({
                     indexName: searchIndexes.research,
+                    routing: instantSearchRouter,
                     searchClient,
                 });
 
@@ -536,6 +545,7 @@ const searchModalId = '#neulyEmbedSearchModal';
             if (document.querySelector(sectionSelectors.clinicaltrials) !== null) {
                 const clinicalTrialsSearch = instantsearch({
                     indexName: searchIndexes.clinicaltrials,
+                    routing: instantSearchRouter,
                     searchClient,
                 });
 
@@ -636,6 +646,7 @@ const searchModalId = '#neulyEmbedSearchModal';
             if (document.querySelector(sectionSelectors.events) !== null) {
                 const eventsSearch = instantsearch({
                     indexName: searchIndexes.events,
+                    routing: instantSearchRouter,
                     searchClient,
                 });
 
@@ -738,6 +749,7 @@ const searchModalId = '#neulyEmbedSearchModal';
             if (document.querySelector(sectionSelectors.jobs) !== null) {
                 const jobsSearch = instantsearch({
                     indexName: searchIndexes.jobs,
+                    routing: instantSearchRouter,
                     searchClient,
                 });
 
@@ -825,6 +837,7 @@ const searchModalId = '#neulyEmbedSearchModal';
             if (document.querySelector(sectionSelectors.newsArticles) !== null) {
                 const newsArticlesSearch = instantsearch({
                     indexName: searchIndexes.newsArticles,
+                    routing: instantSearchRouter,
                     searchClient,
                 });
 
@@ -877,12 +890,82 @@ const searchModalId = '#neulyEmbedSearchModal';
                 searchInstances.push(newsArticlesSearch);
             }
 
-            $('.nes-submit-button').on('click', function(e) {
-                var query = $('.nes-main-input').val().trim();
+            function setInstantSearchUiState(indexUiState) {
+                searchInstances.forEach(function (search) {
+                    let indexName = search.indexName;
 
-                searchInstances.forEach(function (instance) {
-                    instance.helper.setQuery(query).search();
+                    search.setUiState(uiState => ({
+                        ...uiState,
+                        [indexName]: {
+                            ...uiState[indexName],
+                            // We reset the page when the search state changes.
+                            page: 1,
+                            ...indexUiState,
+                        },
+                    }));
                 });
+            }
+
+            //TODO check work of the uiState[searchIndexes.companies]
+            function getInstantSearchUiState() {
+                const uiState = instantSearchRouter.read()
+
+                return (uiState && uiState[searchIndexes.companies]) || {}
+            }
+
+            const searchPageState = getInstantSearchUiState();
+
+            const querySuggestionsPlugin = createQuerySuggestionsPlugin({
+                searchClient,
+                indexName: 'general_query_suggestions',
+                transformSource({ source }) {
+                    return {
+                        ...source,
+                        sourceId: 'querySuggestionsPlugin',
+                        onSelect({ setIsOpen, setQuery, item, event }) {
+                            setSearchQuery(item.name);
+                            setQuery(item.name);
+                        },
+                        templates: {
+                            item(params) {
+                                const { item } = params;
+                                return item.name;
+                            },
+                        },
+                    };
+                },
+            });
+
+            function setSearchQuery(query)
+            {
+                searchInstances.forEach(function (search) {
+                    search.helper.setQuery(query).search();
+                });
+            }
+
+            autocomplete({
+                container: '.nes-autocomplete-container',
+                placeholder: 'Search',
+                detachedMediaQuery: 'none',
+                plugins: [querySuggestionsPlugin],
+                openOnFocus: true,
+                initialState: {
+                    query: searchPageState.query || '',
+                },
+                onSubmit({ state }) {
+                    setInstantSearchUiState({ query: state.query });
+                    setSearchQuery(state.query);
+                },
+                onReset() {
+                    setInstantSearchUiState({ query: '' });
+                    setSearchQuery('');
+                },
+                onStateChange({ prevState, state }) {
+                    if (prevState.query !== state.query) {
+                        setInstantSearchUiState({ query: state.query });
+                        setSearchQuery(state.query);
+                    }
+                },
             });
         });
     };

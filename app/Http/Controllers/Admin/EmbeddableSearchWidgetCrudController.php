@@ -112,23 +112,48 @@ class EmbeddableSearchWidgetCrudController extends CrudController
         $request = $response->getRequest();
         $entry = $this->data['entry'];
 
-        //TODO remove example after added dynamic focuses
-//        $entry->filters = [
-//            'companies' => [
-//                'focus' => [
-//                    'prefilter' => [
-//                        'Psilocybin'
-//                    ]
-//                ]
-//            ],
-//            'people' => [
-//                'focus' => [
-//                    'prefilter' => [
-//                        'Psilocybin'
-//                    ]
-//                ]
-//            ],
-//        ];
+        //TODO remove example after added dynamic filters management
+        $entry->filters = [
+            'companies' => [
+                'focus' => [],
+                'type' => [],
+                'countries' => [],
+                'locations' => [],
+                'hasJobs' => [],
+                'hasEvents' => [],
+            ],
+            'people' => [
+                'focus' => [],
+                'countries' => [],
+            ],
+            'investors' => [
+                'type' => [],
+                'countries' => [],
+                'hasJobs' => [],
+            ],
+            'research' => [
+                'focus' => [],
+                'companies' => [],
+                'people' => [],
+            ],
+            'clinical_trials' => [
+                'focus' => [],
+                'people' => [],
+                'companies' => [],
+                'status' => [],
+            ],
+            'events' => [
+                'type' => [],
+                'countries' => [],
+                'focus' => [],
+                'companies' => [],
+            ],
+            'jobs' => [
+                'type' => [],
+                'countries' => [],
+                'companies' => [],
+            ],
+        ];
 
         $entry->save();
 

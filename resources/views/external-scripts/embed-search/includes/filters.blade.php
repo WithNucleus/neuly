@@ -1,6 +1,6 @@
 <a href="#" class="btn btn-default nes-sidenav-open">Filters</a>
 <div class="col-sm-3 col-xs-12 bg-light nes-sidenav nes-filter">
-    <a href="#" class="nes-sidenav-close visible-xs">&times;</a>
+    <a href="#" class="nes-sidenav-close">&times;</a>
     <div class="title clearfix">
         <div class="h3 border-bottom pb-2 filter-title">
             Filters
@@ -8,10 +8,10 @@
         </div>
     </div>
     <div class="sidebar-sticky">
-        @isset($filters['has-events'])
+        @isset($filters['hasEvents'])
             <div class="nes-filter-item nes-filter-has-events"></div>
         @endisset
-        @isset($filters['has-jobs'])
+        @isset($filters['hasJobs'])
             <div class="nes-filter-item nes-filter-has-jobs"></div>
         @endisset
         @isset($filters['type'])
