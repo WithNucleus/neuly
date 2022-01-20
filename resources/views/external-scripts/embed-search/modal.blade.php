@@ -14,13 +14,9 @@ use App\Models\EmbeddableSearchWidget;
                             <img src="{{ asset('images/nucleus-logo-white.png') }}" alt="Nucleus">
                         @endif
                     </span>
+
                     <div class="ml-3 mr-auto d-flex">
-                        <input class="nes-main-input form-control search-field" name="search"
-                               type="search" placeholder="Search..."
-                               aria-label="Search" autocomplete="off" spellcheck="false" dir="auto">
-                        <button class="btn nes-submit-button ml-2" type="submit"
-                                title="Search">&#128269
-                        </button>
+                        <div class="nes-autocomplete-container"></div>
                     </div>
                     <button type="button" class="close nes-btn-close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&#x2715</span></button>
