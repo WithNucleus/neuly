@@ -8,10 +8,10 @@
         </div>
     </div>
     <div class="sidebar-sticky">
-        @isset($filters['has-events'])
+        @isset($filters['hasEvents'])
             <div class="nes-filter-item nes-filter-has-events"></div>
         @endisset
-        @isset($filters['has-jobs'])
+        @isset($filters['hasJobs'])
             <div class="nes-filter-item nes-filter-has-jobs"></div>
         @endisset
         @isset($filters['type'])
