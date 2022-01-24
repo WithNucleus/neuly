@@ -4,10 +4,10 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "df525cf1169245c5f8ba39e78515e111",
+    "content-hash": "6f60b61766c9a4500043d86b90360846",
     "packages": [
         {
-            "name": "akaunting/firewall",
+            "name": "akaunting/laravel-firewall",
             "version": "1.3.4",
             "source": {
                 "type": "git",
@@ -71,7 +71,6 @@
                 "issues": "https://github.com/akaunting/laravel-firewall/issues",
                 "source": "https://github.com/akaunting/laravel-firewall/tree/1.3.4"
             },
-            "abandoned": "akaunting/laravel-firewall",
             "time": "2021-12-20T07:44:45+00:00"
         },
         {
