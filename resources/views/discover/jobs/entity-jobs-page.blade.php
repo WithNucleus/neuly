@@ -6,15 +6,18 @@
 
     @include('discover.includes.show-begin', ['full_width' => false])
 
-    <h1>Jobs at {{ $investor->name }}</h1>
+    <h1>Jobs at {{ $owner->name }}</h1>
 
     @isset($jobs)
         <div class="list-group list-group-flush">
             @forelse($jobs as $job)
                 <div class="list-group-item">
 
-                    <p class="lead-smaller mb-0">
+                    <p class="lead-smaller mb-0 d-flex align-items-center">
                         <a href="{{ route('discover.jobs.show', $job->slug) }}">{{ $job->job_title }}</a>
+                        @if ($job->status === App\Models\Job::STATUS_ARCHIVED)
+                            <span class="badge badge-secondary ml-3">Archived</span>
+                        @endif
                     </p>
 
                     <div>
