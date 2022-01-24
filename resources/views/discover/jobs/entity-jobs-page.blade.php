@@ -15,9 +15,6 @@
 
                     <p class="lead-smaller mb-0 d-flex align-items-center">
                         <a href="{{ route('discover.jobs.show', $job->slug) }}">{{ $job->job_title }}</a>
-                        @if ($job->status === App\Models\Job::STATUS_ARCHIVED)
-                            <span class="badge badge-secondary ml-3">Archived</span>
-                        @endif
                     </p>
 
                     <div>
@@ -50,7 +47,7 @@
 
                 </div>
             @empty
-                No jobs
+                There are currently no open jobs at {{ $owner->name }}
             @endforelse
         </div>
     @endisset
