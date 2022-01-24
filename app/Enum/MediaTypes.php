@@ -9,6 +9,7 @@ class MediaTypes {
     const MEDIA_TYPE_MIXED = 'Mixed';
     const MEDIA_TYPE_PODCAST = 'Podcast';
     const MEDIA_TYPE_BOOK = 'Book';
+    const MEDIA_TYPE_NEWS = 'News';
 
     const MEDIA_TYPES = [
         self::MEDIA_TYPE_ARTICLE,
@@ -16,6 +17,7 @@ class MediaTypes {
         self::MEDIA_TYPE_VIDEO,
         self::MEDIA_TYPE_MIXED,
         self::MEDIA_TYPE_PODCAST,
-        self::MEDIA_TYPE_BOOK
+        self::MEDIA_TYPE_BOOK,
+        self::MEDIA_TYPE_NEWS
     ];
 }

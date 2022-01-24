@@ -192,6 +192,17 @@
                     <i class='nav-icon la la-cog'></i> Import Settings
                 </a>
             </li>
+		</ul>
+	</li>
+
+    <li class="nav-item nav-dropdown">
+        <a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon la la-brain"></i> Data &amp; Media</a>
+        <ul class="nav-dropdown-items">
+            <li class='nav-item'>
+                <a class='nav-link' href='{{ route('admin.media-dashboard') }}'>
+                    <i class='nav-icon la la-list-alt'></i> Dashboard
+                </a>
+            </li>
             <li class='nav-item'>
                 <a class='nav-link' href='{{ backpack_url('datafeed') }}'>
                     <i class='nav-icon la la-rss'></i> Data Feeds
@@ -207,8 +218,8 @@
                     <i class='nav-icon la la-book-reader'></i> Courses
                 </a>
             </li>
-		</ul>
-	</li>
+        </ul>
+    </li>
 @endcan
 
 @can('manage listing requests')
