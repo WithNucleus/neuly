@@ -38,18 +38,19 @@ class SerpapiData implements ShouldQueue
         $serpapiData->company_id = $this->company->id;
 
         try {
-            $apiKey = config('services.serpapi.private_api_key');
-            $search = new \GoogleSearch($apiKey);
-            $query = [
-                'q' => $this->company->name,
-            ];
-            $result = $search->get_json($query);
-
-            if (isset($result->knowledge_graph)) {
-                $serpapiData->knowledge_graph = $result->knowledge_graph;
-            }
-
-            $serpapiData->save();
+            // TODO: GoogleSearch package does not support PHP 8 yet
+//            $apiKey = config('services.serpapi.private_api_key');
+//            $search = new \GoogleSearch($apiKey);
+//            $query = [
+//                'q' => $this->company->name,
+//            ];
+//            $result = $search->get_json($query);
+//
+//            if (isset($result->knowledge_graph)) {
+//                $serpapiData->knowledge_graph = $result->knowledge_graph;
+//            }
+//
+//            $serpapiData->save();
 
         } catch (\Exception $e) {
             Log::error("An error occurred while trying to get SerpApi data for company: '".$this->company->name."' . Error message: ".$e->getMessage());
