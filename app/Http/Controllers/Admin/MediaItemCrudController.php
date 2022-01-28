@@ -193,8 +193,4 @@ class MediaItemCrudController extends CrudController
     {
         $this->setupCreateOperation();
     }
-
-    public function dashboard() {
-        dump('hey!');
-    }
 }
