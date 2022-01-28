@@ -117,6 +117,6 @@ class InvestorController extends Controller
         $owner = Investor::where('slug', $slug)->firstOrFail();
         $jobs = Job::where('owner_id', $owner->id)->where('status', Job::STATUS_OPEN)->orderBy('posted_date', 'desc')->get();
 
-        return view('discover.jobs.entity-jobs-page', compact('owner', 'jobs'));
+        return view('discover.jobs.listing-by-owner', compact('owner', 'jobs'));
     }
 }
