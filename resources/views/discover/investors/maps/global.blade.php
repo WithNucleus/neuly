@@ -99,7 +99,7 @@
     <script type="text/javascript" src="{{ asset('assets/maps/world.js') }}"></script>
     <script>
         // Map
-        var countries = {!! json_encode($countriesByCode) !!}
+        var countries = {!! json_encode($countriesByCode) !!};
 
         var values = [];
 
@@ -148,4 +148,6 @@
             }
         });
     </script>
+
+    @include('discover.includes.limited-access-modal')
 @endsection

@@ -22,57 +22,14 @@ Route::group(['middleware' => 'firewall.all'], function () {
     Route::get('login/{provider}/callback', 'Auth\LoginController@handleProviderCallback');
 });
 
+//TODO seems this method is not used anymore, check and remove
 Route::get('/register/success', 'Auth\MessagesController@registerSuccess')->name('register.success');
-Route::get('/welcome', 'Auth\MessagesController@limitedAccess')->middleware('guest')->name('limitedAccess');
 
 Route::get('/invitation', 'InvitationController@show')->name('invitation.show');
 Route::post('/invitation', 'InvitationController@accept')->name('invitation.accept');
 
 Route::get('/', 'Content\HomeController@index')->name('index');
 Route::get('/about', 'Content\AboutController@index')->name('about');
-
-//Insights main page
-Route::group([
-    'middleware' => ['limitedAccess', 'verifiedIfAuthorized'],
-], function () {
-    Route::get('/insights', 'Index\InsightsController@index')->name('discover.insights');
-    Route::get('/insights/request', 'Index\InsightsController@request')->name('discover.insights.request');
-    Route::post('/insights/request', 'Index\InsightsController@saveRequest')->name('discover.insights.saveRequest');
-});
-
-//Insights
-Route::group([
-    'middleware' => ['limitedAccess', 'verifiedIfAuthorized'],
-    'prefix' => '/insights',
-    'namespace' => 'Insights',
-    'as' => 'insights.',
-], function () {
-    Route::get('/companies-by-type', 'CompaniesByTypeController@index')->name('companies-by-type');
-    Route::get('/top-ten-locations', 'TopTenLocationsController@index')->name('top-ten-locations');
-    Route::get('/companies-by-focus-drug', 'CompaniesByFocusDrug@index')->name('companies-by-focus-drug');
-    Route::get('/clinical-trial-tracker', 'ClinicalTrialPipelineController@show')->name('clinicaltrials.pipeline');
-    Route::get('/market-comparison', 'CompareMarketController@show')->name('compare-market');
-    Route::get('/jobs-by-focus', 'JobsByFocusController@index')->name('jobs-by-focus');
-    Route::get('/jobs-by-type', 'JobsByTypeController@index')->name('jobs-by-type');
-    Route::get('/collaborators', 'ClinicalTrialCollaboratorsListController@show')->name('collaborators.show');
-    Route::post('/collaborators/list', 'ClinicalTrialCollaboratorsListController@index')->name('collaborators');
-    Route::get('/most-interest', 'ClinicalTrialFocusListController@show')->name('most-interest.show');
-    Route::post('/most-interest/list', 'ClinicalTrialFocusListController@index')->name('most-interest');
-    Route::get('/research-authors', 'ResearchAuthorsController@index')->name('research-authors');
-    Route::get('/research-authors/widget', 'ResearchAuthorsController@widget')->name('research-authors.widget');
-    Route::get('/research-organizations', 'ResearchOrganizationsController@index')->name('research-organizations');
-    Route::get('/research-organizations/widget', 'ResearchOrganizationsController@widget')->name('research-organizations.widget');
-    Route::get('/research-by-focus', 'ResearchByFocus@index')->name('research-by-focus');
-    Route::get('/companies-by-focus-industry', 'CompaniesByFocusIndustry@index')->name('companies-by-focus-industry');
-    Route::get('/location-top-by-jobs', 'LocationTopByJobsController@index')->name('location-top-by-jobs');
-    Route::get('/clinical-trials/distribution/countries', 'ClinicalTrialDistributionController@show')->name('distribution.countries.show');
-    Route::get('/clinical-trials/distribution/countries/focus', 'ClinicalTrialDistributionController@showWithFocus')->name('distribution.countries.focus.show');
-    Route::get('/clinical-trials-historic', 'ClinicalTrialHistoric@index')->name('clinical-trials-historic');
-    Route::get('/investment-funds', 'InvestmentFundController@index')->name('investment-funds');
-    Route::get('/investment-funds/organization/{slug}', 'InvestmentFundController@organizationChart')->name('investment-funds.organization');
-    Route::get('/non-profits', 'NonProfitFocusController@chart')->name('nonprofits.focus-chart');
-    Route::get('/educational-organizations', 'EducationalOrganizationsMapController@map')->name('educational-organizations.map');
-});
 
 // Search Suggestions
 Route::group([
@@ -108,7 +65,7 @@ Route::get('/courses', 'Index\CourseController@index')->name('discover.courses')
 
 //Global group for registered and verified users only
 Route::group([
-    'middleware' => ['limitedAccess', 'verifiedIfAuthorized'],
+    'middleware' => ['verifiedIfAuthorized'],
 ], function () {
     Route::get('/psychedelic-index', 'Content\IndexController@index')->name('discover.index');
 
@@ -226,6 +183,49 @@ Route::group([
 
     Route::post('/search/clinicaltrials', 'index\SearchController@showClinicalTrialsResults')->name('search.clinicaltrials');
     Route::get('/search/clinicaltrials/{term}', 'Index\SearchController@showClinicalTrialsResults')->name('search.clinicaltrials.term');
+
+    //Insights main page
+    Route::group([
+        'prefix' => '/insights',
+        'as' => 'discover.',
+    ], function () {
+        Route::get('/', 'Index\InsightsController@index')->name('insights');
+        Route::get('/request', 'Index\InsightsController@request')->name('insights.request');
+        Route::post('/request', 'Index\InsightsController@saveRequest')->name('insights.saveRequest');
+    });
+
+    //Insights
+    Route::group([
+        'prefix' => '/insights',
+        'namespace' => 'Insights',
+        'as' => 'insights.',
+    ], function () {
+        Route::get('/companies-by-type', 'CompaniesByTypeController@index')->name('companies-by-type');
+        Route::get('/top-ten-locations', 'TopTenLocationsController@index')->name('top-ten-locations');
+        Route::get('/companies-by-focus-drug', 'CompaniesByFocusDrug@index')->name('companies-by-focus-drug');
+        Route::get('/clinical-trial-tracker', 'ClinicalTrialPipelineController@show')->name('clinicaltrials.pipeline');
+        Route::get('/market-comparison', 'CompareMarketController@show')->name('compare-market');
+        Route::get('/jobs-by-focus', 'JobsByFocusController@index')->name('jobs-by-focus');
+        Route::get('/jobs-by-type', 'JobsByTypeController@index')->name('jobs-by-type');
+        Route::get('/collaborators', 'ClinicalTrialCollaboratorsListController@show')->name('collaborators.show');
+        Route::post('/collaborators/list', 'ClinicalTrialCollaboratorsListController@index')->name('collaborators');
+        Route::get('/most-interest', 'ClinicalTrialFocusListController@show')->name('most-interest.show');
+        Route::post('/most-interest/list', 'ClinicalTrialFocusListController@index')->name('most-interest');
+        Route::get('/research-authors', 'ResearchAuthorsController@index')->name('research-authors');
+        Route::get('/research-authors/widget', 'ResearchAuthorsController@widget')->name('research-authors.widget');
+        Route::get('/research-organizations', 'ResearchOrganizationsController@index')->name('research-organizations');
+        Route::get('/research-organizations/widget', 'ResearchOrganizationsController@widget')->name('research-organizations.widget');
+        Route::get('/research-by-focus', 'ResearchByFocus@index')->name('research-by-focus');
+        Route::get('/companies-by-focus-industry', 'CompaniesByFocusIndustry@index')->name('companies-by-focus-industry');
+        Route::get('/location-top-by-jobs', 'LocationTopByJobsController@index')->name('location-top-by-jobs');
+        Route::get('/clinical-trials/distribution/countries', 'ClinicalTrialDistributionController@show')->name('distribution.countries.show');
+        Route::get('/clinical-trials/distribution/countries/focus', 'ClinicalTrialDistributionController@showWithFocus')->name('distribution.countries.focus.show');
+        Route::get('/clinical-trials-historic', 'ClinicalTrialHistoric@index')->name('clinical-trials-historic');
+        Route::get('/investment-funds', 'InvestmentFundController@index')->name('investment-funds');
+        Route::get('/investment-funds/organization/{slug}', 'InvestmentFundController@organizationChart')->name('investment-funds.organization');
+        Route::get('/non-profits', 'NonProfitFocusController@chart')->name('nonprofits.focus-chart');
+        Route::get('/educational-organizations', 'EducationalOrganizationsMapController@map')->name('educational-organizations.map');
+    });
 });
 
 // show entity routes with preview feature
@@ -244,7 +244,7 @@ Route::group(['middleware' => 'spamprotection'], function () {
 /* MEMBER DASHBOARD */
 
 Route::group([
-    'middleware' => ['limitedAccess', 'verifiedIfAuthorized'],
+    'middleware' => ['auth', 'verifiedIfAuthorized'],
 ], function () {
     Route::group([
         'prefix' => '/dashboard',

@@ -109,7 +109,7 @@
 </script>
 
 </head>
-<body class="@yield('body-class', '')">
+<body class="@yield('body-class', '') {{ auth()->check() === false ? 'unauthorized' : 'authorized' }}">
 <div id="app">
     @yield('content')
 </div>
