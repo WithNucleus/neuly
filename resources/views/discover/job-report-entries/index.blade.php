@@ -198,4 +198,6 @@
             });
         });
     </script>
+
+    @include('discover.includes.limited-access-modal')
 @endsection

@@ -11,7 +11,7 @@
     <div class="list-group list-group-flush">
         @forelse($company->events as $event)
             <div class="list-group-item">
-                
+
                     <p class="lead-smaller mb-0">
                        <a href="{{ route('discover.events.show', $event->slug) }}">{{ $event->name }}</a>
                     </p>
@@ -38,7 +38,7 @@
                             @endforeach
                         </div>
                     @endif
-                
+
             </div>
         @empty
             No events
@@ -46,5 +46,5 @@
         </div>
 
 	@include('discover.includes.show-end')
-
+    @include('discover.includes.limited-access-modal')
 @endsection

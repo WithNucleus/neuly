@@ -85,6 +85,8 @@
         </div>
 
     </div>
+    @include('discover.includes.limited-access-modal')
+
     <script>
         const searchClient = algoliasearch('2WZKZJIBUG', '686437b222f70e8cdbbba3899ea1f93d');
         const search = instantsearch({
