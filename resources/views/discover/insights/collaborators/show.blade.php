@@ -107,5 +107,6 @@
         </main>
     </div>
 
+    @include('discover.includes.limited-access-modal')
 @endsection
 

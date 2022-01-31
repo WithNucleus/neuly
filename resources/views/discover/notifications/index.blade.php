@@ -82,4 +82,5 @@
 
     @include('footers.mini')
 
+    @include('discover.includes.limited-access-modal')
 @endsection

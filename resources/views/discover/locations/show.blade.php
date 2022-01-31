@@ -21,5 +21,6 @@
         @include('discover.locations.data')
 
     @include('discover.includes.show-end')
+    @include('discover.includes.limited-access-modal')
 
 @endsection

@@ -11,9 +11,4 @@ class MessagesController extends Controller
     {
         return view('auth.thanks');
     }
-
-    public function limitedAccess()
-    {
-        return view('auth.limited-access');
-    }
 }
