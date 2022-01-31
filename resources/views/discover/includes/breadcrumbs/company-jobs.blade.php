@@ -1,7 +1,7 @@
 @include('navbars.breadcrumb', [
     'items' => [
         'Organizations' => route('discover.organizations'),
-        $company->name  => route('discover.organizations.show', $company->slug),
+        $owner->name  => route('discover.organizations.show', $owner->slug),
         'Jobs' => false
-    ]           
+    ]
 ])

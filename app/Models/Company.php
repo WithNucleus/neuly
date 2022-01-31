@@ -253,7 +253,10 @@ class Company extends Model implements EntityContract, EntityImageContract
      * @return \Illuminate\Database\Query\Builder
      */
     public function scopeHasJobs($query) {
-        return $query->whereHas('jobs');
+        return $query->whereHas('jobs', function($query)
+        {
+            $query->open();
+        });
     }
 
     /**

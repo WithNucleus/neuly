@@ -161,11 +161,10 @@ class CompanyController extends Controller
      */
     public function jobs($slug) {
 
-        $company = Company::where('slug', $slug)->firstOrFail();
-        $jobs = Job::where('owner_id', $company->id)->orderBy('posted_date', 'desc')->get();
-        $entity = 'organizations';
+        $owner = Company::where('slug', $slug)->firstOrFail();
+        $jobs = Job::where('owner_id', $owner->id)->where('status', Job::STATUS_OPEN)->orderBy('posted_date', 'desc')->get();
 
-        return view('discover.organizations.jobs', compact('company', 'jobs', 'entity'));
+        return view('discover.jobs.listing-by-owner', compact('owner', 'jobs'));
     }
 
     /**
