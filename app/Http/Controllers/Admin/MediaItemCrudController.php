@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\MediaItemRequest;
+use App\Models\DataFeed;
+use App\Models\MediaItem;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -95,7 +97,30 @@ class MediaItemCrudController extends CrudController
             'type'    => 'date',
         ]);
 
-//        CRUD::setFromDb(); // columns
+        $this->crud->addColumn([
+            'name'    => 'icon_url',
+            'label'   => 'Icon URL',
+            'type'    => 'image',
+        ]);
+
+        $this->crud->addFilter([
+            'name'  => 'media_type',
+            'type'  => 'dropdown',
+            'label' => 'Media Type'
+        ], MediaItem::getMediaTypes(), function($value) {
+            $this->crud->addClause('where', 'media_type', $value);
+        });
+
+        $this->crud->addFilter([
+            'name'  => 'status',
+            'type'  => 'dropdown',
+            'label' => 'Status'
+        ], MediaItem::getStatuses(), function($value) {
+            $this->crud->addClause('where', 'status', $value);
+        });
+
+        $this->crud->addButtonFromView('line', 'media-items.approve', 'media-items.approve', 'beginning');
+
     }
 
     protected function setupShowOperation()
@@ -128,15 +153,18 @@ class MediaItemCrudController extends CrudController
         $this->crud->addField([
             'name'    => 'status',
             'label'   => 'Status',
-            'type'    => 'text',
+            'type'    => 'select2_from_array',
+            'options' => MediaItem::getStatuses(),
+            'allows_null'  => false,
         ]);
 
         $this->crud->addField([
             'name'    => 'media_type',
             'label'   => 'Media Type',
-            'type'    => 'text',
+            'type'    => 'select2_from_array',
+            'options' => DataFeed::getMediaTypes(),
+            'allows_null'  => false,
         ]);
-
 
         $this->crud->addField([
             'label'     => "Focus",

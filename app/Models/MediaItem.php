@@ -17,10 +17,12 @@ class MediaItem extends Model
     */
     const STATUS_PUBLIC = 'Public';
     const STATUS_PENDING = 'Pending';
+    const STATUS_DECLINED = 'Declined';
 
     const STATUSES = [
         self::STATUS_PUBLIC,
-        self::STATUS_PENDING
+        self::STATUS_PENDING,
+        self::STATUS_DECLINED
     ];
 
     protected $table = 'media_items';
@@ -57,6 +59,11 @@ class MediaItem extends Model
     | SCOPES
     |--------------------------------------------------------------------------
     */
+    public function scopePending($query)
+    {
+        $query->where('status', self::STATUS_PENDING);
+    }
+
     public function scopePublic($query)
     {
         $query->where('status', self::STATUS_PUBLIC);
@@ -67,6 +74,10 @@ class MediaItem extends Model
     | ACCESSORS
     |--------------------------------------------------------------------------
     */
+    public function getFormattedContentAttribute(): string
+    {
+        return nl2br(e($this->content));
+    }
 
     /*
     |--------------------------------------------------------------------------
