@@ -14,10 +14,10 @@ class Autosuggest extends Aggregator
      */
     protected $models = [
         \App\Models\Company::class,
-        \App\Models\People::class,
+        \App\Models\Person::class,
         \App\Models\Investor::class,
         \App\Models\Research::class,
-        \App\Models\Cliicaltrial::class,
+        \App\Models\Clinicaltrial::class,
         \App\Models\Event::class,
         \App\Models\Job::class
     ];
