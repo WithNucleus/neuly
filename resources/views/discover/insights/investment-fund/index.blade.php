@@ -55,6 +55,8 @@
 
         </main>
     </div>
+
+    @include('discover.includes.limited-access-modal')
 @endsection
 
 @section('after_scripts')

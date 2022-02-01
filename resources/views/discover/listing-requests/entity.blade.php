@@ -172,4 +172,6 @@ use App\Helpers\Entity\FieldsMapping;
             }
         }
     </script>
+
+    @include('discover.includes.limited-access-modal')
 @endsection
