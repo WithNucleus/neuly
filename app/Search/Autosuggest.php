@@ -6,7 +6,7 @@ use Algolia\ScoutExtended\Searchable\Aggregator;
 
 class Autosuggest extends Aggregator
 {
-    private const INDEX_NAME = 'general_query_suggestions';
+    private const INDEX = 'general_query_suggestions';
     /**
      * The names of the models that should be aggregated.
      *
@@ -24,6 +24,6 @@ class Autosuggest extends Aggregator
 
     public function searchableAs(): string
     {
-        return config('scout.prefix').$this->INDEX_NAME;
+        return config('scout.prefix').self::INDEX;
     }
 }

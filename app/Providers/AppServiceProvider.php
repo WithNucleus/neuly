@@ -5,7 +5,7 @@ namespace App\Providers;
 use App\Models\InsightRequest;
 use App\Models\JobReportEntry;
 use App\Models\ListingRequest;
-use App\Search\AutoSuggest;
+use App\Search\Autosuggest;
 use Illuminate\Support\ServiceProvider;
 use Spatie\QueryBuilder\QueryBuilderRequest;
 use Illuminate\Pagination\Paginator;
@@ -31,7 +31,7 @@ class AppServiceProvider extends ServiceProvider
     {
         QueryBuilderRequest::setArrayValueDelimiter('|');
 
-        AutoSuggest::bootSearchable();
+        Autosuggest::bootSearchable();
 
         view()->composer('backpack::inc.sidebar_content', function($view) {
             $view->with([
