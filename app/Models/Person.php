@@ -35,9 +35,12 @@ class Person extends Model implements EntityContract, EntityImageContract
     |--------------------------------------------------------------------------
     */
 
+    const VISIBILITY_PUBLIC = 'public';
+    const VISIBILITY_PENDING = 'pending';
+
     const VISIBILITY_TYPES = [
-        'public',
-        'pending'
+        self::VISIBILITY_PUBLIC,
+        self::VISIBILITY_PENDING
     ];
 
     protected $table   = 'people';
@@ -303,6 +306,13 @@ class Person extends Model implements EntityContract, EntityImageContract
             'bio' => [
                 'type' => FieldsMapping::TYPE_TEXT,
             ],
+            'visibility' => [
+                'type'  => FieldsMapping::TYPE_ENUM,
+                'values' => self::getVisibilityValues(),
+            ],
+            'visibility_code' => [
+                'type'  => FieldsMapping::TYPE_STRING,
+            ],
             //relations
             'locations' => [
                 'type' => FieldsMapping::TYPE_RELATION,
@@ -351,7 +361,7 @@ class Person extends Model implements EntityContract, EntityImageContract
     public static function getListingRequestMapping()
     {
         $mapping = self::getFieldsMapping();
-        $skipFields = ['slug', 'secondary_email', 'companies', 'investors'];
+        $skipFields = ['slug', 'secondary_email', 'companies', 'investors', 'visibility', 'visibility_code'];
 
         foreach ($skipFields as $field) {
             unset($mapping[$field]);
