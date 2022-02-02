@@ -32,10 +32,7 @@ class PagePreviewHelper
             return $result;
         }
 
-        if (! $request->user()) {
-            $result['canView'] = false;
-            $result['redirectToRoute'] = 'limitedAccess';
-        } elseif ($request->user() instanceof MustVerifyEmail && $request->user()->hasVerifiedEmail() === false) {
+        if ($request->user() instanceof MustVerifyEmail && $request->user()->hasVerifiedEmail() === false) {
             $result['canView'] = false;
             $result['redirectToRoute'] = 'verification.notice';
         }
@@ -69,10 +66,7 @@ class PagePreviewHelper
             }
         }
 
-        if (! $request->user()) {
-            $result['canView'] = false;
-            $result['redirectToRoute'] = 'limitedAccess';
-        } elseif ($request->user() instanceof MustVerifyEmail && $request->user()->hasVerifiedEmail() === false) {
+        if ($request->user() instanceof MustVerifyEmail && $request->user()->hasVerifiedEmail() === false) {
             $result['canView'] = false;
             $result['redirectToRoute'] = 'verification.notice';
         }
