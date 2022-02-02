@@ -49,9 +49,12 @@ class Company extends Model implements EntityContract, EntityImageContract
         'Partner',
     ];
 
+    const VISIBILITY_PUBLIC = 'public';
+    const VISIBILITY_PENDING = 'pending';
+
     const VISIBILITY_TYPES = [
-        'public',
-        'pending'
+        self::VISIBILITY_PUBLIC,
+        self::VISIBILITY_PENDING
     ];
 
     protected $table = 'companies';
@@ -409,6 +412,13 @@ class Company extends Model implements EntityContract, EntityImageContract
             'logo'                 => [
                 'type' => FieldsMapping::TYPE_IMAGE,
             ],
+            'visibility' => [
+                'type'  => FieldsMapping::TYPE_ENUM,
+                'values' => self::getVisibilityValues(),
+            ],
+            'visibility_code' => [
+                'type'  => FieldsMapping::TYPE_STRING,
+            ],
             //relations
             'focus'                => [
                 'type'          => FieldsMapping::TYPE_RELATION,
@@ -464,7 +474,7 @@ class Company extends Model implements EntityContract, EntityImageContract
     public static function getListingRequestMapping()
     {
         $mapping = self::getFieldsMapping();
-        $skipFields = ['slug', 'notes', 'jobs', 'people', 'valuations'];
+        $skipFields = ['slug', 'notes', 'jobs', 'people', 'valuations', 'visibility', 'visibility_code'];
 
         foreach ($skipFields as $field) {
             unset($mapping[$field]);

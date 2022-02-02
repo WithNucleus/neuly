@@ -295,6 +295,7 @@ class CompanyCrudController extends CrudController
             'type'    => 'radio',
             'label'   => 'Visibility',
             'options' => Company::getVisibilityValues(),
+            'default' => Company::VISIBILITY_PUBLIC,
             'inline'  => true,
         ]);
         $this->crud->addField([

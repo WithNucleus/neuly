@@ -340,6 +340,7 @@ class PersonCrudController extends CrudController
             'type'    => 'radio',
             'label'   => 'Visibility',
             'options' => Person::getVisibilityValues(),
+            'default' => Person::VISIBILITY_PUBLIC,
             'inline'  => true,
         ]);
         $this->crud->addField([
