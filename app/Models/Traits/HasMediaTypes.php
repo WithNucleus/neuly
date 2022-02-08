@@ -41,6 +41,11 @@ trait HasMediaTypes {
         $query->where('media_type', MediaTypes::MEDIA_TYPE_MIXED);
     }
 
+    public function scopePatentFilings($query)
+    {
+        $query->where('media_type', MediaTypes::MEDIA_TYPE_PATENT_FILING);
+    }
+
     public function scopePodcasts($query)
     {
         $query->where('media_type', MediaTypes::MEDIA_TYPE_PODCAST);

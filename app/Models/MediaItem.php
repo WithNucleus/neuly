@@ -49,6 +49,16 @@ class MediaItem extends Model
         return $this->belongsToMany(Focus::class, 'focus_media_item', 'media_item_id', 'focus_id');
     }
 
+    public function companies(): \Illuminate\Database\Eloquent\Relations\MorphToMany
+    {
+        return $this->morphedByMany(Company::class, 'entity' , 'media_item_relationships')->withTimestamps();
+    }
+
+    public function people(): \Illuminate\Database\Eloquent\Relations\MorphToMany
+    {
+        return $this->morphedByMany(Person::class, 'entity' , 'media_item_relationships')->withTimestamps();
+    }
+
     public function source(): \Illuminate\Database\Eloquent\Relations\MorphTo
     {
         return $this->morphTo();
