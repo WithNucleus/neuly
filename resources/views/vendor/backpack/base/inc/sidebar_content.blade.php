@@ -218,6 +218,11 @@
                     <i class='nav-icon la la-book-reader'></i> Courses
                 </a>
             </li>
+            <li class='nav-item'>
+                <a class='nav-link' href='{{ backpack_url('patent') }}'>
+                    <i class='nav-icon la la-lightbulb'></i> Patents
+                </a>
+            </li>
         </ul>
     </li>
 @endcan

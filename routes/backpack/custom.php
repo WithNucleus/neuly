@@ -115,4 +115,5 @@ Route::group([
         });
 
     });
+    Route::crud('patent', 'PatentCrudController');
 }); // this should be the absolute last line of this file

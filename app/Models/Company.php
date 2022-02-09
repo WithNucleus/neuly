@@ -245,6 +245,16 @@ class Company extends Model implements EntityContract, EntityImageContract
         return $this->hasOne(CompanySerpapiData::class);
     }
 
+    public function patents(): \Illuminate\Database\Eloquent\Relations\MorphToMany
+    {
+        return $this->morphToMany(Patent::class, 'entity' , 'patent_relationships')->withTimestamps();
+    }
+
+    public function mediaItems(): \Illuminate\Database\Eloquent\Relations\MorphToMany
+    {
+        return $this->morphToMany(MediaItem::class, 'entity' , 'media_item_relationships')->withTimestamps();
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES

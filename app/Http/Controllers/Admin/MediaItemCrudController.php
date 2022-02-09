@@ -119,8 +119,6 @@ class MediaItemCrudController extends CrudController
             $this->crud->addClause('where', 'status', $value);
         });
 
-        $this->crud->addButtonFromView('line', 'media-items.approve', 'media-items.approve', 'beginning');
-
     }
 
     protected function setupShowOperation()

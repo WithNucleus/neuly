@@ -87,6 +87,11 @@ class Focus extends Model implements EntityContract
         return $this->belongsToMany('App\Models\NewsArticle', 'focus_news_article', 'focus_id', 'news_article_id')->withTimestamps();
     }
 
+    public function patents(): \Illuminate\Database\Eloquent\Relations\MorphToMany
+    {
+        return $this->morphToMany(Patent::class, 'entity' , 'patent_relationships')->withTimestamps();
+    }
+
     public function people()
     {
         return $this->belongsToMany(Person::class, 'focus_person', 'focus_id', 'person_id');

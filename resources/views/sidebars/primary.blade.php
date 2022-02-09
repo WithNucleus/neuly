@@ -122,6 +122,14 @@
             @if(Route::is('discover.courses'))
                 @include('sidebars.courses')
             @endif
+
+            @if(Route::is('discover.patents') OR Route::is('discover.patents.tracker'))
+                @include('sidebars.patents')
+            @endif
+
+            @if(Route::is('discover.patents.filings'))
+                @include('sidebars.data-feeds.patent-filings')
+            @endif
         </div>
     </div>
 </nav>
