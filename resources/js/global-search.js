@@ -5,10 +5,43 @@ $('.global-search-trigger').on('click', function(e) {
 });
 
 $('#searchModal .btn-close').on('click', function(e) {
-    console.log('close modal');
     e.preventDefault();
     $('#searchModal').hide();
     $('#searchModal').removeClass('show');
+});
+
+$(function() {
+    const search = window.location.search;
+    const params = new URL(location.href).searchParams;
+    const options = ['companies', 'people', 'investors', 'research', 'clinicaltrials', 'events', 'jobs'];
+    var tab = search.split('%5B')[0].replace('?','');
+
+
+    if(options.indexOf(tab) != -1 && $('.global-search-button ')) {
+        $('#searchModal').show();
+        $('#searchModal').addClass('show');
+
+        switch (tab) {
+            case 'people':
+                $('#people-tab').trigger('click');
+                break;
+            case 'investors':
+                $('#investors-tab').trigger('click');
+                break;
+            case 'research':
+                $('#research-tab').trigger('click');
+                break;
+            case 'clinicaltrials':
+                $('#clinical-trials-tab').trigger('click');
+                break;
+            case 'events':
+                $('#events-tab').trigger('click');
+                break;
+            case'jobs':
+                $('#jobs-tab').trigger('click');
+                break;
+        }
+    }
 });
 
 

@@ -23,9 +23,9 @@
  * Date: 2020-05-04T22:49Z
  */
 
-/*! InstantSearch.js 4.35.0 | © Algolia, Inc. and contributors; MIT License | https://github.com/algolia/instantsearch.js */
+/*! InstantSearch.js 4.37.2 | © Algolia, Inc. and contributors; MIT License | https://github.com/algolia/instantsearch.js */
 
-/*! algoliasearch-lite.umd.js | 4.11.0 | © Algolia, inc. | https://github.com/algolia/algoliasearch-client-javascript */
+/*! algoliasearch-lite.umd.js | 4.12.0 | © Algolia, inc. | https://github.com/algolia/algoliasearch-client-javascript */
 
 /**!
  * @fileOverview Kickass library to create and place poppers near their reference elements.
