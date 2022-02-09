@@ -256,5 +256,5 @@
             background-color: #FBE9E7;
         }
     </style>
-
+    @include('discover.includes.limited-access-modal')
 @endsection
