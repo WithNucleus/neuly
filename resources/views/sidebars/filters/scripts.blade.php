@@ -60,8 +60,9 @@
             'age',
             'gender',
             'year',
-            'education_credits'
         ];
+
+        $('#filterSidebar input').prop('disabled', true);
 
         allowedFilters.forEach(function (filterName) {
             let filters = getFilterValuesByName(filterName);
@@ -89,6 +90,7 @@
         }
 
         // Redirect
+
         document.location.href = url;
     }
 
