@@ -125,6 +125,12 @@
     const { createQuerySuggestionsPlugin } = window['@algolia/autocomplete-plugin-query-suggestions'];
 </script>
 
+<div class="loading-indicator">
+    <div class="spinner-border text-light" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+
 <script type="text/javascript" src="{{ mix('js/app.js') }}"></script>
 
 @if(Route::is('index') OR Route::is('home'))
