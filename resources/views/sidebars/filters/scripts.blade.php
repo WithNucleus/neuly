@@ -62,6 +62,8 @@
             'year',
         ];
 
+        $('#filterSidebar input').prop('disabled', true);
+        $('.loading-indicator').css('display', 'flex');
         allowedFilters.forEach(function (filterName) {
             let filters = getFilterValuesByName(filterName);
 
@@ -88,6 +90,7 @@
         }
 
         // Redirect
+
         document.location.href = url;
     }
 
