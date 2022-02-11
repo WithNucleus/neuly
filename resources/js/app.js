@@ -272,4 +272,5 @@ $(document).ready(function() {
 require('./bootstrap');
 require('./notifications');
 require('./insights');
+require('./limited-access-modal');
 import Cookies from 'js-cookie';

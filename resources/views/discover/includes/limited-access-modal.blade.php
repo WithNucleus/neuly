@@ -20,16 +20,3 @@
         </div>
     </div>
 </div>
-
-@section('after_scripts')
-    <script>
-        $(function() {
-            if ($('body').hasClass('unauthorized')) {
-                $('#limitedAccessModal').modal({backdrop: 'static', keyboard: false}).show();
-                $('body').css('overflow', 'hidden');
-            }
-        });
-    </script>
-@endsection
-
-
