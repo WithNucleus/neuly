@@ -20,9 +20,12 @@
             </li>
             @can('import')
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('admin.import.company.serpapi.index') }}">
-                        <span>Import Details</span>
-                    </a>
+{{--                    <a class="nav-link" href="{{ route('admin.import.company.serpapi.index') }}">--}}
+{{--                        <span>Import Details</span>--}}
+{{--                    </a>--}}
+                    <span class="nav-link">
+                        <span>Import Details <span class="badge">disabled</span></span>
+                    </span>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('admin.import.company.serpapi-data.index') }}">

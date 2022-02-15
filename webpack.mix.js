@@ -23,6 +23,7 @@ mix
 	.js('resources/js/app.js', 'public/js')
 	.js('resources/js/discovertabs.js', 'public/js')
 	.js('resources/js/formValidation.js', 'public/js')
+    .js('resources/js/appDetailModal.js', 'public/js')
     .js('resources/js/home-hero.js', 'public/js')
     .js('resources/js/nav-tiles.js', 'public/js')
     .js('resources/js/embed-search.js', 'public/js/external');
