@@ -13,12 +13,22 @@
     <div class="row mt-4">
 
         <div class="col-12 mb-4 d-flex align-items-center">
-            <div class="d-flex align-items-center">
+            <div class="d-flex align-items-center mr-5">
                 <label for="filter-media-type" class="font-weight-bold text-nowrap mr-2 mb-0">Media Type</label>
                 <select name="filter-media-type" id="filter-media-type" class="form-control">
                     <option value="All">All</option>
                     @foreach(\App\Models\DataFeed::getMediaTypes() as $mediaType)
                         <option value="{{ $mediaType }}">{{ $mediaType }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="d-flex align-items-center">
+                <label for="filter-source" class="font-weight-bold text-nowrap mr-2 mb-0">Source</label>
+                <select name="filter-source" id="filter-source" class="form-control">
+                    <option value="All">All</option>
+                    @foreach($sources as $source)
+                        <option value="{{ $source }}">{{ $source }}</option>
                     @endforeach
                 </select>
             </div>
@@ -34,8 +44,11 @@
         </div>
 
         @forelse ($mediaItems as $item)
-            <div id="item-{{ $item->id }}" class="col-12 mb-4">
+            <div id="item-{{ $item->id }}" class="item-container col-12 mb-4 position-relative">
                 <div class="item-content card shadow-sm p-4">
+                    <div class="hovering-buttons hovering-buttons-{{ $item->id }}">
+                        @include('admin.data-feeds.media-item-action-buttons', ['item' => $item])
+                    </div>
                     <h3 class="h5 mb-3">
                         <a href="{{ $item->url }}" target="_blank" rel="noopener noreferrer">
                             {{ $item->name }}
@@ -66,27 +79,6 @@
                             View Details
                         </a>
                     </div>
-                    <div class="d-flex align-items-center flex-wrap mt-3">
-
-                        <div class="d-flex align-items-center mr-5">
-                            <button class="approve-item btn btn-success mr-2 text-nowrap"
-                                    data-url="{{ route('admin.media-dashboard.update', $item->id) }}"
-                                    data-type="#media-item-{{ $item->id }}"
-                                    data-parent="#item-{{ $item->id }}"
-                            >Approve as</button>
-                            <label for="media-item-{{ $item->id }}" class="sr-only">Approve as</label>
-                            <select id="media-item-{{ $item->id }}" class="form-control">
-                                @foreach (\App\Enum\MediaTypes::MEDIA_TYPES as $mediaType)
-                                    <option value="{{ $mediaType }}" @if ($mediaType === $item->media_type) selected @endif>{{ $mediaType }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <button class="btn btn-warning mr-4 decline-item" data-parent="#item-{{ $item->id }}" data-url="{{ route('admin.media-dashboard.update', $item->id) }}">
-                            Decline
-                        </button>
-
-                    </div>
                 </div>
             </div>
         @empty
@@ -112,9 +104,64 @@
             max-width: 100%;
             height: auto;
         }
+
+        .hovering-buttons {
+            margin-bottom: 1rem;
+        }
+
+        @media (min-width: 1300px) {
+            .hovering-buttons {
+                top: 0;
+                position: absolute;
+            }
+
+            .hovering-buttons .action-buttons-container {
+                flex-direction: column;
+                align-items: flex-start !important;
+                margin-top: 0 !important;
+                padding: 1rem;
+            }
+
+            .hovering-buttons .action-buttons-container .approve-item-container {
+                margin-bottom: 2rem;
+            }
+        }
+
+        @media (min-width: 1400px) {
+            .item-content,
+            .js-ajax-response {
+                max-width: 820px;
+            }
+        }
+
+        .form-control {
+            width: auto;
+        }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.1/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.1/ScrollTrigger.min.js"></script>
     <script>
         $(document).ready(function () {
+
+            gsap.registerPlugin(ScrollTrigger);
+
+            $(window).on("resize", function () {
+                $('.hovering-buttons').css('left', $('.item-content').outerWidth() + 'px');
+            }).resize();
+
+            @foreach ($mediaItems as $item)
+                ScrollTrigger.matchMedia({
+                    "(min-width: 1300px)": function() {
+                        ScrollTrigger.create({
+                            trigger: "#item-{{ $item->id }}",
+                            start: "top top",
+                            end: "bottom 150px",
+                            pin: ".hovering-buttons-{{ $item->id }}",
+                            pinSpacing: false,
+                        });
+                    },
+                });
+            @endforeach
 
             $.ajaxSetup({
                 headers: {
@@ -185,7 +232,21 @@
                 } else {
                     window.location.href = "{{ route('admin.media-dashboard') }}" + "?filter[media_type]=" + mediaType;
                 }
-            })
+            });
+
+            let filterSource = "{{ $filter['source'] ?? "All" }}";
+
+            $('#filter-source').val(filterSource);
+
+            $('#filter-source').on('change', function() {
+                let source = $(this).val();
+
+                if (source === 'All') {
+                    window.location.href = "{{ route('admin.media-dashboard') }}";
+                } else {
+                    window.location.href = "{{ route('admin.media-dashboard') }}" + "?filter[source]=" + source;
+                }
+            });
         });
     </script>
 @endsection

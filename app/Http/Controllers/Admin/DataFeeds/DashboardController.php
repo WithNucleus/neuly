@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Admin\DataFeeds;
 
 use App\Http\Controllers\Controller;
+use App\Models\DataFeed;
 use App\Models\MediaItem;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
+use Illuminate\Database\Eloquent\Builder;
 
 class DashboardController extends Controller
 {
@@ -17,7 +20,8 @@ class DashboardController extends Controller
             ->pending()
             ->allowedFilters([
                 'name',
-                'media_type'
+                'media_type',
+                AllowedFilter::partial('source', 'source.name'),
             ])
             ->allowedSorts([
                 'name',
@@ -28,7 +32,11 @@ class DashboardController extends Controller
             ->paginate()
             ->appends(request()->query());
 
-        return view('admin.data-feeds.dashboard', compact('mediaItems', 'filter'));
+        $sources = DataFeed::whereHas('mediaItems', function (Builder $query) {
+            $query->where('status', MediaItem::STATUS_PENDING);
+        })->orderBy('name')->pluck('name')->toArray();
+
+        return view('admin.data-feeds.dashboard', compact('mediaItems', 'filter', 'sources'));
     }
 
     public function update($id, Request $request): \Illuminate\Http\JsonResponse
