@@ -17,22 +17,20 @@
                 <label for="filter-media-type" class="font-weight-bold text-nowrap mr-2 mb-0">Media Type</label>
                 <select name="filter-media-type" id="filter-media-type" class="form-control">
                     <option value="All">All</option>
-                    @foreach(\App\Models\DataFeed::getMediaTypes() as $mediaType)
+                    @foreach($mediaTypes as $mediaType)
                         <option value="{{ $mediaType }}">{{ $mediaType }}</option>
                     @endforeach
                 </select>
             </div>
-
             <div class="d-flex align-items-center mr-5">
                 <label for="filter-source" class="font-weight-bold text-nowrap mr-2 mb-0">Source</label>
                 <select name="filter-source" id="filter-source" class="form-control">
                     <option value="All">All</option>
-                    @foreach($sources as $source)
-                        <option value="{{ $source }}">{{ $source }}</option>
+                    @foreach($sources as $name => $count)
+                        <option value="{{ $name }}">{{ $name }} ({{ $count }})</option>
                     @endforeach
                 </select>
             </div>
-
             <div class="d-flex align-items-center mr-5">
                 <label for="filter-pagination" class="font-weight-bold text-nowrap mr-2 mb-0">Items per page</label>
                 <select name="filter-pagination" id="filter-pagination" class="form-control">
@@ -43,8 +41,12 @@
                 </select>
             </div>
 
-            <div>
+            <div class="mr-5">
                 <a href="{{ route('admin.media-dashboard') }}" class="btn btn-light btn-sm">Remove All Filters</a>
+            </div>
+
+            <div>
+                <button class="approve-all-items btn btn-info btn-sm">Approve All Visible Items</button>
             </div>
         </div>
 
@@ -58,7 +60,7 @@
         </div>
 
         @forelse ($mediaItems as $item)
-            <div id="item-{{ $item->id }}" class="item-container col-12 mb-4 position-relative">
+            <div id="item-{{ $item->id }}" class="item-container col-12 mb-4 position-relative" data-item="{{ $item->id }}" data-url="{{ route('admin.media-dashboard.update', $item->id) }}">
                 <div class="item-content card shadow-sm p-4">
                     <div class="hovering-buttons hovering-buttons-{{ $item->id }}">
                         @include('admin.data-feeds.media-item-action-buttons', ['item' => $item])
@@ -108,10 +110,11 @@
 @endsection
 
 @section('after_scripts')
+
     <style>
         .item-content,
         .js-ajax-response {
-            max-width: 820px;
+            max-width: 760px;
         }
 
         .item-content img {
@@ -151,12 +154,12 @@
         .form-control {
             width: auto;
         }
+
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.1/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.1/ScrollTrigger.min.js"></script>
     <script>
         $(document).ready(function () {
-
             gsap.registerPlugin(ScrollTrigger);
 
             $(window).on("resize", function () {
@@ -205,7 +208,7 @@
                     }
 
                     $('html, body').animate({scrollTop: $(parent).offset().top -100 });
-                    $(parent).slideUp();
+                    $(parent).slideUp("normal", function() { $(parent).remove(); } );
                 });
             });
 
@@ -226,8 +229,36 @@
                     }
 
                     $('html, body').animate({scrollTop: $(parent).offset().top -100 });
-                    $(parent).slideUp();
+                    $(parent).slideUp("normal", function() { $(parent).remove(); } );
                 });
+            });
+
+            $('.approve-all-items').on('click', function() {
+
+                let approveAll = confirm('Are you sure you want to approve everything on this page?');
+
+                if (approveAll === true) {
+
+                    $('.item-container').each(function() {
+
+                        let actionUrl = $(this).data('url');
+                        let itemContent = $(this).children('.item-content');
+
+                        $.post(actionUrl, {
+                            status: "{{ \App\Models\MediaItem::STATUS_PUBLIC }}",
+                        }, function (response) {
+
+                            itemContent.text(response.message);
+
+                            if (response.status === 'success') {
+                                itemContent.addClass('text-success');
+                            } else {
+                                itemContent.addClass('text-danger');
+                            }
+                        });
+                    });
+                }
+
             });
 
             $('button.close').on('click', function() {
@@ -268,17 +299,17 @@
 
             $('#filter-pagination').on('change', function() {
 
-                let url = "{{ route('admin.media-dashboard') }}";
+                let url = "{{ route('admin.media-dashboard') }}?pagination=" + $(this).val();
 
                 if (filterSource !== 'All') {
-                    url += "?filter[source]=" + filterSource;
+                    url += "&filter[source]=" + filterSource;
                 }
 
                 if (filterMediaType !== 'All') {
-                    url += "?filter[media_type]=" + filterMediaType;
+                    url += "&filter[media_type]=" + filterMediaType;
                 }
 
-                window.location.href = url + "&pagination=" + $(this).val();
+                window.location.href = url;
             });
         });
     </script>

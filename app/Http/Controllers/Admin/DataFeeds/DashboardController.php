@@ -33,11 +33,19 @@ class DashboardController extends Controller
             ->paginate($pagination)
             ->appends(request()->query());
 
-        $sources = DataFeed::whereHas('mediaItems', function (Builder $query) {
+        $dataFeedQuery = DataFeed::whereHas('mediaItems', function (Builder $query) {
             $query->where('status', MediaItem::STATUS_PENDING);
-        })->orderBy('name')->pluck('name')->toArray();
+        })->withCount([
+            'mediaItems' => function($query) {
+                $query->where('status', MediaItem::STATUS_PENDING);
+            }
+        ]);
 
-        return view('admin.data-feeds.dashboard', compact('mediaItems', 'filter', 'sources', 'pagination'));
+        $sources = $dataFeedQuery->orderBy('name')->pluck('media_items_count', 'name')->toArray();
+
+        $mediaTypes = $dataFeedQuery->orderBy('name')->pluck('media_type')->unique()->toArray();
+
+        return view('admin.data-feeds.dashboard', compact('mediaItems', 'filter', 'pagination', 'sources', 'mediaTypes'));
     }
 
     public function update($id, Request $request): \Illuminate\Http\JsonResponse
