@@ -58,15 +58,15 @@ class DataFeedCrudController extends CrudController
         ]);
 
         $this->crud->addColumn([
-            'name'  => 'feed_type',
-            'label' => 'Feed Type',
+            'name'  => 'source_category',
+            'label' => 'Source Category',
             'type'  => 'text'
         ]);
 
         $this->crud->addColumn([
-            'name'  => 'source_category',
-            'label' => 'Source Category',
-            'type'  => 'text'
+            'name'  => 'auto_approval',
+            'label' => 'Auto Approval',
+            'type'  => 'boolean'
         ]);
 
         $this->crud->addColumn([
@@ -90,11 +90,41 @@ class DataFeedCrudController extends CrudController
 
         $this->crud->addButtonFromView('line', 'datafeed.get-feed', 'datafeed.get-feed', 'beginning');
 
-        /**
-         * Columns can be defined using the fluent syntax or array syntax:
-         * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
-         */
+        $this->crud->addFilter([
+            'name'  => 'media_type',
+            'type'  => 'select2_multiple',
+            'label' => 'Media Type'
+        ], function() {
+            return DataFeed::getMediaTypes();
+        }, function($values) {
+            $this->crud->addClause('whereIn', 'media_type', json_decode($values));
+        });
+
+        $this->crud->addFilter([
+            'name'  => 'source_category',
+            'type'  => 'select2_multiple',
+            'label' => 'Source Category'
+        ], function() {
+            return DataFeed::getSourceCategories();
+        }, function($values) {
+            $this->crud->addClause('whereIn', 'source_category', json_decode($values));
+        });
+
+        $this->crud->addFilter([
+            'type'  => 'simple',
+            'name'  => 'active',
+            'label' => 'Active'
+        ], false, function() {
+            $this->crud->addClause('active');
+        });
+
+        $this->crud->addFilter([
+            'type'  => 'simple',
+            'name'  => 'auto_approval',
+            'label' => 'Auto Approval'
+        ], false, function() {
+            $this->crud->addClause('autoApproval');
+        });
     }
 
     protected function setupShowOperation()
@@ -171,7 +201,11 @@ class DataFeedCrudController extends CrudController
             'type'  => 'textarea'
         ]);
 
-//        CRUD::setFromDb(); // fields
+        $this->crud->addField([
+            'name'    => 'auto_approval',
+            'type'    => 'boolean',
+            'label'   => 'Auto Approval',
+        ]);
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:

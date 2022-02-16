@@ -15,6 +15,7 @@ class DashboardController extends Controller
     public function index(Request $request) {
 
         $filter = $request->query('filter');
+        $pagination = $request->query('pagination') ?? 25;
 
         $mediaItems = QueryBuilder::for(MediaItem::class)
             ->pending()
@@ -29,14 +30,14 @@ class DashboardController extends Controller
                 'media_type'
             ])
             ->defaultSort('-date')
-            ->paginate()
+            ->paginate($pagination)
             ->appends(request()->query());
 
         $sources = DataFeed::whereHas('mediaItems', function (Builder $query) {
             $query->where('status', MediaItem::STATUS_PENDING);
         })->orderBy('name')->pluck('name')->toArray();
 
-        return view('admin.data-feeds.dashboard', compact('mediaItems', 'filter', 'sources'));
+        return view('admin.data-feeds.dashboard', compact('mediaItems', 'filter', 'sources', 'pagination'));
     }
 
     public function update($id, Request $request): \Illuminate\Http\JsonResponse

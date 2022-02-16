@@ -23,7 +23,7 @@
                 </select>
             </div>
 
-            <div class="d-flex align-items-center">
+            <div class="d-flex align-items-center mr-5">
                 <label for="filter-source" class="font-weight-bold text-nowrap mr-2 mb-0">Source</label>
                 <select name="filter-source" id="filter-source" class="form-control">
                     <option value="All">All</option>
@@ -31,6 +31,20 @@
                         <option value="{{ $source }}">{{ $source }}</option>
                     @endforeach
                 </select>
+            </div>
+
+            <div class="d-flex align-items-center mr-5">
+                <label for="filter-pagination" class="font-weight-bold text-nowrap mr-2 mb-0">Items per page</label>
+                <select name="filter-pagination" id="filter-pagination" class="form-control">
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </div>
+
+            <div>
+                <a href="{{ route('admin.media-dashboard') }}" class="btn btn-light btn-sm">Remove All Filters</a>
             </div>
         </div>
 
@@ -230,7 +244,7 @@
                 if (mediaType === 'All') {
                     window.location.href = "{{ route('admin.media-dashboard') }}";
                 } else {
-                    window.location.href = "{{ route('admin.media-dashboard') }}" + "?filter[media_type]=" + mediaType;
+                    window.location.href = "{{ route('admin.media-dashboard') }}" + "?filter[media_type]=" + mediaType + "&pagination=" + filterPagination;
                 }
             });
 
@@ -244,8 +258,27 @@
                 if (source === 'All') {
                     window.location.href = "{{ route('admin.media-dashboard') }}";
                 } else {
-                    window.location.href = "{{ route('admin.media-dashboard') }}" + "?filter[source]=" + source;
+                    window.location.href = "{{ route('admin.media-dashboard') }}" + "?filter[source]=" + source + "&pagination=" + filterPagination;
                 }
+            });
+
+            let filterPagination = "{{ $pagination }}";
+
+            $('#filter-pagination').val(filterPagination);
+
+            $('#filter-pagination').on('change', function() {
+
+                let url = "{{ route('admin.media-dashboard') }}";
+
+                if (filterSource !== 'All') {
+                    url += "?filter[source]=" + filterSource;
+                }
+
+                if (filterMediaType !== 'All') {
+                    url += "?filter[media_type]=" + filterMediaType;
+                }
+
+                window.location.href = url + "&pagination=" + $(this).val();
             });
         });
     </script>
