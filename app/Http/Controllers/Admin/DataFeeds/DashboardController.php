@@ -22,7 +22,7 @@ class DashboardController extends Controller
             ->allowedFilters([
                 'name',
                 'media_type',
-                AllowedFilter::partial('source', 'source.name'),
+                AllowedFilter::exact('source', 'source.name'),
             ])
             ->allowedSorts([
                 'name',
