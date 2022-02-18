@@ -57,11 +57,6 @@ class DataFeed extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
-    public static function getAutoApprovalOptions(): array
-    {
-        return self::AUTO_APPROVAL_VALUES;
-    }
-
     public static function getFeedTypes(): array
     {
         return array_combine(self::FEED_TYPES, self::FEED_TYPES);

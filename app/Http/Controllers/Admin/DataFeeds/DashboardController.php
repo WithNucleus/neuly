@@ -41,9 +41,9 @@ class DashboardController extends Controller
             }
         ]);
 
-        $sources = $dataFeedQuery->orderBy('name')->pluck('media_items_count', 'name')->toArray();
-
-        $mediaTypes = $dataFeedQuery->orderBy('name')->pluck('media_type')->unique()->toArray();
+        $dataFeeds = $dataFeedQuery->orderBy('name')->get();
+        $sources = $dataFeeds->pluck('media_items_count', 'name')->toArray();
+        $mediaTypes = $dataFeeds->pluck('media_type')->unique()->toArray();
 
         return view('admin.data-feeds.dashboard', compact('mediaItems', 'filter', 'pagination', 'sources', 'mediaTypes'));
     }
