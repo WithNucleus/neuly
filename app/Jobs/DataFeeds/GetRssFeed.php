@@ -82,10 +82,12 @@ class GetRssFeed implements ShouldQueue
                         'media_type' => $mediaType
                     ];
 
+                    if ($dataFeed->auto_approval === 1) {
+                        $attributes['status'] = MediaItem::STATUS_PUBLIC;
+                    }
+
                     MediaItem::create($attributes);
 
-                } else {
-                    Log::info('Media Item exists - skipping import' . "\n" . $url);
                 }
 
             } catch (Throwable $exception) {

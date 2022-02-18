@@ -47,6 +47,11 @@ class DataFeed extends Model
         self::STATUS_INACTIVE,
     ];
 
+    const AUTO_APPROVAL_VALUES = [
+        'No',
+        'Yes'
+    ];
+
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS
@@ -85,6 +90,11 @@ class DataFeed extends Model
     public function scopeActive($query)
     {
         $query->where('status', self::STATUS_ACTIVE);
+    }
+
+    public function scopeAutoApproval($query)
+    {
+        $query->where('auto_approval', true);
     }
 
     public function scopeGoogleAlerts($query)

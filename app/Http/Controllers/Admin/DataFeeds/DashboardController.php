@@ -3,21 +3,26 @@
 namespace App\Http\Controllers\Admin\DataFeeds;
 
 use App\Http\Controllers\Controller;
+use App\Models\DataFeed;
 use App\Models\MediaItem;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
+use Illuminate\Database\Eloquent\Builder;
 
 class DashboardController extends Controller
 {
     public function index(Request $request) {
 
         $filter = $request->query('filter');
+        $pagination = $request->query('pagination') ?? 25;
 
         $mediaItems = QueryBuilder::for(MediaItem::class)
             ->pending()
             ->allowedFilters([
                 'name',
-                'media_type'
+                'media_type',
+                AllowedFilter::exact('source', 'source.name'),
             ])
             ->allowedSorts([
                 'name',
@@ -25,10 +30,22 @@ class DashboardController extends Controller
                 'media_type'
             ])
             ->defaultSort('-date')
-            ->paginate()
+            ->paginate($pagination)
             ->appends(request()->query());
 
-        return view('admin.data-feeds.dashboard', compact('mediaItems', 'filter'));
+        $dataFeedQuery = DataFeed::whereHas('mediaItems', function (Builder $query) {
+            $query->where('status', MediaItem::STATUS_PENDING);
+        })->withCount([
+            'mediaItems' => function($query) {
+                $query->where('status', MediaItem::STATUS_PENDING);
+            }
+        ]);
+
+        $dataFeeds = $dataFeedQuery->orderBy('name')->get();
+        $sources = $dataFeeds->pluck('media_items_count', 'name')->toArray();
+        $mediaTypes = $dataFeeds->pluck('media_type')->unique()->toArray();
+
+        return view('admin.data-feeds.dashboard', compact('mediaItems', 'filter', 'pagination', 'sources', 'mediaTypes'));
     }
 
     public function update($id, Request $request): \Illuminate\Http\JsonResponse
