@@ -73,7 +73,7 @@
 
                         <a class="dropdown-item" href="{{ route('user.settings') }}" title="Settings">Settings</a>
                         <a class="dropdown-item" href="{{ route('user.person.index') }}" title="Person">Person Listing</a>
-
+                        <a class="dropdown-item" href="{{ route('user.search.templates.index') }}" title="Search Templates">Search Templates</a>
                         @can('admin login')
                             <a href="/admin" class="dropdown-item">Admin</a>
                         @endcan

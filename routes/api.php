@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\EventsController;
 use App\Http\Controllers\Api\JobsController;
 use App\Http\Controllers\Api\SearchController;
+use App\Http\Controllers\Index\SearchTemplateController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/api/entities/list/{alias}', 'EntityDataController@getEntitiesListByAlias')->name('api.entities.list.byAlias');
 
 Route::post('/feedback', 'FeedbackController@apiStore')->name('feedback.api.store');
-
+Route::post('/search/templates', [SearchTemplateController::class, 'apiStore'])->name('search.templates.api.store');
 Route::group([
     'middleware' => ['api.auth:api'],
     'as' => 'api.',
