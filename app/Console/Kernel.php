@@ -87,6 +87,14 @@ class Kernel extends ConsoleKernel
             ->onSuccess(function() {
                 Log::info('Data Feeds - Google Alerts failed successful');
             });
+
+        // Clean Backups - Weekly
+        $schedule
+            ->command('php artisan backup:clean')
+            ->weeklyOn(1, '8:00')
+            ->onFailure(function() {
+                Log::critical('Clean backups failed');
+            });
     }
 
     /**
