@@ -1,4 +1,5 @@
-<div class="search-modal modal fade" id="searchModal" tabindex="-1" role="dialog" aria-modal="true">
+@auth
+    <div class="search-modal modal fade" id="searchModal" tabindex="-1" role="dialog" aria-modal="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-body">
@@ -11,6 +12,8 @@
                         <input id="search-input" class="form-control global-search-input search-field" name="search" type="search" placeholder="Discover organizations, people, research..." aria-label="Search" autocomplete="off" spellcheck="false" dir="auto" style="position: relative; vertical-align: top; background-color: transparent;">
                         <button id="search-button" class="btn global-search-button ml-2 my-2 my-sm-0" type="submit" title="Search Neuly"><i class="far fa-search"></i></button>
                     </div>-->
+                    <button type="button" class="btn btn-primary choose-search-template">choose template</button>
+                    <button type="button" class="btn btn-primary open-search-template">Save as template</button>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                 </nav>
                 <div class="content">
@@ -355,6 +358,35 @@
                     </div>
                 </div>
             </div>
+            <div class="template-save-modal">
+                <div class="modal-content">
+                    <div class="alert alert-danger" id="error-messages" role="alert"></div>
+                    <div class="container">
+                        <div class="row">
+                            <label class="col-md-2 control-label">Name:</label>
+                            <input id="template-name" type="text" class="form-control" name="name" />
+                        </div>
+                        <div class="row">
+                            <label class="col-md-2 control-label">Description:</label>
+                            <textarea id="template-description" class="form-control" name="description"></textarea>
+                        </div>
+                        <div class="actions row">
+                            <input type="hidden" name="user_id" id="user_id" value="{{ auth()->user()->id }}" />
+                            <button class="btn btn-primary save-search-template">save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="template-choose-modal">
+                <div class="modal-content">
+                    <ul>
+                    @foreach(\App\User::find(Auth::id())->searchTemplates as $template)
+                        <li data-type="{{ $template->type }}"><a href="{{ $template->link }}">{{ $template->name }}</a></li>
+                    @endforeach
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+@endauth
