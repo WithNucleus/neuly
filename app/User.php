@@ -5,6 +5,7 @@ namespace App;
 use App\Models\FollowList;
 use App\Models\Person;
 use App\Models\RaisedClaim;
+use App\Models\SearchTemplate;
 use App\Models\Team;
 use App\Models\TeamInvitation;
 use App\Models\UserSocialAuth;
@@ -101,5 +102,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function team()
     {
         return $this->belongsToMany(Team::class);
+    }
+
+    public function searchTemplates()
+    {
+        return $this->hasMany(SearchTemplate::class, 'user_id');
     }
 }

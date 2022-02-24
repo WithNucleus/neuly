@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Dashboard\TeamController;
 use App\Http\Controllers\ExternalScriptController;
+use App\Http\Controllers\Index\SearchTemplateController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -322,6 +323,13 @@ Route::group([
     Route::post('/user/person/create/finish', 'Index\UserPersonController@storeSocialShowFinishStep')->name('user.person.finish.store');
 
     Route::get('/user/person/search', 'Index\UserPersonController@search')->name('user.person.search');
+
+    // Search Templates
+
+    Route::get('/user/search/templates', [SearchTemplateController::class, 'index'])->name('user.search.templates.index');
+    Route::get('/user/search/templates/{template}', [SearchTemplateController::class, 'update'])->name('user.search.templates.update');
+    Route::patch('/user/search/templates/{template}', [SearchTemplateController::class, 'update'])->name('user.search.templates.patch');
+    Route::get('/user/search/templates/{template}/delete', [SearchTemplateController::class, 'delete'])->name('user.search.templates.delete');
 });
 
 // User Email Reset
