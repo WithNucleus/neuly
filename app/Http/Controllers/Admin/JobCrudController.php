@@ -199,13 +199,12 @@ class JobCrudController extends CrudController
             'prefix'     => "$",
             'attributes' => ["step" => ".01"]
         ]);
-
         $this->crud->addField([
             'name'  => 'owner',
             'type'  => 'select2_morph_1_n',
             'label' => 'Owner',
             'showAsterisk' => true,
-            'model' => false, //hack for backpack's handle of polymorphic 1-n relations
+            'model' => '', //hack for backpack's handle of polymorphic 1-n relations
             'data' => [
                 'companies' => [
                     'label' => 'Company',
