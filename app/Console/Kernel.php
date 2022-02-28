@@ -90,8 +90,8 @@ class Kernel extends ConsoleKernel
 
         // Clean Backups - Weekly
         $schedule
-            ->command('php artisan backup:clean')
-            ->weeklyOn(1, '8:00')
+            ->command('backup:clean')
+            ->weeklyOn(1, '8:30')
             ->onFailure(function() {
                 Log::critical('Clean backups failed');
             });
