@@ -5,7 +5,7 @@
         <tr>
             <td class="header">
                 <a href="{{ config('app.url') }}" style="display: inline-block;">
-                    <img src="https://neuly.com/images/neuly-logo-light.png" class="logo">
+                    <img src="https://app.neuly.com/images/neuly-logo-light.png" class="logo">
                 </a>
             </td>
         </tr>
