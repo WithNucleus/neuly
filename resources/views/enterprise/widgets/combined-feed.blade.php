@@ -13,17 +13,22 @@
                     <a href="{{ $item->url }}" class="d-block font-weight-bold mb-1" target="_blank" rel="noopener noreferrer">
                         {{ $item->name }}
                     </a>
-                    <div class="text-quarternary mb-1">
-                        {{ \Carbon\Carbon::parse($item->date)->format('M d, Y') }}
-                    </div>
-                    @if ($item->focus->count() > 0)
-                        <div class="text-secondarydark">
-                            <i class="fad fa-flask"></i>
-                            @foreach($item->focus as $item)
-                                {{ $item->name }}@if (!$loop->last),@endif
-                            @endforeach
+                    <div class="widget-expandable-details" style="display: none">
+                        <div class="text-quarternary mb-1">
+                            {{ \Carbon\Carbon::parse($item->date)->format('M d, Y') }}
                         </div>
-                    @endif
+                        @if ($item->focus->count() > 0)
+                            <div class="text-secondarydark">
+                                <i class="fad fa-flask"></i>
+                                @foreach($item->focus as $item)
+                                    {{ $item->name }}@if (!$loop->last),@endif
+                                @endforeach
+                            </div>
+                        @endif
+                        <div class="widget-expandable-details" style="display: none;">
+                            {{ $item->summary }}
+                        </div>
+                    </div>
                 </div>
             </div>
         </li>

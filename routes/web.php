@@ -355,6 +355,7 @@ Route::group(['middleware' => ['can:enterprise demo']], function () {
         Route::get('/dashboard/recently-viewed', 'DashboardController@userRecentlyViewedWidget')->name('dashboard.recently-viewed');
         Route::get('/dashboard/team', 'DashboardController@teamWidget')->name('dashboard.team');
         Route::get('/dashboard/patents', 'DashboardController@patentsWidget')->name('dashboard.patents');
+        Route::get('/dashboard/clinical-trials', 'DashboardController@clinicalTrialsWidget')->name('dashboard.clinical-trials');
     });
 });
 

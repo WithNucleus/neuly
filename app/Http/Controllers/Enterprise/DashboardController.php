@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Enterprise;
 
 use App\Http\Controllers\Controller;
+use App\Models\Clinicaltrial;
 use App\Models\Follow;
 use App\Models\FollowList;
 use App\Models\MediaItem;
@@ -135,8 +136,6 @@ class DashboardController extends Controller
         $pageFilters = $request->input('page');
         $maxResults = $pageFilters['size'] ?? 5;
 
-        // TODO: IDEA! --toggle between expanded view and more compact view for patents & also maybe include summaries in media items feed
-
         $patents = QueryBuilder::for(Patent::class)
             ->with([
                 'companies',
@@ -161,6 +160,37 @@ class DashboardController extends Controller
         return View::make("enterprise.widgets.patents")
             ->with([
                 'patents' => $patents,
+            ])
+            ->render();
+    }
+
+    public function clinicalTrialsWidget(Request $request): string
+    {
+        $pageFilters = $request->input('page');
+        $maxResults = $pageFilters['size'] ?? 5;
+
+        $clinicalTrials = QueryBuilder::for(Clinicaltrial::class)
+            ->with([
+                'companies',
+                'people',
+                'focus'
+            ])->allowedSorts([
+                'title',
+                'start_date'
+            ])
+            ->allowedFilters([
+                'status',
+                AllowedFilter::partial('focus', 'focus.name'),
+                AllowedFilter::partial('people', 'people.name'),
+                AllowedFilter::partial('company', 'companies.name'),
+            ])
+            ->defaultSort('-start_date')
+            ->jsonPaginate($maxResults)
+            ->appends(request()->query());
+
+        return View::make("enterprise.widgets.clinical-trials")
+            ->with([
+                'clinicalTrials' => $clinicalTrials,
             ])
             ->render();
     }

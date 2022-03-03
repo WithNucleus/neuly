@@ -37,11 +37,17 @@
                     Loading patents...
                 </div>
             </div>
-            <div class="enterprise-widget widget-large">
+            <div class="enterprise-widget">
                 <h2 class="widget-title">Latest News &amp; More</h2>
                 @include('enterprise.widget-includes.combined-feed-controls')
                 <div id="combined-feed" data-url="{{ route('enterprise.dashboard.newsfeed') }}">
                     Loading feed...
+                </div>
+            </div>
+            <div class="enterprise-widget">
+                <h2 class="widget-title">Clinical Trials</h2>
+                <div id="clinical-trials-widget" data-url="{{ route('enterprise.dashboard.clinical-trials') }}">
+                    Loading clinical trials...
                 </div>
             </div>
             <div class="enterprise-widget">
@@ -181,6 +187,7 @@
             getEnterpriseWidget('#recently-viewed-widget');
             getEnterpriseWidget('#team-widget');
             getEnterpriseWidget('#patents-widget');
+            getEnterpriseWidget('#clinical-trials-widget');
         });
     </script>
 @endsection
