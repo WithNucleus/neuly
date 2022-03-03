@@ -341,6 +341,18 @@ Route::group([
     Route::get('/user/person/search', 'Index\UserPersonController@search')->name('user.person.search');
 });
 
+// Enterprise Dashboard
+Route::group(['middleware' => ['can:enterprise demo']], function () {
+    Route::group([
+        'as' => 'enterprise.',
+        'namespace' => 'Enterprise',
+        'prefix' => '/enterprise',
+    ], function () {
+        Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
+        Route::get('/dashboard/newsfeed', 'DashboardController@combinedFeedWidget')->name('dashboard.newsfeed');
+    });
+});
+
 // User Email Reset
 Route::get('/user/retake/{token}', 'Index\UserRetakeController@index')->name('user.retake');
 

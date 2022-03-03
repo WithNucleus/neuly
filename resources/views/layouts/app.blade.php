@@ -69,6 +69,12 @@
         <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
     @endif
 
+    @if (Route::is('enterprise.dashboard'))
+        <link rel="stylesheet" href="{{ mix('css/enterprise-dashboard.css') }}">
+        <script src="https://unpkg.com/packery@2/dist/packery.pkgd.js"></script>
+        <script src="https://unpkg.com/draggabilly@2/dist/draggabilly.pkgd.js"></script>
+    @endif
+
     <script type="text/javascript" src="{{ asset('assets/chart.js') }}"></script>
     <script type="text/javascript" src="{{ asset('assets/chartisan.js') }}"></script>
 
