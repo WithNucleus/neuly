@@ -8,6 +8,9 @@
 .enterprise-dashboard-controls {
     border: 1px solid $gray-200;
     padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 .enterprise-widget,
@@ -100,7 +103,7 @@
     transition: transform 0.2s;
 }
 
-#widget-drag-toggle {
+.enterprise-toggle-switch {
     display: flex;
     align-items: stretch;
     position: relative;
@@ -153,7 +156,7 @@
     }
 }
 
-#widget-drag-toggle[data-drag="false"] {
+.enterprise-toggle-switch[data-drag="false"] {
     .on {
         left: -3rem;
     }
@@ -163,7 +166,7 @@
     }
 }
 
-#widget-drag-toggle[data-drag="true"] {
+.enterprise-toggle-switch[data-drag="true"] {
     .off {
         left: -3rem;
     }

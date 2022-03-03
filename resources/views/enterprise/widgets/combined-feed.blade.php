@@ -1,4 +1,4 @@
-<ul class="list-group shadow-sm">
+<ul class="list-group">
     @foreach($feed as $item)
         <li class="list-group-item">
             <div class="d-flex">

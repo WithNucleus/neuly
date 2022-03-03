@@ -7,6 +7,7 @@ use App\Models\Follow;
 use App\Models\FollowList;
 use App\Models\MediaItem;
 use App\Models\MemberNote;
+use App\Models\Patent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -24,8 +25,8 @@ class DashboardController extends Controller
 
     public function combinedFeedWidget(Request $request): string
     {
-        $queryFilters = $request->input('page');
-        $maxResults = $queryFilters['size'] ?? 15;
+        $pageFilters = $request->input('page');
+        $maxResults = $pageFilters['size'] ?? 15;
 
         $feed = QueryBuilder::for(MediaItem::class)
             ->enterpriseCombinedFeed()
@@ -129,15 +130,38 @@ class DashboardController extends Controller
             ->render();
     }
 
-    private function getTeam($user) {
-        $team = null;
+    public function patentsWidget(Request $request): string
+    {
+        $pageFilters = $request->input('page');
+        $maxResults = $pageFilters['size'] ?? 5;
 
-        if ($user->hasRole('Team owner')) {
-            $team = $user->ownedTeam()->with(['members', 'invitations'])->first();
-        } elseif ($user->hasRole('Team member')) {
-            $team = $user->team()->with(['members', 'owner'])->first();
-        }
+        // TODO: IDEA! --toggle between expanded view and more compact view for patents & also maybe include summaries in media items feed
 
-        return $team;
+        $patents = QueryBuilder::for(Patent::class)
+            ->with([
+                'companies',
+                'people',
+                'focus'
+            ])->allowedSorts([
+                'name',
+                'priority_date',
+                'granted_date',
+                'expiration_date'
+            ])
+            ->allowedFilters([
+                'status',
+                AllowedFilter::partial('focus', 'focus.name'),
+                AllowedFilter::partial('people', 'people.name'),
+                AllowedFilter::partial('company', 'companies.name'),
+            ])
+            ->defaultSort('-priority_date')
+            ->jsonPaginate($maxResults)
+            ->appends(request()->query());
+
+        return View::make("enterprise.widgets.patents")
+            ->with([
+                'patents' => $patents,
+            ])
+            ->render();
     }
 }

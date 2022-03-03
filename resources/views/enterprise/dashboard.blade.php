@@ -10,10 +10,16 @@
         @include('members.includes.status-messages')
 
         <div class="enterprise-dashboard-controls">
-            <button id="widget-drag-toggle" class="btn btn-sm" data-drag="false">
+            <button id="widget-drag-toggle" class="enterprise-toggle-switch btn btn-sm" data-drag="false">
                 <span class="on">On</span>
                 <span class="off">Off</span>
                 <span class="label">Rearrange Widgets</span>
+            </button>
+
+            <button id="show-details-toggle" class="enterprise-toggle-switch btn btn-sm ml-4" data-drag="false">
+                <span class="on">On</span>
+                <span class="off">Off</span>
+                <span class="label">Show Details</span>
             </button>
         </div>
 
@@ -26,9 +32,9 @@
                 </div>
             </div>
             <div class="enterprise-widget">
-                <h2 class="widget-title">Follows</h2>
-                <div id="follows-widget" data-url="{{ route('enterprise.dashboard.follows') }}">
-                    Loading follows...
+                <h2 class="widget-title">Patents</h2>
+                <div id="patents-widget" data-url="{{ route('enterprise.dashboard.patents') }}">
+                    Loading patents...
                 </div>
             </div>
             <div class="enterprise-widget widget-large">
@@ -36,6 +42,12 @@
                 @include('enterprise.widget-includes.combined-feed-controls')
                 <div id="combined-feed" data-url="{{ route('enterprise.dashboard.newsfeed') }}">
                     Loading feed...
+                </div>
+            </div>
+            <div class="enterprise-widget">
+                <h2 class="widget-title">Follows</h2>
+                <div id="follows-widget" data-url="{{ route('enterprise.dashboard.follows') }}">
+                    Loading follows...
                 </div>
             </div>
             <div class="enterprise-widget">
@@ -100,33 +112,45 @@
 
             });
 
-            // ajax newsfeed
-            let combinedFeedUrl = $('#combined-feed').data('url');
+            // Show Details in Widgets
+            let showDetails = false;
 
-            function updateCombinedFeed(url) {
-                // update combined feed html
+            $('#show-details-toggle').on( 'click', function() {
+                showDetails = !showDetails;
+                $(this).attr('data-drag', showDetails);
+
+                if (showDetails === true) {
+                    $('.widget-expandable-details').slideDown(400, function() {
+                        $widgetGrid.packery();
+                    });
+                } else {
+                    $('.widget-expandable-details').slideUp(400, function() {
+                        $widgetGrid.packery();
+                    });
+                }
+            });
+
+            /* FUNCTION FOR AJAX WIDGETS */
+            function getEnterpriseWidget(widgetId, url = false) {
+
+                if (url === false) {
+                    url = $(widgetId).data('url');
+                }
+
                 $.get(
                     url,
                     function (data) {
-                        $("#combined-feed").html(data);
+                        $(widgetId).html(data);
                         $widgetGrid.packery();
                     }
                 );
             }
 
-            updateCombinedFeed(combinedFeedUrl);
-
-            // last thing - packery init
-            $widgetGrid.packery();
-
+            // Query Filters for Combined Feed
             function buildCombinedFeedUrl() {
 
-                let newUrl = combinedFeedUrl;
+                let newUrl = $('#combined-feed').data('url') + '?page[size]=' + $('#cf-feed-pages').find(":selected").text();
 
-                // Pagination
-                newUrl += '?page[size]=' + $('#cf-feed-pages').find(":selected").text();
-
-                // Filter Media Type
                 let filterTypes = [];
 
                 $('.combined-feed-controls .custom-control-input').each(function() {
@@ -139,12 +163,9 @@
                     newUrl += '&filter[type]=' + filterTypes.join('|');
                 }
 
-                // Update Combined Feed
-                updateCombinedFeed(newUrl);
-                console.log("newUrl: " + newUrl);
+                getEnterpriseWidget('#combined-feed', newUrl);
             }
 
-            // Combined Feed - Filter by Media Type
             $('.combined-feed-controls .custom-checkbox').on('change', function() {
                 buildCombinedFeedUrl();
             });
@@ -153,65 +174,13 @@
                 buildCombinedFeedUrl();
             });
 
-            // follows
-            let followsUrl = $('#follows-widget').data('url');
-
-            function updateFollowsWidget(url) {
-                $.get(
-                    url,
-                    function (data) {
-                        $("#follows-widget").html(data);
-                        $widgetGrid.packery();
-                    }
-                );
-            }
-
-            updateFollowsWidget(followsUrl);
-
-            // Notes
-            let notesUrl = $('#notes-widget').data('url');
-
-            function updateNotesWidget(url) {
-                $.get(
-                    url,
-                    function (data) {
-                        $("#notes-widget").html(data);
-                        $widgetGrid.packery();
-                    }
-                );
-            }
-
-            updateNotesWidget(notesUrl);
-
-            // Recently Viewed
-            let recentlyViewedUrl = $('#recently-viewed-widget').data('url');
-
-            function updateRecentlyViewedWidget(url) {
-                $.get(
-                    url,
-                    function (data) {
-                        $("#recently-viewed-widget").html(data);
-                        $widgetGrid.packery();
-                    }
-                );
-            }
-
-            updateRecentlyViewedWidget(recentlyViewedUrl);
-
-            // Team
-            let teamUrl = $('#team-widget').data('url');
-
-            function updateTeamWidget(url) {
-                $.get(
-                    url,
-                    function (data) {
-                        $("#team-widget").html(data);
-                        $widgetGrid.packery();
-                    }
-                );
-            }
-
-            updateTeamWidget(teamUrl);
+            // get widgets
+            getEnterpriseWidget('#combined-feed');
+            getEnterpriseWidget('#follows-widget');
+            getEnterpriseWidget('#notes-widget');
+            getEnterpriseWidget('#recently-viewed-widget');
+            getEnterpriseWidget('#team-widget');
+            getEnterpriseWidget('#patents-widget');
         });
     </script>
 @endsection
