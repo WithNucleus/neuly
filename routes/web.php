@@ -350,6 +350,10 @@ Route::group(['middleware' => ['can:enterprise demo']], function () {
     ], function () {
         Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
         Route::get('/dashboard/newsfeed', 'DashboardController@combinedFeedWidget')->name('dashboard.newsfeed');
+        Route::get('/dashboard/follows', 'DashboardController@userFollowsWidget')->name('dashboard.follows');
+        Route::get('/dashboard/notes', 'DashboardController@userNotesWidget')->name('dashboard.notes');
+        Route::get('/dashboard/recently-viewed', 'DashboardController@userRecentlyViewedWidget')->name('dashboard.recently-viewed');
+        Route::get('/dashboard/team', 'DashboardController@teamWidget')->name('dashboard.team');
     });
 });
 

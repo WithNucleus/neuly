@@ -20,12 +20,20 @@
     .grid-sizer {
         width: 50%;
     }
+
+    .widget-large {
+        width: 100%;
+    }
 }
 
 @media (min-width: 1024px) {
     .enterprise-widget,
     .grid-sizer {
         width: 33.3%;
+    }
+
+    .widget-large {
+        width: 50%;
     }
 }
 
@@ -34,11 +42,16 @@
     .grid-sizer {
         width: 25%;
     }
+
+    .widget-large {
+        width: 50%;
+    }
 }
 
 .enterprise-widget {
     background: $gray-100;
     padding: 1rem;
+    margin-bottom: 2rem;
     border: 2px solid transparent;
 
     .widget-title {
@@ -158,4 +171,20 @@
     .on {
         left: 0;
     }
+}
+
+.combined-feed-controls {
+    margin-bottom: 1rem;
+}
+
+.has-accordion-arrow[aria-expanded=false]:after {
+    content: "\f055";
+    font-weight: 300;
+    font-family: "Font Awesome 5 Pro";
+}
+
+.has-accordion-arrow[aria-expanded=true]:after {
+    content: "\f056";
+    font-weight: 300;
+    font-family: "Font Awesome 5 Pro";
 }

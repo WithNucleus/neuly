@@ -1,4 +1,4 @@
-<h4>{{ $team->name }}</h4>
+<h4 class="widget-title">{{ $team->name }}</h4>
 @if($team->members->count() + $team->invitations->count() < 9)
     <div class="row">
         <div class="col-12">
@@ -25,7 +25,7 @@
             <ul class="list-group mb-2">
                 @foreach ($team->members as $member)
                     <li class="list-group-item">
-                        <p class="lead font-weight-bold mb-0"> {{ $member->fullname }}</p>
+                        <p class="font-weight-bold mb-0"> {{ $member->fullname }}</p>
 
                         <div class="d-flex flex-wrap justify-content-between">
                             <div class="left-side font-size-small">
@@ -38,7 +38,7 @@
                                 @csrf
                                 @method('delete')
                                 <button type="submit" class="btn btn-link btn-sm ml-2 p-0 text-danger confirm-action">
-                                    <i class="fad fa-trash-alt"></i> Delete
+                                    <i class="fad fa-trash-alt mr-1"></i>Delete
                                 </button>
                             </form>
                         </div>
@@ -69,7 +69,7 @@
                                 @csrf
                                 @method('delete')
                                 <button type="submit" class="btn btn-link btn-sm ml-2 p-0 text-danger confirm-action">
-                                    <i class="fad fa-trash-alt"></i> Delete
+                                    <i class="fad fa-trash-alt mr-1"></i>Delete
                                 </button>
                             </form>
                         </div>

@@ -21,61 +21,33 @@
             <div class="grid-sizer"></div>
             <div class="enterprise-widget">
                 <h2 class="widget-title">Notes</h2>
-{{--                @include('members.dashboard-widgets.notes')--}}
+                <div id="notes-widget" data-url="{{ route('enterprise.dashboard.notes') }}">
+                    Loading notes...
+                </div>
             </div>
             <div class="enterprise-widget">
                 <h2 class="widget-title">Follows</h2>
-{{--                @include('members.dashboard-widgets.following')--}}
-            </div>
-            <div class="enterprise-widget">
-                <h2 class="widget-title">Recently Viewed</h2>
-{{--                @include('members.dashboard-widgets.recent')--}}
-            </div>
-            <div class="enterprise-widget">
-                <h2 class="widget-title">Latest News &amp; More</h2>
-                <div class="combined-feed-controls">
-                    <div class="category">
-                        <div class="text-uppercase">
-                            Category
-                        </div>
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="cf-feed-filter-news" data-name="News">
-                            <label class="custom-control-label" for="cf-feed-filter-news">News</label>
-                        </div>
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="cf-feed-filter-video" data-name="Video">
-                            <label class="custom-control-label" for="cf-feed-filter-video">Videos</label>
-                        </div>
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="cf-feed-filter-podcast" data-name="Podcast">
-                            <label class="custom-control-label" for="cf-feed-filter-podcast">Podcasts</label>
-                        </div>
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="cf-feed-filter-article" data-name="Article">
-                            <label class="custom-control-label" for="cf-feed-filter-article">Articles</label>
-                        </div>
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="cf-feed-filter-patent-filing" data-name="Patent Filing">
-                            <label class="custom-control-label" for="cf-feed-filter-patent-filing">Patent Filings</label>
-                        </div>
-                    </div>
-                    <div class="number-pages">
-                        <label for="cf-feed-pages" class="text-uppercase">Max Results</label>
-                        <select id="cf-feed-pages" class="custom-select">
-                            <option value="10">10</option>
-                            <option value="15">15</option>
-                            <option value="20">20</option>
-                            <option value="25">25</option>
-                            <option value="50">50</option>
-                        </select>
-                    </div>
+                <div id="follows-widget" data-url="{{ route('enterprise.dashboard.follows') }}">
+                    Loading follows...
                 </div>
+            </div>
+            <div class="enterprise-widget widget-large">
+                <h2 class="widget-title">Latest News &amp; More</h2>
+                @include('enterprise.widget-includes.combined-feed-controls')
                 <div id="combined-feed" data-url="{{ route('enterprise.dashboard.newsfeed') }}">
                     Loading feed...
                 </div>
             </div>
             <div class="enterprise-widget">
-                @include('members.dashboard-widgets.team')
+                <h2 class="widget-title">Recently Viewed</h2>
+                <div id="recently-viewed-widget" data-url="{{ route('enterprise.dashboard.recently-viewed') }}">
+                    Loading recently viewed...
+                </div>
+            </div>
+            <div class="enterprise-widget">
+                <div id="team-widget" data-url="{{ route('enterprise.dashboard.team') }}">
+                    Loading team...
+                </div>
             </div>
         </div>
 
@@ -180,6 +152,66 @@
             $('#cf-feed-pages').on('change', function() {
                 buildCombinedFeedUrl();
             });
+
+            // follows
+            let followsUrl = $('#follows-widget').data('url');
+
+            function updateFollowsWidget(url) {
+                $.get(
+                    url,
+                    function (data) {
+                        $("#follows-widget").html(data);
+                        $widgetGrid.packery();
+                    }
+                );
+            }
+
+            updateFollowsWidget(followsUrl);
+
+            // Notes
+            let notesUrl = $('#notes-widget').data('url');
+
+            function updateNotesWidget(url) {
+                $.get(
+                    url,
+                    function (data) {
+                        $("#notes-widget").html(data);
+                        $widgetGrid.packery();
+                    }
+                );
+            }
+
+            updateNotesWidget(notesUrl);
+
+            // Recently Viewed
+            let recentlyViewedUrl = $('#recently-viewed-widget').data('url');
+
+            function updateRecentlyViewedWidget(url) {
+                $.get(
+                    url,
+                    function (data) {
+                        $("#recently-viewed-widget").html(data);
+                        $widgetGrid.packery();
+                    }
+                );
+            }
+
+            updateRecentlyViewedWidget(recentlyViewedUrl);
+
+            // Team
+            let teamUrl = $('#team-widget').data('url');
+
+            function updateTeamWidget(url) {
+                $.get(
+                    url,
+                    function (data) {
+                        $("#team-widget").html(data);
+                        $widgetGrid.packery();
+                    }
+                );
+            }
+
+            updateTeamWidget(teamUrl);
         });
     </script>
 @endsection
