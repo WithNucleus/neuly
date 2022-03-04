@@ -68,6 +68,18 @@
         flex-shrink: 0;
         background-size: contain;
         background-position: center center;
+        background-repeat: no-repeat;
+    }
+
+    .logo-icon {
+        width: 48px;
+        height: 48px;
+        margin-right: 1rem;
+        margin-top: .5rem;
+        flex-shrink: 0;
+        background-size: contain;
+        background-position: center center;
+        background-repeat: no-repeat;
     }
 
     .cf-neutral-icon {
@@ -173,10 +185,6 @@
     .on {
         left: 0;
     }
-}
-
-.combined-feed-controls {
-    margin-bottom: 1rem;
 }
 
 .has-accordion-arrow[aria-expanded=false]:after {

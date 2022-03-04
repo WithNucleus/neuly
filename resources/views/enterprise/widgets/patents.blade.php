@@ -1,10 +1,11 @@
+@include('enterprise.widget-controls.patents')
 <ul class="list-group list-group-flush border">
     @forelse($patents as $patent)
         <li class="list-group-item">
             <p class="font-weight-bold mb-1">
                 <a href="{{ $patent->url }}" target="_blank" rel="noopener noreferrer">{{ $patent->name }}</a>
             </p>
-            <div class="widget-expandable-details" style="display: none">
+            <div class="widget-expandable-details">
                 @if($patent->focus->count() > 0)
                     <p class="text-secondarydark mb-1">
                         <i class="fad fa-flask"></i>
@@ -55,7 +56,7 @@
             </div>
         </li>
     @empty
-        <li class="list-group-item py-4">
+        <li class="list-group-item">
             <p class="lead mb-0">
                 No patents match your search criteria.
             </p>

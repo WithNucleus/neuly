@@ -1,4 +1,4 @@
-<div class="combined-feed-controls">
+<div class="combined-feed-controls mb-3">
     <div class="d-flex align-items-stretch">
         <button class="btn btn-sm has-accordion-arrow" type="button" data-toggle="collapse" data-target="#cf-categories" aria-expanded="false" aria-controls="cf-categories">
             Category Filter

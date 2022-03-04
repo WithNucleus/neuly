@@ -1,10 +1,11 @@
+@include('enterprise.widget-controls.clinical-trials')
 <ul class="list-group list-group-flush mb-4 border">
     @foreach($clinicalTrials as $trial)
         <li class="list-group-item">
             <p class="font-weight-bold mb-1">
                 <a href="{{ route('discover.clinicaltrials.show', $trial->slug) }}">{{ $trial->title }}</a>
             </p>
-            <div class="widget-expandable-details" style="display: none">
+            <div class="widget-expandable-details">
                 @if($trial->focus->count() > 0)
                     <p class="text-secondarydark mb-1">
                         <i class="fad fa-flask"></i>

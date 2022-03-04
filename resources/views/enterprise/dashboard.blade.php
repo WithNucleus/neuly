@@ -16,7 +16,7 @@
                 <span class="label">Rearrange Widgets</span>
             </button>
 
-            <button id="show-details-toggle" class="enterprise-toggle-switch btn btn-sm ml-4" data-drag="false">
+            <button id="show-details-toggle" class="enterprise-toggle-switch btn btn-sm ml-4" data-drag="true">
                 <span class="on">On</span>
                 <span class="off">Off</span>
                 <span class="label">Show Details</span>
@@ -39,8 +39,8 @@
             </div>
             <div class="enterprise-widget">
                 <h2 class="widget-title">Latest News &amp; More</h2>
-                @include('enterprise.widget-includes.combined-feed-controls')
-                <div id="combined-feed" data-url="{{ route('enterprise.dashboard.newsfeed') }}">
+                @include('enterprise.widget-controls.combined-feed')
+                <div id="combined-feed" data-url="{{ route('enterprise.dashboard.combined-feed') }}">
                     Loading feed...
                 </div>
             </div>
@@ -48,6 +48,18 @@
                 <h2 class="widget-title">Clinical Trials</h2>
                 <div id="clinical-trials-widget" data-url="{{ route('enterprise.dashboard.clinical-trials') }}">
                     Loading clinical trials...
+                </div>
+            </div>
+            <div class="enterprise-widget">
+                <h2 class="widget-title">Jobs</h2>
+                <div id="jobs-widget" data-url="{{ route('enterprise.dashboard.jobs') }}">
+                    Loading jobs...
+                </div>
+            </div>
+            <div class="enterprise-widget">
+                <h2 class="widget-title">Events</h2>
+                <div id="events-widget" data-url="{{ route('enterprise.dashboard.events') }}">
+                    Loading events...
                 </div>
             </div>
             <div class="enterprise-widget">
@@ -118,8 +130,8 @@
 
             });
 
-            // Show Details in Widgets
-            let showDetails = false;
+            // Show/Hide Details in Widgets
+            let showDetails = true;
 
             $('#show-details-toggle').on( 'click', function() {
                 showDetails = !showDetails;
@@ -188,6 +200,8 @@
             getEnterpriseWidget('#team-widget');
             getEnterpriseWidget('#patents-widget');
             getEnterpriseWidget('#clinical-trials-widget');
+            getEnterpriseWidget('#jobs-widget');
+            getEnterpriseWidget('#events-widget');
         });
     </script>
 @endsection

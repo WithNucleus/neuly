@@ -342,20 +342,22 @@ Route::group([
 });
 
 // Enterprise Dashboard
-Route::group(['middleware' => ['can:enterprise demo']], function () {
+Route::group(['middleware' => ['auth', 'enterprise.demo']], function () {
     Route::group([
         'as' => 'enterprise.',
         'namespace' => 'Enterprise',
         'prefix' => '/enterprise',
     ], function () {
         Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
-        Route::get('/dashboard/newsfeed', 'DashboardController@combinedFeedWidget')->name('dashboard.newsfeed');
+        Route::get('/dashboard/combined-feed', 'DashboardController@combinedFeedWidget')->name('dashboard.combined-feed');
         Route::get('/dashboard/follows', 'DashboardController@userFollowsWidget')->name('dashboard.follows');
         Route::get('/dashboard/notes', 'DashboardController@userNotesWidget')->name('dashboard.notes');
         Route::get('/dashboard/recently-viewed', 'DashboardController@userRecentlyViewedWidget')->name('dashboard.recently-viewed');
         Route::get('/dashboard/team', 'DashboardController@teamWidget')->name('dashboard.team');
         Route::get('/dashboard/patents', 'DashboardController@patentsWidget')->name('dashboard.patents');
         Route::get('/dashboard/clinical-trials', 'DashboardController@clinicalTrialsWidget')->name('dashboard.clinical-trials');
+        Route::get('/dashboard/jobs', 'DashboardController@jobsWidget')->name('dashboard.jobs');
+        Route::get('/dashboard/events', 'DashboardController@eventsWidget')->name('dashboard.events');
     });
 });
 

@@ -4,11 +4,18 @@ namespace App\Http\Controllers\Enterprise;
 
 use App\Http\Controllers\Controller;
 use App\Models\Clinicaltrial;
+use App\Models\Company;
+use App\Models\Event;
+use App\Models\Focus;
 use App\Models\Follow;
 use App\Models\FollowList;
+use App\Models\Investor;
+use App\Models\Job;
+use App\Models\Location;
 use App\Models\MediaItem;
 use App\Models\MemberNote;
 use App\Models\Patent;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -157,9 +164,12 @@ class DashboardController extends Controller
             ->jsonPaginate($maxResults)
             ->appends(request()->query());
 
+        $focusList = Focus::whereHas('patents')->orderBy('name')->pluck('name', 'slug')->toArray();
+
         return View::make("enterprise.widgets.patents")
             ->with([
                 'patents' => $patents,
+                'focusList' => $focusList
             ])
             ->render();
     }
@@ -188,9 +198,78 @@ class DashboardController extends Controller
             ->jsonPaginate($maxResults)
             ->appends(request()->query());
 
+        $focusList = Focus::whereHas('clinicaltrials')->orderBy('name')->pluck('name', 'slug')->toArray();
+
         return View::make("enterprise.widgets.clinical-trials")
             ->with([
                 'clinicalTrials' => $clinicalTrials,
+                'focusList' => $focusList
+            ])
+            ->render();
+    }
+
+    public function jobsWidget(Request $request): string
+    {
+        $pageFilters = $request->input('page');
+        $maxResults = $pageFilters['size'] ?? 5;
+
+        $jobs = QueryBuilder::for(Job::class)
+            ->with('owner')
+            ->where('status', Job::STATUS_OPEN)
+            ->allowedFilters([
+                AllowedFilter::exact('type', 'employment_type'),
+                AllowedFilter::exact('title', 'job_title'),
+                AllowedFilter::exact('locations', 'locations.name'),
+                AllowedFilter::partial('company', 'company.name'),
+                AllowedFilter::partial('investor', 'investor.name'),
+            ])
+            ->defaultSort('-posted_date')
+            ->allowedSorts([
+                AllowedSort::field('title', 'job_title'),
+                AllowedSort::field('date', 'posted_date'),
+                AllowedSort::field('type', 'employment_type'),
+            ])
+            ->paginate($maxResults)
+            ->appends(request()->query());
+
+        $locations = Location::whereHas('jobs')->get()->pluck('name')->unique()->sort();
+        $companies = Company::whereHas('jobs')->get()->pluck('name')->unique()->sort();
+        $investors = Investor::whereHas('jobs')->get()->pluck('name')->unique()->sort();
+
+        return View::make("enterprise.widgets.jobs")
+            ->with([
+                'jobs' => $jobs,
+            ])
+            ->render();
+    }
+
+    public function eventsWidget(Request $request): string
+    {
+        $pageFilters = $request->input('page');
+        $maxResults = $pageFilters['size'] ?? 5;
+        $now = Carbon::now(config('app.timezone'));
+
+        $events = QueryBuilder::for(Event::class)
+            ->where('start_date', '>=', $now)
+            ->with(['companies', 'eventTypes', 'locations', 'focus'])
+            ->allowedFilters([
+                'name',
+                AllowedFilter::partial('type', 'event_types.name'),
+                AllowedFilter::partial('company', 'companies.name'),
+                AllowedFilter::partial('locations', 'locations.name'),
+                AllowedFilter::partial('focus', 'focus.name'),
+            ])
+            ->defaultSort('start_date')
+            ->allowedSorts([
+                'name',
+                AllowedSort::field('date', 'start_date'),
+            ])
+            ->paginate($maxResults)
+            ->appends(request()->query());
+
+        return View::make("enterprise.widgets.events")
+            ->with([
+                'events' => $events,
             ])
             ->render();
     }
