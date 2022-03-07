@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Events\SendNotification;
+use App\Helpers\NotificationHelper;
 use App\Http\Requests\NewsArticleRequest;
 use App\Models\Focus;
 use App\Models\NewsArticle;
+use App\Notifications\NewsArticleCreated;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -162,6 +164,9 @@ class NewsArticleCrudController extends CrudController
                 SendNotification::dispatch($focus, 'A new article has been added to focus.', 'some long description');
             }
         }
+
+        $news_article = $this->data['entry'];
+        NotificationHelper::sendSlackNotification(new NewsArticleCreated($news_article), 'news');
 
         return $response;
     }

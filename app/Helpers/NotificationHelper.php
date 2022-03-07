@@ -31,4 +31,11 @@ class NotificationHelper
             NotificationFacade::route('slack', config('services.slack.webhooks.notifications'))->notify($notification);
         }
     }
+
+    public static function sendSlackNotification(Notification $notification, string $channel)
+    {
+        if (config('services.slack.webhooks.' . $channel)) {
+            NotificationFacade::route('slack', config('services.slack.webhooks.' . $channel))->notify($notification);
+        }
+    }
 }

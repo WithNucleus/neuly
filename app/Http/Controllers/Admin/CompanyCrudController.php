@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Events\SendNotification;
+use App\Helpers\NotificationHelper;
 use App\Http\Controllers\Backpack\CRUD\Operations\UpdateOperationWithTouching;
 use App\Http\Requests\CompanyRequest;
 use App\Models\Company;
 use App\Models\Investor;
+use App\Notifications\OrganizationCreated;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use App\Models\Focus;
 use Backpack\CRUD\app\Library\Widget;
@@ -293,6 +295,8 @@ class CompanyCrudController extends CrudController
                 SendNotification::dispatch($investor, $title, $description, 'investors');
             }
         }
+
+        NotificationHelper::sendSlackNotification(new OrganizationCreated($company), 'organizations');
 
         return $response;
     }
