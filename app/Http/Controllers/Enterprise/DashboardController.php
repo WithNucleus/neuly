@@ -34,7 +34,7 @@ class DashboardController extends Controller
     public function combinedFeedWidget(Request $request): string
     {
         $pageFilters = $request->input('page');
-        $maxResults = $pageFilters['size'] ?? 15;
+        $maxResults = $pageFilters['size'] ?? 10;
 
         $feed = QueryBuilder::for(MediaItem::class)
             ->enterpriseCombinedFeed()
@@ -272,5 +272,44 @@ class DashboardController extends Controller
                 'events' => $events,
             ])
             ->render();
+    }
+
+    public function filters(Request $request): string
+    {
+        $search = $request->input('search');
+        $for = $request->input('for');
+
+        $allowedEntities = [
+            'clinicaltrials' => Clinicaltrial::class,
+            'patents' => Patent::class,
+            'media_items' => MediaItem::class,
+            'focus' => Focus::class
+        ];
+
+        $allowedFields = [
+            'media_type'
+        ];
+
+        if ($search === 'media_items') {
+            $query = MediaItem::enterpriseCombinedFeed();
+        } else {
+            $query = $allowedEntities[$search]::orderBy('name');
+        }
+
+        if (in_array($for, $allowedFields)) {
+            $query = $query->orderBy($for)->pluck($for, $for);
+        } else {
+            $query = $query->whereHas($for)->pluck('name', 'slug');
+        }
+
+        $filterValues = array_change_key_case($query->toArray(), CASE_LOWER);
+
+        return View::make("enterprise.widget-controls.filters.checkbox")
+            ->with([
+                'className' => $search . '-' . $for,
+                'filterValues' => $filterValues,
+            ])
+            ->render();
+
     }
 }

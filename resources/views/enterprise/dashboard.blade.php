@@ -27,55 +27,57 @@
             <div class="grid-sizer"></div>
             <div class="enterprise-widget">
                 <h2 class="widget-title">Notes</h2>
-                <div id="notes-widget" data-url="{{ route('enterprise.dashboard.notes') }}">
+                <div id="notes-widget" class="enterprise-widget-content" data-url="{{ route('enterprise.dashboard.notes') }}">
                     Loading notes...
                 </div>
             </div>
             <div class="enterprise-widget">
                 <h2 class="widget-title">Patents</h2>
-                <div id="patents-widget" data-url="{{ route('enterprise.dashboard.patents') }}">
+                @include('enterprise.widget-controls.patents')
+                <div id="patents-widget" class="enterprise-widget-content" data-url="{{ route('enterprise.dashboard.patents') }}">
                     Loading patents...
                 </div>
             </div>
             <div class="enterprise-widget">
                 <h2 class="widget-title">Latest News &amp; More</h2>
                 @include('enterprise.widget-controls.combined-feed')
-                <div id="combined-feed" data-url="{{ route('enterprise.dashboard.combined-feed') }}">
+                <div id="combined-feed" class="enterprise-widget-content" data-url="{{ route('enterprise.dashboard.combined-feed') }}">
                     Loading feed...
                 </div>
             </div>
             <div class="enterprise-widget">
                 <h2 class="widget-title">Clinical Trials</h2>
-                <div id="clinical-trials-widget" data-url="{{ route('enterprise.dashboard.clinical-trials') }}">
+                @include('enterprise.widget-controls.clinical-trials')
+                <div id="clinical-trials-widget" class="enterprise-widget-content" data-url="{{ route('enterprise.dashboard.clinical-trials') }}">
                     Loading clinical trials...
                 </div>
             </div>
             <div class="enterprise-widget">
                 <h2 class="widget-title">Jobs</h2>
-                <div id="jobs-widget" data-url="{{ route('enterprise.dashboard.jobs') }}">
+                <div id="jobs-widget" class="enterprise-widget-content" data-url="{{ route('enterprise.dashboard.jobs') }}">
                     Loading jobs...
                 </div>
             </div>
             <div class="enterprise-widget">
                 <h2 class="widget-title">Events</h2>
-                <div id="events-widget" data-url="{{ route('enterprise.dashboard.events') }}">
+                <div id="events-widget" class="enterprise-widget-content" data-url="{{ route('enterprise.dashboard.events') }}">
                     Loading events...
                 </div>
             </div>
             <div class="enterprise-widget">
                 <h2 class="widget-title">Follows</h2>
-                <div id="follows-widget" data-url="{{ route('enterprise.dashboard.follows') }}">
+                <div id="follows-widget" class="enterprise-widget-content" data-url="{{ route('enterprise.dashboard.follows') }}">
                     Loading follows...
                 </div>
             </div>
             <div class="enterprise-widget">
                 <h2 class="widget-title">Recently Viewed</h2>
-                <div id="recently-viewed-widget" data-url="{{ route('enterprise.dashboard.recently-viewed') }}">
+                <div id="recently-viewed-widget" class="enterprise-widget-content" data-url="{{ route('enterprise.dashboard.recently-viewed') }}">
                     Loading recently viewed...
                 </div>
             </div>
             <div class="enterprise-widget">
-                <div id="team-widget" data-url="{{ route('enterprise.dashboard.team') }}">
+                <div id="team-widget" class="enterprise-widget-content" data-url="{{ route('enterprise.dashboard.team') }}">
                     Loading team...
                 </div>
             </div>
@@ -91,7 +93,9 @@
     <script>
         $(document).ready(function() {
 
-            // TODO: Add 'blank' widgets to keep empty columns if they want to? & resizeable heights
+            let draggableWidgets = [];
+            let isDrag = false;
+            let showDetails = true;
 
             // Widget Grid
             let $widgetGrid = $('.enterprise-widget-grid').packery({
@@ -101,38 +105,28 @@
                 initLayout: false,
             });
 
-            let draggies = [];
-            let isDrag = false;
-
             $widgetGrid.find('.enterprise-widget').each( function( i, gridItem ) {
+                let draggableWidget = new Draggabilly( gridItem );
+                draggableWidgets.push( draggableWidget );
+                $widgetGrid.packery( 'bindDraggabillyEvents', draggableWidget );
 
-                let draggie = new Draggabilly( gridItem );
-                draggies.push( draggie );
-                $widgetGrid.packery( 'bindDraggabillyEvents', draggie );
-
-                draggies.forEach( function( draggie ) {
-                    draggie[ 'disable' ]();
+                draggableWidgets.forEach( function( draggableWidget ) {
+                    draggableWidget[ 'disable' ]();
                 });
             });
 
             $('#widget-drag-toggle').on( 'click', function() {
-
                 isDrag = !isDrag;
-
                 $(this).attr('data-drag', isDrag);
-
                 let method = isDrag ? 'enable' : 'disable';
 
-                draggies.forEach( function( draggie ) {
-                    draggie[ method ]();
-                    draggie.element.setAttribute('data-drag', method);
+                draggableWidgets.forEach( function( draggableWidget ) {
+                    draggableWidget[ method ]();
+                    draggableWidget.element.setAttribute('data-drag', method);
                 });
-
             });
 
             // Show/Hide Details in Widgets
-            let showDetails = true;
-
             $('#show-details-toggle').on( 'click', function() {
                 showDetails = !showDetails;
                 $(this).attr('data-drag', showDetails);
@@ -149,8 +143,7 @@
             });
 
             /* FUNCTION FOR AJAX WIDGETS */
-            function getEnterpriseWidget(widgetId, url = false) {
-
+            function getEnterpriseWidget(widgetId, url = false, buildWidgets = true) {
                 if (url === false) {
                     url = $(widgetId).data('url');
                 }
@@ -162,34 +155,68 @@
                         $widgetGrid.packery();
                     }
                 );
+
+                // Widget Controls -- Setup Filters
+                if (buildWidgets === true) {
+                    console.log("getting widget " + widgetId);
+
+                    let widgetControls = $(widgetId).siblings('.widget-controls');
+
+                    widgetControls.each(function() {
+
+                        $(this).children('.filter-checkboxes').each(function() {
+
+                            let url = $(this).data('url');
+                            let filterGroup = $(this).children('.filter-group');
+                            console.log(url);
+
+                            $.get(
+                                url,
+                                function (data) {
+                                    $(filterGroup).html(data);
+                                }
+                            );
+                        });
+
+                    });
+                }
             }
 
-            // Query Filters for Combined Feed
-            function buildCombinedFeedUrl() {
+            function buildQueryUrl(element) {
 
-                let newUrl = $('#combined-feed').data('url') + '?page[size]=' + $('#cf-feed-pages').find(":selected").text();
+                let widgetControls = $(element).parents('.widget-controls');
+                let pageSize = widgetControls.find('.page-size').find(":selected").text();
+                let parentWidget = widgetControls.parents('.enterprise-widget').find('.enterprise-widget-content');
+                let newUrl = parentWidget.data('url') + '?page[size]=' + pageSize;
 
-                let filterTypes = [];
+                // go through checkboxes
+                widgetControls.find('.filter-checkboxes').each(function() {
 
-                $('.combined-feed-controls .custom-control-input').each(function() {
-                    if ($(this).prop('checked') === true) {
-                        filterTypes.push($(this).data('name'));
+                    let filterType = $(this).data('filter');
+                    let filterValues = [];
+
+                    $(this).find('.custom-control-input').each(function() {
+                        if ($(this).prop('checked') === true) {
+                            filterValues.push($(this).data('name'));
+                        }
+                    });
+
+                    if (filterValues.length > 0) {
+                        newUrl += '&filter[' + filterType + ']=' + filterValues.join('|');
                     }
+
+                    getEnterpriseWidget(parentWidget, newUrl, false);
+
                 });
 
-                if (filterTypes.length > 0) {
-                    newUrl += '&filter[type]=' + filterTypes.join('|');
-                }
-
-                getEnterpriseWidget('#combined-feed', newUrl);
             }
 
-            $('.combined-feed-controls .custom-checkbox').on('change', function() {
-                buildCombinedFeedUrl();
+            $(document).on("change", ".custom-checkbox" , function() {
+                buildQueryUrl($(this));
             });
 
-            $('#cf-feed-pages').on('change', function() {
-                buildCombinedFeedUrl();
+            $(document).on("change", ".custom-select", function() {
+                buildQueryUrl($(this));
             });
 
             // get widgets

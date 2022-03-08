@@ -1,4 +1,3 @@
-@include('enterprise.widget-controls.clinical-trials')
 <ul class="list-group list-group-flush mb-4 border">
     @foreach($clinicalTrials as $trial)
         <li class="list-group-item">

@@ -1,4 +1,3 @@
-@include('enterprise.widget-controls.patents')
 <ul class="list-group list-group-flush border">
     @forelse($patents as $patent)
         <li class="list-group-item">

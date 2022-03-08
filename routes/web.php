@@ -358,6 +358,7 @@ Route::group(['middleware' => ['auth', 'enterprise.demo']], function () {
         Route::get('/dashboard/clinical-trials', 'DashboardController@clinicalTrialsWidget')->name('dashboard.clinical-trials');
         Route::get('/dashboard/jobs', 'DashboardController@jobsWidget')->name('dashboard.jobs');
         Route::get('/dashboard/events', 'DashboardController@eventsWidget')->name('dashboard.events');
+        Route::get('/dashboard/filters', 'DashboardController@filters')->name('dashboard.filters');
     });
 });
 
