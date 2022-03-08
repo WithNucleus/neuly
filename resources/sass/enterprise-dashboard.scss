@@ -6,8 +6,7 @@
 }
 
 .enterprise-dashboard-controls {
-    border: 1px solid $gray-200;
-    padding: 1.5rem;
+    padding: 1rem 1.5rem .5rem 1.5rem;
     display: flex;
     align-items: center;
     flex-wrap: wrap;
@@ -197,4 +196,28 @@
     content: "\f056";
     font-weight: 300;
     font-family: "Font Awesome 5 Pro";
+}
+
+.widget-controls {
+    position: relative;
+    z-index: 3;
+
+    .filter-checkboxes {
+        position: absolute;
+        z-index: 4;
+
+        .custom-control-label {
+            white-space: nowrap;
+        }
+    }
+}
+
+.filter-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(magenta, .5);
+    z-index: 2;
 }

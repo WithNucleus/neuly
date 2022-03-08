@@ -84,9 +84,6 @@
         </div>
 
     </div>
-
-
-
 @endsection
 
 @section('after_scripts')
@@ -158,17 +155,15 @@
 
                 // Widget Controls -- Setup Filters
                 if (buildWidgets === true) {
-                    console.log("getting widget " + widgetId);
 
                     let widgetControls = $(widgetId).siblings('.widget-controls');
 
                     widgetControls.each(function() {
 
-                        $(this).children('.filter-checkboxes').each(function() {
+                        $(this).find('.filter-checkboxes').each(function() {
 
                             let url = $(this).data('url');
                             let filterGroup = $(this).children('.filter-group');
-                            console.log(url);
 
                             $.get(
                                 url,
@@ -206,6 +201,8 @@
                     }
 
                     getEnterpriseWidget(parentWidget, newUrl, false);
+
+                    console.log("newUrl: " + newUrl);
 
                 });
 

@@ -42,7 +42,7 @@ class DashboardController extends Controller
             ->with(['focus'])
             ->allowedFilters([
                 'name',
-                AllowedFilter::partial('focus', 'focus.name'),
+                AllowedFilter::exact('focus', 'focus.name'),
                 AllowedFilter::exact('type', 'media_type'),
             ])
             ->defaultSort('-date')
@@ -282,7 +282,7 @@ class DashboardController extends Controller
         $allowedEntities = [
             'clinicaltrials' => Clinicaltrial::class,
             'patents' => Patent::class,
-            'media_items' => MediaItem::class,
+            'mediaItems' => MediaItem::class,
             'focus' => Focus::class
         ];
 
@@ -290,7 +290,7 @@ class DashboardController extends Controller
             'media_type'
         ];
 
-        if ($search === 'media_items') {
+        if ($search === 'mediaItems') {
             $query = MediaItem::enterpriseCombinedFeed();
         } else {
             $query = $allowedEntities[$search]::orderBy('name');
