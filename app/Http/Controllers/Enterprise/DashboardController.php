@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Enterprise;
 use App\Http\Controllers\Controller;
 use App\Models\Clinicaltrial;
 use App\Models\Company;
+use App\Models\Dashboard;
 use App\Models\Event;
 use App\Models\Focus;
 use App\Models\Follow;
@@ -27,8 +28,60 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class DashboardController extends Controller
 {
-    public function index() {
-        return view('enterprise.dashboard');
+    private array $defaultWidgets = [
+        [
+            'notes' => 'Notes',
+            'jobs' => 'Jobs',
+            'events' => 'Events',
+        ],
+        [
+            'patents' => 'Patents',
+            'clinical-trials' => 'Clinical Trials',
+        ],
+        [
+            'combined-feed' => 'Latest News and More',
+        ],
+        [
+            'follows' => 'Follows',
+            'recently-viewed' => 'Recently Viewed',
+            'team' => 'Team',
+        ]
+    ];
+
+    public function index(): \Illuminate\Contracts\View\View
+    {
+        $dashboard = $this->getUserDashboard();
+        $widgets = $this->getUserWidgets($dashboard);
+
+        return view('enterprise.dashboard-drag', compact('widgets', 'dashboard'));
+    }
+
+    public function saveWidgets(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $user = $request->user();
+        $dashboardName = $request->input('dashboard');
+
+        $widgetNames = $request->input('widgetNames');
+        $widgetLabels = $request->input('widgetLabels');
+
+        $dashboard = Dashboard::where('user_id', $user->id)->where('name', $dashboardName)->first();
+
+        if ($dashboard) {
+            $dashboard->widget_names = json_encode($widgetNames);
+            $dashboard->widget_labels = json_encode($widgetLabels);
+            $dashboard->save();
+            $response = [
+                'status' => 'success',
+                'message' => 'Saved widget order'
+            ];
+        } else {
+            $response = [
+                'status' => 'error',
+                'message' => 'Could not find your dashboard'
+            ];
+        }
+
+        return response()->json($response);
     }
 
     public function combinedFeedWidget(Request $request): string
@@ -311,5 +364,45 @@ class DashboardController extends Controller
             ])
             ->render();
 
+    }
+
+    private function getUserDashboard(): Dashboard
+    {
+        $user = Auth::user();
+
+        if (Auth::user()->dashboards()->first()) {
+            $dashboard = $user->dashboards()->first();
+        } else {
+            $dashboard = new Dashboard([
+                'name' => 'Primary'
+            ]);
+            $user->dashboards()->save($dashboard);
+        }
+
+        return $dashboard;
+    }
+
+    private function getUserWidgets(Dashboard $dashboard): array
+    {
+        if ($dashboard->widget_names !== null) {
+            $widgets = [];
+            $widgetNames = json_decode($dashboard->widget_names);
+            $widgetLabels = json_decode($dashboard->widget_labels);
+
+            foreach ($widgetNames as $key => $widgetColumn) {
+                $thisColumn = [];
+                $theseLabels = $widgetLabels[$key];
+
+                foreach ($widgetColumn as $widgetKey => $widgetName) {
+                    $widgetLabel = $theseLabels[$widgetKey];
+                    $thisColumn[$widgetName] = $widgetLabel;
+                }
+                $widgets[$key] = $thisColumn;
+            }
+        } else {
+            $widgets = $this->defaultWidgets;
+        }
+
+        return $widgets;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Dashboard;
 use App\Models\FollowList;
 use App\Models\Person;
 use App\Models\RaisedClaim;
@@ -63,43 +64,48 @@ class User extends Authenticatable implements MustVerifyEmail
         });
     }
 
-    public function getFullnameAttribute()
+    public function getFullnameAttribute(): string
     {
         return $this->name.' '.$this->last_name;
     }
 
-    public function socialAuth()
+    public function socialAuth(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(UserSocialAuth::class);
     }
 
-    public function relatedPerson()
+    public function relatedPerson(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(Person::class, 'user_id');
     }
 
-    public function raisedClaim()
+    public function raisedClaim(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(RaisedClaim::class);
     }
 
-    public function hasRaisedClaimBefore()
+    public function hasRaisedClaimBefore(): bool
     {
         return $this->raisedClaim()->exists();
     }
 
-    public function teamInvitations()
+    public function teamInvitations(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(TeamInvitation::class);
     }
 
-    public function ownedTeam()
+    public function ownedTeam(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(Team::class, 'owner_id');
     }
 
-    public function team()
+    public function team(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Team::class);
+    }
+
+    public function dashboards(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Dashboard::class);
     }
 }

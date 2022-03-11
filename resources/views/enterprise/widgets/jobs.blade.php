@@ -1,4 +1,4 @@
-<ul class="list-group list-group-flush border">
+<ul class="list-group">
     @forelse($jobs as $job)
         <li class="list-group-item d-md-flex">
             <div class="logo-icon" style="background-image: url('{{ $job->owner->entityImageUrl }}');"></div>
