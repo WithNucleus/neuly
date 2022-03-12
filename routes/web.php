@@ -360,6 +360,7 @@ Route::group(['middleware' => ['auth', 'enterprise.demo']], function () {
         Route::get('/dashboard/events', 'DashboardController@eventsWidget')->name('dashboard.events');
         Route::get('/dashboard/filters', 'DashboardController@filters')->name('dashboard.filters');
         Route::post('/dashboard/save', 'DashboardController@saveWidgets')->name('dashboard.widgets.save');
+        Route::get('/dashboard/template', 'DashboardController@widgetTemplate')->name('dashboard.template');
     });
 });
 

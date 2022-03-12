@@ -29,6 +29,24 @@
             <button id="add-widget-column" class="btn btn-sm border ml-4">
                 <i class="fas fa-line-columns mr-1"></i>Add Widget Space
             </button>
+
+            <div class="dropdown">
+                <button id="add-widgets" class="btn btn-sm border ml-4" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-th-large mr-1"></i>Add Widget
+                </button>
+                <div class="dropdown-menu" aria-labelledby="add-widgets">
+                    @foreach ($allWidgets as $widgetGroup)
+                        @foreach ($widgetGroup as $widgetName => $widgetLabel)
+                            <button class="dropdown-item add-widget-link"
+                                    data-widget="{{ $widgetName }}"
+                                    data-template="{{ route('enterprise.dashboard.template') }}?name={{ $widgetName }}&label={{ $widgetLabel }}"
+                                    data-url="{{ Route::has('enterprise.dashboard.' . $widgetName) ? route('enterprise.dashboard.' . $widgetName) : '' }}">
+                                {{ $widgetLabel }}
+                            </button>
+                        @endforeach
+                    @endforeach
+                </div>
+            </div>
         </div>
 
         <div class="enterprise-widget-grid" data-dashboard="{{ $dashboard->name }}">
@@ -75,14 +93,14 @@
                     handle: ".drag-handle",
                     placeholder: "portlet-placeholder",
                     stop: function( event, ui ) {
-                        getWidgetData();
+                        saveWidgetData();
                     },
                 });
 
                 $('.widget-column').sortable(isDrag ? 'enable' : 'disable');
             }
 
-            function getWidgetData() {
+            function saveWidgetData() {
                 let widgetNames = [];
                 let widgetLabels = [];
 
@@ -101,9 +119,6 @@
                     }
                 });
 
-                console.log(widgetNames);
-                console.log(widgetLabels);
-
                 $.post('{{ route('enterprise.dashboard.widgets.save') }}', {
                     widgetNames: widgetNames,
                     widgetLabels: widgetLabels,
@@ -119,7 +134,8 @@
                 loadSortables();
             });
 
-            function getEnterpriseWidget(widgetName, url = false, buildWidgets = true) {
+            function getEnterpriseWidget(widgetName, url = false, buildFilters = true) {
+                console.log("getting enterprise widget");
                 let widgetId = "#" + widgetName;
 
                 if (url === false) {
@@ -136,24 +152,28 @@
                 }
 
                 // Widget Controls -- Setup Filters
-                if (buildWidgets === true) {
-                    let widgetControls = $(widgetId).find('.widget-controls');
-                    console.log(widgetControls);
-
-                    widgetControls.each(function() {
-                        $(this).find('.filter-checkboxes').each(function() {
-                            let url = $(this).data('url');
-                            let filterGroup = $(this).children('.filter-group');
-
-                            $.get(
-                                url,
-                                function (data) {
-                                    $(filterGroup).html(data);
-                                }
-                            );
-                        });
-                    });
+                if (buildFilters === true) {
+                    buildWidgetFilters(widgetId);
                 }
+            }
+
+            function buildWidgetFilters(widgetId) {
+                let widgetControls = $(widgetId).find('.widget-controls');
+
+                widgetControls.each(function() {
+                    console.log($(this));
+                    $(this).find('.filter-checkboxes').each(function() {
+                        let url = $(this).data('url');
+                        let filterGroup = $(this).children('.filter-group');
+
+                        $.get(
+                            url,
+                            function (data) {
+                                $(filterGroup).html(data);
+                            }
+                        );
+                    });
+                });
             }
 
             function buildQueryUrl(element) {
@@ -243,11 +263,48 @@
                 });
             });
 
+            // Remove Widgets
             $(document).on('click', '.remove-widget', function(event) {
                 event.preventDefault();
                 let parentWidget = $(this).attr('data-widget');
                 $(parentWidget).remove();
-                getWidgetData();
+                saveWidgetData();
+                allowAddableWidgets();
+            });
+
+            // Sets what widgets are allowed to be added
+            function allowAddableWidgets() {
+                $('.add-widget-link').each(function() {
+
+                    let widgetId = '#' + $(this).attr('data-widget');
+
+                    if ($(widgetId).length) {
+                        $(this).prop('disabled', true);
+                    } else {
+                        $(this).prop('disabled', false);
+                    }
+                });
+            }
+
+            allowAddableWidgets();
+
+            // Adding a Widget
+            $(document).on('click', '.add-widget-link', function() {
+                let widgetId = $(this).attr('data-widget');
+                let templateUrl = $(this).attr('data-template');
+                let dataUrl = $(this).attr('data-url');
+                let firstWidget = $('.widget-column:first .enterprise-widget:first');
+
+                $.get(
+                    templateUrl,
+                    function (data) {
+                        $(data).insertBefore(firstWidget);
+                    }
+                );
+
+                getEnterpriseWidget(widgetId, dataUrl);
+                allowAddableWidgets();
+                saveWidgetData();
             });
         });
     </script>

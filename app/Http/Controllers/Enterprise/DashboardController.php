@@ -52,8 +52,9 @@ class DashboardController extends Controller
     {
         $dashboard = $this->getUserDashboard();
         $widgets = $this->getUserWidgets($dashboard);
+        $allWidgets = $this->defaultWidgets;
 
-        return view('enterprise.dashboard-drag', compact('widgets', 'dashboard'));
+        return view('enterprise.dashboard-drag', compact('widgets', 'dashboard', 'allWidgets'));
     }
 
     public function saveWidgets(Request $request): \Illuminate\Http\JsonResponse
@@ -82,6 +83,19 @@ class DashboardController extends Controller
         }
 
         return response()->json($response);
+    }
+
+    public function widgetTemplate(Request $request): string
+    {
+        $widgetName = $request->input('name');
+        $widgetLabel = $request->input('label');
+
+        return View::make("enterprise.widgets._template")
+            ->with([
+                'widgetName' => $widgetName,
+                'widgetLabel' => $widgetLabel
+            ])
+            ->render();
     }
 
     public function combinedFeedWidget(Request $request): string
