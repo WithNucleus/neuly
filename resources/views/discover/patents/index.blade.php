@@ -147,13 +147,13 @@
                                             </div>
                                             @if($patent->granted_date != '')
                                                 <div class="mr-5">
-                                                    <strong class="d-block">Priority Date</strong>
+                                                    <strong class="d-block">Granted Date</strong>
                                                     {{ Carbon\Carbon::parse($patent->granted_date)->format('M d, Y') }}
                                                 </div>
                                             @endif
                                             @if($patent->expiration_date != '')
                                                 <div class="mr-5">
-                                                    <strong class="d-block">Priority Date</strong>
+                                                    <strong class="d-block">Expiration Date</strong>
                                                     {{ Carbon\Carbon::parse($patent->expiration_date)->format('M d, Y') }}
                                                 </div>
                                             @endif

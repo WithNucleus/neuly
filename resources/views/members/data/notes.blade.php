@@ -8,9 +8,9 @@
 @if ($notes->count() > 0)
     <ul class="list-group @if($shadow == true)shadow-sm @endif">
         @foreach ($notes as $note)
-            
+
             <li class="list-group-item">
-                <p class="lead font-weight-bold mb-0">
+                <p class="font-weight-bold mb-0">
                     <a href="{{ route('member.notes.show', $note->slug) }}">{{ $note->title }}</a>
                 </p>
 
