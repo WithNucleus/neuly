@@ -82,22 +82,22 @@ class Clinicaltrial extends Model implements EntityContract
     */
 
     public function locations() {
-        return $this->belongsToMany('App\Models\Location', 'clinicaltrial_location', 'clinicaltrial_id', 'location_id')
+        return $this->belongsToMany(Location::class, 'clinicaltrial_location', 'clinicaltrial_id', 'location_id')
                     ->withTimestamps();
     }
 
     public function companies() {
-        return $this->belongsToMany('App\Models\Company', 'clinicaltrial_company', 'clinicaltrial_id', 'company_id')
+        return $this->belongsToMany(Company::class, 'clinicaltrial_company', 'clinicaltrial_id', 'company_id')
                     ->withTimestamps();
     }
 
     public function people() {
-        return $this->belongsToMany('App\Models\Person', 'clinicaltrial_person', 'clinicaltrial_id', 'person_id')
+        return $this->belongsToMany(Person::class, 'clinicaltrial_person', 'clinicaltrial_id', 'person_id')
                     ->withTimestamps();
     }
 
     public function focus() {
-        return $this->belongsToMany('App\Models\Focus', 'clinicaltrial_focus', 'clinicaltrial_id', 'focus_id')
+        return $this->belongsToMany(Focus::class, 'clinicaltrial_focus', 'clinicaltrial_id', 'focus_id')
                     ->withTimestamps();
     }
 

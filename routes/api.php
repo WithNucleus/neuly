@@ -1,7 +1,14 @@
 <?php
 
+use App\Http\Controllers\Api\CompaniesController;
+use App\Http\Controllers\Api\ClinicaltrialsController;
 use App\Http\Controllers\Api\EventsController;
+use App\Http\Controllers\Api\InvestorsController;
 use App\Http\Controllers\Api\JobsController;
+use App\Http\Controllers\Api\PeopleController;
+use App\Http\Controllers\Api\ResearchController;
+use App\Http\Controllers\Api\SearchController;
+use App\Http\Controllers\Index\SearchTemplateController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,12 +25,20 @@ use Illuminate\Support\Facades\Route;
 Route::get('/api/entities/list/{alias}', 'EntityDataController@getEntitiesListByAlias')->name('api.entities.list.byAlias');
 
 Route::post('/feedback', 'FeedbackController@apiStore')->name('feedback.api.store');
+Route::post('/search/templates', [SearchTemplateController::class, 'apiStore'])->name('search.templates.api.store');
 
 Route::group([
     'middleware' => ['api.auth:api'],
     'as' => 'api.',
 ], function () {
-    Route::get('/jobs', [JobsController::class, 'index'])->name('jobs.index');
-    Route::get('/events', [EventsController::class, 'index'])->name('events.index');
+    Route::get('/jobs', [JobsController::class, 'index']);
+    Route::get('/events', [EventsController::class, 'index']);
+    Route::get('/organisations', [CompaniesController::class, 'index']);
+    Route::get('/people', [PeopleController::class, 'index']);
+    Route::get('/investors', [InvestorsController::class, 'index']);
+    Route::get('/research', [ResearchController::class, 'index']);
+    Route::get('/clinical-trials', [ClinicaltrialsController::class, 'index']);
+
+    Route::get('/search/suggestions', [SearchController::class, 'suggestions'])->name('search.suggestions');
 });
 
