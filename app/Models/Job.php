@@ -174,17 +174,17 @@ class Job extends Model implements EntityContract
     }
 
     public function focus() {
-        return $this->belongsToMany('App\Models\Focus', 'focus_job', 'job_id', 'focus_id')
+        return $this->belongsToMany(Focus::class, 'focus_job', 'job_id', 'focus_id')
                     ->withTimestamps();
     }
 
     public function locations() {
-        return $this->belongsToMany('App\Models\Location', 'job_location', 'job_id', 'location_id')
+        return $this->belongsToMany(Location::class, 'job_location', 'job_id', 'location_id')
                     ->withTimestamps();
     }
 
     public function jobApplications() {
-        return $this->hasMany('App\Models\JobApplication');
+        return $this->hasMany(JobApplication::class);
     }
 
     /*
