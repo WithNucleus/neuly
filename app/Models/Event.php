@@ -99,6 +99,11 @@ class Event extends Model implements EntityContract, EntityImageContract
     |--------------------------------------------------------------------------
     */
 
+    public function scopePast(Builder $query)
+    {
+        return $query->where('start_date', '<=', Carbon::now(config('app.timezone')));
+    }
+
     public function scopeUpcoming(Builder $query)
     {
         return $query->where('start_date', '>=', Carbon::now(config('app.timezone')));

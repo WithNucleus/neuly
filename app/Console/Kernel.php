@@ -95,6 +95,14 @@ class Kernel extends ConsoleKernel
             ->onFailure(function() {
                 Log::critical('Clean backups failed');
             });
+
+        // Daily Metrics
+        $schedule
+            ->command('dailyMetrics')
+            ->daily()
+            ->onFailure(function() {
+                Log::critical('Daily metrics failed');
+            });
     }
 
     /**
