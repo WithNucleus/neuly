@@ -135,7 +135,6 @@
             });
 
             function getEnterpriseWidget(widgetName, url = false, buildFilters = true) {
-                console.log("getting enterprise widget");
                 let widgetId = "#" + widgetName;
 
                 if (url === false) {
@@ -161,7 +160,6 @@
                 let widgetControls = $(widgetId).find('.widget-controls');
 
                 widgetControls.each(function() {
-                    console.log($(this));
                     $(this).find('.filter-checkboxes').each(function() {
                         let url = $(this).data('url');
                         let filterGroup = $(this).children('.filter-group');

@@ -33,6 +33,9 @@ class DashboardController extends Controller
             'notes' => 'Notes',
             'jobs' => 'Jobs',
             'events' => 'Events',
+            'follows' => 'Follows',
+            'recently-viewed' => 'Recently Viewed',
+            'team' => 'Team',
         ],
         [
             'patents' => 'Patents',
@@ -42,9 +45,8 @@ class DashboardController extends Controller
             'combined-feed' => 'Latest News and More',
         ],
         [
-            'follows' => 'Follows',
-            'recently-viewed' => 'Recently Viewed',
-            'team' => 'Team',
+            'chart-organizations-focus' => 'Organizations by Focus',
+            'chart-organizations-industry' => 'Organizations by Industry'
         ]
     ];
 
@@ -339,6 +341,16 @@ class DashboardController extends Controller
                 'events' => $events,
             ])
             ->render();
+    }
+
+    public function organizationsFocusChart(): string
+    {
+        return View::make("enterprise.widgets.chart-organizations-focus")->render();
+    }
+
+    public function organizationsIndustryChart(): string
+    {
+        return View::make("enterprise.widgets.chart-organizations-industry")->render();
     }
 
     public function filters(Request $request): string
