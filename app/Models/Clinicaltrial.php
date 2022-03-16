@@ -59,6 +59,22 @@ class Clinicaltrial extends Model implements EntityContract
     |--------------------------------------------------------------------------
     */
 
+    protected static function booted()
+    {
+        static::creating(function ($model) {
+            $model->setSlug();
+        });
+
+        static::updating(function ($model) {
+            $model->setSlug();
+        });
+    }
+
+    private function setSlug()
+    {
+        $this->attributes['slug'] = $this->attributes['nct_number'] . '-' . Str::slug($this->attributes['title']);
+    }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
@@ -170,13 +186,6 @@ class Clinicaltrial extends Model implements EntityContract
     public function getNameAttribute()
     {
         return $this->attributes['title'];
-    }
-
-    // Set Slug Attribute When Setting Title
-    public function setTitleAttribute($value) {
-        $this->attributes['title'] = $value;
-        $nct_number = $this->attributes['nct_number'];
-        $this->attributes['slug'] = $nct_number . '-' . Str::slug($value);
     }
 
     public function setConditionsAttribute($value) {
