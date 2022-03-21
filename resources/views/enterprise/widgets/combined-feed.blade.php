@@ -3,11 +3,11 @@
         <li class="list-group-item">
             <div class="d-flex">
                 @if ($item->icon_url == '')
-                    <div class="cf-neutral-icon">
+                    <div class="cf-neutral-icon widget-expandable-details">
                         {!! $item->media_icon !!}
                     </div>
                 @else
-                    <div class="cf-feed-icon" style="background-image: url({{ $item->icon_url }})"></div>
+                    <div class="cf-feed-icon widget-expandable-details" style="background-image: url({{ $item->icon_url }})"></div>
                 @endif
                 <div>
                     <a href="{{ $item->url }}" class="d-block font-weight-bold mb-1" target="_blank" rel="noopener noreferrer">

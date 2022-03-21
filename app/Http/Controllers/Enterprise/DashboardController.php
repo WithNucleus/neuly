@@ -30,6 +30,7 @@ class DashboardController extends Controller
 {
     private array $defaultWidgets = [
         [
+            'combined-feed' => 'Latest News and More',
             'notes' => 'Notes',
             'jobs' => 'Jobs',
             'events' => 'Events',
@@ -42,11 +43,27 @@ class DashboardController extends Controller
             'clinical-trials' => 'Clinical Trials',
         ],
         [
-            'combined-feed' => 'Latest News and More',
+            'chart-organizations-focus' => 'Organizations by Focus',
+            'chart-organizations-industry' => 'Organizations by Industry',
+            'chart-job-demand' => 'Job Demand',
+            'chart-active-patents' => 'Active Patents by Priority Date',
+            'chart-clinical-trials-status' => 'Clinical Trials by Status',
+            'chart-investments-by-focus' => 'Organization Investments by Focus',
+        ]
+    ];
+
+    private array $defaultWidgetColumns = [
+        [
+            'name' => 'news',
+            'size' => 'medium'
         ],
         [
-            'chart-organizations-focus' => 'Organizations by Focus',
-            'chart-organizations-industry' => 'Organizations by Industry'
+            'name' => 'research',
+            'size' => 'medium'
+        ],
+        [
+            'name' => 'charts',
+            'size' => 'large'
         ]
     ];
 
@@ -55,8 +72,14 @@ class DashboardController extends Controller
         $dashboard = $this->getUserDashboard();
         $widgets = $this->getUserWidgets($dashboard);
         $allWidgets = $this->defaultWidgets;
+        $widgetColumns = $this->defaultWidgetColumns;
 
-        return view('enterprise.dashboard-drag', compact('widgets', 'dashboard', 'allWidgets'));
+        if (count($widgets) !== count($widgetColumns)) {
+            echo 'Houston, there was a problem. Please email <a href="mailto:sydney@withnucleus.com">sydney@withnucleus.com</a>';
+            exit();
+        }
+
+        return view('enterprise.dashboard-drag', compact('widgets', 'dashboard', 'allWidgets', 'widgetColumns'));
     }
 
     public function saveWidgets(Request $request): \Illuminate\Http\JsonResponse
@@ -341,16 +364,6 @@ class DashboardController extends Controller
                 'events' => $events,
             ])
             ->render();
-    }
-
-    public function organizationsFocusChart(): string
-    {
-        return View::make("enterprise.widgets.chart-organizations-focus")->render();
-    }
-
-    public function organizationsIndustryChart(): string
-    {
-        return View::make("enterprise.widgets.chart-organizations-industry")->render();
     }
 
     public function filters(Request $request): string

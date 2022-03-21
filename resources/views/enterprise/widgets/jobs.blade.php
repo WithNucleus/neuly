@@ -1,7 +1,7 @@
 <ul class="list-group">
     @forelse($jobs as $job)
         <li class="list-group-item d-md-flex">
-            <div class="logo-icon" style="background-image: url('{{ $job->owner->entityImageUrl }}');"></div>
+            <div class="logo-icon widget-expandable-details" style="background-image: url('{{ $job->owner->entityImageUrl }}');"></div>
             <div class="text">
                 <p class="mb-1 font-weight-bold">
                     <a href="{{ route('discover.jobs.show', $job->slug) }}">

@@ -73,10 +73,11 @@
         <link rel="stylesheet" href="{{ mix('css/enterprise-dashboard.css') }}">
         <script src="https://unpkg.com/packery@2/dist/packery.pkgd.js"></script>
         <script src="https://unpkg.com/draggabilly@2/dist/draggabilly.pkgd.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha256-t9UJPrESBeG2ojKTIcFLPGF7nHi2vEc7f5A2KpH/UBU=" crossorigin="anonymous"></script>
+    @else
+        <script type="text/javascript" src="{{ asset('assets/chart.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('assets/chartisan.js') }}"></script>
     @endif
-
-    <script type="text/javascript" src="{{ asset('assets/chart.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('assets/chartisan.js') }}"></script>
 
     <script type="text/javascript" src="{{ asset('assets/typeahead.js') }}"></script>
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/bootstrap-tagsinput.css') }}"/>
