@@ -18,7 +18,7 @@ class CreateMetricsTable extends Migration
             $table->date('date');
             $table->string('type')->default('daily');
             $table->string('notes')->nullable();
-            $table->integer('organizations');
+            $table->integer('organizations')->default(0);
             $table->integer('people')->default(0);
             $table->integer('investors')->default(0);
             $table->integer('events_total')->default(0);

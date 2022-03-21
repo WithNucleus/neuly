@@ -54,7 +54,7 @@ class CollectMetrics implements ShouldQueue
         $jobs_open = Job::open()->count();
         $jobs_archived = Job::archived()->count();
         $media_items_total = MediaItem::public()->count();
-        $news = MediaItem::public()->count();
+        $news = MediaItem::news()->public()->count();
         $articles = MediaItem::articles()->public()->count();
         $images = MediaItem::images()->public()->count();
         $videos = MediaItem::videos()->public()->count();
