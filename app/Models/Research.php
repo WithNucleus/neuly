@@ -58,17 +58,17 @@ class Research extends Model implements EntityContract
     */
 
     public function focus() {
-        return $this->belongsToMany('App\Models\Focus', 'focus_research', 'research_id', 'focus_id')
+        return $this->belongsToMany(Focus::class, 'focus_research', 'research_id', 'focus_id')
                     ->withTimestamps();
     }
 
     public function companies() {
-        return $this->belongsToMany('App\Models\Company', 'company_research', 'research_id', 'company_id')
+        return $this->belongsToMany(Company::class, 'company_research', 'research_id', 'company_id')
                     ->withTimestamps();
     }
 
     public function people() {
-        return $this->belongsToMany('App\Models\Person', 'person_research', 'research_id', 'person_id')
+        return $this->belongsToMany(Person::class, 'person_research', 'research_id', 'person_id')
                     ->withTimestamps();
     }
 

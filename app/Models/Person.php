@@ -149,7 +149,7 @@ class Person extends Model implements EntityContract, EntityImageContract
 
     public function companies()
     {
-        return $this->belongsToMany('App\Models\Company', 'company_person', 'person_id', 'company_id')
+        return $this->belongsToMany(Company::class, 'company_person', 'person_id', 'company_id')
             ->withPivot(['position'])
             ->withTimestamps();
     }
@@ -161,38 +161,38 @@ class Person extends Model implements EntityContract, EntityImageContract
 
     public function locations()
     {
-        return $this->belongsToMany('App\Models\Location', 'location_person', 'person_id', 'location_id')
+        return $this->belongsToMany(Location::class, 'location_person', 'person_id', 'location_id')
             ->withTimestamps();
     }
 
     public function investors()
     {
-        return $this->belongsToMany('App\Models\Investor', 'investor_person', 'person_id', 'investor_id')
+        return $this->belongsToMany(Investor::class, 'investor_person', 'person_id', 'investor_id')
             ->withPivot(['role'])
             ->withTimestamps();
     }
 
     public function research()
     {
-        return $this->belongsToMany('App\Models\Research', 'person_research', 'person_id', 'research_id')
+        return $this->belongsToMany(Research::class, 'person_research', 'person_id', 'research_id')
             ->withTimestamps();
     }
 
     public function events()
     {
-        return $this->belongsToMany('App\Models\Event', 'event_person', 'person_id', 'event_id')
+        return $this->belongsToMany(Event::class, 'event_person', 'person_id', 'event_id')
             ->withTimestamps();
     }
 
     public function clinicaltrials()
     {
-        return $this->belongsToMany('App\Models\Clinicaltrial', 'clinicaltrial_person', 'person_id', 'clinicaltrial_id')
+        return $this->belongsToMany(Clinicaltrial::class, 'clinicaltrial_person', 'person_id', 'clinicaltrial_id')
             ->withTimestamps();
     }
 
     public function relatedUser()
     {
-        return $this->belongsTo('App\User', 'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /*
@@ -203,7 +203,7 @@ class Person extends Model implements EntityContract, EntityImageContract
 
     public function scopePublic($query)
     {
-        return $query->where('visibilty', '=', 'public');
+        return $query->where('visibility', 'public');
     }
 
     /*
