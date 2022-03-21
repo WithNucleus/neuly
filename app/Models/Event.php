@@ -48,7 +48,7 @@ class Event extends Model implements EntityContract, EntityImageContract
     protected static $imageFolderPath = 'events';
     protected static $imageFilenameAttribute = 'name';
 
-    private $searchableRelationships = [
+    private array $searchableRelationships = [
         'companies' => 'name',
         'focus' => 'name',
         'locations' => 'name',
@@ -56,7 +56,7 @@ class Event extends Model implements EntityContract, EntityImageContract
         'eventTypes' => 'name',
     ];
 
-    private $searchableDateFields = [
+    private array $searchableDateFields = [
         'start_date',
         'end_date',
     ];
@@ -73,23 +73,28 @@ class Event extends Model implements EntityContract, EntityImageContract
     |--------------------------------------------------------------------------
     */
 
-    public function companies() {
+    public function companies(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
         return $this->belongsToMany('App\Models\Company', 'company_event', 'event_id', 'company_id')->withTimestamps();
     }
 
-    public function focus() {
+    public function focus(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
         return $this->belongsToMany('App\Models\Focus', 'event_focus', 'event_id', 'focus_id')->withTimestamps();
     }
 
-    public function locations() {
+    public function locations(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
         return $this->belongsToMany('App\Models\Location', 'event_location', 'event_id', 'location_id')->withTimestamps();
     }
 
-    public function people() {
+    public function people(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
         return $this->belongsToMany('App\Models\Person', 'event_person', 'event_id', 'person_id')->withTimestamps();
     }
 
-    public function eventTypes() {
+    public function eventTypes(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
         return $this->belongsToMany('App\Models\EventType', 'event_event_type', 'event_id', 'event_type_id')->withTimestamps();
     }
 
@@ -99,7 +104,12 @@ class Event extends Model implements EntityContract, EntityImageContract
     |--------------------------------------------------------------------------
     */
 
-    public function scopeUpcoming(Builder $query)
+    public function scopePast(Builder $query): Builder
+    {
+        return $query->where('start_date', '<', Carbon::now(config('app.timezone')));
+    }
+
+    public function scopeUpcoming(Builder $query): Builder
     {
         return $query->where('start_date', '>=', Carbon::now(config('app.timezone')));
     }
@@ -124,7 +134,7 @@ class Event extends Model implements EntityContract, EntityImageContract
     /**
      * @return array
      */
-    public static function getFieldsMapping()
+    public static function getFieldsMapping(): array
     {
         return [
             //attributes
@@ -185,7 +195,7 @@ class Event extends Model implements EntityContract, EntityImageContract
         ];
     }
 
-    public static function getListingRequestMapping()
+    public static function getListingRequestMapping(): array
     {
         $mapping = self::getFieldsMapping();
         $skipFields = ['slug'];

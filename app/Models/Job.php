@@ -200,6 +200,10 @@ class Job extends Model implements EntityContract
         return $query->where('status', self::STATUS_OPEN);
     }
 
+    public function scopeArchived($query) {
+        return $query->where('status', self::STATUS_ARCHIVED);
+    }
+
     /*
     |--------------------------------------------------------------------------
     | ACCESSORS
