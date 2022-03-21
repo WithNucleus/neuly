@@ -33,7 +33,7 @@ Route::group([
 ], function () {
     Route::get('/jobs', [JobsController::class, 'index']);
     Route::get('/events', [EventsController::class, 'index']);
-    Route::get('/organisations', [CompaniesController::class, 'index']);
+    Route::get('/organizations', [CompaniesController::class, 'index']);
     Route::get('/people', [PeopleController::class, 'index']);
     Route::get('/investors', [InvestorsController::class, 'index']);
     Route::get('/research', [ResearchController::class, 'index']);

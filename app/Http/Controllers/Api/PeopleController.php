@@ -12,12 +12,16 @@ class PeopleController extends Controller
         $hiddenFields = [
             'id',
             'slug',
+            'email',
+            'secondary_email',
             'photo',
             'visibility',
             'visibility_code',
             'created_at',
             'updated_at',
             'user_id',
+            'twitter_followers',
+            'instagram_followers',
         ];
 
         $relationsWithArray = [

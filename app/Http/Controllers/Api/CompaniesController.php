@@ -17,6 +17,10 @@ class CompaniesController extends Controller
             'visibility_code',
             'created_at',
             'updated_at',
+            'focus_description',
+            'location',
+            'contact_info',
+            'notes',
         ];
 
         $relationsWithArray = [
