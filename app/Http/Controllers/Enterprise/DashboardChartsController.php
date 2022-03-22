@@ -146,7 +146,7 @@ class DashboardChartsController extends Controller
         foreach ($focuses as $focus) {
             $focusName = $focus['name'];
             unset($focus['name']);
-            $values[$focusName] = $focus;
+            $values[$focusName] = array_values($focus);
         }
 
         $labels = array_values($statuses);
