@@ -131,22 +131,22 @@ class DashboardChartsController extends Controller
             'withdrawn' => 'Withdrawn',
         ];
 
-        $focuses = Focus::select(['name'])->whereIn('name', $focuses);
+        $focusesQuery = Focus::select(['name'])->whereIn('name', $focuses);
 
         foreach ($statuses as $label => $status) {
-            $focuses = $focuses->withCount(['clinicaltrials as ' . $label => function (Builder $query) use ($status) {
+            $focusesQuery->withCount(['clinicaltrials as ' . $label => function (Builder $query) use ($status) {
                 $query->where('status', $status);
             }]);
         }
 
-        $focuses = $focuses->get()->toArray();
+        $focuses = $focusesQuery->get()->toArray();
 
         $values = [];
 
         foreach ($focuses as $focus) {
             $focusName = $focus['name'];
             unset($focus['name']);
-            $values[$focusName] = array_values($focus);
+            $values[$focusName] = $focus;
         }
 
         $labels = array_values($statuses);
