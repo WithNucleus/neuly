@@ -21,7 +21,7 @@
             <li class="list-group-item d-flex">
 
                 {{-- Image --}}
-                <div class="recently-viewed-image mr-3">
+                <div class="recently-viewed-image mr-3 widget-expandable-details">
                     @if (!empty($item->properties['image']) && file_exists('storage/' . $item->properties['image']))
                         <img src="storage/{{ $item->properties['image'] }}" alt="{{ $item->description }}" class="logo">
                     @else
@@ -35,11 +35,11 @@
                         <a href="{{ route($route, $item->properties['slug']) }}" class="font-weight-bold">{{ $item->description }}</a>
                     </div>
 
-                    <span class="mr-4 font-size-small">
+                    <span class="mr-4 font-size-small widget-expandable-details">
                         <i class="fad fa-clock text-black-50"></i> {{ Carbon\Carbon::parse($item->created_at)->diffForHumans() }}
                     </span>
 
-                    <span class="mr-4 font-size-small">
+                    <span class="mr-4 font-size-small widget-expandable-details">
                         <i class="fad fa-tags text-secondarydark"></i> {{ $entity_name }}
                     </span>
                 </div>

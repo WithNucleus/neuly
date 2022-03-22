@@ -15,7 +15,7 @@
                 </p>
 
                 <div class="d-flex flex-wrap justify-content-between">
-                    <div class="left-side font-size-small">
+                    <div class="left-side font-size-small widget-expandable-details">
                         <i class="fad fa-clock"></i> Last updated {{ \Carbon\Carbon::parse($note->updated_at)->diffForHumans() }}
 
                         @if($note->visibility == 'public')
@@ -25,7 +25,7 @@
                         @endif
                     </div>
 
-                    <div class="right-side font-size-small">
+                    <div class="right-side font-size-small widget-expandable-details">
                         <a href="{{ route('member.notes.edit', $note->slug) }}" class="text-primary text-decoration-none mr-2"><i class="fad fa-edit"></i> Edit</a>
                         <a href="{{ route('member.notes.destroy', $note->id) }}" class="text-danger confirm-action text-decoration-none"><i class="fad fa-trash-alt"></i> Delete</a>
                     </div>

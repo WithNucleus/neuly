@@ -361,6 +361,13 @@ Route::group(['middleware' => ['auth', 'enterprise.demo']], function () {
         Route::get('/dashboard/filters', 'DashboardController@filters')->name('dashboard.filters');
         Route::post('/dashboard/save', 'DashboardController@saveWidgets')->name('dashboard.widgets.save');
         Route::get('/dashboard/template', 'DashboardController@widgetTemplate')->name('dashboard.template');
+
+        Route::get('/dashboard/charts/organizations-focus', 'DashboardChartsController@organizationsFocusChart')->name('dashboard.chart-organizations-focus');
+        Route::get('/dashboard/charts/organizations-industry', 'DashboardChartsController@organizationsIndustryChart')->name('dashboard.chart-organizations-industry');
+        Route::get('/dashboard/charts/job-demand', 'DashboardChartsController@jobDemandChart')->name('dashboard.chart-job-demand');
+        Route::get('/dashboard/charts/active-patents', 'DashboardChartsController@activePatentsChart')->name('dashboard.chart-active-patents');
+        Route::get('/dashboard/charts/clinical-trials', 'DashboardChartsController@clinicalTrialsChart')->name('dashboard.chart-clinical-trials-status');
+        Route::get('/dashboard/charts/investments-by-focus', 'DashboardChartsController@investmentByFocus')->name('dashboard.chart-investments-by-focus');
     });
 });
 

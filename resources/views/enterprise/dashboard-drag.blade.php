@@ -50,8 +50,8 @@
         </div>
 
         <div class="enterprise-widget-grid" data-dashboard="{{ $dashboard->name }}">
-            @foreach ($widgets as $columns)
-                <div class="widget-column">
+            @foreach ($widgets as $key => $columns)
+                <div class="widget-column" data-name="{{ $widgetColumns[$key]['name'] }}" data-size="{{ $widgetColumns[$key]['size'] }}">
                     @foreach($columns as $widgetName => $widgetLabel)
                         <x-enterprise.widget name="{{ $widgetName }}" heading="{{ $widgetLabel }}" />
                     @endforeach
@@ -103,6 +103,7 @@
             function saveWidgetData() {
                 let widgetNames = [];
                 let widgetLabels = [];
+                let widgetColumns = [];
 
                 $('.widget-column').each(function() {
                     let columnNames = [];
@@ -135,7 +136,6 @@
             });
 
             function getEnterpriseWidget(widgetName, url = false, buildFilters = true) {
-                console.log("getting enterprise widget");
                 let widgetId = "#" + widgetName;
 
                 if (url === false) {
@@ -161,7 +161,6 @@
                 let widgetControls = $(widgetId).find('.widget-controls');
 
                 widgetControls.each(function() {
-                    console.log($(this));
                     $(this).find('.filter-checkboxes').each(function() {
                         let url = $(this).data('url');
                         let filterGroup = $(this).children('.filter-group');

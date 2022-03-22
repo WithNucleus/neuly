@@ -23,9 +23,9 @@
                     </div>
                 @endif
 
-                <div class="d-flex flex-wrap justify-content-between @if($show_more == true) mt-1 mb-1 @endif">
+                <div class="d-flex flex-wrap justify-content-between widget-expandable-details">
                     @if(!isset($public_list) || $public_list == false)
-                    <div class="left-side font-size-small">
+                    <div class="left-side font-size-small widget-expandable-details">
                             <i class="fad fa-clock"></i> Added {{ \Carbon\Carbon::parse($follow->created_at)->diffForHumans() }}
                             <span class="ml-3 {{ $follow->email_notification ? 'text-success' : 'text-muted' }}"><i class="fad fa-bell"></i> Email notifications</span>
                             <span class="ml-3 {{ $follow->app_notification ? 'text-success' : 'text-muted'  }}"><i class="fad fa-bell"></i> Neuly notifications</span>
