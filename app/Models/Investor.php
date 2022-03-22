@@ -96,17 +96,17 @@ class Investor extends Model implements EntityContract, EntityImageContract
     */
 
     public function locations() {
-        return $this->belongsToMany('App\Models\Location', 'investor_location', 'investor_id', 'location_id')
+        return $this->belongsToMany(Location::class, 'investor_location', 'investor_id', 'location_id')
             ->withTimestamps();
     }
 
     public function companies() {
-        return $this->belongsToMany('App\Models\Company', 'company_investor', 'investor_id', 'company_id')
+        return $this->belongsToMany(Company::class, 'company_investor', 'investor_id', 'company_id')
             ->withTimestamps();
     }
 
     public function people() {
-        return $this->belongsToMany('App\Models\Person', 'investor_person', 'investor_id', 'person_id')
+        return $this->belongsToMany(Person::class, 'investor_person', 'investor_id', 'person_id')
             ->withPivot(['role'])
             ->withTimestamps();
     }

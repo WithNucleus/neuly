@@ -73,29 +73,24 @@ class Event extends Model implements EntityContract, EntityImageContract
     |--------------------------------------------------------------------------
     */
 
-    public function companies(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
-    {
-        return $this->belongsToMany('App\Models\Company', 'company_event', 'event_id', 'company_id')->withTimestamps();
+    public function companies() {
+        return $this->belongsToMany(Company::class, 'company_event', 'event_id', 'company_id')->withTimestamps();
     }
 
-    public function focus(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
-    {
-        return $this->belongsToMany('App\Models\Focus', 'event_focus', 'event_id', 'focus_id')->withTimestamps();
+    public function focus() {
+        return $this->belongsToMany(Focus::class, 'event_focus', 'event_id', 'focus_id')->withTimestamps();
     }
 
-    public function locations(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
-    {
-        return $this->belongsToMany('App\Models\Location', 'event_location', 'event_id', 'location_id')->withTimestamps();
+    public function locations() {
+        return $this->belongsToMany(Location::class, 'event_location', 'event_id', 'location_id')->withTimestamps();
     }
 
-    public function people(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
-    {
-        return $this->belongsToMany('App\Models\Person', 'event_person', 'event_id', 'person_id')->withTimestamps();
+    public function people() {
+        return $this->belongsToMany(Person::class, 'event_person', 'event_id', 'person_id')->withTimestamps();
     }
 
-    public function eventTypes(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
-    {
-        return $this->belongsToMany('App\Models\EventType', 'event_event_type', 'event_id', 'event_type_id')->withTimestamps();
+    public function eventTypes() {
+        return $this->belongsToMany(EventType::class, 'event_event_type', 'event_id', 'event_type_id')->withTimestamps();
     }
 
     /*
