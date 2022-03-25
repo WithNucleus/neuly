@@ -58,7 +58,8 @@ return [
         'admin_notifications_enabled' => env('SLACK_ADMIN_NOTIFICATIONS_ENABLED', false),
         'webhooks' => [
             'notifications' => 'https://hooks.slack.com/services/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',
-            'metrics' => 'https://hooks.slack.com/services/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'
+            'metrics' => 'https://hooks.slack.com/services/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',
+            'metrics_change' => 'https://hooks.slack.com/services/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'
         ],
     ],
 

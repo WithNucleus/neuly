@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Metrics;
 
 use App\Jobs\Metrics\CollectMetrics;
 use Illuminate\Console\Command;
@@ -12,14 +12,14 @@ class DailyMetrics extends Command
      *
      * @var string
      */
-    protected $signature = 'dailyMetrics';
+    protected $signature = 'metrics:daily';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Starts a collection of Neuly metrics (count of all entities)';
+    protected $description = 'Starts a collection of Neuly metrics for the day & dispatches a job for the daily count';
 
     /**
      * Create a new command instance.
@@ -38,7 +38,7 @@ class DailyMetrics extends Command
      */
     public function handle()
     {
-        CollectMetrics::dispatch('daily');
+        CollectMetrics::dispatch();
         return 0;
     }
 }
