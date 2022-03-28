@@ -2,6 +2,7 @@
 
 namespace App\Jobs\Metrics;
 
+use App\Helpers\NotificationHelper;
 use App\Models\Clinicaltrial;
 use App\Models\Company;
 use App\Models\Course;
@@ -14,6 +15,7 @@ use App\Models\Metric;
 use App\Models\Patent;
 use App\Models\Person;
 use App\Models\Research;
+use App\Notifications\Metrics\DailyMetrics;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -95,5 +97,6 @@ class CollectMetrics implements ShouldQueue
         ]);
 
         MetricsChange::dispatch($metric, Metric::TYPE_CHANGE, Metric::FREQUENCY_DAILY);
+        NotificationHelper::sendSlackNotification(new DailyMetrics($metric), 'metrics');
     }
 }

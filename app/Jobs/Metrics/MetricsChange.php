@@ -60,10 +60,10 @@ class MetricsChange implements ShouldQueue
     private function getPreviousMetricRecord($frequency, $currentDate): Metric
     {
         $date = match ($frequency) {
-            'weekly' => Carbon::parse($currentDate)->subWeek(),
-            'monthly' => Carbon::parse($currentDate)->subMonth(),
-            'quarterly' => Carbon::parse($currentDate)->subQuarter(),
-            'yearly' => Carbon::parse($currentDate)->subYear(),
+            Metric::FREQUENCY_WEEKLY => Carbon::parse($currentDate)->subWeek(),
+            Metric::FREQUENCY_MONTHLY => Carbon::parse($currentDate)->subMonth(),
+            Metric::FREQUENCY_QUARTERLY => Carbon::parse($currentDate)->subQuarter(),
+            Metric::FREQUENCY_YEARLY => Carbon::parse($currentDate)->subYear(),
             default => Carbon::parse($currentDate)->subDay(),
         };
 
