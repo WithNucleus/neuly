@@ -3,15 +3,18 @@
 namespace App\Jobs\Metrics;
 
 use App\Helpers\NotificationHelper;
+use App\Models\Clinicaltrial;
 use App\Models\Company;
 use App\Models\Course;
 use App\Models\Event;
 use App\Models\Investor;
 use App\Models\Job;
+use App\Models\Location;
 use App\Models\MediaItem;
 use App\Models\Metric;
 use App\Models\Patent;
 use App\Models\Person;
+use App\Models\Research;
 use App\Notifications\Metrics\DailyMetrics;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -24,16 +27,14 @@ class CollectMetrics implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected string $type;
-
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($type)
+    public function __construct()
     {
-        $this->type = $type;
+        //
     }
 
     /**
@@ -47,6 +48,9 @@ class CollectMetrics implements ShouldQueue
         $organizations = Company::count();
         $people = Person::public()->count();
         $investors = Investor::count();
+        $clinical_trials = Clinicaltrial::count();
+        $research = Research::count();
+        $locations = Location::count();
         $events_total = Event::count();
         $events_upcoming = Event::upcoming()->count();
         $events_past = Event::past()->count();
@@ -67,10 +71,12 @@ class CollectMetrics implements ShouldQueue
 
         $metric = Metric::create([
             'date' => $date,
-            'type' => $this->type,
             'organizations' => $organizations,
             'people' => $people,
             'investors' => $investors,
+            'research' => $research,
+            'locations' => $locations,
+            'clinical_trials' => $clinical_trials,
             'events_total' => $events_total,
             'events_upcoming' => $events_upcoming,
             'events_past' => $events_past,
@@ -90,7 +96,7 @@ class CollectMetrics implements ShouldQueue
             'patents' => $patents,
         ]);
 
+        MetricsChange::dispatch($metric, Metric::TYPE_CHANGE, Metric::FREQUENCY_DAILY);
         NotificationHelper::sendSlackNotification(new DailyMetrics($metric), 'metrics');
-
     }
 }

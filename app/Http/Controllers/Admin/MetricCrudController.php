@@ -42,6 +42,7 @@ class MetricCrudController extends CrudController
         CRUD::column('organizations');
         CRUD::column('people');
         CRUD::column('investors');
+        CRUD::column('clinical_trials');
         CRUD::column('events_total');
         CRUD::column('events_upcoming');
         CRUD::column('events_past');
