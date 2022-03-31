@@ -72,6 +72,10 @@ Route::group([
         Route::get('/media-dashboard', 'DataFeeds\DashboardController@index')->name('media-dashboard');
         Route::post('/media-dashboard/update/{id}', 'DataFeeds\DashboardController@update')->name('media-dashboard.update');
 
+        // Metrics
+        Route::crud('metric', 'MetricCrudController');
+        Route::get('/metrics-dashboard', 'Metrics\DashboardController@index')->name('metrics-dashboard');
+
         // Courses
         Route::crud('course', 'CourseCrudController');
     });
