@@ -14,7 +14,13 @@ class DashboardController extends Controller
         $allFields = Metric::CHART_FIELDS;
         $currentFields = $allFields;
 
+        // Remove Series
         $removeSeries = explode(',', $request->input('remove'));
+
+        $chartType = match($request->input('type')) {
+            'bar' => 'bar',
+            default => 'line'
+        };
 
         foreach ($removeSeries as $series) {
             unset($currentFields[$series]);
@@ -44,7 +50,7 @@ class DashboardController extends Controller
             'last-month' => 'Last Month',
             'last-quarter' => 'Last Quarter',
             'last-year' => 'Last Year',
-            'custom' => 'Custom'
+            'all-time' => 'All Time',
         ];
 
         $startDate = match ($dateRange) {
@@ -57,6 +63,7 @@ class DashboardController extends Controller
             "year-to-date" => Carbon::now()->startOfYear()->format('Y-m-d'),
             "quarter-to-date" => Carbon::now()->startOfQuarter()->format('Y-m-d'),
             "month-to-date" => Carbon::now()->startOfMonth()->format('Y-m-d'),
+            "all-time" => '2020-07-01',
             default => Carbon::now()->subDays(30)->format('Y-m-d')
         };
 
@@ -84,7 +91,8 @@ class DashboardController extends Controller
             'currentFields',
             'currentFieldsJson',
             'presetRanges',
-            'dateRange'
+            'dateRange',
+            'chartType'
         ));
     }
 }
