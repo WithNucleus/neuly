@@ -17,15 +17,15 @@
                     @endif
 
                     @if ($list->description)
-                        <p class="mb-0"><small>{{ $list->description }}</small></p>
+                        <p class="mb-0 widget-expandable-details"><small>{{ $list->description }}</small></p>
                     @endif
 
-                    <p class="mt-2 mb-0">
-                    @if($list->is_public)
-                        <span class="text-success"><i class="fad fa-eye"></i> Public</span>
-                    @else
-                        <span class="text-muted"><i class="fad fa-lock-alt"></i> Private</span>
-                    @endif
+                    <p class="mt-2 mb-0 widget-expandable-details">
+                        @if($list->is_public)
+                            <span class="text-success"><i class="fad fa-eye"></i> Public</span>
+                        @else
+                            <span class="text-muted"><i class="fad fa-lock-alt"></i> Private</span>
+                        @endif
                     </p>
                 </div>
 

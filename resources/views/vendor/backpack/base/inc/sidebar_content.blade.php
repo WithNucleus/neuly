@@ -226,6 +226,11 @@
                     <i class='nav-icon la la-lightbulb'></i> Patents
                 </a>
             </li>
+            <li class='nav-item'>
+                <a class='nav-link' href='{{ backpack_url('metric') }}'>
+                    <i class='nav-icon la la-chart-line'></i> Metrics
+                </a>
+            </li>
         </ul>
     </li>
 @endcan

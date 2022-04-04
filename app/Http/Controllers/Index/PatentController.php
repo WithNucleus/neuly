@@ -64,6 +64,7 @@ class PatentController extends Controller
             ])
             ->allowedFilters([
                 'status',
+                'priority_date',
                 AllowedFilter::partial('focus', 'focus.name'),
                 AllowedFilter::partial('people', 'people.name'),
                 AllowedFilter::partial('company', 'companies.name'),

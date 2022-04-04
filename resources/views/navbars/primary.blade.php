@@ -65,7 +65,11 @@
                 </li>
             @else
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('member.dashboard') }}">Dashboard</a>
+                    @can('enterprise demo')
+                        <a class="nav-link" href="{{ route('enterprise.dashboard') }}">Dashboard</a>
+                    @else
+                        <a class="nav-link" href="{{ route('member.dashboard') }}">Dashboard</a>
+                    @endcan
                 </li>
                 <li class="nav-item dropdown">
                     <a id="navbarDropdown" class="nav-link dropdown-toggle nav-user-dropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>

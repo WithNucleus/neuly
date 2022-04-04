@@ -72,6 +72,8 @@ return [
             'news' => 'https://hooks.slack.com/services/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',
             'books' => 'https://hooks.slack.com/services/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',
             'podcasts' => 'https://hooks.slack.com/services/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'
+            'metrics' => 'https://hooks.slack.com/services/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',
+            'metrics_change' => 'https://hooks.slack.com/services/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'
         ],
     ],
 
