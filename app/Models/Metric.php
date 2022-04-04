@@ -80,6 +80,56 @@ class Metric extends Model
         'patents' => 'Patents',
     ];
 
+    const METRICS_TABLES_ENTITIES = [
+        'organizations' => 'companies',
+        'people' => 'people',
+        'investors' => 'investors',
+        'clinical_trials' => 'clinicaltrials',
+        'research' => 'research',
+        'locations' => 'locations',
+        'events' => 'events',
+        'jobs' => 'jobs',
+        'courses' => 'courses',
+        'patents' => 'patents',
+        'users' => 'users'
+    ];
+
+    const TILE_TABLES = [
+        'companies',
+        'people',
+        'investors',
+        'clinicaltrials',
+        'research',
+        'locations',
+        'events',
+        'jobs',
+        'courses',
+        'patents',
+        'users'
+    ];
+
+    const TILE_LABELS = [
+        'companies' => 'Organizations',
+        'people' => 'People',
+        'investors' => 'Investors',
+        'clinicaltrials' => 'Clinical Trials',
+        'research' => 'Research',
+        'locations' => 'Locations',
+        'events' => 'Events',
+        'jobs' => 'Jobs',
+        'courses' => 'Courses',
+        'patents' => 'Patents',
+        'Article' => 'Articles',
+        'Image' => 'Images',
+        'Video' => 'Videos',
+        'Mixed' => 'Mixed Media',
+        'Podcast' => 'Podcasts',
+        'Book' => 'Books',
+        'News' => 'News',
+        'Patent Filing' => 'Patent Filings',
+        'users' => 'Users'
+    ];
+
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS

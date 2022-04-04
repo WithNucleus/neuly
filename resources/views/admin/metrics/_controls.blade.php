@@ -1,10 +1,21 @@
 <div class="col-12 mb-4 d-flex flex-wrap align-items-start">
+    <div class="my-1 mr-4">
+        <button id="update-chart-series" class="btn btn-primary" data-page-url="{{ route('admin.metrics.charts') }}">Update Filters</button>
+    </div>
     <div class="d-flex align-items-center mr-4 my-1">
         <label for="filter-date-range" class="font-weight-bold text-nowrap mr-2 mb-0">Date Range</label>
         <select name="filter-date-range" id="filter-date-range" class="form-control">
             @foreach ($presetRanges as $rangeValue => $rangeLabel)
-                <option value="{{ $rangeValue }}" @if ($dateRange == $rangeValue) selected @endif>{{ $rangeLabel }}</option>
+                <option value="{{ $rangeValue }}" @if ($filterDateRange == $rangeValue) selected @endif>{{ $rangeLabel }}</option>
             @endforeach
+        </select>
+    </div>
+
+    <div class="d-flex align-items-center mr-4 my-1">
+        <label for="filter-metrics-type" class="font-weight-bold text-nowrap mr-2 mb-0">Metrics Type</label>
+        <select name="filter-metrics-type" id="filter-metrics-type" class="form-control">
+            <option value="counts">Counts</option>
+            <option value="changes" @if ($filterMetricsType == 'changes') selected @endif>Changes</option>
         </select>
     </div>
 
@@ -12,7 +23,7 @@
         <label for="filter-chart-type" class="font-weight-bold text-nowrap mr-2 mb-0">Chart Type</label>
         <select name="filter-chart-type" id="filter-chart-type" class="form-control">
             <option value="line">Line</option>
-            <option value="bar" @if ($chartType == 'bar') selected @endif>Bar</option>
+            <option value="bar" @if ($filterChartType == 'bar') selected @endif>Bar</option>
         </select>
     </div>
 
@@ -31,10 +42,6 @@
             </div>
         </div>
     </div>
-
-    <div class="my-1">
-        <button id="update-chart-series" class="btn btn-primary" data-page-url="{{ route('admin.metrics-dashboard') }}">Update Chart</button>
-    </div>
 </div>
 <style>
     .data-type-checkbox-group {
@@ -48,6 +55,7 @@
 <script>
     let dateRangeElement = document.getElementById('filter-date-range');
     let chartTypeElement = document.getElementById('filter-chart-type');
+    let metricsTypeElement = document.getElementById('filter-metrics-type');
     let chartSeriesItems = document.querySelectorAll('.chart-series-item');
     let updateChartButton = document.getElementById('update-chart-series');
 
@@ -78,6 +86,9 @@
         let chartType = chartTypeElement.value;
         console.log("chartType: " + chartType);
 
+        let metricsType = metricsTypeElement.value;
+        console.log("metricsType: " + metricsType);
+
         let url = pageUrl + "?range=" + dateFilter;
 
         if (removeSeriesItems.length > 0) {
@@ -86,6 +97,10 @@
 
         if (chartType === 'bar') {
             url += '&type=' + chartType;
+        }
+
+        if (metricsType === 'changes') {
+            url += '&metrics=' + metricsType;
         }
 
         window.location.href = url;

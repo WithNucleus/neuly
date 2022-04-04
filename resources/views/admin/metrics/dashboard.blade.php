@@ -3,8 +3,7 @@
 @section('header')
     <div class="container-fluid mt-5">
         <h2>
-            <span class="text-capitalize">Metrics Dashboard - Counts</span>
-            {{--            <a href="{{ route('admin.datafeed.index') }}" class="font-sm"><i class="la la-angle-double-left"></i> Back to <span>Data Feeds</span></a>--}}
+            <span class="text-capitalize">Metrics Dashboard - {{ $filterMetricsType }}</span>
         </h2>
     </div>
 @endsection
@@ -30,7 +29,9 @@
                 <tbody>
                 @forelse ($metrics as $metric)
                     <tr>
-                        <td>{{ \Carbon\Carbon::parse($metric->date)->format('Y-m-d') }}</td>
+                        <td>
+                            {{ \Carbon\Carbon::parse($metric->date)->format('Y-m-d') }}
+                        </td>
                         @foreach($currentFields as $fieldName => $fieldLabel)
                             <td>{{ $metric->{$fieldName} }}</td>
                         @endforeach
@@ -38,7 +39,7 @@
                 @empty
                     <tr>
                         <td colspan="3">
-                            no records match your query
+                            No records match your query
                         </td>
                     </tr>
                 @endforelse
@@ -60,5 +61,5 @@
     <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/themes/Kelly.js"></script>
 
-    @include('admin.metrics.charts.' . $chartType)
+    @include('admin.metrics.charts.' . $filterChartType)
 @endsection

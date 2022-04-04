@@ -74,7 +74,9 @@ Route::group([
 
         // Metrics
         Route::crud('metric', 'MetricCrudController');
-        Route::get('/metrics-dashboard', 'Metrics\DashboardController@index')->name('metrics-dashboard');
+        Route::get('/metrics/charts', 'Metrics\DashboardController@charts')->name('metrics.charts');
+        Route::get('/metrics/tiles', 'Metrics\DashboardController@tiles')->name('metrics.tiles');
+        Route::get('/metrics/tiles/details', 'Metrics\DashboardController@tileDetails')->name('metrics.tiles.details');
 
         // Courses
         Route::crud('course', 'CourseCrudController');
