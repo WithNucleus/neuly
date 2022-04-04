@@ -227,6 +227,10 @@ class MediaItemCrudController extends CrudController
     private function sendApprovedNotification(MediaItem $mediaItem) {
 
         $channel = NotificationHelper::MEDIA_TYPE_CHANNELS[$mediaItem->media_type];
+        if($mediaItem->source_id !== null) {
+            $channel = NotificationHelper::MEDIA_TYPE_CHANNELS['Google Alert'];
+        }
+
         NotificationHelper::sendSlackNotification(new MediaItemApproved($mediaItem), $channel);
     }
 }
