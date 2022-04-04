@@ -32,22 +32,21 @@ $dates = array(
     <div class="row mb-5">
         <div class="col-12 col-lg-6">
             @if($clinicaltrial->people->count() > 0 OR $clinicaltrial->companies->count() > 0)
-                    <h2 class="lead font-normal font-weight-bold mb-1">Sponsors/Collaborators:</h2>
-                    <p class="mb-0">
-                        @if($clinicaltrial->companies->count() > 0)
-                            @foreach ($clinicaltrial->companies as $company)
-                                <a href="{{ route('discover.organizations.show', $company->slug )}} ">{{ $company->name }}</a><br>
-                            @endforeach
-                        @endif
+                <h2 class="lead font-normal font-weight-bold mb-1">Sponsors/Collaborators:</h2>
+                <p class="mb-0">
+                    @if($clinicaltrial->companies->count() > 0)
+                        @foreach ($clinicaltrial->companies as $company)
+                            <a href="{{ route('discover.organizations.show', $company->slug )}} ">{{ $company->name }}</a><br>
+                        @endforeach
+                    @endif
 
-                        @if($clinicaltrial->companies->count() > 0)
-                            @foreach ($clinicaltrial->people as $person)
-                                <a href="{{ route('discover.people.show', $person->slug) }}">{{ $person->name }}</a>
+                    @if($clinicaltrial->companies->count() > 0)
+                        @foreach ($clinicaltrial->people as $person)
+                            <a href="{{ route('discover.people.show', $person->slug) }}">{{ $person->name }}</a>
 
-                                @if (!$loop->last)<br>@endif
-                            @endforeach
-                        @endif
-                    </p>
+                            @if (!$loop->last)<br>@endif
+                        @endforeach
+                    @endif
                 </p>
             @endif
         </div>

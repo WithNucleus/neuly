@@ -34,6 +34,7 @@ mix
 	.sass('resources/sass/index-qm.scss', 'public/css')
 	.sass('resources/sass/datatables.scss', 'public/css')
     .sass('resources/sass/nav-tiles.scss', 'public/css')
+    .sass('resources/sass/enterprise-dashboard.scss', 'public/css')
     .sass('resources/sass/embed-search.scss', 'public/css/external');
 
 // Copy Images

@@ -177,32 +177,32 @@ class Company extends Model implements EntityContract, EntityImageContract
 
     public function focus(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany('App\Models\Focus', 'company_focus', 'company_id', 'focus_id')
+        return $this->belongsToMany(Focus::class, 'company_focus', 'company_id', 'focus_id')
             ->withTimestamps();
     }
 
     public function people(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany('App\Models\Person', 'company_person', 'company_id', 'person_id')
+        return $this->belongsToMany(Person::class, 'company_person', 'company_id', 'person_id')
             ->withPivot(['position'])
             ->withTimestamps();
     }
 
     public function locations(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany('App\Models\Location', 'company_location', 'company_id', 'location_id')
+        return $this->belongsToMany(Location::class, 'company_location', 'company_id', 'location_id')
             ->withTimestamps();
     }
 
     public function investors(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany('App\Models\Investor', 'company_investor', 'company_id', 'investor_id')
+        return $this->belongsToMany(Investor::class, 'company_investor', 'company_id', 'investor_id')
             ->withTimestamps();
     }
 
     public function research(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany('App\Models\Research', 'company_research', 'company_id', 'research_id')
+        return $this->belongsToMany(Research::class, 'company_research', 'company_id', 'research_id')
             ->withTimestamps();
     }
 
@@ -213,13 +213,13 @@ class Company extends Model implements EntityContract, EntityImageContract
 
     public function events(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany('App\Models\Event', 'company_event', 'company_id', 'event_id')
+        return $this->belongsToMany(Event::class, 'company_event', 'company_id', 'event_id')
             ->withTimestamps();
     }
 
     public function clinicaltrials(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany('App\Models\Clinicaltrial', 'clinicaltrial_company', 'company_id', 'clinicaltrial_id')
+        return $this->belongsToMany(Clinicaltrial::class, 'clinicaltrial_company', 'company_id', 'clinicaltrial_id')
             ->withTimestamps();
     }
 

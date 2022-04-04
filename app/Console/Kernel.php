@@ -21,33 +21,24 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
+     * @param Schedule $schedule
      * @return void
      */
     protected function schedule(Schedule $schedule)
     {
-
-        // Schedule Backups
+        // Backups
         $schedule
             ->command('backup:run')
             ->twiceDaily(9, 17)
             ->onFailure(function () {
-                // Log Warning
                 Log::critical('Backup Failed!');
-            })
-            ->onSuccess(function () {
-                Log::info('Backup Succeeded!');
             });
 
-        // DB backup every 30 minutes
         $schedule
             ->command('backup:run --only-db --filename=db_' . date('Y-m-d_H-i-s') . '.zip')
             ->everyThirtyMinutes()
             ->onFailure(function () {
                 Log::critical('Backup Failed!');
-            })
-            ->onSuccess(function () {
-                Log::info('Backup Succeeded!');
             });
 
         // Send E-Mail Notifications
@@ -55,7 +46,7 @@ class Kernel extends ConsoleKernel
             ->job(new SendEmailNotifications())
             ->weeklyOn(3, '12:00');
 
-        // remove unverified users
+        // Remove Unverified Users
         $schedule
             ->command('clean:unverified')
             ->dailyAt(1)
@@ -77,7 +68,7 @@ class Kernel extends ConsoleKernel
                 Log::info('Data Feeds - Google Alerts successful');
             });
 
-        // Data Feed - All
+        // Data Feeds - All
         $schedule
             ->command('dataFeeds:getAll')
             ->everySixHours()
@@ -85,15 +76,44 @@ class Kernel extends ConsoleKernel
                 Log::critical('Data Feeds - Google Alerts failed');
             })
             ->onSuccess(function() {
-                Log::info('Data Feeds - Google Alerts failed successful');
+                Log::info('Data Feeds - Google Alerts successful');
             });
 
-        // Clean Backups - Weekly
+        // Clean Backups
         $schedule
             ->command('backup:clean')
             ->weeklyOn(1, '8:30')
             ->onFailure(function() {
                 Log::critical('Clean backups failed');
+            });
+
+        // Metrics
+        $schedule
+            ->command('metrics:daily')
+            ->daily()
+            ->onFailure(function() {
+                Log::critical('Daily metrics failed');
+            });
+
+        $schedule
+            ->command('metrics:weekly')
+            ->weeklyOn(1, '0:05')
+            ->onFailure(function() {
+                Log::critical('Weekly metrics failed');
+            });
+
+        $schedule
+            ->command('metrics:monthly')
+            ->monthlyOn(1, '0:05')
+            ->onFailure(function() {
+                Log::critical('Monthly metrics failed');
+            });
+
+        $schedule
+            ->command('metrics:yearly')
+            ->yearlyOn(1, 1, '0:05')
+            ->onFailure(function() {
+                Log::critical('Yearly metrics failed');
             });
     }
 

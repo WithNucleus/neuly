@@ -27,6 +27,13 @@ class Patent extends Model
          'expiration_date',
      ];
 
+     const STATUSES_ACTIVE = [
+        'Filed',
+        'Pending',
+        'Published',
+        'Granted'
+     ];
+
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS

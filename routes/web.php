@@ -341,6 +341,36 @@ Route::group([
     Route::get('/user/person/search', 'Index\UserPersonController@search')->name('user.person.search');
 });
 
+// Enterprise Dashboard
+Route::group(['middleware' => ['auth', 'enterprise.demo']], function () {
+    Route::group([
+        'as' => 'enterprise.',
+        'namespace' => 'Enterprise',
+        'prefix' => '/enterprise',
+    ], function () {
+        Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
+        Route::get('/dashboard/combined-feed', 'DashboardController@combinedFeedWidget')->name('dashboard.combined-feed');
+        Route::get('/dashboard/follows', 'DashboardController@userFollowsWidget')->name('dashboard.follows');
+        Route::get('/dashboard/notes', 'DashboardController@userNotesWidget')->name('dashboard.notes');
+        Route::get('/dashboard/recently-viewed', 'DashboardController@userRecentlyViewedWidget')->name('dashboard.recently-viewed');
+        Route::get('/dashboard/team', 'DashboardController@teamWidget')->name('dashboard.team');
+        Route::get('/dashboard/patents', 'DashboardController@patentsWidget')->name('dashboard.patents');
+        Route::get('/dashboard/clinical-trials', 'DashboardController@clinicalTrialsWidget')->name('dashboard.clinical-trials');
+        Route::get('/dashboard/jobs', 'DashboardController@jobsWidget')->name('dashboard.jobs');
+        Route::get('/dashboard/events', 'DashboardController@eventsWidget')->name('dashboard.events');
+        Route::get('/dashboard/filters', 'DashboardController@filters')->name('dashboard.filters');
+        Route::post('/dashboard/save', 'DashboardController@saveWidgets')->name('dashboard.widgets.save');
+        Route::get('/dashboard/template', 'DashboardController@widgetTemplate')->name('dashboard.template');
+
+        Route::get('/dashboard/charts/organizations-focus', 'DashboardChartsController@organizationsFocusChart')->name('dashboard.chart-organizations-focus');
+        Route::get('/dashboard/charts/organizations-industry', 'DashboardChartsController@organizationsIndustryChart')->name('dashboard.chart-organizations-industry');
+        Route::get('/dashboard/charts/job-demand', 'DashboardChartsController@jobDemandChart')->name('dashboard.chart-job-demand');
+        Route::get('/dashboard/charts/active-patents', 'DashboardChartsController@activePatentsChart')->name('dashboard.chart-active-patents');
+        Route::get('/dashboard/charts/clinical-trials', 'DashboardChartsController@clinicalTrialsChart')->name('dashboard.chart-clinical-trials-status');
+        Route::get('/dashboard/charts/investments-by-focus', 'DashboardChartsController@investmentByFocus')->name('dashboard.chart-investments-by-focus');
+    });
+});
+
 // User Email Reset
 Route::get('/user/retake/{token}', 'Index\UserRetakeController@index')->name('user.retake');
 

@@ -72,6 +72,8 @@ Route::group([
             Route::get('{id}/accept', 'ListingRequestCrudController@getAcceptForm')->name('accept');
             Route::post('{id}/accept', 'ListingRequestCrudController@postAcceptForm');
         });
+
+        Route::crud('metric', 'MetricCrudController');
     });
 
     // imports group
