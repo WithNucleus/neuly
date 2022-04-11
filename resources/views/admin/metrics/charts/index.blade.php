@@ -11,7 +11,7 @@
 @section('content')
     <div class="row mt-4">
 
-        @include('admin.metrics._controls')
+        @include('admin.metrics.charts._controls')
 
         <div class="col-12">
 

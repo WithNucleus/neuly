@@ -4,18 +4,8 @@ namespace App\Http\Controllers\Admin\Metrics;
 
 use App\Enum\MediaTypes;
 use App\Http\Controllers\Controller;
-use App\Models\Clinicaltrial;
-use App\Models\Company;
-use App\Models\Course;
-use App\Models\Event;
-use App\Models\Investor;
-use App\Models\Job;
-use App\Models\Location;
 use App\Models\MediaItem;
 use App\Models\Metric;
-use App\Models\Patent;
-use App\Models\Person;
-use App\Models\Research;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -57,43 +47,9 @@ class DashboardController extends Controller
 
         // Date Stuff
         $filterDateRange = $request->input('range');
-
-        $presetRanges = [
-            'last-30-days' => 'Last 30 Days',
-            'year-to-date' => 'Year to Date',
-            'quarter-to-date' => 'Quarter to Date',
-            'month-to-date' => 'Month to Date',
-            'this-week' => 'This Week',
-            'today' => 'Today',
-            'last-week' => 'Last Week',
-            'last-month' => 'Last Month',
-            'last-quarter' => 'Last Quarter',
-            'last-year' => 'Last Year',
-            'all-time' => 'All Time',
-        ];
-
-        $startDate = match ($filterDateRange) {
-            "this-week" => Carbon::now()->startOfWeek()->format('Y-m-d'),
-            "today" => Carbon::now()->format('Y-m-d'),
-            "last-week" => Carbon::now()->startOfWeek()->subWeeks(1)->format('Y-m-d'),
-            "last-month" => Carbon::now()->subMonths(1)->startOfMonth()->format('Y-m-d'),
-            "last-quarter" => Carbon::now()->startOfQuarter()->subQuarter()->format('Y-m-d'),
-            "last-year" => Carbon::now()->startOfYear()->subYear()->format('Y-m-d'),
-            "year-to-date" => Carbon::now()->startOfYear()->format('Y-m-d'),
-            "quarter-to-date" => Carbon::now()->startOfQuarter()->format('Y-m-d'),
-            "month-to-date" => Carbon::now()->startOfMonth()->format('Y-m-d'),
-            "all-time" => '2020-07-01',
-            default => Carbon::now()->subDays(30)->format('Y-m-d')
-        };
-
-        $endDate = match ($filterDateRange) {
-            "this-week" => Carbon::now()->endOfWeek()->format('Y-m-d'),
-            "last-week" => Carbon::now()->endOfWeek()->subWeeks(1)->format('Y-m-d'),
-            "last-month" => Carbon::now()->subMonths(1)->endOfMonth()->format('Y-m-d'),
-            "last-quarter" => Carbon::now()->endOfQuarter()->subQuarter()->format('Y-m-d'),
-            "last-year" => Carbon::now()->endOfYear()->subYear()->format('Y-m-d'),
-            default => Carbon::now()->format('Y-m-d')
-        };
+        $presetRanges = $this->getPresetDateRanges();
+        $startDate = $this->matchStartDate($filterDateRange);
+        $endDate = $this->matchEndDate($filterDateRange);
 
         $metrics = $metricsQuery
             ->whereBetween('date', [$startDate, $endDate])
@@ -103,7 +59,7 @@ class DashboardController extends Controller
         $stackedBarData = json_encode($metrics->toArray());
         $currentFieldsJson = json_encode($currentFields);
 
-        return view('admin.metrics.dashboard', compact(
+        return view('admin.metrics.charts.index', compact(
             'metrics',
             'stackedBarData',
             'allFields',
@@ -120,33 +76,65 @@ class DashboardController extends Controller
 
     public function tiles(Request $request) {
 
-        $filterDateStart = Carbon::parse($request->input('start'))->startOfDay();
-        $filterDateEnd = Carbon::parse($request->input('end'))->endOfDay();
+        $filterDateRange = $request->input('range') ?: 'this-week';
+        $filterDateStart = $this->matchStartDate($filterDateRange);
+        $filterDateEnd = $this->matchEndDate($filterDateRange);
 
+        if ($request->input('start')) {
+            $filterDateStart = Carbon::parse($request->input('start'))->startOfDay();
+            $filterDateRange = 'custom';
+        }
+
+        if ($request->input('end')) {
+            $filterDateEnd = Carbon::parse($request->input('end'))->endOfDay();
+        }
+
+        $presetRanges = $this->getPresetDateRanges();
         $entityTables = Metric::TILE_TABLES;
         $tileLabels = Metric::TILE_LABELS;
 
         $metrics = [];
+        $totalRecords = 0;
+
+        foreach ($tileLabels as $key => $value) {
+            $metrics[$key] = [
+                'label' => $value,
+                'count' => 0
+            ];
+        }
 
         foreach ($entityTables as $table) {
-            $metrics[$table] = DB::table($table)
+            $count = DB::table($table)
                 ->whereBetween('created_at', [$filterDateStart, $filterDateEnd])
-                ->get()
-                ->toArray();
+                ->count();
+            $totalRecords += $count;
+            $metrics[$table]['count'] = $count;
         }
 
         $mediaMetrics = DB::table('media_items')
             ->whereBetween('created_at', [$filterDateStart, $filterDateEnd])
+            ->where('status', MediaItem::STATUS_PUBLIC)
             ->get()
             ->groupBy('media_type')
             ->toArray();
+
+        foreach ($mediaMetrics as $label => $data) {
+            $count = count($data);
+            $totalRecords += $count;
+            $metrics[$label]['count'] = $count;
+        }
+
+        $chartData = json_encode(array_values($metrics));
 
         return view('admin.metrics.tiles.index', compact(
             'filterDateStart',
             'filterDateEnd',
             'metrics',
-            'tileLabels',
-            'mediaMetrics'
+            'chartData',
+            'totalRecords',
+            'mediaMetrics',
+            'presetRanges',
+            'filterDateRange'
         ));
 
     }
@@ -163,16 +151,19 @@ class DashboardController extends Controller
             $metrics = DB::table('media_items')
                 ->where('media_type', $entity)
                 ->whereBetween('created_at', [$filterDateStart, $filterDateEnd])
+                ->orderBy('created_at')
                 ->get()
                 ->toArray();
         } else {
             $metrics = DB::table($entity)
                 ->whereBetween('created_at', [$filterDateStart, $filterDateEnd])
+                ->orderBy('created_at')
                 ->get()
                 ->toArray();
         }
 
         $tileLabels = Metric::TILE_LABELS;
+
         $entityLabel = $tileLabels[$entity];
 
         return view('admin.metrics.tiles.tile-details', compact(
@@ -182,5 +173,52 @@ class DashboardController extends Controller
             'entity',
             'entityLabel',
         ));
+    }
+
+    private function getPresetDateRanges(): array
+    {
+        return [
+            'last-30-days' => 'Last 30 Days',
+            'year-to-date' => 'Year to Date',
+            'quarter-to-date' => 'Quarter to Date',
+            'month-to-date' => 'Month to Date',
+            'this-week' => 'This Week',
+            'today' => 'Today',
+            'last-week' => 'Last Week',
+            'last-month' => 'Last Month',
+            'last-quarter' => 'Last Quarter',
+            'last-year' => 'Last Year',
+            'all-time' => 'All Time',
+            'custom' => 'Custom'
+        ];
+    }
+
+    private function matchStartDate($filterDateRange): string
+    {
+        return match ($filterDateRange) {
+            "this-week" => Carbon::now()->startOfWeek()->startOfDay()->format('Y-m-d H:i:s'),
+            "today" => Carbon::now()->startOfDay()->format('Y-m-d H:i:s'),
+            "last-week" => Carbon::now()->startOfWeek()->subWeeks(1)->startOfDay()->format('Y-m-d H:i:s'),
+            "last-month" => Carbon::now()->subMonths(1)->startOfMonth()->startOfDay()->format('Y-m-d H:i:s'),
+            "last-quarter" => Carbon::now()->startOfQuarter()->subQuarter()->startOfDay()->format('Y-m-d H:i:s'),
+            "last-year" => Carbon::now()->startOfYear()->subYear()->startOfDay()->format('Y-m-d H:i:s'),
+            "year-to-date" => Carbon::now()->startOfYear()->startOfDay()->format('Y-m-d H:i:s'),
+            "quarter-to-date" => Carbon::now()->startOfQuarter()->startOfDay()->format('Y-m-d H:i:s'),
+            "month-to-date" => Carbon::now()->startOfMonth()->startOfDay()->format('Y-m-d H:i:s'),
+            "all-time" => '2020-06-01',
+            default => Carbon::now()->subDays(30)->startOfDay()->format('Y-m-d H:i:s')
+        };
+    }
+
+    private function matchEndDate($filterDateRange): string
+    {
+        return match ($filterDateRange) {
+            "this-week" => Carbon::now()->endOfWeek()->endOfDay()->format('Y-m-d H:i:s'),
+            "last-week" => Carbon::now()->endOfWeek()->subWeeks(1)->endOfDay()->format('Y-m-d H:i:s'),
+            "last-month" => Carbon::now()->subMonths(1)->endOfMonth()->endOfDay()->format('Y-m-d H:i:s'),
+            "last-quarter" => Carbon::now()->endOfQuarter()->subQuarter()->endOfDay()->format('Y-m-d H:i:s'),
+            "last-year" => Carbon::now()->endOfYear()->subYear()->endOfDay()->format('Y-m-d H:i:s'),
+            default => Carbon::now()->endOfDay()->format('Y-m-d H:i:s')
+        };
     }
 }
