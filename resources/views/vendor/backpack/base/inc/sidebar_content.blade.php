@@ -227,7 +227,7 @@
                 </a>
             </li>
             <li class='nav-item'>
-                <a class='nav-link' href='{{ backpack_url('metric') }}'>
+                <a class='nav-link' href='{{ route('admin.metrics.tiles') }}?range=last-30-days'>
                     <i class='nav-icon la la-chart-line'></i> Metrics
                 </a>
             </li>

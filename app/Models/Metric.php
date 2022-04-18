@@ -19,6 +19,10 @@ class Metric extends Model
     protected $guarded = ['id'];
     protected $dates = ['date'];
 
+    protected $casts = [
+        'date' => 'date:Y-m-d'
+    ];
+
     const TYPE_COUNT = 'count';
     const TYPE_CHANGE = 'change';
 
@@ -54,6 +58,78 @@ class Metric extends Model
         'patents',
     ];
 
+    const CHART_FIELDS = [
+        'organizations' => 'Organizations',
+        'people' => 'People',
+        'investors' => 'Investors',
+        'clinical_trials' => 'Clinical Trials',
+        'research' => 'Research',
+        'locations' => 'Locations',
+        'events_total' => 'Events',
+        'jobs_total' => 'Jobs',
+        'media_items_total' => 'Media Items',
+        'news' => 'News',
+        'articles' => 'Articles',
+        'images' => 'Images',
+        'videos' => 'Videos',
+        'mixed_media' => 'Mixed Media',
+        'podcasts' => 'Podcasts',
+        'books' => 'Books',
+        'patent_filings' => 'Patent Filings',
+        'courses' => 'Courses',
+        'patents' => 'Patents',
+    ];
+
+    const METRICS_TABLES_ENTITIES = [
+        'organizations' => 'companies',
+        'people' => 'people',
+        'investors' => 'investors',
+        'clinical_trials' => 'clinicaltrials',
+        'research' => 'research',
+        'locations' => 'locations',
+        'events' => 'events',
+        'jobs' => 'jobs',
+        'courses' => 'courses',
+        'patents' => 'patents',
+        'users' => 'users'
+    ];
+
+    const TILE_TABLES = [
+        'companies',
+        'people',
+        'investors',
+        'clinicaltrials',
+        'research',
+        'locations',
+        'events',
+        'jobs',
+        'courses',
+        'patents',
+        'users'
+    ];
+
+    const TILE_LABELS = [
+        'companies' => 'Organizations',
+        'people' => 'People',
+        'investors' => 'Investors',
+        'clinicaltrials' => 'Clinical Trials',
+        'research' => 'Research',
+        'locations' => 'Locations',
+        'events' => 'Events',
+        'jobs' => 'Jobs',
+        'courses' => 'Courses',
+        'patents' => 'Patents',
+        'Article' => 'Articles',
+        'Image' => 'Images',
+        'Video' => 'Videos',
+        'Mixed' => 'Mixed Media',
+        'Podcast' => 'Podcasts',
+        'Book' => 'Books',
+        'News' => 'News',
+        'Patent Filing' => 'Patent Filings',
+        'users' => 'Users'
+    ];
+
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS
@@ -71,6 +147,33 @@ class Metric extends Model
     | SCOPES
     |--------------------------------------------------------------------------
     */
+    public function scopeChanges($query) {
+        return $query->where('type', self::TYPE_CHANGE);
+    }
+
+    public function scopeCounts($query) {
+        return $query->where('type', self::TYPE_COUNT);
+    }
+
+    public function scopeDaily($query) {
+        return $query->where('frequency', self::FREQUENCY_DAILY);
+    }
+
+    public function scopeWeekly($query) {
+        return $query->where('frequency', self::FREQUENCY_WEEKLY);
+    }
+
+    public function scopeMonthly($query) {
+        return $query->where('frequency', self::FREQUENCY_MONTHLY);
+    }
+
+    public function scopeQuarterly($query) {
+        return $query->where('frequency', self::FREQUENCY_QUARTERLY);
+    }
+
+    public function scopeYearly($query) {
+        return $query->where('frequency', self::FREQUENCY_YEARLY);
+    }
 
     /*
     |--------------------------------------------------------------------------

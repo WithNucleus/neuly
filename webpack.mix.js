@@ -26,6 +26,8 @@ mix
     .js('resources/js/appDetailModal.js', 'public/js')
     .js('resources/js/home-hero.js', 'public/js')
     .js('resources/js/nav-tiles.js', 'public/js')
+    .js('resources/js/metrics/bar.js', 'public/js')
+    .js('resources/js/metrics/line.js', 'public/js')
     .js('resources/js/embed-search.js', 'public/js/external');
 
 // Mix CSS
