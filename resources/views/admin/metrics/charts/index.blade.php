@@ -60,6 +60,5 @@
     <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/themes/Kelly.js"></script>
-
-    @include('admin.metrics.charts.' . $filterChartType)
+    <script src="{{ asset('js/' . $filterChartType . '.js') }}"></script>
 @endsection

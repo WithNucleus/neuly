@@ -43,7 +43,7 @@ class DashboardController extends Controller
         array_unshift($selectedFields, 'date');
 
         // Metrics Query
-        $metricsQuery = Metric::{$filterMetricsType}()->orderBy('date', 'asc')->daily();
+        $metrics = Metric::{$filterMetricsType}()->orderBy('date', 'asc')->daily();
 
         // Date Stuff
         $filterDateRange = $request->input('range');
@@ -51,7 +51,7 @@ class DashboardController extends Controller
         $startDate = $this->matchStartDate($filterDateRange);
         $endDate = $this->matchEndDate($filterDateRange);
 
-        $metrics = $metricsQuery
+        $metrics = $metrics
             ->whereBetween('date', [$startDate, $endDate])
             ->select($selectedFields)
             ->get();
@@ -149,18 +149,15 @@ class DashboardController extends Controller
 
         if (in_array($entity, $mediaItems)) {
             $metrics = DB::table('media_items')
-                ->where('media_type', $entity)
-                ->whereBetween('created_at', [$filterDateStart, $filterDateEnd])
-                ->orderBy('created_at')
-                ->get()
-                ->toArray();
+                ->where('media_type', $entity);
         } else {
-            $metrics = DB::table($entity)
-                ->whereBetween('created_at', [$filterDateStart, $filterDateEnd])
-                ->orderBy('created_at')
-                ->get()
-                ->toArray();
+            $metrics = DB::table($entity);
         }
+
+        $metrics = $metrics->whereBetween('created_at', [$filterDateStart, $filterDateEnd])
+            ->orderBy('created_at')
+            ->get()
+            ->toArray();
 
         $tileLabels = Metric::TILE_LABELS;
 

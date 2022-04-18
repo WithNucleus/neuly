@@ -5,7 +5,10 @@
         <h2>
             <span class="text-capitalize">Neuly Records</span>
             <small id="datatable_info_stack" class="animated fadeIn" style="display: inline-flex;">
-                {{ $totalRecords }} items added between {{ Carbon\Carbon::parse($filterDateStart)->format('M d, Y') }} - {{ Carbon\Carbon::parse($filterDateEnd)->format('M d, Y') }}</span>
+                <span class="mr-2">
+                    {{ $totalRecords }} items added between {{ Carbon\Carbon::parse($filterDateStart)->format('M d, Y') }} - {{ Carbon\Carbon::parse($filterDateEnd)->format('M d, Y') }}
+                </span>
+                <span><a href="{{ backpack_url('metric') }}">View all Metrics</a></span>
             </small>
         </h2>
     </div>
