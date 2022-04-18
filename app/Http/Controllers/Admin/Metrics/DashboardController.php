@@ -42,16 +42,15 @@ class DashboardController extends Controller
         $selectedFields = array_keys($currentFields);
         array_unshift($selectedFields, 'date');
 
-        // Metrics Query
-        $metrics = Metric::{$filterMetricsType}()->orderBy('date', 'asc')->daily();
-
         // Date Stuff
         $filterDateRange = $request->input('range');
         $presetRanges = $this->getPresetDateRanges();
         $startDate = $this->matchStartDate($filterDateRange);
         $endDate = $this->matchEndDate($filterDateRange);
 
-        $metrics = $metrics
+        $metrics = Metric::{$filterMetricsType}()
+            ->orderBy('date', 'asc')
+            ->daily()
             ->whereBetween('date', [$startDate, $endDate])
             ->select($selectedFields)
             ->get();
