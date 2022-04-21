@@ -10,7 +10,6 @@ class InvestorsController extends Controller
     public function index()
     {
         $hiddenFields = [
-            'id',
             'slug',
             'logo',
             'created_at',
