@@ -120,14 +120,6 @@
     </li>
 @endcan
 
-@can('edit news articles')
-	<li class='nav-item'>
-		<a class='nav-link' href='{{ backpack_url('newsarticle') }}'>
-			<i class='nav-icon la la-newspaper'></i> News Articles
-		</a>
-	</li>
-@endcan
-
 @can('edit clinical trials')
     <li class="nav-item nav-dropdown">
         <a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon la la-stethoscope"></i> Clinical Trials</a>

@@ -9,7 +9,6 @@ use App\Models\Traits\OldSlugRedirectable;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -47,12 +46,12 @@ class Focus extends Model implements EntityContract
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    public function clinicaltrials()
+    public function clinicaltrials(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany('App\Models\Clinicaltrial', 'clinicaltrial_focus', 'focus_id', 'clinicaltrial_id')->withTimestamps();
     }
 
-    public function companies()
+    public function companies(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany('App\Models\Company', 'company_focus', 'focus_id', 'company_id')->withTimestamps();
     }
@@ -62,17 +61,17 @@ class Focus extends Model implements EntityContract
         return $this->belongsToMany(Course::class);
     }
 
-    public function events()
+    public function events(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany('App\Models\Event', 'event_focus', 'focus_id', 'event_id')->withTimestamps();
     }
 
-    public function importResults()
+    public function importResults(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany('App\Models\ImportResult');
     }
 
-    public function jobs()
+    public function jobs(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany('App\Models\Job', 'focus_job', 'focus_id', 'job_id')->withTimestamps();
     }
@@ -82,22 +81,17 @@ class Focus extends Model implements EntityContract
         return $this->belongsToMany('App\Models\MediaItem', 'focus_media_item', 'focus_id', 'media_item_id');
     }
 
-    public function newsarticles()
-    {
-        return $this->belongsToMany('App\Models\NewsArticle', 'focus_news_article', 'focus_id', 'news_article_id')->withTimestamps();
-    }
-
     public function patents(): \Illuminate\Database\Eloquent\Relations\MorphToMany
     {
         return $this->morphToMany(Patent::class, 'entity' , 'patent_relationships')->withTimestamps();
     }
 
-    public function people()
+    public function people(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Person::class, 'focus_person', 'focus_id', 'person_id');
     }
 
-    public function research()
+    public function research(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany('App\Models\Research', 'focus_research', 'focus_id', 'research_id')->withTimestamps();
     }

@@ -91,7 +91,10 @@
                                             <a href="{{ $newsArticle->url }}" target="_blank" rel="noopener noreferrer" title="{{ $newsArticle->name }}">{{ $newsArticle->name }}</a>
                                         </p>
                                         <p class="my-1">
-                                            <strong>{{ \Carbon\Carbon::parse($newsArticle->date)->format('M d, Y') }}</strong> &ndash; {{ $newsArticle->summary }}
+                                            <strong>{{ \Carbon\Carbon::parse($newsArticle->date)->format('M d, Y') }}</strong>
+                                            @if ($newsArticle->summary != '')
+                                                &ndash; {{ $newsArticle->summary }}
+                                            @endif
                                         </p>
                                         @if($newsArticle->focus->count() > 0)
                                             <p class="text-secondarydark my-1">

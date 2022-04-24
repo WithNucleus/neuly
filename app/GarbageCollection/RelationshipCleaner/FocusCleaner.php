@@ -5,7 +5,6 @@ namespace App\GarbageCollection\RelationshipCleaner;
 use App\Models\Focus;
 use App\Models\Investor;
 use App\Models\Job;
-use App\Models\NewsArticle;
 use App\Models\Research;
 use Illuminate\Support\Facades\DB;
 
@@ -20,7 +19,6 @@ class FocusCleaner
     {
         $this->focus = Focus::all()->pluck('id');
         $this->jobs = Job::all()->pluck('id');
-        $this->articles = NewsArticle::all()->pluck('id');
         $this->researchs = Research::all()->pluck('id');
     }
 
