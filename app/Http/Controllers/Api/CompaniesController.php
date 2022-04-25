@@ -125,8 +125,8 @@ class CompaniesController extends Controller
 
         try {
             $entity = Company::create($data);
-        } catch (\Throwable $trowable) {
-            return response()->json(['status' => 'Error', 'message' => $trowable->getMessage()]);
+        } catch (\Throwable $throwable) {
+            return response()->json(['status' => 'Error', 'message' => $throwable->getMessage()]);
         }
 
         $entity->url = route('discover.organizations.show', $entity->slug);
@@ -152,8 +152,8 @@ class CompaniesController extends Controller
 
         try {
             $entity->update($data);
-        } catch (\Throwable $trowable) {
-            return response()->json(['status' => 'Error', 'message' => $trowable->getMessage()]);
+        } catch (\Throwable $throwable) {
+            return response()->json(['status' => 'Error', 'message' => $throwable->getMessage()]);
         }
 
         $entity->url = route('discover.organizations.show', $entity->slug);

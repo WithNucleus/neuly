@@ -104,8 +104,8 @@ class PeopleController extends Controller
 
         try {
             $entity = Person::create($data);
-        } catch (\Throwable $trowable) {
-            return response()->json(['status' => 'Error', 'message' => $trowable->getMessage()]);
+        } catch (\Throwable $throwable) {
+            return response()->json(['status' => 'Error', 'message' => $throwable->getMessage()]);
         }
 
         $entity->url = route('discover.people.show', $entity->slug);
@@ -131,8 +131,8 @@ class PeopleController extends Controller
 
         try {
             $entity->update($data);
-        } catch (\Throwable $trowable) {
-            return response()->json(['status' => 'Error', 'message' => $trowable->getMessage()]);
+        } catch (\Throwable $throwable) {
+            return response()->json(['status' => 'Error', 'message' => $throwable->getMessage()]);
         }
 
         $entity->url = route('discover.people.show', $entity->slug);
