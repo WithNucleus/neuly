@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\SearchableEntity;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -9,6 +10,7 @@ use Illuminate\Support\Str;
 class Course extends Model
 {
     use CrudTrait;
+    use SearchableEntity;
 
     /*
     |--------------------------------------------------------------------------
@@ -43,6 +45,15 @@ class Course extends Model
         self::SCHEDULE_UPCOMING,
         self::SCHEDULE_PAST
     ];
+
+    private $searchableRelationships = [
+        'focus' => 'name',
+        'companies' => 'name',
+    ];
+
+    private $searchableSkippedFields = [];
+
+    private $searchableModelName = 'Course';
 
     /*
     |--------------------------------------------------------------------------
