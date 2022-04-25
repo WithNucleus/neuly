@@ -24,7 +24,6 @@ Route::group([
     Route::crud('job', 'JobCrudController');
     Route::crud('event', 'EventCrudController');
     Route::crud('eventtype', 'EventTypeCrudController');
-    Route::crud('newsarticle', 'NewsArticleCrudController');
     Route::crud('clinicaltrial', 'ClinicaltrialCrudController');
     Route::crud('jobapplication', 'JobApplicationCrudController');
     Route::crud('redirect', 'RedirectCrudController');

@@ -134,7 +134,7 @@ Route::group([
     Route::get('/clinical-trials/{slug}', 'Index\ClinicaltrialController@show')->name('discover.clinicaltrials.show');
 
     // News Articles
-    Route::get('/news', 'Index\NewsArticleController@index')->name('discover.news');
+    Route::get('/news', 'Index\DataFeeds\NewsController@index')->name('discover.news');
 
     // Listing Requests
     Route::get('/listing', 'Index\ListingRequestController@index')->name('listing');

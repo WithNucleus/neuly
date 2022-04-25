@@ -3,18 +3,13 @@
 namespace App\Http\Controllers\Content;
 
 use App\Http\Controllers\Controller;
+use App\Models\MediaItem;
 use Illuminate\Http\Request;
-use App\Models\Company;
-use App\Models\Person;
-use App\Models\Investor;
-use App\Models\Location;
 use App\Models\Event;
 use App\Models\Job;
 use App\Models\Clinicaltrial;
-use App\Models\NewsArticle;
 use App\Services\Metas;
 use Carbon\Carbon;
-use DB;
 
 class HomeController extends Controller
 {
@@ -33,7 +28,7 @@ class HomeController extends Controller
             ->take(3)
             ->get();
         $jobs = Job::where('status', Job::STATUS_OPEN)->orderBy('posted_date', 'desc')->take(3)->get();
-        $news_articles = NewsArticle::orderBy('date', 'desc')->take(3)->get();
+        $news_articles = MediaItem::news()->public()->orderBy('date', 'desc')->take(3)->get();
         $metas = Metas::fromPage($request->path());
         $count_recruiting_trials = Clinicaltrial::where('status', 'Recruiting')->count();
 
