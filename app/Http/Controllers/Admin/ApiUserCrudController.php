@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\ApiUserRequest;
+use App\Models\ApiUser;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Illuminate\Support\Str;
@@ -65,6 +66,15 @@ class ApiUserCrudController extends CrudController
                 ],
             ],
             [
+                'name' => 'permission_level',
+                'label' => 'Permission Level',
+                'type' => 'radio',
+                'options' => [
+                    ApiUser::PERMISSION_LEVEL_READ => 'Read',
+                    ApiUser::PERMISSION_LEVEL_WRITE => 'Read & Write',
+                ],
+            ],
+            [
                 'name' => 'created_at',
                 'label' => 'Created at',
                 'type' => 'datetime',
@@ -110,6 +120,16 @@ class ApiUserCrudController extends CrudController
                 'options' => [
                     0 => 'Inactive',
                     1 => 'Active',
+                ],
+            ],
+            [
+                'name' => 'permission_level',
+                'label' => 'Permission Level',
+                'type' => 'radio',
+                'default' => ApiUser::PERMISSION_LEVEL_READ,
+                'options' => [
+                    ApiUser::PERMISSION_LEVEL_READ => 'Read',
+                    ApiUser::PERMISSION_LEVEL_WRITE => 'Read & Write',
                 ],
             ],
         ]);

@@ -3,27 +3,42 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\PersonRequest;
 use App\Models\Person;
 
 class PeopleController extends Controller
 {
+    private $hiddenFields = [
+        'slug',
+        'email',
+        'secondary_email',
+        'photo',
+        'visibility',
+        'visibility_code',
+        'created_at',
+        'updated_at',
+        'user_id',
+        'twitter_followers',
+        'instagram_followers',
+    ];
+
+    private $allowedFields = [
+        'name',
+        'website',
+        'facebook',
+        'instagram',
+        'linkedin',
+        'twitter',
+        'google_scholar',
+        'bio',
+        'published_works',
+        'byline',
+        'job_type',
+    ];
+
     public function index()
     {
-        $hiddenFields = [
-            'id',
-            'slug',
-            'email',
-            'secondary_email',
-            'photo',
-            'visibility',
-            'visibility_code',
-            'created_at',
-            'updated_at',
-            'user_id',
-            'twitter_followers',
-            'instagram_followers',
-        ];
-
+        $hiddenFields = $this->hiddenFields;
         $relationsWithArray = [
             'focus' => function ($query) {
                 return $query->select('name');
@@ -47,7 +62,6 @@ class PeopleController extends Controller
                 return $query->select('title', 'slug');
             },
         ];
-
         $entityShowRoutesMapping = [
             'companies' => 'discover.organizations.show',
             'investors' => 'discover.investors.show',
@@ -82,5 +96,58 @@ class PeopleController extends Controller
             });
 
         return response()->json($data);
+    }
+
+    public function create(PersonRequest $request)
+    {
+        $data = $this->filterRequestData($request->all());
+
+        try {
+            $entity = Person::create($data);
+        } catch (\Throwable $throwable) {
+            return response()->json(['status' => 'Error', 'message' => $throwable->getMessage()]);
+        }
+
+        $entity->url = route('discover.people.show', $entity->slug);
+        $entity->imageUrl = $entity->entityImageUrl ? url($entity->entityImageUrl) : null;
+        $entity->makeHidden($this->hiddenFields);
+
+        return response()->json([
+            'status' => 'Success',
+            'message' => 'Person created.',
+            'data' => $entity,
+        ]);
+    }
+
+    public function update(PersonRequest $request, $id)
+    {
+        $entity = Person::find($id);
+
+        if ($entity === null) {
+            return response()->json(['message' => 'Record not found.'], 404);
+        }
+
+        $data = $this->filterRequestData($request->all());
+
+        try {
+            $entity->update($data);
+        } catch (\Throwable $throwable) {
+            return response()->json(['status' => 'Error', 'message' => $throwable->getMessage()]);
+        }
+
+        $entity->url = route('discover.people.show', $entity->slug);
+        $entity->imageUrl = $entity->entityImageUrl ? url($entity->entityImageUrl) : null;
+        $entity->makeHidden($this->hiddenFields);
+
+        return response()->json([
+            'status' => 'Success',
+            'message' => 'Organization updated.',
+            'data' => $entity,
+        ]);
+    }
+
+    private function filterRequestData($requestArray)
+    {
+        return array_intersect_key($requestArray, array_flip($this->allowedFields));
     }
 }

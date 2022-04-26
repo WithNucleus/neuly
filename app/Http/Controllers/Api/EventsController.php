@@ -10,7 +10,6 @@ class EventsController extends Controller
     public function index()
     {
         $hiddenFields = [
-            'id',
             'slug',
             'image',
             'event_url',
