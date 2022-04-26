@@ -10,7 +10,6 @@ class ClinicaltrialsController extends Controller
     public function index()
     {
         $hiddenFields = [
-            'id',
             'slug',
             'created_at',
             'updated_at',
