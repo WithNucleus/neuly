@@ -10,7 +10,6 @@ class ResearchController extends Controller
     public function index()
     {
         $hiddenFields = [
-            'id',
             'slug',
             'api_identifier',
             'created_at',

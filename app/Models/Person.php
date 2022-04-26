@@ -257,6 +257,11 @@ class Person extends Model implements EntityContract, EntityImageContract
     |--------------------------------------------------------------------------
     */
 
+    public function setNameAttribute($value) {
+        $this->attributes['name'] = $value;
+        $this->attributes['slug'] = self::generateUniqueSlug($value);
+    }
+
     public function setPhotoAttribute($value)
     {
         $this->updateImageAttribute($value);
