@@ -2,8 +2,11 @@
 
 namespace App\Jobs\DataFeeds;
 
+use App\Helpers\NotificationHelper;
+use App\Jobs\AutoTag\TagMediaItem;
 use App\Models\DataFeed;
 use App\Models\MediaItem;
+use App\Notifications\DuplicateMediaItem;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -44,6 +47,7 @@ class GetRssFeed implements ShouldQueue
     private function getFeed($dataFeed) {
 
         $mediaType = $dataFeed->media_type;
+        $feedSourceCategory = $dataFeed->source_category;
         $feed = $this->setupSimplePieFeed($dataFeed);
         $feedName = $this->formatFeedName($feed->get_title());
 
@@ -79,14 +83,30 @@ class GetRssFeed implements ShouldQueue
                         'source_type' => DataFeed::class,
                         'source_id' => $dataFeed->id,
                         'date' => $date,
-                        'media_type' => $mediaType
+                        'media_type' => $mediaType,
+                        'status' => MediaItem::STATUS_PENDING
                     ];
 
                     if ($dataFeed->auto_approval === 1) {
                         $attributes['status'] = MediaItem::STATUS_PUBLIC;
                     }
 
-                    MediaItem::create($attributes);
+                    $mediaItem = MediaItem::create($attributes);
+                    TagMediaItem::dispatch($mediaItem);
+
+                    // Check for other Google Alerts with same URL
+                    if ($feedSourceCategory === DataFeed::SOURCE_GOOGLE_ALERT) {
+
+                        $duplicates = MediaItem::where('url', $url)
+                            ->with(['companies', 'focus', 'people'])
+                            ->where('source_type', DataFeed::class)
+                            ->where('source_id', '!=', $dataFeed->id)
+                            ->get();
+
+                        if ($duplicates->count() > 0) {
+                            $this->searchForDuplicates($duplicates, $mediaItem);
+                        }
+                    }
 
                 }
 
@@ -163,5 +183,54 @@ class GetRssFeed implements ShouldQueue
         }
 
         return $summary;
+    }
+
+    private function searchForDuplicates($duplicates, $newMediaItem) {
+
+        NotificationHelper::sendSlackNotification(new DuplicateMediaItem($newMediaItem, $duplicates), 'duplicate_media');
+
+        $syncFocus = $this->getRelationshipSyncArray($duplicates, 'focus');
+        $syncOrganizations = $this->getRelationshipSyncArray($duplicates, 'companies');
+        $syncPeople = $this->getRelationshipSyncArray($duplicates, 'people');
+
+        $primaryItem = $newMediaItem;
+
+        // TODO: Add summaries together -- Google Alerts send in summary excerpts that match keywords? maybe take the first 5 words and search the summary for a match? if no match, combine summaries
+
+        foreach ($duplicates as $duplicateMediaItem) {
+
+            if ($duplicateMediaItem->status == MediaItem::STATUS_PUBLIC) {
+                $primaryItem = $duplicateMediaItem;
+            } elseif ($duplicateMediaItem->status == MediaItem::STATUS_PENDING) {
+                $duplicateMediaItem->status = MediaItem::STATUS_DUPLICATE;
+                $duplicateMediaItem->save();
+            }
+        }
+
+        if ($primaryItem != $newMediaItem) {
+            $newMediaItem->status = MediaItem::STATUS_DUPLICATE;
+            $newMediaItem->save();
+        }
+
+        $primaryItem->focus()->syncWithoutDetaching($syncFocus);
+        $primaryItem->companies()->syncWithoutDetaching($syncOrganizations);
+        $primaryItem->people()->syncWithoutDetaching($syncPeople);
+    }
+
+    private function getRelationshipSyncArray($mediaItemDuplicates, $relationship): array
+    {
+        $recordSyncArray = [];
+
+        foreach ($mediaItemDuplicates as $mediaItemDuplicate) {
+            $recordIds = match ($relationship) {
+                "focus" => $mediaItemDuplicate->focus()->pluck('id')->toArray(),
+                "companies" => $mediaItemDuplicate->companies()->pluck('id')->toArray(),
+                "people" => $mediaItemDuplicate->people()->pluck('id')->toArray(),
+            };
+
+            $recordSyncArray = array_merge($recordSyncArray, $recordIds);
+        }
+
+        return $recordSyncArray;
     }
 }

@@ -86,6 +86,18 @@ class MediaItemCrudController extends CrudController
         ]);
 
         $this->crud->addColumn([
+            'name'    => 'companies',
+            'label'   => 'Organization',
+            'type'    => 'relationship',
+        ]);
+
+        $this->crud->addColumn([
+            'name'    => 'people',
+            'label'   => 'People',
+            'type'    => 'relationship',
+        ]);
+
+        $this->crud->addColumn([
             'name'    => 'date',
             'label'   => 'Publish Date',
             'type'    => 'date',
@@ -175,6 +187,32 @@ class MediaItemCrudController extends CrudController
                 return $query->orderBy('name', 'ASC')->get();
             }),
             'model'   => "App\Models\Focus",
+        ]);
+
+        $this->crud->addField([
+            'label'     => "Organizations",
+            'type'      => 'select2_multiple',
+            'name'      => 'companies',
+            'entity'    => 'companies',
+            'attribute' => 'name',
+            'pivot'   => true,
+            'options' => (function ($query) {
+                return $query->orderBy('name', 'ASC')->get();
+            }),
+            'model'   => "App\Models\Company",
+        ]);
+
+        $this->crud->addField([
+            'label'     => "People",
+            'type'      => 'select2_multiple',
+            'name'      => 'people',
+            'entity'    => 'people',
+            'attribute' => 'name',
+            'pivot'   => true,
+            'options' => (function ($query) {
+                return $query->orderBy('name', 'ASC')->get();
+            }),
+            'model'   => "App\Models\Person",
         ]);
 
         CRUD::setFromDb(); // fields

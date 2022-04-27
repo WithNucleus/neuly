@@ -18,11 +18,13 @@ class MediaItem extends Model
     const STATUS_PUBLIC = 'Public';
     const STATUS_PENDING = 'Pending';
     const STATUS_DECLINED = 'Declined';
+    const STATUS_DUPLICATE = 'Duplicate';
 
     const STATUSES = [
         self::STATUS_PUBLIC,
         self::STATUS_PENDING,
-        self::STATUS_DECLINED
+        self::STATUS_DECLINED,
+        self::STATUS_DUPLICATE
     ];
 
     protected $table = 'media_items';
