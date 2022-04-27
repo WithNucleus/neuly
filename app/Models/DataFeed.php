@@ -6,10 +6,13 @@ use App\Models\Traits\HasMediaTypes;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class DataFeed extends Model
 {
-    use CrudTrait, HasMediaTypes;
+    use CrudTrait,
+        HasMediaTypes,
+        LogsActivity;
 
     /*
     |--------------------------------------------------------------------------
@@ -19,6 +22,9 @@ class DataFeed extends Model
 
     protected $table = 'data_feeds';
     protected $guarded = ['id'];
+
+    protected static $logUnguarded = true;
+    protected static $logName = 'entities';
 
     const FEED_TYPE_RSS = 'RSS';
 
