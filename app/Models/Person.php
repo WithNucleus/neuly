@@ -49,6 +49,7 @@ class Person extends Model implements EntityContract, EntityImageContract
 
     // log activity for all attributes, which not listed in $guarded array
     protected static $logUnguarded = true;
+    protected static $logName = 'entities';
 
     protected static $imageAttribute         = 'photo';
     protected static $imageFolderPath        = 'people';

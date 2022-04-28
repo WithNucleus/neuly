@@ -6,11 +6,13 @@ use App\Models\Traits\SearchableEntity;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Course extends Model
 {
     use CrudTrait;
     use SearchableEntity;
+    use LogsActivity;
 
     /*
     |--------------------------------------------------------------------------
@@ -25,6 +27,9 @@ class Course extends Model
     // protected $fillable = [];
     // protected $hidden = [];
     // protected $dates = [];
+
+    protected static $logUnguarded = true;
+    protected static $logName = 'entities';
 
     const TYPE_ONLINE = 'Online';
     const TYPE_OFFLINE = 'In-Person';

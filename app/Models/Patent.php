@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Patent extends Model
 {
     use CrudTrait;
+    use LogsActivity;
 
     /*
     |--------------------------------------------------------------------------
@@ -21,11 +23,14 @@ class Patent extends Model
     protected $guarded = ['id'];
     // protected $fillable = [];
     // protected $hidden = [];
-     protected $dates = [
-         'priority_date',
-         'granted_date',
-         'expiration_date',
-     ];
+    protected $dates = [
+        'priority_date',
+        'granted_date',
+        'expiration_date',
+    ];
+
+    protected static $logUnguarded = true;
+    protected static $logName = 'entities';
 
      const STATUSES_ACTIVE = [
         'Filed',

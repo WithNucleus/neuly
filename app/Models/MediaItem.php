@@ -5,10 +5,13 @@ namespace App\Models;
 use App\Models\Traits\HasMediaTypes;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class MediaItem extends Model
 {
-    use CrudTrait, HasMediaTypes;
+    use CrudTrait,
+        HasMediaTypes,
+        LogsActivity;
 
     /*
     |--------------------------------------------------------------------------
@@ -29,7 +32,10 @@ class MediaItem extends Model
 
     protected $table = 'media_items';
     protected $guarded = ['id'];
-     protected $dates = ['date'];
+    protected $dates = ['date'];
+
+    protected static $logUnguarded = true;
+    protected static $logName = 'entities';
 
     /*
     |--------------------------------------------------------------------------
