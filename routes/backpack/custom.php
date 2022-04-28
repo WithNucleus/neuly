@@ -115,4 +115,10 @@ Route::group([
 
     });
     Route::crud('patent', 'PatentCrudController');
+
+    Route::group([
+        'middleware' => 'permission:view logs'
+    ], function() {
+        Route::crud('activity-log', 'ActivityLogCrudController');
+    });
 }); // this should be the absolute last line of this file

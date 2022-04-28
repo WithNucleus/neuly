@@ -304,6 +304,12 @@
                     <i class='nav-icon la la-search'></i> Search Log
                 </a>
             </li>
+
+            <li class='nav-item'>
+                <a class='nav-link' href='{{ backpack_url('activity-log') }}'>
+                    <i class='nav-icon la la-running'></i> Activity Log
+                </a>
+            </li>
         </ul>
     </li>
 @endcan
@@ -376,3 +382,13 @@
         <i class='nav-icon la la-search'></i> Embeddable search
     </a>
 </li>
+
+<style>
+    pre {
+        white-space: pre-wrap;       /* css-3 */
+        white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+        white-space: -pre-wrap;      /* Opera 4-6 */
+        white-space: -o-pre-wrap;    /* Opera 7 */
+        word-wrap: break-word;       /* Internet Explorer 5.5+ */
+    }
+</style>
