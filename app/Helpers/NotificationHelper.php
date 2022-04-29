@@ -38,4 +38,20 @@ class NotificationHelper
             NotificationFacade::route('slack', config('services.slack.webhooks.' . $channel))->notify($notification);
         }
     }
+
+    public static function sendSalesNotifications(Notification $notification)
+    {
+        $emailSettings = config('mail.custom.sales_notifications_email');
+        $emailArray    = StringHelper::explodeAndFilterEmpty($emailSettings, ',');
+
+        foreach ($emailArray as $email) {
+            if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                NotificationFacade::route('mail', $email)->notify($notification);
+            }
+        }
+
+        if (config('services.slack.admin_notifications_enabled')) {
+            NotificationFacade::route('slack', config('services.slack.webhooks.sales_pipeline'))->notify($notification);
+        }
+    }
 }

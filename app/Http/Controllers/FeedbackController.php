@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\NotificationHelper;
 use App\Http\Requests\FeedbackApiRequest;
+use App\Http\Requests\FeedbackDemoRequest;
 use App\Http\Requests\FeedbackRequest;
 use App\Models\Feedback;
+use App\Notifications\DemoRequestNotification;
+use App\Notifications\FeedbackCreated;
 use Illuminate\Support\Facades\Auth;
 
 class FeedbackController extends Controller
@@ -63,6 +67,38 @@ class FeedbackController extends Controller
 
         $feedback->save();
 
+        NotificationHelper::sendAdminNotifications(new FeedbackCreated($feedback));
+
         return $feedback;
+    }
+
+    public function createDemoRequest(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    {
+        return view('feedback.demo-request');
+    }
+
+    public function storeDemoRequest(FeedbackDemoRequest $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    {
+        $requestData = $request->validated();
+
+        $demoRequest = new Feedback();
+        $demoRequest->organization = $requestData['organization'];
+        $demoRequest->job_title = $requestData['job_title'];
+        $demoRequest->type    = 'demo request';
+        $demoRequest->title = 'Demo Request - ' . $requestData['organization'];
+        $demoRequest->content = $requestData['content'];
+
+        if (!Auth::user()) {
+            $demoRequest->user_name  = $requestData['name'];
+            $demoRequest->user_email = $requestData['email'];
+        } else {
+            $demoRequest->user_id = Auth::id();
+        }
+
+        $demoRequest->save();
+
+        NotificationHelper::sendSalesNotifications(new DemoRequestNotification($demoRequest));
+
+        return view('feedback.demo-thanks');
     }
 }

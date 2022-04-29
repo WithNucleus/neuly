@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('body-class', 'page-events bg-light')
+@section('body-class', 'page-request home-hero')
 
 @section('content')
 
@@ -14,12 +14,12 @@
                 <div class="row">
 
                     <div class="col-12">
-                        <div class="card mt-3 shadow-sm">
+                        <div class="card mt-5 shadow">
                             <div class="card-body">
                                 <h1 class="text-center text-primary">Thank you!</h1>
                                 @include('discover.includes.status-messages')
 
-                                <p class="text-center">We appreciate your feedback.</p>
+                                <p class="text-center lead mb-1">We'll be in touch.</p>
                             </div>
                         </div>
                     </div>
@@ -28,5 +28,3 @@
         </div>
     </div>
 @endsection
-
-

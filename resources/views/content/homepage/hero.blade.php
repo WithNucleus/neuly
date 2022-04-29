@@ -26,7 +26,7 @@
                     </ul>
                     <p class="text-center text-lg-left ml-lg-3">
                         <a href="{{ route('register') }}" class="btn btn-dark btn-lg btn-xl mr-3">Signup</a>
-                        <a href="{{ route('member.dashboard') }}" class="btn btn-light btn-lg btn-xl" style="background-color: #454a91;border-color: #454a91;color: #fff;">Request Data</a>
+                        <a href="{{ route('feedback.request-demo') }}" class="btn btn-primary btn-lg btn-xl">Request Data</a>
                     </p>
                     <p class="text-center lead text-lg-left ml-lg-3">
                         <a href="{{ route('about') }}" class="text-dark font-weight-bold">Or learn more about Neuly</a>

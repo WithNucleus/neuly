@@ -60,7 +60,8 @@ return [
             'notifications' => 'https://hooks.slack.com/services/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',
             'metrics' => 'https://hooks.slack.com/services/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',
             'metrics_change' => 'https://hooks.slack.com/services/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',
-            'duplicate_media' => 'https://hooks.slack.com/services/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'
+            'duplicate_media' => 'https://hooks.slack.com/services/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',
+            'sales_pipeline' => 'https://hooks.slack.com/services/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'
         ],
     ],
 

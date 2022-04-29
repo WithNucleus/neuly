@@ -111,6 +111,7 @@ return [
     'custom' => [
         'admin_notifications_email' => env('ADMIN_NOTIFICATIONS_EMAIL'),
         'send_slug_updated_email' => env('SEND_SLUG_UPDATED_NOTIFICATION_EMAIL'),
+        'sales_notifications_email' => env('SALES_NOTIFICATIONS_EMAIL'),
     ],
 
 ];
