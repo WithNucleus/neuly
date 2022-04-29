@@ -243,6 +243,9 @@ Route::post('/listing/request/finish', 'Index\ListingRequestController@finishReq
 Route::group(['middleware' => 'spamprotection'], function () {
     Route::get('/feedback', 'FeedbackController@create')->name('feedback.create');
     Route::post('/feedback', 'FeedbackController@store')->name('feedback.store');
+
+    Route::get('/request-demo', 'FeedbackController@createDemoRequest')->name('feedback.request-demo');
+    Route::post('/request-demo', 'FeedbackController@storeDemoRequest')->name('feedback.store-demo');
 });
 
 /* MEMBER DASHBOARD */

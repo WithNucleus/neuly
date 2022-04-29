@@ -27,12 +27,12 @@ class Feedback extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected static function booted()
-    {
-        static::created(function ($model) {
-            NotificationHelper::sendAdminNotifications(new FeedbackCreated($model));
-        });
-    }
+//    protected static function booted()
+//    {
+//        static::created(function ($model) {
+//            NotificationHelper::sendAdminNotifications(new FeedbackCreated($model));
+//        });
+//    }
 
     public function getStatusAttribute($value)
     {

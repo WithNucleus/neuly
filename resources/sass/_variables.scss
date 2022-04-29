@@ -40,7 +40,7 @@ $grays: map-merge(
 );
 
 $blue:    #275DAD;
-$indigo:  #6610f2 !default;
+$indigo:  #454a91; // new primary color
 $purple:  #A7ABDD;
 $purple-darker:  darken(#A7ABDD, 15%);
 $pink:    #e83e8c !default;
@@ -79,7 +79,7 @@ $colors: map-merge(
   $colors
 );
 
-$primary:       $blue;
+$primary:       $indigo;
 $secondary:     $darkblue;
 $secondarydark: $purple-darker;
 $tertiary:      $cyan;

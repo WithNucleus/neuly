@@ -9,8 +9,11 @@
     <main id="home-main" role="main">
 
         <div class="bg-neurons py-3 shadow-sm">
-            <div class="container py-5">
-                <h1 class="hero-title font-weight-normal mt-2">Clear data to build the future of psychedelics.</h1>
+            <div class="container-fluid py-5">
+                <h1 class="hero-title text-center mt-5 mx-auto mb-5">
+                    All the Data, Tools, and Care
+                    <span class="d-block">in One <strong style="color: #454a91">Psychedelic Platform</strong></span>
+                </h1>
             </div>
         </div>
 

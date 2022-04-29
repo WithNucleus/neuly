@@ -28,23 +28,6 @@ $(document).ready(function() {
 		return elementBottom > viewportTop && elementTop < viewportBottom;
 	};
 
-	// Homepage Global vs Navbar Search
-	if($body.hasClass('page-home')) {
-		// If Homepage
-		$(window).on('resize scroll', function() {
-
-			// Search Form
-			var hero = $('.home-hero');
-			var navbarSearch = $('.global-search-form');
-
-			if ($(hero).isInViewport() && $(window).width() > 991) {
-				$(navbarSearch).slideUp();
-			} else {
-				$(navbarSearch).slideDown();
-			}
-		});
-	}
-
 	// Discover Menu -- Navigate Neuly
 	$("#toggle-discover-menu").on('click', function() {
         $('#discover-menu').slideToggle();
