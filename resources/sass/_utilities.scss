@@ -91,8 +91,8 @@ body.noscroll {
 // Hero Title
 @media (min-width: 768px) {
 	.hero-title {
-		font-size: 4.25rem;
-	    line-height: 4.45rem;
+        font-size: 5vw;
+        line-height: 1;
 	    margin: 0;
 	}
 
@@ -246,13 +246,26 @@ ul.plain-list {
 	line-height: 1.25;
 }
 
+// Extra Large Button
+.btn-xl {
+    font-size: 1.8rem;
+    border-radius: 1rem;
+    padding-left: 1.8rem;
+    padding-right: 1.8rem;
+}
+
+@media (min-width: 1500px) {
+    .btn-xl {
+        font-size: 1.8vw;
+        padding-left: 2.2vw;
+        padding-right: 2.2vw;
+    }
+}
+
 // Sort Button
 .sort-button {
-	padding-left: 0.5rem;
-	padding-right: 0.5rem;
-	padding-top: .25rem;
-	padding-bottom: .25rem;
-	color: $quaternary;
+    padding: .25rem 0.5rem;
+    color: $quaternary;
 	text-decoration: none;
 	font-weight: 700;
 	border-radius: 0.25rem;
