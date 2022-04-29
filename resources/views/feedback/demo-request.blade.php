@@ -15,7 +15,7 @@
 
                     <div class="col-12">
                         <div class="card card-body mt-3 mt-lg-5 shadow">
-                            <div style="max-width: 640px;margin: auto">
+                            <div class="mx-auto py-3" style="max-width: 640px;">
                                 <h1 class="text-center text-primary">Request a Demo</h1>
                                 <p class="lead muted text-muted text-center">Please fill out the form below to schedule a demo and we'll get back to you as soon as possible.</p>
 
