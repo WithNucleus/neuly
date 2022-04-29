@@ -40,9 +40,6 @@
 }
 
 @media (min-width: 992px) {
-    .page-home .global-search-form {
-        display: none;
-    }
 
     .form-inline .form-control.global-search-input {
         width: 305px;
@@ -55,12 +52,6 @@
     .form-inline .form-control.global-search-input {
         width: 310px;
         font-size: .9rem;
-    }
-}
-
-@media (max-width: 991px) {
-    .page-home .global-search-form {
-        display: block !important;
     }
 }
 
