@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\PersonRequest;
 use App\Models\Person;
 
-class PeopleController extends Controller
+class PeopleController extends ApiBaseController
 {
-    private $hiddenFields = [
+    protected $hiddenFields = [
         'slug',
         'email',
         'secondary_email',
@@ -22,7 +21,7 @@ class PeopleController extends Controller
         'instagram_followers',
     ];
 
-    private $allowedFields = [
+    protected $allowedFields = [
         'name',
         'website',
         'facebook',
@@ -36,9 +35,10 @@ class PeopleController extends Controller
         'job_type',
     ];
 
+    protected $showEntityRouteName = 'discover.people.show';
+
     public function index()
     {
-        $hiddenFields = $this->hiddenFields;
         $relationsWithArray = [
             'focus' => function ($query) {
                 return $query->select('name');
@@ -65,7 +65,6 @@ class PeopleController extends Controller
         $entityShowRoutesMapping = [
             'companies' => 'discover.organizations.show',
             'investors' => 'discover.investors.show',
-            'people' => 'discover.people.show',
             'research' => 'discover.research.show',
             'events' => 'discover.events.show',
             'clinicaltrials' => 'discover.clinicaltrials.show',
@@ -74,13 +73,11 @@ class PeopleController extends Controller
         $data = Person::public()
             ->with($relationsWithArray)
             ->get()
-            ->map(function ($item) use ($hiddenFields, $entityShowRoutesMapping) {
-                $item->url = route($entityShowRoutesMapping['people'], $item->slug);
-                $item->imageUrl = $item->entityImageUrl ? url($item->entityImageUrl) : null;
+            ->map(function ($entity) use ($entityShowRoutesMapping) {
+                $this->prepareEntityForResponse($entity);
 
-                foreach ($item->getRelations() as $relationName => $relationItems) {
+                foreach ($entity->getRelations() as $relationName => $relationItems) {
                     $relationItems->map(function ($relationItem) use ($relationName, $entityShowRoutesMapping) {
-
                         if (isset($entityShowRoutesMapping[$relationName]) && isset($relationItem->slug)) {
                             $relationItem->url = route($entityShowRoutesMapping[$relationName], $relationItem->slug);
                             $relationItem->makeHidden('slug');
@@ -90,9 +87,7 @@ class PeopleController extends Controller
                     });
                 }
 
-                $item->makeHidden($hiddenFields);
-
-                return $item;
+                return $entity;
             });
 
         return response()->json($data);
@@ -108,9 +103,7 @@ class PeopleController extends Controller
             return response()->json(['status' => 'Error', 'message' => $throwable->getMessage()]);
         }
 
-        $entity->url = route('discover.people.show', $entity->slug);
-        $entity->imageUrl = $entity->entityImageUrl ? url($entity->entityImageUrl) : null;
-        $entity->makeHidden($this->hiddenFields);
+        $this->prepareEntityForResponse($entity);
 
         return response()->json([
             'status' => 'Success',
@@ -135,19 +128,12 @@ class PeopleController extends Controller
             return response()->json(['status' => 'Error', 'message' => $throwable->getMessage()]);
         }
 
-        $entity->url = route('discover.people.show', $entity->slug);
-        $entity->imageUrl = $entity->entityImageUrl ? url($entity->entityImageUrl) : null;
-        $entity->makeHidden($this->hiddenFields);
+        $this->prepareEntityForResponse($entity);
 
         return response()->json([
             'status' => 'Success',
             'message' => 'Person updated.',
             'data' => $entity,
         ]);
-    }
-
-    private function filterRequestData($requestArray)
-    {
-        return array_intersect_key($requestArray, array_flip($this->allowedFields));
     }
 }

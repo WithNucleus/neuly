@@ -182,7 +182,7 @@ class JobCrudController extends CrudController
             'name'    => 'status',
             'type'    => 'select_from_array',
             'label'   => 'Status',
-            'options' => Job::getStatusValues(),
+            'options' => Job::STATUS_VALUES,
         ]);
 
         $this->crud->addField([

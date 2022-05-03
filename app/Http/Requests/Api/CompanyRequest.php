@@ -2,20 +2,8 @@
 
 namespace App\Http\Requests\Api;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class CompanyRequest extends FormRequest
+class CompanyRequest extends ApiBaseRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return auth()->user()->hasWritePermission();
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *

@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Api;
 
-class PersonRequest extends ApiBaseRequest
+class EventRequest extends ApiBaseRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -12,7 +12,9 @@ class PersonRequest extends ApiBaseRequest
     public function rules()
     {
         return [
-            'name' => 'required|min:3|max:255',
+            'name' => 'required|min:5|max:255',
+            'start_date' => 'required|date',
+            'end_date' => 'date'
         ];
     }
 }

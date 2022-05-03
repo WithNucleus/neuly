@@ -2,22 +2,31 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\EventRequest;
 use App\Models\Event;
 
-class EventsController extends Controller
+class EventsController extends ApiBaseController
 {
+    protected $hiddenFields = [
+        'slug',
+        'image',
+        'event_url',
+        'registration_url',
+        'created_at',
+        'updated_at',
+    ];
+
+    protected $allowedFields = [
+        'name',
+        'start_date',
+        'end_date',
+        'description',
+    ];
+
+    protected $showEntityRouteName = 'discover.events.show';
+
     public function index()
     {
-        $hiddenFields = [
-            'slug',
-            'image',
-            'event_url',
-            'registration_url',
-            'created_at',
-            'updated_at',
-        ];
-
         $relationsWithArray = [
             'companies' => function ($query) {
                 return $query->select('name', 'slug');
@@ -32,19 +41,21 @@ class EventsController extends Controller
                 return $query->select('name');
             },
         ];
+        $entityRelationsShowRoutes = [
+            'companies' => 'discover.organizations.show',
+        ];
 
         $events = Event::upcoming()
             ->with($relationsWithArray)
             ->orderBy('start_date', 'asc')
             ->get()
-            ->map(function ($item) use ($hiddenFields) {
-                $item->url = route('discover.events.show', $item->slug);
-                $item->imageUrl = url($item->entityImageUrl);
+            ->map(function ($entity) use ($entityRelationsShowRoutes) {
+                $this->prepareEntityForResponse($entity);
 
-                foreach ($item->getRelations() as $relationName => $relationItems) {
-                    $relationItems->map(function ($relationItem) use ($relationName) {
-                        if ($relationName == 'companies') {
-                            $relationItem->url = route('discover.organizations.show', $relationItem->slug);
+                foreach ($entity->getRelations() as $relationName => $relationItems) {
+                    $relationItems->map(function ($relationItem) use ($relationName,$entityRelationsShowRoutes) {
+                        if (isset($entityShowRoutesMapping[$relationName]) && isset($relationItem->slug)) {
+                            $relationItem->url = route($entityRelationsShowRoutes[$relationName], $relationItem->slug);
                             $relationItem->makeHidden('slug');
                         }
 
@@ -52,11 +63,53 @@ class EventsController extends Controller
                     });
                 }
 
-                $item->makeHidden($hiddenFields);
-
-                return $item;
+                return $entity;
             });
 
         return response()->json($events);
+    }
+
+    public function create(EventRequest $request)
+    {
+        $data = $this->filterRequestData($request->all());
+
+        try {
+            $entity = Event::create($data);
+        } catch (\Throwable $throwable) {
+            return response()->json(['status' => 'Error', 'message' => $throwable->getMessage()]);
+        }
+
+        $this->prepareEntityForResponse($entity);
+
+        return response()->json([
+            'status' => 'Success',
+            'message' => 'Event created.',
+            'data' => $entity,
+        ]);
+    }
+
+    public function update(EventRequest $request, $id)
+    {
+        $entity = Event::find($id);
+
+        if ($entity === null) {
+            return response()->json(['message' => 'Record not found.'], 404);
+        }
+
+        $data = $this->filterRequestData($request->all());
+
+        try {
+            $entity->update($data);
+        } catch (\Throwable $throwable) {
+            return response()->json(['status' => 'Error', 'message' => $throwable->getMessage()]);
+        }
+
+        $this->prepareEntityForResponse($entity);
+
+        return response()->json([
+            'status' => 'Success',
+            'message' => 'Event updated.',
+            'data' => $entity,
+        ]);
     }
 }

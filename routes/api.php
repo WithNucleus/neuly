@@ -31,19 +31,35 @@ Route::group([
     'middleware' => ['api.auth:api'],
 ], function () {
     Route::get('/jobs', [JobsController::class, 'index']);
+    Route::post('/jobs', [JobsController::class, 'create']);
+    Route::put('/jobs/{id}', [JobsController::class, 'update']);
+
     Route::get('/events', [EventsController::class, 'index']);
+    Route::post('/events', [EventsController::class, 'create']);
+    Route::put('/events/{id}', [EventsController::class, 'update']);
 
     Route::get('/organizations', [CompaniesController::class, 'index']);
     Route::post('/organizations', [CompaniesController::class, 'create']);
-    Route::post('/organizations/{id}', [CompaniesController::class, 'update']);
+    Route::put('/organizations/{id}', [CompaniesController::class, 'update']);
 
     Route::get('/people', [PeopleController::class, 'index']);
     Route::post('/people', [PeopleController::class, 'create']);
-    Route::post('/people/{id}', [PeopleController::class, 'update']);
+    Route::put('/people/{id}', [PeopleController::class, 'update']);
 
     Route::get('/investors', [InvestorsController::class, 'index']);
+    Route::post('/investors', [InvestorsController::class, 'create']);
+    Route::put('/investors/{id}', [InvestorsController::class, 'update']);
+
     Route::get('/research', [ResearchController::class, 'index']);
+    Route::post('/research', [ResearchController::class, 'create']);
+    Route::put('/research/{id}', [ResearchController::class, 'update']);
+
     Route::get('/clinical-trials', [ClinicaltrialsController::class, 'index']);
+    Route::post('/clinical-trials', [ClinicaltrialsController::class, 'create']);
+    Route::put('/clinical-trials/{id}', [ClinicaltrialsController::class, 'update']);
+
     Route::get('/media-items/{type?}', [MediaItemsController::class, 'index']);
+    Route::post('/media-items', [MediaItemsController::class, 'create']);
+    Route::put('/media-items/{id}', [MediaItemsController::class, 'update']);
 });
 
