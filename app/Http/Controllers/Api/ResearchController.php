@@ -27,37 +27,11 @@ class ResearchController extends ApiBaseController
 
     public function index()
     {
-        $relationsWithArray = [
-            'focus' => function ($query) {
-                return $query->select('name');
-            },
-            'companies' => function ($query) {
-                return $query->select('name', 'slug');
-            },
-            'people' => function ($query) {
-                return $query->select('name', 'slug');
-            },
-        ];
-        $entityShowRoutesMapping = [
-            'companies' => 'discover.organizations.show',
-            'people' => 'discover.people.show',
-        ];
-
-        $data = Research::with($relationsWithArray)
+        $data = Research::with($this->getRelationWithArray())
             ->get()
-            ->map(function ($entity) use ($entityShowRoutesMapping) {
+            ->map(function ($entity) {
+                $this->prepareEntityRelationsData($entity);
                 $this->prepareEntityForResponse($entity);
-
-                foreach ($entity->getRelations() as $relationName => $relationItems) {
-                    $relationItems->map(function ($relationItem) use ($relationName, $entityShowRoutesMapping) {
-                        if (isset($entityShowRoutesMapping[$relationName]) && isset($relationItem->slug)) {
-                            $relationItem->url = route($entityShowRoutesMapping[$relationName], $relationItem->slug);
-                            $relationItem->makeHidden('slug');
-                        }
-
-                        $relationItem->makeHidden('pivot');
-                    });
-                }
 
                 return $entity;
             });
@@ -107,5 +81,34 @@ class ResearchController extends ApiBaseController
             'message' => 'Research updated.',
             'data' => $entity,
         ]);
+    }
+
+    public function show($id)
+    {
+        $entity = Research::with($this->getRelationWithArray())->find($id);
+
+        if ($entity === null) {
+            return response()->json(['message' => 'Record not found.'], 404);
+        }
+
+        $this->prepareEntityRelationsData($entity);
+        $this->prepareEntityForResponse($entity);
+
+        return response()->json($entity);
+    }
+
+    private function getRelationWithArray()
+    {
+        return [
+            'focus' => function ($query) {
+                return $query->select('name');
+            },
+            'companies' => function ($query) {
+                return $query->select('name', 'slug');
+            },
+            'people' => function ($query) {
+                return $query->select('name', 'slug');
+            },
+        ];
     }
 }

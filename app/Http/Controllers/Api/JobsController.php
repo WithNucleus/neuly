@@ -32,32 +32,13 @@ class JobsController extends ApiBaseController
 
     public function index()
     {
-        $relationsWithArray = [
-            'owner',
-            'focus' => function ($query) {
-                return $query->select('name');
-            },
-            'locations' => function ($query) {
-                return $query->select('name');
-            },
-        ];
-
         $data = Job::open()
-            ->with($relationsWithArray)
+            ->with($this->getRelationWithArray())
             ->orderBy('posted_date', 'desc')
             ->get()
             ->map(function ($entity) {
-                $entity->organization_name = $entity->ownerName;
-                $entity->organization_url = $entity->ownerShowUrl;
+                $this->prepareEntityRelationsData($entity);
                 $this->prepareEntityForResponse($entity);
-
-                foreach ($entity->getRelations() as $relationName => $relationItems) {
-                    if (in_array($relationName, ['focus', 'locations'])) {
-                        $relationItems->map(function ($relationItem) use ($relationName) {
-                            $relationItem->makeHidden('pivot');
-                        });
-                    }
-                }
 
                 return $entity;
             });
@@ -83,8 +64,6 @@ class JobsController extends ApiBaseController
             return response()->json(['status' => 'Error', 'message' => $throwable->getMessage()]);
         }
 
-        $entity->organization_name = $entity->ownerName;
-        $entity->organization_url = $entity->ownerShowUrl;
         $this->prepareEntityForResponse($entity);
 
         return response()->json([
@@ -120,8 +99,6 @@ class JobsController extends ApiBaseController
             return response()->json(['status' => 'Error', 'message' => $throwable->getMessage()]);
         }
 
-        $entity->organization_name = $entity->ownerName;
-        $entity->organization_url = $entity->ownerShowUrl;
         $this->prepareEntityForResponse($entity);
 
         return response()->json([
@@ -129,5 +106,32 @@ class JobsController extends ApiBaseController
             'message' => 'Job updated.',
             'data' => $entity,
         ]);
+    }
+
+    public function show($id)
+    {
+        $entity = Job::with($this->getRelationWithArray())->find($id);
+
+        if ($entity === null) {
+            return response()->json(['message' => 'Record not found.'], 404);
+        }
+
+        $this->prepareEntityRelationsData($entity);
+        $this->prepareEntityForResponse($entity);
+
+        return response()->json($entity);
+    }
+
+    private function getRelationWithArray()
+    {
+        return [
+            'owner',
+            'focus' => function ($query) {
+                return $query->select('name');
+            },
+            'locations' => function ($query) {
+                return $query->select('name');
+            },
+        ];
     }
 }

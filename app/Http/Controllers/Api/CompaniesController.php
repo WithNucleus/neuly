@@ -40,68 +40,12 @@ class CompaniesController extends ApiBaseController
 
     public function index()
     {
-        $relationsWithArray = [
-            'focus' => function ($query) {
-                return $query->select('name');
-            },
-            'locations' => function ($query) {
-                return $query->select('name');
-            },
-            'investors' => function ($query) {
-                return $query->select('name', 'slug');
-            },
-            'people' => function ($query) {
-                return $query->select('name', 'slug');
-            },
-            'research' => function ($query) {
-                return $query->select('name', 'slug');
-            },
-            'jobs' => function ($query) {
-                return $query->open()->select('owner_id', 'job_title', 'slug');
-            },
-            'events' => function ($query) {
-                return $query->upcoming()->select('name', 'slug');
-            },
-            'clinicaltrials' => function ($query) {
-                return $query->select('title', 'slug');
-            },
-            'parents' => function ($query) {
-                return $query->select('name');
-            },
-            'subsidiaries' => function ($query) {
-                return $query->select('name');
-            },
-        ];
-        $entityShowRoutesMapping = [
-            'investors' => 'discover.investors.show',
-            'people' => 'discover.people.show',
-            'research' => 'discover.research.show',
-            'events' => 'discover.events.show',
-            'jobs' => 'discover.jobs.show',
-            'clinicaltrials' => 'discover.clinicaltrials.show',
-        ];
-
         $data = Company::public()
-            ->with($relationsWithArray)
+            ->with($this->getRelationWithArray())
             ->get()
-            ->map(function ($entity) use ($entityShowRoutesMapping) {
+            ->map(function ($entity) {
+                $this->prepareEntityRelationsData($entity);
                 $this->prepareEntityForResponse($entity);
-
-                foreach ($entity->getRelations() as $relationName => $relationItems) {
-                    $relationItems->map(function ($relationItem) use ($relationName, $entityShowRoutesMapping) {
-                        if (isset($entityShowRoutesMapping[$relationName]) && isset($relationItem->slug)) {
-                            $relationItem->url = route($entityShowRoutesMapping[$relationName], $relationItem->slug);
-                            $relationItem->makeHidden('slug');
-                        }
-
-                        //Eloquent issue with morphed relation: without selecting "owner_id" no records will be retrieved
-                        if ($relationName == 'jobs') {
-                            $relationItem->makeHidden('owner_id');
-                        }
-
-                        $relationItem->makeHidden('pivot');
-                    });
-                }
 
                 return $entity;
             });
@@ -151,5 +95,55 @@ class CompaniesController extends ApiBaseController
             'message' => 'Organization updated.',
             'data' => $entity,
         ]);
+    }
+
+    public function show($id)
+    {
+        $entity = Company::with($this->getRelationWithArray())->find($id);
+
+        if ($entity === null) {
+            return response()->json(['message' => 'Record not found.'], 404);
+        }
+
+        $this->prepareEntityRelationsData($entity);
+        $this->prepareEntityForResponse($entity);
+
+        return response()->json($entity);
+    }
+
+    private function getRelationWithArray()
+    {
+        return [
+            'focus' => function ($query) {
+                return $query->select('name');
+            },
+            'locations' => function ($query) {
+                return $query->select('name');
+            },
+            'investors' => function ($query) {
+                return $query->select('name', 'slug');
+            },
+            'people' => function ($query) {
+                return $query->select('name', 'slug');
+            },
+            'research' => function ($query) {
+                return $query->select('name', 'slug');
+            },
+            'jobs' => function ($query) {
+                return $query->open()->select('owner_id', 'job_title', 'slug');
+            },
+            'events' => function ($query) {
+                return $query->upcoming()->select('name', 'slug');
+            },
+            'clinicaltrials' => function ($query) {
+                return $query->select('title', 'slug');
+            },
+            'parents' => function ($query) {
+                return $query->select('name');
+            },
+            'subsidiaries' => function ($query) {
+                return $query->select('name');
+            },
+        ];
     }
 }

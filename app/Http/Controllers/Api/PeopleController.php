@@ -39,53 +39,12 @@ class PeopleController extends ApiBaseController
 
     public function index()
     {
-        $relationsWithArray = [
-            'focus' => function ($query) {
-                return $query->select('name');
-            },
-            'locations' => function ($query) {
-                return $query->select('name');
-            },
-            'investors' => function ($query) {
-                return $query->select('name', 'slug');
-            },
-            'companies' => function ($query) {
-                return $query->select('name', 'slug');
-            },
-            'research' => function ($query) {
-                return $query->select('name', 'slug');
-            },
-            'events' => function ($query) {
-                return $query->upcoming()->select('name', 'slug');
-            },
-            'clinicaltrials' => function ($query) {
-                return $query->select('title', 'slug');
-            },
-        ];
-        $entityShowRoutesMapping = [
-            'companies' => 'discover.organizations.show',
-            'investors' => 'discover.investors.show',
-            'research' => 'discover.research.show',
-            'events' => 'discover.events.show',
-            'clinicaltrials' => 'discover.clinicaltrials.show',
-        ];
-
         $data = Person::public()
-            ->with($relationsWithArray)
+            ->with($this->getRelationWithArray())
             ->get()
-            ->map(function ($entity) use ($entityShowRoutesMapping) {
+            ->map(function ($entity) {
+                $this->prepareEntityRelationsData($entity);
                 $this->prepareEntityForResponse($entity);
-
-                foreach ($entity->getRelations() as $relationName => $relationItems) {
-                    $relationItems->map(function ($relationItem) use ($relationName, $entityShowRoutesMapping) {
-                        if (isset($entityShowRoutesMapping[$relationName]) && isset($relationItem->slug)) {
-                            $relationItem->url = route($entityShowRoutesMapping[$relationName], $relationItem->slug);
-                            $relationItem->makeHidden('slug');
-                        }
-
-                        $relationItem->makeHidden('pivot');
-                    });
-                }
 
                 return $entity;
             });
@@ -135,5 +94,46 @@ class PeopleController extends ApiBaseController
             'message' => 'Person updated.',
             'data' => $entity,
         ]);
+    }
+
+    public function show($id)
+    {
+        $entity = Person::with($this->getRelationWithArray())->find($id);
+
+        if ($entity === null) {
+            return response()->json(['message' => 'Record not found.'], 404);
+        }
+
+        $this->prepareEntityRelationsData($entity);
+        $this->prepareEntityForResponse($entity);
+
+        return response()->json($entity);
+    }
+
+    private function getRelationWithArray()
+    {
+        return [
+            'focus' => function ($query) {
+                return $query->select('name');
+            },
+            'locations' => function ($query) {
+                return $query->select('name');
+            },
+            'investors' => function ($query) {
+                return $query->select('name', 'slug');
+            },
+            'companies' => function ($query) {
+                return $query->select('name', 'slug');
+            },
+            'research' => function ($query) {
+                return $query->select('name', 'slug');
+            },
+            'events' => function ($query) {
+                return $query->upcoming()->select('name', 'slug');
+            },
+            'clinicaltrials' => function ($query) {
+                return $query->select('title', 'slug');
+            },
+        ];
     }
 }

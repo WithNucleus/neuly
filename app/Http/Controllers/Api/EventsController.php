@@ -27,41 +27,13 @@ class EventsController extends ApiBaseController
 
     public function index()
     {
-        $relationsWithArray = [
-            'companies' => function ($query) {
-                return $query->select('name', 'slug');
-            },
-            'eventTypes' => function ($query) {
-                return $query->select('name');
-            },
-            'focus' => function ($query) {
-                return $query->select('name');
-            },
-            'locations' => function ($query) {
-                return $query->select('name');
-            },
-        ];
-        $entityRelationsShowRoutes = [
-            'companies' => 'discover.organizations.show',
-        ];
-
         $events = Event::upcoming()
-            ->with($relationsWithArray)
+            ->with($this->getRelationWithArray())
             ->orderBy('start_date', 'asc')
             ->get()
-            ->map(function ($entity) use ($entityRelationsShowRoutes) {
+            ->map(function ($entity) {
+                $this->prepareEntityRelationsData($entity);
                 $this->prepareEntityForResponse($entity);
-
-                foreach ($entity->getRelations() as $relationName => $relationItems) {
-                    $relationItems->map(function ($relationItem) use ($relationName,$entityRelationsShowRoutes) {
-                        if (isset($entityShowRoutesMapping[$relationName]) && isset($relationItem->slug)) {
-                            $relationItem->url = route($entityRelationsShowRoutes[$relationName], $relationItem->slug);
-                            $relationItem->makeHidden('slug');
-                        }
-
-                        $relationItem->makeHidden('pivot');
-                    });
-                }
 
                 return $entity;
             });
@@ -111,5 +83,37 @@ class EventsController extends ApiBaseController
             'message' => 'Event updated.',
             'data' => $entity,
         ]);
+    }
+
+    public function show($id)
+    {
+        $entity = Event::with($this->getRelationWithArray())->find($id);
+
+        if ($entity === null) {
+            return response()->json(['message' => 'Record not found.'], 404);
+        }
+
+        $this->prepareEntityRelationsData($entity);
+        $this->prepareEntityForResponse($entity);
+
+        return response()->json($entity);
+    }
+
+    private function getRelationWithArray()
+    {
+        return [
+            'companies' => function ($query) {
+                return $query->select('name', 'slug');
+            },
+            'eventTypes' => function ($query) {
+                return $query->select('name');
+            },
+            'focus' => function ($query) {
+                return $query->select('name');
+            },
+            'locations' => function ($query) {
+                return $query->select('name');
+            },
+        ];
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Enum\MediaTypes;
 use App\Http\Requests\Api\MediaItemRequest;
 use App\Models\MediaItem;
+use Illuminate\Http\Request;
 
 class MediaItemsController extends ApiBaseController
 {
@@ -27,34 +28,20 @@ class MediaItemsController extends ApiBaseController
         'icon_url',
     ];
 
-    public function index($mediaType = null)
+    public function index(Request $request)
     {
-        if ($mediaType !== null) {
-            $mediaType = ucfirst(str_replace('_', ' ', $mediaType));
+        $mediaType = null;
+
+        if ($request->input('type') !== null) {
+            $mediaType = $request->input('type');
 
             if (!in_array($mediaType, MediaTypes::MEDIA_TYPES)) {
                 return response()->json(['message' => 'Wrong media type parameter!'], 400);
             }
         }
 
-        $relationsWithArray = [
-            'focus' => function ($query) {
-                return $query->select('name');
-            },
-            'companies' => function ($query) {
-                return $query->select('name', 'slug');
-            },
-            'people' => function ($query) {
-                return $query->select('name', 'slug');
-            },
-        ];
-        $entityShowRoutesMapping = [
-            'companies' => 'discover.organizations.show',
-            'people' => 'discover.people.show',
-        ];
-
         $query = MediaItem::public()
-            ->with($relationsWithArray);
+            ->with($this->getRelationWithArray());
 
         if ($mediaType !== null) {
             $query->where('media_type', $mediaType);
@@ -62,19 +49,9 @@ class MediaItemsController extends ApiBaseController
 
         $data = $query->orderBy('date', 'desc')
             ->get()
-            ->map(function ($entity) use ($entityShowRoutesMapping) {
+            ->map(function ($entity) {
                 $this->prepareEntityForResponse($entity);
-
-                foreach ($entity->getRelations() as $relationName => $relationItems) {
-                    $relationItems->map(function ($relationItem) use ($relationName, $entityShowRoutesMapping) {
-                        if (isset($entityShowRoutesMapping[$relationName]) && isset($relationItem->slug)) {
-                            $relationItem->url = route($entityShowRoutesMapping[$relationName], $relationItem->slug);
-                            $relationItem->makeHidden('slug');
-                        }
-
-                        $relationItem->makeHidden('pivot');
-                    });
-                }
+                $this->prepareEntityRelationsData($entity);
 
                 return $entity;
             });
@@ -124,5 +101,34 @@ class MediaItemsController extends ApiBaseController
             'message' => 'Media Item updated.',
             'data' => $entity,
         ]);
+    }
+
+    public function show($id)
+    {
+        $entity = MediaItem::with($this->getRelationWithArray())->find($id);
+
+        if ($entity === null) {
+            return response()->json(['message' => 'Record not found.'], 404);
+        }
+
+        $this->prepareEntityRelationsData($entity);
+        $this->prepareEntityForResponse($entity);
+
+        return response()->json($entity);
+    }
+
+    private function getRelationWithArray()
+    {
+        return [
+            'focus' => function ($query) {
+                return $query->select('name');
+            },
+            'companies' => function ($query) {
+                return $query->select('name', 'slug');
+            },
+            'people' => function ($query) {
+                return $query->select('name', 'slug');
+            },
+        ];
     }
 }

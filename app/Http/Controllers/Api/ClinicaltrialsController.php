@@ -44,41 +44,11 @@ class ClinicaltrialsController extends ApiBaseController
 
     public function index()
     {
-        $relationsWithArray = [
-            'focus' => function ($query) {
-                return $query->select('name');
-            },
-            'locations' => function ($query) {
-                return $query->select('name');
-            },
-            'companies' => function ($query) {
-                return $query->select('name', 'slug');
-            },
-            'people' => function ($query) {
-                return $query->select('name', 'slug');
-            },
-        ];
-        $entityRelationsShowRoutes = [
-            'companies' => 'discover.organizations.show',
-            'people' => 'discover.people.show',
-        ];
-
-        $data = Clinicaltrial::with($relationsWithArray)
+        $data = Clinicaltrial::with($this->getRelationWithArray())
             ->get()
-            ->map(function ($entity) use ($entityRelationsShowRoutes) {
+            ->map(function ($entity) {
+                $this->prepareEntityRelationsData($entity);
                 $this->prepareEntityForResponse($entity);
-
-                //TODO make processing relations common function for all entities
-                foreach ($entity->getRelations() as $relationName => $relationItems) {
-                    $relationItems->map(function ($relationItem) use ($relationName, $entityRelationsShowRoutes) {
-                        if (isset($entityRelationsShowRoutes[$relationName]) && isset($relationItem->slug)) {
-                            $relationItem->url = route($entityRelationsShowRoutes[$relationName], $relationItem->slug);
-                            $relationItem->makeHidden('slug');
-                        }
-
-                        $relationItem->makeHidden('pivot');
-                    });
-                }
 
                 return $entity;
             });
@@ -128,5 +98,37 @@ class ClinicaltrialsController extends ApiBaseController
             'message' => 'Clinical Trial updated.',
             'data' => $entity,
         ]);
+    }
+
+    public function show($id)
+    {
+        $entity = Clinicaltrial::with($this->getRelationWithArray())->find($id);
+
+        if ($entity === null) {
+            return response()->json(['message' => 'Record not found.'], 404);
+        }
+
+        $this->prepareEntityRelationsData($entity);
+        $this->prepareEntityForResponse($entity);
+
+        return response()->json($entity);
+    }
+
+    private function getRelationWithArray()
+    {
+        return [
+            'focus' => function ($query) {
+                return $query->select('name');
+            },
+            'locations' => function ($query) {
+                return $query->select('name');
+            },
+            'companies' => function ($query) {
+                return $query->select('name', 'slug');
+            },
+            'people' => function ($query) {
+                return $query->select('name', 'slug');
+            },
+        ];
     }
 }

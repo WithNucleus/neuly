@@ -24,46 +24,11 @@ class InvestorsController extends ApiBaseController
 
     public function index()
     {
-        $relationsWithArray = [
-            'locations' => function ($query) {
-                return $query->select('name');
-            },
-            'companies' => function ($query) {
-                return $query->select('name', 'slug');
-            },
-            'people' => function ($query) {
-                return $query->select('name', 'slug');
-            },
-            'jobs' => function ($query) {
-                return $query->open()->select('owner_id', 'job_title', 'slug');
-            },
-        ];
-        $entityShowRoutesMapping = [
-            'companies' => 'discover.organizations.show',
-            'people' => 'discover.people.show',
-            'jobs' => 'discover.jobs.show',
-        ];
-
-        $data = Investor::with($relationsWithArray)
+        $data = Investor::with($this->getRelationWithArray())
             ->get()
-            ->map(function ($entity) use ($entityShowRoutesMapping) {
+            ->map(function ($entity) {
+                $this->prepareEntityRelationsData($entity);
                 $this->prepareEntityForResponse($entity);
-
-                foreach ($entity->getRelations() as $relationName => $relationItems) {
-                    $relationItems->map(function ($relationItem) use ($relationName, $entityShowRoutesMapping) {
-                        if (isset($entityShowRoutesMapping[$relationName]) && isset($relationItem->slug)) {
-                            $relationItem->url = route($entityShowRoutesMapping[$relationName], $relationItem->slug);
-                            $relationItem->makeHidden('slug');
-                        }
-
-                        //Eloquent issue with morphed relation: without selecting "owner_id" no records will be retrieved
-                        if ($relationName == 'jobs') {
-                            $relationItem->makeHidden('owner_id');
-                        }
-
-                        $relationItem->makeHidden('pivot');
-                    });
-                }
 
                 return $entity;
             });
@@ -113,5 +78,37 @@ class InvestorsController extends ApiBaseController
             'message' => 'Investor updated.',
             'data' => $entity,
         ]);
+    }
+
+    public function show($id)
+    {
+        $entity = Investor::with($this->getRelationWithArray())->find($id);
+
+        if ($entity === null) {
+            return response()->json(['message' => 'Record not found.'], 404);
+        }
+
+        $this->prepareEntityRelationsData($entity);
+        $this->prepareEntityForResponse($entity);
+
+        return response()->json($entity);
+    }
+
+    private function getRelationWithArray()
+    {
+        return [
+            'locations' => function ($query) {
+                return $query->select('name');
+            },
+            'companies' => function ($query) {
+                return $query->select('name', 'slug');
+            },
+            'people' => function ($query) {
+                return $query->select('name', 'slug');
+            },
+            'jobs' => function ($query) {
+                return $query->open()->select('owner_id', 'job_title', 'slug');
+            },
+        ];
     }
 }
