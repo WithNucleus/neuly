@@ -2,6 +2,9 @@
 
 namespace App\Http\Requests\Api;
 
+use App\Models\Investor;
+use Illuminate\Validation\Rule;
+
 class InvestorRequest extends ApiBaseRequest
 {
     /**
@@ -12,9 +15,12 @@ class InvestorRequest extends ApiBaseRequest
     public function rules()
     {
         return [
-            'name' => 'required|min:3|max:255|unique:investors,name,' . $this->get('id'),
+            'name' => 'required|min:3|max:255|unique:investors,name,' . $this->route('id'),
             'website' => 'max:255',
-            'type' => 'max:255'
+            'type' => [
+                'nullable',
+                Rule::in(Investor::TYPE),
+            ],
         ];
     }
 }

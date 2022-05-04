@@ -28,6 +28,7 @@ class JobRequest extends ApiBaseRequest
                 Rule::in(Job::EMPLOYMENT_TYPE),
             ],
             'status' => [
+                'nullable',
                 Rule::in(Job::STATUS_VALUES),
             ],
         ];

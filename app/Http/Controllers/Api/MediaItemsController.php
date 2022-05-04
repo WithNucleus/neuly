@@ -32,8 +32,8 @@ class MediaItemsController extends ApiBaseController
     {
         $mediaType = null;
 
-        if ($request->input('type') !== null) {
-            $mediaType = $request->input('type');
+        if ($request->input('media_type') !== null) {
+            $mediaType = $request->input('media_type');
 
             if (!in_array($mediaType, MediaTypes::MEDIA_TYPES)) {
                 return response()->json(['message' => 'Wrong media type parameter!'], 400);

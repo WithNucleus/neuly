@@ -14,7 +14,7 @@ class EventRequest extends ApiBaseRequest
         return [
             'name' => 'required|min:5|max:255',
             'start_date' => 'required|date',
-            'end_date' => 'date'
+            'end_date' => 'nullable|date'
         ];
     }
 }

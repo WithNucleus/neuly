@@ -12,9 +12,9 @@ class ResearchRequest extends ApiBaseRequest
     public function rules()
     {
         return [
-            'name' => 'required|min:5|max:255|unique:research,name,' . $this->get('id'),
+            'name' => 'required|min:5|max:255|unique:research,name,' . $this->route('id'),
             'link' => 'max:500',
-            'publish_date' => 'date',
+            'publish_date' => 'nullable|date',
             'publication_info' => 'max:500',
         ];
     }
