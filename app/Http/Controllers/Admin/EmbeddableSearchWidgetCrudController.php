@@ -35,6 +35,10 @@ class EmbeddableSearchWidgetCrudController extends CrudController
      */
     public function setup()
     {
+        if (!backpack_user()->can('nucleus tools')) {
+            abort(404);
+        }
+
         CRUD::setModel(EmbeddableSearchWidget::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/embeddable-search-widget');
         CRUD::setEntityNameStrings('embeddable search widget', 'embeddable search widgets');
