@@ -31,7 +31,6 @@ class EventCrudController extends CrudController
      */
     public function setup()
     {
-        // Check Guard
         if(!backpack_user()->can('edit events')) {
             abort(404);
         }

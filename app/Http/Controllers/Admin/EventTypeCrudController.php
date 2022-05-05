@@ -27,6 +27,10 @@ class EventTypeCrudController extends CrudController
      */
     public function setup()
     {
+        if(!backpack_user()->can('edit events')) {
+            abort(404);
+        }
+
         CRUD::setModel(EventType::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/eventtype');
         CRUD::setEntityNameStrings('event type', 'event types');

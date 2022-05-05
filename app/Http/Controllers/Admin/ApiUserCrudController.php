@@ -26,6 +26,10 @@ class ApiUserCrudController extends CrudController
      */
     public function setup()
     {
+        if (!backpack_user()->can('edit users')) {
+            abort(404);
+        }
+
         CRUD::setModel(\App\Models\ApiUser::class);
         CRUD::setRoute(config('backpack.base.route_prefix').'/api-user');
         CRUD::setEntityNameStrings('API User', 'API Users');

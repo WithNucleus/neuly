@@ -41,9 +41,11 @@
             <li class='nav-item'>
                 <a class='nav-link' href='{{ backpack_url('person') }}'>People List</a>
             </li>
+            @can('import')
             <li class='nav-item'>
                 <a class='nav-link' href='{{ route('admin.import.people.index') }}'>Import People</a>
             </li>
+            @endcan
         </ul>
     </li>
 @endcan
@@ -325,8 +327,10 @@
     </li>
 @endcan
 
+@can('nucleus tools')
 <li class='nav-item'>
     <a class='nav-link' href='{{ backpack_url('embeddable-search-widget') }}'>
         <i class='nav-icon la la-search'></i> Embeddable search
     </a>
 </li>
+@endcan
