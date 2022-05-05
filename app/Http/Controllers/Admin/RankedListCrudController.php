@@ -30,6 +30,10 @@ class RankedListCrudController extends CrudController
      */
     public function setup()
     {
+        if (! backpack_user()->can('manage ranked lists')) {
+            abort(404);
+        }
+
         $this->crud->setModel(RankedList::class);
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/rankedList');
         $this->crud->setEntityNameStrings('ranked list', 'ranked lists');
