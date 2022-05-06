@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\NotificationHelper;
 use App\Http\Requests\MediaItemRequest;
 use App\Models\DataFeed;
 use App\Models\MediaItem;
+use App\Notifications\MediaItemApproved;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -20,6 +22,8 @@ class MediaItemCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation { store as traitStore; }
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation { update as traitUpdate; }
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -228,5 +232,43 @@ class MediaItemCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+
+    public function store()
+    {
+        $response = $this->traitStore();
+        $request = $response->getRequest();
+
+        $mediaItem = $this->data['entry'];
+
+        if($mediaItem->status === 'Public') {
+            $this->sendApprovedNotification($mediaItem);
+        }
+
+
+        return $response;
+    }
+
+    public function update()
+    {
+        $response = $this->traitUpdate();
+
+        $mediaItem = $this->data['entry'];
+
+        if($mediaItem->status === 'Public') {
+            $this->sendApprovedNotification($mediaItem);
+        }
+
+        return $response;
+    }
+
+    private function sendApprovedNotification(MediaItem $mediaItem) {
+
+        $channel = NotificationHelper::MEDIA_TYPE_CHANNELS[$mediaItem->media_type];
+        if($mediaItem->source_id !== null) {
+            $channel = NotificationHelper::MEDIA_TYPE_CHANNELS['Google Alert'];
+        }
+
+        NotificationHelper::sendSlackNotification(new MediaItemApproved($mediaItem), $channel);
     }
 }
