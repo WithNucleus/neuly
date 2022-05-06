@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Helpers\NotificationHelper;
 use App\Http\Controllers\Backpack\CRUD\Operations\UpdateOperationWithTouching;
 use App\Http\Requests\PersonRequest;
 use App\Models\Person;
-use App\Notifications\PersonCreated;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Backpack\CRUD\app\Library\Widget;
@@ -19,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 class PersonCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation { store as traitStore; }
+    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
     use UpdateOperationWithTouching;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
@@ -371,17 +369,5 @@ class PersonCrudController extends CrudController
         ]);
 
         $this->setupCreateOperation();
-    }
-
-    public function store()
-    {
-        $response = $this->traitStore();
-        $request = $response->getRequest();
-
-        $person = $this->data['entry'];
-
-        NotificationHelper::sendSlackNotification(new PersonCreated($person), 'people');
-
-        return $response;
     }
 }

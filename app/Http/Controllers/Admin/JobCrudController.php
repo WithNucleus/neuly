@@ -3,14 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Events\SendNotification;
-use App\Helpers\NotificationHelper;
 use App\Http\Controllers\Backpack\CRUD\Operations\UpdateOperationWithTouching;
 use App\Http\Requests\JobRequest;
 use App\Models\Company;
 use App\Models\Focus;
 use App\Models\Investor;
 use App\Models\Job;
-use App\Notifications\JobCreated;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Backpack\CRUD\app\Library\Widget;
@@ -299,8 +297,6 @@ class JobCrudController extends CrudController
                 SendNotification::dispatch($focus, $title, $description, 'jobs');
             }
         }
-
-        NotificationHelper::sendSlackNotification(new JobCreated($job), 'jobs');
 
         return $response;
     }
