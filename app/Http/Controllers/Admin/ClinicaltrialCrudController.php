@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Helpers\NotificationHelper;
 use App\Http\Controllers\Backpack\CRUD\Operations\UpdateOperationWithTouching;
 use App\Http\Requests\ClinicaltrialRequest;
 use App\Models\Clinicaltrial;
-use App\Notifications\ClinicalTrialCreated;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -349,18 +347,5 @@ class ClinicaltrialCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
-    }
-
-    public function store()
-    {
-        $response = $this->traitStore();
-        $request = $response->getRequest();
-        dd($request->all());
-
-        $clinicalTrial = $this->data['entry'];
-
-        //NotificationHelper::sendSlackNotification(new ClinicalTrialCreated($clinicalTrial), 'clinical_trials');
-
-        return $response;
     }
 }

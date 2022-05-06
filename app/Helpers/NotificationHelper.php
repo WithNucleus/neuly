@@ -7,14 +7,6 @@ use Illuminate\Support\Facades\Notification as NotificationFacade;
 
 class NotificationHelper
 {
-
-    public const MEDIA_TYPE_CHANNELS = [
-        'Article' => 'articles',
-        'Google Alert' => 'google_alerts',
-        'News' => 'news',
-        'Book' => 'books',
-        'Podcast' => 'podcasts'
-    ];
     public static function getType($object)
     {
         return get_class($object);

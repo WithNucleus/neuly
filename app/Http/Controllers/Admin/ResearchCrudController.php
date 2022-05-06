@@ -3,12 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Events\SendNotification;
-use App\Helpers\NotificationHelper;
 use App\Http\Controllers\Backpack\CRUD\Operations\UpdateOperationWithTouching;
 use App\Http\Requests\ResearchRequest;
 use App\Models\Focus;
 use App\Models\Research;
-use App\Notifications\ResearchCreated;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -192,8 +190,6 @@ class ResearchCrudController extends CrudController
                 SendNotification::dispatch($focus, $title, $description, 'focus');
             }
         }
-
-        NotificationHelper::sendSlackNotification(new ResearchCreated($research), 'research');
 
         return $response;
     }
