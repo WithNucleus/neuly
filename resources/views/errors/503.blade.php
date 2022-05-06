@@ -13,6 +13,6 @@
     $default_error_message = "Sorry about that, but our service is currently not available. <br /><br />Please try again later.";
   @endphp
   @can('view logs')
-      {!! isset($exception)? ($exception->getMessage()?$exception->getMessage():$default_error_message): $default_error_message !!}
+      {!! isset($exception)? ($exception->getMessage()?e($exception->getMessage()):$default_error_message): $default_error_message !!}
   @endcan
 @endsection

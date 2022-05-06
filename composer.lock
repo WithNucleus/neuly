@@ -353,16 +353,16 @@
         },
         {
             "name": "backpack/crud",
-            "version": "4.1.65",
+            "version": "4.1.69",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Laravel-Backpack/CRUD.git",
-                "reference": "e7ab6b798262d847647238f91f88992b457927d9"
+                "reference": "248e2e034cedcffe01732cdce01fb3d1ecad9ffa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Laravel-Backpack/CRUD/zipball/e7ab6b798262d847647238f91f88992b457927d9",
-                "reference": "e7ab6b798262d847647238f91f88992b457927d9",
+                "url": "https://api.github.com/repos/Laravel-Backpack/CRUD/zipball/248e2e034cedcffe01732cdce01fb3d1ecad9ffa",
+                "reference": "248e2e034cedcffe01732cdce01fb3d1ecad9ffa",
                 "shasum": ""
             },
             "require": {
@@ -440,9 +440,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Laravel-Backpack/CRUD/issues",
-                "source": "https://github.com/Laravel-Backpack/CRUD/tree/4.1.65"
+                "source": "https://github.com/Laravel-Backpack/CRUD/tree/4.1.69"
             },
-            "time": "2022-01-21T15:41:05+00:00"
+            "time": "2022-03-30T12:20:48+00:00"
         },
         {
             "name": "backpack/logmanager",
