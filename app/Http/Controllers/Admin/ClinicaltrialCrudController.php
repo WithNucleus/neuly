@@ -351,7 +351,7 @@ class ClinicaltrialCrudController extends CrudController
         $this->setupCreateOperation();
     }
 
-    /*public function store()
+    public function store()
     {
         $response = $this->traitStore();
         $request = $response->getRequest();
@@ -359,8 +359,8 @@ class ClinicaltrialCrudController extends CrudController
 
         $clinicalTrial = $this->data['entry'];
 
-        NotificationHelper::sendSlackNotification(new ClinicalTrialCreated($clinicalTrial), 'clinical_trials');
+        //NotificationHelper::sendSlackNotification(new ClinicalTrialCreated($clinicalTrial), 'clinical_trials');
 
         return $response;
-    }*/
+    }
 }
