@@ -35,6 +35,16 @@ class Job extends Model implements EntityContract
     const STATUS_OPEN = 'open';
     const STATUS_ARCHIVED = 'archived';
 
+    const STATUS_VALUES = [
+        self::STATUS_OPEN => 'Open',
+        self::STATUS_ARCHIVED => 'Archived',
+    ];
+
+    const OWNER_TYPES = [
+        'organization' => Company::class,
+        'investor' => Investor::class,
+    ];
+
     protected $table = 'jobs';
     protected $guarded = ['id'];
     protected $fillable = [
@@ -105,51 +115,6 @@ class Job extends Model implements EntityContract
         return array_combine(self::EMPLOYMENT_TYPE, self::EMPLOYMENT_TYPE);
     }
 
-    /**
-     * @return string|null
-     */
-    public function getOwnerShowUrlAdminAttribute()
-    {
-        if ($this->owner instanceof Company) {
-            return route('company.show', $this->owner->id);
-        }
-
-        if ($this->owner instanceof Investor) {
-            return route('investor.show', $this->owner->id);
-        }
-
-        return null;
-    }
-
-    public function getOwnerShowUrlAttribute()
-    {
-        if ($this->owner instanceof Company) {
-            return route('discover.organizations.show', $this->owner->slug);
-        }
-
-        if ($this->owner instanceof Investor) {
-            return route('discover.investors.show', $this->owner->slug);
-        }
-
-        return null;
-    }
-
-    public function getOwnerNameAttribute()
-    {
-        return $this->owner ? $this->owner->name : null;
-    }
-
-    /**
-     * @return array
-     */
-    public static function getStatusValues()
-    {
-        return [
-            self::STATUS_OPEN => 'Open',
-            self::STATUS_ARCHIVED => 'Archived',
-        ];
-    }
-
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
@@ -192,6 +157,7 @@ class Job extends Model implements EntityContract
     | SCOPES
     |--------------------------------------------------------------------------
     */
+
     /**
      * @param \Illuminate\Database\Query\Builder $query
      * @return \Illuminate\Database\Query\Builder
@@ -213,6 +179,40 @@ class Job extends Model implements EntityContract
     public function getNameAttribute()
     {
         return $this->job_title;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getOwnerShowUrlAdminAttribute()
+    {
+        if ($this->owner instanceof Company) {
+            return route('company.show', $this->owner->id);
+        }
+
+        if ($this->owner instanceof Investor) {
+            return route('investor.show', $this->owner->id);
+        }
+
+        return null;
+    }
+
+    public function getOwnerShowUrlAttribute()
+    {
+        if ($this->owner instanceof Company) {
+            return route('discover.organizations.show', $this->owner->slug);
+        }
+
+        if ($this->owner instanceof Investor) {
+            return route('discover.investors.show', $this->owner->slug);
+        }
+
+        return null;
+    }
+
+    public function getOwnerNameAttribute()
+    {
+        return $this->owner ? $this->owner->name : null;
     }
 
     /*

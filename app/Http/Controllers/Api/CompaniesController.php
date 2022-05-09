@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\CompanyRequest;
 use App\Models\Company;
-use http\Env\Response;
 
-class CompaniesController extends Controller
+class CompaniesController extends ApiBaseController
 {
-    private $hiddenFields = [
+    protected $hiddenFields = [
         'slug',
         'logo',
         'visibility',
@@ -22,7 +20,7 @@ class CompaniesController extends Controller
         'notes',
     ];
 
-    private $allowedFields = [
+    protected $allowedFields = [
         'name',
         'ownership',
         'website',
@@ -38,10 +36,84 @@ class CompaniesController extends Controller
         'linkedin',
     ];
 
+    protected $showEntityRouteName = 'discover.people.show';
+
     public function index()
     {
-        $hiddenFields = $this->hiddenFields;
-        $relationsWithArray = [
+        $data = Company::public()
+            ->with($this->getRelationWithArray())
+            ->get()
+            ->map(function ($entity) {
+                $this->prepareEntityRelationsData($entity);
+                $this->prepareEntityForResponse($entity);
+
+                return $entity;
+            });
+
+        return response()->json($data);
+    }
+
+    public function create(CompanyRequest $request)
+    {
+        $data = $this->filterRequestData($request->all());
+
+        try {
+            $entity = Company::create($data);
+        } catch (\Throwable $throwable) {
+            return response()->json(['status' => 'Error', 'message' => $throwable->getMessage()]);
+        }
+
+        $this->prepareEntityForResponse($entity);
+
+        return response()->json([
+            'status' => 'Success',
+            'message' => 'Organization created.',
+            'data' => $entity,
+        ]);
+    }
+
+    public function update(CompanyRequest $request, $id)
+    {
+        $entity = Company::find($id);
+
+        if ($entity === null) {
+            return response()->json(['message' => 'Record not found.'], 404);
+        }
+
+        $data = $this->filterRequestData($request->all());
+
+        try {
+            $entity->update($data);
+        } catch (\Throwable $throwable) {
+            return response()->json(['status' => 'Error', 'message' => $throwable->getMessage()]);
+        }
+
+        $this->prepareEntityForResponse($entity);
+
+        return response()->json([
+            'status' => 'Success',
+            'message' => 'Organization updated.',
+            'data' => $entity,
+        ]);
+    }
+
+    public function show($id)
+    {
+        $entity = Company::with($this->getRelationWithArray())->find($id);
+
+        if ($entity === null) {
+            return response()->json(['message' => 'Record not found.'], 404);
+        }
+
+        $this->prepareEntityRelationsData($entity);
+        $this->prepareEntityForResponse($entity);
+
+        return response()->json($entity);
+    }
+
+    private function getRelationWithArray()
+    {
+        return [
             'focus' => function ($query) {
                 return $query->select('name');
             },
@@ -73,103 +145,5 @@ class CompaniesController extends Controller
                 return $query->select('name');
             },
         ];
-        $entityShowRoutesMapping = [
-            'companies' => 'discover.organizations.show',
-            'investors' => 'discover.investors.show',
-            'people' => 'discover.people.show',
-            'research' => 'discover.research.show',
-            'events' => 'discover.events.show',
-            'jobs' => 'discover.jobs.show',
-            'clinicaltrials' => 'discover.clinicaltrials.show',
-        ];
-
-        $data = Company::public()
-            ->with($relationsWithArray)
-            ->get()
-            ->map(function ($item) use ($hiddenFields, $entityShowRoutesMapping) {
-                $item->url = route($entityShowRoutesMapping['companies'], $item->slug);
-                $item->imageUrl = $item->entityImageUrl ? url($item->entityImageUrl) : null;
-
-                foreach ($item->getRelations() as $relationName => $relationItems) {
-                    $relationItems->map(function ($relationItem) use ($relationName, $entityShowRoutesMapping) {
-
-                        if (isset($entityShowRoutesMapping[$relationName]) && isset($relationItem->slug)) {
-                            $relationItem->url = route($entityShowRoutesMapping[$relationName], $relationItem->slug);
-                            $relationItem->makeHidden('slug');
-                        }
-
-                        //Eloquent issue: without selecting "owner_id" no records will be retrieved
-                        if ($relationName == 'jobs') {
-                            $relationItem->makeHidden('owner_id');
-                        }
-
-                        $relationItem->makeHidden('pivot');
-                    });
-                }
-
-                $item->makeHidden($hiddenFields);
-
-                return $item;
-            });
-
-        return response()->json($data);
-    }
-
-    public function show($id)
-    {
-    }
-
-    public function create(CompanyRequest $request)
-    {
-        $data = $this->filterRequestData($request->all());
-
-        try {
-            $entity = Company::create($data);
-        } catch (\Throwable $throwable) {
-            return response()->json(['status' => 'Error', 'message' => $throwable->getMessage()]);
-        }
-
-        $entity->url = route('discover.organizations.show', $entity->slug);
-        $entity->imageUrl = $entity->entityImageUrl ? url($entity->entityImageUrl) : null;
-        $entity->makeHidden($this->hiddenFields);
-
-        return response()->json([
-            'status' => 'Success',
-            'message' => 'Organization created.',
-            'data' => $entity,
-        ]);
-    }
-
-    public function update(CompanyRequest $request, $id)
-    {
-        $entity = Company::find($id);
-
-        if ($entity === null) {
-            return response()->json(['message' => 'Record not found.'], 404);
-        }
-
-        $data = $this->filterRequestData($request->all());
-
-        try {
-            $entity->update($data);
-        } catch (\Throwable $throwable) {
-            return response()->json(['status' => 'Error', 'message' => $throwable->getMessage()]);
-        }
-
-        $entity->url = route('discover.organizations.show', $entity->slug);
-        $entity->imageUrl = $entity->entityImageUrl ? url($entity->entityImageUrl) : null;
-        $entity->makeHidden($this->hiddenFields);
-
-        return response()->json([
-            'status' => 'Success',
-            'message' => 'Organization updated.',
-            'data' => $entity,
-        ]);
-    }
-
-    //TODO made this method common between API controllers
-    private function filterRequestData($requestArray)
-    {
-        return array_intersect_key($requestArray, array_flip($this->allowedFields));
     }
 }
