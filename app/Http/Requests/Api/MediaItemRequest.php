@@ -14,7 +14,7 @@ class MediaItemRequest extends ApiBaseRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'name' => 'required|min:5|max:255',
             'media_type' => [
                 'required',
@@ -24,5 +24,7 @@ class MediaItemRequest extends ApiBaseRequest
             'url' => 'nullable|url',
             'icon_url' => 'nullable|url',
         ];
+
+        return $this->updateRulesForPutMethod($rules);
     }
 }

@@ -83,7 +83,7 @@ class JobsController extends ApiBaseController
 
         $data = $this->filterRequestData($request->all());
 
-        if ($data['owner_type'] && $data['owner_id']) {
+        if (isset($data['owner_type']) && isset($data['owner_id'])) {
             $data['owner_type'] = Job::OWNER_TYPES[$data['owner_type']];
             $ownerModel = $data['owner_type'];
             $owner = $ownerModel::find($data['owner_id']);

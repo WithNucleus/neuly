@@ -11,7 +11,7 @@ class PersonRequest extends ApiBaseRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'name' => 'required|min:3|max:255',
             'website' => 'max:255',
             'facebook' => 'max:255',
@@ -23,5 +23,7 @@ class PersonRequest extends ApiBaseRequest
             'byline' => 'max:255',
             'job_type' => 'max:255',
         ];
+
+        return $this->updateRulesForPutMethod($rules);
     }
 }

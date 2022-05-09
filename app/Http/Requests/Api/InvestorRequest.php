@@ -14,7 +14,7 @@ class InvestorRequest extends ApiBaseRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'name' => 'required|min:3|max:255|unique:investors,name,' . $this->route('id'),
             'website' => 'max:255',
             'type' => [
@@ -22,5 +22,7 @@ class InvestorRequest extends ApiBaseRequest
                 Rule::in(Investor::TYPE),
             ],
         ];
+
+        return $this->updateRulesForPutMethod($rules);
     }
 }

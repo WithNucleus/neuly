@@ -11,7 +11,7 @@ class ClinicaltrialRequest extends ApiBaseRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'title' => 'required|min:5|max:255',
             'nct_number' => 'required|min:3|max:255',
             'acronym' => 'max:255',
@@ -35,5 +35,7 @@ class ClinicaltrialRequest extends ApiBaseRequest
             'min_age' => 'nullable|integer',
             'max_age' => 'nullable|integer',
         ];
+
+        return $this->updateRulesForPutMethod($rules);
     }
 }

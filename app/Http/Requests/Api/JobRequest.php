@@ -14,7 +14,7 @@ class JobRequest extends ApiBaseRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'owner_id' => 'required|integer',
             'owner_type' => [
                 'required',
@@ -32,5 +32,7 @@ class JobRequest extends ApiBaseRequest
                 Rule::in(Job::STATUS_VALUES),
             ],
         ];
+
+        return $this->updateRulesForPutMethod($rules);
     }
 }

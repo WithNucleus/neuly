@@ -11,7 +11,7 @@ class CompanyRequest extends ApiBaseRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'name' => 'required|min:3|max:255|unique:companies,name,' . $this->route('id'),
             'ownership' => 'max:255',
             'website' => 'max:255',
@@ -25,5 +25,7 @@ class CompanyRequest extends ApiBaseRequest
             'instagram' => 'max:255',
             'linkedin' => 'max:255',
         ];
+
+        return $this->updateRulesForPutMethod($rules);
     }
 }

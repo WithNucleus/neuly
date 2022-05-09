@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Contracts\EntityImageContract;
 use App\Models\Job;
+use Illuminate\Database\Eloquent\Collection;
 
 class ApiBaseController extends Controller
 {
@@ -16,7 +17,9 @@ class ApiBaseController extends Controller
 
     protected function filterRequestData($requestArray)
     {
-        return array_intersect_key($requestArray, array_flip($this->allowedFields));
+        $allowedFieldsData = array_intersect_key($requestArray, array_flip($this->allowedFields));
+
+        return array_filter($allowedFieldsData);
     }
 
     protected function prepareEntityForResponse($entity)
@@ -42,19 +45,21 @@ class ApiBaseController extends Controller
         $entityRelationsShowRoutes = $this->getRelatedEntitiesShowRoutes();
 
         foreach ($entity->getRelations() as $relationName => $relationItems) {
-            $relationItems->map(function ($relationItem) use ($relationName, $entityRelationsShowRoutes) {
-                if (isset($entityRelationsShowRoutes[$relationName]) && isset($relationItem->slug)) {
-                    $relationItem->url = route($entityRelationsShowRoutes[$relationName], $relationItem->slug);
-                    $relationItem->makeHidden('slug');
-                }
+            if ($relationItems instanceof Collection) {
+                $relationItems->map(function ($relationItem) use ($relationName, $entityRelationsShowRoutes) {
+                    if (isset($entityRelationsShowRoutes[$relationName]) && isset($relationItem->slug)) {
+                        $relationItem->url = route($entityRelationsShowRoutes[$relationName], $relationItem->slug);
+                        $relationItem->makeHidden('slug');
+                    }
 
-                //Eloquent issue with morphed relation: without selecting "owner_id" no records will be retrieved
-                if ($relationItem instanceof Job) {
-                    $relationItem->makeHidden('owner_id');
-                }
+                    //Eloquent issue with morphed relation: without selecting "owner_id" no records will be retrieved
+                    if ($relationItem instanceof Job) {
+                        $relationItem->makeHidden('owner_id');
+                    }
 
-                $relationItem->makeHidden('pivot');
-            });
+                    $relationItem->makeHidden('pivot');
+                });
+            }
         }
     }
 
