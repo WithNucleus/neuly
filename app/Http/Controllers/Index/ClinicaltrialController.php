@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Index;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\FollowRepository;
+use App\Services\Metas;
 use Illuminate\Http\Request;
 use App\Models\Focus;
 use App\Models\Clinicaltrial;
@@ -108,6 +109,8 @@ class ClinicaltrialController extends Controller
             }
         }
 
+        $metas = Metas::fromPage($request->path());
+
         return view('discover.clinicaltrials.index', compact(
             'clinicaltrials',
             'status',
@@ -120,7 +123,8 @@ class ClinicaltrialController extends Controller
             'filters_interventions',
             'filters_outcome_measures',
             'filters_study_designs',
-            'filters_year'
+            'filters_year',
+            'metas',
         ));
     }
 
