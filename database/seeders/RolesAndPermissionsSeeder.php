@@ -20,9 +20,9 @@ class RolesAndPermissionsSeeder extends Seeder
         // Create permissions
 
         $permissions = array(
+            'admin login',
             'edit companies',
             'edit users',
-            'admin login',
             'edit focus categories',
             'view backups',
             'view logs',
@@ -36,13 +36,19 @@ class RolesAndPermissionsSeeder extends Seeder
             'edit event types',
             'edit news articles',
             'edit clinical trials',
-            'edit feedback',
-            'manage listing requests',
-            'manage entity merge',
             'import',
             'view job applications',
             'manage redirects',
+            'edit feedback',
+            'manage listing requests',
+            'manage entity merge',
+            'manage insight requests',
+            'manage job reports',
             'edit person claims',
+            'manage ranked lists',
+            'manage navigation tiles',
+            'enterprise demo',
+            'nucleus tools',
         );
 
         foreach ($permissions as $permission) {
@@ -59,7 +65,7 @@ class RolesAndPermissionsSeeder extends Seeder
         $roles = array(
             'Subscriber' => [],
             'Premium' => [],
-            'Editor' => ['edit companies', 'admin login', 'edit investors', 'edit people'],
+            'Editor' => ['edit companies', 'admin login', 'edit investors', 'edit people', 'edit events', 'enterprise demo'],
             'Professional' => [],
             'Enterprise' => [],
             'Team owner' => [],

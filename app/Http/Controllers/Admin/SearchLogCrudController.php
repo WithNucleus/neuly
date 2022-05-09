@@ -23,6 +23,10 @@ class SearchLogCrudController extends CrudController
      */
     public function setup()
     {
+        if(!backpack_user()->can('view logs')) {
+            abort(404);
+        }
+
         CRUD::setModel(SearchLog::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/searchlog');
         CRUD::setEntityNameStrings('search log', 'search log');
