@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\MediaItemsController;
 use App\Http\Controllers\Api\PeopleController;
 use App\Http\Controllers\Api\ResearchController;
 use App\Http\Controllers\Api\SearchController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Index\SearchTemplateController;
 use Illuminate\Support\Facades\Route;
 
@@ -26,6 +27,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/api/entities/list/{alias}', 'EntityDataController@getEntitiesListByAlias')->name('api.entities.list.byAlias');
 
 Route::post('/feedback', 'FeedbackController@apiStore')->name('feedback.api.store');
+
+Route::group([
+    'middleware' => ['auth:api-users'],
+], function () {
+    Route::get('/user', [UserController::class, 'get']);
+});
 
 Route::group([
     'middleware' => ['api.auth:api'],

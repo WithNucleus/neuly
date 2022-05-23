@@ -18,6 +18,14 @@ trait EntityImage
     }
 
     /**
+     * @return string|null
+     */
+    public function getFullImageUrlAttribute()
+    {
+        return $this->{self::$imageAttribute} ? url($this->getEntityImageUrlAttribute()) : null;
+    }
+
+    /**
      * @return array
      */
     public static function getImageImportSettings()

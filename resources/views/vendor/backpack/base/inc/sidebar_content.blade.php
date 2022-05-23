@@ -333,9 +333,14 @@
             <li class="nav-item"><a class="nav-link" href="{{ backpack_url('role') }}"><i
                         class="nav-icon la la-id-badge"></i> <span>Roles</span></a></li>
             <li class="nav-item"><a class="nav-link" href="{{ backpack_url('permission') }}"><i
-                        class="nav-icon la la-key"></i> <span>Permissions</span></a></li>
+                        class="nav-icon la la-lock"></i> <span>Permissions</span></a></li>
             <li class='nav-item'><a class='nav-link' href='{{ backpack_url('api-user') }}'><i
                         class='nav-icon la la-exchange-alt'></i> API Users</a></li>
+            <li class='nav-item'><a class='nav-link' href='{{ backpack_url('oauth-clients') }}'>
+                    <i class='nav-icon la la-key'></i> Oauth clients</a></li>
+            <li class='nav-item'><a class='nav-link' href='{{ backpack_url('oauth-access-token') }}'>
+                    <i class='nav-icon la la-key'></i> Oauth access tokens</a>
+            </li>
         </ul>
     </li>
 @endcan
