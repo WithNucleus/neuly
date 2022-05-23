@@ -113,4 +113,6 @@ Route::group([
         });
 
     });
+    Route::crud('oauth-clients', 'OauthClientsCrudController');
+    Route::crud('oauth-access-token', 'OauthAccessTokenCrudController');
 }); // this should be the absolute last line of this file

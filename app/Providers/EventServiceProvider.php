@@ -6,10 +6,12 @@ use App\Events\RegisteredAndVerified;
 use App\Events\SendNotification;
 use App\Listeners\CreateAppNotification;
 use App\Listeners\CreateMailNotification;
+use App\Listeners\RevokeOldOauthTokens;
 use App\Listeners\SendWelcomeEmailNotification;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use Laravel\Passport\Events\AccessTokenCreated;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -29,6 +31,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         RegisteredAndVerified::class => [
             SendWelcomeEmailNotification::class
+        ],
+        AccessTokenCreated::class => [
+            RevokeOldOauthTokens::class
         ]
     ];
 

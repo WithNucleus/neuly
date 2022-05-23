@@ -19,4 +19,9 @@
             <i class="fad fa-share-alt"></i> Social accounts
         </a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link @if(Route::is('user.settings.oauth')) active text-primary @else text-muted @endif" href="{{ route('user.settings.oauth') }}">
+            <i class="fad fa-key"></i> Connected Apps
+        </a>
+    </li>
 </ul>
