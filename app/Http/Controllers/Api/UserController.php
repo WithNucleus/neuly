@@ -11,7 +11,7 @@ class UserController
         $user = auth()->user();
         $userPhoto = null;
 
-        if ($user instanceof User && $user->has('relatedPerson')) {
+        if ($user instanceof User && $user->relatedPerson !== null) {
             $userPhoto = $user->relatedPerson->fullImageUrl;
         }
 
