@@ -6,6 +6,7 @@ use App\Http\Requests\OauthClientsRequest;
 use App\Models\OauthClient;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Illuminate\Support\Str;
 
 /**
  * Class OauthClientsCrudController
@@ -101,6 +102,22 @@ class OauthClientsCrudController extends CrudController
                 'type' => 'boolean',
                 'default' => 0,
             ],
+            //temporary set default values for create action
+            [
+                'name' => 'secret',
+                'type' => 'hidden',
+                'value' => Str::random(40),
+            ],
+            [
+                'name' => 'personal_access_client',
+                'type' => 'hidden',
+                'value' => 0,
+            ],
+            [
+                'name' => 'password_client',
+                'type' => 'hidden',
+                'value' => 0,
+            ],
         ]);
     }
 
@@ -112,6 +129,37 @@ class OauthClientsCrudController extends CrudController
      */
     protected function setupUpdateOperation()
     {
-        $this->setupCreateOperation();
+        CRUD::setValidation(OauthClientsRequest::class);
+
+        $this->crud->addFields([
+            [
+                'name' => 'name',
+                'label' => 'Client name',
+                'type' => 'text',
+                'required' => true,
+            ],
+            [
+                'name' => 'redirect',
+                'label' => 'Redirect URL',
+                'type' => 'text',
+                'required' => true,
+            ],
+            [
+                'name' => 'description',
+                'label' => 'Description',
+                'type' => 'textarea',
+            ],
+            [
+                'name' => 'logo',
+                'label' => 'Logo',
+                'type' => 'image',
+            ],
+            [
+                'name' => 'revoked',
+                'label' => 'Revoked',
+                'type' => 'boolean',
+                'default' => 0,
+            ],
+        ]);
     }
 }
