@@ -14,6 +14,7 @@ use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Passport\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Yadahan\AuthenticationLog\AuthenticationLogable;
 
@@ -24,6 +25,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use CrudTrait;
     use AuthenticationLogable;
     use CanFollow;
+    use HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
