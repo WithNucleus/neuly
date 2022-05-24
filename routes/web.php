@@ -248,6 +248,13 @@ Route::group(['middleware' => 'spamprotection'], function () {
     Route::post('/request-demo', 'FeedbackController@storeDemoRequest')->name('feedback.store-demo');
 });
 
+/* Bookable Listings */
+Route::group(['middleware' => 'spamprotection'], function () {
+    Route::get('/care', 'Index\BookableListingController@index')->name('discover.bookable-listing.practitioners');
+    Route::get('/care/{slug}', 'Index\BookableListingController@show')->name('discover.bookable-listing.show');
+    Route::post('/care', 'Index\BookableListingController@reservationRequest')->name('discover.bookable-listing.reservation-request');
+});
+
 /* MEMBER DASHBOARD */
 
 Route::group([

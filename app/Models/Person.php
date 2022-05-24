@@ -171,6 +171,10 @@ class Person extends Model implements EntityContract, EntityImageContract
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+    public function bookableListings()
+    {
+        return $this->morphMany(BookableListing::class, 'bookable');
+    }
 
     public function companies()
     {

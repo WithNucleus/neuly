@@ -77,6 +77,10 @@
 
                 @include('discover.includes.breadcrumbs.podcast-show')
 
+            @elseif (Route::is('discover.bookable-listing.show'))
+
+                @include('discover.includes.breadcrumbs.bookable-listings')
+
             @endif
 
         </div>

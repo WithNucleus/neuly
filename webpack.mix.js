@@ -28,7 +28,8 @@ mix
     .js('resources/js/nav-tiles.js', 'public/js')
     .js('resources/js/metrics/bar.js', 'public/js')
     .js('resources/js/metrics/line.js', 'public/js')
-    .js('resources/js/embed-search.js', 'public/js/external');
+    .js('resources/js/embed-search.js', 'public/js/external')
+    .js('resources/js/practitioners.js', 'public/js');
 
 // Mix CSS
 mix

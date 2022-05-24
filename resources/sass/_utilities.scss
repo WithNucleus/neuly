@@ -149,6 +149,11 @@ body.noscroll {
 	margin-bottom: 0;
 }
 
+.alert ul {
+    margin: 0;
+    padding: 0 0 0 1rem;
+}
+
 // Input Type Files Cursor Hover
 .custom-file-input:hover,
 .cursor-hover-pointer:hover {
@@ -332,4 +337,10 @@ ul.plain-list {
 
 .btn-twitter:hover {
     background-color: darken(#1DA1F2, 5%);
+}
+
+// Custom Checkboxes for Lead Size
+.lead.custom-checkbox .custom-control-label::before,
+.lead.custom-checkbox .custom-control-label::after {
+    top: .5rem;
 }

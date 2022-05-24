@@ -47,11 +47,6 @@
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link @if(Route::is('discover.books')) active @endif " href="{{ route('discover.books') }}">
-            <span class="icon mr-1"><i class="fad fa-book"></i></span>Books
-        </a>
-    </li>
-    <li class="nav-item">
         <a class="nav-link @if(Route::is('discover.podcasts')) active @endif " href="{{ route('discover.podcasts') }}">
             <span class="icon mr-1"><i class="fad fa-podcast"></i></span>Podcasts
         </a>
@@ -61,10 +56,22 @@
             <span class="icon mr-1"><i class="fad fa-book-reader"></i></span>Courses
         </a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link @if(Route::is('discover.bookable-listing.practitioners')) active @endif " href="{{ route('discover.bookable-listing.practitioners') }}">
+            <span class="icon mr-1"><i class="fad fa-medkit"></i></span>Practitioners
+        </a>
+    </li>
     @if(Route::is('discover.videos'))
         <li class="nav-item">
             <a class="nav-link active" href="{{ route('discover.videos') }}">
                 <span class="icon mr-1"><i class="fad fa-film"></i></span>Videos
+            </a>
+        </li>
+    @endif
+    @if(Route::is('discover.books'))
+        <li class="nav-item">
+            <a class="nav-link @if(Route::is('discover.books')) active @endif " href="{{ route('discover.books') }}">
+                <span class="icon mr-1"><i class="fad fa-book"></i></span>Books
             </a>
         </li>
     @endif

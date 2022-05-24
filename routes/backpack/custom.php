@@ -39,6 +39,8 @@ Route::group([
     Route::post('rankedList/{id}/removeEntity', 'RankedListCrudController@removeEntity')->name('admin.rankedList.removeEntity');
     Route::post('rankedList/{id}/updateEntities', 'RankedListCrudController@updateEntities')->name('admin.rankedList.updateEntities');
     Route::crud('entitycontent', 'EntityContentCrudController');
+    Route::crud('bookable-listing', 'BookableListingCrudController');
+    Route::crud('bookable-listing-request', 'BookableListingRequestCrudController');
 
     Route::crud('location-geocoding', 'LocationGeocodingCrudController');
     Route::get('location-geocoding/run', 'LocationGeocodingCrudController@runGeocoding')->name('admin.location-geocoding.run');
