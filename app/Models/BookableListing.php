@@ -21,6 +21,9 @@ class BookableListing extends Model
     const TYPE_RETREAT = 'Retreat';
     const TYPE_THERAPIST = 'Therapist';
 
+    const STATUS_PENDING = 'Pending';
+    const STATUS_PUBLIC = 'Public';
+
     const TYPES_CARE = [
         self::TYPE_CLINIC,
         self::TYPE_COACH,
@@ -34,6 +37,11 @@ class BookableListing extends Model
         self::TYPE_COURSE,
         self::TYPE_RETREAT,
         self::TYPE_THERAPIST,
+    ];
+
+    const STATUSES = [
+        self::STATUS_PENDING,
+        self::STATUS_PUBLIC
     ];
 
     private array $searchableRelationships = [
@@ -118,6 +126,10 @@ class BookableListing extends Model
             ->orWhere('type', self::TYPE_THERAPIST);
     }
 
+    public function scopePublic($query) {
+        return $query->where('status', self::STATUS_PUBLIC);
+    }
+
     /*
     |--------------------------------------------------------------------------
     | ACCESSORS
@@ -192,6 +204,8 @@ class BookableListing extends Model
     }
 
     public function setLocationIdAttribute($value) {
+        $this->attributes['location_id'] = $value;
+
         try {
             $location = Location::find($value);
             $this->attributes['city'] = $location->city;

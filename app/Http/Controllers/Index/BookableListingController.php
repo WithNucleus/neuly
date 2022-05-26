@@ -7,6 +7,7 @@ use App\Http\Requests\StoreBookableListingRequest;
 use App\Mail\BookableListingReservationMail;
 use App\Models\BookableListingRequest;
 use App\Models\Company;
+use App\Models\Location;
 use App\Models\Person;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -47,7 +48,7 @@ class BookableListingController extends Controller
             $filterTypes = [];
         }
 
-        $bookableListings = QueryBuilder::for(BookableListing::practitioners())
+        $bookableListings = QueryBuilder::for(BookableListing::public()->practitioners())
             ->with(['focus', 'companyBranch', 'bookable', 'location']);
 
         if ($latitude !== NULL AND $longitude !== NULL) {
@@ -168,6 +169,12 @@ class BookableListingController extends Controller
             'organization' => Company::class,
         };
 
+        if (Auth::user()->can('edit companies')) {
+            $attributes['status'] = BookableListing::STATUS_PUBLIC;
+        } else {
+            $attributes['status'] = BookableListing::STATUS_PENDING;
+        }
+
         $bookableListing = BookableListing::create($attributes);
 
         $bookableListing->image = $bookableListing->bookable->entityImageUrl;
@@ -180,7 +187,15 @@ class BookableListingController extends Controller
            'content' => $attributes['description']
         ]);
 
-        // TODO: Search Location & set location ID
+        // TODO: Create New Locations if no match
+        $locationName = $attributes['location_name'];
+
+        $matchingLocation = Location::where('name', $locationName)->first();
+
+        if ($matchingLocation) {
+            $bookableListing->location_id = $matchingLocation->id;
+            $bookableListing->save();
+        }
 
         return redirect()->route('discover.bookable-listing.show', $bookableListing->slug);
     }

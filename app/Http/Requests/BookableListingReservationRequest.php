@@ -30,7 +30,8 @@ class BookableListingReservationRequest extends FormRequest
             'phone' => 'required_without:email',
             'date' => 'nullable|date',
             'message' => 'nullable|string',
-            'bookable_listing_id' => 'required|integer'
+            'bookable_listing_id' => 'required|integer',
+            'number_of_guests' => 'nullable|integer'
         ];
     }
 

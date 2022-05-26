@@ -19,17 +19,24 @@
             <label for="phone" class="sr-only">Last Name</label>
             <input type="tel" name="phone" id="phone" class="form-control ml-2" placeholder="Phone #">
         </div>
-        <div class="mb-4 d-flex align-items-center justify-content-center">
-            <label for="date" class="font-weight-bold d-block mb-0 mr-2 text-nowrap">Requested Date</label>
-            <input type="date" name="date" id="date" class="form-control" value="{{ old('date') }}" min="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
-        </div>
+        @if($bookableListing->type == \App\Models\BookableListing::TYPE_RETREAT)
+            <div class="mb-4 d-flex align-items-center justify-content-center">
+                <label for="number_of_guests" class="font-weight-bold d-block mb-0 mr-2 text-nowrap"># of Guests</label>
+                <input type="number" name="number_of_guests" id="number_of_guests" class="form-control" value="{{ old('number_of_guests') ?? 1 }}">
+            </div>
+        @else
+            <div class="mb-4 d-flex align-items-center justify-content-center">
+                <label for="date" class="font-weight-bold d-block mb-0 mr-2 text-nowrap">Requested Date</label>
+                <input type="date" name="date" id="date" class="form-control" value="{{ old('date') }}" min="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
+            </div>
+        @endif
         <div class="mb-4">
             <label for="message" class="font-weight-bold">Any questions or comments?</label>
             <textarea class="form-control" name="message" id="message" rows="2">{{ old('message') }}</textarea>
         </div>
         <div>
             <input type="hidden" name="bookable_listing_id" value="{{ $bookableListing->id }}">
-            <button type="submit" class="btn btn-success">Send Reservation Request</button>
+            <button type="submit" class="btn btn-success" @if($bookableListing->status == \App\Models\BookableListing::STATUS_PENDING) disabled @endif>Send Reservation Request</button>
         </div>
     </form>
 </div>

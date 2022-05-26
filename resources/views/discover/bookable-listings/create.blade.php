@@ -76,12 +76,12 @@
                     <div class="row mb-4">
                         <div class="col-12">
                             <label for="description" class="font-weight-bold">Description</label>
-                            <textarea class="form-control" id="description" name="description" rows="5"></textarea>
+                            <textarea class="form-control" id="description" name="description" rows="5" required></textarea>
                         </div>
                     </div>
 
                     <div>
-                        <input type="hidden" name="locationName" id="locationName" value="{{ old('locationName') }}">
+                        <input type="hidden" name="location_name" id="location_name" value="{{ old('location_name') }}">
                         <input type="hidden" name="latitude" id="latitude" value="{{ old('latitude') }}">
                         <input type="hidden" name="longitude" id="longitude" value="{{ old('longitude') }}">
                     </div>
@@ -111,16 +111,47 @@
 
             careProvidersField.on('select2:select', function (e) {
                 let data = e.params.data;
-                console.log(data);
-
                 let careProviderName = data.text;
-                console.log("careProviderName" + careProviderName);
-
                 $('#name').val(careProviderName);
             });
         });
-    </script>
 
+        const pageUrl = document.getElementById('practitioners-page').getAttribute('data-page-url');
+
+        const locationSearchOptions = {
+            key: "oc_gs_8jhgsf873gebvjsfhvkshkbghfun44",
+            language: 'en'
+        };
+
+        const locationNameField = document.getElementById('location_name');
+        const locationLatitudeField = document.getElementById('latitude');
+        const locationLongitudeField = document.getElementById('longitude');
+
+        const bookableListElement = document.getElementById('bookable-list');
+        const loadingResult = document.getElementById('loading-results');
+        const errorResult = document.getElementById('error-results');
+
+        const handleLocationSearchResult = ({ item }) => {
+
+            let locationName = item.formatted;
+            let latitude = item.geometry.lat;
+            let longitude = item.geometry.lng;
+
+            locationNameField.value = locationName;
+            locationLatitudeField.value = latitude;
+            locationLongitudeField.value = longitude;
+        };
+
+        const locationSearchEvents = {
+            onSelect: handleLocationSearchResult
+        };
+
+        opencage.algoliaAutocomplete({
+            container: "#autocomplete",
+            placeholder: "Search for places",
+            plugins: [opencage.OpenCageGeoSearchPlugin(locationSearchOptions, locationSearchEvents)]
+        });
+    </script>
     <style>
         .select2-container .select2-selection--single,
         .select2-container--default .select2-selection--single .select2-selection__arrow {
@@ -158,44 +189,5 @@
             margin-bottom: 0;
         }
     </style>
-
-    <script>
-        const pageUrl = document.getElementById('practitioners-page').getAttribute('data-page-url');
-
-        const locationSearchOptions = {
-            key: "oc_gs_8jhgsf873gebvjsfhvkshkbghfun44",
-            language: 'en'
-        };
-
-        const locationNameField = document.getElementById('locationName');
-        const locationLatitudeField = document.getElementById('latitude');
-        const locationLongitudeField = document.getElementById('longitude');
-
-        const bookableListElement = document.getElementById('bookable-list');
-        const loadingResult = document.getElementById('loading-results');
-        const errorResult = document.getElementById('error-results');
-
-        const handleLocationSearchResult = ({ item }) => {
-            let locationName = item.formatted;
-            let latitude = item.geometry.lat;
-            let longitude = item.geometry.lng;
-
-            locationNameField.value = locationName;
-            locationLatitudeField.value = latitude;
-            locationLongitudeField.value = longitude;
-
-            setLoadingThenGetFilters();
-        };
-
-        const locationSearchEvents = {
-            onSelect: handleLocationSearchResult
-        };
-
-        opencage.algoliaAutocomplete({
-            container: "#autocomplete",
-            placeholder: "Search for places",
-            plugins: [opencage.OpenCageGeoSearchPlugin(locationSearchOptions, locationSearchEvents)]
-        });
-    </script>
     @include('discover.includes.limited-access-modal')
 @endsection

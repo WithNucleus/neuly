@@ -20,6 +20,7 @@ class CreateBookableListingRequestsTable extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->date('date')->nullable();
+            $table->integer('number_of_guests')->nullable();
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
             $table->longText('message')->nullable();

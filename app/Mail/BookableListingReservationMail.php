@@ -39,6 +39,7 @@ class BookableListingReservationMail extends Mailable
                 'email' => $this->bookableListingRequest->email,
                 'phone' => $this->bookableListingRequest->phone,
                 'date' => $this->bookableListingRequest->date,
+                'number_of_guests' => $this->bookableListingRequest->number_of_guests,
                 'message' => $this->bookableListingRequest->message,
                 'bookable' => $this->bookableListingRequest->bookableListing->bookable->name
             ])

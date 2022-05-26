@@ -19,6 +19,7 @@ class CreateBookableListingsTable extends Migration
             $table->string('slug')->nullable()->unique();
             $table->morphs('bookable');
             $table->string('type');
+            $table->string('status');
             $table->string('url')->nullable();
             $table->string('phone')->nullable();
             $table->string('email')->nullable();

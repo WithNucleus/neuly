@@ -36,10 +36,10 @@ class StoreBookableListingRequest extends FormRequest
             'url' => 'nullable',
             'phone' => 'nullable',
             'address' => 'nullable',
-            'locationName' => 'nullable',
+            'location_name' => 'nullable',
             'latitude' => 'nullable',
             'longitude' => 'nullable',
-            'description' => 'nullable'
+            'description' => 'required'
         ];
     }
 }

@@ -6,6 +6,10 @@
 
     @include('discover.includes.show-begin', ['full_width' => false])
 
+    @if($bookableListing->status == \App\Models\BookableListing::STATUS_PENDING)
+        <div class="alert alert-warning">This listing is pending. We'll review it as soon as possible to include in our care provider directory.</div>
+    @endif
+
     <h1>{{ $bookableListing->bookable->name }}</h1>
 
     @if($bookableEntity == 'organizations')
