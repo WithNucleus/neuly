@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Akaunting\Firewall\Models\Log;
+use App\Models\Traits\HasEntityContent;
 use App\Models\Traits\SearchableEntity;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -11,13 +12,21 @@ use Illuminate\Support\Str;
 class BookableListing extends Model
 {
     use CrudTrait,
-        SearchableEntity;
+        SearchableEntity,
+        HasEntityContent;
 
     const TYPE_CLINIC = 'Clinic';
     const TYPE_COACH = 'Coach';
     const TYPE_COURSE = 'Course';
     const TYPE_RETREAT = 'Retreat';
     const TYPE_THERAPIST = 'Therapist';
+
+    const TYPES_CARE = [
+        self::TYPE_CLINIC,
+        self::TYPE_COACH,
+        self::TYPE_RETREAT,
+        self::TYPE_THERAPIST,
+    ];
 
     const TYPES = [
         self::TYPE_CLINIC,

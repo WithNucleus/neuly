@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Index;
 
 use App\Http\Requests\BookableListingReservationRequest;
+use App\Http\Requests\StoreBookableListingRequest;
 use App\Mail\BookableListingReservationMail;
 use App\Models\BookableListingRequest;
+use App\Models\Company;
+use App\Models\Person;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
@@ -136,5 +139,49 @@ class BookableListingController extends Controller
 
         return redirect()->back()->with('success', 'Your request was sent successfully!');
 
+    }
+
+    public function create() {
+
+        $types = BookableListing::TYPES_CARE;
+
+        $organizations = Company::public()->pluck('name', 'id');
+        $people = Person::public()->pluck('name', 'id');
+
+        return view('discover.bookable-listings.create', [
+            'types' => $types,
+            'organizations' => $organizations,
+            'people' => $people,
+        ]);
+    }
+
+    public function store(StoreBookableListingRequest $request) {
+
+        $attributes = $request->validated();
+
+        $bookableDetails = explode('-', $attributes['bookable_id']);
+
+        $attributes['bookable_id'] = $bookableDetails[1];
+
+        $attributes['bookable_type'] = match($bookableDetails[0]) {
+            'person' => Person::class,
+            'organization' => Company::class,
+        };
+
+        $bookableListing = BookableListing::create($attributes);
+
+        $bookableListing->image = $bookableListing->bookable->entityImageUrl;
+        $bookableListing->save();
+
+        // Add Description to Entity Content
+        $bookableListing->content()->create([
+           'name' => 'Description',
+           'order' => 1,
+           'content' => $attributes['description']
+        ]);
+
+        // TODO: Search Location & set location ID
+
+        return redirect()->route('discover.bookable-listing.show', $bookableListing->slug);
     }
 }

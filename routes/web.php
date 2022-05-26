@@ -253,6 +253,8 @@ Route::group(['middleware' => 'spamprotection'], function () {
     Route::get('/care', 'Index\BookableListingController@index')->name('discover.bookable-listing.practitioners');
     Route::get('/care/{slug}', 'Index\BookableListingController@show')->name('discover.bookable-listing.show');
     Route::post('/care', 'Index\BookableListingController@reservationRequest')->name('discover.bookable-listing.reservation-request');
+    Route::get('/add-care-listing', 'Index\BookableListingController@create')->name('discover.bookable-listing.create');
+    Route::post('/add-care-listing', 'Index\BookableListingController@store')->name('discover.bookable-listing.store');
 });
 
 /* MEMBER DASHBOARD */

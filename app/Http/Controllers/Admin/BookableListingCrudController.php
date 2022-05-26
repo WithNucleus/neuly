@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\BookableListingRequest;
+use App\Http\Requests\StoreBookableListingRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -65,7 +65,7 @@ class BookableListingCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
-        CRUD::setValidation(BookableListingRequest::class);
+        CRUD::setValidation(StoreBookableListingRequest::class);
 
         CRUD::field('id');
         CRUD::field('bookable_type');
