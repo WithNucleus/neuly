@@ -24,17 +24,15 @@ class CreateBookableListingsTable extends Migration
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
             $table->string('address')->nullable();
-            $table->string('city')->nullable();
-            $table->string('state')->nullable();
+            $table->string('location_name')->nullable();
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
             $table->foreignId('location_id')->nullable()->references('id')->on('locations');
             $table->foreignId('company_branch_id')->nullable()->references('id')->on('company_branches');
             $table->string('image')->nullable();
             $table->json('hours_json')->nullable();
+            $table->boolean('virtual')->default(0);
             $table->timestamps();
-
-            // TODO: Add a location_name field instead of city/state -- that will look nicer and be easier to copy over
         });
     }
 

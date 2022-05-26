@@ -23,6 +23,11 @@
                         <label class="custom-control-label" for="filterType-{{ $typeOption }}">{{ $typeOption }}</label>
                     </div>
                 @endforeach
+
+                <div class="custom-control custom-checkbox lead ml-5">
+                    <input type="checkbox" class="custom-control-input" id="virtual" name="virtual" @if($filterVirtual == true) checked @endif>
+                    <label class="custom-control-label" for="virtual">Virtual / Remote</label>
+                </div>
             </div>
 
             <div class="d-flex align-items-center flex-wrap mx-auto" style="max-width: 1024px">
@@ -94,23 +99,15 @@
                                 </div>
                                 <div>
                                     <div class="text-center">
-                                        @if($bookableListing->company_branch_id != '')
-                                            <address class="mb-1 text-dark">
-                                                {!! $bookableListing->companyBranch->fullAddress !!}
-                                            </address>
-                                            @if ($bookableListing->companyBranch->phone != '')
-                                                <span class="d-block text-dark">
-                                                    <i class="fa fa-phone-square-alt mr-1 text-info"></i>{{ $bookableListing->companyBranch->phone }}
-                                                </span>
-                                            @endif
-                                        @endif
-
                                         <address class="text-dark">
                                             @if($bookableListing->address != '')
                                                 <span class="d-block">{{$bookableListing->address }}</span>
                                             @endif
-                                            @if ($bookableListing->city != '')
-                                                <span class="d-block">{{ $bookableListing->city }}</span>
+                                            @if ($bookableListing->location_name != '')
+                                                <span class="d-block">{{ $bookableListing->location_name }}</span>
+                                            @endif
+                                            @if($bookableListing->virtual === 1)
+                                                <span class="d-block text-muted">Virtual / Remote</span>
                                             @endif
                                         </address>
                                     </div>

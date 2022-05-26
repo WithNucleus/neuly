@@ -7,6 +7,7 @@ use App\Http\Requests\StoreBookableListingRequest;
 use App\Mail\BookableListingReservationMail;
 use App\Models\BookableListingRequest;
 use App\Models\Company;
+use App\Models\Focus;
 use App\Models\Location;
 use App\Models\Person;
 use Illuminate\Support\Facades\Auth;
@@ -40,6 +41,12 @@ class BookableListingController extends Controller
         $locationName = 'your location';
         $locationSearch = false;
 
+        if (isset($request->query('filter')['virtual'])) {
+            $virtual = true;
+        } else {
+            $virtual = false;
+        }
+
         $distance = $request->input('distance') ?? 100;  //(miles - see note)
 
         if (isset($request->query('filter')['type'])) {
@@ -48,8 +55,7 @@ class BookableListingController extends Controller
             $filterTypes = [];
         }
 
-        $bookableListings = QueryBuilder::for(BookableListing::public()->practitioners())
-            ->with(['focus', 'companyBranch', 'bookable', 'location']);
+        $bookableListings = QueryBuilder::for(BookableListing::public()->practitioners());
 
         if ($latitude !== NULL AND $longitude !== NULL) {
             $bookableListings = $bookableListings->selectRaw('(3959 * acos (
@@ -78,14 +84,15 @@ class BookableListingController extends Controller
         }
 
         $bookableListings = $bookableListings
-            ->addSelect(['name', 'id', 'slug', 'bookable_listings.latitude', 'bookable_listings.longitude', 'type', 'address', 'image'])
+            ->addSelect(['name', 'id', 'slug', 'location_name', 'latitude', 'longitude', 'type', 'address', 'image', 'virtual'])
             ->allowedSorts([
                 'name',
             ])
             ->defaultSort('name')
             ->allowedFilters([
                 AllowedFilter::partial('focus', 'focus.name'),
-                'type'
+                'type',
+                'virtual'
             ])
             ->paginate(15)
             ->appends(request()->query());
@@ -101,6 +108,7 @@ class BookableListingController extends Controller
             'filterLongitude' => $longitude,
             'filterDistance' => $distance,
             'filterTypes' => $filterTypes,
+            'filterVirtual' => $virtual,
             'locationName' => $locationName,
             'locationSearch' => $locationSearch
         ]);
@@ -145,6 +153,7 @@ class BookableListingController extends Controller
     public function create() {
 
         $types = BookableListing::TYPES_CARE;
+        $focuses = Focus::drugs()->pluck('name', 'id')->toArray();
 
         $organizations = Company::public()->pluck('name', 'id');
         $people = Person::public()->pluck('name', 'id');
@@ -153,6 +162,7 @@ class BookableListingController extends Controller
             'types' => $types,
             'organizations' => $organizations,
             'people' => $people,
+            'focuses' => $focuses
         ]);
     }
 
@@ -179,6 +189,11 @@ class BookableListingController extends Controller
 
         $bookableListing->image = $bookableListing->bookable->entityImageUrl;
         $bookableListing->save();
+
+        // Focus
+        if (!empty($attributes['focus'])) {
+            $bookableListing->focus()->syncWithoutDetaching(array_keys($attributes['focus']));
+        }
 
         // Add Description to Entity Content
         $bookableListing->content()->create([

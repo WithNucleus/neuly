@@ -10,7 +10,7 @@
 
         <div id="practitioners-page" class="mx-auto px-lg-5 container text-left">
 
-            <h1 class="mt-3 mb-4 text-center">Add a Care Service</h1>
+            <h1 class="mt-3 mb-4 text-center">Add a Care Listing</h1>
 
             <div class="mx-auto" style="max-width: 640px">
                 @include('discover.includes.status-messages')
@@ -33,7 +33,7 @@
 
                     <div class="row mb-4">
                         <div class="col-12 col-lg-6">
-                            <label for="name" class="font-weight-bold">Service Name</label>
+                            <label for="name" class="font-weight-bold">Listing Name</label>
                             <input type="text" name="name" id="name" class="form-control" value="{{ old('name') }}" required>
                         </div>
                         <div class="col-12 col-lg-6">
@@ -58,7 +58,7 @@
                         </div>
                     </div>
 
-                    <div class="row mb-4">
+                    <div class="row mb-3">
                         <div class="col-12">
                             <p class="font-weight-bold mb-0">Location</p>
                         </div>
@@ -71,6 +71,27 @@
                             <div id="autocomplete"></div>
                             <label for="autocomplete" class="d-block text-muted font-size-small">City / Region / Country</label>
                         </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="custom-control custom-checkbox lead">
+                            <input type="checkbox" class="custom-control-input" id="virtual" name="virtual" value="1">
+                            <label class="custom-control-label" for="virtual">We offer virtual / remote services</label>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <p class="font-weight-bold mb-0">Focus</p>
+                        </div>
+                        @foreach($focuses as $focusId => $focusName)
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" name="focus[{{ $focusId }}]" id="focus-{{ $focusId }}">
+                                    <label class="custom-control-label" for="focus-{{ $focusId }}">{{ $focusName }}</label>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
 
                     <div class="row mb-4">

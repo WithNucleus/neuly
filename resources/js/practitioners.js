@@ -13,6 +13,8 @@ const bookableListElement = document.getElementById('bookable-list');
 const loadingResult = document.getElementById('loading-results');
 const errorResult = document.getElementById('error-results');
 
+const virtualCheckbox = document.getElementById('virtual');
+
 const handleLocationSearchResult = ({ item }) => {
     let locationName = item.formatted;
     let latitude = item.geometry.lat;
@@ -83,6 +85,8 @@ document.getElementById('hide-no-location').addEventListener('click', function()
     errorResult.style.display = "none";
 });
 
+virtualCheckbox.addEventListener('change', setLoadingThenGetFilters);
+
 function setLoading() {
     bookableListElement.style.display = "none";
     loadingResult.style.display = "block";
@@ -118,6 +122,13 @@ function getFiltersAndRefine() {
 
     if (filterTypes.length > 0) {
         url = url + 'filter[type]=' + filterTypes.join("|");
+    }
+
+    // Virtual?
+    let virtualChecked = virtualCheckbox.checked;
+
+    if (virtualChecked === true) {
+        url = url + '&filter[virtual]=1';
     }
 
     window.location = url;

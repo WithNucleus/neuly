@@ -208,8 +208,7 @@ class BookableListing extends Model
 
         try {
             $location = Location::find($value);
-            $this->attributes['city'] = $location->city;
-            $this->attributes['state'] = $location->region;
+            $this->attributes['location_name'] = $location->name;
             $this->attributes['latitude'] = $location->latitude;
             $this->attributes['longitude'] = $location->longitude;
         } catch (\Throwable $throwable) {
