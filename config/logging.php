@@ -99,6 +99,11 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
+
+        'geocoding' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/geocoding.log'),
+        ]
     ],
 
 ];

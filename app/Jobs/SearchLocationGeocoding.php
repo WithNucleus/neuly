@@ -39,12 +39,18 @@ class SearchLocationGeocoding implements ShouldQueue
         $processed = [];
         $failed = [];
 
+
         try {
             $apiKey = config('services.opencage.api_key');
             $geocoder = new Geocoder($apiKey);
+            \Log::channel('geocoding')->info('API Key: '.$apiKey);
 
             foreach ($this->locationGeocoding->payload as $locationId => $locationName) {
+
+                \Log::channel('geocoding')->info('Processing: '.$locationName);
                 $result = $geocoder->geocode($locationName);
+                \Log::channel('geocoding')->info('Message for '.$locationName.': '.$result['status']['message']);
+
 
                 if ($result && $result['total_results'] > 0) {
                     $geocodingData = $result['results'][0];
