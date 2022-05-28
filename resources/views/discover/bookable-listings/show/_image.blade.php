@@ -1,1 +1,1 @@
-<div class="bookable-image-large" style="background-image: url('{{ ($bookableListing->image) ?? $bookableListing->bookableImage }}');"></div>
+<img src="{{ ($bookableListing->image) ?? $bookableListing->bookableImage }}" alt="{{ $bookableListing->name }}" class="bookable-show-image">

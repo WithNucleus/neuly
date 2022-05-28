@@ -195,6 +195,10 @@ class Location extends Model implements EntityContract
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+    public function bookableListings(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(BookableListing::class);
+    }
 
     public function companies()
     {

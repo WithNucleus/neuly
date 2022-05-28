@@ -134,6 +134,10 @@
 
             {{ $bookableListings->links() }}
 
+            <div class="my-4 text-center lead-larger">
+                <span class="d-block mb-2">Would you like to be listed here?</span> <a href="{{ route('discover.bookable-listing.create') }}" class="btn btn-lg btn-primary">Join our Care Directory</a>
+            </div>
+
             @include('discover.includes.discover-footer-content')
 
         </div>

@@ -28,10 +28,11 @@ class CreateBookableListingsTable extends Migration
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
             $table->foreignId('location_id')->nullable()->references('id')->on('locations');
-            $table->foreignId('company_branch_id')->nullable()->references('id')->on('company_branches');
             $table->string('image')->nullable();
             $table->json('hours_json')->nullable();
             $table->boolean('virtual')->default(0);
+            $table->foreignId('company_branch_id')->nullable()->references('id')->on('company_branches');
+            $table->foreignId('user_id')->nullable()->references('id')->on('users');
             $table->timestamps();
         });
     }

@@ -5,6 +5,7 @@ namespace App\Models;
 use Akaunting\Firewall\Models\Log;
 use App\Models\Traits\HasEntityContent;
 use App\Models\Traits\SearchableEntity;
+use App\User;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -111,6 +112,11 @@ class BookableListing extends Model
     public function location(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Location::class);
+    }
+
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     /*
