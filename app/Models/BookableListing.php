@@ -208,13 +208,12 @@ class BookableListing extends Model
     public function setLocationIdAttribute($value) {
         $this->attributes['location_id'] = $value;
 
-        try {
-            $location = Location::find($value);
+        $location = Location::find($value);
+
+        if ($location !== null) {
             $this->attributes['location_name'] = $location->name;
             $this->attributes['latitude'] = $location->latitude;
             $this->attributes['longitude'] = $location->longitude;
-        } catch (\Throwable $throwable) {
-            Log::warning('Problem saving Location ID ' . $throwable->getMessage());
         }
     }
 }
