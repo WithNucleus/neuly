@@ -125,11 +125,7 @@ class BookableListing extends Model
     |--------------------------------------------------------------------------
     */
     public function scopePractitioners($query) {
-        return $query
-            ->where('type', self::TYPE_CLINIC)
-            ->orWhere('type', self::TYPE_COACH)
-            ->orWhere('type', self::TYPE_RETREAT)
-            ->orWhere('type', self::TYPE_THERAPIST);
+        return $query->whereIn('type', self::TYPES_CARE);
     }
 
     public function scopePublic($query) {

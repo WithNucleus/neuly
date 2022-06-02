@@ -138,11 +138,7 @@ class BookableListingController extends Controller
     {
         $attributes = $request->validated();
 
-        if (Auth::user()) {
-            $attributes['user_id'] = Auth::id();
-        } else {
-            abort(404);
-        }
+        $attributes['user_id'] = Auth::id();
 
         $bookableRequest = BookableListingRequest::create($attributes);
 
@@ -190,6 +186,16 @@ class BookableListingController extends Controller
         $bookableListing = BookableListing::create($attributes);
 
         $bookableListing->image = $bookableListing->bookable->entityImageUrl;
+
+        // TODO: Create New Locations if no match
+        $locationName = $attributes['location_name'];
+
+        $matchingLocation = Location::where('name', $locationName)->first();
+
+        if ($matchingLocation) {
+            $bookableListing->location_id = $matchingLocation->id;
+        }
+
         $bookableListing->save();
 
         // Focus
@@ -203,16 +209,6 @@ class BookableListingController extends Controller
            'order' => 1,
            'content' => $attributes['description']
         ]);
-
-        // TODO: Create New Locations if no match
-        $locationName = $attributes['location_name'];
-
-        $matchingLocation = Location::where('name', $locationName)->first();
-
-        if ($matchingLocation) {
-            $bookableListing->location_id = $matchingLocation->id;
-            $bookableListing->save();
-        }
 
         if ($bookableListing->status == BookableListing::STATUS_PENDING) {
             NotificationHelper::sendAdminNotifications(new BookableListingNotification($bookableListing));
