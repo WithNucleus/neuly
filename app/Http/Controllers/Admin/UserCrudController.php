@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\PermissionManager\app\Http\Requests\UserStoreCrudRequest as StoreRequest;
 use Backpack\PermissionManager\app\Http\Requests\UserUpdateCrudRequest as UpdateRequest;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 
 class UserCrudController extends CrudController
@@ -93,6 +94,13 @@ class UserCrudController extends CrudController
     public function setupCreateOperation()
     {
         $this->addUserFields();
+        $this->crud->addFields([
+            [
+                'type' => 'hidden',
+                'name' => 'email_verified_at',
+                'value' => Carbon::now(),
+            ],
+        ]);
         $this->crud->setValidation(StoreRequest::class);
     }
 
