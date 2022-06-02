@@ -164,6 +164,10 @@ class Company extends Model implements EntityContract, EntityImageContract
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+    public function bookableListings()
+    {
+        return $this->morphMany(BookableListing::class, 'bookable');
+    }
 
     public function companyBranches(): \Illuminate\Database\Eloquent\Relations\HasMany
     {

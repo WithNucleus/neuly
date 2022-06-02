@@ -39,6 +39,7 @@
                     <a class="dropdown-item" href="{{ route('discover.videos') }}"><i class="fad fa-film fa-fw"></i> Videos</a>
                     <a class="dropdown-item" href="{{ route('discover.patents') }}"><i class="fad fa-lightbulb-on fa-fw"></i> Patents</a>
                     <a class="dropdown-item" href="{{ route('discover.patents.filings') }}"><i class="fad fa-cabinet-filing fa-fw"></i> Patent Filings</a>
+                    <a class="dropdown-item" href="{{ route('discover.bookable-listing.practitioners') }}"><i class="fad fa-medkit fa-fw"></i> Practitioners</a>
                 </div>
             </li>
 

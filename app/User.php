@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Models\BookableListing;
+use App\Models\BookableListingRequest;
 use App\Models\Dashboard;
 use App\Models\FollowList;
 use App\Models\Person;
@@ -67,6 +69,16 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getFullnameAttribute(): string
     {
         return $this->name.' '.$this->last_name;
+    }
+
+    public function bookableListings(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(BookableListing::class);
+    }
+
+    public function bookableListingRequests(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(BookableListingRequest::class);
     }
 
     public function socialAuth(): \Illuminate\Database\Eloquent\Relations\HasMany
