@@ -46,6 +46,7 @@ class ImportFailureCorrector
     private static function correctSponsorCollaborators($importFailure, $requestArray)
     {
         $isSuccess = false;
+        $modelId = $requestArray['id'] ?? null;
         $modelClassName = $requestArray['model'];
         $nctNumber = $importFailure->details['nct_number'];
         $importValue = $importFailure->details['value'];
@@ -54,30 +55,38 @@ class ImportFailureCorrector
             $clinicaltrial = Clinicaltrial::where('nct_number', $nctNumber)->firstOrFail();
 
             if ($modelClassName === Company::class) {
-                $company = Company::updateOrCreate([
-                    'name' => $importValue,
-                ], [
-                    'slug' => Str::slug($importValue),
-                ]);
+                if ($modelId !== null) {
+                    $company = Company::findOrFail($modelId);
+                } else {
+                    $company = Company::updateOrCreate([
+                        'name' => $importValue,
+                    ], [
+                        'slug' => Str::slug($importValue),
+                    ]);
+                }
 
                 $clinicaltrial->companies()->syncWithoutDetaching($company->id);
                 $isSuccess = true;
             }
 
             if ($modelClassName === Person::class) {
-                $person = Person::updateOrCreate([
-                    'name' => $importValue,
-                ], [
-                    'slug' => Person::generateUniqueSlug($importValue),
-                ]);
+                if ($modelId !== null) {
+                    $person = Person::findOrFail($modelId);
+                } else {
+                    $person = Person::updateOrCreate([
+                        'name' => $importValue,
+                    ], [
+                        'slug' => Person::generateUniqueSlug($importValue),
+                    ]);
+                }
 
                 $clinicaltrial->people()->syncWithoutDetaching($person->id);
                 $isSuccess = true;
             }
         } catch (\Throwable $e) {
             Log::error(
-                "Unable to resolve ImportFailure [id = {$importFailure->id}, nct_number = {$nctNumber}].\n".
-                'ErrorMessage: '.$e->getMessage()
+                "Unable to resolve ImportFailure [id = {$importFailure->id}, nct_number = {$nctNumber}].\n" .
+                'ErrorMessage: ' . $e->getMessage()
             );
         }
 
@@ -111,8 +120,8 @@ class ImportFailureCorrector
             }
         } catch (\Throwable $e) {
             Log::error(
-                "Unable to resolve ImportFailure [id = {$importFailure->id}, nct_number = {$nctNumber}].\n".
-                'ErrorMessage: '.$e->getMessage()
+                "Unable to resolve ImportFailure [id = {$importFailure->id}, nct_number = {$nctNumber}].\n" .
+                'ErrorMessage: ' . $e->getMessage()
             );
         }
 
