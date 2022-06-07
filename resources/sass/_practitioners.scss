@@ -28,3 +28,51 @@
         max-width: 100px;
     }
 }
+
+.neuly-care-banner {
+    width: 100%;
+    background: #000;
+    padding-top: 4rem;
+    text-align: center;
+
+    @media (min-width: 1024px) {
+        padding-top: 2rem;
+    }
+
+    img {
+        width: 100%;
+        max-width: 1800px;
+        margin-left: auto;
+        margin-right: auto;
+        height: auto;
+    }
+
+    #find-neuly-care:hover {
+        cursor: pointer;
+    }
+}
+
+.join-care-directory-banner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: $black;
+    padding: 4rem 2rem;
+
+    img {
+        width: 100%;
+        max-width: 500px;
+        height: auto;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 2rem;
+    }
+
+    .h1 {
+        font-size: 3.25rem;
+        text-align: center;
+        margin-bottom: 3rem;
+        color: $gray-400;
+    }
+}

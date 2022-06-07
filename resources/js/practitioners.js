@@ -133,3 +133,11 @@ function getFiltersAndRefine() {
 
     window.location = url;
 }
+
+$( document ).ready(function() {
+    $("#find-neuly-care").click(function() {
+        $([document.documentElement, document.body]).animate({
+            scrollTop: $("#practitioners-page").offset().top
+        }, 1000);
+    });
+});

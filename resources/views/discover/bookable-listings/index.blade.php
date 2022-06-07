@@ -6,6 +6,10 @@
 
     @include('navbars.primary')
 
+    <div class="neuly-care-banner">
+        <img id="find-neuly-care" src="{{ asset('images/neuly-care-banner.png') }}" alt="Find practitioners and connect with the care you need">
+    </div>
+
     <div class="container-fluid text-center">
 
         <div id="practitioners-page" class="mx-auto px-lg-5 container text-left" style="max-width: 1500px" data-page-url="{{ route('discover.bookable-listing.practitioners') }}">
@@ -92,7 +96,7 @@
                         <div class="card shadow-sm h-100 p-4 d-flex flex-grow-1">
                             <a href="{{ route('discover.bookable-listing.show', $bookableListing->slug) }}" class="text-decoration-none d-flex flex-column justify-content-between flex-grow-1">
                                 <div class="mb-3">
-                                    <div class="bookable-image" style="background-image: url('{{ $bookableListing->image }}');"></div>
+                                    <div class="bookable-image @if ($bookableListing->bookable_type == \App\Models\Person::class) rounded-circle @endif" style="background-image: url('{{ $bookableListing->image }}');"></div>
                                     <h2 class="h5 mt-3 text-center">
                                         {{ $bookableListing->name }}
                                     </h2>
@@ -134,8 +138,10 @@
 
             {{ $bookableListings->links() }}
 
-            <div class="my-4 text-center lead-larger">
-                <span class="d-block mb-2">Would you like to be listed here?</span> <a href="{{ route('discover.bookable-listing.create') }}" class="btn btn-lg btn-primary">Join our Care Directory</a>
+            <div class="join-care-directory-banner">
+                <img src="{{ asset('images/neuly-care-logo-dark.png') }}" alt="Neuly Care">
+                <div class="d-block h1">Would you like to be listed here?</div>
+                <a href="{{ route('discover.bookable-listing.create') }}" class="btn btn-xl btn-primary">Join our Care Directory</a>
             </div>
 
             @include('discover.includes.discover-footer-content')

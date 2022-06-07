@@ -86,7 +86,7 @@ class BookableListingController extends Controller
         }
 
         $bookableListings = $bookableListings
-            ->addSelect(['name', 'id', 'slug', 'location_name', 'latitude', 'longitude', 'type', 'address', 'image', 'virtual'])
+            ->addSelect(['name', 'id', 'slug', 'location_name', 'latitude', 'longitude', 'type', 'address', 'image', 'virtual', 'bookable_type'])
             ->allowedSorts([
                 'name',
             ])
