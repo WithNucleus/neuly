@@ -24,7 +24,7 @@
                             @endforeach
                             <div class="row">
                                 <div class="col-6">
-                                    <button class="btn btn-primary js-fix-sponsor-failure-button"
+                                    <button class="btn btn-success js-fix-sponsor-failure-button"
                                             data-model="{{ \App\Models\Company::class }}"
                                             data-action="{{ route('import.failures.fix', $failure->id) }}">Create as Organization and attach
                                     </button>
@@ -48,7 +48,7 @@
                                 </div>
 
                                 <div class="col-6">
-                                    <button class="btn btn-primary js-fix-sponsor-failure-button"
+                                    <button class="btn btn-success js-fix-sponsor-failure-button"
                                             data-model="{{ \App\Models\Person::class }}"
                                             data-action="{{ route('import.failures.fix', $failure->id) }}">Create as Person and attach
                                     </button>
