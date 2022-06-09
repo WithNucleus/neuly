@@ -106,6 +106,132 @@
         });
     });
 
+    if ($('.js-fix-sponsor-failure-search-company-input') !== undefined) {
+
+        let companySearchInputs = $('.js-fix-sponsor-failure-search-company-input'),
+            companyGetListAction =  companySearchInputs.first().data('action'),
+            companyType = companySearchInputs.first().data('entity-type'),
+            companyIdsByName = [],
+            companyNames = [];
+
+        $.getJSON(companyGetListAction, {'entity_type': companyType }, function(response) {
+            if (response.status === 'ok') {
+                $.each(response.data, function (i, item) {
+                    companyNames.push(item.name);
+                    companyIdsByName[item.name] = item.id;
+                });
+
+                let companyEntitiesList = new Bloodhound({
+                    datumTokenizer: Bloodhound.tokenizers.whitespace,
+                    queryTokenizer: Bloodhound.tokenizers.whitespace,
+                    local: companyNames
+                });
+
+                companySearchInputs.each(function (){
+                    let input = $(this),
+                        idInput = input.siblings('.js-company-id-input');
+
+                    input.typeahead(null, {
+                        name: 'master',
+                        source: companyEntitiesList
+                    });
+                    input.attr('disabled', false);
+
+                    input.bind('typeahead:select', function (event, item) {
+                        input.removeClass('is-invalid')
+                        idInput.val(companyIdsByName[item]);
+                    });
+                });
+            }
+        });
+    }
+
+    $('.js-fix-sponsor-failure-attach-company-button').on('click', function () {
+        let button = $(this),
+            itemBlock = button.parents('.js-failure-item-container'),
+            searchInput = itemBlock.find('.js-fix-company-search-input'),
+            companyId = itemBlock.find('.js-company-id-input').val(),
+            action = button.data('action'),
+            model = button.data('model');
+
+        if (!companyId) {
+            searchInput.addClass('is-invalid');
+            return false;
+        }
+
+        let data = {
+            'model' : model,
+            'id': companyId,
+        };
+
+        $.post(action, data, function (response){
+            processRequestResponse(itemBlock, response.status);
+        });
+    });
+
+    if ($('.js-fix-sponsor-failure-search-person-input') !== undefined) {
+
+        let peopleSearchInputs = $('.js-fix-sponsor-failure-search-person-input'),
+            peopleGetListAction =  peopleSearchInputs.first().data('action'),
+            personType = peopleSearchInputs.first().data('entity-type'),
+            peopleIdsByName = [],
+            peopleNames = [];
+
+        $.getJSON(peopleGetListAction, {'entity_type': personType }, function(response) {
+            if (response.status === 'ok') {
+                $.each(response.data, function (i, item) {
+                    peopleNames.push(item.name);
+                    peopleIdsByName[item.name] = item.id;
+                });
+
+                let peopleEntitiesList = new Bloodhound({
+                    datumTokenizer: Bloodhound.tokenizers.whitespace,
+                    queryTokenizer: Bloodhound.tokenizers.whitespace,
+                    local: peopleNames
+                });
+
+                peopleSearchInputs.each(function (){
+                    let input = $(this),
+                        idInput = input.siblings('.js-person-id-input');
+
+                    input.typeahead(null, {
+                        name: 'master',
+                        source: peopleEntitiesList
+                    });
+                    input.attr('disabled', false);
+
+                    input.bind('typeahead:select', function (event, item) {
+                        input.removeClass('is-invalid')
+                        idInput.val(peopleIdsByName[item]);
+                    });
+                });
+            }
+        });
+    }
+
+    $('.js-fix-sponsor-failure-attach-person-button').on('click', function () {
+        let button = $(this),
+            itemBlock = button.parents('.js-failure-item-container'),
+            searchInput = itemBlock.find('.js-fix-person-search-input'),
+            personId = itemBlock.find('.js-person-id-input').val(),
+            action = button.data('action'),
+            model = button.data('model');
+
+        if (!personId) {
+            searchInput.addClass('is-invalid');
+            return false;
+        }
+
+        let data = {
+            'model' : model,
+            'id': personId,
+        };
+
+        $.post(action, data, function (response){
+            processRequestResponse(itemBlock, response.status);
+        });
+    });
+
     $(".js-fix-image-failure-button").on('click', function () {
         let button = $(this),
             itemBlock = button.parents('.js-failure-item-container'),
