@@ -122,6 +122,14 @@
                                         @if ($locationSearch == true)
                                             <span class="mx-4">{{ number_format($bookableListing->distance, 2) }} miles</span>
                                         @endif
+                                        @if ($bookableListing->start_date != '')
+                                            <span class="mx-4">
+                                                {{ \Carbon\Carbon::parse($bookableListing->start_date)->format('M d') }}
+                                                @if ($bookableListing->end_date != '')
+                                                    &ndash; {{ \Carbon\Carbon::parse($bookableListing->end_date)->format('M d') }}
+                                                @endif
+                                            </span>
+                                        @endif
                                     </div>
                                 </div>
                             </a>

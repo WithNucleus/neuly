@@ -27,6 +27,9 @@
                                 @foreach($people as $id => $name)
                                     <option value="person-{{ $id }}" data-type="person" @if(old('bookable_id') == "person-" . $id) selected @endif>{{ $name }}</option>
                                 @endforeach
+                                @foreach($events as $id => $name)
+                                    <option value="event-{{ $id }}" data-type="person" @if(old('bookable_id') == "event-" . $id) selected @endif>{{ $name }}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
