@@ -42,9 +42,12 @@ class InsightRequestCreated extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->line('New Insight Request')
-            ->action('Show Insight Request', route('insightRequest.show', $this->insightRequest->id))
-            ->line('Thank you for using our application!');
+            ->markdown('emails.insight-request', [
+                'name' => $this->insightRequest->name,
+                'text' => $this->insightRequest->text
+            ])
+            ->replyTo($this->insightRequest->email)
+            ->subject('Insight Request from ' . $this->insightRequest->name);
     }
 
     /**
@@ -55,13 +58,14 @@ class InsightRequestCreated extends Notification
     {
         $url = route('insightRequest.show', $this->insightRequest->id);
         $from = $this->insightRequest->name . ' [' . $this->insightRequest->email . ']';
+        $text = $this->insightRequest->text;
 
         return (new SlackMessage)
-            ->content('New Insight Request')
-            ->attachment(function ($attachment) use ($url, $from) {
-                $attachment->title('Show', $url)
+            ->content('New Insight Request from ' . $from)
+            ->attachment(function ($attachment) use ($url, $from, $text) {
+                $attachment->title('View in Neuly', $url)
                     ->fields([
-                        'From' => $from,
+                        'Request' => $text
                     ]);
             });
     }

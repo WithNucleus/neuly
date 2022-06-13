@@ -29,7 +29,7 @@ class InsightRequest extends Model
     protected static function booted()
     {
         static::created(function ($model) {
-            NotificationHelper::sendAdminNotifications(new InsightRequestCreated($model));
+            NotificationHelper::sendSalesNotifications(new InsightRequestCreated($model));
         });
     }
 
