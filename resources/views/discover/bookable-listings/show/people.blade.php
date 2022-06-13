@@ -3,7 +3,7 @@
         @include('discover.bookable-listings.show._website')
         @include('discover.bookable-listings.show._focus')
 
-        @if($bookableListing->bookable->bio != '')
+        @if($bookableListing->bookable->bio)
             <div class="mb-3">
                 {!! $bookableListing->bookable->bio !!}
             </div>

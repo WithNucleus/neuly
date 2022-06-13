@@ -10,6 +10,7 @@ use App\Mail\BookableListingForReviewMail;
 use App\Mail\BookableListingReservationMail;
 use App\Models\BookableListingRequest;
 use App\Models\Company;
+use App\Models\Event;
 use App\Models\Focus;
 use App\Models\Location;
 use App\Models\Person;
@@ -86,7 +87,7 @@ class BookableListingController extends Controller
         }
 
         $bookableListings = $bookableListings
-            ->addSelect(['name', 'id', 'slug', 'location_name', 'latitude', 'longitude', 'type', 'address', 'image', 'virtual', 'bookable_type'])
+            ->addSelect(['name', 'id', 'slug', 'location_name', 'latitude', 'longitude', 'type', 'address', 'image', 'virtual', 'bookable_type', 'start_date', 'end_date'])
             ->allowedSorts([
                 'name',
             ])
@@ -126,6 +127,7 @@ class BookableListingController extends Controller
             'App\Models\Company' => 'organizations',
             'App\Models\Person' => 'people',
             'App\Models\Course' => 'courses',
+            'App\Models\Event' => 'events',
         };
 
         return view('discover.bookable-listings.show', [
@@ -158,11 +160,13 @@ class BookableListingController extends Controller
 
         $organizations = Company::public()->pluck('name', 'id');
         $people = Person::public()->pluck('name', 'id');
+        $events = Event::upcoming()->pluck('name', 'id');
 
         return view('discover.bookable-listings.create', [
             'types' => $types,
             'organizations' => $organizations,
             'people' => $people,
+            'events' => $events,
             'focuses' => $focuses
         ]);
     }
@@ -179,6 +183,7 @@ class BookableListingController extends Controller
         $attributes['bookable_type'] = match($bookableDetails[0]) {
             'person' => Person::class,
             'organization' => Company::class,
+            'event' => Event::class,
         };
 
         $attributes['status'] = $this->getNewBookableListingStatus();
@@ -194,6 +199,16 @@ class BookableListingController extends Controller
 
         if ($matchingLocation) {
             $bookableListing->location_id = $matchingLocation->id;
+        }
+
+        if ($attributes['bookable_type'] == Event::class) {
+
+            $event = Event::find($attributes['bookable_id']);
+
+            if ($event) {
+                $bookableListing->start_date = $event->start_date;
+                $bookableListing->end_date = $event->end_date;
+            }
         }
 
         $bookableListing->save();

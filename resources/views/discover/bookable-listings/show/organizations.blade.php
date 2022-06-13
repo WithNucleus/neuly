@@ -4,7 +4,7 @@
 
         @include('discover.bookable-listings.show._focus')
 
-        @if($bookableListing->bookable->summary != '')
+        @if($bookableListing->bookable->summary)
             <p>
                 {{ $bookableListing->bookable->summary }}
             </p>

@@ -104,10 +104,10 @@
                                 <div>
                                     <div class="text-center">
                                         <address class="text-dark">
-                                            @if($bookableListing->address != '')
+                                            @if($bookableListing->address)
                                                 <span class="d-block">{{$bookableListing->address }}</span>
                                             @endif
-                                            @if ($bookableListing->location_name != '')
+                                            @if ($bookableListing->location_name)
                                                 <span class="d-block">{{ $bookableListing->location_name }}</span>
                                             @endif
                                             @if($bookableListing->virtual === 1)
@@ -121,6 +121,14 @@
                                         </span>
                                         @if ($locationSearch == true)
                                             <span class="mx-4">{{ number_format($bookableListing->distance, 2) }} miles</span>
+                                        @endif
+                                        @if ($bookableListing->start_date)
+                                            <span class="mx-4">
+                                                {{ \Carbon\Carbon::parse($bookableListing->start_date)->format('M d') }}
+                                                @if ($bookableListing->end_date)
+                                                    &ndash; {{ \Carbon\Carbon::parse($bookableListing->end_date)->format('M d') }}
+                                                @endif
+                                            </span>
                                         @endif
                                     </div>
                                 </div>
