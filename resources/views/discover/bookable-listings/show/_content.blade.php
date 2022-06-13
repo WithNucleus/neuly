@@ -9,7 +9,7 @@
     </div>
 @endif
 
-@if ($bookableListing->bookable->count > 0)
+@if ($bookableListing->bookable_type == \App\Models\Company::class OR $bookableListing->bookable_type == \App\Models\Person::class)
 
     @if ($bookableListing->bookable->content->count() > 0)
         <div>

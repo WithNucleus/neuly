@@ -6,9 +6,17 @@
 
         <div class="event-details">
             <p class="lead mb-2">
-                <span class="sr-only">Date:</span> {{ Carbon\Carbon::parse($bookableListing->bookable->start_date)->format('M d, Y') }}
-                @if($bookableListing->bookable->end_date != '')
-                    - {{ Carbon\Carbon::parse($bookableListing->bookable->end_date)->format('M d, Y') }}
+                <span class="sr-only">Date:</span>
+                @if($bookableListing->start_date)
+                    {{ Carbon\Carbon::parse($bookableListing->start_date)->format('M d, Y') }}
+                    @if($bookableListing->bookable->end_date)
+                        - {{ Carbon\Carbon::parse($bookableListing->end_date)->format('M d, Y') }}
+                    @endif
+                @else
+                    {{ Carbon\Carbon::parse($bookableListing->bookable->start_date)->format('M d, Y') }}
+                    @if($bookableListing->bookable->end_date)
+                        - {{ Carbon\Carbon::parse($bookableListing->bookable->end_date)->format('M d, Y') }}
+                    @endif
                 @endif
             </p>
         </div>
