@@ -1,9 +1,10 @@
 <?php
 
 use App\Http\Controllers\Dashboard\TeamController;
+use App\Http\Controllers\ExternalScriptController;
+use App\Http\Controllers\Index\UserOauthController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ExternalScriptController;
 
 /*
 |--------------------------------------------------------------------------
@@ -333,6 +334,8 @@ Route::group([
     Route::post('/user/settings/validateurl', 'Index\UserProfileController@checkMemberUrl')->name('user.validate.member_url');
     Route::get('/user/settings/social', 'Index\UserSocialController@index')->name('user.settings.social');
     Route::get('/user/settings/social/connect/{provider}', 'Index\UserSocialController@connect')->name('user.settings.social.connect');
+    Route::get('/user/settings/oauth', [UserOauthController::class, 'index'])->name('user.settings.oauth');
+    Route::post('/user/settings/oauth/{clientId}/disconnect', [UserOauthController::class, 'disconnectClient'])->name('user.settings.oauth.disconnectClient');
 
     Route::get('/user/person/status', 'Index\UserClaimPersonController@status')->name('user.person.status');
     Route::get('/user/person/verify/email', 'Index\UserClaimPersonController@verifyEmail')->name('user.person.verify.email');

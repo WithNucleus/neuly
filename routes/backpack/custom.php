@@ -123,4 +123,7 @@ Route::group([
     ], function() {
         Route::crud('activity-log', 'ActivityLogCrudController');
     });
+
+    Route::crud('oauth-clients', 'OauthClientsCrudController');
+    Route::crud('oauth-access-token', 'OauthAccessTokenCrudController');
 }); // this should be the absolute last line of this file
