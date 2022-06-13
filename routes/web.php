@@ -383,6 +383,8 @@ Route::group(['middleware' => ['auth', 'enterprise.demo']], function () {
         Route::get('/dashboard/charts/active-patents', 'DashboardChartsController@activePatentsChart')->name('dashboard.chart-active-patents');
         Route::get('/dashboard/charts/clinical-trials', 'DashboardChartsController@clinicalTrialsChart')->name('dashboard.chart-clinical-trials-status');
         Route::get('/dashboard/charts/investments-by-focus', 'DashboardChartsController@investmentByFocus')->name('dashboard.chart-investments-by-focus');
+
+        Route::post('/dashboard/request-widget', 'RequestWidgetController@requestWidget')->name('dashboard.widgets.request');
     });
 });
 

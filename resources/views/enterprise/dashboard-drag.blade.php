@@ -47,6 +47,10 @@
                     @endforeach
                 </div>
             </div>
+
+            <button type="button" class="btn btn-sm border ml-4" data-toggle="modal" data-target="#requestWidget">
+                <i class="fad fa-question-square mr-1"></i>Request Widget
+            </button>
         </div>
 
         <div class="enterprise-widget-grid" data-dashboard="{{ $dashboard->name }}">
@@ -61,11 +65,48 @@
 
     </div>
 <div class="filter-backdrop" style="display: none"></div>
+
+<div class="modal fade" id="requestWidget" tabindex="-1" role="dialog" aria-labelledby="requestWidgetLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="requestWidgetLabel">Request a Widget</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="js-ajax-response alert position-relative" style="display: none;">
+                    <span class="message"></span>
+                    <button type="button" class="close close-ajax-response" data-hide="alert" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <form method="post" action="" class="max-width-450">
+                    @csrf
+                    <div class="form-group">
+                        <label for="request-widget-content" class="font-weight-bold">What data / info would you like to see?</label>
+                        <textarea class="form-control" name="request-widget-content" id="request-widget-content" rows="10"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button id="request-widget" type="submit" class="btn btn-primary" data-url="{{ route('enterprise.dashboard.widgets.request') }}">Submit Request</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('after_scripts')
     <script>
         $(document).ready(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
             const dashboard = $('.enterprise-widget-grid').data('dashboard');
             let isDrag = false;
             let showDetails = true;
@@ -304,6 +345,35 @@
                 getEnterpriseWidget(widgetId, dataUrl);
                 allowAddableWidgets();
                 saveWidgetData();
+            });
+
+            // Request Widget
+            $('#request-widget').on('click', function(event) {
+                event.preventDefault();
+
+                let url = $(this).data('url');
+                console.log(url);
+
+                let content = $('#request-widget-content').val();
+
+                $.post(url, {
+                    content: content,
+                }, function (response) {
+
+                    $('.js-ajax-response .message').text(response.message);
+
+                    if (response.status === 'success') {
+                        $('.js-ajax-response').removeClass('alert-danger').addClass('alert-success').show();
+                        $('#request-widget-content').val('');
+
+                    } else {
+                        $('.js-ajax-response').removeClass('alert-success').addClass('alert-danger').show();
+                    }
+                });
+            });
+
+            $('button.close-ajax-response').on('click', function() {
+                $(this).parent().hide();
             });
         });
     </script>
