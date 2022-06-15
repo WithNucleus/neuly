@@ -131,5 +131,6 @@
 @include('navbars.admin-menu')
 
 @yield('after_scripts')
+<script src="https://neuly.com/nav-tiles/nucleus.js" type="text/javascript"></script>
 </body>
 </html>
