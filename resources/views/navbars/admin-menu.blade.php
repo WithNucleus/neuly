@@ -1,5 +1,5 @@
 @can('admin login')
-	<div id="admin-menu-button">
+	<div id="admin-menu-button" class="js-nucleus-nav-tiles">
 	    <button class="btn btn-dark p-2" id="toggle-admin-menu" tabindex="1" data-toggle="tooltip" data-placement="right" title="Neuly Admin">
 	        <i class="fad fa-cogs fa-lg text-tertiary"></i> <span class="sr-only">Admin Menu</span></button>
 	</div>
@@ -162,7 +162,7 @@
 							@endif
 						@endif
 
-					
+
 				@endif
 			</div>
 

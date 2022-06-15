@@ -1,5 +1,6 @@
 window.addEventListener('load', () => {
     nucleusNavTile();
+    sortNucleusNavTiles();
 });
 
 function nucleusNavTile() {
@@ -19,7 +20,7 @@ function nucleusNavTile() {
 
     // Nav Tile Button
     const navTileElement = document.createElement("div");
-    navTileElement.className = "nucleus-nav-tile";
+    navTileElement.className = "nucleus-nav-tile js-nucleus-nav-tiles";
 
     const navTileButton = document.createElement("button");
     navTileButton.className = "btn";
@@ -89,5 +90,16 @@ function nucleusNavTile() {
         }
 
         navTileMenuList.appendChild(element);
+    }
+}
+
+function sortNucleusNavTiles() {
+    var navTiles = document.getElementsByClassName("js-nucleus-nav-tiles");
+    var cssBottomValue = 0.25;
+
+    /* iterate from last item to first) */
+    for (var i = navTiles.length - 1; i >= 0; i--) {
+        navTiles.item(i).style.bottom = cssBottomValue + 'rem';
+        cssBottomValue = cssBottomValue + 3.25;
     }
 }
