@@ -1,9 +1,9 @@
-<div id="discover-feedback-button">
+<div id="discover-feedback-button" class="js-nucleus-nav-tiles">
     <button class="btn btn-dark p-2" id="toggle-feedback-modal" tabindex="1" data-toggle="tooltip" data-placement="left" title="Neuly Feedback">
         <i class="fas fa-comment fa-lg text-tertiary"></i> <span class="sr-only">Neuly Feedback</span></button>
 </div>
 
-<div id="discover-menu-button">
+<div id="discover-menu-button" class="js-nucleus-nav-tiles">
     <button class="btn btn-dark p-2" id="toggle-discover-menu" tabindex="1" data-toggle="tooltip" data-placement="left" title="Navigate Neuly">
         <img src="{{ asset('images/brain-icon-cyan.png') }}" alt="Neuly Menu"> <span class="sr-only">Neuly Menu</span></button>
 </div>
