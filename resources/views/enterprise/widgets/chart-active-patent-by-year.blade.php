@@ -3,7 +3,7 @@
         <canvas id="activePatentsByYearChart" style="height: 350px"
                 data-labels="{{ $labels }}"
                 data-values="{{ $values }}"
-                data-url="{{ route('discover.patents') }}?filter[priority_date]="
+                data-url=""
         ></canvas>
     </div>
 
@@ -46,19 +46,19 @@
                 }
             });
 
-            canvas.onclick = function(evt) {
-                let activePoints = myNewChart.getElementsAtEvent(evt);
-                if (activePoints[0]) {
-                    let chartData = activePoints[0]['_chart'].config.data;
-                    let idx = activePoints[0]['_index'];
-
-                    let label = chartData.labels[idx];
-                    let value = chartData.datasets[0].data[idx];
-
-                    let url = actionUrl + label;
-                    window.open(url, '_blank');
-                }
-            };
+            // canvas.onclick = function(evt) {
+            //     let activePoints = myNewChart.getElementsAtEvent(evt);
+            //     if (activePoints[0]) {
+            //         let chartData = activePoints[0]['_chart'].config.data;
+            //         let idx = activePoints[0]['_index'];
+            //
+            //         let label = chartData.labels[idx];
+            //         let value = chartData.datasets[0].data[idx];
+            //
+            //         let url = actionUrl + label;
+            //         window.open(url, '_blank');
+            //     }
+            // };
         });
 
     </script>
