@@ -50,7 +50,7 @@
 
                 <div class="dropdown-menu dropdown-menu-anchor-right" aria-labelledby="navbarDropdownExplore">
                     <a class="dropdown-item" href="{{ route('discover.insights') }}"><i class="fad fa-head-side-brain fa-fw"></i> Neuly Insights</a>
-                    <a class="dropdown-item" href="{{ route('discover.patents.tracker') }}"><i class="fad fa-lightbulb-on fa-fw"></i> Patents Tracker</a>
+                    <a class="dropdown-item" href="{{ route('discover.patents') }}"><i class="fad fa-lightbulb-on fa-fw"></i> Patents Tracker</a>
                     <a class="dropdown-item" href="{{ route('insights.clinicaltrials.pipeline') }}"><i class="fad fa-stream fa-fw"></i> Clinical Trial Tracker</a>
                     <a class="dropdown-item" href="{{ route('insights.investment-funds') }}"><i class="fad fa-chart-network fa-fw"></i> Investment Funds</a>
                     <a class="dropdown-item" href="{{ route('discover.insights.request') }}"><i class="fad fa-bullhorn fa-fw"></i> Request Insight</a>

@@ -186,7 +186,7 @@ Route::group([
     Route::get('/search/clinicaltrials/{term}', 'Index\SearchController@showClinicalTrialsResults')->name('search.clinicaltrials.term');
 
     Route::get('/patents', 'Index\PatentController@index')->name('discover.patents');
-    Route::get('/patent-tracker', 'Index\PatentController@tracker')->name('discover.patents.tracker');
+    Route::get('/patent-tracker', 'Index\PatentController@index')->name('discover.patents.tracker');
     Route::get('/patent-filings', 'Index\DataFeeds\PatentFilingController@index')->name('discover.patents.filings');
 
     //Insights main page

@@ -74,16 +74,16 @@
                                     </div>
                                 @endisset
 
-                                <div class="switch-view mt-2 mb-3 my-md-0">
-                                    <div class="btn-group" role="group" aria-label="Switch Patent view">
-                                        <a href="{{ route('discover.patents') }}" class="btn btn-primary" title="List View" data-toggle="tooltip" data-placement="top">
-                                            <i class="fad fa-list-ul fa-lg"></i>
-                                        </a>
-                                        <a href="{{ route('discover.patents.tracker') }}" class="btn btn-outline-primary" title="Tracker" data-toggle="tooltip" data-placement="top">
-                                            <i class="fad fa-stream fa-lg"></i>
-                                        </a>
-                                    </div>
-                                </div>
+{{--                                <div class="switch-view mt-2 mb-3 my-md-0">--}}
+{{--                                    <div class="btn-group" role="group" aria-label="Switch Patent view">--}}
+{{--                                        <a href="{{ route('discover.patents') }}" class="btn btn-primary" title="List View" data-toggle="tooltip" data-placement="top">--}}
+{{--                                            <i class="fad fa-list-ul fa-lg"></i>--}}
+{{--                                        </a>--}}
+{{--                                        <a href="{{ route('discover.patents.tracker') }}" class="btn btn-outline-primary" title="Tracker" data-toggle="tooltip" data-placement="top">--}}
+{{--                                            <i class="fad fa-stream fa-lg"></i>--}}
+{{--                                        </a>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
                             </div>
 
                             {{-- Filters --}}
