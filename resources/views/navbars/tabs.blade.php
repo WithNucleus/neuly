@@ -75,22 +75,8 @@
             </a>
         </li>
     @endif
-    @if(Route::is('discover.patents'))
-        <li class="nav-item">
-            <a class="nav-link active" href="{{ route('discover.patents') }}">
-                <span class="icon mr-1"><i class="fad fa-lightbulb-on"></i></span>Patents
-            </a>
-        </li>
-    @endif
-    @if(Route::is('discover.patents.filings'))
-        <li class="nav-item">
-            <a class="nav-link active" href="{{ route('discover.patents.filings') }}">
-                <span class="icon mr-1"><i class="fad fa-cabinet-filing"></i></span>Patent Filings
-            </a>
-        </li>
-    @endif
     <li class="nav-item">
-        <a class="nav-link @if(Request::is('insights/*') OR Route::is('discover.insights') OR Route::is('discover.patents.tracker')) active @endif " href="{{ route('discover.insights') }}">
+        <a class="nav-link @if(Request::is('insights/*') OR Route::is('discover.insights')) active @endif " href="{{ route('discover.insights') }}">
             <span class="icon mr-1"><i class="fad fa-head-side-brain"></i></span>Insights
         </a>
     </li>
