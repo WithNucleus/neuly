@@ -152,13 +152,7 @@ class ListingRequestCrudController extends CrudController
 
         $listingRequest = ListingRequest::findOrFail($id);
         $entityClass = ListingRequestHelper::getEntityClassByType($listingRequest->entity_type);
-        $rules = ListingRequestHelper::getRulesByEntityClass($entityClass);
-
-        if ($listingRequest->to_update_id === null) {
-            $rules['slug'] = 'required|min:3|max:255|required|unique:'.$entityClass;
-        } else {
-            unset($rules['slug']);
-        }
+        $rules = ListingRequestHelper::getRulesByEntityClass($entityClass, $listingRequest->to_update_id);
 
         Validator::make($request->all(), $rules)->validate();
 

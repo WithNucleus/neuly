@@ -51,13 +51,13 @@ class ListingRequestHelper
     }
 
     /**
-     * @param string $type
+     * @param string $entityClass
      * @return string
      * @throws \Exception
      */
-    public static function getEntityTypeByClass($class)
+    public static function getEntityTypeByClass($entityClass)
     {
-        $type = array_search($class, self::getAllowedEntities());
+        $type = array_search($entityClass, self::getAllowedEntities());
 
         if (! $type) {
             throw new \Exception('Wrong entity class!');
@@ -102,11 +102,12 @@ class ListingRequestHelper
     }
 
     /**
-     * @param string $class
+     * @param string $entityClass
+     * @param int|null $toUpdateEntityId
      * @return array
      * @throws \Exception
      */
-    public static function getRulesByEntityClass($class)
+    public static function getRulesByEntityClass($entityClass, $toUpdateEntityId = null)
     {
         $allowedRequestsArray = [
             Event::class => EventRequest::class,
@@ -116,10 +117,10 @@ class ListingRequestHelper
             Person::class => PersonRequest::class,
         ];
 
-        $requestClass = isset($allowedRequestsArray[$class]) ? $allowedRequestsArray[$class] : false;
+        $requestClass = isset($allowedRequestsArray[$entityClass]) ? $allowedRequestsArray[$entityClass] : false;
 
         if (! $requestClass) {
-            throw new \Exception('Request class for entity "'.$class.'" not found!');
+            throw new \Exception('Request class for entity "'.$entityClass.'" not found!');
         }
 
         $rules = (new $requestClass)->rules();
@@ -130,6 +131,17 @@ class ListingRequestHelper
 
             $rules['owner.id'] = 'required';
             $rules['owner.type'] = 'required';
+        }
+
+        //check unique 'name' for update action using current entity 'id'
+        if ($requestClass === CompanyRequest::class && $toUpdateEntityId !== null) {
+            $rules['name'] = 'required|max:255|unique:companies,name,' . $toUpdateEntityId;
+        }
+
+        if ($toUpdateEntityId === null) {
+            $rules['slug'] = 'required|min:3|max:255|unique:'.$entityClass;
+        } else {
+            unset($rules['slug']);
         }
 
         return $rules;
