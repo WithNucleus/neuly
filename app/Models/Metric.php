@@ -56,6 +56,7 @@ class Metric extends Model
         'patent_filings',
         'courses',
         'patents',
+        'bookable_listings',
     ];
 
     const CHART_FIELDS = [
@@ -78,6 +79,7 @@ class Metric extends Model
         'patent_filings' => 'Patent Filings',
         'courses' => 'Courses',
         'patents' => 'Patents',
+        'bookable_listings' => 'Bookable Listings',
     ];
 
     const METRICS_TABLES_ENTITIES = [
@@ -91,7 +93,8 @@ class Metric extends Model
         'jobs' => 'jobs',
         'courses' => 'courses',
         'patents' => 'patents',
-        'users' => 'users'
+        'users' => 'users',
+        'bookable_listings' => 'bookable_listings',
     ];
 
     const TILE_TABLES = [
@@ -105,7 +108,8 @@ class Metric extends Model
         'jobs',
         'courses',
         'patents',
-        'users'
+        'users',
+        'bookable_listings',
     ];
 
     const TILE_LABELS = [
@@ -127,7 +131,8 @@ class Metric extends Model
         'Book' => 'Books',
         'News' => 'News',
         'Patent Filing' => 'Patent Filings',
-        'users' => 'Users'
+        'users' => 'Users',
+        'bookable_listings' => 'Bookable Listings',
     ];
 
     /*

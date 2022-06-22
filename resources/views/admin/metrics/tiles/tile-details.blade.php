@@ -34,6 +34,7 @@
                 "Patent Filing",
                 "courses",
                 "patents" => 'admin.metrics.tiles.entities.external-link',
+                'bookable_listings' => 'admin.metrics.tiles.entities.bookable_listings',
                 default => 'admin.metrics.tiles.entities.default'
             }
             ?>
