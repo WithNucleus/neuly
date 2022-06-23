@@ -16,7 +16,7 @@ class RequestWidgetController extends Controller
     {
         $requestContent = $request->input('content');
 
-        $user = User::findOrFail(Auth::id());
+        $user = Auth::user();
 
         if ($requestContent) {
 
