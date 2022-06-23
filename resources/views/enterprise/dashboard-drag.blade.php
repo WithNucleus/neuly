@@ -370,16 +370,15 @@
                 $.post(url, {
                     content: content,
                 }, function (response) {
-
                     $('.js-ajax-response .message').text(response.message);
-
-                    if (response.status === 'success') {
-                        $('.js-ajax-response').removeClass('alert-danger').addClass('alert-success').show();
-                        $('#request-widget-content').val('');
-
-                    } else {
-                        $('.js-ajax-response').removeClass('alert-success').addClass('alert-danger').show();
-                    }
+                    $('.js-ajax-response').removeClass('alert-danger').addClass('alert-success').show();
+                    $('#request-widget-content').val('');
+                })
+                .fail(function(jqXHR) {
+                    $.each(jqXHR.responseJSON.errors, function (key, item) {
+                        $('.js-ajax-response .message').append("<span>"+item+"</span>")
+                    });
+                    $('.js-ajax-response').removeClass('alert-success').addClass('alert-danger').show();
                 });
             });
 
