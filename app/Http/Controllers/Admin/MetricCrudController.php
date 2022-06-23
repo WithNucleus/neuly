@@ -60,5 +60,6 @@ class MetricCrudController extends CrudController
         CRUD::column('patent_filings');
         CRUD::column('courses');
         CRUD::column('patents');
+        CRUD::column('bookable_listings');
     }
 }

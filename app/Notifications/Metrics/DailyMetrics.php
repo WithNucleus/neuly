@@ -53,6 +53,7 @@ class DailyMetrics extends Notification
                         'Locations' => $this->metric->locations,
                         'Courses' => $this->metric->courses,
                         'Patents' => $this->metric->patents,
+                        'Bookable Listings' => $this->metric->bookable_listings,
                     ]);
             })
             ->attachment(function ($attachment) use ($url) {

@@ -3,6 +3,7 @@
 namespace App\Jobs\Metrics;
 
 use App\Helpers\NotificationHelper;
+use App\Models\BookableListing;
 use App\Models\Clinicaltrial;
 use App\Models\Company;
 use App\Models\Course;
@@ -68,6 +69,7 @@ class CollectMetrics implements ShouldQueue
         $patent_filings = MediaItem::patentFilings()->public()->count();
         $courses = Course::count();
         $patents = Patent::count();
+        $bookableListings = BookableListing::count();
 
         $metric = Metric::create([
             'date' => $date,
@@ -94,6 +96,7 @@ class CollectMetrics implements ShouldQueue
             'patent_filings' => $patent_filings,
             'courses' => $courses,
             'patents' => $patents,
+            'bookable_listings' => $bookableListings,
         ]);
 
         MetricsChange::dispatch($metric, Metric::TYPE_CHANGE, Metric::FREQUENCY_DAILY);
