@@ -64,14 +64,22 @@ class ListingRequestController extends Controller
         }
 
         $entityClass = $entityTypes[$entityType];
-        $user = $request->user();
-        $requestData = $request->except('_token', 'comment', 'entity_type', 'to_update_id');
+        $requestData = $request->except('_token', 'comment', 'entity_type', 'to_update_id', 'applicant_name', 'applicant_email');
         $entityName = ($entityClass === Job::class) ? $requestData['job_title'] : $requestData['name'];
         $requestData = $this->handleFilesUpload($entityClass, $requestData);
 
         $listingRequest = new ListingRequest();
-        $listingRequest->email = $user->email;
-        $listingRequest->name = $user->name;
+
+        if (auth()->check()) {
+            $user = auth()->user();
+            $listingRequest->user_id = $user->id;
+            $listingRequest->email = $user->email;
+            $listingRequest->name = $user->name;
+        } else {
+            $listingRequest->email = $request->input('applicant_email');
+            $listingRequest->name = $request->input('applicant_name');
+        }
+
         $listingRequest->entity_type = $entityType;
         $listingRequest->entity_data = $requestData;
         $listingRequest->entity_name = $entityName;
