@@ -64,6 +64,13 @@ Route::get('/podcasts/{slug}', 'Index\DataFeeds\PodcastController@show')->name('
 Route::get('/books', 'Index\DataFeeds\BookController@index')->name('discover.books');
 Route::get('/courses', 'Index\CourseController@index')->name('discover.courses');
 
+// Listing Requests
+Route::get('/listing', 'Index\ListingRequestController@index')->name('listing');
+Route::get('/listing/request', 'Index\ListingRequestController@request')->name('listing.request');
+Route::post('/listing/request', 'Index\ListingRequestController@submitRequest');
+Route::post('/listing/request/finish', 'Index\ListingRequestController@finishRequest')->name('listing.request.finish');
+Route::get('/listing/request/getEntityListJson', 'Index\ListingRequestController@getEntityListJson')->name('listing.request.getEntityListJson');
+
 //Global group for registered and verified users only
 Route::group([
     'middleware' => ['verifiedIfAuthorized'],

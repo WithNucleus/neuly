@@ -59,13 +59,26 @@ class ListingRequestCrudController extends CrudController
                 return $entry->to_update_id ? 'Yes' : 'No';
             }, ]);
         $this->crud->addColumn(['name' => 'entity_name', 'label' => 'Entity', 'type' => 'string']);
-        $this->crud->addColumn(['name' => 'name', 'label' => 'Submitted by', 'type' => 'string']);
+        $this->crud->addColumn([
+            'name' => 'name',
+            'label' => 'Submitted by',
+            'type' => 'closure',
+            'function' => function ($entry) {
+                return $entry->name . ( $entry->user_id === null ? ' (Guest)' : ' (Registered)' );
+            }, ]);
         $this->crud->addColumn(['name' => 'created_at', 'label' => 'Request created', 'type' => 'date']);
     }
 
     protected function setupShowOperation()
     {
         $this->crud->setFromDb();
+        $this->crud->modifyColumn('user_id', [
+            'name' => 'user_id',
+            'label' => 'Registered user?',
+            'type' => 'closure',
+            'function' => function ($entry) {
+                return $entry->user_id ? 'Yes' : ' No';
+            }, ]);
         $this->crud->modifyColumn('to_update_id', [
             'name' => 'to_update_id',
             'label' => 'Update?',
