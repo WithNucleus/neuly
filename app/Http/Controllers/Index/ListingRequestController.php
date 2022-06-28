@@ -31,8 +31,6 @@ class ListingRequestController extends Controller
 
     public function submitRequest(Request $request)
     {
-        $this->checkPreviewPossibility($request);
-
         $entityType = $request->input('entity_type');
         $isUpdate = $request->input('is_update');
         $toUpdateId = $request->input('to_update_id');
@@ -60,8 +58,6 @@ class ListingRequestController extends Controller
 
     public function finishRequest(Request $request)
     {
-        $this->checkPreviewPossibility($request);
-
         $entityType = $request->input('entity_type');
         $entityTypes = ListingRequestHelper::getAllowedEntities();
 
@@ -136,18 +132,5 @@ class ListingRequestController extends Controller
         }
 
         return $requestData;
-    }
-
-    private function checkPreviewPossibility($request)
-    {
-        $previewResult = PagePreviewHelper::checkListingRequestPreview($request);
-
-        if ($previewResult['canView'] === false) {
-            if ($previewResult['redirectToRoute']) {
-                return redirect()->route($previewResult['redirectToRoute']);
-            }
-
-            abort(404);
-        }
     }
 }
