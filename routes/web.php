@@ -57,6 +57,13 @@ Route::group([
 //Other searches
 Route::get('/organization/names.json', 'Index\CompanyController@namesJson');
 
+// Listing Requests
+Route::get('/listing', 'Index\ListingRequestController@index')->name('listing');
+Route::get('/listing/request', 'Index\ListingRequestController@request')->name('listing.request');
+Route::post('/listing/request', 'Index\ListingRequestController@submitRequest');
+Route::post('/listing/request/finish', 'Index\ListingRequestController@finishRequest')->name('listing.request.finish');
+Route::get('/listing/request/getEntityListJson', 'Index\ListingRequestController@getEntityListJson')->name('listing.request.getEntityListJson');
+
 //Global group for registered and verified users only
 Route::group([
     'middleware' => ['verifiedIfAuthorized'],
@@ -129,13 +136,6 @@ Route::group([
     Route::get('/clinical-trials/map', 'Index\ClinicalTrialMapController@showMap')->name('discover.clinicaltrials.map');
     Route::get('/clinical-trials/map/{country}', 'Index\ClinicalTrialMapController@showCountry')->name('discover.clinicaltrials.map.country');
     Route::get('/clinical-trials/{slug}', 'Index\ClinicaltrialController@show')->name('discover.clinicaltrials.show');
-
-    // Listing Requests
-    Route::get('/listing', 'Index\ListingRequestController@index')->name('listing');
-    Route::get('/listing/request', 'Index\ListingRequestController@request')->name('listing.request');
-    Route::post('/listing/request', 'Index\ListingRequestController@submitRequest');
-    Route::post('/listing/request/finish', 'Index\ListingRequestController@finishRequest')->name('listing.request.finish');
-    Route::get('/listing/request/getEntityListJson', 'Index\ListingRequestController@getEntityListJson')->name('listing.request.getEntityListJson');
 
     Route::get('/job-report-entry', 'Index\JobReportEntryController@index')->name('job-report-entry.index');
     Route::post('/job-report-entry', 'Index\JobReportEntryController@store')->name('job-report-entry.store');
