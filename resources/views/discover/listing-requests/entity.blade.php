@@ -27,16 +27,38 @@ use App\Helpers\Entity\FieldsMapping;
                                     Create {{ $entityType }}
                                 @endisset
                                 </p>
-                                <p class="text-center">Use the form below to add or update information for this {{ $entityType }}.</p>
 
-                                <form method="post" action=" {{ route('listing.request.finish') }}"
-                                      enctype="multipart/form-data">
+                                <form method="post" action=" {{ route('listing.request.finish') }}" enctype="multipart/form-data">
                                     @csrf
 
                                     <input type="hidden" name="entity_type" value="{{ $entityType }}"/>
                                     @isset($entity)
                                         <input type="hidden" name="to_update_id" value="{{ $entity->id }}"/>
                                     @endisset
+
+                                    {{--collect name and email if user not authorized--}}
+                                    @guest
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label class="font-weight-bold">Your name:</label>
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control" name="applicant_name" value="" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <label class="font-weight-bold">Your email:</label>
+                                                    <div class="form-group">
+                                                        <input type="email" class="form-control" name="applicant_email" value="" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                    @endguest
+                                    <p class="text-center">Use the form below to add or update information for this {{ $entityType }}.</p>
 
                                     @foreach($mapping as $field => $options)
                                         <div class="row">
@@ -49,30 +71,6 @@ use App\Helpers\Entity\FieldsMapping;
                                             </div>
                                         </div>
                                     @endforeach
-
-                                    @isset($previewRequest)
-                                        @guest
-                                            <input type="hidden" name="entity_type" value="{{ $previewRequest['type'] }}">
-                                            <input type="hidden" name="to_update_id" value="{{ $previewRequest['id'] }}">
-                                            <input type="hidden" name="preview_request" value="{{ $previewRequest['code'] }}">
-
-                                            <div class="form-group">
-                                                <p class="font-weight-bold lead mb-0">
-                                                    Your Info
-                                                </p>
-                                                <div class="row">
-                                                    <div class="col-12 col-md-6">
-                                                        <label for="user_name">Name</label>
-                                                        <input type="text" name="user_name" class="form-control" required>
-                                                    </div>
-                                                    <div class="col-12 col-md-6">
-                                                        <label for="user_email">Email</label>
-                                                        <input type="text" name="user_email" class="form-control" required>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endguest
-                                    @endisset
 
                                     <div class="form-group">
                                         <label class="font-weight-bold">Any additional info about this {{ $entityType }} or comments for the Neuly team?</label>
@@ -172,6 +170,4 @@ use App\Helpers\Entity\FieldsMapping;
             }
         }
     </script>
-
-    @include('discover.includes.limited-access-modal')
 @endsection

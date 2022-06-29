@@ -24,7 +24,6 @@
                                     Please fill out the following form if you’d like to add or edit an organization, people, event, job, or other data set.
                                 </p>
                                 <div class="col-lg-6 mx-auto mt-4 border-top pt-4">
-                                    @auth
                                         <form method="post" action="{{ route('listing.request') }}">
                                             @csrf
 
@@ -68,12 +67,6 @@
                                         </form>
 
                                         <p class="font-size-small">*Note that Neuly adds new data at the company’s sole discretion.</p>
-                                    @else
-                                        <div class="text-center">
-                                            <p>You must be be logged in to submit a listing request</p>
-                                            <a class="btn btn-primary ml-auto mr-0" href="{{ route('login') }}">Login</a>
-                                        </div>
-                                    @endauth
                                 </div>
                             </div>
                         </div>
@@ -87,7 +80,6 @@
         </div>
 
     </div>
-    @include('discover.includes.limited-access-modal')
 @endsection
 
 @section('after_scripts')
