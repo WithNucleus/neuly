@@ -326,4 +326,16 @@ class Location extends Model implements EntityContract
             ],
         ];
     }
+
+    public static function getListingRequestMapping()
+    {
+        $mapping = self::getFieldsMapping();
+        $skipFields = ['slug'];
+
+        foreach ($skipFields as $field) {
+            unset($mapping[$field]);
+        }
+
+        return $mapping;
+    }
 }

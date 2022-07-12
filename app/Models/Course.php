@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\Entity\FieldsMapping;
 use App\Models\Traits\SearchableEntity;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -138,5 +139,70 @@ class Course extends Model
     {
         $this->attributes['name'] = $name;
         $this->attributes['slug'] = Str::slug($name);
+    }
+
+    /**
+     * @return array
+     */
+    public static function getFieldsMapping()
+    {
+        return [
+            //attributes
+            'name'                   => [
+                'type' => FieldsMapping::TYPE_STRING,
+            ],
+            'slug'                    => [
+                'type' => FieldsMapping::TYPE_STRING,
+            ],
+            'summary'              => [
+                'type'  => FieldsMapping::TYPE_TEXT,
+            ],
+            'url'                 => [
+                'type' => FieldsMapping::TYPE_STRING,
+            ],
+            'type'                  => [
+                'type' => FieldsMapping::TYPE_ENUM,
+                'values' => self::getTypes(),
+            ],
+            'lowest_cost'           => [
+                'type' => FieldsMapping::TYPE_INTEGER,
+            ],
+            'highest_cost'                  => [
+                'type' => FieldsMapping::TYPE_INTEGER,
+            ],
+            'schedule'                     => [
+                'type' => FieldsMapping::TYPE_ENUM,
+                'values' => self::getSchedules(),
+            ],
+            'education_credits'                  => [
+                'type' => FieldsMapping::TYPE_STRING,
+            ],
+            'next_date'              => [
+                'type' => FieldsMapping::TYPE_DATE,
+            ],
+            //relations
+            'companies'               => [
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
+                'relationField' => 'name',
+            ],
+            'focus'                   => [
+                'type'          => FieldsMapping::TYPE_RELATION,
+                'relation'      => FieldsMapping::RELATION_N_N,
+                'relationField' => 'name',
+            ],
+        ];
+    }
+
+    public static function getListingRequestMapping()
+    {
+        $mapping = self::getFieldsMapping();
+        $skipFields = ['slug'];
+
+        foreach ($skipFields as $field) {
+            unset($mapping[$field]);
+        }
+
+        return $mapping;
     }
 }

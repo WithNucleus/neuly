@@ -116,7 +116,7 @@ class Research extends Model implements EntityContract
                 'type' => FieldsMapping::TYPE_STRING,
             ],
             'publish_date'     => [
-                'type' => FieldsMapping::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_DATE,
             ],
             'publication_info' => [
                 'type' => FieldsMapping::TYPE_STRING,
@@ -144,5 +144,17 @@ class Research extends Model implements EntityContract
                 'relationField' => 'name',
             ],
         ];
+    }
+
+    public static function getListingRequestMapping()
+    {
+        $mapping = self::getFieldsMapping();
+        $skipFields = ['slug', 'api_identifier'];
+
+        foreach ($skipFields as $field) {
+            unset($mapping[$field]);
+        }
+
+        return $mapping;
     }
 }
