@@ -129,7 +129,7 @@ class Clinicaltrial extends Model implements EntityContract
     /**
      * Get all Sponsors and Collaborators combined together.
      *
-     * @return Collection
+     * @return \Illuminate\Support\Collection
      */
     public function sponsorsAndCollaborators()
     {
@@ -244,25 +244,37 @@ class Clinicaltrial extends Model implements EntityContract
                 'type' => FieldsMapping::TYPE_STRING,
             ],
             'start_date'              => [
-                'type' => FieldsMapping::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_DATE,
             ],
             'primary_completion_date' => [
-                'type' => FieldsMapping::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_DATE,
             ],
             'completion_date'         => [
-                'type' => FieldsMapping::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_DATE,
             ],
             'first_posted'            => [
-                'type' => FieldsMapping::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_DATE,
             ],
             'results_first_posted'    => [
-                'type' => FieldsMapping::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_DATE,
             ],
             'last_update_posted'      => [
-                'type' => FieldsMapping::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_DATE,
             ],
             'study_url'               => [
                 'type' => FieldsMapping::TYPE_STRING,
+            ],
+            'brief_summary'               => [
+                'type' => FieldsMapping::TYPE_TEXT,
+            ],
+            'detailed_description'               => [
+                'type' => FieldsMapping::TYPE_TEXT_EDITOR,
+            ],
+            'min_age'               => [
+                'type' => FieldsMapping::TYPE_INTEGER,
+            ],
+            'max_age'               => [
+                'type' => FieldsMapping::TYPE_INTEGER,
             ],
             //relations
             'companies'               => [
@@ -308,5 +320,17 @@ class Clinicaltrial extends Model implements EntityContract
                 'label'         => 'Study Designs',
             ],
         ];
+    }
+
+    public static function getListingRequestMapping()
+    {
+        $mapping = self::getFieldsMapping();
+        $skipFields = ['slug'];
+
+        foreach ($skipFields as $field) {
+            unset($mapping[$field]);
+        }
+
+        return $mapping;
     }
 }

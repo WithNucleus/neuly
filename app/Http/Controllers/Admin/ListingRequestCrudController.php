@@ -10,6 +10,7 @@ use App\Models\ListingRequest;
 use App\Models\Person;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\Widget;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -201,6 +202,9 @@ class ListingRequestCrudController extends CrudController
             $inputData = $request->input($field);
 
             switch ($options['type']) {
+                case FieldsMapping::TYPE_DATE:
+                    $entity->{$field} = Carbon::parse($inputData)->format('Y-m-d');
+                    break;
                 case FieldsMapping::TYPE_IMAGE:
                     $this->handleImageUpload($request, $entity, $field);
                     break;

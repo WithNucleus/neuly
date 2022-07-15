@@ -4,15 +4,24 @@ namespace App\Helpers;
 
 use App\Helpers\Entity\FieldsMapping;
 use App\Http\Requests\CompanyRequest;
+use App\Http\Requests\CourseRequest;
 use App\Http\Requests\EventRequest;
+use App\Http\Requests\FocusRequest;
 use App\Http\Requests\InvestorRequest;
 use App\Http\Requests\JobRequest;
+use App\Http\Requests\LocationRequest;
 use App\Http\Requests\PersonRequest;
+use App\Http\Requests\ResearchRequest;
+use App\Models\Clinicaltrial;
 use App\Models\Company;
+use App\Models\Course;
 use App\Models\Event;
+use App\Models\Focus;
 use App\Models\Investor;
 use App\Models\Job;
+use App\Models\Location;
 use App\Models\Person;
+use App\Models\Research;
 use Carbon\Carbon;
 
 class ListingRequestHelper
@@ -31,6 +40,11 @@ class ListingRequestHelper
             'job' => Job::class,
             'organization' => Company::class,
             'person' => Person::class,
+            'location' => Location::class,
+            'focus' => Focus::class,
+            'research' => Research::class,
+            'clinicaltrial' => Clinicaltrial::class,
+            'course' => Course::class,
         ];
     }
 
@@ -115,14 +129,17 @@ class ListingRequestHelper
             Job::class => JobRequest::class,
             Company::class => CompanyRequest::class,
             Person::class => PersonRequest::class,
+            Location::class => LocationRequest::class,
+            Focus::class => FocusRequest::class,
+            Research::class => ResearchRequest::class,
+            Course::class => CourseRequest::class,
         ];
 
-        $requestClass = isset($allowedRequestsArray[$entityClass]) ? $allowedRequestsArray[$entityClass] : false;
-
-        if (! $requestClass) {
+        if (! isset($allowedRequestsArray[$entityClass])) {
             throw new \Exception('Request class for entity "'.$entityClass.'" not found!');
         }
 
+        $requestClass =  $allowedRequestsArray[$entityClass];
         $rules = (new $requestClass)->rules();
 
         //modify rules array for Job entity to handle morphable relation for Listing Request form

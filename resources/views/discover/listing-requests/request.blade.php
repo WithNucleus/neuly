@@ -48,7 +48,7 @@
                                                 <select class="custom-select js-listing-request-entity-type" name="entity_type"
                                                         data-action="{{ route('listing.request.getEntityListJson') }}">
                                                     @foreach($entityTypes as $alias => $entityClass)
-                                                        <option value="{{ $alias }}">{{ ucfirst($alias) }}</option>
+                                                        <option value="{{ $alias }}" class="{{ $alias == 'focus' ? 'js-disable-update' : '' }}">{{ ucfirst($alias) }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -102,7 +102,8 @@
 
         isUpdateInput.on('change', function () {
             isUpdate = parseInt($(this).val());
-
+            entityTypeSelect.prop("selectedIndex", 0);
+            entityTypeSelect.find('option.js-disable-update').attr('disabled', isUpdate === 1);
             refreshUpdateEntitiesList();
         });
 

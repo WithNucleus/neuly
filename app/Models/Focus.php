@@ -187,21 +187,10 @@ class Focus extends Model implements EntityContract
                 'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
-            'investors'      => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
-                'relationField' => 'name',
-            ],
             'jobs'           => [
                 'type'          => FieldsMapping::TYPE_RELATION,
                 'relation'      => FieldsMapping::RELATION_N_N,
                 'relationField' => 'job_title',
-            ],
-            'newsarticles'   => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
-                'relationField' => 'name',
-                'label'         => 'News Articles',
             ],
             'people'       => [
                 'type'          => FieldsMapping::TYPE_RELATION,
@@ -214,5 +203,17 @@ class Focus extends Model implements EntityContract
                 'relationField' => 'name',
             ],
         ];
+    }
+
+    public static function getListingRequestMapping()
+    {
+        $mapping = self::getFieldsMapping();
+        $skipFields = ['slug'];
+
+        foreach ($skipFields as $field) {
+            unset($mapping[$field]);
+        }
+
+        return $mapping;
     }
 }
