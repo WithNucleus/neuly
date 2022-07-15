@@ -116,10 +116,12 @@
                                                 <span>
                                                     {{ Carbon\Carbon::parse($video->date)->diffForHumans() }}
                                                 </span>
-                                                <span class="mx-1">&bull;</span>
-                                                <a href="{{ $video->url }}" target="_blank" rel="noopener noreferrer">
-                                                    {{ $video->source->name }}
-                                                </a>
+                                                @if($video->source)
+                                                    <span class="mx-1">&bull;</span>
+                                                    <a href="{{ $video->url }}" target="_blank" rel="noopener noreferrer">
+                                                        {{ $video->source->name }}
+                                                    </a>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
