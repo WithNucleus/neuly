@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Enterprise;
 
 use App\Http\Controllers\Controller;
+use App\Models\Clinicaltrial;
+use App\Models\ClinicaltrialPhase;
 use App\Models\Focus;
 use App\Models\Job;
 use App\Models\Patent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
@@ -223,5 +226,77 @@ class DashboardChartsController extends Controller
         }
 
         return $colors;
+    }
+
+    public function clinicalTrialsFocusChart(Request $request): string
+    {
+        $filter = $request->input('filter');
+        $filteredPhases = null;
+
+        if (isset($filter['phases'])) {
+            $filteredPhases = explode('|', $filter['phases']);
+        }
+
+        $query = DB::table('clinicaltrial_focus')
+            ->select('focus.name', DB::raw('COUNT(clinicaltrial_focus.clinicaltrial_id) as total'))
+            ->join('focus', 'focus.id', '=', 'clinicaltrial_focus.focus_id')
+            ->where('focus.type', Focus::TYPE_DRUG)
+            ->orderBy('focus.name')
+            ->groupBy('clinicaltrial_focus.focus_id');
+
+        if ($filteredPhases) {
+            $query->join('clinicaltrials', 'clinicaltrials.id', '=', 'clinicaltrial_focus.clinicaltrial_id')
+                ->whereIn('clinicaltrials.phase_integer', $filteredPhases);
+        }
+
+        $data = $query->get();
+        $labels = $data->pluck('name')->toJson();
+        $values = $data->pluck('total')->toJson();
+        $colors = json_encode($this->getChartColors(count($data->pluck('total'))));
+
+        $filterValues = [];
+
+        foreach (ClinicaltrialPhase::getPhases() as $phase) {
+            $filterValues[$phase['integer']] = $phase['name'];
+        }
+
+        return View::make("enterprise.widgets.chart-clinical-trials-focus")->with([
+            'labels' => $labels,
+            'values' => $values,
+            'colors' => $colors,
+            'filteredPhases' => $filteredPhases,
+            'filterValues' => $filterValues,
+        ])->render();
+    }
+
+    public function clinicalTrialsLocationsMap()
+    {
+        $clinicalTrials = Clinicaltrial::whereIn('status', ['Recruiting', 'Active, not recruiting', 'Available'])
+            ->whereHas('locations')
+            ->with('locations')
+            ->get();
+
+        $chartData = [];
+
+        foreach ($clinicalTrials as $clinicalTrial) {
+
+            $firstLocation = $clinicalTrial->locations->first();
+
+            $clinicalTrialData = [
+                'title' => $clinicalTrial->title,
+                'url' => route('discover.clinicaltrials.show', $clinicalTrial->slug),
+                'longitude' => $firstLocation->longitude,
+                'latitude' => $firstLocation->latitude,
+                'location' => $firstLocation->name,
+            ];
+
+            array_push($chartData, $clinicalTrialData);
+        }
+
+        $preparedData = json_encode($chartData, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
+
+        return View::make("enterprise.widgets.chart-clinical-trials-locations")->with([
+            'chartData' => $preparedData,
+        ])->render();
     }
 }

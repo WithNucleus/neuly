@@ -12,6 +12,12 @@ class Dashboard extends Model
 
     protected $guarded = ['id'];
 
+    //TODO make json columns auto-casted
+//    protected $casts = [
+//        'widget_names' => 'array',
+//        'widget_labels' => 'array',
+//    ];
+
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class);
