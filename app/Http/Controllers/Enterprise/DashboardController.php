@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Enterprise;
 
 use App\Http\Controllers\Controller;
 use App\Models\Clinicaltrial;
+use App\Models\ClinicaltrialPhase;
 use App\Models\Company;
 use App\Models\Dashboard;
 use App\Models\Event;
@@ -41,6 +42,8 @@ class DashboardController extends Controller
         [
             'patents' => 'Patents',
             'clinical-trials' => 'Clinical Trials',
+            'leading-companies-clinical-trials' => 'Leading Organizations',
+            'clinical-trials-completed' => 'Completed Trials'
         ],
         [
             'chart-organizations-focus' => 'Organizations by Focus',
@@ -49,6 +52,8 @@ class DashboardController extends Controller
             'chart-active-patents' => 'Active Patents by Priority Date',
             'chart-clinical-trials-status' => 'Clinical Trials by Status',
             'chart-investments-by-focus' => 'Organization Investments by Focus',
+            'chart-clinical-trials-focus' => 'Clinical Trials per Compound',
+            'chart-clinical-trials-locations' => 'Location of Trials ',
         ]
     ];
 
@@ -408,10 +413,9 @@ class DashboardController extends Controller
     private function getUserDashboard(): Dashboard
     {
         $user = Auth::user();
+        $dashboard = $user->dashboards()->first();
 
-        if (Auth::user()->dashboards()->first()) {
-            $dashboard = $user->dashboards()->first();
-        } else {
+        if ($dashboard === null) {
             $dashboard = new Dashboard([
                 'name' => 'Primary'
             ]);
@@ -436,6 +440,7 @@ class DashboardController extends Controller
                     $widgetLabel = $theseLabels[$widgetKey];
                     $thisColumn[$widgetName] = $widgetLabel;
                 }
+
                 $widgets[$key] = $thisColumn;
             }
         } else {
@@ -444,4 +449,55 @@ class DashboardController extends Controller
 
         return $widgets;
     }
+
+    public function leadingCompaniesByClinicalTrials()
+    {
+        $companies = Company::withCount('clinicaltrials')
+            ->orderBy('clinicaltrials_count', 'desc')
+            ->limit(10)
+            ->get();
+
+        return View::make("enterprise.widgets.leading-companies-clinical-trials")->with([
+            'companies' => $companies,
+        ])->render();
+    }
+
+    public function clinicalTrialsCompleted(Request $request)
+    {
+        $filter = $request->input('filter');
+        $filteredFocus = isset($filter['focus']) ? explode('|', $filter['focus']) : [];
+
+        $pageFilters = $request->input('page');
+        $pageSize = $pageFilters['size'] ?? 5;
+
+        $query = QueryBuilder::for(Clinicaltrial::class)
+            ->where('status', 'Completed')
+            ->with([
+                'focus'
+            ])->allowedSorts([
+                'title',
+                'completion_date',
+            ])
+            ->allowedFilters([
+                'status',
+                AllowedFilter::partial('focus', 'focus.id'),
+            ])
+            ->defaultSort('-completion_date');
+
+        $totalCompleted = $query->count();
+
+        $clinicalTrials = $query->jsonPaginate($pageSize)
+            ->appends(request()->query());
+
+        $filterFocus = Focus::whereHas('clinicaltrials')->get()->pluck('name', 'id')->toArray();
+
+        return View::make("enterprise.widgets.clinical-trials-completed")->with([
+            'clinicalTrials' => $clinicalTrials,
+            'totalCompleted' => $totalCompleted,
+            'filterFocus' => $filterFocus,
+            'filteredFocus' => $filteredFocus,
+            'pageSize' => $pageSize,
+        ])->render();
+    }
+
 }

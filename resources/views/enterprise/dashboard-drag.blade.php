@@ -111,6 +111,16 @@
 @endsection
 
 @section('after_scripts')
+
+    @if(array_key_exists('chart-clinical-trials-locations', $widgets[2]))
+    <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/maps.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/geodata/worldLow.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/geodata/data/countries2.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/plugins/overlapBuster.js"></script>
+    @endif
+
     <script>
         $(document).ready(function() {
             $.ajaxSetup({

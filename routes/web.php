@@ -386,13 +386,18 @@ Route::group(['middleware' => ['auth', 'enterprise.demo']], function () {
         Route::get('/dashboard/filters', 'DashboardController@filters')->name('dashboard.filters');
         Route::post('/dashboard/save', 'DashboardController@saveWidgets')->name('dashboard.widgets.save');
         Route::get('/dashboard/template', 'DashboardController@widgetTemplate')->name('dashboard.template');
+        Route::get('/dashboard/leading-companies', 'DashboardController@leadingCompaniesByClinicalTrials')->name('dashboard.leading-companies-clinical-trials');
+        Route::get('/dashboard/clinical-trials-completed', 'DashboardController@clinicalTrialsCompleted')->name('dashboard.clinical-trials-completed');
 
+        //charts
         Route::get('/dashboard/charts/organizations-focus', 'DashboardChartsController@organizationsFocusChart')->name('dashboard.chart-organizations-focus');
         Route::get('/dashboard/charts/organizations-industry', 'DashboardChartsController@organizationsIndustryChart')->name('dashboard.chart-organizations-industry');
         Route::get('/dashboard/charts/job-demand', 'DashboardChartsController@jobDemandChart')->name('dashboard.chart-job-demand');
         Route::get('/dashboard/charts/active-patents', 'DashboardChartsController@activePatentsChart')->name('dashboard.chart-active-patents');
         Route::get('/dashboard/charts/clinical-trials', 'DashboardChartsController@clinicalTrialsChart')->name('dashboard.chart-clinical-trials-status');
         Route::get('/dashboard/charts/investments-by-focus', 'DashboardChartsController@investmentByFocus')->name('dashboard.chart-investments-by-focus');
+        Route::get('/dashboard/charts/clinical-trials-focus', 'DashboardChartsController@clinicalTrialsFocusChart')->name('dashboard.chart-clinical-trials-focus');
+        Route::get('/dashboard/charts/clinical-trials-locations', 'DashboardChartsController@clinicalTrialsLocationsMap')->name('dashboard.chart-clinical-trials-locations');
 
         Route::post('/dashboard/request-widget', 'RequestWidgetController@requestWidget')->name('dashboard.widgets.request');
     });
