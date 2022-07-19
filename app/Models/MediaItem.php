@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\HasMediaTypes;
+use App\Models\Traits\SearchableEntity;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -11,7 +12,8 @@ class MediaItem extends Model
 {
     use CrudTrait,
         HasMediaTypes,
-        LogsActivity;
+        LogsActivity,
+        SearchableEntity;
 
     /*
     |--------------------------------------------------------------------------
@@ -45,6 +47,11 @@ class MediaItem extends Model
     public static function getStatuses(): array
     {
         return array_combine(self::STATUSES, self::STATUSES);
+    }
+
+    public function shouldBeSearchable()
+    {
+        return $this->status === self::STATUS_PUBLIC;
     }
 
     /*
