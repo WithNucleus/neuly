@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\DataFeeds;
 use App\Http\Controllers\Controller;
 use App\Models\DataFeed;
 use App\Models\MediaItem;
+use App\Models\Scopes\PublicStatusScope;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -18,6 +19,7 @@ class DashboardController extends Controller
         $pagination = $request->query('pagination') ?? 25;
 
         $mediaItems = QueryBuilder::for(MediaItem::class)
+            ->withoutGlobalScope(PublicStatusScope::class)
             ->pending()
             ->allowedFilters([
                 'name',

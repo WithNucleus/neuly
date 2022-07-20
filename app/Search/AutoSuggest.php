@@ -13,7 +13,7 @@ use \App\Models\Research;
 use \App\Models\Clinicaltrial;
 use \App\Models\Event;
 use \App\Models\Job;
-use Laravel\Scout\Searchable;
+use Illuminate\Support\Str;
 
 class AutoSuggest extends Aggregator
 {
@@ -40,7 +40,7 @@ class AutoSuggest extends Aggregator
     public function toSearchableArray(): array
     {
         return [
-            'name' => $this->model->{$this->getPrimaryField($this->model)},
+            'name' => $this->model->name,
             'url' => $this->getUrl($this->model),
             'description' => $this->getDescription($this->model),
             'image' => $this->getImage($this->model),
@@ -54,15 +54,6 @@ class AutoSuggest extends Aggregator
     public function searchableAs(): string
     {
         return config('scout.prefix') . self::INDEX;
-    }
-
-    private function getPrimaryField($model): string
-    {
-        return match (class_basename($model)) {
-            'Clinicaltrial' => 'title',
-            'Job' => 'job_title',
-            default => 'name'
-        };
     }
 
     private function getUrl($model): string
@@ -100,8 +91,8 @@ class AutoSuggest extends Aggregator
             'Company', => 'organizations ' . $model->ownership,
             'Clinicaltrial', => 'clinical trials',
             'Person', => 'people person',
-            'MediaItem' => $model->media_type,
-            'BookableListing' => $model->plural_type,
+            'MediaItem' => Str::plural($model->media_type),
+            'BookableListing' => Str::plural($model->type),
             default => class_basename($model)
         };
 
