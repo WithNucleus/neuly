@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\PublicStatusScope;
 use App\Models\Traits\HasMediaTypes;
+use App\Models\Traits\SearchableEntity;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -11,7 +13,8 @@ class MediaItem extends Model
 {
     use CrudTrait,
         HasMediaTypes,
-        LogsActivity;
+        LogsActivity,
+        SearchableEntity;
 
     /*
     |--------------------------------------------------------------------------
@@ -37,11 +40,21 @@ class MediaItem extends Model
     protected static $logUnguarded = true;
     protected static $logName = 'entities';
 
+    protected static function booted()
+    {
+        static::addGlobalScope(new PublicStatusScope());
+    }
+
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
+    public function clearGlobalScopes()
+    {
+        static::$globalScopes = [];
+    }
+
     public static function getStatuses(): array
     {
         return array_combine(self::STATUSES, self::STATUSES);

@@ -195,6 +195,15 @@ class BookableListing extends Model
         return "https://google.com/maps/place/" . $addressForGoogle;
     }
 
+    public function getPluralTypeAttribute(): string
+    {
+        if ($this->type === self::TYPE_COACH) {
+            return $this->type . 'es';
+        } else {
+            return $this->type . 's';
+        }
+    }
+
     /*
     |--------------------------------------------------------------------------
     | MUTATORS

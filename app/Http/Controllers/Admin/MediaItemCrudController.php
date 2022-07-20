@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\MediaItemRequest;
 use App\Models\DataFeed;
 use App\Models\MediaItem;
+use App\Models\Scopes\PublicStatusScope;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -28,9 +29,11 @@ class MediaItemCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\App\Models\MediaItem::class);
+        CRUD::setModel(MediaItem::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/media-item');
         CRUD::setEntityNameStrings('media item', 'media items');
+        $this->crud->query = $this->crud->query->withoutGlobalScopes();
+        $this->crud->model->clearGlobalScopes();
     }
 
     /**
