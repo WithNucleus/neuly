@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Akaunting\Firewall\Models\Log;
+use App\Models\Scopes\PublicStatusScope;
 use App\Models\Traits\HasEntityContent;
 use App\Models\Traits\SearchableEntity;
 use App\User;
@@ -16,6 +17,11 @@ class BookableListing extends Model
         SearchableEntity,
         HasEntityContent;
 
+    /*
+    |--------------------------------------------------------------------------
+    | GLOBAL VARIABLES
+    |--------------------------------------------------------------------------
+    */
     const TYPE_CLINIC = 'Clinic';
     const TYPE_COACH = 'Coach';
     const TYPE_COURSE = 'Course';
@@ -57,12 +63,6 @@ class BookableListing extends Model
 
     private string $searchableModelName = 'Bookable Listing';
 
-    /*
-    |--------------------------------------------------------------------------
-    | GLOBAL VARIABLES
-    |--------------------------------------------------------------------------
-    */
-
     protected $table = 'bookable_listings';
     protected $guarded = ['id'];
 
@@ -71,6 +71,16 @@ class BookableListing extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
+    protected static function booted()
+    {
+        static::addGlobalScope(new PublicStatusScope());
+    }
+
+    public function clearGlobalScopes()
+    {
+        static::$globalScopes = [];
+    }
+
     private function generateUniqueSlug($name): string
     {
         $slug = Str::slug($name);
