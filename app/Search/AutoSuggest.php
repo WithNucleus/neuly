@@ -221,7 +221,7 @@ class AutoSuggest extends Aggregator
                 return strip_tags($firstContent->content);
             }
 
-            if ($model->bookable::class === Company::class) {
+            if ($model->bookable instanceof Company) {
                 if ($model->bookable->summary) {
                     return $model->bookable->summary;
                 }
