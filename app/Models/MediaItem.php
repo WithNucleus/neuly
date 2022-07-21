@@ -40,16 +40,16 @@ class MediaItem extends Model
     protected static $logUnguarded = true;
     protected static $logName = 'entities';
 
-    protected static function booted()
-    {
-        static::addGlobalScope(new PublicStatusScope());
-    }
-
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
+    protected static function booted()
+    {
+        static::addGlobalScope(new PublicStatusScope());
+    }
+
     public function clearGlobalScopes()
     {
         static::$globalScopes = [];

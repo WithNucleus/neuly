@@ -33,6 +33,9 @@ class BookableListingCrudController extends CrudController
         CRUD::setModel(\App\Models\BookableListing::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/bookable-listing');
         CRUD::setEntityNameStrings('bookable listing', 'bookable listings');
+
+        $this->crud->query = $this->crud->query->withoutGlobalScopes();
+        $this->crud->model->clearGlobalScopes();
     }
 
     /**
@@ -44,9 +47,11 @@ class BookableListingCrudController extends CrudController
     protected function setupListOperation()
     {
         CRUD::column('id');
+        CRUD::column('name');
         CRUD::column('bookable_type');
         CRUD::column('bookable_id');
         CRUD::column('type');
+        CRUD::column('status');
         CRUD::column('created_at');
         CRUD::column('updated_at');
 

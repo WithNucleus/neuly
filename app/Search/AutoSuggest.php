@@ -45,6 +45,7 @@ class AutoSuggest extends Aggregator
             'name' => $this->model->name,
             'url' => $this->getUrl($this->model),
             'description' => $this->getDescription($this->model),
+            'byline' => $this->getByline($this->model),
             'image' => $this->getImage($this->model),
             'type' => $this->getModelType($this->model),
             'keywords' => $this->getKeywords($this->model)
@@ -76,23 +77,43 @@ class AutoSuggest extends Aggregator
 
     private function getModelType($model): string
     {
-        $modelType = match (get_class($model)) {
+        return match (get_class($model)) {
             Company::class => 'Organization',
             Clinicaltrial::class => 'Clinical Trial',
             MediaItem::class => $model->media_type,
             BookableListing::class => $model->type,
             default => class_basename($model)
         };
+    }
+
+    private function getByline($model): string
+    {
+        $byline = '';
 
         if (get_class($model) === MediaItem::class) {
+
+            $byline = $model->media_type;
+
             if ($model->source) {
                 if ($model->source->source_category !== DataFeed::SOURCE_GOOGLE_ALERT) {
-                    $modelType .= ' - ' . $model->source->name;
+                    $byline = $model->media_type . ' - ' . $model->source->name;
                 }
             }
         }
 
-        return $modelType;
+        if (get_class($model) === Research::class) {
+            if ($model->publication_info) {
+                $byline = $model->publication_info;
+            }
+        }
+
+        if (get_class($model) === BookableListing::class) {
+            if ($model->bookable) {
+                $byline = $model->type . ' - ' . $model->bookable->name;
+            }
+        }
+
+        return $byline;
     }
 
     private function getKeywords($model): string
@@ -163,21 +184,7 @@ class AutoSuggest extends Aggregator
 
         // Research
         if (get_class($model) === Research::class) {
-            $description = '';
-
-            if ($model->publication_info) {
-                $description .= $model->publication_info;
-            }
-
-            if ($model->publication_info AND $model->abstract) {
-                $description .= '; ';
-            }
-
-            if ($model->abstract) {
-                $description .= $model->abstract;
-            }
-
-            return strip_tags($description);
+            return strip_tags($model->abstract);
         }
 
         // Clinical Trial
@@ -211,7 +218,13 @@ class AutoSuggest extends Aggregator
             $firstContent = $model->content()->first();
 
             if ($firstContent) {
-                return strip_tags($firstContent);
+                return strip_tags($firstContent->content);
+            }
+
+            if ($model->bookable instanceof Company) {
+                if ($model->bookable->summary) {
+                    return $model->bookable->summary;
+                }
             }
 
             return 'Bookable ' . $model->type;
