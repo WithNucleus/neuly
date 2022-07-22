@@ -52,7 +52,7 @@ class DashboardController extends Controller
 
     public function update($id, Request $request): \Illuminate\Http\JsonResponse
     {
-        $mediaItem = MediaItem::find($id);
+        $mediaItem = MediaItem::withoutGlobalScope(PublicStatusScope::class)->find($id);
 
         $response = [
             'status' => 'success',
