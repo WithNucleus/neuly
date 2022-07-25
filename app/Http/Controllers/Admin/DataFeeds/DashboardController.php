@@ -36,10 +36,10 @@ class DashboardController extends Controller
             ->appends(request()->query());
 
         $dataFeedQuery = DataFeed::whereHas('mediaItems', function (Builder $query) {
-            $query->where('status', MediaItem::STATUS_PENDING);
+            $query->withoutGlobalScope(PublicStatusScope::class)->where('status', MediaItem::STATUS_PENDING);
         })->withCount([
             'mediaItems' => function($query) {
-                $query->where('status', MediaItem::STATUS_PENDING);
+                $query->withoutGlobalScope(PublicStatusScope::class)->where('status', MediaItem::STATUS_PENDING);
             }
         ]);
 
