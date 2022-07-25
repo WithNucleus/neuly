@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Auth;
 
 use App\User;
 
-class UserController
+class OauthController
 {
-    public function get()
+    public function getUser()
     {
         $user = auth()->user();
         $userPhoto = null;

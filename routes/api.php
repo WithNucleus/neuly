@@ -8,8 +8,10 @@ use App\Http\Controllers\Api\JobsController;
 use App\Http\Controllers\Api\PeopleController;
 use App\Http\Controllers\Api\ResearchController;
 use App\Http\Controllers\Api\SearchController;
-use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\UsersController;
+use App\Http\Controllers\Api\UserRolesController;
 use App\Http\Controllers\Index\SearchTemplateController;
+use App\Http\Controllers\Auth\OauthController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,12 +33,20 @@ Route::post('/search/templates', [SearchTemplateController::class, 'apiStore'])-
 Route::group([
     'middleware' => ['auth:api-users'],
 ], function () {
-    Route::get('/user', [UserController::class, 'get']);
+    Route::get('/user', [OauthController::class, 'getUser']);
 });
 
 Route::group([
     'middleware' => ['api.auth:api'],
 ], function () {
+    Route::get('/users/{id}', [UsersController::class, 'show']);
+    Route::post('/users', [UsersController::class, 'create']);
+    Route::put('/users/{id}', [UsersController::class, 'update']);
+
+    Route::get('/roles', [UserRolesController::class, 'list']);
+    Route::post('/roles/{userId}', [UserRolesController::class, 'assign']);
+    Route::delete('/roles/{userId}', [UserRolesController::class, 'remove']);
+
     Route::get('/jobs', [JobsController::class, 'index']);
     Route::get('/events', [EventsController::class, 'index']);
 
