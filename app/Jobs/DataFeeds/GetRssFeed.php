@@ -6,6 +6,7 @@ use App\Helpers\NotificationHelper;
 use App\Jobs\AutoTag\TagMediaItem;
 use App\Models\DataFeed;
 use App\Models\MediaItem;
+use App\Models\Scopes\PublicStatusScope;
 use App\Notifications\DuplicateMediaItem;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
@@ -56,7 +57,8 @@ class GetRssFeed implements ShouldQueue
             try {
                 $url = $this->formatUrl($item->get_link());
 
-                $existingMedia = MediaItem::where('url', $url)
+                $existingMedia = MediaItem::withoutGlobalScope(PublicStatusScope::class)
+                    ->where('url', $url)
                     ->where('source_type', DataFeed::class)
                     ->where('source_id', $dataFeed->id)
                     ->first();
@@ -97,7 +99,8 @@ class GetRssFeed implements ShouldQueue
                     // Check for other Google Alerts with same URL
                     if ($feedSourceCategory === DataFeed::SOURCE_GOOGLE_ALERT) {
 
-                        $duplicates = MediaItem::where('url', $url)
+                        $duplicates = MediaItem::withoutGlobalScope(PublicStatusScope::class)
+                            ->where('url', $url)
                             ->with(['companies', 'focus', 'people'])
                             ->where('source_type', DataFeed::class)
                             ->where('source_id', '!=', $dataFeed->id)
