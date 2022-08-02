@@ -42,7 +42,7 @@ class DashboardController extends Controller
         [
             'patents' => 'Patents',
             'clinical-trials' => 'Clinical Trials',
-            'leading-companies-clinical-trials' => 'Leading Organizations',
+            'leading-companies-clinical-trials' => 'Most Trials by Organization',
             'clinical-trials-completed' => 'Completed Trials'
         ],
         [
@@ -450,15 +450,35 @@ class DashboardController extends Controller
         return $widgets;
     }
 
-    public function leadingCompaniesByClinicalTrials()
+    public function leadingCompaniesByClinicalTrials(Request $request)
     {
-        $companies = Company::withCount('clinicaltrials')
-            ->orderBy('clinicaltrials_count', 'desc')
-            ->limit(10)
-            ->get();
+        $filter = $request->input('filter');
+        $filteredFocus = isset($filter['focus']) ? explode('|', $filter['focus']) : [];
+
+        $pageFilters = $request->input('page');
+        $pageSize = $pageFilters['size'] ?? 5;
+
+        $companies = QueryBuilder::for(Company::class)
+            ->with([
+                'focus'
+            ])
+            ->withCount([
+                'clinicaltrials'
+            ])
+            ->allowedFilters([
+                AllowedFilter::partial('focus', 'clinicaltrials.focus.id'),
+            ])
+            ->defaultSort('-clinicaltrials_count')
+            ->jsonPaginate($pageSize)
+            ->appends(request()->query());
+
+        $filterFocus = Focus::whereHas('clinicaltrials')->get()->pluck('name', 'id')->toArray();
 
         return View::make("enterprise.widgets.leading-companies-clinical-trials")->with([
             'companies' => $companies,
+            'filterFocus' => $filterFocus,
+            'filteredFocus' => $filteredFocus,
+            'pageSize' => $pageSize,
         ])->render();
     }
 
@@ -473,10 +493,8 @@ class DashboardController extends Controller
         $query = QueryBuilder::for(Clinicaltrial::class)
             ->where('status', 'Completed')
             ->with([
-                'focus'
-            ])->allowedSorts([
-                'title',
-                'completion_date',
+                'focus',
+                'companies',
             ])
             ->allowedFilters([
                 'status',

@@ -160,6 +160,11 @@ class Clinicaltrial extends Model implements EntityContract
             });
     }
 
+    public function scopeActive($query)
+    {
+        return $query->whereIn('status', ['Recruiting', 'Active, not recruiting', 'Available']);
+    }
+
     /**
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param array $years

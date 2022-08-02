@@ -10,13 +10,13 @@
     <div class="filter-checkboxes" data-filter="phases">
         <div class="filter-group bg-white border shadow-sm px-3 py-2 collapse"
              id="filters-chart-clinical-trials-focus-phases">
-            @foreach ($filterValues as $value => $label)
+            @foreach ($phases as $key => $label)
                 <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input"
-                           id="filters-chart-clinical-trials-focus-phases-{{ $value }}" data-name="{{ $value }}"
-                        {{ $filteredPhases && in_array($value, $filteredPhases) ? 'checked' : '' }}>
+                           id="filters-chart-clinical-trials-focus-phases-{{ $key }}" data-name="{{ $key }}"
+                        {{ $filteredPhases && in_array($key, $filteredPhases) ? 'checked' : '' }}>
                     <label class="custom-control-label"
-                           for="filters-chart-clinical-trials-focus-phases-{{ $value }}">{{ $label }}</label>
+                           for="filters-chart-clinical-trials-focus-phases-{{ $key }}">{{ $label }}</label>
                 </div>
             @endforeach
         </div>
@@ -30,43 +30,44 @@
 <script>
 
     $(document).ready(function () {
-
         let canvas = document.getElementById("clinicalTrialsFocusChart");
         let data = JSON.parse(canvas.dataset.values);
-        let labels = JSON.parse(canvas.dataset.labels);
+        let preparedLabels = JSON.parse(canvas.dataset.labels);
         let colors = JSON.parse(canvas.dataset.colors);
         let actionUrl = canvas.dataset.url;
+        let preparedData = [];
+        let i = 0;
+
+        for (let focus in data) {
+            preparedData.push({
+                data: data[focus],
+                label: focus,
+                backgroundColor: colors[i],
+            })
+
+            i++;
+        }
 
         let ctx = canvas.getContext("2d");
         let myNewChart = new Chart(ctx, {
-            type: 'horizontalBar',
+            type: 'bar',
             data: {
-                labels: labels,
-                datasets: [{
-                    data: data,
-                    backgroundColor: colors,
-                    barPercentage: .9,
-                    minBarLength: 2,
-                }]
+                labels: preparedLabels,
+                datasets: preparedData
             },
             options: {
-                legend: {
-                    display: false
-                },
                 maintainAspectRatio: false
             }
         });
 
         canvas.onclick = function (evt) {
-            let activePoints = myNewChart.getElementsAtEvent(evt);
-            if (activePoints[0]) {
-                let chartData = activePoints[0]['_chart'].config.data;
-                let idx = activePoints[0]['_index'];
+            let activePoint = myNewChart.getElementAtEvent(evt);
 
-                let label = chartData.labels[idx];
-                let value = chartData.datasets[0].data[idx];
-
-                let url = actionUrl + label;
+            if (activePoint[0]) {
+                let chartData = activePoint[0]['_chart'].config.data;
+                let idx = activePoint[0]['_datasetIndex'];
+                let focus = chartData.datasets[idx].label;
+                let url = actionUrl + focus;
                 window.open(url, '_blank');
             }
         };

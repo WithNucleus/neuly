@@ -33,6 +33,34 @@
             <p class="font-weight-bold mb-1">
                 <a href="{{ route('discover.clinicaltrials.show', $clinicalTrial->slug) }}">{{ $clinicalTrial->title }}</a>
             </p>
+
+            <div class="widget-expandable-details">
+                @if($clinicalTrial->focus->count() > 0)
+                    <p class="text-secondarydark mb-1">
+                        <i class="fad fa-flask"></i>
+                        @foreach ($clinicalTrial->focus as $item)
+                            {{ $item->name }}@if (!$loop->last) / @endif
+                        @endforeach
+                    </p>
+                @endif
+                @if($clinicalTrial->companies->count() > 0)
+                    <p class="text-info mb-1">
+                        <i class="fad fa-building"></i>
+                        @foreach ($clinicalTrial->companies as $item)
+                            <a href="{{ route('discover.organizations.show', $item->slug) }}" class="text-info">{{ $item->name }}</a>
+                            @if (!$loop->last) / @endif
+                        @endforeach
+                    </p>
+                @endif
+                @if ($clinicalTrial->completion_date)
+                    <p class="mb-2">
+                        <i class="fad fa-calendar-day text-quaternary mr-1"></i>
+                        <span class="mr-3">
+                            <strong>Completion Date:</strong> {{ \Carbon\Carbon::parse($clinicalTrial->completion_date)->format('j F Y') }}
+                        </span>
+                    </p>
+                @endif
+            </div>
         </li>
     @endforeach
 </ul>
