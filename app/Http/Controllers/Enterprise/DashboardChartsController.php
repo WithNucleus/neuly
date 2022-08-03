@@ -137,9 +137,11 @@ class DashboardChartsController extends Controller
         $focusesQuery = Focus::select(['name'])->whereIn('name', $focuses);
 
         foreach ($statuses as $label => $status) {
-            $focusesQuery->withCount(['clinicaltrials as ' . $label => function (Builder $query) use ($status) {
-                $query->where('status', $status);
-            }]);
+            $focusesQuery->withCount([
+                'clinicaltrials as ' . $label => function (Builder $query) use ($status) {
+                    $query->where('status', $status);
+                }
+            ]);
         }
 
         $focuses = $focusesQuery->get()->toArray();
@@ -163,12 +165,14 @@ class DashboardChartsController extends Controller
 
     public function investmentByFocus(): string
     {
-        $focus = Focus::drugs()->orderBy('name')->whereHas('companies', function(Builder $query) {
-                $query->whereHas('investors');
-            })
-            ->withCount(['companies' => function(Builder $query) {
-                $query->whereHas('investors');
-            }])
+        $focus = Focus::drugs()->orderBy('name')->whereHas('companies', function (Builder $query) {
+            $query->whereHas('investors');
+        })
+            ->withCount([
+                'companies' => function (Builder $query) {
+                    $query->whereHas('investors');
+                }
+            ])
             ->get()
             ->pluck('companies_count', 'name')
             ->toArray();
@@ -230,57 +234,81 @@ class DashboardChartsController extends Controller
 
     public function clinicalTrialsFocusChart(Request $request): string
     {
+        $phases = [];
+
+        foreach (ClinicaltrialPhase::getPhases() as $phase) {
+            $phases[$phase['integer']] = $phase['name'];
+        }
+
+        //get by all available phases by default
+        $filteredPhases = array_keys($phases);
         $filter = $request->input('filter');
-        $filteredPhases = null;
 
         if (isset($filter['phases'])) {
             $filteredPhases = explode('|', $filter['phases']);
         }
 
-        $query = DB::table('clinicaltrial_focus')
-            ->select('focus.name', DB::raw('COUNT(clinicaltrial_focus.clinicaltrial_id) as total'))
-            ->join('focus', 'focus.id', '=', 'clinicaltrial_focus.focus_id')
-            ->where('focus.type', Focus::TYPE_DRUG)
-            ->orderBy('focus.name')
-            ->groupBy('clinicaltrial_focus.focus_id');
+        $query = Focus::select(['name'])->where('focus.type', Focus::TYPE_DRUG);
 
-        if ($filteredPhases) {
-            $query->join('clinicaltrials', 'clinicaltrials.id', '=', 'clinicaltrial_focus.clinicaltrial_id')
-                ->whereIn('clinicaltrials.phase_integer', $filteredPhases);
+        foreach ($filteredPhases as $value) {
+            $query->withCount([
+                'clinicaltrials as phase' . $value => function (Builder $query) use ($value) {
+                    $query->where('phase_integer', $value);
+                }
+            ]);
         }
 
-        $data = $query->get();
-        $labels = $data->pluck('name')->toJson();
-        $values = $data->pluck('total')->toJson();
-        $colors = json_encode($this->getChartColors(count($data->pluck('total'))));
+        $data = $query->get()->toArray();
 
-        $filterValues = [];
+        $values = [];
+        $labels = [];
 
-        foreach (ClinicaltrialPhase::getPhases() as $phase) {
-            $filterValues[$phase['integer']] = $phase['name'];
+        foreach ($data as $item) {
+            $focusName = $item['name'];
+            unset($item['name']);
+            $values[$focusName] = array_values($item);
         }
+
+        foreach ($filteredPhases as $phaseInteger) {
+            $labels[] = $phases[$phaseInteger];
+        }
+
+        $colors = $this->getChartColors(count($values));
 
         return View::make("enterprise.widgets.chart-clinical-trials-focus")->with([
-            'labels' => $labels,
-            'values' => $values,
-            'colors' => $colors,
+            'labels' => json_encode($labels),
+            'values' => json_encode($values),
+            'colors' => json_encode($colors),
+            'phases' => $phases,
             'filteredPhases' => $filteredPhases,
-            'filterValues' => $filterValues,
         ])->render();
     }
 
     public function clinicalTrialsLocationsMap()
     {
-        $clinicalTrials = Clinicaltrial::whereIn('status', ['Recruiting', 'Active, not recruiting', 'Available'])
+        $clinicalTrials = Clinicaltrial::active()
+            ->with(['locations', 'focus'])
             ->whereHas('locations')
-            ->with('locations')
             ->get();
 
         $chartData = [];
+        $availableFocuses = [];
 
         foreach ($clinicalTrials as $clinicalTrial) {
-
             $firstLocation = $clinicalTrial->locations->first();
+            $focus = 'N/A';
+
+            if (!empty($clinicalTrial->focus)) {
+                if ($clinicalTrial->focus->count() > 1) {
+                    $focus = 'Multiple';
+                } else {
+                    $focus = $clinicalTrial->focus->first()->name;
+                }
+            }
+
+            if ($focus !== null && array_search($focus, $availableFocuses) === false) {
+                array_push($availableFocuses, $focus);
+            }
 
             $clinicalTrialData = [
                 'title' => $clinicalTrial->title,
@@ -288,15 +316,34 @@ class DashboardChartsController extends Controller
                 'longitude' => $firstLocation->longitude,
                 'latitude' => $firstLocation->latitude,
                 'location' => $firstLocation->name,
+                'focus' => $focus,
             ];
 
             array_push($chartData, $clinicalTrialData);
         }
 
-        $preparedData = json_encode($chartData, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
+        $colorsLegend = [];
+        $colorsMapped = [];
+        $colors = $this->getChartColors(count($availableFocuses));
+
+        foreach ($availableFocuses as $index => $focusName) {
+            $colorsMapped[$focusName] = $colors[$index];
+            $colorsLegend[] = [
+                'name' => $focusName,
+                'fill' => $colors[$index]
+            ];
+        }
+
+        foreach ($chartData as $key => $chartItem) {
+            if ($chartItem['focus'] !== null) {
+                $chartData[$key]['color'] = $colorsMapped[$chartItem['focus']];
+            }
+        }
 
         return View::make("enterprise.widgets.chart-clinical-trials-locations")->with([
-            'chartData' => $preparedData,
+            'chartData' => json_encode($chartData, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK),
+            'availableFocuses' => json_encode($availableFocuses),
+            'colorsLegend' => json_encode($colorsLegend),
         ])->render();
     }
 }

@@ -14,6 +14,11 @@
         <div class="modal-content modal-fullscreen-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Location of Trials</h5>
+{{--                <div class="ml-4 text-center">--}}
+{{--                    @foreach(json_decode($colors) as $focusName => $color)--}}
+{{--                        <span class="badge text-white ml-2 mr-2" style="background-color: {{ $color }};">&nbsp;&nbsp;&nbsp;</span>{{$focusName}}--}}
+{{--                    @endforeach--}}
+{{--                </div>--}}
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -152,13 +157,15 @@
             let imageSeriesTemplate = imageSeries.mapImages.template;
             let circle = imageSeriesTemplate.createChild(am4core.Circle);
             circle.radius = 6;
-            circle.fill = am4core.color("#275dad");
-            circle.fillOpacity = 0.5;
+            circle.category = "{focus}"
+            circle.fill = "{color}";
+            circle.fillOpacity = 0.8;
             circle.stroke = am4core.color("#FFFFFF");
             circle.strokeWidth = 1;
             circle.strokeOpacity = 0.7;
             circle.nonScaling = true;
             circle.tooltipText = "{title}";
+            circle.propertyFields.fill = "color";
 
             imageSeriesTemplate.events.on("hit", function (event) {
                 getModal(event, chart);
@@ -171,6 +178,19 @@
             imageSeriesTemplate.isMeasured = true;
             let overlap = chart.plugins.push(new am4plugins_overlapBuster.OverlapBuster());
             overlap.targets.push(imageSeries.mapImages.template);
+
+            var legend = chart.createChild(am4maps.Legend);
+            legend.data = {!! $colorsLegend !!};
+            legend.align = "center";
+            legend.valign = "top";
+            legend.background.fill = am4core.color("#000");
+            legend.background.fillOpacity = 0.05;
+
+            // chart.legend = new am4maps.Legend();
+            // chart.legend.series = imageSeries;
+            // chart.legend.position = "center";
+            // chart.legend.align = "center";
+            // chart.legend.valign = "top";
         }
 
         function getModal(event, chart) {
@@ -179,6 +199,10 @@
 
             if (event.target.dataItem.dataContext.location !== '') {
                 modalContent += '<p class="text-left mb-1"><i class="fad fa-globe-stand text-success fa-fw"></i> ' + event.target.dataItem.dataContext.location + '</p>';
+            }
+
+            if (event.target.dataItem.dataContext.focus !== '') {
+                modalContent += '<p class="text-left mb-1"><i class="fad fa-flask text-info fa-fw"></i> ' + event.target.dataItem.dataContext.focus + '</p>';
             }
 
             modalContent += '<p class="mt-3"><a href="' + event.target.dataItem.dataContext.url + '" class="btn btn-sm btn-primary m-2" target="_blank" rel="noopener noreferrer">View Listing</a>';
