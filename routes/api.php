@@ -42,6 +42,7 @@ Route::group([
     Route::get('/users/{id}', [UsersController::class, 'show']);
     Route::post('/users', [UsersController::class, 'create']);
     Route::put('/users/{id}', [UsersController::class, 'update']);
+    Route::post('/users/search', [UsersController::class, 'search']);
 
     Route::get('/roles', [UserRolesController::class, 'list']);
     Route::post('/roles/{userId}', [UserRolesController::class, 'assign']);
