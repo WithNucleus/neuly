@@ -43,6 +43,7 @@ return [
     // CSS files that are loaded in all pages, using Laravel's asset() helper
     'styles' => [
         'packages/backpack/base/css/bundle.css',
+        'css/backpack-custom.css',
 
         // Here's what's inside the bundle:
         // 'packages/@digitallyhappy/backstrap/css/style.min.css',
@@ -50,8 +51,9 @@ return [
         // 'packages/noty/noty.css',
 
         // Load the fonts separately (so that you can replace them at will):
-        'packages/source-sans-pro/source-sans-pro.css',
+//        'packages/source-sans-pro/source-sans-pro.css',
         'packages/line-awesome/css/line-awesome.min.css',
+        'https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap',
 
         // Example (the fonts above, loaded from CDN instead)
         // 'https://maxcdn.icons8.com/fonts/line-awesome/1.1/css/line-awesome-font-awesome.min.css',
@@ -66,12 +68,13 @@ return [
         // 'css/app.css' => '',
     ],
 
+
     // ------
     // HEADER
     // ------
 
     // Menu logo. You can replace this with an <img> tag if you have a logo.
-    'project_logo'   => '<b>Neuly</b>Admin',
+    'project_logo'   => '<img src="https://neuly.com/images/neuly-logo-dark.png" alt="Neuly" class="backpack-logo">',
 
     // Show / hide breadcrumbs on admin panel pages.
     'breadcrumbs' => true,
