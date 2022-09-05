@@ -97,8 +97,14 @@ class OauthClientsCrudController extends CrudController
                 'type' => 'image',
             ],
             [
+                'name' => 'password_client',
+                'label' => 'Can issue access tokens?',
+                'type' => 'boolean',
+                'default' => 0,
+            ],
+            [
                 'name' => 'revoked',
-                'label' => 'Revoked',
+                'label' => 'Revoked?',
                 'type' => 'boolean',
                 'default' => 0,
             ],
@@ -114,9 +120,9 @@ class OauthClientsCrudController extends CrudController
                 'value' => 0,
             ],
             [
-                'name' => 'password_client',
+                'name' => 'provider',
                 'type' => 'hidden',
-                'value' => 0,
+                'value' => 'users',
             ],
         ]);
     }
@@ -155,10 +161,26 @@ class OauthClientsCrudController extends CrudController
                 'type' => 'image',
             ],
             [
-                'name' => 'revoked',
-                'label' => 'Revoked',
+                'name' => 'password_client',
+                'label' => 'Can issue access tokens?',
                 'type' => 'boolean',
                 'default' => 0,
+            ],
+            [
+                'name' => 'revoked',
+                'label' => 'Revoked?',
+                'type' => 'boolean',
+                'default' => 0,
+            ],
+            [
+                'name' => 'personal_access_client',
+                'type' => 'hidden',
+                'value' => 0,
+            ],
+            [
+                'name' => 'provider',
+                'type' => 'hidden',
+                'value' => 'users',
             ],
         ]);
     }
