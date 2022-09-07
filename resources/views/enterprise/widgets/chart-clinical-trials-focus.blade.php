@@ -8,7 +8,7 @@
     </div>
 
     <div class="filter-checkboxes" data-filter="phases">
-        <div class="filter-group bg-white border shadow-sm px-3 py-2 collapse"
+        <div class="filter-group border shadow-sm px-3 py-2 collapse"
              id="filters-chart-clinical-trials-focus-phases">
             @foreach ($phases as $key => $label)
                 <div class="custom-control custom-checkbox">
@@ -56,7 +56,23 @@
                 datasets: preparedData
             },
             options: {
-                maintainAspectRatio: false
+                maintainAspectRatio: false,
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        gridLines: {
+                            display: true,
+                            color: "#1e2125"
+                        },
+                    }],
+                    yAxes: [{
+                        display: true,
+                        gridLines: {
+                            display: true,
+                            color: "#1e2125"
+                        },
+                    }]
+                }
             }
         });
 

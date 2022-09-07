@@ -7,7 +7,7 @@
             </button>
 
             <div class="filter-checkboxes" data-filter="focus">
-                <div class="filter-group bg-white border shadow-sm px-3 py-2 collapse"
+                <div class="filter-group border shadow-sm px-3 py-2 collapse"
                      id="filters-clinical-trials-completed-focus">
                     @foreach ($filterFocus as $value => $label)
                         <div class="custom-control custom-checkbox">

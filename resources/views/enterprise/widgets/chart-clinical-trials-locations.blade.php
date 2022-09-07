@@ -3,7 +3,7 @@
         <div class="resizable-widget-container">
             <div style="position: relative;">
                 <img src="{{ asset('images/educational-organizations.jpg') }}" alt="View Trials Location" style="width: 100%;height: auto">
-                <a href="#" class="btn btn-sm btn-dark" data-toggle="modal" data-target="#clinicalTrialLocations" style="position: absolute; top: 50%; left: 50%;">Open Map</a>
+                <a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#clinicalTrialLocations" style="position: absolute; top: 50%; left: 50%;">Open Map</a>
             </div>
         </div>
     </div>
@@ -11,7 +11,7 @@
 
 <div class="modal fade" id="clinicalTrialLocations" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen-dialog">
-        <div class="modal-content modal-fullscreen-content">
+        <div class="modal-content bg-dark modal-fullscreen-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Location of Trials</h5>
 {{--                <div class="ml-4 text-center">--}}
@@ -19,7 +19,7 @@
 {{--                        <span class="badge text-white ml-2 mr-2" style="background-color: {{ $color }};">&nbsp;&nbsp;&nbsp;</span>{{$focusName}}--}}
 {{--                    @endforeach--}}
 {{--                </div>--}}
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -52,7 +52,8 @@
     }
 
     .ampopup-content {
-        background: #fff;
+        background: #111;
+        color: #fefefe;
         box-shadow: 0 .125rem .25rem rgba(0,0,0,.075);
         min-width: 220px;
         text-align: center;
@@ -89,11 +90,12 @@
             let worldPolygon = worldSeries.mapPolygons.template;
             worldPolygon.tooltipText = "{name}";
             worldPolygon.nonScalingStroke = true;
-            worldPolygon.strokeOpacity = 0.5;
-            worldPolygon.fill = am4core.color("#dbdbdb");
+            worldPolygon.strokeOpacity = 0.2;
+            worldPolygon.fill = am4core.color("#000");
 
             let hs = worldPolygon.states.create("hover");
-            hs.properties.fill = am4core.color("#c1c0c0");
+            hs.properties.fill = am4core.color("#454a91");
+            hs.properties.fillOpacity = .4;
 
             let countrySeries = chart.series.push(new am4maps.MapPolygonSeries());
             countrySeries.useGeodata = true;
@@ -106,7 +108,7 @@
             countryPolygon.tooltipText = "{name}";
             countryPolygon.nonScalingStroke = true;
             countryPolygon.strokeOpacity = 0.5;
-            countryPolygon.fill = am4core.color("#dbdbdb");
+            countryPolygon.fill = am4core.color("#111");
 
             worldPolygon.events.on("hit", function (event) {
                 event.target.series.chart.zoomToMapObject(event.target);
@@ -160,7 +162,7 @@
             circle.category = "{focus}"
             circle.fill = "{color}";
             circle.fillOpacity = 0.8;
-            circle.stroke = am4core.color("#FFFFFF");
+            circle.stroke = am4core.color("#000");
             circle.strokeWidth = 1;
             circle.strokeOpacity = 0.7;
             circle.nonScaling = true;
@@ -179,18 +181,13 @@
             let overlap = chart.plugins.push(new am4plugins_overlapBuster.OverlapBuster());
             overlap.targets.push(imageSeries.mapImages.template);
 
-            var legend = chart.createChild(am4maps.Legend);
+            let legend = chart.createChild(am4maps.Legend);
             legend.data = {!! $colorsLegend !!};
             legend.align = "center";
             legend.valign = "top";
             legend.background.fill = am4core.color("#000");
-            legend.background.fillOpacity = 0.05;
-
-            // chart.legend = new am4maps.Legend();
-            // chart.legend.series = imageSeries;
-            // chart.legend.position = "center";
-            // chart.legend.align = "center";
-            // chart.legend.valign = "top";
+            legend.background.fillOpacity = 0.5;
+            legend.labels.template.fill = am4core.color("#fff");
         }
 
         function getModal(event, chart) {

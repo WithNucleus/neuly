@@ -14,7 +14,7 @@
                         {{ $item->name }}
                     </a>
                     <div class="widget-expandable-details">
-                        <div class="text-quarternary mb-1">
+                        <div class="text-muted mb-1">
                             {{ \Carbon\Carbon::parse($item->date)->format('M d, Y') }}
                         </div>
                         @if ($item->focus->count() > 0)

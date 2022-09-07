@@ -23,9 +23,9 @@
                     labels: labels,
                     datasets: [{
                         label: 'Patents',
-                        pointBackgroundColor: "#3366CC",
-                        borderColor: 'rgba(51,102,204,0.25)',
-                        backgroundColor: 'transparent',
+                        pointBackgroundColor: "#1d8c6b",
+                        borderColor: 'rgba(29,140,107,0.4)',
+                        backgroundColor: '#212429',
                         data: values,
                         pointRadius: 5,
                         pointHitRadius: 10,
@@ -34,7 +34,7 @@
                 options: {
                     tooltips: {
                         displayColors: true,
-                        callbacks:{
+                        callbacks: {
                             mode: 'x',
                         },
                     },
@@ -43,6 +43,22 @@
                     legend: {
                         display: false
                     },
+                    scales: {
+                        xAxes: [{
+                            display: true,
+                            gridLines: {
+                                display: true,
+                                color: "#1e2125"
+                            },
+                        }],
+                        yAxes: [{
+                            display: true,
+                            gridLines: {
+                                display: true,
+                                color: "#1e2125"
+                            },
+                        }]
+                    }
                 }
             });
 
