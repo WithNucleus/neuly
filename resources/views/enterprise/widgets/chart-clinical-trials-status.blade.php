@@ -55,6 +55,22 @@
                 },
                 options: {
                     maintainAspectRatio: false,
+                    scales: {
+                        xAxes: [{
+                            display: true,
+                            gridLines: {
+                                display: true,
+                                color: "#1e2125"
+                            },
+                        }],
+                        yAxes: [{
+                            display: true,
+                            gridLines: {
+                                display: true,
+                                color: "#1e2125"
+                            },
+                        }]
+                    }
                 }
             });
 

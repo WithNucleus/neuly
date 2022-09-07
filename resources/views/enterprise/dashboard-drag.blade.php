@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('body-class', 'bg-light')
+@section('body-class', 'bg-dark text-light enterprise-dashboard-page')
 
 @section('content')
 
@@ -22,17 +22,17 @@
                 <span class="label">Detailed View</span>
             </button>
 
-            <button id="collapse-all-widgets-toggle" class="btn btn-sm border ml-4" data-collapsed="false">
+            <button id="collapse-all-widgets-toggle" class="btn btn-sm btn-info ml-4" data-collapsed="false">
                 <span class="icon"></span><span class="label">Widgets</span>
             </button>
 
-            <button id="add-widget-column" class="btn btn-sm border ml-4">
-                <i class="fas fa-line-columns mr-1"></i>Add Widget Space
+            <button id="add-widget-column" class="btn btn-sm btn-info ml-4">
+                <i class="fas fa-line-columns mr-2"></i>Add Widget Space
             </button>
 
             <div class="dropdown">
-                <button id="add-widgets" class="btn btn-sm border ml-4" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-th-large mr-1"></i>Add Widget
+                <button id="add-widgets" class="btn btn-sm btn-info ml-4" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-th-large mr-2"></i>Add Widget
                 </button>
                 <div class="dropdown-menu" aria-labelledby="add-widgets">
                     @foreach ($allWidgets as $widgetGroup)
@@ -48,8 +48,8 @@
                 </div>
             </div>
 
-            <button type="button" class="btn btn-sm border ml-4" data-toggle="modal" data-target="#requestWidget">
-                <i class="fad fa-question-square mr-1"></i>Request Widget
+            <button type="button" class="btn btn-sm btn-info ml-4" data-toggle="modal" data-target="#requestWidget">
+                <i class="fad fa-question-square mr-2"></i>Request Widget
             </button>
         </div>
 
@@ -68,10 +68,10 @@
 
 <div class="modal fade" id="requestWidget" tabindex="-1" role="dialog" aria-labelledby="requestWidgetLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
+        <div class="modal-content bg-dark text-white">
             <div class="modal-header">
-                <h5 class="modal-title" id="requestWidgetLabel">Request a Widget</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <h5 class="modal-title text-info" id="requestWidgetLabel">Request a Widget</h5>
+                <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -123,6 +123,8 @@
 
     <script>
         $(document).ready(function() {
+            Chart.defaults.global.defaultFontColor = "#adb5bd";
+
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

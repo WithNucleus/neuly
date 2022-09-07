@@ -27,7 +27,7 @@
                         label: 'Organizations',
                         backgroundColor: colors,
                         data: values,
-                        borderColor: "#fff",
+                        borderColor: "#111",
                         borderWidth: 2,
                     }]
                 },

@@ -17,6 +17,12 @@
     display: flex;
     align-items: center;
     flex-wrap: wrap;
+
+    .btn-info {
+        border-radius: 1rem;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
 }
 
 .enterprise-widget-grid {
@@ -36,7 +42,7 @@
 }
 
 .has-dragging {
-    border-color: rgba($orange, .15);
+    border-color: #1d8c6b;
 }
 
 @media (min-width: 768px) {
@@ -80,6 +86,7 @@
         align-items: center;
         justify-content: space-between;
         font-size: 1.5rem;
+        color: $gray-300;
 
         .widget-collapse-label[aria-expanded=false] {
             span:before {
@@ -103,7 +110,7 @@
             padding: 0;
             flex-grow: 1;
             margin-right: .75rem;
-            color: $gray-900
+            color: $gray-200
         }
 
         .btn:focus {
@@ -182,19 +189,14 @@
     }
 }
 
-//.enterprise-widget[data-drag="enable"]:hover {
-//    border-color: $orange;
-//    cursor: move;
-//}
-
 .enterprise-widget.is-dragging,
 .enterprise-widget.is-positioning-post-drag {
-    border-color: $orange;
+    border-color: #1d8c6b;
     z-index: 2;
 }
 
 .packery-drop-placeholder {
-    outline: 3px dashed hsla(0, 0%, 0%, 0.5);
+    outline: 3px dashed hsl(0, 2%, 88%);
     outline-offset: -6px;
     -webkit-transition: -webkit-transform 0.2s;
     transition: transform 0.2s;
@@ -207,6 +209,7 @@
     overflow: hidden;
     border: 0;
     padding: 0;
+    border-radius: 1rem;
 
     .off,
     .on {
@@ -220,8 +223,8 @@
         align-items: center;
         justify-content: center;
         text-transform: uppercase;
-        border-top-left-radius: .25rem;
-        border-bottom-left-radius: .25rem;
+        border-top-left-radius: 1rem;
+        border-bottom-left-radius: 1rem;
         z-index: 2;
         transition-property: all;
         transition-duration: .5s;
@@ -230,9 +233,9 @@
     }
 
     .off {
-        background: $gray-400;
-        border-color: $gray-500;
-        color: $gray-900;
+        background: #3f4485;
+        border-color: #3f4485;
+        color: $gray-400;
     }
 
     .on {
@@ -242,14 +245,14 @@
     }
 
     .label {
-        border-top-right-radius: .25rem;
-        border-bottom-right-radius: .25rem;
-        border: 1px solid $gray-300;
+        border-radius: 1rem;
+        border: 1px solid #3f4485;
         display: block;
         height: 100%;
         position: relative;
         z-index: 1;
         padding: 0.25rem 0.5rem 0.25rem 3.5rem;
+        color: $gray-300;
     }
 }
 
@@ -271,6 +274,10 @@
     .on {
         left: 0;
     }
+
+    .label {
+        border-color: $teal;
+    }
 }
 
 .has-accordion-arrow[aria-expanded=false]:after {
@@ -286,7 +293,7 @@
 }
 
 #collapse-all-widgets-toggle {
-    min-width: 150px;
+    min-width: 185px;
     text-align: left;
 }
 
@@ -298,7 +305,7 @@
     }
     span:before {
         content: "Collapse";
-        margin-right: .25rem;
+        margin-right: .5rem;
     }
 }
 
@@ -310,16 +317,27 @@
     }
     span:before {
         content: "Open";
-        margin-right: .25rem;
+        margin-right: .5rem;
     }
 }
 
 .widget-controls {
     position: relative;
+    color: $gray-500;
+
+    .btn-sm {
+        color: $gray-500;
+    }
 
     .filter-checkboxes {
         position: absolute;
         z-index: 4;
+
+        .filter-group {
+            background: $black;
+            color: $gray-400;
+            border-color: $gray-700 !important;
+        }
 
         .custom-control-label {
             white-space: nowrap;
@@ -342,7 +360,7 @@
 }
 
 .portlet-placeholder {
-    background: $orange;
+    background: #1d8c6b;
     height: 5rem;
 }
 
@@ -355,7 +373,7 @@
     top: 0;
     right: 0;
     padding: .5rem;
-    color: $info;
+    color: #5b62bd;
     z-index: 2;
     font-size: 1.25rem;
 }
@@ -375,8 +393,128 @@
 
 .resizable-widget-container {
     resize: vertical;
-    border: 1px solid $gray-200;
+    border: 1px solid $gray-800;
     overflow-y: auto;
     overflow-x: hidden;
     min-height: 100px;
+}
+
+#widget-collapse-team {
+    .form-control {
+        border-top-left-radius: 1rem;
+        border-bottom-left-radius: 1rem;
+        padding-left: 1rem;
+    }
+}
+
+.enterprise-dashboard-page {
+    background-color: #1a1a1a !important;
+
+    .recently-viewed-image {
+        img {
+            filter: invert(1);
+            opacity: .8;
+        }
+    }
+
+    a {
+        color: #5b62bd;
+    }
+
+    a:hover {
+        color: #454a91;
+    }
+
+    .text-info {
+        color: #1d8c6b !important;
+    }
+
+    .text-quaternary,
+    .text-danger,
+    .text-secondarydark,
+    .text-black-50 {
+        color: $gray-500 !important;
+    }
+
+    .text-dark {
+        color: $gray-500 !important;
+    }
+
+    .text-dark:hover {
+        color: $gray-600 !important;
+    }
+
+    .btn-primary {
+        border-radius: 1rem;
+        padding-right: 1.5rem;
+        padding-left: 1.5rem;
+        color: $gray-400;
+    }
+
+    .btn-primary:hover {
+        color: $gray-300;
+    }
+
+    .ampopup-header {
+        background: $primary;
+    }
+
+    .navbar.navbar-dark {
+        background-color: $black !important;
+    }
+
+    .dropdown-menu,
+    .enterprise-team-widget-container {
+        background: $black;
+        color: $gray-400;
+        border-color: $gray-700;
+    }
+
+    .enterprise-team-widget-container {
+        padding: 1.5rem;
+        border: 1px solid $gray-700;
+    }
+
+    .dropdown-item {
+        color: $gray-300;
+    }
+
+    .dropdown-item:disabled {
+        color: $gray-600;
+    }
+
+    .dropdown-item:hover {
+        background: $info;
+        color: $gray-300;
+    }
+
+    .list-group {
+        border-color: $gray-800 !important;
+    }
+
+    .list-group-item {
+        background: $black;
+        color: $gray-400;
+        border-color: $gray-800;
+    }
+
+    .form-control {
+        background-color: $black;
+        color: $gray-400;
+        border-color: $gray-800;
+    }
+
+    .modal-header {
+        border-color: $gray-800;
+    }
+
+    .table {
+        color: $gray-500;
+    }
+
+    .custom-select {
+        background: $black url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='4' height='5' viewBox='0 0 4 5'%3e%3cpath fill='%23CED4DA' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") no-repeat right 0.75rem center/8px 10px;
+        border-color: $gray-800;
+        color: $gray-400;
+    }
 }
