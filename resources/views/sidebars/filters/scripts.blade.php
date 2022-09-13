@@ -60,7 +60,9 @@
             'age',
             'gender',
             'year',
-            'education_credits'
+            'education_credits',
+            'is_investor',
+            'with_email'
         ];
 
         allowedFilters.forEach(function (filterName) {

@@ -6,14 +6,18 @@ use App\Helpers\ClaimPersonHelper;
 use App\Helpers\NotificationHelper;
 use App\Helpers\PagePreviewHelper;
 use App\Http\Controllers\Controller;
+use App\Http\Filters\PeopleCompanyFocusFilter;
 use App\Mail\VerifyClaimedPersonMail;
+use App\Models\Company;
 use App\Models\RaisedClaim;
 use App\Notifications\PersonDeletionRequested;
 use App\Notifications\RaisedClaimCreated;
 use App\Repositories\FollowRepository;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use App\Models\Person;
 use App\Models\Location;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -35,9 +39,10 @@ class PersonController extends Controller
     }
 
     // Public / Private Index for Homepage
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
+        $metas = Metas::fromPage($request->path());
 
-        // Get People
         $people = QueryBuilder::for(Person::class)
             ->public()
             ->with('companies')
@@ -45,6 +50,11 @@ class PersonController extends Controller
                 'name',
                 AllowedFilter::partial('locations', 'locations.name'),
                 AllowedFilter::partial('company', 'companies.name'),
+                AllowedFilter::scope('is_investor', 'hasInvestors'),
+                AllowedFilter::callback('with_email', function (Builder $query, $value) {
+                    $query->whereNotNull('email');
+                }),
+                AllowedFilter::custom('focus', new PeopleCompanyFocusFilter),
             ])
             ->defaultSort('-created_at')
             ->allowedSorts([
@@ -54,17 +64,44 @@ class PersonController extends Controller
             ->paginate(25)
             ->appends(request()->query());
 
-        $locations = Location::has('people', '>' , 0)->with('people')->get()->pluck('country')->unique()->sort();
+        $locations = Location::has('people')->with('people')->get()->pluck('country')->unique()->sort();
+        $companiesWithFocus = Company::has('people')->has('focus')->with('focus')->get();
+        $focuses = new Collection;
 
-        $metas = Metas::fromPage($request->path());
+        foreach ($companiesWithFocus as $company) {
+            foreach ($company->focus as $focus) {
+                $focuses->add($focus->name);
+            }
+        }
+
+        $focuses = $focuses->unique()->sort();
+
+        if ($request->has('filter')) {
+            $filterInput = $request->input('filter');
+
+            $filter = array_map(function ($entity) {
+                return explode('|', $entity);
+            }, $filterInput);
+        }
+
+        $filters_companies = $filter['company'] ?? [];
+        $filters_focuses = $filter['focus'] ?? [];
 
         // Return View
-        return view('discover.people.index', compact('people', 'metas', 'locations'));
+        return view('discover.people.index', compact(
+            'people',
+            'metas',
+            'locations',
+            'focuses',
+            'filters_companies',
+            'filters_focuses',
+        ));
 
     }
 
     // Show More Info -- Full Layout
-    public function show(Request $request, $slug) {
+    public function show(Request $request, $slug)
+    {
 
         // Get Person
         $person = Person::where('slug', $slug)
@@ -93,13 +130,13 @@ class PersonController extends Controller
         }
 
         $metas = Metas::process(array(
-            'title'         => $person->name,
-            'description'   => $person->bio,
-            'image'         => $person->entityImageUrl,
+            'title' => $person->name,
+            'description' => $person->bio,
+            'image' => $person->entityImageUrl,
         ));
 
         $entity = 'people';
-        $isFollowed = (bool) count(FollowRepository::fromuser(Person::class, $person->id));
+        $isFollowed = (bool)count(FollowRepository::fromuser(Person::class, $person->id));
         $isVerified = $person->user_id !== null;
 
         // Log Activity

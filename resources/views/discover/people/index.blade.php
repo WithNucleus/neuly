@@ -77,6 +77,7 @@
                             <?php if (
                                 isset($filters_location) && $filters_location OR
                                 isset($filters_company_name) && $filters_company_name OR
+                                isset($filters_focuses) && $filters_focuses OR
                                 isset($filters_type) && $filters_type
                                 ) : ?>
                             <div class="current-filter-list font-size-small align-self-end border-bottom mb-3 pb-1">
@@ -109,6 +110,16 @@
                                                 {{ $company }}
                                                 @if (!$loop->last) <strong class="text-black-50">/</strong> @endif
                                             @endforeach
+                                        </span>
+                                <?php endif; ?>
+
+                                <?php if (isset($filters_focuses) && $filters_focuses) : ?>
+                                <span class="mr-3">
+                                            <i class="fad fa-flask text-secondarydark"></i>
+                                            @foreach ($filters_focuses as $focus)
+                                        {{ $focus }}
+                                        @if (!$loop->last) <strong class="text-black-50">/</strong> @endif
+                                    @endforeach
                                         </span>
                                 <?php endif; ?>
 
