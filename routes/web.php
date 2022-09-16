@@ -399,7 +399,8 @@ Route::group(['middleware' => ['auth', 'enterprise.demo']], function () {
         Route::get('/dashboard/charts/clinical-trials-focus', 'DashboardChartsController@clinicalTrialsFocusChart')->name('dashboard.chart-clinical-trials-focus');
         Route::get('/dashboard/charts/clinical-trials-locations', 'DashboardChartsController@clinicalTrialsLocationsMap')->name('dashboard.chart-clinical-trials-locations');
 
-        Route::post('/dashboard/request-widget', 'RequestWidgetController@requestWidget')->name('dashboard.widgets.request');
+        Route::post('/dashboard/request/widget', 'DashboardRequestsController@requestWidget')->name('dashboard.request.widget');
+        Route::post('/dashboard/request/clinical-trial-participating', 'DashboardRequestsController@clinicalTrialParticipating')->name('dashboard.request.clinicalTrialParticipating');
     });
 });
 

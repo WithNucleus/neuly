@@ -12,6 +12,25 @@ class Feedback extends Model
 {
     use CrudTrait;
 
+    const TYPE_FEEDBACK = 'feedback';
+    const TYPE_PROBLEM = 'problem';
+    const TYPE_BUG = 'bug';
+    const TYPE_SUGGESTION = 'suggestion';
+    const TYPE_FEATURE = 'feature request';
+    const TYPE_DEMO_REQUEST = 'demo request';
+    const TYPE_ENTERPRISE_REQUEST = 'enterprise request';
+    const TYPE_CT_PARTICIPATING = 'clinical trial participating';
+
+    const TYPES = [
+        self::TYPE_FEEDBACK,
+        self::TYPE_PROBLEM,
+        self::TYPE_BUG,
+        self::TYPE_SUGGESTION,
+        self::TYPE_FEATURE,
+        self::TYPE_DEMO_REQUEST,
+        self::TYPE_ENTERPRISE_REQUEST,
+        self::TYPE_CT_PARTICIPATING,
+    ];
     /*
     |--------------------------------------------------------------------------
     | GLOBAL VARIABLES

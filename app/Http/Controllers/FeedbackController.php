@@ -84,7 +84,7 @@ class FeedbackController extends Controller
         $demoRequest = new Feedback();
         $demoRequest->organization = $requestData['organization'];
         $demoRequest->job_title = $requestData['job_title'];
-        $demoRequest->type    = 'demo request';
+        $demoRequest->type    = Feedback::TYPE_DEMO_REQUEST;
         $demoRequest->title = 'Demo Request - ' . $requestData['organization'];
         $demoRequest->content = $requestData['content'];
 

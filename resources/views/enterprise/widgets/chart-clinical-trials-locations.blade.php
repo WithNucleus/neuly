@@ -9,22 +9,54 @@
     </div>
 </div>
 
-<div class="modal fade" id="clinicalTrialLocations" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="clinicalTrialLocations" tabindex="-1" aria-labelledby="clinicalTrialLocations" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen-dialog">
         <div class="modal-content bg-dark modal-fullscreen-content">
-            <div class="modal-header">
+            <div class="modal-header d-flex justify-content-between">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#participating">
+                    Interested in Participating?
+                </button>
                 <h5 class="modal-title" id="exampleModalLabel">Location of Trials</h5>
-{{--                <div class="ml-4 text-center">--}}
-{{--                    @foreach(json_decode($colors) as $focusName => $color)--}}
-{{--                        <span class="badge text-white ml-2 mr-2" style="background-color: {{ $color }};">&nbsp;&nbsp;&nbsp;</span>{{$focusName}}--}}
-{{--                    @endforeach--}}
-{{--                </div>--}}
-                <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close" style="margin-left: 10%;">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div id="clinicalTrialsLocationsChart" data-wasloaded="false"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="participating" tabindex="-1" aria-labelledby="participating" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Interested in Participating?</h5>
+                <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="lead-smaller">If you're interested in learning more or potentially participating in this or similar clinical trials, please fill out the form below.</p>
+
+                <form class="js-dashboard-request-form" method="post" action="{{ route('enterprise.dashboard.request.clinicalTrialParticipating') }}">
+
+                    <div class="js-ajax-response-block alert position-relative" style="display: none;">
+                        <span class="message"></span>
+                        <button type="button" class="close js-close-ajax-response-block" data-hide="alert" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    @csrf
+                    <div class="form-group">
+                        <label>Message:</label>
+                        <textarea name="content" class="form-control" rows="8" style="resize: none;" required></textarea>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">Submit Request</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -49,14 +81,6 @@
         height: 80vh;
         width: 100%;
         max-width: 100%;
-    }
-
-    .ampopup-content {
-        background: #111;
-        color: #fefefe;
-        box-shadow: 0 .125rem .25rem rgba(0,0,0,.075);
-        min-width: 220px;
-        text-align: center;
     }
 </style>
 
@@ -192,7 +216,13 @@
 
         function getModal(event, chart) {
             let modalContent = '<div style="max-width: 400px;text-align:center">';
-            modalContent += '<p class="lead text-center mb-1"><strong>' + event.target.dataItem.dataContext.title + '</strong></p>';
+            modalContent += '<p class="lead text-center mb-1"><strong>' + event.target.dataItem.dataContext.title + '</strong></p><br>';
+            modalContent += '<p class="text-left mb-1">Start date: ' + event.target.dataItem.dataContext.start_date + '</p>';
+            modalContent += '<p class="text-left mb-1">Completion date: ' + event.target.dataItem.dataContext.completion_date + '</p>';
+            modalContent += '<p class="text-left mb-1">Gender: ' + event.target.dataItem.dataContext.gender + '</p>';
+            modalContent += '<p class="text-left mb-1">Min. age: ' + event.target.dataItem.dataContext.min_age + '</p>';
+            modalContent += '<p class="text-left mb-1">Max. age: ' + event.target.dataItem.dataContext.max_age + '</p>';
+            modalContent += '<br>';
 
             if (event.target.dataItem.dataContext.location !== '') {
                 modalContent += '<p class="text-left mb-1"><i class="fad fa-globe-stand text-success fa-fw"></i> ' + event.target.dataItem.dataContext.location + '</p>';
@@ -206,5 +236,38 @@
             modalContent += "</div>";
             chart.openModal(modalContent);
         }
+    });
+
+    $('#participating .js-dashboard-request-form').on('submit', function(event) {
+        event.preventDefault();
+
+        let form = $(this);
+        let actionUrl = form.attr('action');
+        let responseBlock = form.find('.js-ajax-response-block');
+        let contentInput = form.find('textarea[name="content"]');
+        let content = contentInput.val();
+
+        $.post(actionUrl, {
+            content: content,
+        }, function (response) {
+            console.log('response');
+
+            responseBlock.find('.message').text(response.message);
+            responseBlock.removeClass('alert-danger').addClass('alert-success').show();
+            contentInput.val('');
+        })
+        .fail(function(jqXHR) {
+
+            console.log(jqXHR.responseJSON.errors);
+
+            $.each(jqXHR.responseJSON.errors, function (key, item) {
+                responseBlock.find('.message').append("<span>"+item+"</span>")
+            });
+            responseBlock.removeClass('alert-success').addClass('alert-danger').show();
+        });
+    });
+
+    $('#participating .js-close-ajax-response-block').on('click', function() {
+        $(this).parent().hide();
     });
 </script>

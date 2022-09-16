@@ -312,6 +312,11 @@ class DashboardChartsController extends Controller
 
             $clinicalTrialData = [
                 'title' => $clinicalTrial->title,
+                'start_date' => date('M d, Y', strtotime($clinicalTrial->start_date)),
+                'completion_date' => date('M d, Y', strtotime($clinicalTrial->completion_date)),
+                'gender' => $clinicalTrial->gender,
+                'min_age' => $clinicalTrial->min_age ?? 'n/a',
+                'max_age' => $clinicalTrial->max_age ?? 'n/a',
                 'url' => route('discover.clinicaltrials.show', $clinicalTrial->slug),
                 'longitude' => $firstLocation->longitude,
                 'latitude' => $firstLocation->latitude,
