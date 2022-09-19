@@ -64,17 +64,18 @@ class PersonController extends Controller
             ->paginate(25)
             ->appends(request()->query());
 
-        $locations = Location::has('people')->with('people')->get()->pluck('country')->unique()->sort();
+        $locations = Location::has('people')->with('people')->get()->pluck('country')->unique()->sort()->toArray();
         $companiesWithFocus = Company::has('people')->has('focus')->with('focus')->get();
-        $focuses = new Collection;
+        $focuses = [];
 
         foreach ($companiesWithFocus as $company) {
             foreach ($company->focus as $focus) {
-                $focuses->add($focus->name);
+                $focuses[] = $focus->name;
             }
         }
 
-        $focuses = $focuses->unique()->sort();
+        $focuses = array_unique($focuses);
+        sort($focuses);
 
         if ($request->has('filter')) {
             $filterInput = $request->input('filter');
