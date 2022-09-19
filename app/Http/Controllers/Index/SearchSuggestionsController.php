@@ -14,7 +14,7 @@ use App\Models\Investor;
 use App\Models\Person;
 use App\Models\Location;
 use App\Models\Focus;
-use DB;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Response;
 
 class SearchSuggestionsController extends Controller
@@ -111,6 +111,11 @@ class SearchSuggestionsController extends Controller
 
     public function clinicalTrialResearchers() {
         return self::getPivotRelationships('clinicaltrial_person', 'person_id', 'App\Models\Person');
+    }
+
+    public function peopleOrganizations()
+    {
+        return self::getPivotRelationships('company_person', 'company_id', Company::class);
     }
 
     public function clinicalTrialConditions() {

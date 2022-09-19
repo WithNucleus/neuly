@@ -51,6 +51,7 @@ Route::group([
     Route::get('/clinicalTrialInterventions.json', 'SearchSuggestionsController@clinicalTrialInterventions')->name('clinicalTrialInterventions');
     Route::get('/clinicalTrialOutcomeMeasures.json', 'SearchSuggestionsController@clinicalTrialOutcomeMeasures')->name('clinicalTrialOutcomeMeasures');
     Route::get('/clinicalTrialStudyDesigns.json', 'SearchSuggestionsController@clinicalTrialStudyDesigns')->name('clinicalTrialStudyDesigns');
+    Route::get('/peopleOrganizations.json', 'SearchSuggestionsController@peopleOrganizations')->name('peopleOrganizations');
 });
 
 //Other searches

@@ -250,6 +250,11 @@ class Person extends Model implements EntityContract, EntityImageContract
         return $query->where('visibility', 'public');
     }
 
+    public function scopeHasInvestors($query)
+    {
+        return $query->whereHas('investors');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | ACCESSORS

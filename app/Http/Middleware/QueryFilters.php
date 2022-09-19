@@ -109,6 +109,19 @@ class QueryFilters
             $filter_education_credits = array();
         }
 
+        if (isset($request->query('filter')['is_investor'])) {
+            $filter_is_investor = $request->query('filter')['is_investor'];
+        } else {
+            $filter_is_investor = 0;
+        }
+
+        if (isset($request->query('filter')['with_email'])) {
+            $filter_with_email = $request->query('filter')['with_email'];
+        } else {
+            $filter_with_email = 0;
+        }
+
+
         // Share with Blade
         view()->share('filters', $filters);
         view()->share('sort', $sort_string);
@@ -124,6 +137,8 @@ class QueryFilters
         view()->share('filter_hiring', $filter_hiring);
         view()->share('filter_upcoming_events', $filter_upcoming_events);
         view()->share('filter_education_credits', $filter_education_credits);
+        view()->share('filter_is_investor', $filter_is_investor);
+        view()->share('filter_with_email', $filter_with_email);
         view()->share('path', $path);
 
         // Return Next Request
