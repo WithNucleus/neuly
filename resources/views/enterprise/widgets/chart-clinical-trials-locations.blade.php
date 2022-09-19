@@ -270,4 +270,14 @@
     $('#participating .js-close-ajax-response-block').on('click', function() {
         $(this).parent().hide();
     });
+
+    $('#participating').on('show.bs.modal', function (){
+        $(this).css('z-index', 2010);
+        $('.modal-backdrop').css('z-index', 2000);
+    });
+
+    $('#participating').on('hide.bs.modal', function (){
+        $(this).css('z-index', '');
+        $('.modal-backdrop').css('z-index', '');
+    });
 </script>
