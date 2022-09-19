@@ -2,7 +2,7 @@
 /**
  * @param string $label
  * @param string $name
- * @param \Illuminate\Support\Collection $items
+ * @param array $items
  * @param array $item_filters
  * @param bool $inline
  */
@@ -10,11 +10,16 @@
 $initialShowedItems = 10;
 $showMoreOpened = false;
 
-if ($items->count() > $initialShowedItems && isset($item_filters)) {
-    $hiddenItems = $items->slice($initialShowedItems);
+//TODO on refactoring filters phase, pass $items everywhere as an array
+if (isset($items) and $items instanceof \Illuminate\Support\Collection) {
+    $items = $items->toArray();
+}
+
+if (count($items) > $initialShowedItems && isset($item_filters)) {
+    $hiddenItems = array_slice($items, $initialShowedItems);
 
     foreach ($item_filters as $filteredItem) {
-        if ($hiddenItems->search($filteredItem) !== false) {
+        if (in_array($filteredItem, $hiddenItems) === true) {
             $showMoreOpened = true;
             break;
         }
