@@ -101,7 +101,7 @@
                         <textarea class="form-control" name="request-widget-content" id="request-widget-content" rows="10"></textarea>
                     </div>
                     <div class="form-group">
-                        <button id="request-widget" type="submit" class="btn btn-primary" data-url="{{ route('enterprise.dashboard.widgets.request') }}">Submit Request</button>
+                        <button id="request-widget" type="submit" class="btn btn-primary" data-url="{{ route('enterprise.dashboard.request.widget') }}">Submit Request</button>
                     </div>
                 </form>
             </div>

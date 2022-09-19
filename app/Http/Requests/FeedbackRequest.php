@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Feedback;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -30,7 +31,7 @@ class FeedbackRequest extends FormRequest
             'content' => 'string|required',
             'type' => [
                 'required',
-                Rule::in(['problem', 'feedback', 'bug', 'suggestion', 'feature request'])
+                Rule::in(Feedback::TYPES)
             ]
         ];
 
