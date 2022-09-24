@@ -44,6 +44,10 @@
             <li class='nav-item'>
                 <a class='nav-link' href='{{ backpack_url('bookable-listing-request') }}'>Requests</a>
             </li>
+            <li class='nav-item'>
+                <a class='nav-link' href='{{ backpack_url('directory') }}'>
+                    <i class='nav-icon la la-address-card'></i> Directories</a>
+            </li>
         </ul>
     </li>
 @endcan

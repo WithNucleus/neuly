@@ -111,6 +111,18 @@ trait SearchableEntity {
             $array = Arr::except($array, $this->searchableSkippedFields);
         }
 
+        /**
+         * Geo Search Data
+         */
+        if (property_exists($this, 'geoSearch')) {
+            if ($array['latitude'] AND $array['longitude']) {
+                $array['_geoloc'] = [
+                    'lat' => $array['latitude'],
+                    'lng' => $array['longitude']
+                ];
+            }
+        }
+
         return $array;
     }
 }
