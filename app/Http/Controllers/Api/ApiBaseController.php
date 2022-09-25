@@ -26,6 +26,10 @@ class ApiBaseController extends Controller
 
     protected function prepareEntityForResponse($entity)
     {
+        if ($entity instanceof BookableListing) {
+            $entity->url_external = $entity->url;
+        }
+
         if (isset($entity->slug)) {
             $entity->url = route($this->showEntityRouteName, $entity->slug);
         }

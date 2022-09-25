@@ -23,7 +23,8 @@ class BookableListingsController extends ApiBaseController
         'name',
         'type',
         'slug',
-        'content'
+        'content',
+        'url'
     ];
 
     protected $showEntityRouteName = 'discover.bookable-listing.show';
