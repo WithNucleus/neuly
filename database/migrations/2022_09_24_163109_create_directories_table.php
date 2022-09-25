@@ -16,6 +16,7 @@ class CreateDirectoriesTable extends Migration
         Schema::create('directories', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
+            $table->string('url_prefix');
             $table->timestamps();
         });
     }
