@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\BookableListing;
 use App\Models\Directory;
+use App\Models\Focus;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
@@ -69,7 +70,7 @@ class BookableListingsController extends ApiBaseController
     {
         return [
             'focus' => function ($query) {
-                return $query->select('name');
+                return $query->where('type', Focus::TYPE_DRUG)->select('name');
             },
             'directories' => function ($query) {
                 return $query->select('name', 'url_prefix');
