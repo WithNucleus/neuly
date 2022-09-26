@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\BookableListingsController;
 use App\Http\Controllers\Api\CompaniesController;
 use App\Http\Controllers\Api\ClinicaltrialsController;
 use App\Http\Controllers\Api\EventsController;
@@ -8,10 +9,8 @@ use App\Http\Controllers\Api\JobsController;
 use App\Http\Controllers\Api\MediaItemsController;
 use App\Http\Controllers\Api\PeopleController;
 use App\Http\Controllers\Api\ResearchController;
-use App\Http\Controllers\Api\SearchController;
 use App\Http\Controllers\Api\UsersController;
 use App\Http\Controllers\Api\UserRolesController;
-use App\Http\Controllers\Index\SearchTemplateController;
 use App\Http\Controllers\Auth\OauthController;
 use Illuminate\Support\Facades\Route;
 
@@ -87,5 +86,10 @@ Route::group([
     Route::get('/media-items/{id}', [MediaItemsController::class, 'show']);
     Route::post('/media-items', [MediaItemsController::class, 'create']);
     Route::put('/media-items/{id}', [MediaItemsController::class, 'update']);
+
+    Route::get('/bookable-listings', [BookableListingsController::class, 'index']);
+//    Route::get('/bookable-listings/{id}', [BookableListingsController::class, 'show']);
+//    Route::post('/bookable-listings', [BookableListingsController::class, 'create']);
+//    Route::put('/bookable-listings/{id}', [BookableListingsController::class, 'update']);
 });
 

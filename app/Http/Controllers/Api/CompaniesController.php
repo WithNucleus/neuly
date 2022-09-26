@@ -36,7 +36,7 @@ class CompaniesController extends ApiBaseController
         'linkedin',
     ];
 
-    protected $showEntityRouteName = 'discover.people.show';
+    protected $showEntityRouteName = 'discover.organizations.show';
 
     public function index()
     {

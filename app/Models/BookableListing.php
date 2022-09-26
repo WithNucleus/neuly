@@ -63,6 +63,8 @@ class BookableListing extends Model
 
     private string $searchableModelName = 'Bookable Listing';
 
+    private array $geoSearch;
+
     protected $table = 'bookable_listings';
     protected $guarded = ['id'];
 
@@ -113,10 +115,14 @@ class BookableListing extends Model
         return $this->belongsTo(CompanyBranch::class);
     }
 
+    public function directories(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Directory::class)->withTimestamps();
+    }
+
     public function focus(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(Focus::class, 'bookable_listing_focus', 'bookable_listing_id', 'focus_id')
-            ->withTimestamps();
+        return $this->belongsToMany(Focus::class, 'bookable_listing_focus', 'bookable_listing_id', 'focus_id')->withTimestamps();
     }
 
     public function location(): \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -164,10 +170,15 @@ class BookableListing extends Model
     public function getBookableUrlAttribute(): string
     {
         try {
-            return route('discover.bookable-listing.show', [strtolower($this->type), $this->slug]);
+            return route('discover.bookable-listing.show', $this->slug);
         } catch (\Throwable $throwable) {
             return '';
         }
+    }
+
+    public function backpackViewButton($crud = false): string
+    {
+        return '<a class="btn btn-sm btn-link" target="_blank" href="' . $this->bookable_url . '">View</a>';
     }
 
     public function getBookableImageAttribute(): string

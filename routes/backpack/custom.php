@@ -41,6 +41,7 @@ Route::group([
     Route::crud('entitycontent', 'EntityContentCrudController');
     Route::crud('bookable-listing', 'BookableListingCrudController');
     Route::crud('bookable-listing-request', 'BookableListingRequestCrudController');
+    Route::crud('directory', 'DirectoryCrudController');
 
     Route::crud('location-geocoding', 'LocationGeocodingCrudController');
     Route::get('location-geocoding/run', 'LocationGeocodingCrudController@runGeocoding')->name('admin.location-geocoding.run');

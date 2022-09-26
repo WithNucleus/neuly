@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\BookableListing;
 use App\Models\Contracts\EntityImageContract;
+use App\Models\EntityContent;
 use App\Models\Job;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -24,6 +26,10 @@ class ApiBaseController extends Controller
 
     protected function prepareEntityForResponse($entity)
     {
+        if ($entity instanceof BookableListing) {
+            $entity->url_external = $entity->url;
+        }
+
         if (isset($entity->slug)) {
             $entity->url = route($this->showEntityRouteName, $entity->slug);
         }
@@ -57,6 +63,10 @@ class ApiBaseController extends Controller
                         $relationItem->makeHidden('owner_id');
                     }
 
+                    if ($relationItem instanceof EntityContent) {
+                        $relationItem->makeHidden('entity_id');
+                    }
+
                     $relationItem->makeHidden('pivot');
                 });
             }
@@ -73,6 +83,7 @@ class ApiBaseController extends Controller
             'events' => 'discover.events.show',
             'jobs' => 'discover.jobs.show',
             'clinicaltrials' => 'discover.clinicaltrials.show',
+            'bookable-listings' => 'discover.bookable-listing.show',
         ];
     }
 }

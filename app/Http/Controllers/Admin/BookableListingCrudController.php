@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\BookableListingCrudRequest;
 use App\Http\Requests\StoreBookableListingRequest;
+use App\Models\BookableListing;
+use App\Models\Company;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Illuminate\Support\Facades\Route;
 
 /**
  * Class BookableListingCrudController
@@ -48,12 +52,22 @@ class BookableListingCrudController extends CrudController
     {
         CRUD::column('id');
         CRUD::column('name');
-        CRUD::column('bookable_type');
         CRUD::column('bookable_id');
         CRUD::column('type');
         CRUD::column('status');
+        $this->crud->addColumn([
+            'label' => "Directories",
+            'type' => "select_multiple",
+            'name' => 'directories',
+            'entity' => 'directories',
+            'attribute' => "name",
+            'model' => "App\Models\Directory",
+        ]);
+        CRUD::column('bookable_type');
         CRUD::column('created_at');
         CRUD::column('updated_at');
+
+        $this->crud->addButtonFromModelFunction('line', 'view', 'backpackViewButton', 'beginning');
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -70,18 +84,44 @@ class BookableListingCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
-        CRUD::setValidation(StoreBookableListingRequest::class);
+        CRUD::setValidation(BookableListingCrudRequest::class);
 
-        CRUD::field('id');
-        CRUD::field('bookable_type');
-        CRUD::field('bookable_id');
+        CRUD::field('name');
         CRUD::field('type');
+        CRUD::field('status');
         CRUD::field('phone');
+        CRUD::field('email');
         CRUD::field('address');
         CRUD::field('city');
         CRUD::field('state');
         CRUD::field('latitude');
         CRUD::field('longitude');
+
+        $this->crud->addField([
+            'name' => 'start_date',
+            'type' => 'date_picker',
+            'label' => 'Start Date',
+        ]);
+
+        $this->crud->addField([
+            'name' => 'end_date',
+            'type' => 'date_picker',
+            'label' => 'End Date',
+        ]);
+
+        $this->crud->addField([
+            'label'     => "Directories",
+            'type'      => 'select2_multiple',
+            'name'      => 'directories',
+            'entity'    => 'directories',
+            'attribute' => 'name',
+            'pivot'     => true,
+            'select_all' => true,
+            'model'     => "App\Models\Directory",
+            'options'   => (function ($query) {
+                return $query->orderBy('name', 'ASC')->get();
+             }),
+        ]);
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:
