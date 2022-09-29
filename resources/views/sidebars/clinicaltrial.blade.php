@@ -68,8 +68,6 @@
     'item_filters' => $filters_year
 ])
 
-{{-- @include('sidebars.filters.location', ['column' => '3']) --}}
-
 {{-- @include('sidebars.filters.textsearch', [
 	'title' 		=> 'Organization',
 	'placeholder' 	=> 'e.g. 920 Coalition',

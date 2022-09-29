@@ -43,6 +43,8 @@ Route::group([
     Route::get('/investorsPeople.json', 'SearchSuggestionsController@investorsPeople')->name('investorsPeople');
     Route::get('/investorsOrganizations.json', 'SearchSuggestionsController@investorsOrganizations')->name('investorsOrganizations');
     Route::get('/companiesLocations.json', 'SearchSuggestionsController@companiesLocations')->name('companiesLocations');
+    Route::get('/peopleLocations.json', 'SearchSuggestionsController@peopleLocations')->name('peopleLocations');
+    Route::get('/investorsLocations.json', 'SearchSuggestionsController@investorsLocations')->name('investorsLocations');
     Route::get('/locationsRegions.json', 'SearchSuggestionsController@locationsRegions')->name('locationsRegions');
     Route::get('/focusOrganizations.json', 'SearchSuggestionsController@focusOrganizations')->name('focusOrganizations');
     Route::get('/clinicalTrialCollaborators.json', 'SearchSuggestionsController@clinicalTrialCollaborators')->name('clinicalTrialCollaborators');

@@ -164,40 +164,22 @@ $(document).ready(function() {
         });
     }
 
-	// Location Search on Organizations Index
-    if ($('.organizations-locations .typeahead').length !== 0) {
-        var companiesLocations = new Bloodhound({
-            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-            queryTokenizer: Bloodhound.tokenizers.whitespace,
-            prefetch: '/searchassets/companiesLocations.json'
-        });
-
-        companiesLocations.initialize();
-
-        $('.organizations-locations .typeahead').typeahead(null,
-            {
-                name: 'organizations',
-                display: 'name',
-                source: companiesLocations,
-                limit: 10,
-            });
-    }
-
 	// Regions Search on Locations Index
-    if ($('.locations-locations .typeahead').length !== 0) {
-        var locationsRegions = new Bloodhound({
+    if ($('.filter-locations .typeahead').length !== 0) {
+        var actionUrl = $('.filter-locations .typeahead').data('action-url');
+        var locationsList = new Bloodhound({
             datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
             queryTokenizer: Bloodhound.tokenizers.whitespace,
-            prefetch: '/searchassets/locationsRegions.json'
+            prefetch: actionUrl
         });
 
-        locationsRegions.initialize();
+        locationsList.initialize();
 
-        $('.locations-locations .typeahead').typeahead(null,
+        $('.filter-locations .typeahead').typeahead(null,
             {
                 name: 'organizations',
                 display: 'name',
-                source: locationsRegions,
+                source: locationsList,
                 limit: 10,
             });
     }

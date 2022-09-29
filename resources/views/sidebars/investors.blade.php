@@ -15,11 +15,10 @@
     'item_filters' => $filters_type
 ])
 
-@include('sidebars.filters.checkboxes-new', [
-    'label'     => 'Locations',
-    'name'      => 'locations',
-    'items'     => $locations,
-    'item_filters' => $filters_location
+@include('sidebars.filters.locations', [
+    'label' => 'Locations',
+    'filters_location' => $filters_location,
+    'actionUrl' => route('searchassets.investorsLocations'),
 ])
 
 <div class="investors-people mb-4">

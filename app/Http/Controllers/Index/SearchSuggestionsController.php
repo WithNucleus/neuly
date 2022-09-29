@@ -188,10 +188,24 @@ class SearchSuggestionsController extends Controller
         return json_encode($locations);
     }
 
-    /* Get Locations of Organizations */
     public function companiesLocations() {
+        return $this->getRelatedLocations('company_location');
+    }
 
-        $ids = DB::table('company_location')->pluck('company_id')->unique();
+    public function peopleLocations() {
+        return $this->getRelatedLocations('location_person');
+    }
+
+    public function investorsLocations() {
+        return $this->getRelatedLocations('investor_location');
+    }
+
+    /**
+     * @param $pivotTable
+     * @return false|string
+     */
+    private function getRelatedLocations($pivotTable) {
+        $ids = DB::table($pivotTable)->pluck('location_id')->unique();
         $location_models = Location::findMany($ids)->sortBy('name');
 
         $regions = array();
@@ -246,6 +260,5 @@ class SearchSuggestionsController extends Controller
         }
 
         return json_encode($results);
-
     }
 }
