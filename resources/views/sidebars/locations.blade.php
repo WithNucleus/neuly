@@ -1,7 +1,7 @@
 @include('sidebars.filters.locations', [
     'label' => 'Search',
     'filters_location' => $filters_location,
-    'actionUrl' => route('searchassets.locationRegions')
+    'actionUrl' => route('searchassets.locationsRegions')
 ])
 
 @include('sidebars.filters.checkboxes-new', [
