@@ -115,6 +115,21 @@ class Kernel extends ConsoleKernel
             ->onFailure(function() {
                 Log::critical('Yearly metrics failed');
             });
+
+        $schedule
+            ->command('activitylog:archive')
+            ->monthlyOn(1)
+            ->onFailure(function() {
+                Log::critical('Activity log archive command failed');
+            });
+
+        //Run after 'activitylog:archive' command at same day
+        $schedule
+            ->command('activitylog:clean')
+            ->monthlyOn(1, '23:00')
+            ->onFailure(function() {
+                Log::critical('Activity log clean command failed');
+            });
     }
 
     /**

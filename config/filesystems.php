@@ -84,6 +84,11 @@ return [
             'root'   => storage_path('app/batch-images-upload'),
         ],
 
+        'archive' => [
+            'driver' => 'local',
+            'root'   => storage_path('archive'),
+        ],
+
     ],
 
     /*
