@@ -41,6 +41,22 @@ class EventsController extends ApiBaseController
         return response()->json($events);
     }
 
+    public function past()
+    {
+        $events = Event::past()
+            ->with($this->getRelationWithArray())
+            ->orderBy('start_date', 'desc')
+            ->get()
+            ->map(function ($entity) {
+                $this->prepareEntityRelationsData($entity);
+                $this->prepareEntityForResponse($entity);
+
+                return $entity;
+            });
+
+        return response()->json($events);
+    }
+
     public function create(EventRequest $request)
     {
         $data = $this->filterRequestData($request->all());

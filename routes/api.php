@@ -53,6 +53,7 @@ Route::group([
     Route::put('/jobs/{id}', [JobsController::class, 'update']);
 
     Route::get('/events', [EventsController::class, 'index']);
+    Route::get('/events/past', [EventsController::class, 'past']);
     Route::get('/events/{id}', [EventsController::class, 'show']);
     Route::post('/events', [EventsController::class, 'create']);
     Route::put('/events/{id}', [EventsController::class, 'update']);
