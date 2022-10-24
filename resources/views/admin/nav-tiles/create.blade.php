@@ -33,6 +33,16 @@
                         </div>
                     </div>
 
+                    <div class="form-group row mb-4">
+                        <div class="col-12 col-md-6">
+                            <label for="placement">Placement</label>
+                            <select class="custom-select" name="placement" id="placement">
+                                <option value="right">Right</option>
+                                <option value="left">Left</option>
+                            </select>
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <input type="color" name="menu_bg" id="menu_bg" value="{{ \App\Models\NavigationTile::MENU_BG_COLOR }}" class="mr-2">
                         <label for="menu_bg">Menu Background Color</label>

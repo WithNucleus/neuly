@@ -15,8 +15,10 @@ $badgeColor: #212529;
 .nucleus-nav-tile {
     position: fixed;
     bottom: .25rem;
-    right: .25rem;
+    right: auto;
+    left: auto;
     z-index: 149;
+    width: auto;
 
     .btn {
         min-width: 45px;
@@ -65,7 +67,8 @@ $badgeColor: #212529;
 #nucleus-nav-menu {
     position: fixed;
     bottom: 3.3rem;
-    right: .25rem;
+    right: auto;
+    left: auto;
     z-index: 150;
     background: $menuBg;
     color: $menuLinkColor;
