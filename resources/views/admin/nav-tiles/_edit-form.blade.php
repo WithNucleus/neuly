@@ -28,6 +28,16 @@
         </div>
     </div>
 
+    <div class="form-group row mb-4">
+        <div class="col-12 col-md-6">
+            <label for="placement">Placement {{ old('placement') }}</label>
+            <select class="custom-select" name="placement" id="placement">
+                <option value="right" @if($navigationTile->placement === 'right') selected @endif>Right</option>
+                <option value="left" @if($navigationTile->placement === 'left') selected @endif>Left</option>
+            </select>
+        </div>
+    </div>
+
     <div class="form-group">
         <input type="color" name="menu_bg" id="menu_bg" value="{{ old('menu_bg', $navigationTile->menu_bg) }}" class="mr-2">
         <label for="menu_bg">Menu Background Color</label>

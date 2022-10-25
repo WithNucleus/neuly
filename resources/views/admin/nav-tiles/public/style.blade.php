@@ -1,6 +1,10 @@
 @import '{{ url('/') . mix('css/nav-tiles.css') }}';
 
 /* Tile Button */
+.nucleus-nav-tile {
+    {{ $navigationTile->placement }}: 0.25rem;
+}
+
 .nucleus-nav-tile .btn {
     background-color: {{ $navigationTile->button_bg }};
 }
@@ -16,6 +20,7 @@
 #nucleus-nav-menu {
     background-color: {{ $navigationTile->menu_bg }};
     color: {{ $navigationTile->menu_link_color }};
+    {{ $navigationTile->placement }}: 0.25rem;
 }
 
 #nucleus-nav-menu a {
