@@ -73,57 +73,8 @@
                                 </div>
                             @endisset
 
-                            {{-- Filters --}}
-                            <?php if (
-                                isset($filters_location) && $filters_location OR
-                                isset($filters_company_name) && $filters_company_name OR
-                                isset($filters_focus) && $filters_focus OR
-                                isset($filters_person_name) && $filters_person_name
-                                ) : ?>
-                            <div class="current-filter-list font-size-small align-self-end mt-3 mb-3 border-bottom pb-1">
-                                <strong class="text-uppercase mr-3 text-black-50">Current Filters:</strong>
 
-                                <?php if (isset($filters_location) && $filters_location) : ?>
-                                        <span class="mr-3">
-                                            <i class="fad fa-map-marker-alt text-info"></i>
-                                            @foreach ($filters_location as $location)
-                                                {{ $location }}
-                                                @if (!$loop->last) <strong class="text-info">/</strong> @endif
-                                            @endforeach
-                                        </span>
-                                <?php endif; ?>
-
-                                <?php if (isset($filters_person_name) && $filters_person_name) : ?>
-                                        <span class="mr-3">
-                                            <i class="fad fa-user-edit text-danger"></i>
-                                            @foreach ($filters_person_name as $person)
-                                                {{ $person }}
-                                                @if (!$loop->last) <strong class="text-info">/</strong> @endif
-                                            @endforeach
-                                        </span>
-                                <?php endif; ?>
-
-                                <?php if (isset($filters_company_name) && $filters_company_name) : ?>
-                                        <span class="mr-3">
-                                            <i class="fad fa-building text-secondarydark"></i>
-                                            @foreach ($filters_company_name as $company)
-                                                {{ $company }}
-                                                @if (!$loop->last) <strong class="text-black-50">/</strong> @endif
-                                            @endforeach
-                                        </span>
-                                <?php endif; ?>
-
-                                <?php if (isset($filters_focus) && $filters_focus) : ?>
-                                        <span class="mr-3">
-                                            <i class="fad fa-flask text-secondarydark"></i>
-                                            @foreach ($filters_focus as $focus)
-                                                {{ $focus }}
-                                                @if (!$loop->last) <strong class="text-black-50">/</strong> @endif
-                                            @endforeach
-                                        </span>
-                                <?php endif; ?>
-                            </div>
-                            <?php endif; ?>
+                            @include('includes.filters.active-list')
 
                             {{-- Research Records --}}
                             <ul class="list-group list-group-flush mb-4 shadow-sm">

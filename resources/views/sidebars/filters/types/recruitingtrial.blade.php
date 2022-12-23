@@ -1,18 +1,18 @@
-@include('sidebars.filters.checkboxes-new', [
+@include('sidebars.filters.includes.checkboxes-new', [
     'label'     => 'Focus',
     'name'      => 'focus',
     'items'     => $focus_cats,
     'item_filters' => $filters_focus
 ])
 
-@include('sidebars.filters.checkboxes-new', [
+@include('sidebars.filters.includes.checkboxes-new', [
     'label'     => 'Locations',
     'name'      => 'locations',
     'items'     => $locations,
     'item_filters' => $filters_location
 ])
 
-@include('sidebars.filters.radio-buttons', [
+@include('sidebars.filters.includes.radio-buttons', [
     'label'     => 'gender',
     'name'      => 'gender',
     'items'     => $gender,
@@ -55,4 +55,4 @@
     </div>
 </div>
 
-@include('sidebars.filters.scripts')
+@include('sidebars.filters.includes.scripts')

@@ -1,8 +1,8 @@
-@include('sidebars.filters.checkboxes-new', [
+@include('sidebars.filters.includes.checkboxes-new', [
     'label'     => 'Focus',
     'name'      => 'focus',
     'items'     => $focusCategories,
     'item_filters' => $filters_focus
 ])
 
-@include('sidebars.filters.scripts')
+@include('sidebars.filters.includes.scripts')

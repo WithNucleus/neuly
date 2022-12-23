@@ -73,37 +73,8 @@
                                 </div>
                             @endisset
 
-                            {{-- Filters --}}
-                            <?php if (
-                                isset($filters_location) && $filters_location OR
-                                isset($filters_company_name) && $filters_company_name OR
-                                isset($filters_employment_type) && $filters_employment_type
-                                ) : ?>
-                            <div class="current-filter-list font-size-small align-self-end border-bottom mb-3 pb-1">
-                                <strong class="text-uppercase mr-3 text-black-50">Current Filters:</strong>
 
-                                <?php if (isset($filters_location) && $filters_location) : ?>
-                                    <span class="mr-3">
-                                        <i class="fad fa-map-marker-alt text-info"></i>
-                                        @foreach ($filters_location as $location)
-                                            {{ $location }}
-                                            @if (!$loop->last) <strong class="text-info">/</strong> @endif
-                                        @endforeach
-                                    </span>
-                                <?php endif; ?>
-
-                                <?php if (isset($filters_type) && $filters_type) : ?>
-                                    <span class="mr-3">
-                                        <i class="fad fa-funnel-dollar text-quaternary"></i>
-                                        @foreach ($filters_type as $type)
-                                            {{ $type }}
-                                            @if (!$loop->last) <strong class="text-info">/</strong> @endif
-                                        @endforeach
-                                    </span>
-                                <?php endif; ?>
-
-                            </div>
-                            <?php endif; ?>
+                            @include('includes.filters.active-list')
 
                             {{-- Investors --}}
                             <div class="d-flex flex-wrap">

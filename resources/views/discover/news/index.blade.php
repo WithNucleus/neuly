@@ -67,21 +67,7 @@
                                 </div>
                             @endisset
 
-                            {{-- Filters --}}
-                            <?php if (isset($filters_focus) && $filters_focus) : ?>
-                            <div class="current-filter-list font-size-small align-self-end border-bottom mb-3 pb-1">
-                                <strong class="text-uppercase mr-3 text-black-50">Current Filters:</strong>
-
-                                <span class="mr-3">
-                                    <i class="fad fa-map-marker-alt text-info"></i>
-                                    @foreach ($filters_focus as $focus)
-                                        {{ $focus }}
-                                        @if (!$loop->last) <strong class="text-info">/</strong> @endif
-                                    @endforeach
-                                </span>
-
-                            </div>
-                            <?php endif; ?>
+                            @include('includes.filters.active-list')
 
                             {{-- News Articles --}}
                             <ul class="list-group list-group-flush mb-4 shadow-sm">

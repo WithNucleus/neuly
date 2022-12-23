@@ -1,18 +1,18 @@
-{{-- @include('sidebars.filters.textsearch', [
+{{-- @include('sidebars.filters.includes.textsearch', [
 	'title' 		=> 'Organization',
 	'placeholder' 	=> 'e.g. 920 Coalition',
 	'prefetch' 		=> 'organization/names.json',
 	'column' 		=> 1
 ]) --}}
 
-{{-- @include('sidebars.filters.textsearch', [
+{{-- @include('sidebars.filters.includes.textsearch', [
 	'title' 		=> 'Investor',
 	'placeholder' 	=> 'e.g. Tabula Rasa Ventures',
 	'prefetch' 		=> 'investor/names.json',
 	'column' 		=> 2
 ]) --}}
 
-{{-- @include('sidebars.filters.focus', ['column' => '0']) --}}
+{{-- @include('sidebars.filters.includes.focus', ['column' => '0']) --}}
 
 <div class="focus-organizations mb-4">
 	<label for="organizations" class="h4">Organizations</label>
@@ -49,4 +49,4 @@
 </div>
 @endisset
 
-@include('sidebars.filters.scripts')
+@include('sidebars.filters.includes.scripts')

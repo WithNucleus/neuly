@@ -43,58 +43,8 @@
                 </div>
             @endisset
 
-            {{-- Filters --}}
-            <?php if (
-            isset($filters_location) && $filters_location OR
-            isset($filters_company_name) && $filters_company_name OR
-            isset($filters_investor_name) && $filters_investor_name OR
-            isset($filters_type) && $filters_type
-            ) : ?>
-            <div class="current-filter-list font-size-small align-self-end border-bottom mb-3 pb-1">
-                <strong class="text-uppercase mr-3 text-black-50">Current Filters:</strong>
 
-                <?php if (isset($filters_type) && $filters_type) : ?>
-                <span class="mr-3">
-                    <i class="fad fa-briefcase text-quaternary"></i>
-                    @foreach ($filters_type as $type)
-                        {{ $type }}
-                        @if (!$loop->last) <strong class="text-black-50">/</strong> @endif
-                    @endforeach
-                </span>
-                <?php endif; ?>
-
-                <?php if (isset($filters_location) && $filters_location) : ?>
-                <span class="mr-3">
-                    <i class="fad fa-map-marker-alt text-info"></i>
-                    @foreach ($filters_location as $location)
-                        {{ $location }}
-                        @if (!$loop->last) <strong class="text-info">/</strong> @endif
-                    @endforeach
-                </span>
-                <?php endif; ?>
-
-                <?php if (isset($filters_company_name) && $filters_company_name) : ?>
-                <span class="mr-3">
-                    <i class="fad fa-building text-secondarydark"></i>
-                    @foreach ($filters_company_name as $company)
-                        {{ $company }}
-                        @if (!$loop->last) <strong class="text-black-50">/</strong> @endif
-                    @endforeach
-                </span>
-                <?php endif; ?>
-
-                <?php if (isset($filters_investor_name) && $filters_investor_name) : ?>
-                <span class="mr-3">
-                    <i class="fad fa-hands-usd text-secondarydark"></i>
-                    @foreach ($filters_investor_name as $investor)
-                        {{ $investor }}
-                        @if (!$loop->last) <strong class="text-black-50">/</strong> @endif
-                    @endforeach
-                </span>
-                <?php endif; ?>
-
-            </div>
-            <?php endif; ?>
+            @include('includes.filters.active-list')
 
             {{-- Jobs --}}
             <ul class="list-group list-group-flush mb-4 @if((isset($embed) && $embed == false) OR !isset($embed))shadow-sm @endif js-items-list">

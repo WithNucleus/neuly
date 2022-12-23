@@ -9,31 +9,31 @@
     </div>
 </div>
 
-@include('sidebars.filters.checkboxes-new', [
+@include('sidebars.filters.includes.checkboxes-new', [
     'label'     => 'Type',
     'name'      => 'type',
     'items'     => ['Privately Held', 'Public Company', 'Non-Profit', 'Educational Institution', 'Government Agency'],
     'item_filters' => $filters_type
 ])
 
-@include('sidebars.filters.locations', [
+@include('sidebars.filters.includes.locations', [
     'label' => 'Locations',
     'filters_location' => $filters_location,
     'actionUrl' => route('searchassets.companiesLocations'),
 ])
 
-@include('sidebars.filters.checkboxes-new', [
+@include('sidebars.filters.includes.checkboxes-new', [
     'label'     => 'Focus',
     'name'      => 'focus',
     'items'     => $focus_cats,
     'item_filters' => $filters_focus
 ])
 
-{{-- @include('sidebars.filters.checkboxes-new', [
+{{-- @include('sidebars.filters.includes.checkboxes-new', [
     'label'     => 'Locations',
     'name'      => 'location',
     'items'     => $locations,
     'item_filters' => $filters_location
 ]) --}}
 
-@include('sidebars.filters.scripts')
+@include('sidebars.filters.includes.scripts')

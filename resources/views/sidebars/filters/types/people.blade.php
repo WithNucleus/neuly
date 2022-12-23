@@ -1,4 +1,4 @@
-{{-- @include('sidebars.filters.textsearch', [
+{{-- @include('sidebars.filters.includes.textsearch', [
 	'title' 		=> 'Person',
 	'placeholder' 	=> 'e.g. Aaron Johnson',
 	'prefetch' 		=> 'people/names.json',
@@ -19,24 +19,24 @@
     </div>
 </div>
 
-@include('sidebars.filters.typeahead', [
+@include('sidebars.filters.includes.typeahead', [
     'label'     => 'Organizations',
     'name'      => 'company',
     'items'     => $filters_companies,
     'action'    => route('searchassets.peopleOrganizations')
 ])
 
-@include('sidebars.filters.locations', [
+@include('sidebars.filters.includes.locations', [
     'label' => 'Locations',
     'filters_location' => $filters_location,
     'actionUrl' => route('searchassets.peopleLocations'),
 ])
 
-@include('sidebars.filters.checkboxes-new', [
+@include('sidebars.filters.includes.checkboxes-new', [
     'label'     => 'Focus',
     'name'      => 'focus',
     'items'     => $focuses,
     'item_filters' => $filters_focuses
 ])
 
-@include('sidebars.filters.scripts')
+@include('sidebars.filters.includes.scripts')

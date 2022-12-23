@@ -1,11 +1,11 @@
-@include('sidebars.filters.checkboxes-new', [
+@include('sidebars.filters.includes.checkboxes-new', [
     'label'     => 'Companies',
     'name'      => 'company',
     'items'     => $company_cats,
     'item_filters' => $filters_companies
 ])
 
-@include('sidebars.filters.checkboxes-new', [
+@include('sidebars.filters.includes.checkboxes-new', [
     'label'     => 'Locations',
     'name'      => 'locations',
     'items'     => $location_cats,
@@ -13,4 +13,4 @@
 ])
 
 
-@include('sidebars.filters.scripts')
+@include('sidebars.filters.includes.scripts')

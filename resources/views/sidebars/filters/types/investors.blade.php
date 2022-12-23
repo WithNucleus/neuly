@@ -5,7 +5,7 @@
     </div>
 </div>
 
-@include('sidebars.filters.radio-buttons', [
+@include('sidebars.filters.includes.radio-buttons', [
     'label'     => 'Type',
     'name'      => 'type',
     'items'     => [
@@ -15,7 +15,7 @@
     'item_filters' => $filters_type
 ])
 
-@include('sidebars.filters.locations', [
+@include('sidebars.filters.includes.locations', [
     'label' => 'Locations',
     'filters_location' => $filters_location,
     'actionUrl' => route('searchassets.investorsLocations'),
@@ -63,4 +63,4 @@
 	</div>
 </div>
 
-@include('sidebars.filters.scripts')
+@include('sidebars.filters.includes.scripts')

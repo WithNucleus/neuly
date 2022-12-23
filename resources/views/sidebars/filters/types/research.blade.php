@@ -1,36 +1,36 @@
-{{-- @include('sidebars.filters.textsearch', [
-	'title' 		=> 'Research', 
-	'placeholder' 	=> 'e.g. Clinical investigations', 
+{{-- @include('sidebars.filters.includes.textsearch', [
+	'title' 		=> 'Research',
+	'placeholder' 	=> 'e.g. Clinical investigations',
 	'prefetch' 		=> 'research/names.json',
 	'column' 		=> 0
 ]) --}}
 
-{{-- @include('sidebars.filters.textsearch', [
-	'title' 		=> 'Organization', 
-	'placeholder' 	=> 'e.g. 920 Coalition', 
+{{-- @include('sidebars.filters.includes.textsearch', [
+	'title' 		=> 'Organization',
+	'placeholder' 	=> 'e.g. 920 Coalition',
 	'prefetch' 		=> 'organization/names.json',
 	'column' 		=> 1
 ]) --}}
 
-{{-- @include('sidebars.filters.textsearch', [
-	'title' 		=> 'People', 
-	'placeholder' 	=> 'e.g. Allergan', 
+{{-- @include('sidebars.filters.includes.textsearch', [
+	'title' 		=> 'People',
+	'placeholder' 	=> 'e.g. Allergan',
 	'prefetch' 		=> 'people/names.json',
 	'column' 		=> 2
 ]) --}}
 
-{{-- @include('sidebars.filters.focus', ['column' => '3']) --}}
+{{-- @include('sidebars.filters.includes.focus', ['column' => '3']) --}}
 
-@include('sidebars.filters.checkboxes-new', [
+@include('sidebars.filters.includes.checkboxes-new', [
     'label'     => 'Focus',
     'name'      => 'focus',
     'items'     => $focus_cats,
     'item_filters' => $filters_focus
 ])
 
-{{-- @include('sidebars.filters.textsearch', [
-	'title' 		=> 'People', 
-	'placeholder' 	=> 'Search authors', 
+{{-- @include('sidebars.filters.includes.textsearch', [
+	'title' 		=> 'People',
+	'placeholder' 	=> 'Search authors',
 	'prefetch' 		=> 'people/names.json',
 	'column' 		=> 2
 ]) --}}
@@ -56,4 +56,4 @@
 	</div>
 </div>
 
-@include('sidebars.filters.scripts')
+@include('sidebars.filters.includes.scripts')
