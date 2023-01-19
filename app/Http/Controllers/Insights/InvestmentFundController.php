@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Company;
 use Illuminate\Http\Request;
 use App\Models\Investor;
+use Illuminate\Support\Str;
 
 class InvestmentFundController extends Controller
 {
@@ -34,6 +35,27 @@ class InvestmentFundController extends Controller
 
         $investorChart = $this->processInvestor($investors);
         $chartData = json_encode($investorChart);
+
+        dump($investorChart);
+
+        foreach ($investorChart as $investor) {
+            echo "<h1>" . $investor['name'] . "</h1>";
+            $html = '<div class="investor-item text-center p-4"><div class="investor-logo mx-auto" data-investor="' . $investor['slug'] . '" role="button" aria-expanded="false" aria-controls="' . $investor['slug'] . '"style="background-image: url(' . $investor['image'] . ');"></div>';
+
+            $html .= '<div id="' . $investor['slug'] . '" class="investor-details"><h2 class="h3 text-secondary mb-3"><a href="' . $investor['link'] . '" target="_blank" rel="noopener noreferrer">' . $investor["name"] . '</a></h2>';
+
+            $html .= '<div class="container investor-companies-list d-flex flex-wrap justify-content-center" id="' . $investor['slug'] . '">';
+
+            foreach ($investor['children'] as $company) {
+                $html .= '<div class="item col-12 col-md-3 p-3"><p class="lead text-center mb-1 sr-only visually-hidden">'  . $company['name'] . '</p><div class="company-logo mx-auto" style="background-image: url('  . $company['image'] . ');"></div></div>';
+            }
+
+            $html .= '</div></div></div>';
+
+            echo '<textarea style="width:100%;height:600px">'. $html . '</textarea>';
+        }
+
+        dd('stop hammer time');
 
         return view('discover.insights.investment-fund.index', compact('chartData', 'filter'));
     }
@@ -116,8 +138,10 @@ class InvestmentFundController extends Controller
             $childrenCompanies = isset($relatedCompanies[$investor->id]) ? $relatedCompanies[$investor->id] : [];
             $investorData = [
                 'name' => $investor->name,
+                'slug' => $investor->slug,
+                'link' => $investor->website,
                 'value' => $investor->companies_count,
-                'image' => $investor->entityImageUrl,
+                'image' => $investor->full_image_url,
                 'type' => 'investor',
                 'children' => $childrenCompanies,
             ];
@@ -148,7 +172,7 @@ class InvestmentFundController extends Controller
             $companyData = [
                 'name' => $company->name,
                 'value' => 3,
-                'image' => $company->entityImageUrl,
+                'image' => $company->full_image_url,
                 'type' => 'company',
                 'ownership' => $company->ownership,
                 'listing_url' => route('discover.organizations.show', $company->slug),
