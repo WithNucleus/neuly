@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Mail\WelcomeMail;
 use App\Providers\RouteServiceProvider;
 use App\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\VerifiesEmails;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class VerificationController extends Controller
 {
@@ -54,6 +56,7 @@ class VerificationController extends Controller
 
         if ($user->markEmailAsVerified()) {
             event(new Verified($user));
+            Mail::to($user)->send(new WelcomeMail($user->name));
         }
 
         return view('auth.verified', ['email' => $user->email]);
