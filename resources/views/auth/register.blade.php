@@ -114,7 +114,15 @@
                     </div>
 
                     <div class="form-group mb-0 mt-4">
-                        <button type="submit" class="btn btn-dark mr-2">
+                        <div class="mb-4">
+                            {!! htmlFormSnippet() !!}
+                            @error('recaptcha')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <button type="submit" class="btn btn-lg btn-dark mr-2">
                             {{ __('Register') }}
                         </button>
                         Already a member? <a href="{{ route('login') }}">Login here.</a>
