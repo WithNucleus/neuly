@@ -40,7 +40,8 @@
         "spatie/laravel-query-builder": "^3.0",
         "stevebauman/purify": "^4.0",
         "te7a-houdini/laravel-trix": "^2.0",
-        "yadahan/laravel-authentication-log": "^1.2"
+        "yadahan/laravel-authentication-log": "^1.2",
+        "league/flysystem-aws-s3-v3": "^3.0"
     },
     "require-dev": {
         "backpack/generators": "^3.1",
