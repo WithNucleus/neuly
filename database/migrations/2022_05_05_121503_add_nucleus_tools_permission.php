@@ -5,7 +5,7 @@ use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
 
-class AddNucleusToolsPermission extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -41,4 +41,4 @@ class AddNucleusToolsPermission extends Migration
 
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
     }
-}
+};

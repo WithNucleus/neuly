@@ -5,7 +5,7 @@ use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
 
-class AddEnterprisePermissions extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -52,4 +52,4 @@ class AddEnterprisePermissions extends Migration
 
         $permission->delete();
     }
-}
+};

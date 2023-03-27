@@ -3,7 +3,7 @@
 use App\Models\ClinicaltrialPhase;
 use Illuminate\Database\Migrations\Migration;
 
-class AddClinicalTrialPhaseRecords extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -36,4 +36,4 @@ class AddClinicalTrialPhaseRecords extends Migration
             ClinicaltrialPhase::find($phase['name'])->delete();
         }
     }
-}
+};

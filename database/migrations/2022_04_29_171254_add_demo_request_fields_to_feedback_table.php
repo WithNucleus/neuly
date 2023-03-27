@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class AddDemoRequestFieldsToFeedbackTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -36,4 +36,4 @@ class AddDemoRequestFieldsToFeedbackTable extends Migration
 
         DB::statement("ALTER TABLE feedback MODIFY COLUMN type ENUM('problem', 'feedback', 'bug', 'suggestion', 'feature request')");
     }
-}
+};

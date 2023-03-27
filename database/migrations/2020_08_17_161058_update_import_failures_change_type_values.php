@@ -3,7 +3,7 @@
 use App\Models\ImportFailure;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateImportFailuresChangeTypeValues extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -26,4 +26,4 @@ class UpdateImportFailuresChangeTypeValues extends Migration
     {
         //no need to revert column's data
     }
-}
+};

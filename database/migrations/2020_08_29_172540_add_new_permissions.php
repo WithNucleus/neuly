@@ -5,7 +5,7 @@ use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
 
-class AddNewPermissions extends Migration
+return new class extends Migration
 {
     private $oldPermission = 'edit listing requests';
 
@@ -56,4 +56,4 @@ class AddNewPermissions extends Migration
             $adminRole->givePermissionTo($this->oldPermission);
         }
     }
-}
+};

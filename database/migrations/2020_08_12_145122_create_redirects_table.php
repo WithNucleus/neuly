@@ -7,7 +7,7 @@ use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
 
-class CreateRedirectsTable extends Migration
+return new class extends Migration
 {
     const PERMISSION_MANAGE_REDIRECTS = 'manage redirects';
 
@@ -57,4 +57,4 @@ class CreateRedirectsTable extends Migration
         // Reset cached roles and permissions
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
     }
-}
+};

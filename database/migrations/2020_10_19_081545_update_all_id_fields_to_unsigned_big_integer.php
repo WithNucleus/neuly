@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateAllIdFieldsToUnsignedBigInteger extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -121,4 +121,4 @@ class UpdateAllIdFieldsToUnsignedBigInteger extends Migration
             $table->dropForeign(['event_id', 'person_id']);
         });
     }
-}
+};

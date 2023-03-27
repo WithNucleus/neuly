@@ -5,7 +5,7 @@ use App\Models\Location;
 use Illuminate\Database\Migrations\Migration;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
-class ChangeCountryNameRecords extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -50,4 +50,4 @@ class ChangeCountryNameRecords extends Migration
             $output->writeln($uk_location->name.' changed UK name');
         }
     }
-}
+};

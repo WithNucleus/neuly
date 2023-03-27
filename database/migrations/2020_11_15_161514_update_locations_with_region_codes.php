@@ -4,7 +4,7 @@ use App\Models\Location;
 use Illuminate\Database\Migrations\Migration;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
-class UpdateLocationsWithRegionCodes extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -89,4 +89,4 @@ class UpdateLocationsWithRegionCodes extends Migration
     {
         // no need
     }
-}
+};

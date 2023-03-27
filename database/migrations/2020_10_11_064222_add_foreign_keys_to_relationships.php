@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddForeignKeysToRelationships extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -742,4 +742,4 @@ class AddForeignKeysToRelationships extends Migration
             $table->increments('id')->change();
         });
     }
-}
+};

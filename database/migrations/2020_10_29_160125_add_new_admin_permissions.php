@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
-class AddNewAdminPermissions extends Migration
+return new class extends Migration
 {
     private $newPermissions = [
         'manage insight requests',
@@ -44,4 +44,4 @@ class AddNewAdminPermissions extends Migration
             $adminRole->revokePermissionTo($this->newPermissions);
         }
     }
-}
+};

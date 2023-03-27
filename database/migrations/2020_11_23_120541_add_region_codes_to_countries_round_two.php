@@ -4,7 +4,7 @@ use App\Models\Location;
 use Illuminate\Database\Migrations\Migration;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
-class AddRegionCodesToCountriesRoundTwo extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -290,4 +290,4 @@ class AddRegionCodesToCountriesRoundTwo extends Migration
     {
         // no need
     }
-}
+};

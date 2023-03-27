@@ -6,7 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCtInterventionsTable extends Migration
+return new class extends Migration
 {
     const CT_TABLE = 'clinicaltrials';
 
@@ -101,4 +101,4 @@ class CreateCtInterventionsTable extends Migration
             }
         });
     }
-}
+};

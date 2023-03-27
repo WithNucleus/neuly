@@ -4,7 +4,7 @@ use App\Models\Clinicaltrial;
 use Illuminate\Database\Migrations\Migration;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
-class DeleteExtraClinicalTrials extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -285,4 +285,4 @@ class DeleteExtraClinicalTrials extends Migration
 
         $output->writeln($success.' clinical trials successfully deleted'.' and '.$failed.' failed');
     }
-}
+};

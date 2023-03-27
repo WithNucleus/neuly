@@ -6,7 +6,7 @@ use App\Models\MediaItem;
 use App\Models\NewsArticle;
 use Illuminate\Database\Migrations\Migration;
 
-class MigrateAndRemoveOldNews extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -52,4 +52,4 @@ class MigrateAndRemoveOldNews extends Migration
     {
         //
     }
-}
+};

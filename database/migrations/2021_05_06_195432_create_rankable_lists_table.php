@@ -7,7 +7,7 @@ use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
 
-class CreateRankableListsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -52,4 +52,4 @@ class CreateRankableListsTable extends Migration
 
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
     }
-}
+};

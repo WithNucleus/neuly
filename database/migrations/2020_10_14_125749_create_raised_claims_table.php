@@ -7,7 +7,7 @@ use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
 
-class CreateRaisedClaimsTable extends Migration
+return new class extends Migration
 {
     const PERMISSION_MANAGE_CLAIMS = 'edit person claims';
 
@@ -68,4 +68,4 @@ class CreateRaisedClaimsTable extends Migration
         // Reset cached roles and permissions
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
     }
-}
+};
