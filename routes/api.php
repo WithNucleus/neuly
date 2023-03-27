@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\EntityDataController;
+use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\Api\BookableListingsController;
 use App\Http\Controllers\Api\ClinicaltrialsController;
 use App\Http\Controllers\Api\CompaniesController;
@@ -25,9 +27,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/api/entities/list/{alias}', 'EntityDataController@getEntitiesListByAlias')->name('api.entities.list.byAlias');
+Route::get('/api/entities/list/{alias}', [EntityDataController::class, 'getEntitiesListByAlias'])->name('api.entities.list.byAlias');
 
-Route::post('/feedback', 'FeedbackController@apiStore')->name('feedback.api.store');
+Route::post('/feedback', [FeedbackController::class, 'apiStore'])->name('feedback.api.store');
 
 Route::middleware('auth:api-users')->group(function () {
     Route::get('/user', [OauthController::class, 'getUser']);
