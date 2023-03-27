@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\App;
 use Illuminate\Support\Facades\Route;
 
 // --------------------------
@@ -9,8 +8,15 @@ use Illuminate\Support\Facades\Route;
 // This route file is loaded automatically by Backpack\Base.
 // Routes you generate using Backpack\Generators will be placed here.
 
-Route::prefix(config('backpack.base.route_prefix', 'admin'))->middleware(config('backpack.base.web_middleware', 'web'), config('backpack.base.middleware_key', 'admin'))->group(function () { // custom admin routes
-Route::crud('company', 'CompanyCrudController');
+Route::group([
+    'prefix'     => config('backpack.base.route_prefix', 'admin'),
+    'middleware' => array_merge(
+        (array) config('backpack.base.web_middleware', 'web'),
+        (array) config('backpack.base.middleware_key', 'admin')
+    ),
+    'namespace'  => 'App\Http\Controllers\Admin',
+], function () { // custom admin routes
+    Route::crud('company', 'CompanyCrudController');
     Route::crud('companybranch', 'CompanyBranchCrudController');
     Route::crud('focus', 'FocusCrudController');
     Route::crud('person', 'PersonCrudController');
@@ -48,10 +54,10 @@ Route::crud('company', 'CompanyCrudController');
     Route::crud('api-user', 'ApiUserCrudController');
     Route::crud('embeddable-search-widget', 'EmbeddableSearchWidgetCrudController');
 
-    Route::crud('ct_condition', 'CtConditionCrudController');
-    Route::crud('ct_intervention', 'CtInterventionCrudController');
-    Route::crud('ct_outcome_measure', 'CtOutcomeMeasureCrudController');
-    Route::crud('ct_study_design', 'CtStudyDesignCrudController');
+    Route::crud('ct_condition', 'ClinicalTrialDetails\CtConditionCrudController');
+    Route::crud('ct_intervention', 'ClinicalTrialDetails\CtInterventionCrudController');
+    Route::crud('ct_outcome_measure', 'ClinicalTrialDetails\CtOutcomeMeasureCrudController');
+    Route::crud('ct_study_design', 'ClinicalTrialDetails\CtStudyDesignCrudController');
 
     Route::name('admin.')->group(function () {
         Route::crud('listingrequest', 'ListingRequestCrudController');
@@ -66,16 +72,16 @@ Route::crud('company', 'CompanyCrudController');
     // imports group
     Route::prefix('import')->name('admin.import.')->middleware('permission:import')->group(function () {
         Route::prefix('clinicaltrial')->name('clinicaltrial.')->group(function () {
-            Route::crud('parsing', 'ParsingController');
+            Route::crud('parsing', 'Import\ClinicalTrial\ParsingController');
             Route::post('parsing/bulkImport', [App\Http\Controllers\Admin\Import\ClinicalTrial\ParsingController::class, 'bulkImport'])->name('parsing.bulkImport');
-            Route::crud('parsing-results', 'ParsingResultsController');
+            Route::crud('parsing-results', 'Import\ClinicalTrial\ParsingResultsController');
             Route::get('parsing-results/{id}/approve', [App\Http\Controllers\Admin\Import\ClinicalTrial\ParsingResultsController::class, 'approve'])->name('parsing-results.approve');
         });
 
         Route::prefix('company')->name('company.')->group(function () {
-            Route::crud('serpapi', 'SerpapiController');
+            Route::crud('serpapi', 'Import\Company\SerpapiController');
             Route::post('serpapi/bulkImport', [App\Http\Controllers\Admin\Import\Company\SerpapiController::class, 'bulkImport'])->name('serpapi.bulkImport');
-            Route::crud('serpapi-data', 'SerpapiDataController');
+            Route::crud('serpapi-data', 'Import\Company\SerpapiDataController');
             Route::get('serpapi-data/{id}/mark-as-reviewed', [App\Http\Controllers\Admin\Import\Company\SerpapiDataController::class, 'markAsReviewed'])->name('serpapi-data.markAsReviewed');
             Route::get('serpapi-data/{id}/review', [App\Http\Controllers\Admin\Import\Company\SerpapiDataController::class, 'review'])->name('serpapi-data.review');
             Route::post('serpapi-data/{id}/review', [App\Http\Controllers\Admin\Import\Company\SerpapiDataController::class, 'reviewSubmit']);
@@ -86,6 +92,7 @@ Route::crud('company', 'CompanyCrudController');
             Route::post('/process', [App\Http\Controllers\Admin\Import\PeopleController::class, 'process'])->name('process');
         });
     });
+
     Route::crud('patent', 'PatentCrudController');
 
     Route::middleware('permission:view logs')->group(function () {
@@ -94,4 +101,11 @@ Route::crud('company', 'CompanyCrudController');
 
     Route::crud('oauth-clients', 'OauthClientsCrudController');
     Route::crud('oauth-access-token', 'OauthAccessTokenCrudController');
+
+    Route::middleware('permission:import')->group(function () {
+        Route::crud('datafeed', 'DataFeedCrudController');
+        Route::crud('media-item', 'MediaItemCrudController');
+        Route::crud('metric', 'MetricCrudController');
+        Route::crud('course', 'CourseCrudController');
+    });
 }); // this should be the absolute last line of this file

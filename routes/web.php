@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Auth;
 use App\Http\Controllers\Content;
 use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Dashboard\TeamController;
@@ -8,7 +7,6 @@ use App\Http\Controllers\Enterprise;
 use App\Http\Controllers\ExternalScriptController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\Index;
-use App\Http\Controllers\index;
 use App\Http\Controllers\Index\UserOauthController;
 use App\Http\Controllers\Insights;
 use App\Http\Controllers\InvitationController;
@@ -29,12 +27,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('firewall.all')->group(function () {
     Auth::routes(['verify' => true]);
-    Route::get('login/{provider}', [Auth\LoginController::class, 'redirectToProvider'])->name('login.social');
-    Route::get('login/{provider}/callback', [Auth\LoginController::class, 'handleProviderCallback']);
+    Route::get('login/{provider}', [App\Http\Controllers\Auth\LoginController::class, 'redirectToProvider'])->name('login.social');
+    Route::get('login/{provider}/callback', [App\Http\Controllers\Auth\LoginController::class, 'handleProviderCallback']);
 });
 
 //TODO seems this method is not used anymore, check and remove
-Route::get('/register/success', [Auth\MessagesController::class, 'registerSuccess'])->name('register.success');
+Route::get('/register/success', [App\Http\Controllers\Auth\MessagesController::class, 'registerSuccess'])->name('register.success');
 
 Route::get('/invitation', [InvitationController::class, 'show'])->name('invitation.show');
 Route::post('/invitation', [InvitationController::class, 'accept'])->name('invitation.accept');

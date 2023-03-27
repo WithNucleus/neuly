@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Backpack;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('firewall.all', config('backpack.base.web_middleware', 'web'))->prefix(config('backpack.base.route_prefix'))->group(function () {
+Route::middleware(['firewall.all', config('backpack.base.web_middleware', 'web')])->prefix(config('backpack.base.route_prefix'))->group(function () {
     // if not otherwise configured, setup the auth routes
     if (config('backpack.base.setup_auth_routes')) {
         // Authentication Routes...

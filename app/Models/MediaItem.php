@@ -7,6 +7,7 @@ use App\Models\Traits\HasMediaTypes;
 use App\Models\Traits\SearchableEntity;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class MediaItem extends Model
@@ -123,4 +124,10 @@ class MediaItem extends Model
     | MUTATORS
     |--------------------------------------------------------------------------
     */
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->useLogName(self::$logName);
+    }
 }
