@@ -10,7 +10,7 @@ use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
  * Class CompanyBranchCrudController
- * @package App\Http\Controllers\Admin
+ *
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
 class CompanyBranchCrudController extends CrudController
@@ -28,12 +28,12 @@ class CompanyBranchCrudController extends CrudController
      */
     public function setup()
     {
-        if(!backpack_user()->can('edit companies')) {
+        if (! backpack_user()->can('edit companies')) {
             abort(404);
         }
 
         CRUD::setModel(\App\Models\CompanyBranch::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/companybranch');
+        CRUD::setRoute(config('backpack.base.route_prefix').'/companybranch');
         CRUD::setEntityNameStrings('Company Branch', 'Company Branches');
     }
 
@@ -41,6 +41,7 @@ class CompanyBranchCrudController extends CrudController
      * Define what happens when the List operation is loaded.
      *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
+     *
      * @return void
      */
     protected function setupListOperation()
@@ -49,24 +50,24 @@ class CompanyBranchCrudController extends CrudController
             'name' => 'company_id',
             'type' => 'relationship',
             'label' => 'Company',
-            'entity'    => 'company',
+            'entity' => 'company',
             'attribute' => 'name',
-            'model'     => Company::class,
+            'model' => Company::class,
         ]);
 
         $this->crud->addColumn([
             'name' => 'location_id',
             'type' => 'relationship',
             'label' => 'Location',
-            'entity'    => 'location',
+            'entity' => 'location',
             'attribute' => 'name',
-            'model'     => Location::class,
+            'model' => Location::class,
         ]);
 
         $this->crud->addColumn([
             'name' => 'phone',
             'type' => 'phone',
-            'label' => 'Phone'
+            'label' => 'Phone',
         ]);
     }
 
@@ -74,6 +75,7 @@ class CompanyBranchCrudController extends CrudController
      * Define what happens when the Show operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-show
+     *
      * @return void
      */
     protected function setupShowOperation()
@@ -85,6 +87,7 @@ class CompanyBranchCrudController extends CrudController
      * Define what happens when the Create operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-create
+     *
      * @return void
      */
     protected function setupCreateOperation()
@@ -92,25 +95,25 @@ class CompanyBranchCrudController extends CrudController
         CRUD::setValidation(CompanyBranchRequest::class);
 
         $this->crud->addField([
-            'label'     => "Organization",
-            'type'      => 'select2',
-            'name'      => 'company_id',
-            'entity'    => 'company',
-            'model'     => "App\Models\Company",
+            'label' => 'Organization',
+            'type' => 'select2',
+            'name' => 'company_id',
+            'entity' => 'company',
+            'model' => "App\Models\Company",
             'attribute' => 'name',
-            'options'   => (function ($query) {
+            'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
         ]);
 
         $this->crud->addField([
-            'label'     => "Location",
-            'type'      => 'select2',
-            'name'      => 'location_id',
-            'entity'    => 'location',
-            'model'     => "App\Models\Location",
+            'label' => 'Location',
+            'type' => 'select2',
+            'name' => 'location_id',
+            'entity' => 'location',
+            'model' => "App\Models\Location",
             'attribute' => 'name',
-            'options'   => (function ($query) {
+            'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
         ]);
@@ -118,25 +121,25 @@ class CompanyBranchCrudController extends CrudController
         $this->crud->addField([
             'name' => 'address',
             'type' => 'text',
-            'label' => 'Address'
+            'label' => 'Address',
         ]);
 
         $this->crud->addField([
             'name' => 'address2',
             'type' => 'text',
-            'label' => 'Address Line 2'
+            'label' => 'Address Line 2',
         ]);
 
         $this->crud->addField([
             'name' => 'phone',
             'type' => 'text',
-            'label' => 'Phone'
+            'label' => 'Phone',
         ]);
 
         $this->crud->addField([
             'name' => 'hours',
             'type' => 'text',
-            'label' => 'Hours'
+            'label' => 'Hours',
         ]);
 
         /**
@@ -150,6 +153,7 @@ class CompanyBranchCrudController extends CrudController
      * Define what happens when the Update operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
+     *
      * @return void
      */
     protected function setupUpdateOperation()

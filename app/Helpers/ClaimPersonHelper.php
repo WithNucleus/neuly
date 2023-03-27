@@ -10,8 +10,6 @@ use App\User;
 class ClaimPersonHelper
 {
     /**
-     * @param \App\User $user
-     * @param \App\Models\Person $person
      * @return bool
      */
     public static function checkByEmail(User $user, Person $person)
@@ -26,8 +24,6 @@ class ClaimPersonHelper
     }
 
     /**
-     * @param \App\User $user
-     * @param \App\Models\Person $person
      * @return false
      */
     public static function checkBySocials(User $user, Person $person)
@@ -46,8 +42,6 @@ class ClaimPersonHelper
     }
 
     /**
-     * @param \App\User $user
-     * @param \App\Models\Person $person
      * @return bool
      */
     public static function canBeAutoClaimed(User $user, Person $person)
@@ -55,11 +49,6 @@ class ClaimPersonHelper
         return self::checkByEmail($user, $person) || self::checkBySocials($user, $person);
     }
 
-    /**
-     * @param \App\User $user
-     * @param \App\Models\Person $person
-     * @param \App\Models\RaisedClaim|null $claim
-     */
     public static function acceptClaim(User $user, Person $person, RaisedClaim $claim = null)
     {
         $person->user_id = $user->id;

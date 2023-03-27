@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Models\Company;
+use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 
 class updateCompanySlugs extends Command
@@ -43,7 +43,6 @@ class updateCompanySlugs extends Command
         $companies = Company::whereNull('slug')->take(20)->get();
 
         foreach ($companies as $company) {
-
             // Get Name
             $name = $company->name;
 
@@ -55,7 +54,7 @@ class updateCompanySlugs extends Command
             $company->update();
 
             // Print Info
-            $this->info('Updated slug for ' . $company->name);
+            $this->info('Updated slug for '.$company->name);
         }
     }
 }

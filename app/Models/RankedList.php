@@ -16,6 +16,7 @@ class RankedList extends Model
     */
 
     protected $table = 'ranked_lists';
+
     protected $guarded = ['id'];
 
     /*

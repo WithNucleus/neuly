@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Enterprise;
 
 use App\Http\Controllers\Controller;
 use App\Models\Clinicaltrial;
-use App\Models\ClinicaltrialPhase;
 use App\Models\Company;
 use App\Models\Dashboard;
 use App\Models\Event;
@@ -43,7 +42,7 @@ class DashboardController extends Controller
             'patents' => 'Patents',
             'clinical-trials' => 'Clinical Trials',
             'leading-companies-clinical-trials' => 'Most Trials by Organization',
-            'clinical-trials-completed' => 'Completed Trials'
+            'clinical-trials-completed' => 'Completed Trials',
         ],
         [
             'chart-organizations-focus' => 'Organizations by Focus',
@@ -54,22 +53,22 @@ class DashboardController extends Controller
             'chart-investments-by-focus' => 'Organization Investments by Focus',
             'chart-clinical-trials-focus' => 'Clinical Trials per Compound',
             'chart-clinical-trials-locations' => 'Location of Trials ',
-        ]
+        ],
     ];
 
     private array $defaultWidgetColumns = [
         [
             'name' => 'news',
-            'size' => 'medium'
+            'size' => 'medium',
         ],
         [
             'name' => 'research',
-            'size' => 'medium'
+            'size' => 'medium',
         ],
         [
             'name' => 'charts',
-            'size' => 'large'
-        ]
+            'size' => 'large',
+        ],
     ];
 
     public function index(): \Illuminate\Contracts\View\View
@@ -103,12 +102,12 @@ class DashboardController extends Controller
             $dashboard->save();
             $response = [
                 'status' => 'success',
-                'message' => 'Saved widget order'
+                'message' => 'Saved widget order',
             ];
         } else {
             $response = [
                 'status' => 'error',
-                'message' => 'Could not find your dashboard'
+                'message' => 'Could not find your dashboard',
             ];
         }
 
@@ -120,10 +119,10 @@ class DashboardController extends Controller
         $widgetName = $request->input('name');
         $widgetLabel = $request->input('label');
 
-        return View::make("enterprise.widgets._template")
+        return View::make('enterprise.widgets._template')
             ->with([
                 'widgetName' => $widgetName,
-                'widgetLabel' => $widgetLabel
+                'widgetLabel' => $widgetLabel,
             ])
             ->render();
     }
@@ -149,9 +148,9 @@ class DashboardController extends Controller
             ->jsonPaginate($maxResults)
             ->appends(request()->query());
 
-        return View::make("enterprise.widgets.combined-feed")
+        return View::make('enterprise.widgets.combined-feed')
             ->with([
-                'feed' => $feed
+                'feed' => $feed,
             ])
             ->render();
     }
@@ -170,22 +169,22 @@ class DashboardController extends Controller
             ->take(3)
             ->get();
 
-        return View::make("enterprise.widgets.follows")
+        return View::make('enterprise.widgets.follows')
             ->with([
                 'followLists' => $followLists,
-                'follows' => $follows
+                'follows' => $follows,
             ])
             ->render();
     }
 
-    public function userNotesWidget (): string
+    public function userNotesWidget(): string
     {
         $notes = MemberNote::where('user_id', Auth::id())
             ->orderBy('updated_at', 'desc')
             ->take(5)
             ->get();
 
-        return View::make("enterprise.widgets.notes")
+        return View::make('enterprise.widgets.notes')
             ->with([
                 'notes' => $notes,
             ])
@@ -209,7 +208,7 @@ class DashboardController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return View::make("enterprise.widgets.recently-viewed")
+        return View::make('enterprise.widgets.recently-viewed')
             ->with([
                 'recently_viewed' => $recently_viewed,
             ])
@@ -227,7 +226,7 @@ class DashboardController extends Controller
             $team = $user->team()->with(['members', 'owner'])->first();
         }
 
-        return View::make("enterprise.widgets.team")
+        return View::make('enterprise.widgets.team')
             ->with([
                 'user' => $user,
                 'team' => $team,
@@ -244,12 +243,12 @@ class DashboardController extends Controller
             ->with([
                 'companies',
                 'people',
-                'focus'
+                'focus',
             ])->allowedSorts([
                 'name',
                 'priority_date',
                 'granted_date',
-                'expiration_date'
+                'expiration_date',
             ])
             ->allowedFilters([
                 'status',
@@ -263,10 +262,10 @@ class DashboardController extends Controller
 
         $focusList = Focus::whereHas('patents')->orderBy('name')->pluck('name', 'slug')->toArray();
 
-        return View::make("enterprise.widgets.patents")
+        return View::make('enterprise.widgets.patents')
             ->with([
                 'patents' => $patents,
-                'focusList' => $focusList
+                'focusList' => $focusList,
             ])
             ->render();
     }
@@ -280,10 +279,10 @@ class DashboardController extends Controller
             ->with([
                 'companies',
                 'people',
-                'focus'
+                'focus',
             ])->allowedSorts([
                 'title',
-                'start_date'
+                'start_date',
             ])
             ->allowedFilters([
                 'status',
@@ -297,10 +296,10 @@ class DashboardController extends Controller
 
         $focusList = Focus::whereHas('clinicaltrials')->orderBy('name')->pluck('name', 'slug')->toArray();
 
-        return View::make("enterprise.widgets.clinical-trials")
+        return View::make('enterprise.widgets.clinical-trials')
             ->with([
                 'clinicalTrials' => $clinicalTrials,
-                'focusList' => $focusList
+                'focusList' => $focusList,
             ])
             ->render();
     }
@@ -333,7 +332,7 @@ class DashboardController extends Controller
         $companies = Company::whereHas('jobs')->get()->pluck('name')->unique()->sort();
         $investors = Investor::whereHas('jobs')->get()->pluck('name')->unique()->sort();
 
-        return View::make("enterprise.widgets.jobs")
+        return View::make('enterprise.widgets.jobs')
             ->with([
                 'jobs' => $jobs,
             ])
@@ -364,7 +363,7 @@ class DashboardController extends Controller
             ->paginate($maxResults)
             ->appends(request()->query());
 
-        return View::make("enterprise.widgets.events")
+        return View::make('enterprise.widgets.events')
             ->with([
                 'events' => $events,
             ])
@@ -380,11 +379,11 @@ class DashboardController extends Controller
             'clinicaltrials' => Clinicaltrial::class,
             'patents' => Patent::class,
             'mediaItems' => MediaItem::class,
-            'focus' => Focus::class
+            'focus' => Focus::class,
         ];
 
         $allowedFields = [
-            'media_type'
+            'media_type',
         ];
 
         if ($search === 'mediaItems') {
@@ -401,13 +400,12 @@ class DashboardController extends Controller
 
         $filterValues = array_change_key_case($query->toArray(), CASE_LOWER);
 
-        return View::make("enterprise.widget-controls.filters.checkbox")
+        return View::make('enterprise.widget-controls.filters.checkbox')
             ->with([
-                'className' => $search . '-' . $for,
+                'className' => $search.'-'.$for,
                 'filterValues' => $filterValues,
             ])
             ->render();
-
     }
 
     private function getUserDashboard(): Dashboard
@@ -417,7 +415,7 @@ class DashboardController extends Controller
 
         if ($dashboard === null) {
             $dashboard = new Dashboard([
-                'name' => 'Primary'
+                'name' => 'Primary',
             ]);
             $user->dashboards()->save($dashboard);
         }
@@ -460,10 +458,10 @@ class DashboardController extends Controller
 
         $companies = QueryBuilder::for(Company::class)
             ->with([
-                'focus'
+                'focus',
             ])
             ->withCount([
-                'clinicaltrials'
+                'clinicaltrials',
             ])
             ->allowedFilters([
                 AllowedFilter::partial('focus', 'clinicaltrials.focus.id'),
@@ -474,7 +472,7 @@ class DashboardController extends Controller
 
         $filterFocus = Focus::whereHas('clinicaltrials')->get()->pluck('name', 'id')->toArray();
 
-        return View::make("enterprise.widgets.leading-companies-clinical-trials")->with([
+        return View::make('enterprise.widgets.leading-companies-clinical-trials')->with([
             'companies' => $companies,
             'filterFocus' => $filterFocus,
             'filteredFocus' => $filteredFocus,
@@ -509,7 +507,7 @@ class DashboardController extends Controller
 
         $filterFocus = Focus::whereHas('clinicaltrials')->get()->pluck('name', 'id')->toArray();
 
-        return View::make("enterprise.widgets.clinical-trials-completed")->with([
+        return View::make('enterprise.widgets.clinical-trials-completed')->with([
             'clinicalTrials' => $clinicalTrials,
             'totalCompleted' => $totalCompleted,
             'filterFocus' => $filterFocus,
@@ -517,5 +515,4 @@ class DashboardController extends Controller
             'pageSize' => $pageSize,
         ])->render();
     }
-
 }

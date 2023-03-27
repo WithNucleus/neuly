@@ -9,7 +9,6 @@ use App\Models\NavigationTileItem;
 
 class NavigationTileItemController extends Controller
 {
-
     /**
      * Stores a newly created Navigation Tile Link
      */
@@ -27,7 +26,8 @@ class NavigationTileItemController extends Controller
         }
 
         $navItem = NavigationTileItem::create($attributes);
-        return redirect()->route('admin.nav-tiles.edit', $id)->with('navigationTileItemSuccess', 'Added ' . $navItem->name . '!');
+
+        return redirect()->route('admin.nav-tiles.edit', $id)->with('navigationTileItemSuccess', 'Added '.$navItem->name.'!');
     }
 
     /**
@@ -43,13 +43,13 @@ class NavigationTileItemController extends Controller
             $navItem->update($request->all());
 
             if ($type == 'title') {
-                $navItem->url = NULL;
-                $navItem->badge = NULL;
+                $navItem->url = null;
+                $navItem->badge = null;
                 $navItem->save();
             }
         }
 
-        return redirect()->route('admin.nav-tiles.edit', $navItem->navigationTile->id)->with('navItemsSuccess', 'Updated ' . $navItem->name . '!');
+        return redirect()->route('admin.nav-tiles.edit', $navItem->navigationTile->id)->with('navItemsSuccess', 'Updated '.$navItem->name.'!');
     }
 
     /**
@@ -59,7 +59,7 @@ class NavigationTileItemController extends Controller
     {
         $response = [
             'status' => 'success',
-            'message' => 'Deleted'
+            'message' => 'Deleted',
         ];
 
         $navItem = NavigationTileItem::find($id);

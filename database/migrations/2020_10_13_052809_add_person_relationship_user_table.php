@@ -13,14 +13,14 @@ class AddPersonRelationshipUserTable extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint  $table) {
-           $table->unsignedBigInteger('person_id')->nullable(true);
+        Schema::table('users', function (Blueprint $table) {
+            $table->unsignedBigInteger('person_id')->nullable(true);
 
-           $table->foreign('person_id')
-               ->references('id')
-               ->on('people')
-               ->onUpdate('cascade')
-               ->onDelete('cascade');
+            $table->foreign('person_id')
+                ->references('id')
+                ->on('people')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 
@@ -32,9 +32,9 @@ class AddPersonRelationshipUserTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-           $table->dropForeign(['person_id']);
+            $table->dropForeign(['person_id']);
         });
-        Schema::table('users', function (Blueprint  $table) {
+        Schema::table('users', function (Blueprint $table) {
             $table->dropColumn('person_id');
         });
     }

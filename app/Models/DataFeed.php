@@ -21,15 +21,17 @@ class DataFeed extends Model
     */
 
     protected $table = 'data_feeds';
+
     protected $guarded = ['id'];
 
     protected static $logUnguarded = true;
+
     protected static $logName = 'entities';
 
     const FEED_TYPE_RSS = 'RSS';
 
     const FEED_TYPES = [
-        self::FEED_TYPE_RSS
+        self::FEED_TYPE_RSS,
     ];
 
     const SOURCE_GOOGLE_ALERT = 'Google Alert';
@@ -42,10 +44,11 @@ class DataFeed extends Model
         'Video',
         'Mindfulness',
         self::SOURCE_GOOGLE_ALERT,
-        'Podcast'
+        'Podcast',
     ];
 
     const STATUS_ACTIVE = 'Active';
+
     const STATUS_INACTIVE = 'Inactive';
 
     const STATUSES = [
@@ -55,7 +58,7 @@ class DataFeed extends Model
 
     const AUTO_APPROVAL_VALUES = [
         'No',
-        'Yes'
+        'Yes',
     ];
 
     /*

@@ -12,7 +12,9 @@ class ListingRequest extends Model
     use CrudTrait;
 
     const STATUS_OPEN = 'open';
+
     const STATUS_ACCEPTED = 'accepted';
+
     const STATUS_DECLINED = 'declined';
 
     /*
@@ -22,6 +24,7 @@ class ListingRequest extends Model
     */
 
     protected $table = 'listing_requests';
+
     protected $guarded = ['id'];
 
     protected $casts = ['entity_data' => 'object'];

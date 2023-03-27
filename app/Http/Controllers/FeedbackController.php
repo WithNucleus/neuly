@@ -22,7 +22,6 @@ class FeedbackController extends Controller
     }
 
     /**
-     * @param \App\Http\Requests\FeedbackRequest $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function store(FeedbackRequest $request)
@@ -33,7 +32,6 @@ class FeedbackController extends Controller
     }
 
     /**
-     * @param \App\Http\Requests\FeedbackApiRequest $request
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function apiStore(FeedbackApiRequest $request)
@@ -44,18 +42,17 @@ class FeedbackController extends Controller
     }
 
     /**
-     * @param $requestData
      * @return \App\Models\Feedback
      */
     private function storeFeedback($requestData)
     {
-        $feedback          = new Feedback();
-        $feedback->title   = $requestData['title'];
-        $feedback->type    = $requestData['type'];
+        $feedback = new Feedback();
+        $feedback->title = $requestData['title'];
+        $feedback->type = $requestData['type'];
         $feedback->content = $requestData['content'];
 
-        if (!Auth::user()) {
-            $feedback->user_name  = $requestData['user_name'];
+        if (! Auth::user()) {
+            $feedback->user_name = $requestData['user_name'];
             $feedback->user_email = $requestData['user_email'];
         } else {
             $feedback->user_id = Auth::user()->id;
@@ -84,12 +81,12 @@ class FeedbackController extends Controller
         $demoRequest = new Feedback();
         $demoRequest->organization = $requestData['organization'];
         $demoRequest->job_title = $requestData['job_title'];
-        $demoRequest->type    = Feedback::TYPE_DEMO_REQUEST;
-        $demoRequest->title = 'Demo Request - ' . $requestData['organization'];
+        $demoRequest->type = Feedback::TYPE_DEMO_REQUEST;
+        $demoRequest->title = 'Demo Request - '.$requestData['organization'];
         $demoRequest->content = $requestData['content'];
 
-        if (!Auth::user()) {
-            $demoRequest->user_name  = $requestData['name'];
+        if (! Auth::user()) {
+            $demoRequest->user_name = $requestData['name'];
             $demoRequest->user_email = $requestData['email'];
         } else {
             $demoRequest->user_id = Auth::id();

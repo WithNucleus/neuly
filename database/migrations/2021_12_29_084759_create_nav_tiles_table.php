@@ -56,7 +56,7 @@ class CreateNavTilesTable extends Migration
      */
     public function down()
     {
-        Permission::whereIn('name' , $this->newPermissions)->delete();
+        Permission::whereIn('name', $this->newPermissions)->delete();
 
         $adminRole = Role::where('name', 'Admin')->first();
 

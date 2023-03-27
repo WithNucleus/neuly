@@ -24,7 +24,6 @@ class FixCompaniesAndJobsEnumValues extends Migration
             DB::table('companies')
                 ->where('ownership', (string) $wrongValue)
                 ->update(['ownership' => $correctValue]);
-
         }
 
         $jobEmploymentTypeValuesToFix = [

@@ -24,8 +24,9 @@ class UserPasswordController extends Controller
         $user = Auth::user();
         $password = $request->input('password');
 
-        if (!$validateUserHandler->execute($password, $user->password)) {
+        if (! $validateUserHandler->execute($password, $user->password)) {
             Session::flash('error', 'Request validation failed. Please try again.');
+
             return redirect(route('user.settings.password'));
         }
 

@@ -10,8 +10,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class SendEmailNotifications implements ShouldQueue
@@ -43,8 +41,7 @@ class SendEmailNotifications implements ShouldQueue
                 return [$item->user_id => $item];
             });
 
-        foreach($notificationsByUser as $userId => $notifications)
-        {
+        foreach ($notificationsByUser as $userId => $notifications) {
             $user = User::find($userId);
 
             Mail::mailer(config('mail.notification'))

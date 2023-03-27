@@ -14,7 +14,7 @@ trait EntityImage
     public function getEntityImageUrlAttribute()
     {
         return $this->{self::$imageAttribute} ?
-            Storage::url(self::$imageFolderPath . DIRECTORY_SEPARATOR . $this->{self::$imageAttribute}) : null;
+            Storage::url(self::$imageFolderPath.DIRECTORY_SEPARATOR.$this->{self::$imageAttribute}) : null;
     }
 
     /**
@@ -41,16 +41,16 @@ trait EntityImage
      */
     public static function getImageUrlPrefix()
     {
-        return DIRECTORY_SEPARATOR . 'storage' . DIRECTORY_SEPARATOR . self::$imageFolderPath . DIRECTORY_SEPARATOR;
+        return DIRECTORY_SEPARATOR.'storage'.DIRECTORY_SEPARATOR.self::$imageFolderPath.DIRECTORY_SEPARATOR;
     }
 
     /**
-     * @param string|null $imageValue
+     * @param  string|null  $imageValue
      */
     private function updateImageAttribute($imageValue)
     {
-        $diskName        = 'public';
-        $attributeName   = self::$imageAttribute;
+        $diskName = 'public';
+        $attributeName = self::$imageAttribute;
         $currentFilename = $this->{$attributeName};
 
         // image not changed
@@ -60,7 +60,7 @@ trait EntityImage
 
         // remove old image file
         if ($currentFilename) {
-            $oldImagePath = self::$imageFolderPath . DIRECTORY_SEPARATOR . $currentFilename;
+            $oldImagePath = self::$imageFolderPath.DIRECTORY_SEPARATOR.$currentFilename;
 
             Storage::disk($diskName)->delete($oldImagePath);
         }
@@ -68,12 +68,13 @@ trait EntityImage
         // image was erased or set to empty
         if (empty($imageValue)) {
             $this->attributes[$attributeName] = null;
+
             return;
         }
 
         // new image uploaded
-        $imageFilename = Str::slug($this->{self::$imageFilenameAttribute}) . '.png';
-        $imagePath     = self::$imageFolderPath . DIRECTORY_SEPARATOR . $imageFilename;
+        $imageFilename = Str::slug($this->{self::$imageFilenameAttribute}).'.png';
+        $imagePath = self::$imageFolderPath.DIRECTORY_SEPARATOR.$imageFilename;
 
         if (Str::startsWith($imageValue, 'data:image')) {
             // uploaded via backpack's CRUD
@@ -82,7 +83,7 @@ trait EntityImage
             Storage::disk($diskName)->put($imagePath, $image->stream());
         } elseif ($imageValue !== $currentFilename) {
             // new image assigned from 'entity merge' or 'listing request'
-            $addedImagePath = self::$imageFolderPath . DIRECTORY_SEPARATOR . $imageValue;
+            $addedImagePath = self::$imageFolderPath.DIRECTORY_SEPARATOR.$imageValue;
 
             if (Storage::disk($diskName)->exists($imagePath)) {
                 Storage::disk($diskName)->delete($imagePath);

@@ -2,7 +2,6 @@
 
 namespace App\Jobs\Import;
 
-use App\Helpers\EntityHelper;
 use App\Models\Contracts\EntityImageContract;
 use App\Models\ImportFailure;
 use App\Models\ImportResult;
@@ -57,18 +56,18 @@ class BatchImageUpload implements ShouldQueue
 
     /**
      * ProcessLocation constructor.
-     * @param \App\Models\ImportResult $importResult
-     * @param string $entityClass
-     * @param int $entityId
-     * @param string $imageFilename
+     *
+     * @param  string  $entityClass
+     * @param  int  $entityId
+     * @param  string  $imageFilename
      *
      * @throws \Exception
      */
     public function __construct(ImportResult $importResult, $entityClass, $entityId, $imageFilename)
     {
-        $this->importResult  = $importResult;
+        $this->importResult = $importResult;
         $this->imageFilename = $imageFilename;
-        $this->entity        = $entityClass::find($entityId);
+        $this->entity = $entityClass::find($entityId);
 
         if ($this->entity === null) {
             $message = "Entity '$entityClass' with ID $entityId not found.";
@@ -77,7 +76,7 @@ class BatchImageUpload implements ShouldQueue
         }
 
         if ($this->entity instanceof EntityImageContract === false) {
-            $message = "Entity '$entityClass' is not an instance of '" . EntityImageContract::class . "'." ;
+            $message = "Entity '$entityClass' is not an instance of '".EntityImageContract::class."'.";
             Log::error($message);
             throw new \Exception($message);
         }
@@ -97,13 +96,14 @@ class BatchImageUpload implements ShouldQueue
             $imageContent = $diskUpload->get($this->imageFilename);
         } catch (FileNotFoundException $e) {
             $this->addFailedRecord();
+
             return false;
         }
 
-        $entityImageField  = $this->imageSettings['field'];
+        $entityImageField = $this->imageSettings['field'];
         $entityImageFolder = $this->imageSettings['folder'];
         $imageExtension = File::extension($this->imageFilename);
-        $newImageValue  = $entityImageFolder .  DIRECTORY_SEPARATOR . uniqid() . '.' . $imageExtension;
+        $newImageValue = $entityImageFolder.DIRECTORY_SEPARATOR.uniqid().'.'.$imageExtension;
 
         if ($this->entity->{$entityImageField}) {
             $diskPublic->delete($this->entity->{$entityImageField});
@@ -123,16 +123,15 @@ class BatchImageUpload implements ShouldQueue
     private function addFailedRecord()
     {
         $record = [
-            'target_id'    => $this->entity->id,
+            'target_id' => $this->entity->id,
             'target_class' => get_class($this->entity),
-            'import_value' => $this->imageFilename
+            'import_value' => $this->imageFilename,
         ];
 
         ImportFailure::create([
             'import_result_id' => $this->importResult->id,
-            'type'             => ImportFailure::TYPE_IMAGE,
-            'details'          => $record,
+            'type' => ImportFailure::TYPE_IMAGE,
+            'details' => $record,
         ]);
     }
-
 }

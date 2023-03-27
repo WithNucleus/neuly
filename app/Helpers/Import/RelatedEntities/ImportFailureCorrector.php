@@ -11,10 +11,7 @@ use Illuminate\Support\Facades\Validator;
 
 class ImportFailureCorrector
 {
-
     /**
-     * @param \App\Models\ImportFailure $importFailure
-     * @param array $requestArray
      * @return bool
      */
     public static function correctFailure(ImportFailure $importFailure, array $requestArray)
@@ -40,27 +37,27 @@ class ImportFailureCorrector
     /**
      * Update or create new Location entity from ImportFailure and attach to Clinicaltrial
      *
-     * @param \App\Models\ImportFailure $importFailure
-     * @param array $requestArray
+     * @param  \App\Models\ImportFailure  $importFailure
+     * @param  array  $requestArray
      * @return bool
      */
     private static function correctLocations($importFailure, $requestArray)
     {
-        $isSuccess   = false;
-        $targetId    = $importFailure->details['target_id'];
+        $isSuccess = false;
+        $targetId = $importFailure->details['target_id'];
         $targetClass = $importFailure->details['target_class'];
-        $modelClass  = $requestArray['model'];
-        $country     = null;
-        $region      = null;
-        $city        = null;
-        $locationId  = null;
+        $modelClass = $requestArray['model'];
+        $country = null;
+        $region = null;
+        $city = null;
+        $locationId = null;
 
         if (isset($requestArray['location_id'])) {
             $locationId = $requestArray['location_id'];
         } else {
             $country = $requestArray['country'];
-            $region  = $requestArray['region'];
-            $city    = $requestArray['city'];
+            $region = $requestArray['region'];
+            $city = $requestArray['city'];
         }
 
         try {
@@ -84,15 +81,15 @@ class ImportFailureCorrector
     }
 
     /**
-     * @param \App\Models\ImportFailure $importFailure
-     * @param array $requestArray
+     * @param  \App\Models\ImportFailure  $importFailure
+     * @param  array  $requestArray
      * @return bool
      */
     private static function correctPeopleOrganisation($importFailure, $requestArray)
     {
         $isSuccess = false;
-        $targetId  = $importFailure->details['target_id'];
-        $type      = $requestArray['type'];
+        $targetId = $importFailure->details['target_id'];
+        $type = $requestArray['type'];
 
         try {
             if ($type === 'create') {
@@ -108,7 +105,6 @@ class ImportFailureCorrector
                 $person->linkedin = isset($requestArray['linkedin']) ? $requestArray['linkedin'] : null;
 
                 $person->save();
-
             } elseif ($type === 'update') {
                 $person = Person::findOrFail($targetId);
 
@@ -134,13 +130,12 @@ class ImportFailureCorrector
             if (isset($requestArray['position']) && isset($requestArray['company_id'])) {
                 $person->companies()->syncWithoutDetaching([
                     $requestArray['company_id'] => [
-                        'position' => $requestArray['position']
-                    ]
+                        'position' => $requestArray['position'],
+                    ],
                 ]);
             }
 
             $isSuccess = true;
-
         } catch (\Throwable $exception) {
             self::logError($importFailure, $e);
         }
@@ -149,14 +144,14 @@ class ImportFailureCorrector
     }
 
     /**
-     * @param \App\Models\ImportFailure $importFailure
-     * @param \Throwable $exception
+     * @param  \App\Models\ImportFailure  $importFailure
+     * @param  \Throwable  $exception
      */
     private static function logError($importFailure, $exception)
     {
         Log::error(
-            "Unable to resolve ImportFailure [id = {$importFailure->id}, type = {$importFailure->type}].\n" .
-            "ErrorMessage: " . $exception->getMessage()
+            "Unable to resolve ImportFailure [id = {$importFailure->id}, type = {$importFailure->type}].\n".
+            'ErrorMessage: '.$exception->getMessage()
         );
     }
 }

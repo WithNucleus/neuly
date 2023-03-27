@@ -238,5 +238,5 @@ return [
     */
 
     'datepicker_input_format' => 'mm/dd/yyyy',
-    'date_format'             => 'm/d/Y',
+    'date_format' => 'm/d/Y',
 ];

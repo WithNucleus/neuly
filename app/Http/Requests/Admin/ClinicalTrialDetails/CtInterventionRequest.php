@@ -24,7 +24,7 @@ class CtInterventionRequest extends FormRequest
     public function rules()
     {
         return [
-            'value' => 'required|min:5|max:255|unique:ct_interventions,value,' . $this->get('id'),
+            'value' => 'required|min:5|max:255|unique:ct_interventions,value,'.$this->get('id'),
         ];
     }
 }

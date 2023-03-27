@@ -35,13 +35,12 @@ class QuarterlyMetrics extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
     public function handle(): int
     {
         $metric = Metric::where('date', Carbon::now()->format('Y-m-d'))->firstOrFail();
         MetricsChange::dispatch($metric, Metric::TYPE_CHANGE, Metric::FREQUENCY_QUARTERLY);
+
         return 0;
     }
 }

@@ -13,7 +13,6 @@ use Storage;
 
 class BackupController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware(['permission:view backups']);
@@ -21,7 +20,7 @@ class BackupController extends Controller
 
     public function index()
     {
-        if (!count(config('backup.backup.destination.disks'))) {
+        if (! count(config('backup.backup.destination.disks'))) {
             dd(trans('backpack::backup.no_disks_configured'));
         }
 
@@ -37,12 +36,12 @@ class BackupController extends Controller
                 // only take the zip files into account
                 if (substr($f, -4) == '.zip' && $disk->exists($f)) {
                     $this->data['backups'][] = [
-                        'file_path'     => $f,
-                        'file_name'     => str_replace('backups/', '', $f),
-                        'file_size'     => $disk->size($f),
+                        'file_path' => $f,
+                        'file_name' => str_replace('backups/', '', $f),
+                        'file_size' => $disk->size($f),
                         'last_modified' => $disk->lastModified($f),
-                        'disk'          => $disk_name,
-                        'download'      => ($adapter instanceof Local) ? true : false,
+                        'disk' => $disk_name,
+                        'download' => ($adapter instanceof Local) ? true : false,
                     ];
                 }
             }
@@ -80,9 +79,9 @@ class BackupController extends Controller
         try {
             Log::info('Backpack\BackupManager -- Called backup:run --only-db from admin interface');
 
-            Artisan::call('backup:run --only-db --filename=db_' . date('Y-m-d_H-i-s') . '.zip');
+            Artisan::call('backup:run --only-db --filename=db_'.date('Y-m-d_H-i-s').'.zip');
 
-            $output  = Artisan::output();
+            $output = Artisan::output();
             $message = $this->getResultMessage($output);
         } catch (Exception $e) {
             Log::error($e);
@@ -132,7 +131,7 @@ class BackupController extends Controller
     }
 
     /**
-     * @param string $output
+     * @param  string  $output
      * @return string
      */
     private function getResultMessage($output)
@@ -141,7 +140,7 @@ class BackupController extends Controller
             preg_match('/Backup failed because(.*?)$/ms', $output, $match);
             $message = "Backpack\BackupManager -- backup process failed because ";
             $message .= isset($match[1]) ? $match[1] : '';
-            Log::error($message . PHP_EOL . $output);
+            Log::error($message.PHP_EOL.$output);
         } else {
             $message = 'success';
             Log::info("Backpack\BackupManager -- backup process has started");

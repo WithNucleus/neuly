@@ -4,7 +4,6 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rule;
 
 class FeedbackDemoRequest extends FormRequest
 {
@@ -33,12 +32,12 @@ class FeedbackDemoRequest extends FormRequest
 
         $unauthedUserRules = [
             'name' => 'required',
-            'email' => 'required|email'
+            'email' => 'required|email',
         ];
 
         $rules = $generalRules;
 
-        if(!Auth::user()) {
+        if (! Auth::user()) {
             $rules = array_merge($unauthedUserRules, $generalRules);
         }
 

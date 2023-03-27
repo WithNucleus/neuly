@@ -10,18 +10,16 @@ class IFrameGuard
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
      * @return mixed
      */
     public function handle($request, Closure $next)
     {
         $response = $next($request);
 
-        if(config('http.enable_x_frame_options'))
-        {
+        if (config('http.enable_x_frame_options')) {
             $routeCurrent = \Route::current();
 
-            if(is_object($routeCurrent) && isset($routeCurrent->action['prefix']) && in_array($routeCurrent->action['prefix'], config('http.enable_x_frame_options_prefix'))) {
+            if (is_object($routeCurrent) && isset($routeCurrent->action['prefix']) && in_array($routeCurrent->action['prefix'], config('http.enable_x_frame_options_prefix'))) {
                 $response->headers->set('X-Frame-Options', 'ALLOW FROM '.$request->fullUrl(), false);
             } else {
                 $response->headers->set('X-Frame-Options', 'DENY', false);

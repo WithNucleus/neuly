@@ -14,9 +14,6 @@ class ListingRequestCreated extends Notification
      */
     public $listingRequest;
 
-    /**
-     * @param \App\Models\ListingRequest $listingRequest
-     */
     public function __construct(ListingRequest $listingRequest)
     {
         $this->listingRequest = $listingRequest;
@@ -50,7 +47,7 @@ class ListingRequestCreated extends Notification
     }
 
     /**
-     * @param mixed $notifiable
+     * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\SlackMessage
      */
     public function toSlack($notifiable)

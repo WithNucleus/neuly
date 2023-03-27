@@ -1,16 +1,16 @@
 <?php
 
 use App\Http\Controllers\Api\BookableListingsController;
-use App\Http\Controllers\Api\CompaniesController;
 use App\Http\Controllers\Api\ClinicaltrialsController;
+use App\Http\Controllers\Api\CompaniesController;
 use App\Http\Controllers\Api\EventsController;
 use App\Http\Controllers\Api\InvestorsController;
 use App\Http\Controllers\Api\JobsController;
 use App\Http\Controllers\Api\MediaItemsController;
 use App\Http\Controllers\Api\PeopleController;
 use App\Http\Controllers\Api\ResearchController;
-use App\Http\Controllers\Api\UsersController;
 use App\Http\Controllers\Api\UserRolesController;
+use App\Http\Controllers\Api\UsersController;
 use App\Http\Controllers\Auth\OauthController;
 use Illuminate\Support\Facades\Route;
 
@@ -93,4 +93,3 @@ Route::group([
 //    Route::post('/bookable-listings', [BookableListingsController::class, 'create']);
 //    Route::put('/bookable-listings/{id}', [BookableListingsController::class, 'update']);
 });
-

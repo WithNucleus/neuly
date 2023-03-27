@@ -14,6 +14,7 @@ class DuplicateMediaItem extends Notification
     use Queueable;
 
     protected MediaItem $mediaItem;
+
     protected Collection $duplicates;
 
     /**
@@ -31,7 +32,6 @@ class DuplicateMediaItem extends Notification
      * Get the notification's delivery channels.
      *
      * @param  mixed  $notifiable
-     * @return array
      */
     public function via($notifiable): array
     {
@@ -50,13 +50,13 @@ class DuplicateMediaItem extends Notification
                     ->fields([
                         'Source' => $this->mediaItem->source->name,
                         'Status' => $this->mediaItem->status,
-                        'URL' => $this->mediaItem->url
-                ]);
+                        'URL' => $this->mediaItem->url,
+                    ]);
             });
 
         foreach ($this->duplicates as $duplicate) {
             $url = route('admin.media-item.show', $duplicate->id);
-            $title = $duplicate->status . ': ' . $duplicate->source->name . ' ' . Carbon::parse($duplicate->date)->format('Y-m-d');
+            $title = $duplicate->status.': '.$duplicate->source->name.' '.Carbon::parse($duplicate->date)->format('Y-m-d');
 
             $slackMessage->attachment(function ($attachment) use ($title, $url) {
                 $attachment->title($title, $url);

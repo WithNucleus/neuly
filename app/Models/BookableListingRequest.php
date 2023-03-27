@@ -17,6 +17,7 @@ class BookableListingRequest extends Model
     */
 
     protected $table = 'bookable_listing_requests';
+
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
@@ -58,7 +59,7 @@ class BookableListingRequest extends Model
     */
     public function getFullNameAttribute(): string
     {
-        return $this->first_name . " " . $this->last_name;
+        return $this->first_name.' '.$this->last_name;
     }
 
     /*

@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Models\Location;
+use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 
 class updateLocationSlugs extends Command
@@ -43,7 +43,6 @@ class updateLocationSlugs extends Command
         $locations = Location::whereNull('slug')->take(20)->get();
 
         foreach ($locations as $location) {
-
             // Get Name
             $name = $location->name;
 
@@ -55,7 +54,7 @@ class updateLocationSlugs extends Command
             $location->update();
 
             // Print Info
-            $this->info('Updated slug for ' . $location->name);
+            $this->info('Updated slug for '.$location->name);
         }
     }
 }

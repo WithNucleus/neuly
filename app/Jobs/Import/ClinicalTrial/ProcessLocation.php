@@ -46,9 +46,8 @@ class ProcessLocation implements ShouldQueue
 
     /**
      * ProcessLocation constructor.
-     * @param \App\Models\Clinicaltrial $clinicaltrial
-     * @param \App\Models\ImportResult $importResult
-     * @param array $locations
+     *
+     * @param  array  $locations
      */
     public function __construct(Clinicaltrial $clinicaltrial, ImportResult $importResult, $locations)
     {
@@ -94,7 +93,7 @@ class ProcessLocation implements ShouldQueue
     }
 
     /**
-     * @param array $locations
+     * @param  array  $locations
      * @return array
      */
     private function mapLocationParts($locations)
@@ -119,13 +118,13 @@ class ProcessLocation implements ShouldQueue
     }
 
     /**
-     * @param \App\Models\Location $location
+     * @param  \App\Models\Location  $location
      */
     private function addImportMessage($location)
     {
         $nctNumber = $this->clinicaltrial->nct_number;
         $message = [
-            'import_id'    => $location->id,
+            'import_id' => $location->id,
             'import_value' => $location->name,
         ];
 
@@ -140,13 +139,13 @@ class ProcessLocation implements ShouldQueue
     }
 
     /**
-     * @param array $locationArray
+     * @param  array  $locationArray
      */
     private function addFailedRecord($locationData)
     {
         $this->importFailedRecords[] = [
             'nct_number' => $this->clinicaltrial->nct_number,
-            'target_id'    => $this->clinicaltrial->id,
+            'target_id' => $this->clinicaltrial->id,
             'target_class' => get_class($this->clinicaltrial),
             'import_value' => implode(', ', $locationData),
         ];
@@ -184,10 +183,10 @@ class ProcessLocation implements ShouldQueue
 
             $failedRecords[] = [
                 'import_result_id' => $this->importResult->id,
-                'type'             => ImportFailure::TYPE_LOCATIONS,
-                'details'          => json_encode($record),
-                'created_at'       => $datetime,
-                'updated_at'       => $datetime,
+                'type' => ImportFailure::TYPE_LOCATIONS,
+                'details' => json_encode($record),
+                'created_at' => $datetime,
+                'updated_at' => $datetime,
             ];
         }
 
@@ -195,7 +194,7 @@ class ProcessLocation implements ShouldQueue
     }
 
     /**
-     * @param array $record
+     * @param  array  $record
      */
     private function logError($record)
     {

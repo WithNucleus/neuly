@@ -14,9 +14,6 @@ class FeedbackCreated extends Notification
      */
     public $feedback;
 
-    /**
-     * @param \App\Models\Feedback $feedback
-     */
     public function __construct(Feedback $feedback)
     {
         $this->feedback = $feedback;
@@ -25,7 +22,7 @@ class FeedbackCreated extends Notification
     /**
      * Get the notification's delivery channels.
      *
-     * @param mixed $notifiable
+     * @param  mixed  $notifiable
      * @return array
      */
     public function via($notifiable)
@@ -36,30 +33,30 @@ class FeedbackCreated extends Notification
     /**
      * Get the mail representation of the notification.
      *
-     * @param mixed $notifiable
+     * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
     public function toMail($notifiable)
     {
         return (new MailMessage)
             ->line('New Feedback')
-            ->line('Title: ' . $this->feedback->title)
-            ->line('Type: ' . $this->feedback->type)
-            ->line('From: ' . $this->feedback->user_name . ' [' . $this->feedback->user_email . ']')
+            ->line('Title: '.$this->feedback->title)
+            ->line('Type: '.$this->feedback->type)
+            ->line('From: '.$this->feedback->user_name.' ['.$this->feedback->user_email.']')
             ->action('Show', route('feedback.show', $this->feedback->id))
             ->line('Thank you for using our application!');
     }
 
     /**
-     * @param mixed $notifiable
+     * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\SlackMessage
      */
     public function toSlack($notifiable)
     {
-        $url   = route('feedback.show', $this->feedback->id);
+        $url = route('feedback.show', $this->feedback->id);
         $title = $this->feedback->title;
-        $type  = $this->feedback->type;
-        $from  = $this->feedback->user_name . ' [' . $this->feedback->user_email . ']';
+        $type = $this->feedback->type;
+        $from = $this->feedback->user_name.' ['.$this->feedback->user_email.']';
 
         return (new SlackMessage)
             ->content('New Feedback')
@@ -67,8 +64,8 @@ class FeedbackCreated extends Notification
                 $attachment->title('Show', $url)
                     ->fields([
                         'Title' => $title,
-                        'Type'  => $type,
-                        'From'  => $from,
+                        'Type' => $type,
+                        'From' => $from,
                     ]);
             });
     }

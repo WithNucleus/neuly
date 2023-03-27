@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Content;
 
 use App\Http\Controllers\Controller;
-use App\Models\MediaItem;
-use Illuminate\Http\Request;
+use App\Models\Clinicaltrial;
 use App\Models\Event;
 use App\Models\Job;
-use App\Models\Clinicaltrial;
+use App\Models\MediaItem;
 use App\Services\Metas;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
@@ -22,7 +22,6 @@ class HomeController extends Controller
     // Homepage
     public function index(Request $request)
     {
-
         $latest_events = Event::where('start_date', '>=', Carbon::now('America/Chicago'))
             ->orderBy('start_date', 'asc')
             ->take(3)
@@ -39,6 +38,5 @@ class HomeController extends Controller
             'news_articles',
             'metas'
         ));
-
     }
 }

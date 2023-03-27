@@ -2,6 +2,7 @@
 /**
  * TODO: in the future need to describe here methods specific only for "Entities" type of model, like getMergeMapping() now
  */
+
 namespace App\Models\Contracts;
 
 interface EntityContract

@@ -56,21 +56,20 @@ class ProcessSponsorCollaborators
 
     /**
      * Company names mapped as [id => name].
+     *
      * @var array
      */
     private $existedCompanyNames = [];
 
     /**
      * Person names mapped as [id => name].
+     *
      * @var array
      */
     private $existedPersonNames = [];
 
     /**
      * ProcessSponsorCollaborators constructor.
-     * @param \App\Models\Clinicaltrial $clinicaltrial
-     * @param \App\Models\ImportResult $importResult
-     * @param array $values
      *
      * @return void
      */
@@ -85,7 +84,7 @@ class ProcessSponsorCollaborators
         if ($useOrganisationMapping) {
             $importSettings = ImportSetting::find(1);
 
-            if ($importSettings && !empty($importSettings->mapping_organisation)) {
+            if ($importSettings && ! empty($importSettings->mapping_organisation)) {
                 $this->companyMappingSettings = $importSettings->mapping_organisation;
             }
         }
@@ -111,18 +110,21 @@ class ProcessSponsorCollaborators
 
                 $this->addCompanyMessage($company->id, $value);
                 $this->addNewCompanyName($company);
+
                 continue;
             }
 
             if ($companyId = $this->checkValueInExistingCompanies($value)) {
                 $companyIds[] = $companyId;
                 $this->addCompanyMessage($companyId, $value);
+
                 continue;
             }
 
             if ($personId = $this->checkValueInExistingPersons($value)) {
                 $personIds[] = $personId;
                 $this->addPersonMessage($personId, $value);
+
                 continue;
             }
 
@@ -137,7 +139,7 @@ class ProcessSponsorCollaborators
     }
 
     /**
-     * @param string $value
+     * @param  string  $value
      * @return bool
      */
     private function checkValueInMappingOrganisationSettings($value)
@@ -152,7 +154,7 @@ class ProcessSponsorCollaborators
     }
 
     /**
-     * @param string $value
+     * @param  string  $value
      * @return int|bool
      */
     private function checkValueInExistingCompanies($value)
@@ -167,7 +169,6 @@ class ProcessSponsorCollaborators
     }
 
     /**
-     * @param \App\Models\Company $company
      * @return void
      */
     private function addNewCompanyName(Company $company)
@@ -178,7 +179,7 @@ class ProcessSponsorCollaborators
     }
 
     /**
-     * @param string $value
+     * @param  string  $value
      * @return int|bool
      */
     private function checkValueInExistingPersons($value)
@@ -193,8 +194,8 @@ class ProcessSponsorCollaborators
     }
 
     /**
-     * @param int $companyId
-     * @param string $value
+     * @param  int  $companyId
+     * @param  string  $value
      */
     private function addCompanyMessage($companyId, $value)
     {
@@ -215,8 +216,8 @@ class ProcessSponsorCollaborators
     }
 
     /**
-     * @param int $personId
-     * @param string $value
+     * @param  int  $personId
+     * @param  string  $value
      */
     private function addPersonMessage($personId, $value)
     {
@@ -237,7 +238,7 @@ class ProcessSponsorCollaborators
     }
 
     /**
-     * @param string $value
+     * @param  string  $value
      */
     private function addFailedRecord($value)
     {
@@ -297,7 +298,7 @@ class ProcessSponsorCollaborators
     }
 
     /**
-     * @param array $record
+     * @param  array  $record
      */
     private function logError($record)
     {

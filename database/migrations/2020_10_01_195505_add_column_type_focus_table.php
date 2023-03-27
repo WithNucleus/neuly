@@ -31,7 +31,7 @@ class AddColumnTypeFocusTable extends Migration
             'Ayahuasca',
             'Arketamine',
             'Mescaline',
-            'Noribogaine'
+            'Noribogaine',
         ];
 
         Focus::whereIn('name', $drugFocusNames)->update(['type' => Focus::TYPE_DRUG]);

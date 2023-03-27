@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 class PersonCleaner
 {
     private $people = null;
+
     private $researchs = null;
 
     public function __construct()
@@ -34,14 +35,13 @@ class PersonCleaner
             ->orWhereNotIn('person_id', $this->people)
             ->get();
 
-        foreach($orphened as $entry)
-        {
+        foreach ($orphened as $entry) {
             DB::table('person_research')
-                ->where('research_id','=', $entry->research_id)
-                ->where('person_id','=', $entry->person_id)
+                ->where('research_id', '=', $entry->research_id)
+                ->where('person_id', '=', $entry->person_id)
                 ->delete();
         }
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between People and Researchs.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between People and Researchs.';
     }
 }

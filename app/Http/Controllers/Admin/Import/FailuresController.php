@@ -13,14 +13,13 @@ use Illuminate\Http\Request;
 
 class FailuresController extends Controller
 {
-
     public function __construct()
     {
-        $this->middleware(['role:Admin','permission:import']);
+        $this->middleware(['role:Admin', 'permission:import']);
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function showByType($importResultId, $type)
@@ -32,7 +31,7 @@ class FailuresController extends Controller
             ImportFailure::TYPE_PEOPLE_ORGANIZATION,
         ];
 
-        if (!in_array($type, $allowedTypes)) {
+        if (! in_array($type, $allowedTypes)) {
             abort(404);
         }
 
@@ -42,26 +41,25 @@ class FailuresController extends Controller
 
         if ($type === ImportFailure::TYPE_LOCATIONS) {
             foreach ($failures as $failure) {
-                if (!empty($failure->details['import_value'])) {
+                if (! empty($failure->details['import_value'])) {
                     $locationParts = StringHelper::explodeAndFilterEmpty($failure->details['import_value'], ',');
 
                     $failure->location_parts = [
                         'country' => isset($locationParts[0]) ? $locationParts[0] : '',
-                        'region'  => isset($locationParts[1]) ? $locationParts[1] : '',
-                        'city'    => isset($locationParts[2]) ? $locationParts[2] : '',
+                        'region' => isset($locationParts[1]) ? $locationParts[1] : '',
+                        'city' => isset($locationParts[2]) ? $locationParts[2] : '',
                     ];
                 }
             }
         }
 
-        return view('admin.import.failures.' . $type, compact('importResultId', 'failures'));
+        return view('admin.import.failures.'.$type, compact('importResultId', 'failures'));
     }
 
     /**
      * Ajax method for manual fix of ImportFailure
      *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function fix(Request $request, $id)
@@ -88,8 +86,7 @@ class FailuresController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function delete(Request $request, $id)

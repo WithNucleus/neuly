@@ -12,6 +12,7 @@ class EmailReset extends Model
     |--------------------------------------------------------------------------
     */
     protected $table = 'email_resets';
+
     protected $guarded = ['id'];
 
     /*

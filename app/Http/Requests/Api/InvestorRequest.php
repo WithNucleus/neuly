@@ -15,7 +15,7 @@ class InvestorRequest extends ApiBaseRequest
     public function rules()
     {
         $rules = [
-            'name' => 'required|min:3|max:255|unique:investors,name,' . $this->route('id'),
+            'name' => 'required|min:3|max:255|unique:investors,name,'.$this->route('id'),
             'website' => 'max:255',
             'type' => [
                 'nullable',

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 
 /**
  * Class PersonCrudController.
+ *
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
 class PersonCrudController extends CrudController
@@ -42,6 +43,7 @@ class PersonCrudController extends CrudController
      * Define what happens when the List operation is loaded.
      *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
+     *
      * @return void
      */
     protected function setupListOperation()
@@ -222,6 +224,7 @@ class PersonCrudController extends CrudController
      * Define what happens when the Create operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-create
+     *
      * @return void
      */
     protected function setupCreateOperation()
@@ -336,17 +339,17 @@ class PersonCrudController extends CrudController
             }),
         ]);
         $this->crud->addField([
-            'name'    => 'visibility',
-            'type'    => 'radio',
-            'label'   => 'Visibility',
+            'name' => 'visibility',
+            'type' => 'radio',
+            'label' => 'Visibility',
             'options' => Person::getVisibilityValues(),
             'default' => Person::VISIBILITY_PUBLIC,
-            'inline'  => true,
+            'inline' => true,
         ]);
         $this->crud->addField([
-            'name'  => 'visibility_code',
-            'type'  => 'text',
-            'label' => 'Visibility Code'
+            'name' => 'visibility_code',
+            'type' => 'text',
+            'label' => 'Visibility Code',
         ]);
     }
 
@@ -354,6 +357,7 @@ class PersonCrudController extends CrudController
      * Define what happens when the Update operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
+     *
      * @return void
      */
     protected function setupUpdateOperation()

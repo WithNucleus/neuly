@@ -68,7 +68,7 @@ return [
         // Backups
         'backups' => [
             'driver' => 'local',
-            'root'   => storage_path('backups'),
+            'root' => storage_path('backups'),
         ],
 
         // Member Notes
@@ -81,12 +81,12 @@ return [
 
         'batch-images-upload' => [
             'driver' => 'local',
-            'root'   => storage_path('app/batch-images-upload'),
+            'root' => storage_path('app/batch-images-upload'),
         ],
 
         'archive' => [
             'driver' => 'local',
-            'root'   => storage_path('archive'),
+            'root' => storage_path('archive'),
         ],
 
     ],

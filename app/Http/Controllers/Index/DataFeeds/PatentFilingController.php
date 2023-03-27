@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Index\DataFeeds;
 
-use App\Http\Controllers\Controller;
 use App\Enum\MediaTypes;
+use App\Http\Controllers\Controller;
 use App\Models\Company;
 use App\Models\Focus;
 use App\Models\MediaItem;
@@ -24,7 +24,7 @@ class PatentFilingController extends Controller
             ->with(['source'])
             ->allowedSorts([
                 'name',
-                'date'
+                'date',
             ])
             ->allowedFilters([
                 AllowedFilter::partial('focus', 'focus.name'),

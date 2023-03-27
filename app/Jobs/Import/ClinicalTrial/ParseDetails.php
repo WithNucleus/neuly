@@ -4,6 +4,8 @@ namespace App\Jobs\Import\ClinicalTrial;
 
 use App\Models\Clinicaltrial;
 use App\Models\ClinicaltrialParsingResult;
+use DOMDocument;
+use DOMXPath;
 use Goutte\Client;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -11,20 +13,19 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
-use DOMDocument;
-use DOMXPath;
 
 class ParseDetails implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private $baseUrl = 'https://clinicaltrials.gov/ct2/show/';
+
     private $clinicaltrial;
+
     private $attributesToRemove;
 
     /**
      * Parse Details constructor.
-     * @param Clinicaltrial $clinicaltrial
      */
     public function __construct(Clinicaltrial $clinicaltrial)
     {
@@ -39,7 +40,7 @@ class ParseDetails implements ShouldQueue
             'align',
             'hspace',
             'vspace',
-            'dir'
+            'dir',
         ];
     }
 
@@ -69,7 +70,6 @@ class ParseDetails implements ShouldQueue
 
             $parsingResult->brief_summary = $this->stripAttributes($brief_summary, $this->attributesToRemove);
             $parsingResult->detailed_description = $this->stripAttributes($detailedDescription, $this->attributesToRemove);
-
         } catch (\Exception $e) {
             Log::error("An error occurred while trying to parse the Clinical trial url: '$url' . Error message: ".$e->getMessage());
         }
@@ -79,19 +79,21 @@ class ParseDetails implements ShouldQueue
 
     /**
      * Strip Attributes from HTML Strings
-     * @param $html
-     * @param $attributes
+     *
      * @return false|string
      */
-    private function stripAttributes($html, $attributes) {
-        $html = '<div>' . $html . '</div>';
+    private function stripAttributes($html, $attributes)
+    {
+        $html = '<div>'.$html.'</div>';
         $dom = new DOMDocument;
         $dom->loadHTML($html);
         $xPath = new DOMXPath($dom);
 
-        foreach($attributes as $attribute) {
-            $nodes = $xPath->query('//*[@' . $attribute . ']');
-            foreach($nodes as $node) $node->removeAttribute($attribute);
+        foreach ($attributes as $attribute) {
+            $nodes = $xPath->query('//*[@'.$attribute.']');
+            foreach ($nodes as $node) {
+                $node->removeAttribute($attribute);
+            }
         }
 
         return substr($dom->saveHTML($dom->getElementsByTagName('div')->item(0)), 5, -6);

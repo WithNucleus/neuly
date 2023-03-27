@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Country extends Model
 {
-
     /*
     |--------------------------------------------------------------------------
     | GLOBAL VARIABLES
@@ -16,6 +15,7 @@ class Country extends Model
     protected $table = 'countries';
 
     protected $primaryKey = 'name';
+
     protected $keyType = 'string';
 
     public $incrementing = false;

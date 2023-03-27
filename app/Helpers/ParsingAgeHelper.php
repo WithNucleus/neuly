@@ -2,7 +2,8 @@
 
 namespace App\Helpers;
 
-class ParsingAgeHelper {
+class ParsingAgeHelper
+{
     public static function getRelevantPassages($ageString)
     {
         $matches = [];
@@ -29,16 +30,12 @@ class ParsingAgeHelper {
             '',
             $match);
 
-        if (preg_match('/'.self::getMonthsPattern().'/', $match))
-        {
+        if (preg_match('/'.self::getMonthsPattern().'/', $match)) {
             $ageValue = (int) ($ageValue / 12);
         }
-        if (preg_match('/'.self::getHoursPattern().'|'.self::getWeeksPattern().'/', $match))
-        {
+        if (preg_match('/'.self::getHoursPattern().'|'.self::getWeeksPattern().'/', $match)) {
             $ageValue = 0;
-        }
-        else if (preg_match('/'.self::getOpenEndPattern().'/', $match))
-        {
+        } elseif (preg_match('/'.self::getOpenEndPattern().'/', $match)) {
             $ageValue = null;
         }
 
@@ -47,13 +44,10 @@ class ParsingAgeHelper {
 
     public static function setAgeValues($trial, $ages)
     {
-        if(count($ages) === 2)
-        {
+        if (count($ages) === 2) {
             $trial->min_age = $ages[0];
             $trial->max_age = $ages[1];
-        }
-        else
-        {
+        } else {
             $trial->min_age = null;
             $trial->max_age = null;
         }
@@ -61,23 +55,28 @@ class ParsingAgeHelper {
         $trial->save();
     }
 
-    private static function getOpenEndPattern() {
+    private static function getOpenEndPattern()
+    {
         return '(up\sto)|(\solder)';
     }
 
-    private static function getHoursPattern() {
+    private static function getHoursPattern()
+    {
         return '(\sHour)|(\sHours)';
     }
 
-    private static function getWeeksPattern() {
+    private static function getWeeksPattern()
+    {
         return '(\sWeek)|(\sWeeks)';
     }
 
-    private static function getMonthsPattern() {
+    private static function getMonthsPattern()
+    {
         return '(\sMonth)|(\sMonths)';
     }
 
-    private static function getYearsPattern() {
+    private static function getYearsPattern()
+    {
         return '(\sYear)|(\sYears)';
     }
 

@@ -6,8 +6,8 @@ use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\Model;
+use Storage;
 use Str;
-use \Storage;
 
 class Page extends Model
 {
@@ -22,18 +22,21 @@ class Page extends Model
     */
 
     protected $table = 'pages';
+
     protected $primaryKey = 'id';
+
     public $timestamps = true;
+
     protected $fillable = ['template', 'name', 'title', 'slug', 'content', 'extras', 'meta_image'];
+
     protected $fakeColumns = ['extras'];
+
     protected $casts = [
         'extras' => 'array',
     ];
 
     /**
      * Return the sluggable configuration array for this model.
-     *
-     * @return array
      */
     public function sluggable(): array
     {
@@ -106,18 +109,14 @@ class Page extends Model
 
         $storage = Storage::disk($disk);
 
-        if(is_null($value)){
-
+        if (is_null($value)) {
             $storage->delete(Str::replaceFirst('storage/', 'public/', $this->meta_image));
             $this->attributes['meta_image'] = $value;
-
-        }else{
-
-            if(Str::startsWith($value, 'data:image')){
-
+        } else {
+            if (Str::startsWith($value, 'data:image')) {
                 // Get extension
-                @list($type, $file_data) = explode(';', $value);
-                @list(, $file_data) = explode(',', $file_data);
+                @[$type, $file_data] = explode(';', $value);
+                @[, $file_data] = explode(',', $file_data);
 
                 $extension = substr(strrchr($type, '/'), 1);
                 // Note We can't use $this->id since initialy the Page is

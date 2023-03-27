@@ -31,18 +31,18 @@ class FeedbackRequest extends FormRequest
             'content' => 'string|required',
             'type' => [
                 'required',
-                Rule::in(Feedback::TYPES)
-            ]
+                Rule::in(Feedback::TYPES),
+            ],
         ];
 
         $unauthedUserRules = [
             'user_name' => 'string|required',
-            'user_email' => 'email|required'
+            'user_email' => 'email|required',
         ];
 
         $rules = $generalRules;
 
-        if(!Auth::user()) {
+        if (! Auth::user()) {
             $rules = array_merge($generalRules, $unauthedUserRules);
         }
 

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Index;
 
-
 use App\Http\Controllers\Controller;
 use App\Models\Person;
 use App\Models\RaisedClaim;
@@ -27,8 +26,7 @@ class UserPersonController extends Controller
     {
         $person = Auth::user()->relatedPerson;
 
-        if(!$person)
-        {
+        if (! $person) {
             abort(404);
         }
 
@@ -39,8 +37,7 @@ class UserPersonController extends Controller
     {
         $person = Auth::user()->relatedPerson;
 
-        if(!$person)
-        {
+        if (! $person) {
             abort(404);
         }
 
@@ -50,7 +47,7 @@ class UserPersonController extends Controller
     public function savePersonal(Request $request)
     {
         $request->validate([
-            'name' => 'required'
+            'name' => 'required',
         ]);
 
         $person = Auth::user()->relatedPerson;
@@ -94,13 +91,14 @@ class UserPersonController extends Controller
     public function create()
     {
         $user = Auth::user();
+
         return view('members.person.create', compact('user'));
     }
 
     public function storeBasicInformationShowEmailStep(Request $request)
     {
         $request->validate([
-            'name' => 'required'
+            'name' => 'required',
         ]);
 
         $user = Auth::user();
@@ -114,7 +112,6 @@ class UserPersonController extends Controller
 
         $user->person_id = $person->id;
         $user->save();
-
 
         return view('members.person.create_email', compact('user'));
     }
@@ -146,12 +143,11 @@ class UserPersonController extends Controller
     {
         $user = Auth::user();
 
-        $cleanTerm = $user->name . ' ' . $user->last_name;
+        $cleanTerm = $user->name.' '.$user->last_name;
 
         $searchTerm = '%'.$user->name.'%'.$user->last_name.'%';
 
-        if($request->has('search'))
-        {
+        if ($request->has('search')) {
             $searchTerm = '%'.$request->input('search').'%';
             $cleanTerm = $request->input('search');
         }

@@ -27,6 +27,7 @@ use Carbon\Carbon;
 class ListingRequestHelper
 {
     const SOURCE_ORIGINAL = 'original';
+
     const SOURCE_REQUEST = 'request';
 
     /**
@@ -49,8 +50,9 @@ class ListingRequestHelper
     }
 
     /**
-     * @param string $type
+     * @param  string  $type
      * @return string
+     *
      * @throws \Exception
      */
     public static function getEntityClassByType($type)
@@ -65,8 +67,9 @@ class ListingRequestHelper
     }
 
     /**
-     * @param string $entityClass
+     * @param  string  $entityClass
      * @return string
+     *
      * @throws \Exception
      */
     public static function getEntityTypeByClass($entityClass)
@@ -81,7 +84,7 @@ class ListingRequestHelper
     }
 
     /**
-     * @param array $options
+     * @param  array  $options
      * @return string
      */
     public static function getFieldViewByMappingOptions($options)
@@ -116,9 +119,10 @@ class ListingRequestHelper
     }
 
     /**
-     * @param string $entityClass
-     * @param int|null $toUpdateEntityId
+     * @param  string  $entityClass
+     * @param  int|null  $toUpdateEntityId
      * @return array
+     *
      * @throws \Exception
      */
     public static function getRulesByEntityClass($entityClass, $toUpdateEntityId = null)
@@ -139,7 +143,7 @@ class ListingRequestHelper
             throw new \Exception('Request class for entity "'.$entityClass.'" not found!');
         }
 
-        $requestClass =  $allowedRequestsArray[$entityClass];
+        $requestClass = $allowedRequestsArray[$entityClass];
         $rules = (new $requestClass)->rules();
 
         //modify rules array for Job entity to handle morphable relation for Listing Request form
@@ -152,7 +156,7 @@ class ListingRequestHelper
 
         //check unique 'name' for update action using current entity 'id'
         if ($requestClass === CompanyRequest::class && $toUpdateEntityId !== null) {
-            $rules['name'] = 'required|max:255|unique:companies,name,' . $toUpdateEntityId;
+            $rules['name'] = 'required|max:255|unique:companies,name,'.$toUpdateEntityId;
         }
 
         if ($toUpdateEntityId === null) {
@@ -165,7 +169,7 @@ class ListingRequestHelper
     }
 
     /**
-     * @param string $entityMergeMapping
+     * @param  string  $entityMergeMapping
      * @return array
      */
     public static function getEntityRelationValuesByType($type)
@@ -191,10 +195,10 @@ class ListingRequestHelper
     }
 
     /**
-     * @param object $originalEntity
-     * @param object $requestData
-     * @param string $field
-     * @param array $options
+     * @param  object  $originalEntity
+     * @param  object  $requestData
+     * @param  string  $field
+     * @param  array  $options
      * @return bool
      */
     public static function isEntitiesFieldDifferent($originalEntity, $requestData, $field, $options)

@@ -23,10 +23,10 @@ class InsightsController extends Controller
     {
         if (auth()->check()) {
             $email = auth()->user()->email;
-            $name  = auth()->user()->name;
+            $name = auth()->user()->name;
         } else {
             $email = $request->input('email');
-            $name  = $request->input('name');
+            $name = $request->input('name');
         }
 
         $insightRequest = new InsightRequest();

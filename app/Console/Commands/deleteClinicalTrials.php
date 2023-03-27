@@ -40,8 +40,8 @@ class deleteClinicalTrials extends Command
     {
         $clinicaltrials = Clinicaltrial::doesntHave('focus')->get();
 
-        foreach($clinicaltrials as $clinicaltrial) {
-            $this->info('Deleting ' . $clinicaltrial->title);
+        foreach ($clinicaltrials as $clinicaltrial) {
+            $this->info('Deleting '.$clinicaltrial->title);
             $clinicaltrial->delete();
         }
     }

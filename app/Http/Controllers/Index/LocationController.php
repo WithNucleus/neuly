@@ -3,16 +3,14 @@
 namespace App\Http\Controllers\Index;
 
 use App\Http\Controllers\Controller;
-use App\Repositories\FollowRepository;
-use Illuminate\Http\Request;
 use App\Models\Location;
+use App\Repositories\FollowRepository;
 use App\Services\Metas;
-use Illuminate\Support\Facades\DB;
-use Spatie\QueryBuilder\QueryBuilder;
-use Spatie\QueryBuilder\AllowedSort;
-use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\Activitylog\Models\Activity;
 use Auth;
+use Illuminate\Http\Request;
+use Spatie\Activitylog\Models\Activity;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class LocationController extends Controller
 {
@@ -27,8 +25,8 @@ class LocationController extends Controller
     }
 
     // Index
-    public function index(Request $request) {
-
+    public function index(Request $request)
+    {
         // Get Location
         $locations = QueryBuilder::for(Location::class)
             ->allowedFilters([
@@ -43,7 +41,7 @@ class LocationController extends Controller
             ])
             ->defaultSort('name')
             ->allowedSorts([
-                'name', 'city', 'region', 'country'
+                'name', 'city', 'region', 'country',
             ])
             ->paginate(50)
             ->appends(request()->query());
@@ -56,20 +54,19 @@ class LocationController extends Controller
 
         // Return View
         return view('discover.locations.index', compact('locations', 'countries', 'metas'));
-
     }
 
     // Show
-    public function show(Request $request, $slug) {
-
+    public function show(Request $request, $slug)
+    {
         // Get Location
         $location = Location::where('slug', $slug)->firstOrFail();
 
-        $metas = Metas::process(array(
-            'title'         => $location->name,
-            'description'   => '',
-            'image'         => '',
-        ));
+        $metas = Metas::process([
+            'title' => $location->name,
+            'description' => '',
+            'image' => '',
+        ]);
 
         $entity = 'locations';
         $isFollowed = (bool) count(FollowRepository::fromuser(Location::class, $location->id));
@@ -80,7 +77,7 @@ class LocationController extends Controller
             ->withProperties([
                 'ip' => $request->ip(),
                 'entity' => 'locations',
-                'slug' => $location->slug
+                'slug' => $location->slug,
             ])
             ->performedOn($location)
             ->tap(function (Activity $activity) use ($request) {

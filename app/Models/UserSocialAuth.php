@@ -21,7 +21,8 @@ class UserSocialAuth extends Model
         return self::$providers;
     }
 
-    public static function isProviderAllowed($provider){
+    public static function isProviderAllowed($provider)
+    {
         return in_array($provider, self::$providers);
     }
 

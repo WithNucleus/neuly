@@ -3,18 +3,18 @@
 namespace App\Http\Controllers\Index;
 
 use App\Http\Controllers\Controller;
-use App\Models\Job;
-use App\Repositories\FollowRepository;
-use Illuminate\Http\Request;
 use App\Models\Investor;
+use App\Models\Job;
 use App\Models\Location;
+use App\Repositories\FollowRepository;
 use App\Services\Metas;
-use Spatie\Activitylog\Models\Activity;
-use Spatie\QueryBuilder\QueryBuilder;
-use Spatie\QueryBuilder\AllowedSort;
-use Spatie\QueryBuilder\AllowedFilter;
-use Auth;
 use App\Services\StringLengthSort;
+use Auth;
+use Illuminate\Http\Request;
+use Spatie\Activitylog\Models\Activity;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\AllowedSort;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class InvestorController extends Controller
 {
@@ -31,11 +31,10 @@ class InvestorController extends Controller
     /**
      * List of Investors
      *
-     * @param Request $request
      * @return View
      */
-    public function index(Request $request) {
-
+    public function index(Request $request)
+    {
         $investors = QueryBuilder::for(Investor::class)
             ->with('companies')
             ->allowedFilters([
@@ -55,31 +54,28 @@ class InvestorController extends Controller
 
         $types = Investor::pluck('type')->unique()->sort();
 
-        $locations = Location::has('investors', '>' , 0)->with('investors')->get()->pluck('country')->unique()->sort();
+        $locations = Location::has('investors', '>', 0)->with('investors')->get()->pluck('country')->unique()->sort();
 
         $metas = Metas::fromPage($request->path());
 
         // Return View
         return view('discover.investors.index', compact('investors', 'types', 'metas', 'locations'));
-
     }
 
     /**
      * Show Investor
      *
-     * @param Request $request
-     * @param $slug
      * @return View
      */
-    public function show(Request $request, $slug) {
-
+    public function show(Request $request, $slug)
+    {
         $investor = Investor::where('slug', $slug)->firstOrFail();
 
-        $metas = Metas::process(array(
-            'title'         => $investor->name,
-            'description'   => '',
-            'image'         => '',
-        ));
+        $metas = Metas::process([
+            'title' => $investor->name,
+            'description' => '',
+            'image' => '',
+        ]);
 
         $entity = 'investors';
         $isFollowed = (bool) count(FollowRepository::fromuser(Investor::class, $investor->id));
@@ -90,7 +86,7 @@ class InvestorController extends Controller
                 'ip' => $request->ip(),
                 'entity' => 'investors',
                 'slug' => $investor->slug,
-                'image' => $investor->logo
+                'image' => $investor->logo,
             ])
             ->performedOn($investor)
             ->tap(function (Activity $activity) use ($request) {
@@ -109,11 +105,10 @@ class InvestorController extends Controller
     /**
      * Show Jobs for Investor
      *
-     * @param $slug
      * @return View
      */
-    public function jobs($slug) {
-
+    public function jobs($slug)
+    {
         $owner = Investor::where('slug', $slug)->firstOrFail();
         $jobs = Job::where('owner_id', $owner->id)->where('status', Job::STATUS_OPEN)->orderBy('posted_date', 'desc')->get();
 

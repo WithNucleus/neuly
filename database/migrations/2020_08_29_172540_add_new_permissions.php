@@ -24,7 +24,7 @@ class AddNewPermissions extends Migration
         // Reset cached roles and permissions
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
-        Permission::where('name' , $this->oldPermission)->delete();
+        Permission::where('name', $this->oldPermission)->delete();
 
         foreach ($this->newPermissions as $permission) {
             Permission::create(['name' => $permission]);
@@ -47,7 +47,7 @@ class AddNewPermissions extends Migration
         // Reset cached roles and permissions
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
-        Permission::whereIn('name' , $this->newPermissions)->delete();
+        Permission::whereIn('name', $this->newPermissions)->delete();
         Permission::create(['name' => $this->oldPermission]);
 
         $adminRole = Role::where('name', 'Admin')->first();
@@ -55,6 +55,5 @@ class AddNewPermissions extends Migration
         if ($adminRole !== null) {
             $adminRole->givePermissionTo($this->oldPermission);
         }
-
     }
 }

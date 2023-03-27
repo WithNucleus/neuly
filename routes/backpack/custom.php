@@ -7,14 +7,14 @@
 // Routes you generate using Backpack\Generators will be placed here.
 
 Route::group([
-    'prefix'     => config('backpack.base.route_prefix', 'admin'),
+    'prefix' => config('backpack.base.route_prefix', 'admin'),
     'middleware' => [
         config('backpack.base.web_middleware', 'web'),
         config('backpack.base.middleware_key', 'admin'),
     ],
-    'namespace'  => 'App\Http\Controllers\Admin',
+    'namespace' => 'App\Http\Controllers\Admin',
 ], function () { // custom admin routes
-    Route::crud('company', 'CompanyCrudController');
+Route::crud('company', 'CompanyCrudController');
     Route::crud('companybranch', 'CompanyBranchCrudController');
     Route::crud('focus', 'FocusCrudController');
     Route::crud('person', 'PersonCrudController');
@@ -53,8 +53,8 @@ Route::group([
     Route::crud('embeddable-search-widget', 'EmbeddableSearchWidgetCrudController');
 
     Route::group([
-        'namespace'  => 'ClinicalTrialDetails',
-    ], function (){
+        'namespace' => 'ClinicalTrialDetails',
+    ], function () {
         Route::crud('ct_condition', 'CtConditionCrudController');
         Route::crud('ct_intervention', 'CtInterventionCrudController');
         Route::crud('ct_outcome_measure', 'CtOutcomeMeasureCrudController');
@@ -62,12 +62,12 @@ Route::group([
     });
 
     Route::group([
-        'as' => 'admin.'
+        'as' => 'admin.',
     ], function () {
         Route::crud('listingrequest', 'ListingRequestCrudController');
         Route::group([
             'prefix' => 'listingrequest',
-            'as' => 'listingrequest.'
+            'as' => 'listingrequest.',
         ], function () {
             Route::get('{id}/decline', 'ListingRequestCrudController@getDeclineForm')->name('decline');
             Route::post('{id}/decline', 'ListingRequestCrudController@postDeclineForm');
@@ -83,7 +83,6 @@ Route::group([
         'as' => 'admin.import.',
         'middleware' => ['permission:import'],
     ], function () {
-
         Route::group([
             'prefix' => 'clinicaltrial',
             'namespace' => 'ClinicalTrial',
@@ -115,13 +114,12 @@ Route::group([
             Route::get('/', 'PeopleController@index')->name('index');
             Route::post('/process', 'PeopleController@process')->name('process');
         });
-
     });
     Route::crud('patent', 'PatentCrudController');
 
     Route::group([
-        'middleware' => 'permission:view logs'
-    ], function() {
+        'middleware' => 'permission:view logs',
+    ], function () {
         Route::crud('activity-log', 'ActivityLogCrudController');
     });
 

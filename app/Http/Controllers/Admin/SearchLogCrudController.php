@@ -8,7 +8,7 @@ use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
  * Class SearchLogCrudController
- * @package App\Http\Controllers\Admin
+ *
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
 class SearchLogCrudController extends CrudController
@@ -23,12 +23,12 @@ class SearchLogCrudController extends CrudController
      */
     public function setup()
     {
-        if(!backpack_user()->can('view logs')) {
+        if (! backpack_user()->can('view logs')) {
             abort(404);
         }
 
         CRUD::setModel(SearchLog::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/searchlog');
+        CRUD::setRoute(config('backpack.base.route_prefix').'/searchlog');
         CRUD::setEntityNameStrings('search log', 'search log');
     }
 
@@ -36,6 +36,7 @@ class SearchLogCrudController extends CrudController
      * Define what happens when the List operation is loaded.
      *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
+     *
      * @return void
      */
     protected function setupListOperation()
@@ -45,7 +46,7 @@ class SearchLogCrudController extends CrudController
         $this->crud->addColumn([
             'type' => 'datetime',
             'name' => 'created_at',
-            'label' => 'Created on'
+            'label' => 'Created on',
         ]);
     }
 }

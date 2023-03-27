@@ -12,6 +12,7 @@ class ApiUser extends Authenticatable
     use HasFactory;
 
     const PERMISSION_LEVEL_READ = 1;
+
     const PERMISSION_LEVEL_WRITE = 2;
 
     protected $guarded = ['id'];

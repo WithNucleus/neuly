@@ -4,15 +4,14 @@ namespace App\Http\Controllers\Insights;
 
 use App\Http\Controllers\Controller;
 use App\Models\Company;
-use Illuminate\Http\Request;
 use App\Models\Investor;
+use Illuminate\Http\Request;
 
 class InvestmentFundController extends Controller
 {
-
     /**
      * Show the Investment Funds Chart
-     * @param Request $request
+     *
      * @return View
      */
     public function index(Request $request)
@@ -40,11 +39,11 @@ class InvestmentFundController extends Controller
 
     /**
      * Show the Relationships Chart for an Organization
-     * @param $slug
+     *
      * @return View
      */
-    public function organizationChart($slug) {
-
+    public function organizationChart($slug)
+    {
         $chartData = [];
         $filter = '';
 
@@ -62,7 +61,7 @@ class InvestmentFundController extends Controller
             'listing_url' => route('discover.organizations.show', $company->slug),
             'chart_url' => '',
             'type' => 'company',
-            'children' => []
+            'children' => [],
         ];
 
         if ($company->investors_count > 0) {
@@ -98,16 +97,16 @@ class InvestmentFundController extends Controller
         $chartData = json_encode($chartData);
 
         return view('discover.insights.investment-fund.organization', compact('chartData', 'filter', 'companyName'));
-
     }
 
     /**
      * Process the investors and their companies
-     * @param \Illuminate\Database\Eloquent\Collection $investors
+     *
+     * @param  \Illuminate\Database\Eloquent\Collection  $investors
      * @return array
      */
-    private function processInvestor($investors) {
-
+    private function processInvestor($investors)
+    {
         $investorChart = [];
         $investorIds = $investors->pluck('id')->toArray();
         $relatedCompanies = $this->getRelatedCompanies($investorIds);
@@ -129,7 +128,6 @@ class InvestmentFundController extends Controller
     }
 
     /**
-     * @param $investorIds
      * @return array
      */
     private function getRelatedCompanies($investorIds)
@@ -169,32 +167,31 @@ class InvestmentFundController extends Controller
         return $companiesByInvestorId;
     }
 
-    private function processCompanyRelationship($companyChart, $company, $model, $model_count) {
-
+    private function processCompanyRelationship($companyChart, $company, $model, $model_count)
+    {
         $value = ceil($company->{$model_count} / 10);
 
         $companyData = [
             'name' => ucwords($model),
             'value' => $value,
-            'image' => asset('images/icons/small-transparent/' . $model . '.svg'),
+            'image' => asset('images/icons/small-transparent/'.$model.'.svg'),
             'listing_url' => '',
             'chart_url' => '',
             'type' => $model,
-            'children' => []
+            'children' => [],
         ];
 
         foreach ($company->{$model} as $entity) {
-
             $modelData = [
                 'name' => $entity->name,
                 'value' => 1,
-                'listing_url' => route('discover.' . $model . '.show', $entity->slug),
+                'listing_url' => route('discover.'.$model.'.show', $entity->slug),
                 'chart_url' => '',
                 'type' => $model,
-                'image' => asset('images/icons/small-transparent/' . $model . '.svg'),
+                'image' => asset('images/icons/small-transparent/'.$model.'.svg'),
             ];
 
-            if ($model == 'events' OR $model == 'investors') {
+            if ($model == 'events' or $model == 'investors') {
                 $modelData['image'] = $entity->entityImageUrl;
             }
 
@@ -205,5 +202,4 @@ class InvestmentFundController extends Controller
 
         return $companyChart;
     }
-
 }

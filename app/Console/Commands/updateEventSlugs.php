@@ -2,10 +2,9 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Models\Event;
+use Illuminate\Console\Command;
 use Illuminate\Support\Str;
-use Carbon\Carbon;
 
 class updateEventSlugs extends Command
 {
@@ -44,7 +43,6 @@ class updateEventSlugs extends Command
         $events = Event::whereNull('slug')->take(2)->get();
 
         foreach ($events as $event) {
-
             // Get Name
             $name = $event->name;
 
@@ -56,7 +54,7 @@ class updateEventSlugs extends Command
             $event->update();
 
             // Print Info
-            $this->info('Updated slug for ' . $event->name);
+            $this->info('Updated slug for '.$event->name);
         }
     }
 }

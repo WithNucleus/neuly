@@ -11,7 +11,7 @@ class SendWelcomeEmailNotification
     /**
      * Handle the event.
      *
-     * @param  \Illuminate\Auth\Events\Registered|\App\Events\RegisteredAndVerified $event
+     * @param  \Illuminate\Auth\Events\Registered|\App\Events\RegisteredAndVerified  $event
      * @return void
      */
     public function handle($event)

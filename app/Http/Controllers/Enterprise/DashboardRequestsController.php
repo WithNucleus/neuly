@@ -8,7 +8,6 @@ use App\Http\Requests\Enterprise\WidgetRequest;
 use App\Models\Feedback;
 use App\Notifications\EnterpriseWidgetNotification;
 use App\Notifications\FeedbackCreated;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardRequestsController extends Controller
@@ -30,10 +29,9 @@ class DashboardRequestsController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Your request has been sent. Thank you!'
+            'message' => 'Your request has been sent. Thank you!',
         ]);
     }
-
 
     public function clinicalTrialParticipating(WidgetRequest $request)
     {
@@ -51,7 +49,7 @@ class DashboardRequestsController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Your request has been sent. Thank you!'
+            'message' => 'Your request has been sent. Thank you!',
         ]);
     }
 }

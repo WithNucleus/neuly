@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 
 Route::group([
@@ -58,7 +59,7 @@ Route::group([
     // Data Feed
     Route::group([
         'middleware' => 'permission:import',
-    ], function() {
+    ], function () {
         Route::crud('datafeed', 'DataFeedCrudController');
         Route::group([
             'prefix' => '/datafeed',
@@ -114,7 +115,6 @@ Route::group([
     'namespace' => 'Admin\Import',
     'as' => 'import.',
 ], function () {
-
     // Import Clinical Trials
     Route::get('/clinicaltrials', 'ClinicalTrialController@importClinicaltrials')
         ->name('clinicaltrials');
@@ -189,7 +189,6 @@ Route::group([
         Route::get('/results/{id}', 'BatchImagesUploadController@results')->name('results');
         Route::get('/failures/{id}', 'BatchImagesUploadController@failures')->name('failures');
     });
-
 });
 
 //TODO update route's names and middleware to match 'admin' pattern and move to common admin group

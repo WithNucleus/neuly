@@ -49,18 +49,18 @@ class ProcessLocation implements ShouldQueue
 
     /**
      * ProcessLocation constructor.
-     * @param \App\Models\ImportResult $importResult
-     * @param string $entityClass
-     * @param int $entityId
-     * @param array $locations
+     *
+     * @param  string  $entityClass
+     * @param  int  $entityId
+     * @param  array  $locations
      *
      * @throws \Exception
      */
     public function __construct(ImportResult $importResult, $entityClass, $entityId, $locations)
     {
-        $this->importResult  = $importResult;
-        $this->locations     = $locations;
-        $this->entity        = $entityClass::find($entityId);
+        $this->importResult = $importResult;
+        $this->locations = $locations;
+        $this->entity = $entityClass::find($entityId);
 
         if ($this->entity === null) {
             throw new \Exception("Entity '$entityClass' with ID $entityId not found");
@@ -94,16 +94,16 @@ class ProcessLocation implements ShouldQueue
     }
 
     /**
-     * @param \App\Models\Location $location
+     * @param  \App\Models\Location  $location
      */
     private function addSuccessMessage($location)
     {
         $message = [
-            'import_id'    => $location->id,
-            'import_value' => $location->name
+            'import_id' => $location->id,
+            'import_value' => $location->name,
         ];
 
-        if (!isset($this->importSuccessMessages[$this->entity->id])) {
+        if (! isset($this->importSuccessMessages[$this->entity->id])) {
             $this->importSuccessMessages[$this->entity->id] = [
                 'target_id' => $this->entity->id,
                 'messages' => [$message],
@@ -114,14 +114,14 @@ class ProcessLocation implements ShouldQueue
     }
 
     /**
-     * @param array $locationArray
+     * @param  array  $locationArray
      */
     private function addFailedRecord($locationName)
     {
         $this->importFailedRecords[] = [
-            'target_id'    => $this->entity->id,
+            'target_id' => $this->entity->id,
             'target_class' => get_class($this->entity),
-            'import_value' => $locationName
+            'import_value' => $locationName,
         ];
     }
 
@@ -132,7 +132,7 @@ class ProcessLocation implements ShouldQueue
     {
         $oldMessages = json_decode($this->importResult->location_messages, true);
 
-        if (!empty($oldMessages)) {
+        if (! empty($oldMessages)) {
             $this->importSuccessMessages = array_merge($oldMessages, $this->importSuccessMessages);
         }
 
@@ -150,31 +150,31 @@ class ProcessLocation implements ShouldQueue
         }
 
         $failedRecords = [];
-        $datetime      = Carbon::now();
+        $datetime = Carbon::now();
 
         foreach ($this->importFailedRecords as $record) {
             $this->logError($record);
 
             $failedRecords[] = [
                 'import_result_id' => $this->importResult->id,
-                'type'             => ImportFailure::TYPE_LOCATIONS,
-                'details'          => json_encode($record),
-                'created_at'       => $datetime,
-                'updated_at'       => $datetime,
+                'type' => ImportFailure::TYPE_LOCATIONS,
+                'details' => json_encode($record),
+                'created_at' => $datetime,
+                'updated_at' => $datetime,
             ];
         }
 
         ImportFailure::insert($failedRecords);
     }
+
     /**
-     * @param array $record
+     * @param  array  $record
      */
     private function logError($record)
     {
         Log::error(
-            $this->entity->id . ' ' . $this->entity->name . ':\n' .
-            'Did not create or find a location.' . '\n' . json_encode($record)
+            $this->entity->id.' '.$this->entity->name.':\n'.
+            'Did not create or find a location.'.'\n'.json_encode($record)
         );
     }
-
 }

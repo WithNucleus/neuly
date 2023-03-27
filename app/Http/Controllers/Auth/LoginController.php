@@ -53,6 +53,7 @@ class LoginController extends Controller
     public function showLoginForm()
     {
         session()->put('loginRedirect', url()->previous());
+
         return view('auth.login');
     }
 
@@ -67,12 +68,12 @@ class LoginController extends Controller
     }
 
     /**
-     * @param string $provider
+     * @param  string  $provider
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|void
      */
     public function redirectToProvider($provider)
     {
-        if (!UserSocialAuth::isProviderAllowed($provider)) {
+        if (! UserSocialAuth::isProviderAllowed($provider)) {
             abort(404);
         }
 
@@ -87,7 +88,7 @@ class LoginController extends Controller
     public function handleProviderCallback($provider)
     {
         try {
-            if (!UserSocialAuth::isProviderAllowed($provider)) {
+            if (! UserSocialAuth::isProviderAllowed($provider)) {
                 throw new \Exception('Social provider not allowed.');
             }
 
@@ -104,7 +105,7 @@ class LoginController extends Controller
 
                 return redirect()
                     ->route('user.settings.social')
-                    ->with('success', 'Social account for ' . ucfirst($provider) . ' was connected successfully!');
+                    ->with('success', 'Social account for '.ucfirst($provider).' was connected successfully!');
             }
 
             //regular auth with social account
@@ -113,7 +114,7 @@ class LoginController extends Controller
                     ->where('provider_id', $socialiteUser->getId());
             })->first();
 
-            if (!$user) {
+            if (! $user) {
                 $name = $socialiteUser->getName();
                 $nameParts = explode(' ', $name);
 
@@ -126,11 +127,11 @@ class LoginController extends Controller
                 }
 
                 $user = User::firstOrCreate([
-                    'email' => $socialiteUser->getEmail()
+                    'email' => $socialiteUser->getEmail(),
                 ], [
-                    'name'              => $firstName,
-                    'last_name'         => $lastName,
-                    'password'          => Hash::make(Str::random('20')),
+                    'name' => $firstName,
+                    'last_name' => $lastName,
+                    'password' => Hash::make(Str::random('20')),
                     'email_verified_at' => Carbon::now(),
                 ])->assignRole('Subscriber');
 
@@ -147,7 +148,6 @@ class LoginController extends Controller
             auth()->login($user);
 
             return redirect()->intended($this->redirectPath());
-
         } catch (\Exception $e) {
             return redirect()->route('login')->with('error', "Failed to authenticate with $provider");
         }

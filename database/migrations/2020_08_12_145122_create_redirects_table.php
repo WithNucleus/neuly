@@ -3,9 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-
-use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
 
 class CreateRedirectsTable extends Migration
@@ -31,7 +30,7 @@ class CreateRedirectsTable extends Migration
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
         $permission = Permission::create(['name' => self::PERMISSION_MANAGE_REDIRECTS]);
-        $role       = Role::where(['name' => 'Admin'])->first();
+        $role = Role::where(['name' => 'Admin'])->first();
 
         if ($role) {
             $role->givePermissionTo($permission);
@@ -48,7 +47,7 @@ class CreateRedirectsTable extends Migration
         Schema::dropIfExists('redirects');
 
         $permission = Permission::where(['name' => self::PERMISSION_MANAGE_REDIRECTS])->first();
-        $role       = Role::where(['name' => 'Admin'])->first();
+        $role = Role::where(['name' => 'Admin'])->first();
 
         if ($permission && $role) {
             $role->revokePermissionTo($permission);

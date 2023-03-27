@@ -16,20 +16,27 @@ class Metric extends Model
     */
 
     protected $table = 'metrics';
+
     protected $guarded = ['id'];
+
     protected $dates = ['date'];
 
     protected $casts = [
-        'date' => 'date:Y-m-d'
+        'date' => 'date:Y-m-d',
     ];
 
     const TYPE_COUNT = 'count';
+
     const TYPE_CHANGE = 'change';
 
     const FREQUENCY_DAILY = 'daily';
+
     const FREQUENCY_WEEKLY = 'weekly';
+
     const FREQUENCY_MONTHLY = 'monthly';
+
     const FREQUENCY_QUARTERLY = 'quarterly';
+
     const FREQUENCY_YEARLY = 'yearly';
 
     const METRICS_FIELDS = [
@@ -152,31 +159,38 @@ class Metric extends Model
     | SCOPES
     |--------------------------------------------------------------------------
     */
-    public function scopeChanges($query) {
+    public function scopeChanges($query)
+    {
         return $query->where('type', self::TYPE_CHANGE);
     }
 
-    public function scopeCounts($query) {
+    public function scopeCounts($query)
+    {
         return $query->where('type', self::TYPE_COUNT);
     }
 
-    public function scopeDaily($query) {
+    public function scopeDaily($query)
+    {
         return $query->where('frequency', self::FREQUENCY_DAILY);
     }
 
-    public function scopeWeekly($query) {
+    public function scopeWeekly($query)
+    {
         return $query->where('frequency', self::FREQUENCY_WEEKLY);
     }
 
-    public function scopeMonthly($query) {
+    public function scopeMonthly($query)
+    {
         return $query->where('frequency', self::FREQUENCY_MONTHLY);
     }
 
-    public function scopeQuarterly($query) {
+    public function scopeQuarterly($query)
+    {
         return $query->where('frequency', self::FREQUENCY_QUARTERLY);
     }
 
-    public function scopeYearly($query) {
+    public function scopeYearly($query)
+    {
         return $query->where('frequency', self::FREQUENCY_YEARLY);
     }
 

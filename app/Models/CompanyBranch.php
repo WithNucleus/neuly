@@ -17,6 +17,7 @@ class CompanyBranch extends Model
     */
 
     protected $table = 'company_branches';
+
     protected $guarded = ['id'];
 
     /*
@@ -61,11 +62,11 @@ class CompanyBranch extends Model
         }
 
         if ($this->address2 != '') {
-            $address .= " " . $this->address2;
+            $address .= ' '.$this->address2;
         }
 
         if ($this->location) {
-            $address .= "<br>" . $this->location->name;
+            $address .= '<br>'.$this->location->name;
         }
 
         return $address;
@@ -75,6 +76,7 @@ class CompanyBranch extends Model
     {
         $addressForGoogle = str_replace(',', '', $this->fullAddress);
         $addressForGoogle = str_replace('<br>', '+', $addressForGoogle);
+
         return str_replace(' ', '+', $addressForGoogle);
     }
 

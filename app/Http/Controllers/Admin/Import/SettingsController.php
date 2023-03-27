@@ -32,22 +32,21 @@ class SettingsController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request)
     {
         // ImportSettings always stored with ID = 1
-        $importSettings              = ImportSetting::find(1);
-        $mappingOrganisation         = strtolower($request->input('mapping_organisation'));
+        $importSettings = ImportSetting::find(1);
+        $mappingOrganisation = strtolower($request->input('mapping_organisation'));
         $mappingOrganisationFiltered = StringHelper::explodeAndFilterEmpty($mappingOrganisation, ',');
 
         if ($importSettings) {
             $importSettings->mapping_organisation = $mappingOrganisationFiltered;
             $importSettings->update();
         } else {
-            $importSettings                       = new ImportSetting();
-            $importSettings->id                   = 1;
+            $importSettings = new ImportSetting();
+            $importSettings->id = 1;
             $importSettings->mapping_organisation = $mappingOrganisationFiltered;
             $importSettings->save();
         }
@@ -56,5 +55,4 @@ class SettingsController extends Controller
 
         return redirect()->route('import.settings.index');
     }
-
 }

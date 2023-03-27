@@ -3,22 +3,21 @@
 namespace App\Http\Controllers\Index;
 
 use App\Http\Controllers\Controller;
+use App\Models\Clinicaltrial;
+use App\Models\Focus;
+use App\Models\Location;
 use App\Repositories\FollowRepository;
 use App\Services\Metas;
-use Illuminate\Http\Request;
-use App\Models\Focus;
-use App\Models\Clinicaltrial;
-use Spatie\Activitylog\Models\Activity;
-use Spatie\QueryBuilder\QueryBuilder;
-use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\AllowedSort;
 use Auth;
 use DB;
-use App\Models\Location;
+use Illuminate\Http\Request;
+use Spatie\Activitylog\Models\Activity;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\AllowedSort;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class ClinicaltrialController extends Controller
 {
-
     /**
      * Create a new controller instance.
      *
@@ -52,12 +51,12 @@ class ClinicaltrialController extends Controller
             ->allowedSorts([
                 AllowedSort::field('start', 'start_date'),
                 AllowedSort::field('updated', 'last_update_posted'),
-                'title'
+                'title',
             ])
             ->paginate(10)
             ->appends(request()->query());
 
-    	$status = Clinicaltrial::pluck('status')->unique()->sort();
+        $status = Clinicaltrial::pluck('status')->unique()->sort();
         $years = Clinicaltrial::select(DB::raw('YEAR(start_date) as year'))->distinct()->orderBy('year', 'desc')->get()->pluck('year');
         $focus_cats = Focus::drugs()->orderBy('name')->get()->pluck('name');
         $locations = Location::select('country')
@@ -80,31 +79,31 @@ class ClinicaltrialController extends Controller
                 return explode('|', $entity);
             }, $filterInput);
 
-            if(isset($filter['company'])) {
+            if (isset($filter['company'])) {
                 $filters_companies = $filter['company'];
             }
 
-            if(isset($filter['researchers'])) {
+            if (isset($filter['researchers'])) {
                 $filters_researchers = $filter['researchers'];
             }
 
-            if(isset($filter['conditions'])) {
+            if (isset($filter['conditions'])) {
                 $filters_conditions = $filter['conditions'];
             }
 
-            if(isset($filter['interventions'])) {
+            if (isset($filter['interventions'])) {
                 $filters_interventions = $filter['interventions'];
             }
 
-            if(isset($filter['outcome_measures'])) {
+            if (isset($filter['outcome_measures'])) {
                 $filters_outcome_measures = $filter['outcome_measures'];
             }
 
-            if(isset($filter['study_designs'])) {
+            if (isset($filter['study_designs'])) {
                 $filters_study_designs = $filter['study_designs'];
             }
 
-            if(isset($filter['year'])) {
+            if (isset($filter['year'])) {
                 $filters_year = $filter['year'];
             }
         }
@@ -131,14 +130,14 @@ class ClinicaltrialController extends Controller
     public function show(Request $request, $slug)
     {
         $clinicaltrial = Clinicaltrial::with([
-                'conditions',
-                'interventions',
-                'outcomeMeasures',
-                'studyDesigns',
-                'locations',
-                'people',
-                'companies'
-            ])
+            'conditions',
+            'interventions',
+            'outcomeMeasures',
+            'studyDesigns',
+            'locations',
+            'people',
+            'companies',
+        ])
             ->where('slug', $slug)
             ->firstOrFail();
 
@@ -151,7 +150,7 @@ class ClinicaltrialController extends Controller
             ->withProperties([
                 'ip' => $request->ip(),
                 'entity' => 'clinicaltrials',
-                'slug' => $clinicaltrial->slug
+                'slug' => $clinicaltrial->slug,
             ])
             ->performedOn($clinicaltrial)
             ->tap(function (Activity $activity) use ($request) {

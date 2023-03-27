@@ -5,13 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\MediaItemRequest;
 use App\Models\DataFeed;
 use App\Models\MediaItem;
-use App\Models\Scopes\PublicStatusScope;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
  * Class MediaItemCrudController
- * @package App\Http\Controllers\Admin
+ *
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
 class MediaItemCrudController extends CrudController
@@ -30,7 +29,7 @@ class MediaItemCrudController extends CrudController
     public function setup()
     {
         CRUD::setModel(MediaItem::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/media-item');
+        CRUD::setRoute(config('backpack.base.route_prefix').'/media-item');
         CRUD::setEntityNameStrings('media item', 'media items');
         $this->crud->query = $this->crud->query->withoutGlobalScopes();
         $this->crud->model->clearGlobalScopes();
@@ -40,100 +39,100 @@ class MediaItemCrudController extends CrudController
      * Define what happens when the List operation is loaded.
      *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
+     *
      * @return void
      */
     protected function setupListOperation()
     {
         $this->crud->addColumn([
-            'name'    => 'name',
-            'label'   => 'Name',
-            'type'    => 'text',
+            'name' => 'name',
+            'label' => 'Name',
+            'type' => 'text',
         ]);
 
         $this->crud->addColumn([
-            'name'    => 'url',
-            'label'   => 'URL',
-            'type'    => 'text',
+            'name' => 'url',
+            'label' => 'URL',
+            'type' => 'text',
             'wrapper' => [
                 'element' => 'a',
                 'href' => function ($crud, $column, $entry, $related_key) {
                     return $entry->url;
                 },
-                    'target' => '_blank',
-                    'rel'=> 'noopener noreferrer'
+                'target' => '_blank',
+                'rel' => 'noopener noreferrer',
             ],
         ]);
 
         $this->crud->addColumn([
-            'name'    => 'status',
-            'label'   => 'Status',
-            'type'    => 'text',
+            'name' => 'status',
+            'label' => 'Status',
+            'type' => 'text',
         ]);
 
         $this->crud->addColumn([
-            'name'    => 'media_type',
-            'label'   => 'Media Type',
-            'type'    => 'text',
+            'name' => 'media_type',
+            'label' => 'Media Type',
+            'type' => 'text',
         ]);
 
         $this->crud->addColumn([
-            'name'    => 'source',
-            'label'   => 'Source',
-            'type'    => 'relationship',
+            'name' => 'source',
+            'label' => 'Source',
+            'type' => 'relationship',
         ]);
 
         $this->crud->addColumn([
-            'name'    => 'focus',
-            'label'   => 'Focus',
-            'type'    => 'relationship',
+            'name' => 'focus',
+            'label' => 'Focus',
+            'type' => 'relationship',
         ]);
 
         $this->crud->addColumn([
-            'name'    => 'companies',
-            'label'   => 'Organization',
-            'type'    => 'relationship',
+            'name' => 'companies',
+            'label' => 'Organization',
+            'type' => 'relationship',
         ]);
 
         $this->crud->addColumn([
-            'name'    => 'people',
-            'label'   => 'People',
-            'type'    => 'relationship',
+            'name' => 'people',
+            'label' => 'People',
+            'type' => 'relationship',
         ]);
 
         $this->crud->addColumn([
-            'name'    => 'date',
-            'label'   => 'Publish Date',
-            'type'    => 'date',
+            'name' => 'date',
+            'label' => 'Publish Date',
+            'type' => 'date',
         ]);
 
         $this->crud->addColumn([
-            'name'    => 'created_at',
-            'label'   => 'Created',
-            'type'    => 'date',
+            'name' => 'created_at',
+            'label' => 'Created',
+            'type' => 'date',
         ]);
 
         $this->crud->addColumn([
-            'name'    => 'icon_url',
-            'label'   => 'Icon URL',
-            'type'    => 'image',
+            'name' => 'icon_url',
+            'label' => 'Icon URL',
+            'type' => 'image',
         ]);
 
         $this->crud->addFilter([
-            'name'  => 'media_type',
-            'type'  => 'dropdown',
-            'label' => 'Media Type'
-        ], MediaItem::getMediaTypes(), function($value) {
+            'name' => 'media_type',
+            'type' => 'dropdown',
+            'label' => 'Media Type',
+        ], MediaItem::getMediaTypes(), function ($value) {
             $this->crud->addClause('where', 'media_type', $value);
         });
 
         $this->crud->addFilter([
-            'name'  => 'status',
-            'type'  => 'dropdown',
-            'label' => 'Status'
-        ], MediaItem::getStatuses(), function($value) {
+            'name' => 'status',
+            'type' => 'dropdown',
+            'label' => 'Status',
+        ], MediaItem::getStatuses(), function ($value) {
             $this->crud->addClause('where', 'status', $value);
         });
-
     }
 
     protected function setupShowOperation()
@@ -145,6 +144,7 @@ class MediaItemCrudController extends CrudController
      * Define what happens when the Create operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-create
+     *
      * @return void
      */
     protected function setupCreateOperation()
@@ -152,80 +152,80 @@ class MediaItemCrudController extends CrudController
         CRUD::setValidation(MediaItemRequest::class);
 
         $this->crud->addField([
-            'name'    => 'name',
-            'label'   => 'Name',
-            'type'    => 'text',
+            'name' => 'name',
+            'label' => 'Name',
+            'type' => 'text',
         ]);
 
         $this->crud->addField([
-            'name'    => 'url',
-            'label'   => 'URL',
-            'type'    => 'url',
+            'name' => 'url',
+            'label' => 'URL',
+            'type' => 'url',
         ]);
 
         $this->crud->addField([
-            'name'    => 'status',
-            'label'   => 'Status',
-            'type'    => 'select2_from_array',
+            'name' => 'status',
+            'label' => 'Status',
+            'type' => 'select2_from_array',
             'options' => MediaItem::getStatuses(),
-            'allows_null'  => false,
+            'allows_null' => false,
         ]);
 
         $this->crud->addField([
-            'name'    => 'media_type',
-            'label'   => 'Media Type',
-            'type'    => 'select2_from_array',
+            'name' => 'media_type',
+            'label' => 'Media Type',
+            'type' => 'select2_from_array',
             'options' => DataFeed::getMediaTypes(),
-            'allows_null'  => false,
+            'allows_null' => false,
         ]);
 
         $this->crud->addField([
-            'label'     => "Focus",
-            'type'      => 'select2_multiple',
-            'name'      => 'focus',
-            'entity'    => 'focus',
+            'label' => 'Focus',
+            'type' => 'select2_multiple',
+            'name' => 'focus',
+            'entity' => 'focus',
             'attribute' => 'name',
-            'pivot'   => true,
+            'pivot' => true,
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
-            'model'   => "App\Models\Focus",
+            'model' => "App\Models\Focus",
         ]);
 
         $this->crud->addField([
-            'label'     => "Organizations",
-            'type'      => 'select2_multiple',
-            'name'      => 'companies',
-            'entity'    => 'companies',
+            'label' => 'Organizations',
+            'type' => 'select2_multiple',
+            'name' => 'companies',
+            'entity' => 'companies',
             'attribute' => 'name',
-            'pivot'   => true,
+            'pivot' => true,
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
-            'model'   => "App\Models\Company",
+            'model' => "App\Models\Company",
         ]);
 
         $this->crud->addField([
-            'label'     => "People",
-            'type'      => 'select2_multiple',
-            'name'      => 'people',
-            'entity'    => 'people',
+            'label' => 'People',
+            'type' => 'select2_multiple',
+            'name' => 'people',
+            'entity' => 'people',
             'attribute' => 'name',
-            'pivot'   => true,
+            'pivot' => true,
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
-            'model'   => "App\Models\Person",
+            'model' => "App\Models\Person",
         ]);
 
         CRUD::setFromDb(); // fields
-
     }
 
     /**
      * Define what happens when the Update operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
+     *
      * @return void
      */
     protected function setupUpdateOperation()

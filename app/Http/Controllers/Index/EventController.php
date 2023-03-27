@@ -4,22 +4,22 @@ namespace App\Http\Controllers\Index;
 
 use App\Helpers\EmbedLogHelper;
 use App\Http\Controllers\Controller;
-use App\Repositories\FollowRepository;
-use Illuminate\Http\Request;
+use App\Models\Company;
 use App\Models\Event;
 use App\Models\EventType;
 use App\Models\Focus;
 use App\Models\Location;
-use App\Models\Company;
-use Carbon\Carbon;
+use App\Repositories\FollowRepository;
 use App\Services\Metas;
-use Illuminate\Support\Facades\DB;
-use Spatie\QueryBuilder\QueryBuilder;
-use Spatie\QueryBuilder\AllowedSort;
-use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\Activitylog\Models\Activity;
 use Auth;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Spatie\Activitylog\Models\Activity;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\AllowedSort;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class EventController extends Controller
 {
@@ -34,7 +34,8 @@ class EventController extends Controller
     }
 
     // Upcoming Events
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $data = $this->getIndexData($request);
         $data['metas'] = Metas::fromPage($request->path());
 
@@ -42,8 +43,8 @@ class EventController extends Controller
     }
 
     // Past Events
-    public function past(Request $request) {
-
+    public function past(Request $request)
+    {
         // Get Events
         $events = QueryBuilder::for(Event::class)
             ->where('start_date', '<=', Carbon::now('America/Chicago'))
@@ -65,25 +66,25 @@ class EventController extends Controller
 
         // Get Focus Values
         $focus_cats = Focus::whereHas('events', function (Builder $query) {
-                    $query->where('start_date', '<=', Carbon::now('America/Chicago'));
-                })
+            $query->where('start_date', '<=', Carbon::now('America/Chicago'));
+        })
                 ->get()
                 ->pluck('name');
 
         // Event Types
-        $event_types = EventType::has('events', '>' , 0)->with('events')->get()->pluck('name');
+        $event_types = EventType::has('events', '>', 0)->with('events')->get()->pluck('name');
 
         // Organizations
         $event_organizations = Company::whereHas('events', function (Builder $query) {
-                    $query->where('start_date', '<=', Carbon::now('America/Chicago'));
-                })
+            $query->where('start_date', '<=', Carbon::now('America/Chicago'));
+        })
                 ->get()
                 ->pluck('name');
 
         // Locations
         $locations = Location::whereHas('events', function (Builder $query) {
-                    $query->where('start_date', '<=', Carbon::now('America/Chicago'));
-                })
+            $query->where('start_date', '<=', Carbon::now('America/Chicago'));
+        })
                 ->get()
                 ->pluck('country')->unique()->sort();
 
@@ -92,19 +93,19 @@ class EventController extends Controller
 
         // Return View
         return view('discover.events.index', compact('events', 'focus_cats', 'event_types', 'metas', 'locations', 'event_organizations'));
-
     }
 
-    public function show(Request $request, $slug) {
+    public function show(Request $request, $slug)
+    {
         $event = Event::where('slug', $slug)->firstOrFail();
 
         EmbedLogHelper::add($request, $event);
 
-        $metas = Metas::process(array(
-            'title'         => $event->name,
-            'description'   => strip_tags($event->description),
-            'image'         => '',
-        ));
+        $metas = Metas::process([
+            'title' => $event->name,
+            'description' => strip_tags($event->description),
+            'image' => '',
+        ]);
 
         $related = $this->getRelatedEntities($event);
 
@@ -117,7 +118,7 @@ class EventController extends Controller
                 'ip' => $request->ip(),
                 'entity' => 'events',
                 'slug' => $event->slug,
-                'image' => $event->image
+                'image' => $event->image,
             ])
             ->performedOn($event)
             ->tap(function (Activity $activity) use ($request) {
@@ -189,11 +190,11 @@ class EventController extends Controller
             ->sort();
 
         return [
-            'events'              => $events,
-            'event_types'         => $event_types,
-            'focus_cats'          => $focus_cats,
+            'events' => $events,
+            'event_types' => $event_types,
+            'focus_cats' => $focus_cats,
             'event_organizations' => $event_organizations,
-            'locations'           => $locations,
+            'locations' => $locations,
         ];
     }
 
@@ -219,5 +220,4 @@ class EventController extends Controller
     {
         return response()->json(Event::all()->pluck('name'));
     }
-
 }

@@ -30,10 +30,10 @@ class DashboardChartsController extends Controller
         $values = $data->pluck('total')->toJson();
         $colors = json_encode($this->getChartColors(count($data->pluck('total'))));
 
-        return View::make("enterprise.widgets.chart-organizations-focus")->with([
+        return View::make('enterprise.widgets.chart-organizations-focus')->with([
             'labels' => $labels,
             'values' => $values,
-            'colors' => $colors
+            'colors' => $colors,
         ])->render();
     }
 
@@ -52,10 +52,10 @@ class DashboardChartsController extends Controller
         $values = $data->pluck('total')->toJson();
         $colors = json_encode($this->getChartColors(count($data->pluck('total'))));
 
-        return View::make("enterprise.widgets.chart-organizations-industry")->with([
+        return View::make('enterprise.widgets.chart-organizations-industry')->with([
             'labels' => $labels,
             'values' => $values,
-            'colors' => $colors
+            'colors' => $colors,
         ])->render();
     }
 
@@ -78,11 +78,10 @@ class DashboardChartsController extends Controller
             array_push($labels, Carbon::parse($group['date'])->format('M Y'));
         }
 
-        return View::make("enterprise.widgets.chart-job-demand")->with([
+        return View::make('enterprise.widgets.chart-job-demand')->with([
             'labels' => json_encode($labels),
             'values' => json_encode($values),
         ])->render();
-
     }
 
     public function activePatentsChart(): string
@@ -105,7 +104,7 @@ class DashboardChartsController extends Controller
             array_push($labels, $group['date']);
         }
 
-        return View::make("enterprise.widgets.chart-active-patent-by-year")->with([
+        return View::make('enterprise.widgets.chart-active-patent-by-year')->with([
             'labels' => json_encode($labels),
             'values' => json_encode($values),
         ])->render();
@@ -118,7 +117,7 @@ class DashboardChartsController extends Controller
             'Ketamine',
             'MDMA',
             'GHB',
-            'LSD'
+            'LSD',
         ];
 
         $statuses = [
@@ -138,9 +137,9 @@ class DashboardChartsController extends Controller
 
         foreach ($statuses as $label => $status) {
             $focusesQuery->withCount([
-                'clinicaltrials as ' . $label => function (Builder $query) use ($status) {
+                'clinicaltrials as '.$label => function (Builder $query) use ($status) {
                     $query->where('status', $status);
-                }
+                },
             ]);
         }
 
@@ -156,11 +155,10 @@ class DashboardChartsController extends Controller
 
         $labels = array_values($statuses);
 
-        return View::make("enterprise.widgets.chart-clinical-trials-status")->with([
+        return View::make('enterprise.widgets.chart-clinical-trials-status')->with([
             'labels' => json_encode($labels),
             'values' => json_encode($values),
         ])->render();
-
     }
 
     public function investmentByFocus(): string
@@ -171,7 +169,7 @@ class DashboardChartsController extends Controller
             ->withCount([
                 'companies' => function (Builder $query) {
                     $query->whereHas('investors');
-                }
+                },
             ])
             ->get()
             ->pluck('companies_count', 'name')
@@ -181,7 +179,7 @@ class DashboardChartsController extends Controller
         $labels = array_keys($focus);
         $colors = $this->getChartColors(count($labels));
 
-        return View::make("enterprise.widgets.chart-investment-by-focus")->with([
+        return View::make('enterprise.widgets.chart-investment-by-focus')->with([
             'labels' => json_encode($labels),
             'values' => json_encode($values),
             'colors' => json_encode($colors),
@@ -252,9 +250,9 @@ class DashboardChartsController extends Controller
 
         foreach ($filteredPhases as $value) {
             $query->withCount([
-                'clinicaltrials as phase' . $value => function (Builder $query) use ($value) {
+                'clinicaltrials as phase'.$value => function (Builder $query) use ($value) {
                     $query->where('phase_integer', $value);
-                }
+                },
             ]);
         }
 
@@ -275,7 +273,7 @@ class DashboardChartsController extends Controller
 
         $colors = $this->getChartColors(count($values));
 
-        return View::make("enterprise.widgets.chart-clinical-trials-focus")->with([
+        return View::make('enterprise.widgets.chart-clinical-trials-focus')->with([
             'labels' => json_encode($labels),
             'values' => json_encode($values),
             'colors' => json_encode($colors),
@@ -298,7 +296,7 @@ class DashboardChartsController extends Controller
             $firstLocation = $clinicalTrial->locations->first();
             $focus = 'N/A';
 
-            if (!empty($clinicalTrial->focus)) {
+            if (! empty($clinicalTrial->focus)) {
                 if ($clinicalTrial->focus->count() > 1) {
                     $focus = 'Multiple';
                 } else {
@@ -335,7 +333,7 @@ class DashboardChartsController extends Controller
             $colorsMapped[$focusName] = $colors[$index];
             $colorsLegend[] = [
                 'name' => $focusName,
-                'fill' => $colors[$index]
+                'fill' => $colors[$index],
             ];
         }
 
@@ -345,7 +343,7 @@ class DashboardChartsController extends Controller
             }
         }
 
-        return View::make("enterprise.widgets.chart-clinical-trials-locations")->with([
+        return View::make('enterprise.widgets.chart-clinical-trials-locations')->with([
             'chartData' => json_encode($chartData, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK),
             'availableFocuses' => json_encode($availableFocuses),
             'colorsLegend' => json_encode($colorsLegend),

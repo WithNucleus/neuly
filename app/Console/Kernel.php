@@ -21,7 +21,6 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      *
-     * @param Schedule $schedule
      * @return void
      */
     protected function schedule(Schedule $schedule)
@@ -35,7 +34,7 @@ class Kernel extends ConsoleKernel
             });
 
         $schedule
-            ->command('backup:run --only-db --filename=db_' . date('Y-m-d_H-i-s') . '.zip')
+            ->command('backup:run --only-db --filename=db_'.date('Y-m-d_H-i-s').'.zip')
             ->everyThirtyMinutes()
             ->onFailure(function () {
                 Log::critical('Backup Failed!');
@@ -50,10 +49,10 @@ class Kernel extends ConsoleKernel
         $schedule
             ->command('clean:unverified')
             ->dailyAt(1)
-            ->onFailure(function() {
+            ->onFailure(function () {
                 Log::critical('Cleaning unverified users Failed!');
             })
-            ->onSuccess(function() {
+            ->onSuccess(function () {
                 Log::info('Cleaning unverified users Succeeded!');
             });
 
@@ -61,10 +60,10 @@ class Kernel extends ConsoleKernel
         $schedule
             ->command('dataFeeds:googleAlerts')
             ->hourlyAt(15)
-            ->onFailure(function() {
+            ->onFailure(function () {
                 Log::critical('Data Feeds - Google Alerts failed');
             })
-            ->onSuccess(function() {
+            ->onSuccess(function () {
                 Log::info('Data Feeds - Google Alerts successful');
             });
 
@@ -72,10 +71,10 @@ class Kernel extends ConsoleKernel
         $schedule
             ->command('dataFeeds:getAll')
             ->everySixHours()
-            ->onFailure(function() {
+            ->onFailure(function () {
                 Log::critical('Data Feeds - Google Alerts failed');
             })
-            ->onSuccess(function() {
+            ->onSuccess(function () {
                 Log::info('Data Feeds - Google Alerts successful');
             });
 
@@ -83,7 +82,7 @@ class Kernel extends ConsoleKernel
         $schedule
             ->command('backup:clean')
             ->weeklyOn(1, '8:30')
-            ->onFailure(function() {
+            ->onFailure(function () {
                 Log::critical('Clean backups failed');
             });
 
@@ -91,35 +90,35 @@ class Kernel extends ConsoleKernel
         $schedule
             ->command('metrics:daily')
             ->daily()
-            ->onFailure(function() {
+            ->onFailure(function () {
                 Log::critical('Daily metrics failed');
             });
 
         $schedule
             ->command('metrics:weekly')
             ->weeklyOn(1, '0:05')
-            ->onFailure(function() {
+            ->onFailure(function () {
                 Log::critical('Weekly metrics failed');
             });
 
         $schedule
             ->command('metrics:monthly')
             ->monthlyOn(1, '0:05')
-            ->onFailure(function() {
+            ->onFailure(function () {
                 Log::critical('Monthly metrics failed');
             });
 
         $schedule
             ->command('metrics:yearly')
             ->yearlyOn(1, 1, '0:05')
-            ->onFailure(function() {
+            ->onFailure(function () {
                 Log::critical('Yearly metrics failed');
             });
 
         $schedule
             ->command('activitylog:archive')
             ->monthlyOn(1)
-            ->onFailure(function() {
+            ->onFailure(function () {
                 Log::critical('Activity log archive command failed');
             });
 
@@ -127,7 +126,7 @@ class Kernel extends ConsoleKernel
         $schedule
             ->command('activitylog:clean')
             ->monthlyOn(1, '23:00')
-            ->onFailure(function() {
+            ->onFailure(function () {
                 Log::critical('Activity log clean command failed');
             });
     }

@@ -22,7 +22,7 @@ class UpdateJobsTableAddOwnerMorphColumns extends Migration
 
         DB::table('jobs')->update([
             'owner_id' => DB::raw('company_id'),
-            'owner_type' => Company::class
+            'owner_type' => Company::class,
         ]);
 
         Schema::table('jobs', function (Blueprint $table) {

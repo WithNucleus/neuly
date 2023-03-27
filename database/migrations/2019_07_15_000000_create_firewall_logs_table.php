@@ -23,7 +23,7 @@ class CreateFirewallLogsTable extends Migration
             $table->text('request')->nullable();
             $table->timestamps();
             $table->softDeletes();
-            
+
             $table->index('ip');
         });
     }

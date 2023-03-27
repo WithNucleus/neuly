@@ -13,7 +13,7 @@ class AddDeleteCascadeOnUsersSocialAuthConstraint extends Migration
      */
     public function up()
     {
-        Schema::table('user_social_auth', function(Blueprint $table) {
+        Schema::table('user_social_auth', function (Blueprint $table) {
             $table->dropForeign(['user_id']);
             $table->foreign('user_id')
                 ->references('id')
@@ -30,7 +30,7 @@ class AddDeleteCascadeOnUsersSocialAuthConstraint extends Migration
      */
     public function down()
     {
-        Schema::table('user_social_auth', function(Blueprint $table) {
+        Schema::table('user_social_auth', function (Blueprint $table) {
             $table->dropForeign(['user_id']);
             $table->foreign('user_id')
                 ->references('id')

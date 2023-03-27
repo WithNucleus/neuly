@@ -29,10 +29,12 @@ class Focus extends Model implements EntityContract
     */
 
     protected $table = 'focus';
+
     protected $guarded = ['id'];
 
     // log activity for all attributes, which not listed in $guarded array
     protected static $logUnguarded = true;
+
     protected static $logName = 'entities';
 
     /*
@@ -88,7 +90,7 @@ class Focus extends Model implements EntityContract
 
     public function patents(): \Illuminate\Database\Eloquent\Relations\MorphToMany
     {
-        return $this->morphToMany(Patent::class, 'entity' , 'patent_relationships')->withTimestamps();
+        return $this->morphToMany(Patent::class, 'entity', 'patent_relationships')->withTimestamps();
     }
 
     public function people(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
@@ -108,7 +110,6 @@ class Focus extends Model implements EntityContract
     */
 
     /**
-     * @param $query
      * @return mixed
      */
     public function scopeDrugs($query)
@@ -122,7 +123,7 @@ class Focus extends Model implements EntityContract
     }
 
     /**
-     * @param \Illuminate\Database\Query\Builder $query
+     * @param  \Illuminate\Database\Query\Builder  $query
      * @return \Illuminate\Database\Query\Builder
      */
     public function scopeHasJobs($query)
@@ -165,41 +166,41 @@ class Focus extends Model implements EntityContract
     {
         return [
             //attributes
-            'name'           => [
+            'name' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'slug'           => [
+            'slug' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
             //relations
             'clinicaltrials' => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'title',
             ],
-            'companies'      => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'companies' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
-            'events'         => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'events' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
-            'jobs'           => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'jobs' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'job_title',
             ],
-            'people'       => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'people' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
-            'research'       => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'research' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
         ];

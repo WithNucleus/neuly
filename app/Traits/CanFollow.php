@@ -12,7 +12,8 @@ use App\Models\Location;
 use App\Models\Person;
 use App\Models\Research;
 
-trait CanFollow {
+trait CanFollow
+{
     public function followedCompanies()
     {
         return $this->morphToMany(Company::class, 'followable');

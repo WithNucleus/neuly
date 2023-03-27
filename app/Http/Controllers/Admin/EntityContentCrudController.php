@@ -8,7 +8,7 @@ use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
  * Class EntityContentCrudController
- * @package App\Http\Controllers\Admin
+ *
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
 class EntityContentCrudController extends CrudController
@@ -27,7 +27,7 @@ class EntityContentCrudController extends CrudController
     public function setup()
     {
         CRUD::setModel(\App\Models\EntityContent::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/entitycontent');
+        CRUD::setRoute(config('backpack.base.route_prefix').'/entitycontent');
         CRUD::setEntityNameStrings('entity content', 'entity content');
     }
 
@@ -35,6 +35,7 @@ class EntityContentCrudController extends CrudController
      * Define what happens when the List operation is loaded.
      *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
+     *
      * @return void
      */
     protected function setupListOperation()
@@ -56,6 +57,7 @@ class EntityContentCrudController extends CrudController
      * Define what happens when the Create operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-create
+     *
      * @return void
      */
     protected function setupCreateOperation()
@@ -63,21 +65,21 @@ class EntityContentCrudController extends CrudController
         $this->crud->setValidation(EntityContentRequest::class);
 
         $this->crud->addField([
-            'name'  => 'name',
-            'type'  => 'text',
-            'label' => 'Name'
+            'name' => 'name',
+            'type' => 'text',
+            'label' => 'Name',
         ]);
 
         $this->crud->addField([
-            'name'  => 'content',
-            'type'  => 'textarea',
-            'label' => 'Content'
+            'name' => 'content',
+            'type' => 'textarea',
+            'label' => 'Content',
         ]);
 
         $this->crud->addField([
-            'name'  => 'order',
-            'type'  => 'number',
-            'label' => 'Order'
+            'name' => 'order',
+            'type' => 'number',
+            'label' => 'Order',
         ]);
 
         // TODO -- Add the entity morph fields
@@ -93,6 +95,7 @@ class EntityContentCrudController extends CrudController
      * Define what happens when the Update operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
+     *
      * @return void
      */
     protected function setupUpdateOperation()

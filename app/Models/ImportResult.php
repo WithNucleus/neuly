@@ -7,8 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class ImportResult extends Model
 {
     const TYPE_CLINICAL_TRIALS = 'clinical_trials';
+
     const TYPE_RELATED_ENTITIES_LOCATION = 'related_entities_locations';
+
     const TYPE_RELATED_ENTITIES_PEOPLE_ORGANIZATION = 'related_entities_people_organisation';
+
     const TYPE_BATCH_IMAGES_UPLOAD = 'batch_images_upload';
 
     /*
@@ -17,7 +20,8 @@ class ImportResult extends Model
     |--------------------------------------------------------------------------
     */
 
-	protected $table = 'import_results';
+    protected $table = 'import_results';
+
     protected $guarded = ['id'];
 
     protected $casts = [
@@ -30,7 +34,8 @@ class ImportResult extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function focus() {
+    public function focus()
+    {
         return $this->belongsTo('App\Models\Focus');
     }
 

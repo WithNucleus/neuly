@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Models\Focus;
+use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 
 class updateFocusSlugs extends Command
@@ -43,7 +43,6 @@ class updateFocusSlugs extends Command
         $focus_cats = Focus::whereNull('slug')->take(20)->get();
 
         foreach ($focus_cats as $focus) {
-
             // Get Name
             $name = $focus->name;
 
@@ -55,7 +54,7 @@ class updateFocusSlugs extends Command
             $focus->update();
 
             // Print Info
-            $this->info('Updated slug for ' . $focus->name);
+            $this->info('Updated slug for '.$focus->name);
         }
     }
 }

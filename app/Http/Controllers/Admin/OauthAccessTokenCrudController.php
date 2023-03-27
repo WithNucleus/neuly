@@ -7,7 +7,7 @@ use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
  * Class OauthAccessTokenCrudController
- * @package App\Http\Controllers\Admin
+ *
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
 class OauthAccessTokenCrudController extends CrudController
@@ -22,12 +22,12 @@ class OauthAccessTokenCrudController extends CrudController
      */
     public function setup()
     {
-        if (!backpack_user()->can('edit users')) {
+        if (! backpack_user()->can('edit users')) {
             abort(404);
         }
 
         CRUD::setModel(\App\Models\OauthAccessToken::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/oauth-access-token');
+        CRUD::setRoute(config('backpack.base.route_prefix').'/oauth-access-token');
         CRUD::setEntityNameStrings('oauth access token', 'oauth access tokens');
     }
 
@@ -35,6 +35,7 @@ class OauthAccessTokenCrudController extends CrudController
      * Define what happens when the List operation is loaded.
      *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
+     *
      * @return void
      */
     protected function setupListOperation()

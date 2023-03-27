@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Validator;
 
 /**
  * Class ListingRequestCrudController.
+ *
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
 class ListingRequestCrudController extends CrudController
@@ -45,6 +46,7 @@ class ListingRequestCrudController extends CrudController
      * Define what happens when the List operation is loaded.
      *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
+     *
      * @return void
      */
     protected function setupListOperation()
@@ -65,7 +67,7 @@ class ListingRequestCrudController extends CrudController
             'label' => 'Submitted by',
             'type' => 'closure',
             'function' => function ($entry) {
-                return $entry->name . ( $entry->user_id === null ? ' (Guest)' : ' (Registered)' );
+                return $entry->name.($entry->user_id === null ? ' (Guest)' : ' (Registered)');
             }, ]);
         $this->crud->addColumn(['name' => 'created_at', 'label' => 'Request created', 'type' => 'date']);
     }
@@ -102,10 +104,10 @@ class ListingRequestCrudController extends CrudController
         $this->crud->addButtonFromModelFunction('line', 'decline', 'generateDeclineButton', 'beginning');
 
         Widget::add([
-            'type'           => 'view',
-            'view'           => 'admin.listing_requests.widget.show_original_entity',
+            'type' => 'view',
+            'view' => 'admin.listing_requests.widget.show_original_entity',
             'originalEntity' => $originalEntity,
-            'mapping'        => $mapping,
+            'mapping' => $mapping,
         ])->to('after_content');
     }
 
@@ -228,7 +230,7 @@ class ListingRequestCrudController extends CrudController
 
         if (in_array($entityClass, $entitiesWithVisibility)) {
             $entity->visibility = 'public';
-            $entity->visibility_code = NULL;
+            $entity->visibility_code = null;
         }
 
         $this->handleOneToOneRelationData($entity, $mapping, $relationsData);
@@ -238,9 +240,8 @@ class ListingRequestCrudController extends CrudController
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     * @param object $entity
-     * @param string $field
+     * @param  object  $entity
+     * @param  string  $field
      */
     private function handleImageUpload(Request $request, $entity, $fieldName)
     {
@@ -294,7 +295,7 @@ class ListingRequestCrudController extends CrudController
     }
 
     /**
-     * @param string $filepath
+     * @param  string  $filepath
      * @return string
      */
     private function getFilenameFromPath($filepath)
@@ -305,9 +306,9 @@ class ListingRequestCrudController extends CrudController
     }
 
     /**
-     * @param object $entity
-     * @param array $mapping
-     * @param array $relationsData
+     * @param  object  $entity
+     * @param  array  $mapping
+     * @param  array  $relationsData
      */
     private function handleOneToOneRelationData($entity, $mapping, $relationsData)
     {

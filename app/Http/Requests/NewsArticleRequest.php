@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Http\Requests\Request;
 use Illuminate\Foundation\Http\FormRequest;
 
 class NewsArticleRequest extends FormRequest
@@ -28,7 +27,7 @@ class NewsArticleRequest extends FormRequest
         return [
             'name' => 'required|min:5|max:255',
             'publisher' => 'required|min:5|max:255',
-            'url' => 'required|min:5|max:255'
+            'url' => 'required|min:5|max:255',
         ];
     }
 

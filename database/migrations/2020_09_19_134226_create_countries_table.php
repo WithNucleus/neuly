@@ -38,9 +38,9 @@ class CreateCountriesTable extends Migration
 
         $countries = json_decode($response->getBody(), true);
 
-        foreach($countries as $country) {
+        foreach ($countries as $country) {
             DB::table('countries')->insert(
-                array(
+                [
                     'name' => $country['name'],
                     'official_name' => $country['name'],
                     'native_name' => $country['nativeName'],
@@ -55,8 +55,8 @@ class CreateCountriesTable extends Migration
                     'currencies' => json_encode($country['currencies']),
                     'languages' => json_encode($country['languages']),
                     'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now()
-                )
+                    'updated_at' => Carbon::now(),
+                ]
             );
         }
     }

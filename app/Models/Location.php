@@ -33,10 +33,12 @@ class Location extends Model implements EntityContract
     */
 
     protected $table = 'locations';
+
     protected $guarded = ['id'];
 
     // log activity for all attributes, which not listed in $guarded array
     protected static $logUnguarded = true;
+
     protected static $logName = 'entities';
 
     private $searchableRelationships = [
@@ -67,7 +69,7 @@ class Location extends Model implements EntityContract
     }
 
     /**
-     * @param bool $isUpdate
+     * @param  bool  $isUpdate
      */
     private function handleMapCodes($isUpdate = false)
     {
@@ -110,9 +112,9 @@ class Location extends Model implements EntityContract
     }
 
     /**
-     * @param string $country
-     * @param string $region
-     * @param string $city
+     * @param  string  $country
+     * @param  string  $region
+     * @param  string  $city
      * @return \App\Models\Location
      */
     public static function findOrCreateLocation($country, $region, $city = '')
@@ -143,10 +145,10 @@ class Location extends Model implements EntityContract
 
         try {
             $location = self::create([
-                'name'    => $name,
-                'slug'    => $slug,
-                'city'    => $city,
-                'region'  => $region,
+                'name' => $name,
+                'slug' => $slug,
+                'city' => $city,
+                'region' => $region,
                 'country' => $country,
             ]);
 
@@ -278,50 +280,50 @@ class Location extends Model implements EntityContract
     {
         return [
             //attributes
-            'name'           => [
+            'name' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'slug'           => [
+            'slug' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'city'           => [
+            'city' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'region'         => [
+            'region' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'country'        => [
+            'country' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
             //relations
-            'companies'      => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'companies' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
-            'people'         => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'people' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
-            'investors'      => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'investors' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
-            'jobs'           => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'jobs' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'job_title',
             ],
-            'events'         => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'events' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
             'clinicaltrials' => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'title',
             ],
         ];

@@ -5,9 +5,6 @@ namespace App\Listeners;
 use App\Events\SendNotification;
 use App\Models\Follow;
 use App\Models\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Support\Facades\DB;
 
 class CreateAppNotification
 {
@@ -24,7 +21,6 @@ class CreateAppNotification
     /**
      * Handle the event.
      *
-     * @param  SendNotification  $event
      * @return void
      */
     public function handle(SendNotification $event)
@@ -34,8 +30,7 @@ class CreateAppNotification
             ->where('app_notification', '=', 1)
             ->get(['user_id']);
 
-        foreach($users as $user)
-        {
+        foreach ($users as $user) {
             $notification = new Notification();
             $notification->user_id = $user->user_id;
             $notification->notifier_id = $event->id;

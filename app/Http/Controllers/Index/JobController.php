@@ -4,19 +4,19 @@ namespace App\Http\Controllers\Index;
 
 use App\Helpers\EmbedLogHelper;
 use App\Http\Controllers\Controller;
+use App\Models\Company;
 use App\Models\Investor;
-use Illuminate\Http\Request;
 use App\Models\Job;
 use App\Models\Location;
-use App\Models\Company;
 use App\Services\Metas;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Models\Activity;
-use Spatie\QueryBuilder\QueryBuilder;
-use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\AllowedFilter;
-use Illuminate\Support\Facades\Auth;
+use Spatie\QueryBuilder\AllowedSort;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class JobController extends Controller
 {
@@ -30,14 +30,16 @@ class JobController extends Controller
         $this->middleware('query_filters')->only('index', 'archive', 'embedIndex');
     }
 
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $data = $this->getIndexData($request, 'open');
         $data['metas'] = Metas::fromPage($request->path());
 
         return view('discover.jobs.index', $data);
     }
 
-    public function archive(Request $request) {
+    public function archive(Request $request)
+    {
         $data = $this->getIndexData($request, 'archived');
         $data['metas'] = Metas::fromPage($request->path());
 
@@ -45,18 +47,18 @@ class JobController extends Controller
     }
 
     // Show
-    public function show(Request $request, $slug) {
-
+    public function show(Request $request, $slug)
+    {
         // Get Job
         $job = Job::where('slug', $slug)->firstOrFail();
 
         EmbedLogHelper::add($request, $job);
 
-        $metas = Metas::process(array(
-            'title'         => $job->job_title,
-            'description'   => strip_tags($job->job_description),
-            'image'         => '',
-        ));
+        $metas = Metas::process([
+            'title' => $job->job_title,
+            'description' => strip_tags($job->job_description),
+            'image' => '',
+        ]);
 
         $related = $this->getReltaedEntities($job);
 
@@ -68,7 +70,7 @@ class JobController extends Controller
             ->withProperties([
                 'ip' => $request->ip(),
                 'entity' => 'jobs',
-                'slug' => $job->slug
+                'slug' => $job->slug,
             ])
             ->performedOn($job)
             ->tap(function (Activity $activity) use ($request) {

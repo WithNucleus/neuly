@@ -1,9 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Symfony\Component\Console\Output\ConsoleOutput;
 use App\Models\Location;
+use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 class RemoveUnusedLocationRecords extends Migration
 {
@@ -18,7 +18,7 @@ class RemoveUnusedLocationRecords extends Migration
         $total_deleted = 0;
         $locations = Location::withCount(['companies', 'people', 'investors', 'jobs', 'events', 'clinicaltrials'])->get();
 
-        foreach($locations as $location) {
+        foreach ($locations as $location) {
             $total = $location->companies_count +
                      $location->people_count +
                      $location->investors_count +
@@ -27,14 +27,13 @@ class RemoveUnusedLocationRecords extends Migration
                      $location->clinicaltrials_count;
 
             if ($total == 0) {
-
                 $total_deleted++;
                 $location->delete();
-                Log::info('Deleted ' . $location->name);
+                Log::info('Deleted '.$location->name);
             }
         }
 
-        $output->writeln($total_deleted . ' locations removed');
+        $output->writeln($total_deleted.' locations removed');
     }
 
     /**

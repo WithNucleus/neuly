@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\DB;
 class JobsByFocusController extends Controller
 {
     /**
-     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function index(Request $request)
@@ -21,7 +20,7 @@ class JobsByFocusController extends Controller
             ->join('focus', 'focus.id', '=', 'focus_job.focus_id')
             ->groupBy('focus_job.focus_id');
         $query = $this->filterQuery($query, $request);
-        $data  = $query->get();
+        $data = $query->get();
 
         $response = [
             'labels' => $data->pluck('name'),
@@ -33,8 +32,8 @@ class JobsByFocusController extends Controller
     }
 
     /**
-     * @param \Illuminate\Database\Query\Builder $query
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Database\Query\Builder
      */
     private function filterQuery($query, $request)
@@ -47,8 +46,8 @@ class JobsByFocusController extends Controller
     }
 
     /**
-     * @param \Illuminate\Database\Query\Builder $query
-     * @param mixed $value
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  mixed  $value
      * @return \Illuminate\Database\Query\Builder
      */
     private function filterByFocus($query, $value)

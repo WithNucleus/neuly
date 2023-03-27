@@ -21,10 +21,13 @@ class NewsArticle extends Model implements EntityImageContract
     */
 
     protected $table = 'news_articles';
+
     protected $guarded = ['id'];
 
     protected static $imageAttribute = 'image';
+
     protected static $imageFolderPath = 'news';
+
     protected static $imageFilenameAttribute = 'name';
 
     protected $casts = [
@@ -44,7 +47,8 @@ class NewsArticle extends Model implements EntityImageContract
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    public function focus() {
+    public function focus()
+    {
         return $this->belongsToMany('App\Models\Focus', 'focus_news_article', 'news_article_id', 'focus_id')->withTimestamps();
     }
 

@@ -9,8 +9,6 @@ use Illuminate\Http\Request;
 class PagePreviewHelper
 {
     /**
-     * @param \Illuminate\Http\Request $request
-     * @param \Illuminate\Database\Eloquent\Model $entity
      * @return array
      */
     public static function checkEntityPreview(Request $request, Model $entity)
@@ -23,7 +21,7 @@ class PagePreviewHelper
 
         //TODO add VisibilityContract with VisibilityTrait to the entity and check instanceof VisibilityContract first
         if ($entity->visibility !== 'public') {
-            if($entity->validateVisibilityCode($visibilityCode) === false) {
+            if ($entity->validateVisibilityCode($visibilityCode) === false) {
                 $result['canView'] = false;
             }
 

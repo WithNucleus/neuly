@@ -143,6 +143,6 @@ return [
     |
     */
 
-    'image_url_prefix' => env('SCOUT_IMAGE_URL_PREFIX', 'https://neuly.com')
+    'image_url_prefix' => env('SCOUT_IMAGE_URL_PREFIX', 'https://neuly.com'),
 
 ];

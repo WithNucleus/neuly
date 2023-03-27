@@ -13,7 +13,7 @@ class AddMinMaxAgeToClinicalTrials extends Migration
      */
     public function up()
     {
-        Schema::table('clinicaltrials', function(Blueprint $table) {
+        Schema::table('clinicaltrials', function (Blueprint $table) {
             $table->integer('min_age')->nullable(true);
             $table->integer('max_age')->nullable(true);
         });
@@ -26,7 +26,7 @@ class AddMinMaxAgeToClinicalTrials extends Migration
      */
     public function down()
     {
-        Schema::table('clinicaltrials', function(Blueprint $table) {
+        Schema::table('clinicaltrials', function (Blueprint $table) {
             $table->drop('min_age');
             $table->drop('max_age');
         });

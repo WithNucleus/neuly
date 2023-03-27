@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Helpers\EntityHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FollowRequest;
 use App\Models\Follow;
-use App\Helpers\EntityHelper;
 use App\Models\FollowList;
-use Illuminate\Http\Request;
 use Auth;
+use Illuminate\Http\Request;
 
 class FollowController extends Controller
 {
@@ -24,7 +24,7 @@ class FollowController extends Controller
 
     public function show($id)
     {
-        $follow    = Follow::with('followable')
+        $follow = Follow::with('followable')
             ->where('user_id', Auth::id())
             ->findOrFail($id);
         $routeName = EntityHelper::getAliasByClass($follow->followable_type);
@@ -33,13 +33,13 @@ class FollowController extends Controller
             abort(404);
         }
 
-        return redirect()->route('discover.' . $routeName . '.show', $follow->followable->slug);
+        return redirect()->route('discover.'.$routeName.'.show', $follow->followable->slug);
     }
 
     public function edit($id)
     {
-        $lists       = FollowList::where('user_id', Auth::id())->get();
-        $follow      = Follow::with('followable')
+        $lists = FollowList::where('user_id', Auth::id())->get();
+        $follow = Follow::with('followable')
             ->where('user_id', Auth::id())
             ->findOrFail($id);
         $previousUrl = url()->previous();
@@ -48,40 +48,36 @@ class FollowController extends Controller
     }
 
     /**
-     * @param \App\Http\Requests\FollowRequest $request
-     * @param int $id
+     * @param  int  $id
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(FollowRequest $request, $id)
     {
-        $followListId      = $request->input('follow_list_id');
-        $appNotification   = $request->input('app_notification', 0);
+        $followListId = $request->input('follow_list_id');
+        $appNotification = $request->input('app_notification', 0);
         $emailNotification = $request->input('email_notification', 0);
-        $redirectUrl       = $request->input('previous_url', url()->previous());
-        $notes             = $request->input('notes');
+        $redirectUrl = $request->input('previous_url', url()->previous());
+        $notes = $request->input('notes');
 
         $follow = Follow::with('followable')
             ->where('user_id', Auth::id())
             ->findOrFail($id);
 
-        $follow->follow_list_id     = $followListId;
-        $follow->app_notification   = $appNotification;
+        $follow->follow_list_id = $followListId;
+        $follow->app_notification = $appNotification;
         $follow->email_notification = $emailNotification;
-        $follow->notes              = $notes;
+        $follow->notes = $notes;
         $follow->save();
 
         return redirect($redirectUrl)
-            ->with('success', '"' . $follow->followable->name . '" subscription was updated.');
+            ->with('success', '"'.$follow->followable->name.'" subscription was updated.');
     }
 
     /**
-     * @param $followableId
-     * @param $followableType
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
     public function getModal($followableId, $followableType)
     {
-
         $entity = null;
 
         if (in_array($followableType, EntityHelper::getEntities()) === true) {
@@ -96,19 +92,18 @@ class FollowController extends Controller
     }
 
     /**
-     * @param \App\Http\Requests\FollowRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function attach(FollowRequest $request)
     {
-        $entity            = null;
-        $user              = auth()->user();
-        $followableId      = $request->input('followable_id');
-        $followableType    = $request->input('followable_type');
-        $followListId      = $request->input('follow_list_id');
+        $entity = null;
+        $user = auth()->user();
+        $followableId = $request->input('followable_id');
+        $followableType = $request->input('followable_type');
+        $followListId = $request->input('follow_list_id');
         $emailNotification = $request->input('email_notification', 0);
-        $appNotification   = $request->input('app_notification', 0);
-        $notes             = $request->input('notes');
+        $appNotification = $request->input('app_notification', 0);
+        $notes = $request->input('notes');
 
         if (in_array($followableType, EntityHelper::getEntities()) === true) {
             $entity = $followableType::find($followableId);
@@ -119,26 +114,25 @@ class FollowController extends Controller
         }
 
         $entity->followers()->attach($user, [
-            'follow_list_id'     => $followListId,
+            'follow_list_id' => $followListId,
             'email_notification' => $emailNotification,
-            'app_notification'   => $appNotification,
-            'notes'              => $notes,
+            'app_notification' => $appNotification,
+            'notes' => $notes,
         ]);
 
-        return redirect()->back()->with('success', 'Congrats - you\'re now following ' . $entity->name . '!');
+        return redirect()->back()->with('success', 'Congrats - you\'re now following '.$entity->name.'!');
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function detach(Request $request)
     {
-        $entity         = null;
-        $user           = auth()->user();
-        $followableId   = $request->input('followable_id');
+        $entity = null;
+        $user = auth()->user();
+        $followableId = $request->input('followable_id');
         $followableType = $request->input('followable_type');
-        $redirectUrl    = $request->input('previous_url', url()->previous());
+        $redirectUrl = $request->input('previous_url', url()->previous());
 
         if (in_array($followableType, EntityHelper::getEntities()) === true) {
             $entity = $followableType::find($followableId);
@@ -150,6 +144,6 @@ class FollowController extends Controller
 
         $entity->followers()->detach($user);
 
-        return redirect($redirectUrl)->with('success', 'Congrats - you unfollowed ' . $entity->name . '!');
+        return redirect($redirectUrl)->with('success', 'Congrats - you unfollowed '.$entity->name.'!');
     }
 }

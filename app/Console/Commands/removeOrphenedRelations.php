@@ -41,8 +41,7 @@ class removeOrphenedRelations extends Command
         $collector = new RelationshipCleaner();
         $messages = $collector->cleanRelations();
 
-        foreach($messages as $message)
-        {
+        foreach ($messages as $message) {
             $this->info($message);
         }
     }

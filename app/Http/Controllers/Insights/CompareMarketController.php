@@ -5,14 +5,13 @@ namespace App\Http\Controllers\Insights;
 use App\Http\Controllers\Controller;
 use App\Models\Company;
 use App\Models\Focus;
-use App\Models\Location;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 
 class CompareMarketController extends Controller
 {
-    public function show(Request $request) {
+    public function show(Request $request)
+    {
         $query = $this->getQuery();
         $query = $this->getRelatedData($query);
 
@@ -32,7 +31,7 @@ class CompareMarketController extends Controller
         $filters_type = [];
 
         $filters_valuation_min = $valuation_min;
-        $filters_valuation_max =  $valuation_max;
+        $filters_valuation_max = $valuation_max;
 
         if ($request->has('filter')) {
             $filter = $this->getFilterValues($request->input('filter'));
@@ -44,9 +43,9 @@ class CompareMarketController extends Controller
             $filters_type = $this->getFilteredType($filter);
             $filters_foundation_years = $this->getFilteredFoundationYears($filter);
 
-            if(array_key_exists('valuation_min', $filter) && array_key_exists('valuation_max', $filter)) {
+            if (array_key_exists('valuation_min', $filter) && array_key_exists('valuation_max', $filter)) {
                 $filters_valuation_min = $filter['valuation_min'][0];
-                $filters_valuation_max =  $filter['valuation_max'][0];
+                $filters_valuation_max = $filter['valuation_max'][0];
             }
         }
 
@@ -82,42 +81,42 @@ class CompareMarketController extends Controller
 
     private function filterQuery($query, $request)
     {
-        if(array_key_exists('valuation_min', $request) && array_key_exists('valuation_max', $request)) {
+        if (array_key_exists('valuation_min', $request) && array_key_exists('valuation_max', $request)) {
             $query = $this->filterByValuation($query, $request['valuation_min'][0], $request['valuation_max'][0]);
         }
-        if(array_key_exists('locations', $request)) {
+        if (array_key_exists('locations', $request)) {
             $query = $this->filterByLocation($query, $request['locations']);
         }
-        if(array_key_exists('focus', $request)) {
+        if (array_key_exists('focus', $request)) {
             $query = $this->filterByFocus($query, $request['focus']);
         }
-        if(array_key_exists('foundation_year', $request)) {
+        if (array_key_exists('foundation_year', $request)) {
             $query = $this->filterByFoundationYear($query, $request['foundation_year']);
         }
-        if(array_key_exists('type', $request)) {
+        if (array_key_exists('type', $request)) {
             $query = $this->filterByType($query, $request['type']);
         }
 
         return $query;
     }
 
-    private function filterByValuation($query, $min, $max) {
+    private function filterByValuation($query, $min, $max)
+    {
         return $query->where('valuation', '>=', $min)
                 ->where('valuation', '<=', $max);
     }
 
-    private function filterByLocation($query, $values) {
-        $query = $query->whereHas('locations', function($q) use ($values) {
+    private function filterByLocation($query, $values)
+    {
+        $query = $query->whereHas('locations', function ($q) use ($values) {
             $firstElement = true;
 
-            foreach($values as $value)
-            {
-                if($firstElement)
-                {
-                    $q->where('locations.name', 'LIKE',  '%'.$value.'%');
+            foreach ($values as $value) {
+                if ($firstElement) {
+                    $q->where('locations.name', 'LIKE', '%'.$value.'%');
                     $firstElement = false;
                 } else {
-                    $q->orWhere('locations.name', 'LIKE',  '%'.$value.'%');
+                    $q->orWhere('locations.name', 'LIKE', '%'.$value.'%');
                 }
             }
         });
@@ -125,25 +124,30 @@ class CompareMarketController extends Controller
         return $query;
     }
 
-    private function filterByFocus($query, $values) {
-        $query = $query->whereHas('focus', function($q) use ($values) {
+    private function filterByFocus($query, $values)
+    {
+        $query = $query->whereHas('focus', function ($q) use ($values) {
             $q->whereIn('name', $values);
         });
+
         return $query;
     }
 
-    private function filterByType($query, $values) {
+    private function filterByType($query, $values)
+    {
         foreach ($values as $type) {
             $query->orWhere('ownership', $type);
         }
+
         return $query;
     }
 
-    private function filterByFoundationYear($query, $values) {
+    private function filterByFoundationYear($query, $values)
+    {
         $firstElement = true;
 
-        foreach($values as $value) {
-            if($firstElement) {
+        foreach ($values as $value) {
+            if ($firstElement) {
                 $query = $this->getFoundedYearWhereClause($value, $query);
                 $firstElement = false;
             } else {
@@ -194,8 +198,8 @@ class CompareMarketController extends Controller
     {
         $foundationYears = new Collection();
 
-        foreach($foundationYearsRaw as $year) {
-            if($year == null) {
+        foreach ($foundationYearsRaw as $year) {
+            if ($year == null) {
                 $year = 'unknown';
             }
 
@@ -260,7 +264,8 @@ class CompareMarketController extends Controller
 
         if ($organization) {
             $min_value = $organization->valuation;
-            return (int)$min_value = 10000 * floor($min_value/10000);
+
+            return (int) $min_value = 10000 * floor($min_value / 10000);
         } else {
             return 0;
         }
@@ -272,7 +277,8 @@ class CompareMarketController extends Controller
 
         if ($organization) {
             $max_value = $organization->valuation;
-            return (int)$max_value = 10000 * ceil($max_value / 10000);
+
+            return (int) $max_value = 10000 * ceil($max_value / 10000);
         } else {
             return 0;
         }

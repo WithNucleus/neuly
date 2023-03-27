@@ -6,12 +6,14 @@ use App\Helpers\Entity\FieldsMapping;
 
 class EntityMergeHelper
 {
-    const SOURCE_MASTER    = 'master';
+    const SOURCE_MASTER = 'master';
+
     const SOURCE_SECONDARY = 'secondary';
-    const SOURCE_MERGE     = 'merge';
+
+    const SOURCE_MERGE = 'merge';
 
     /**
-     * @param string $type
+     * @param  string  $type
      * @return string
      */
     public static function getViewByFieldType($type)
@@ -40,5 +42,4 @@ class EntityMergeHelper
 
         return $view;
     }
-
 }

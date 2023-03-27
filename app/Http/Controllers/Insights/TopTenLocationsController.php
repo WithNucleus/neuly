@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Insights;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
@@ -17,7 +16,7 @@ class TopTenLocationsController extends Controller
         $data = DB::table('location_person')
             ->select([
                 'locations.id', 'locations.name', 'locations.slug',
-                DB::raw('COUNT(location_person.person_id) AS total')
+                DB::raw('COUNT(location_person.person_id) AS total'),
             ])
             ->join('locations', 'locations.id', '=', 'location_person.location_id')
             ->groupBy('locations.id')
@@ -30,7 +29,7 @@ class TopTenLocationsController extends Controller
 
             foreach ($data as $key => $item) {
                 $data[$key]->percent = round(round($item->total / $maxTotal, 2) * 100 / 5);
-                $data[$key]->link    = route('discover.locations.show', $item->slug);
+                $data[$key]->link = route('discover.locations.show', $item->slug);
             }
         }
 

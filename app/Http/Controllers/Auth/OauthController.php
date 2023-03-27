@@ -20,7 +20,7 @@ class OauthController
             'first_name' => $user->name,
             'last_name' => $user->last_name,
             'photo' => $userPhoto,
-            'roles' => $user->getRoleNames()
+            'roles' => $user->getRoleNames(),
         ];
 
         return response()->json($responseData);

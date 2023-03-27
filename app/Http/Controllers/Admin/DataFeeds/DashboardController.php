@@ -6,15 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Models\DataFeed;
 use App\Models\MediaItem;
 use App\Models\Scopes\PublicStatusScope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
-use Illuminate\Database\Eloquent\Builder;
 
 class DashboardController extends Controller
 {
-    public function index(Request $request) {
-
+    public function index(Request $request)
+    {
         $filter = $request->query('filter');
         $pagination = $request->query('pagination') ?? 25;
 
@@ -29,7 +29,7 @@ class DashboardController extends Controller
             ->allowedSorts([
                 'name',
                 'date',
-                'media_type'
+                'media_type',
             ])
             ->defaultSort('-date')
             ->paginate($pagination)
@@ -38,9 +38,9 @@ class DashboardController extends Controller
         $dataFeedQuery = DataFeed::whereHas('mediaItems', function (Builder $query) {
             $query->withoutGlobalScope(PublicStatusScope::class)->where('status', MediaItem::STATUS_PENDING);
         })->withCount([
-            'mediaItems' => function($query) {
+            'mediaItems' => function ($query) {
                 $query->withoutGlobalScope(PublicStatusScope::class)->where('status', MediaItem::STATUS_PENDING);
-            }
+            },
         ]);
 
         $dataFeeds = $dataFeedQuery->orderBy('name')->get();
@@ -73,7 +73,7 @@ class DashboardController extends Controller
 
             $mediaItem->save();
 
-            $response['message'] .= ' ' . $mediaItem->name;
+            $response['message'] .= ' '.$mediaItem->name;
         } else {
             $response['status'] = 'error';
             $response['message'] = 'This item could not be found. It was either deleted or there is a problem.';

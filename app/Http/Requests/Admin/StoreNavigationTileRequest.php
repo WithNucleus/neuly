@@ -3,7 +3,7 @@
 namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
-use \Illuminate\Validation\Rule;
+use Illuminate\Validation\Rule;
 
 class StoreNavigationTileRequest extends FormRequest
 {
@@ -11,8 +11,6 @@ class StoreNavigationTileRequest extends FormRequest
 
     /**
      * Determine if the user is authorized to make this request.
-     *
-     * @return bool
      */
     public function authorize(): bool
     {
@@ -21,8 +19,6 @@ class StoreNavigationTileRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
     public function rules(): array
     {

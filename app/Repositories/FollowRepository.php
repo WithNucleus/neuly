@@ -2,11 +2,11 @@
 
 namespace App\Repositories;
 
-use Auth;
 use App\Models\Follow;
+use Auth;
 
-class FollowRepository {
-
+class FollowRepository
+{
     /**
      * Get current user follows for a specific entity.
      *

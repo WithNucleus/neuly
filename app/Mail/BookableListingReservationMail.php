@@ -4,7 +4,6 @@ namespace App\Mail;
 
 use App\Models\BookableListingRequest;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
@@ -31,7 +30,7 @@ class BookableListingReservationMail extends Mailable
      */
     public function build()
     {
-        $name = $this->bookableListingRequest->first_name . " " . $this->bookableListingRequest->last_name;
+        $name = $this->bookableListingRequest->first_name.' '.$this->bookableListingRequest->last_name;
 
         return $this->markdown('emails.bookable-listings.new-request')
             ->with([
@@ -41,8 +40,8 @@ class BookableListingReservationMail extends Mailable
                 'date' => $this->bookableListingRequest->date,
                 'number_of_guests' => $this->bookableListingRequest->number_of_guests,
                 'message' => $this->bookableListingRequest->message,
-                'bookable' => $this->bookableListingRequest->bookableListing->bookable->name
+                'bookable' => $this->bookableListingRequest->bookableListing->bookable->name,
             ])
-            ->subject('Request for ' . $this->bookableListingRequest->bookableListing->bookable->name . ' from ' . $name);
+            ->subject('Request for '.$this->bookableListingRequest->bookableListing->bookable->name.' from '.$name);
     }
 }

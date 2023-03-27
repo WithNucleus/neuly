@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Http\Requests\Request;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ClinicaltrialRequest extends FormRequest
@@ -27,7 +26,7 @@ class ClinicaltrialRequest extends FormRequest
     {
         return [
             'title' => 'required|min:5|max:255',
-            'nct_number' => 'required|min:3|max:255'
+            'nct_number' => 'required|min:3|max:255',
         ];
     }
 

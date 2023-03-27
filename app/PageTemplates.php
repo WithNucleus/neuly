@@ -61,7 +61,6 @@ trait PageTemplates
 
     private function default()
     {
-
         $this->crud->addField([
             'name' => 'content',
             'label' => trans('backpack::pagemanager.content'),
@@ -75,7 +74,7 @@ trait PageTemplates
             'fake' => true,
             'store_in' => 'extras',
             // 'suffix' => ' | Neuly',
-            'hint' => '60 characters or less; used for open graph and Twitter title, you should include Neuly in here somewhere'
+            'hint' => '60 characters or less; used for open graph and Twitter title, you should include Neuly in here somewhere',
         ]);
         $this->crud->addField([
             'name' => 'meta_description',
@@ -83,7 +82,7 @@ trait PageTemplates
             'fake' => true,
             'store_in' => 'extras',
             'type' => 'textarea',
-            'hint' => 'Google typically truncates to ~155-160 characters'
+            'hint' => 'Google typically truncates to ~155-160 characters',
         ]);
         $this->crud->addField([
             'name' => 'meta_image',
@@ -96,14 +95,13 @@ trait PageTemplates
 
     private function seo()
     {
-
         $this->crud->addField([
             'name' => 'meta_title',
             'label' => trans('backpack::pagemanager.meta_title'),
             'fake' => true,
             'store_in' => 'extras',
             // 'suffix' => ' | Neuly',
-            'hint' => '60 characters or less; used for open graph and Twitter title, you should include Neuly in here somewhere'
+            'hint' => '60 characters or less; used for open graph and Twitter title, you should include Neuly in here somewhere',
         ]);
 
         $this->crud->addField([
@@ -112,7 +110,7 @@ trait PageTemplates
             'label' => trans('backpack::pagemanager.meta_description'),
             'fake' => true,
             'store_in' => 'extras',
-            'hint' => 'Google typically truncates to ~155-160 characters'
+            'hint' => 'Google typically truncates to ~155-160 characters',
         ]);
 
         $this->crud->addField([

@@ -8,7 +8,7 @@ use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
  * Class DirectoryCrudController
- * @package App\Http\Controllers\Admin
+ *
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
 class DirectoryCrudController extends CrudController
@@ -27,7 +27,7 @@ class DirectoryCrudController extends CrudController
     public function setup()
     {
         CRUD::setModel(\App\Models\Directory::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/directory');
+        CRUD::setRoute(config('backpack.base.route_prefix').'/directory');
         CRUD::setEntityNameStrings('directory', 'directories');
     }
 
@@ -35,6 +35,7 @@ class DirectoryCrudController extends CrudController
      * Define what happens when the List operation is loaded.
      *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
+     *
      * @return void
      */
     protected function setupListOperation()
@@ -54,6 +55,7 @@ class DirectoryCrudController extends CrudController
      * Define what happens when the Create operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-create
+     *
      * @return void
      */
     protected function setupCreateOperation()
@@ -72,6 +74,7 @@ class DirectoryCrudController extends CrudController
      * Define what happens when the Update operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
+     *
      * @return void
      */
     protected function setupUpdateOperation()

@@ -3,14 +3,13 @@
 namespace App\GarbageCollection\RelationshipCleaner;
 
 use App\Models\Job;
-use App\Models\JobApplication;
 use App\Models\Location;
 use Illuminate\Support\Facades\DB;
 
 class JobCleaner
 {
-
     private $jobs = null;
+
     private $locations = null;
 
     public function __construct()
@@ -37,15 +36,14 @@ class JobCleaner
             ->orWhereNotIn('job_id', $this->jobs)
             ->get();
 
-        foreach($orphened as $entry)
-        {
+        foreach ($orphened as $entry) {
             DB::table('job_location')
-                ->where('location_id','=', $entry->location_id)
-                ->where('job_id','=', $entry->job_id)
+                ->where('location_id', '=', $entry->location_id)
+                ->where('job_id', '=', $entry->job_id)
                 ->delete();
         }
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Jobs and Locations.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Jobs and Locations.';
     }
 
     public function cleanJobApplicationRelation()
@@ -57,6 +55,6 @@ class JobCleaner
 
         DB::table('job_applications')->whereIn('id', $orphened)->delete();
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Jobs and Job Applications.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Jobs and Job Applications.';
     }
 }

@@ -11,8 +11,8 @@
 */
 
 Route::group([
-    'namespace'  => 'App\Http\Controllers\Admin',
-    'prefix'     => config('backpack.base.route_prefix', 'admin'),
+    'namespace' => 'App\Http\Controllers\Admin',
+    'prefix' => config('backpack.base.route_prefix', 'admin'),
     'middleware' => ['web', config('backpack.base.middleware_key', 'admin')],
 ], function () {
     Route::get('backup', 'BackupController@index')->name('backup.index');

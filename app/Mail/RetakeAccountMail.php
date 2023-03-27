@@ -3,7 +3,6 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
@@ -39,6 +38,6 @@ class RetakeAccountMail extends Mailable
                     ->with([
                         'name' => $this->name,
                     ])
-                    ->subject('Your email was restored on Neuly');;
+                    ->subject('Your email was restored on Neuly');
     }
 }

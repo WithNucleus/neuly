@@ -10,7 +10,9 @@ class CompanySerpapiData extends Model
     use CrudTrait;
 
     protected $table = 'company_serpapi_data';
+
     protected $guarded = ['id'];
+
     protected $casts = ['knowledge_graph' => 'array'];
 
     public function scopeNotReviewed($query)

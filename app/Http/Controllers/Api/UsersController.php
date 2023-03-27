@@ -17,7 +17,7 @@ class UsersController
 
         return response()->json([
             'status' => 'Success',
-            'data' => $this->prepareUserResponseData($user)
+            'data' => $this->prepareUserResponseData($user),
         ]);
     }
 
@@ -40,7 +40,7 @@ class UsersController
 
         return response()->json([
             'status' => 'Success',
-            'data' => $this->prepareUserResponseData($user)
+            'data' => $this->prepareUserResponseData($user),
         ]);
     }
 

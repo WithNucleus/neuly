@@ -45,15 +45,14 @@ class GetRssFeed implements ShouldQueue
         $this->getFeed($this->dataFeed);
     }
 
-    private function getFeed($dataFeed) {
-
+    private function getFeed($dataFeed)
+    {
         $mediaType = $dataFeed->media_type;
         $feedSourceCategory = $dataFeed->source_category;
         $feed = $this->setupSimplePieFeed($dataFeed);
         $feedName = $this->formatFeedName($feed->get_title());
 
         foreach ($feed->get_items() as $item) {
-
             try {
                 $url = $this->formatUrl($item->get_link());
 
@@ -63,8 +62,7 @@ class GetRssFeed implements ShouldQueue
                     ->where('source_id', $dataFeed->id)
                     ->first();
 
-                if (!$existingMedia) {
-
+                if (! $existingMedia) {
                     $date = Carbon::parse($item->get_date())->format('Y-m-d');
                     $feedImage = $feed->get_image_url();
 
@@ -86,7 +84,7 @@ class GetRssFeed implements ShouldQueue
                         'source_id' => $dataFeed->id,
                         'date' => $date,
                         'media_type' => $mediaType,
-                        'status' => MediaItem::STATUS_PENDING
+                        'status' => MediaItem::STATUS_PENDING,
                     ];
 
                     if ($dataFeed->auto_approval === 1) {
@@ -98,7 +96,6 @@ class GetRssFeed implements ShouldQueue
 
                     // Check for other Google Alerts with same URL
                     if ($feedSourceCategory === DataFeed::SOURCE_GOOGLE_ALERT) {
-
                         $duplicates = MediaItem::withoutGlobalScope(PublicStatusScope::class)
                             ->where('url', $url)
                             ->with(['companies', 'focus', 'people'])
@@ -110,11 +107,9 @@ class GetRssFeed implements ShouldQueue
                             $this->searchForDuplicates($duplicates, $mediaItem);
                         }
                     }
-
                 }
-
             } catch (Throwable $exception) {
-                Log::warning('Error during GetRssFeed' , [$exception->getMessage()]);
+                Log::warning('Error during GetRssFeed', [$exception->getMessage()]);
             }
         }
     }
@@ -122,9 +117,9 @@ class GetRssFeed implements ShouldQueue
     private function setupSimplePieFeed($dataFeed): SimplePie
     {
         $feed = new SimplePie();
-        $feed->set_feed_url($dataFeed->url . '?format=xml');
+        $feed->set_feed_url($dataFeed->url.'?format=xml');
         $feed->set_useragent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36');
-        $feed->set_cache_location(storage_path() . '/rss-feeds');
+        $feed->set_cache_location(storage_path().'/rss-feeds');
 
         $stripHtmlTags = $feed->strip_htmltags;
         array_splice($stripHtmlTags, array_search('iframe', $stripHtmlTags), 1);
@@ -155,7 +150,7 @@ class GetRssFeed implements ShouldQueue
     private function formatUrl($originalUrl): string
     {
         $partsToReplace = [
-            'https://www.google.com/url?rct=j&amp;sa=t&amp;url='
+            'https://www.google.com/url?rct=j&amp;sa=t&amp;url=',
         ];
 
         $url = str_replace($partsToReplace, '', $originalUrl);
@@ -173,23 +168,23 @@ class GetRssFeed implements ShouldQueue
         $summary = str_replace(['<p>', '<h1>', '<h2>', '<h3>', '<h4>', '<h5>', '<h6>'], '', $summary);
 
         $stringsToRemove = [
-            'The post ' . $title . ' appeared first on ' . $feedName . '.',
-            'The article ' . $title . ' was originally published on ' . $feedName . '.',
-            'Continue reading ' . $title
+            'The post '.$title.' appeared first on '.$feedName.'.',
+            'The article '.$title.' was originally published on '.$feedName.'.',
+            'Continue reading '.$title,
         ];
 
         $summary = str_replace($stringsToRemove, '', $summary);
 
         if (strlen($summary) > 300) {
             $summary = wordwrap($summary, 300);
-            $summary = substr($summary, 0, strpos($summary, "\n")) . '...';
+            $summary = substr($summary, 0, strpos($summary, "\n")).'...';
         }
 
         return $summary;
     }
 
-    private function searchForDuplicates($duplicates, $newMediaItem) {
-
+    private function searchForDuplicates($duplicates, $newMediaItem)
+    {
         NotificationHelper::sendSlackNotification(new DuplicateMediaItem($newMediaItem, $duplicates), 'duplicate_media');
 
         $syncFocus = $this->getRelationshipSyncArray($duplicates, 'focus');
@@ -201,7 +196,6 @@ class GetRssFeed implements ShouldQueue
         // TODO: Add summaries together -- Google Alerts send in summary excerpts that match keywords? maybe take the first 5 words and search the summary for a match? if no match, combine summaries
 
         foreach ($duplicates as $duplicateMediaItem) {
-
             if ($duplicateMediaItem->status == MediaItem::STATUS_PUBLIC) {
                 $primaryItem = $duplicateMediaItem;
             } elseif ($duplicateMediaItem->status == MediaItem::STATUS_PENDING) {
@@ -226,9 +220,9 @@ class GetRssFeed implements ShouldQueue
 
         foreach ($mediaItemDuplicates as $mediaItemDuplicate) {
             $recordIds = match ($relationship) {
-                "focus" => $mediaItemDuplicate->focus()->pluck('id')->toArray(),
-                "companies" => $mediaItemDuplicate->companies()->pluck('id')->toArray(),
-                "people" => $mediaItemDuplicate->people()->pluck('id')->toArray(),
+                'focus' => $mediaItemDuplicate->focus()->pluck('id')->toArray(),
+                'companies' => $mediaItemDuplicate->companies()->pluck('id')->toArray(),
+                'people' => $mediaItemDuplicate->people()->pluck('id')->toArray(),
             };
 
             $recordSyncArray = array_merge($recordSyncArray, $recordIds);

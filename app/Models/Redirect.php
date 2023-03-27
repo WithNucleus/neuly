@@ -21,10 +21,8 @@ class Redirect extends Model
 
     /**
      * Get the redirectable model of the redirect record
-     *
-     * @return MorphTo
      */
-    public function redirectable() :MorphTo
+    public function redirectable(): MorphTo
     {
         return $this->morphTo();
     }

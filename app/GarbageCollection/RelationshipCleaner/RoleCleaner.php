@@ -10,7 +10,9 @@ use Spatie\Permission\Models\Role;
 class RoleCleaner
 {
     private $roles = null;
+
     private $permissions = null;
+
     private $user = null;
 
     public function __construct()
@@ -38,15 +40,14 @@ class RoleCleaner
             ->orWhereNotIn('permission_id', $this->permissions)
             ->get();
 
-        foreach($orphened as $entry)
-        {
+        foreach ($orphened as $entry) {
             DB::table('role_has_permissions')
-                ->where('role_id','=', $entry->role_id)
-                ->where('permission_id','=', $entry->permission_id)
+                ->where('role_id', '=', $entry->role_id)
+                ->where('permission_id', '=', $entry->permission_id)
                 ->delete();
         }
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Roles and Permissions.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Roles and Permissions.';
     }
 
     public function cleanUserRelation()
@@ -57,15 +58,14 @@ class RoleCleaner
             ->whereNotIn('model_id', $this->user)
             ->get();
 
-        foreach($orphened as $entry)
-        {
+        foreach ($orphened as $entry) {
             DB::table('model_has_roles')
-                ->where('role_id','=', $entry->role_id)
-                ->where('model_id','=', $entry->model_id)
+                ->where('role_id', '=', $entry->role_id)
+                ->where('model_id', '=', $entry->model_id)
                 ->where('model_type', '=', User::class)
                 ->delete();
         }
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Roles and Users.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Roles and Users.';
     }
 }

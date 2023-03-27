@@ -9,7 +9,7 @@ use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
  * Class EventTypeCrudController
- * @package App\Http\Controllers\Admin
+ *
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
 class EventTypeCrudController extends CrudController
@@ -27,12 +27,12 @@ class EventTypeCrudController extends CrudController
      */
     public function setup()
     {
-        if(!backpack_user()->can('edit events')) {
+        if (! backpack_user()->can('edit events')) {
             abort(404);
         }
 
         CRUD::setModel(EventType::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/eventtype');
+        CRUD::setRoute(config('backpack.base.route_prefix').'/eventtype');
         CRUD::setEntityNameStrings('event type', 'event types');
     }
 
@@ -40,6 +40,7 @@ class EventTypeCrudController extends CrudController
      * Define what happens when the List operation is loaded.
      *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
+     *
      * @return void
      */
     protected function setupListOperation()
@@ -51,6 +52,7 @@ class EventTypeCrudController extends CrudController
      * Define what happens when the Create operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-create
+     *
      * @return void
      */
     protected function setupCreateOperation()
@@ -64,6 +66,7 @@ class EventTypeCrudController extends CrudController
      * Define what happens when the Update operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
+     *
      * @return void
      */
     protected function setupUpdateOperation()

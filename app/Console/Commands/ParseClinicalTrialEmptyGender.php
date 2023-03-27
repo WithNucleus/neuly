@@ -40,8 +40,7 @@ class ParseClinicalTrialEmptyGender extends Command
     {
         $trials = Clinicaltrial::where('gender', '=', '')->get();
 
-        foreach($trials as $trial)
-        {
+        foreach ($trials as $trial) {
             $trial->gender = null;
             $trial->save();
         }

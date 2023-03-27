@@ -9,8 +9,6 @@ class StoreBookableListingRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     *
-     * @return bool
      */
     public function authorize(): bool
     {
@@ -29,9 +27,9 @@ class StoreBookableListingRequest extends FormRequest
                 'required',
                 'min:3',
                 'max:255',
-                Rule::unique('bookable_listings')->ignore($this->id)
+                Rule::unique('bookable_listings')->ignore($this->id),
             ],
-            'bookable_id'=> 'required',
+            'bookable_id' => 'required',
             'type' => 'required',
             'url' => 'nullable',
             'phone' => 'nullable',
@@ -41,7 +39,7 @@ class StoreBookableListingRequest extends FormRequest
             'longitude' => 'nullable',
             'description' => 'required',
             'focus' => 'nullable',
-            'virtual' => 'nullable'
+            'virtual' => 'nullable',
         ];
     }
 }

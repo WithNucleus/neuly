@@ -9,8 +9,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Laravel\Scout\Searchable;
 
-trait SearchableEntity {
-
+trait SearchableEntity
+{
     use Searchable;
 
     /**
@@ -31,6 +31,7 @@ trait SearchableEntity {
 
         /**
          * Rename Fields
+         *
          *  @requires $currentName => $newName
          *  e.g. job_title => name
          */
@@ -43,6 +44,7 @@ trait SearchableEntity {
 
         /**
          * Relationships
+         *
          *  @requires $relationName => $fieldName
          *  e.g. companies => name
          */
@@ -54,7 +56,7 @@ trait SearchableEntity {
                             'name' => $data['name'],
                             'city' => $data['city'],
                             'region' => $data['region'],
-                            'country' => $data['country']
+                            'country' => $data['country'],
                         ];
                     })->toArray();
                 } else {
@@ -67,18 +69,20 @@ trait SearchableEntity {
 
         /**
          * Format date fields to YYYY-MM-DD
+         *
          * @requires $dateField
          */
         if (property_exists($this, 'searchableDateFields')) {
             foreach ($this->searchableDateFields as $dateField) {
                 if ($this->{$dateField} != '') {
-                    $array[$dateField . '_pretty'] = Carbon::parse($this->{$dateField})->format('Y-m-d');
+                    $array[$dateField.'_pretty'] = Carbon::parse($this->{$dateField})->format('Y-m-d');
                 }
             }
         }
 
         /**
          * Morphs
+         *
          *  @requires $relationName => $fieldName
          *  e.g. owner => name for Jobs
          */
@@ -92,7 +96,7 @@ trait SearchableEntity {
          * Add Image if Has EntityImageContract
          */
         if ($this instanceof EntityImageContract) {
-            $array[self::$imageAttribute] = config('scout.image_url_prefix') . $this->entityImageUrl;
+            $array[self::$imageAttribute] = config('scout.image_url_prefix').$this->entityImageUrl;
         }
 
         if ($this instanceof Company) {
@@ -115,10 +119,10 @@ trait SearchableEntity {
          * Geo Search Data
          */
         if (property_exists($this, 'geoSearch')) {
-            if ($array['latitude'] AND $array['longitude']) {
+            if ($array['latitude'] and $array['longitude']) {
                 $array['_geoloc'] = [
                     'lat' => $array['latitude'],
-                    'lng' => $array['longitude']
+                    'lng' => $array['longitude'],
                 ];
             }
         }

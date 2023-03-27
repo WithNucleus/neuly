@@ -38,14 +38,18 @@ class Investor extends Model implements EntityContract, EntityImageContract
     ];
 
     protected $table = 'investors';
+
     protected $guarded = ['id'];
 
     // log activity for all attributes, which not listed in $guarded array
     protected static $logUnguarded = true;
+
     protected static $logName = 'entities';
 
     protected static $imageAttribute = 'logo';
+
     protected static $imageFolderPath = 'investors';
+
     protected static $imageFilenameAttribute = 'name';
 
     private $searchableRelationships = [
@@ -69,15 +73,17 @@ class Investor extends Model implements EntityContract, EntityImageContract
         });
     }
 
-    public function getShowLink() {
-        return '<a href="' . route('discover.investors.show', $this->slug) . '">' . $this->name . '</a>';
+    public function getShowLink()
+    {
+        return '<a href="'.route('discover.investors.show', $this->slug).'">'.$this->name.'</a>';
     }
 
-    public function getTypeDescription() {
+    public function getTypeDescription()
+    {
         if ($this->type === 'Private Individual') {
-            return 'a ' . strtolower($this->type);
+            return 'a '.strtolower($this->type);
         } else {
-            return 'a ' . strtolower($this->type) . ' firm';
+            return 'a '.strtolower($this->type).' firm';
         }
     }
 
@@ -95,17 +101,20 @@ class Investor extends Model implements EntityContract, EntityImageContract
     |--------------------------------------------------------------------------
     */
 
-    public function locations() {
+    public function locations()
+    {
         return $this->belongsToMany(Location::class, 'investor_location', 'investor_id', 'location_id')
             ->withTimestamps();
     }
 
-    public function companies() {
+    public function companies()
+    {
         return $this->belongsToMany(Company::class, 'company_investor', 'investor_id', 'company_id')
             ->withTimestamps();
     }
 
-    public function people() {
+    public function people()
+    {
         return $this->belongsToMany(Person::class, 'investor_person', 'investor_id', 'person_id')
             ->withPivot(['role'])
             ->withTimestamps();
@@ -116,7 +125,8 @@ class Investor extends Model implements EntityContract, EntityImageContract
         return $this->belongsToMany(CompanyValuation::class);
     }
 
-    public function jobs() {
+    public function jobs()
+    {
         return $this->morphMany(Job::class, 'owner');
     }
 
@@ -126,12 +136,12 @@ class Investor extends Model implements EntityContract, EntityImageContract
     |--------------------------------------------------------------------------
     */
     /**
-     * @param \Illuminate\Database\Query\Builder $query
+     * @param  \Illuminate\Database\Query\Builder  $query
      * @return \Illuminate\Database\Query\Builder
      */
-    public function scopeHasJobs($query) {
-        return $query->whereHas('jobs', function($query)
-        {
+    public function scopeHasJobs($query)
+    {
+        return $query->whereHas('jobs', function ($query) {
             $query->open();
         });
     }
@@ -148,7 +158,8 @@ class Investor extends Model implements EntityContract, EntityImageContract
     |--------------------------------------------------------------------------
     */
 
-    public function setNameAttribute($value) {
+    public function setNameAttribute($value)
+    {
         $this->attributes['name'] = $value;
         $this->attributes['slug'] = Str::slug($value);
     }
@@ -165,39 +176,39 @@ class Investor extends Model implements EntityContract, EntityImageContract
     {
         return [
             //attributes
-            'name'      => [
+            'name' => [
                 'type' => FieldsMapping::TYPE_STRING,
                 'required' => true,
             ],
-            'slug'      => [
+            'slug' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'website'   => [
+            'website' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
             'type' => [
                 'type' => FieldsMapping::TYPE_ENUM,
                 'values' => self::getTypeValues(),
             ],
-            'logo'      => [
+            'logo' => [
                 'type' => FieldsMapping::TYPE_IMAGE,
             ],
             //relations
             'locations' => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
             'companies' => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
-            'people'    => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'people' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
-                'pivotColumns'  => [
+                'pivotColumns' => [
                     'role',
                 ],
             ],

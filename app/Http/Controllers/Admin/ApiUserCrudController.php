@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 
 /**
  * Class ApiUserCrudController.
+ *
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
 class ApiUserCrudController extends CrudController
@@ -26,7 +27,7 @@ class ApiUserCrudController extends CrudController
      */
     public function setup()
     {
-        if (!backpack_user()->can('edit users')) {
+        if (! backpack_user()->can('edit users')) {
             abort(404);
         }
 
@@ -39,6 +40,7 @@ class ApiUserCrudController extends CrudController
      * Define what happens when the List operation is loaded.
      *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
+     *
      * @return void
      */
     protected function setupListOperation()
@@ -90,6 +92,7 @@ class ApiUserCrudController extends CrudController
      * Define what happens when the Create operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-create
+     *
      * @return void
      */
     protected function setupCreateOperation()
@@ -143,6 +146,7 @@ class ApiUserCrudController extends CrudController
      * Define what happens when the Update operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
+     *
      * @return void
      */
     protected function setupUpdateOperation()

@@ -2,14 +2,22 @@
 
 namespace App\Enum;
 
-class MediaTypes {
+class MediaTypes
+{
     const MEDIA_TYPE_ARTICLE = 'Article';
+
     const MEDIA_TYPE_IMAGE = 'Image';
+
     const MEDIA_TYPE_VIDEO = 'Video';
+
     const MEDIA_TYPE_MIXED = 'Mixed';
+
     const MEDIA_TYPE_PODCAST = 'Podcast';
+
     const MEDIA_TYPE_BOOK = 'Book';
+
     const MEDIA_TYPE_NEWS = 'News';
+
     const MEDIA_TYPE_PATENT_FILING = 'Patent Filing';
 
     const MEDIA_TYPES = [
@@ -20,6 +28,6 @@ class MediaTypes {
         self::MEDIA_TYPE_PODCAST,
         self::MEDIA_TYPE_BOOK,
         self::MEDIA_TYPE_NEWS,
-        self::MEDIA_TYPE_PATENT_FILING
+        self::MEDIA_TYPE_PATENT_FILING,
     ];
 }

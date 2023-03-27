@@ -40,7 +40,7 @@ class UserCleaner
 
         DB::table('job_applications')->whereIn('id', $orphened)->delete();
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Users and Job Applications.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Users and Job Applications.';
     }
 
     public function cleanSocialAuthRelation()
@@ -52,7 +52,7 @@ class UserCleaner
 
         DB::table('user_social_auth')->whereIn('id', $orphened)->delete();
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Users and Social Auths.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Users and Social Auths.';
     }
 
     public function cleanEmailNotificationRelation()
@@ -64,7 +64,7 @@ class UserCleaner
 
         DB::table('email_notifications')->whereIn('id', $orphened)->delete();
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Users and Email Notifications.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Users and Email Notifications.';
     }
 
     public function cleanNotificationRelation()
@@ -76,7 +76,7 @@ class UserCleaner
 
         DB::table('notifications')->whereIn('id', $orphened)->delete();
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Users and Follow Lists.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Users and Follow Lists.';
     }
 
     public function cleanEmailResetRelation()
@@ -88,7 +88,7 @@ class UserCleaner
 
         DB::table('email_resets')->whereIn('id', $orphened)->delete();
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Users and Email Resets.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Users and Email Resets.';
     }
 
     public function cleanPasswordResetRelation()
@@ -101,7 +101,7 @@ class UserCleaner
 
         DB::table('password_resets')->whereIn('email', $orphened)->delete();
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Users and Password Resets.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Users and Password Resets.';
     }
 
     public function cleanFollowableRelation()
@@ -113,7 +113,7 @@ class UserCleaner
 
         DB::table('followables')->whereIn('id', $orphened)->delete();
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Users and Followables.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Users and Followables.';
     }
 
     public function cleanFollowListRelation()
@@ -125,7 +125,7 @@ class UserCleaner
 
         DB::table('follow_lists')->whereIn('id', $orphened)->delete();
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Users and Follow Lists.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Users and Follow Lists.';
     }
 
     public function cleanMemberNoteRelation()
@@ -137,7 +137,6 @@ class UserCleaner
 
         DB::table('member_notes')->whereIn('id', $orphened)->delete();
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Users and Member Notes.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Users and Member Notes.';
     }
-
 }

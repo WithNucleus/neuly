@@ -4,14 +4,14 @@ namespace App\Http\Controllers\Index;
 
 use App\Helpers\MapHelper;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Models\Location;
+use Illuminate\Http\Request;
 
 class LocationMapController extends Controller
 {
     /**
      * Show
+     *
      * @return \Illuminate\View\View
      */
     public function showMap(Request $request)
@@ -39,6 +39,7 @@ class LocationMapController extends Controller
 
     /**
      * Show
+     *
      * @return \Illuminate\View\View
      */
     public function showCountry(Request $request, $country)
@@ -96,18 +97,18 @@ class LocationMapController extends Controller
         return [
             'filter' => $filter,
             'filters_type' => $filters_type,
-            'all_filters_type' => $all_filters_type
+            'all_filters_type' => $all_filters_type,
         ];
     }
 
     private function filterQuery($locations, $filter)
     {
         // type
-        if(array_key_exists('type', $filter)) {
-            foreach($filter['type'] as $type) {
+        if (array_key_exists('type', $filter)) {
+            foreach ($filter['type'] as $type) {
                 if ($type == 'organizations') {
                     $locations = $locations->withCount('companies');
-                } elseif($type == 'clinical trials') {
+                } elseif ($type == 'clinical trials') {
                     $locations = $locations->withCount('clinicaltrials');
                 } else {
                     $locations = $locations->withCount($type);
@@ -134,8 +135,7 @@ class LocationMapController extends Controller
     {
         $mappedArray = [];
 
-        foreach($country_groups as $country_group) {
-
+        foreach ($country_groups as $country_group) {
             $country_count = [
                 'total' => 0,
                 'companies_count' => 0,

@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Http\Requests\Request;
 use Illuminate\Foundation\Http\FormRequest;
 
 class EventTypeRequest extends FormRequest
@@ -26,7 +25,7 @@ class EventTypeRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|min:3|max:255'
+            'name' => 'required|min:3|max:255',
         ];
     }
 

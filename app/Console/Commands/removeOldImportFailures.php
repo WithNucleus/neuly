@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\GarbageCollection\ImportCleaner;
-use App\GarbageCollection\ImportCleaner\FailureCleaner;
 use Illuminate\Console\Command;
 
 class removeOldImportFailures extends Command
@@ -42,8 +41,7 @@ class removeOldImportFailures extends Command
         $collector = new ImportCleaner();
         $messages = $collector->cleanImports();
 
-        foreach($messages as $message)
-        {
+        foreach ($messages as $message) {
             $this->info($message);
         }
     }

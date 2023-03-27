@@ -13,7 +13,7 @@ use Prologue\Alerts\Facades\Alert;
 
 /**
  * Class DataFeedCrudController
- * @package App\Http\Controllers\Admin
+ *
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
 class DataFeedCrudController extends CrudController
@@ -32,7 +32,7 @@ class DataFeedCrudController extends CrudController
     public function setup()
     {
         CRUD::setModel(\App\Models\DataFeed::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/datafeed');
+        CRUD::setRoute(config('backpack.base.route_prefix').'/datafeed');
         CRUD::setEntityNameStrings('data feed', 'data feeds');
     }
 
@@ -40,89 +40,89 @@ class DataFeedCrudController extends CrudController
      * Define what happens when the List operation is loaded.
      *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
+     *
      * @return void
      */
     protected function setupListOperation()
     {
-
         $this->crud->addColumn([
-            'name'  => 'name',
+            'name' => 'name',
             'label' => 'Title',
-            'type'  => 'text'
+            'type' => 'text',
         ]);
 
         $this->crud->addColumn([
-            'name'  => 'url',
+            'name' => 'url',
             'label' => 'URL',
-            'type'  => 'text'
+            'type' => 'text',
         ]);
 
         $this->crud->addColumn([
-            'name'  => 'source_category',
+            'name' => 'source_category',
             'label' => 'Source Category',
-            'type'  => 'text'
+            'type' => 'text',
         ]);
 
         $this->crud->addColumn([
-            'name'  => 'auto_approval',
+            'name' => 'auto_approval',
             'label' => 'Auto Approval',
-            'type'  => 'boolean'
+            'type' => 'boolean',
         ]);
 
         $this->crud->addColumn([
-            'name'  => 'status',
+            'name' => 'status',
             'label' => 'Status',
-            'type'  => 'text'
+            'type' => 'text',
         ]);
 
         $this->crud->addColumn([
-            'name'  => 'media_type',
+            'name' => 'media_type',
             'label' => 'Media Type',
-            'type'  => 'text'
+            'type' => 'text',
         ]);
 
         $this->crud->query->withCount('mediaItems');
         $this->crud->addColumn([
-            'name'      => 'media_items_count', // name of relationship method in the model
-            'type'      => 'text',
-            'label'     => 'Media Items', // Table column heading
+            'name' => 'media_items_count', // name of relationship method in the model
+            'type' => 'text',
+            'label' => 'Media Items', // Table column heading
         ]);
 
         $this->crud->addButtonFromView('line', 'datafeed.get-feed', 'datafeed.get-feed', 'beginning');
 
         $this->crud->addFilter([
-            'name'  => 'media_type',
-            'type'  => 'select2_multiple',
-            'label' => 'Media Type'
-        ], function() {
+            'name' => 'media_type',
+            'type' => 'select2_multiple',
+            'label' => 'Media Type',
+        ], function () {
             return DataFeed::getMediaTypes();
-        }, function($values) {
+        }, function ($values) {
             $this->crud->addClause('whereIn', 'media_type', json_decode($values));
         });
 
         $this->crud->addFilter([
-            'name'  => 'source_category',
-            'type'  => 'select2_multiple',
-            'label' => 'Source Category'
-        ], function() {
+            'name' => 'source_category',
+            'type' => 'select2_multiple',
+            'label' => 'Source Category',
+        ], function () {
             return DataFeed::getSourceCategories();
-        }, function($values) {
+        }, function ($values) {
             $this->crud->addClause('whereIn', 'source_category', json_decode($values));
         });
 
         $this->crud->addFilter([
-            'type'  => 'simple',
-            'name'  => 'active',
-            'label' => 'Active'
-        ], false, function() {
+            'type' => 'simple',
+            'name' => 'active',
+            'label' => 'Active',
+        ], false, function () {
             $this->crud->addClause('active');
         });
 
         $this->crud->addFilter([
-            'type'  => 'simple',
-            'name'  => 'auto_approval',
-            'label' => 'Auto Approval'
-        ], false, function() {
+            'type' => 'simple',
+            'name' => 'auto_approval',
+            'label' => 'Auto Approval',
+        ], false, function () {
             $this->crud->addClause('autoApproval');
         });
     }
@@ -145,6 +145,7 @@ class DataFeedCrudController extends CrudController
      * Define what happens when the Create operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-create
+     *
      * @return void
      */
     protected function setupCreateOperation()
@@ -152,59 +153,59 @@ class DataFeedCrudController extends CrudController
         CRUD::setValidation(DataFeedRequest::class);
 
         $this->crud->addField([
-            'name'  => 'name',
+            'name' => 'name',
             'label' => 'Title',
-            'type'  => 'text'
+            'type' => 'text',
         ]);
 
         $this->crud->addField([
-            'name'  => 'url',
+            'name' => 'url',
             'label' => 'URL',
-            'type'  => 'text'
+            'type' => 'text',
         ]);
 
         $this->crud->addField([
-            'name'    => 'feed_type',
-            'type'    => 'select2_from_array',
-            'label'   => 'Feed Type',
+            'name' => 'feed_type',
+            'type' => 'select2_from_array',
+            'label' => 'Feed Type',
             'options' => DataFeed::getFeedTypes(),
-            'allows_null'  => false,
+            'allows_null' => false,
         ]);
 
         $this->crud->addField([
-            'name'    => 'media_type',
-            'type'    => 'select2_from_array',
-            'label'   => 'Media Type',
+            'name' => 'media_type',
+            'type' => 'select2_from_array',
+            'label' => 'Media Type',
             'options' => DataFeed::getMediaTypes(),
-            'allows_null'  => false,
+            'allows_null' => false,
         ]);
 
         $this->crud->addField([
-            'name'    => 'source_category',
-            'type'    => 'select2_from_array',
-            'label'   => 'Source Category',
+            'name' => 'source_category',
+            'type' => 'select2_from_array',
+            'label' => 'Source Category',
             'options' => DataFeed::getSourceCategories(),
-            'allows_null'  => false,
+            'allows_null' => false,
         ]);
 
         $this->crud->addField([
-            'name'    => 'status',
-            'type'    => 'select2_from_array',
-            'label'   => 'Status',
+            'name' => 'status',
+            'type' => 'select2_from_array',
+            'label' => 'Status',
             'options' => DataFeed::getStatuses(),
-            'allows_null'  => false,
+            'allows_null' => false,
         ]);
 
         $this->crud->addField([
-            'name'  => 'summary',
+            'name' => 'summary',
             'label' => 'Summary',
-            'type'  => 'textarea'
+            'type' => 'textarea',
         ]);
 
         $this->crud->addField([
-            'name'    => 'auto_approval',
-            'type'    => 'boolean',
-            'label'   => 'Auto Approval',
+            'name' => 'auto_approval',
+            'type' => 'boolean',
+            'label' => 'Auto Approval',
         ]);
 
         /**
@@ -218,6 +219,7 @@ class DataFeedCrudController extends CrudController
      * Define what happens when the Update operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
+     *
      * @return void
      */
     protected function setupUpdateOperation()

@@ -12,9 +12,13 @@ use Illuminate\Support\Facades\DB;
 class EventCleaner
 {
     private $events = null;
+
     private $types = null;
+
     private $focus = null;
+
     private $locations = null;
+
     private $people = null;
 
     public function __construct()
@@ -45,15 +49,14 @@ class EventCleaner
             ->orWhereNotIn('event_id', $this->events)
             ->get();
 
-        foreach($orphened as $entry)
-        {
+        foreach ($orphened as $entry) {
             DB::table('event_event_type')
-                ->where('event_id','=', $entry->event_id)
-                ->where('event_type_id','=', $entry->event_type_id)
+                ->where('event_id', '=', $entry->event_id)
+                ->where('event_type_id', '=', $entry->event_type_id)
                 ->delete();
         }
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Events and EventTypes.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Events and EventTypes.';
     }
 
     public function cleanFocusRelation()
@@ -64,15 +67,14 @@ class EventCleaner
             ->orWhereNotIn('event_id', $this->events)
             ->get();
 
-        foreach($orphened as $entry)
-        {
+        foreach ($orphened as $entry) {
             DB::table('event_focus')
-                ->where('event_id','=', $entry->event_id)
-                ->where('focus_id','=', $entry->focus_id)
+                ->where('event_id', '=', $entry->event_id)
+                ->where('focus_id', '=', $entry->focus_id)
                 ->delete();
         }
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Events and Focus.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Events and Focus.';
     }
 
     public function cleanLocationRelation()
@@ -83,15 +85,14 @@ class EventCleaner
             ->orWhereNotIn('event_id', $this->events)
             ->get();
 
-        foreach($orphened as $entry)
-        {
+        foreach ($orphened as $entry) {
             DB::table('event_location')
-                ->where('event_id','=', $entry->event_id)
-                ->where('location_id','=', $entry->location_id)
+                ->where('event_id', '=', $entry->event_id)
+                ->where('location_id', '=', $entry->location_id)
                 ->delete();
         }
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Events and Locations.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Events and Locations.';
     }
 
     public function cleanPersonRelation()
@@ -102,14 +103,13 @@ class EventCleaner
             ->orWhereNotIn('event_id', $this->events)
             ->get();
 
-        foreach($orphened as $entry)
-        {
+        foreach ($orphened as $entry) {
             DB::table('event_person')
-                ->where('event_id','=', $entry->event_id)
-                ->where('person_id','=', $entry->person_id)
+                ->where('event_id', '=', $entry->event_id)
+                ->where('person_id', '=', $entry->person_id)
                 ->delete();
         }
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Events and People.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Events and People.';
     }
 }

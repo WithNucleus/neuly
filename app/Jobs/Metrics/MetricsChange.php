@@ -17,7 +17,9 @@ class MetricsChange implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected Metric $metric;
+
     protected string $type;
+
     protected string $frequency;
 
     /**
@@ -46,7 +48,7 @@ class MetricsChange implements ShouldQueue
         $attributes = [
             'date' => $this->metric->date,
             'type' => $this->type,
-            'frequency' => $this->frequency
+            'frequency' => $this->frequency,
         ];
 
         foreach ($metricFields as $key) {

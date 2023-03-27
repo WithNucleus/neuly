@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Index;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Auth;
-use App\User;
 use App\Http\Requests\ChangeUserSettingsRequest;
-use App\Services\ValidateUserHandler;
+use App\User;
+use Auth;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Validator;
 
@@ -15,7 +14,7 @@ class UserProfileController extends Controller
 {
     public function index(Request $request)
     {
-    	$user = User::find(Auth::user()->id);
+        $user = User::find(Auth::user()->id);
 
         return view('members.settings.profile', compact('user'));
     }
@@ -44,18 +43,16 @@ class UserProfileController extends Controller
     }
 
     // Check Slug via ajax
-    public function checkMemberUrl(Request $request) {
-
+    public function checkMemberUrl(Request $request)
+    {
         $validator = Validator::make($request->all(), [
-            'member_url' => 'nullable|max:25|alpha_dash|unique:users,member_url,' . Auth::user()->id,
+            'member_url' => 'nullable|max:25|alpha_dash|unique:users,member_url,'.Auth::user()->id,
         ]);
 
         if ($validator->passes()) {
-
             return response()->json(['success' => 'Member URL is good']);
         }
 
-        return response()->json(['error'=>$validator->errors()->all()]);
-
+        return response()->json(['error' => $validator->errors()->all()]);
     }
 }

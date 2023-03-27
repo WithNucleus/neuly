@@ -9,7 +9,7 @@ use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
  * Class CtConditionCrudController
- * @package App\Http\Controllers\Admin
+ *
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
 class CtOutcomeMeasureCrudController extends CrudController
@@ -28,7 +28,7 @@ class CtOutcomeMeasureCrudController extends CrudController
     public function setup()
     {
         CRUD::setModel(CtOutcomeMeasure::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/ct_outcome_measure');
+        CRUD::setRoute(config('backpack.base.route_prefix').'/ct_outcome_measure');
         CRUD::setEntityNameStrings('ct_outcome_measure', 'ct_outcome_measures');
     }
 
@@ -36,6 +36,7 @@ class CtOutcomeMeasureCrudController extends CrudController
      * Define what happens when the List operation is loaded.
      *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
+     *
      * @return void
      */
     protected function setupListOperation()
@@ -47,6 +48,7 @@ class CtOutcomeMeasureCrudController extends CrudController
      * Define what happens when the Create operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-create
+     *
      * @return void
      */
     protected function setupCreateOperation()
@@ -60,6 +62,7 @@ class CtOutcomeMeasureCrudController extends CrudController
      * Define what happens when the Update operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
+     *
      * @return void
      */
     protected function setupUpdateOperation()

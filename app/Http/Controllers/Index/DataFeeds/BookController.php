@@ -35,5 +35,4 @@ class BookController extends Controller
 
         return view('discover.data-feeds.books.index', compact('books', 'focus_cats'));
     }
-
 }

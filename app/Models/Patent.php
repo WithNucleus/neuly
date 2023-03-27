@@ -18,9 +18,11 @@ class Patent extends Model
     */
 
     protected $table = 'patents';
+
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
+
     // protected $fillable = [];
     // protected $hidden = [];
     protected $dates = [
@@ -30,14 +32,15 @@ class Patent extends Model
     ];
 
     protected static $logUnguarded = true;
+
     protected static $logName = 'entities';
 
-     const STATUSES_ACTIVE = [
+    const STATUSES_ACTIVE = [
         'Filed',
         'Pending',
         'Published',
-        'Granted'
-     ];
+        'Granted',
+    ];
 
     /*
     |--------------------------------------------------------------------------
@@ -52,17 +55,17 @@ class Patent extends Model
     */
     public function companies(): \Illuminate\Database\Eloquent\Relations\MorphToMany
     {
-        return $this->morphedByMany(Company::class, 'entity' , 'patent_relationships')->withTimestamps();
+        return $this->morphedByMany(Company::class, 'entity', 'patent_relationships')->withTimestamps();
     }
 
     public function focus(): \Illuminate\Database\Eloquent\Relations\MorphToMany
     {
-        return $this->morphedByMany(Focus::class, 'entity' , 'patent_relationships')->withTimestamps();
+        return $this->morphedByMany(Focus::class, 'entity', 'patent_relationships')->withTimestamps();
     }
 
     public function people(): \Illuminate\Database\Eloquent\Relations\MorphToMany
     {
-        return $this->morphedByMany(Person::class, 'entity' , 'patent_relationships')->withTimestamps();
+        return $this->morphedByMany(Person::class, 'entity', 'patent_relationships')->withTimestamps();
     }
 
     /*

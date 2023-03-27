@@ -14,11 +14,17 @@ use Illuminate\Support\Facades\DB;
 class CompanyCleaner
 {
     private $companies = null;
+
     private $events = null;
+
     private $focus = null;
+
     private $investors = null;
+
     private $locations = null;
+
     private $people = null;
+
     private $research = null;
 
     public function __construct()
@@ -54,15 +60,14 @@ class CompanyCleaner
             ->orWhereNotIn('company_id', $this->companies)
             ->get();
 
-        foreach($orphened as $entry)
-        {
+        foreach ($orphened as $entry) {
             DB::table('company_event')
-                ->where('event_id','=', $entry->event_id)
-                ->where('company_id','=', $entry->company_id)
+                ->where('event_id', '=', $entry->event_id)
+                ->where('company_id', '=', $entry->company_id)
                 ->delete();
         }
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Companies and Events.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Companies and Events.';
     }
 
     public function cleanFocusRelation()
@@ -73,15 +78,14 @@ class CompanyCleaner
             ->orWhereNotIn('company_id', $this->companies)
             ->get();
 
-        foreach($orphened as $entry)
-        {
+        foreach ($orphened as $entry) {
             DB::table('company_focus')
-                ->where('focus_id','=', $entry->focus_id)
-                ->where('company_id','=', $entry->company_id)
+                ->where('focus_id', '=', $entry->focus_id)
+                ->where('company_id', '=', $entry->company_id)
                 ->delete();
         }
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Companies and Focus.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Companies and Focus.';
     }
 
     public function cleanInvestorRelation()
@@ -94,7 +98,7 @@ class CompanyCleaner
 
         DB::table('company_investor')->whereIn('id', $orphened)->delete();
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Companies and Investors.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Companies and Investors.';
     }
 
     public function cleanLocationRelation()
@@ -107,7 +111,7 @@ class CompanyCleaner
 
         DB::table('company_location')->whereIn('id', $orphened)->delete();
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Companies and Locations.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Companies and Locations.';
     }
 
     public function cleanPersonRelation()
@@ -118,15 +122,14 @@ class CompanyCleaner
             ->orWhereNotIn('company_id', $this->companies)
             ->get();
 
-        foreach($orphened as $entry)
-        {
+        foreach ($orphened as $entry) {
             DB::table('company_person')
-                ->where('person_id','=', $entry->person_id)
-                ->where('company_id','=', $entry->company_id)
+                ->where('person_id', '=', $entry->person_id)
+                ->where('company_id', '=', $entry->company_id)
                 ->delete();
         }
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Companies and People.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Companies and People.';
     }
 
     public function cleanResearchRelation()
@@ -137,15 +140,14 @@ class CompanyCleaner
             ->orWhereNotIn('company_id', $this->companies)
             ->get();
 
-        foreach($orphened as $entry)
-        {
+        foreach ($orphened as $entry) {
             DB::table('company_research')
-                ->where('research_id','=', $entry->research_id)
-                ->where('company_id','=', $entry->company_id)
+                ->where('research_id', '=', $entry->research_id)
+                ->where('company_id', '=', $entry->company_id)
                 ->delete();
         }
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Companies and People.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Companies and People.';
     }
 
     public function cleanJobApplicationRelation()
@@ -157,6 +159,6 @@ class CompanyCleaner
 
         DB::table('job_applications')->whereIn('id', $orphened)->delete();
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Companies and Job Applications.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Companies and Job Applications.';
     }
 }

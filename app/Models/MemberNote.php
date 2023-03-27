@@ -16,6 +16,7 @@ class MemberNote extends Model
     */
 
     protected $table = 'member_notes';
+
     protected $guarded = ['id'];
 
     /*
@@ -27,14 +28,15 @@ class MemberNote extends Model
     /**
      * Auto-save in trait HasTrixRichText not work, that's why added this custom method
      *
-     * @param array $fieldsData
+     * @param  array  $fieldsData
      */
-    public function saveTrixRichText($fieldsData) {
+    public function saveTrixRichText($fieldsData)
+    {
         foreach ($fieldsData as $field => $content) {
             $this->trixRichText()->updateOrCreate([
                 'field' => $field,
             ], [
-                'field'   => $field,
+                'field' => $field,
                 'content' => $content,
             ]);
         }

@@ -5,9 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Team;
 use App\Models\TeamInvitation;
 use App\User;
-use GrahamCampbell\ResultType\Success;
 use Illuminate\Http\Request;
-use MongoDB\Driver\Session;
 
 class InvitationController extends Controller
 {

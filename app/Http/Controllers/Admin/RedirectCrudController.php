@@ -9,7 +9,7 @@ use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
  * Class RedirectCrudController
- * @package App\Http\Controllers\Admin
+ *
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
 class RedirectCrudController extends CrudController
@@ -26,12 +26,12 @@ class RedirectCrudController extends CrudController
      */
     public function setup()
     {
-        if(!backpack_user()->can('manage redirects')) {
+        if (! backpack_user()->can('manage redirects')) {
             abort(404);
         }
 
         CRUD::setModel(Redirect::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/redirect');
+        CRUD::setRoute(config('backpack.base.route_prefix').'/redirect');
         CRUD::setEntityNameStrings('redirect', 'redirects');
     }
 
@@ -39,6 +39,7 @@ class RedirectCrudController extends CrudController
      * Define what happens when the List operation is loaded.
      *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
+     *
      * @return void
      */
     protected function setupListOperation()
@@ -54,12 +55,12 @@ class RedirectCrudController extends CrudController
         $redirect = Redirect::findOrFail($id);
 
         $this->crud->addColumn([
-            'name'      => 'redirectable',
-            'type'      => 'relationship',
-            'label'     => 'Redirectable (' . $redirect->redirectable->getMorphClass() . ')',
-            'entity'    => 'redirectable',
+            'name' => 'redirectable',
+            'type' => 'relationship',
+            'label' => 'Redirectable ('.$redirect->redirectable->getMorphClass().')',
+            'entity' => 'redirectable',
             'attribute' => 'name',
-            'model'     => $redirect->redirectable->getMorphClass(),
+            'model' => $redirect->redirectable->getMorphClass(),
         ]);
 
         $content = $this->traitShow($id);
@@ -71,6 +72,7 @@ class RedirectCrudController extends CrudController
      * Define what happens when the Update operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
+     *
      * @return void
      */
     protected function setupUpdateOperation()

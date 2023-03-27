@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Follow;
 use App\Models\FollowList;
 use App\Models\MemberNote;
-use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -94,7 +93,7 @@ class DashboardController extends Controller
         $newWidgetsOrder = $request->input('order');
 
         foreach ($this->defaultWidgetsOrder as $widget) {
-            if (!in_array($widget, $newWidgetsOrder)) {
+            if (! in_array($widget, $newWidgetsOrder)) {
                 $newWidgetsOrder[] = $widget;
             }
         }

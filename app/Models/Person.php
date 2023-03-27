@@ -6,17 +6,17 @@ use App\Helpers\Entity\FieldsMapping;
 use App\Models\Contracts\EntityContract;
 use App\Models\Contracts\EntityImageContract;
 use App\Models\Traits\CrudShowEntityPageButton;
+use App\Models\Traits\EntityImage;
 use App\Models\Traits\HasEntityContent;
 use App\Models\Traits\OldSlugRedirectable;
-use App\Models\Traits\EntityImage;
 use App\Models\Traits\SearchableEntity;
 use App\Traits\HasFollowers;
 use App\User;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Person extends Model implements EntityContract, EntityImageContract
@@ -37,22 +37,27 @@ class Person extends Model implements EntityContract, EntityImageContract
     */
 
     const VISIBILITY_PUBLIC = 'public';
+
     const VISIBILITY_PENDING = 'pending';
 
     const VISIBILITY_TYPES = [
         self::VISIBILITY_PUBLIC,
-        self::VISIBILITY_PENDING
+        self::VISIBILITY_PENDING,
     ];
 
-    protected $table   = 'people';
+    protected $table = 'people';
+
     protected $guarded = ['id'];
 
     // log activity for all attributes, which not listed in $guarded array
     protected static $logUnguarded = true;
+
     protected static $logName = 'entities';
 
-    protected static $imageAttribute         = 'photo';
-    protected static $imageFolderPath        = 'people';
+    protected static $imageAttribute = 'photo';
+
+    protected static $imageFolderPath = 'people';
+
     protected static $imageFilenameAttribute = 'id';
 
     private $searchableRelationships = [
@@ -70,7 +75,7 @@ class Person extends Model implements EntityContract, EntityImageContract
         'twitter_followers',
         'instagram_followers',
         'secondary_email',
-        'visibility'
+        'visibility',
     ];
 
     /*
@@ -85,7 +90,7 @@ class Person extends Model implements EntityContract, EntityImageContract
         $slugCount = Person::where('slug', $slug)->count();
 
         if ($slugCount > 0) {
-            $slug = $slug . '-' . uniqid();
+            $slug = $slug.'-'.uniqid();
         }
 
         return $slug;
@@ -93,7 +98,6 @@ class Person extends Model implements EntityContract, EntityImageContract
 
     public static function findOrCreatePerson($name, $google_scholar)
     {
-
         $person = Person::where('name', $name)
             ->orWhere('google_scholar', $google_scholar)
             ->first();
@@ -110,9 +114,8 @@ class Person extends Model implements EntityContract, EntityImageContract
             ]);
 
             return $person;
-
         } catch (QueryException $e) {
-            $error_message = 'Error on findOrCreatePerson()' . "\n" . $e;
+            $error_message = 'Error on findOrCreatePerson()'."\n".$e;
 
             Log::error($error_message);
         }
@@ -121,34 +124,34 @@ class Person extends Model implements EntityContract, EntityImageContract
     public function getLinkedIn()
     {
         if ($this->linkedin != null) {
-            return '<a href="https://www.linkedin.com/in/' . $this->linkedin . '" target="_blank" rel="noopener noreferrer"><i class="lab la-linkedin-in"></i> ' . $this->linkedin . '</a>';
+            return '<a href="https://www.linkedin.com/in/'.$this->linkedin.'" target="_blank" rel="noopener noreferrer"><i class="lab la-linkedin-in"></i> '.$this->linkedin.'</a>';
         }
     }
 
     public function getFacebook()
     {
         if ($this->facebook != null) {
-            return '<a href="https://www.facebook.com/' . $this->facebook . '" target="_blank" rel="noopener noreferrer"><i class="lab la-facebook-f"></i> ' . $this->facebook . '</a>';
+            return '<a href="https://www.facebook.com/'.$this->facebook.'" target="_blank" rel="noopener noreferrer"><i class="lab la-facebook-f"></i> '.$this->facebook.'</a>';
         }
     }
 
     public function getTwitter()
     {
         if ($this->twitter != null) {
-            return '<a href="https://www.twitter.com/' . $this->twitter . '" target="_blank" rel="noopener noreferrer"><i class="lab la-twitter"></i> ' . $this->twitter . '</a>';
+            return '<a href="https://www.twitter.com/'.$this->twitter.'" target="_blank" rel="noopener noreferrer"><i class="lab la-twitter"></i> '.$this->twitter.'</a>';
         }
     }
 
     public function getInstagram()
     {
         if ($this->instagram != null) {
-            return '<a href="https://www.instagram.com/' . $this->instagram . '" target="_blank" rel="noopener noreferrer"><i class="lab la-instagram"></i> ' . $this->instagram . '</a>';
+            return '<a href="https://www.instagram.com/'.$this->instagram.'" target="_blank" rel="noopener noreferrer"><i class="lab la-instagram"></i> '.$this->instagram.'</a>';
         }
     }
 
     public function getShowLink()
     {
-        return '<a href="' . route('discover.people.show', $this->slug) . '">' . $this->name . '</a>';
+        return '<a href="'.route('discover.people.show', $this->slug).'">'.$this->name.'</a>';
     }
 
     public static function getVisibilityValues(): array
@@ -226,12 +229,12 @@ class Person extends Model implements EntityContract, EntityImageContract
 
     public function patents(): \Illuminate\Database\Eloquent\Relations\MorphToMany
     {
-        return $this->morphToMany(Patent::class, 'entity' , 'patent_relationships')->withTimestamps();
+        return $this->morphToMany(Patent::class, 'entity', 'patent_relationships')->withTimestamps();
     }
 
     public function mediaItems(): \Illuminate\Database\Eloquent\Relations\MorphToMany
     {
-        return $this->morphToMany(MediaItem::class, 'entity' , 'media_item_relationships')->withTimestamps();
+        return $this->morphToMany(MediaItem::class, 'entity', 'media_item_relationships')->withTimestamps();
     }
 
     /*
@@ -267,7 +270,8 @@ class Person extends Model implements EntityContract, EntityImageContract
     |--------------------------------------------------------------------------
     */
 
-    public function setNameAttribute($value) {
+    public function setNameAttribute($value)
+    {
         $this->attributes['name'] = $value;
         $this->attributes['slug'] = self::generateUniqueSlug($value);
     }
@@ -333,11 +337,11 @@ class Person extends Model implements EntityContract, EntityImageContract
                 'type' => FieldsMapping::TYPE_TEXT,
             ],
             'visibility' => [
-                'type'  => FieldsMapping::TYPE_ENUM,
+                'type' => FieldsMapping::TYPE_ENUM,
                 'values' => self::getVisibilityValues(),
             ],
             'visibility_code' => [
-                'type'  => FieldsMapping::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             //relations
             'locations' => [
@@ -402,6 +406,7 @@ class Person extends Model implements EntityContract, EntityImageContract
     {
         $jobTypes = config('static.person_job_types');
         sort($jobTypes);
+
         return array_combine($jobTypes, $jobTypes);
     }
 

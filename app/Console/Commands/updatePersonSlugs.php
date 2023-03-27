@@ -2,9 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Models\Person;
-use Illuminate\Support\Str;
+use Illuminate\Console\Command;
 
 class updatePersonSlugs extends Command
 {
@@ -47,7 +46,7 @@ class updatePersonSlugs extends Command
             $person->update();
 
             // Print Info
-            $this->info('Updated slug for ' . $person->name);
+            $this->info('Updated slug for '.$person->name);
         }
     }
 }

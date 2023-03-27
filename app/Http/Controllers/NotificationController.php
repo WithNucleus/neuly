@@ -33,7 +33,7 @@ class NotificationController extends Controller
 
     public function show(Request $request, Notification $notification)
     {
-        if($notification->was_read === 0) {
+        if ($notification->was_read === 0) {
             $notification->was_read = 1;
             $notification->save();
         }
@@ -44,7 +44,6 @@ class NotificationController extends Controller
     public function delete(Request $request, Notification $notification)
     {
         $notification->delete();
-
     }
 
     public function setRead(Request $request, Notification $notification)
@@ -58,8 +57,7 @@ class NotificationController extends Controller
     public function setReadAll(Request $request)
     {
         $unread = Notification::ofUser(Auth::id())->unseen()->get();
-        foreach($unread as $notification)
-        {
+        foreach ($unread as $notification) {
             $notification->was_read = 1;
             $notification->save();
         }

@@ -19,16 +19,15 @@ class UserSocialController extends Controller
     }
 
     /**
-     * @param string $provider
+     * @param  string  $provider
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function connect($provider)
     {
-        if (!UserSocialAuth::isProviderAllowed($provider)) {
+        if (! UserSocialAuth::isProviderAllowed($provider)) {
             abort(404);
         }
 
         return Socialite::driver($provider)->redirect();
     }
-
 }

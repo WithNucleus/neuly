@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Focus;
 use App\Models\Job;
 use App\Models\Location;
-use App\Services\Metas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -16,6 +15,7 @@ class JobMapController extends Controller
 {
     /**
      * Show.
+     *
      * @return \Illuminate\View\View
      */
     public function showMap(Request $request)
@@ -81,8 +81,6 @@ class JobMapController extends Controller
     }
 
     /**
-     * @param $values
-     * @param $query
      * @return mixed
      */
     private function filterFocus($values, $query)
@@ -95,7 +93,6 @@ class JobMapController extends Controller
     }
 
     /**
-     * @param $request
      * @return array|false|string[]
      */
     private function filterFocusValues($request)
@@ -109,7 +106,6 @@ class JobMapController extends Controller
     }
 
     /**
-     * @param $request
      * @return bool
      */
     private function filterHasFocus($request)
@@ -123,7 +119,6 @@ class JobMapController extends Controller
     }
 
     /**
-     * @param $filter
      * @return false|string[]
      */
     private function getFilteredFocus($filter)
@@ -137,7 +132,6 @@ class JobMapController extends Controller
     }
 
     /**
-     * @param $sortParameter
      * @return string
      */
     private function getOrderDirection($sortParameter)
@@ -152,7 +146,6 @@ class JobMapController extends Controller
     }
 
     /**
-     * @param $request
      * @return string
      */
     private function getSortParameter($request)
@@ -166,7 +159,6 @@ class JobMapController extends Controller
     }
 
     /**
-     * @param $locationsByCountries
      * @return array
      */
     private function getJobsByCountries($locationsByCountries, $jobs)
@@ -181,7 +173,6 @@ class JobMapController extends Controller
     }
 
     /**
-     * @param $locationsByRegions
      * @return mixed
      */
     public function getJobsByRegions($locationsByRegions, $jobs)
@@ -196,7 +187,7 @@ class JobMapController extends Controller
     }
 
     /**
-     * @param null $type
+     * @param  null  $type
      * @return mixed
      */
     private function getJobsByEmploymentType($type = null)
@@ -213,7 +204,6 @@ class JobMapController extends Controller
     }
 
     /**
-     * @param $locations
      * @return array
      */
     private function getJobsByLocations($locations, $jobs)
@@ -226,8 +216,6 @@ class JobMapController extends Controller
     }
 
     /**
-     * @param $jobsByCountries
-     * @param $focus
      * @return array
      */
     private function getJobsMappingByCountriesAndFocus($jobsByCountries, $focus)
@@ -261,8 +249,6 @@ class JobMapController extends Controller
     }
 
     /**
-     * @param $jobs
-     * @param $focus
      * @return \Illuminate\Support\Collection
      */
     private function countJobsByFocus($jobs, $focus)
@@ -274,8 +260,6 @@ class JobMapController extends Controller
     }
 
     /**
-     * @param $sort
-     * @param $focus
      * @return array
      */
     private function getCountriesResultByCode($sort, $focus, $jobs)

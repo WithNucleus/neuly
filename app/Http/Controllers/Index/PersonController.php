@@ -9,22 +9,21 @@ use App\Http\Controllers\Controller;
 use App\Http\Filters\PeopleCompanyFocusFilter;
 use App\Mail\VerifyClaimedPersonMail;
 use App\Models\Company;
+use App\Models\Location;
+use App\Models\Person;
 use App\Models\RaisedClaim;
 use App\Notifications\PersonDeletionRequested;
 use App\Notifications\RaisedClaimCreated;
 use App\Repositories\FollowRepository;
+use App\Services\Metas;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use App\Models\Person;
-use App\Models\Location;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-use Spatie\QueryBuilder\QueryBuilder;
-use Spatie\QueryBuilder\AllowedSort;
-use Spatie\QueryBuilder\AllowedFilter;
-use App\Services\Metas;
 use Spatie\Activitylog\Models\Activity;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\AllowedSort;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class PersonController extends Controller
 {
@@ -97,13 +96,11 @@ class PersonController extends Controller
             'filters_companies',
             'filters_focuses',
         ));
-
     }
 
     // Show More Info -- Full Layout
     public function show(Request $request, $slug)
     {
-
         // Get Person
         $person = Person::where('slug', $slug)
             ->with([
@@ -130,14 +127,14 @@ class PersonController extends Controller
             abort(404);
         }
 
-        $metas = Metas::process(array(
+        $metas = Metas::process([
             'title' => $person->name,
             'description' => $person->bio,
             'image' => $person->entityImageUrl,
-        ));
+        ]);
 
         $entity = 'people';
-        $isFollowed = (bool)count(FollowRepository::fromuser(Person::class, $person->id));
+        $isFollowed = (bool) count(FollowRepository::fromuser(Person::class, $person->id));
         $isVerified = $person->user_id !== null;
 
         // Log Activity
@@ -146,7 +143,7 @@ class PersonController extends Controller
             ->withProperties([
                 'ip' => $request->ip(),
                 'entity' => 'people',
-                'slug' => $person->slug
+                'slug' => $person->slug,
             ])
             ->performedOn($person)
             ->tap(function (Activity $activity) use ($request) {
@@ -229,9 +226,9 @@ class PersonController extends Controller
     public function requestDeletionSubmit(Request $request, $slug)
     {
         $person = Person::where('slug', $slug)->firstOrFail();
-        $name   = $request->input('name');
-        $email  = $request->input('email');
-        $cause  = $request->input('cause');
+        $name = $request->input('name');
+        $email = $request->input('email');
+        $cause = $request->input('cause');
 
         $notification = new PersonDeletionRequested($person, $name, $email, $cause);
         NotificationHelper::sendAdminNotifications($notification);

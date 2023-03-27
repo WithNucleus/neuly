@@ -27,7 +27,6 @@ class CreateTeamsTable extends Migration
                 ->onDelete('cascade');
         });
 
-
         Role::create(['name' => 'Team owner']);
     }
 

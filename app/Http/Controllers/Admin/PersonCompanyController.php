@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Events\SendNotification;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Company;
 use App\Models\Person;
+use Illuminate\Http\Request;
 
 class PersonCompanyController extends Controller
 {
@@ -20,7 +20,8 @@ class PersonCompanyController extends Controller
         $this->middleware(['permission:edit companies']);
     }
 
-    public function index(Request $request, $id) {
+    public function index(Request $request, $id)
+    {
         $person = Person::with('companies')->find($id);
         $companies = Company::orderBy('name')->get();
 
@@ -43,15 +44,14 @@ class PersonCompanyController extends Controller
         ]);
         $person->touch();
 
-        $title_company = $company->name . ' added a new person';
-        $title_person = $person->name . ' added to an organization';
+        $title_company = $company->name.' added a new person';
+        $title_person = $person->name.' added to an organization';
 
-        $description = $person->getShowLink() . ' has the position of ' . $request->input('position') . ' at ' . $company->getShowLink() . ', ' . $company->getTypeDescription() . '.';
+        $description = $person->getShowLink().' has the position of '.$request->input('position').' at '.$company->getShowLink().', '.$company->getTypeDescription().'.';
 
         SendNotification::dispatch($company, $title_company, $description, 'organizations');
         SendNotification::dispatch($person, $title_person, $description, 'people');
 
         return redirect()->back();
     }
-
 }

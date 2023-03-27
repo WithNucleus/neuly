@@ -388,7 +388,7 @@ return [
                 '#-moz-binding[\x00-\x20]*:#u',
 
                 // Unneeded tags
-                '#</*(applet|meta|xml|blink|link|style|script|embed|object|iframe|frame|frameset|ilayer|layer|bgsound|title|base)[^>]*>?#i'
+                '#</*(applet|meta|xml|blink|link|style|script|embed|object|iframe|frame|frameset|ilayer|layer|bgsound|title|base)[^>]*>?#i',
             ],
 
             'auto_block' => [

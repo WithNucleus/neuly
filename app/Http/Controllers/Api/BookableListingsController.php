@@ -17,7 +17,7 @@ class BookableListingsController extends ApiBaseController
         'bookable_type',
         'user_id',
         'location_id',
-        'hours_json'
+        'hours_json',
     ];
 
     protected $allowedFields = [
@@ -25,7 +25,7 @@ class BookableListingsController extends ApiBaseController
         'type',
         'slug',
         'content',
-        'url'
+        'url',
     ];
 
     protected $showEntityRouteName = 'discover.bookable-listing.show';
@@ -37,7 +37,7 @@ class BookableListingsController extends ApiBaseController
         if ($request->input('directory') !== null) {
             $directory = Directory::where('name', $request->input('directory'))->first();
 
-            if (!$directory) {
+            if (! $directory) {
                 return response()->json(['message' => 'Invalid directory'], 400);
             }
         }

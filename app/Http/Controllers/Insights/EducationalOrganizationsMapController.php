@@ -7,8 +7,8 @@ use App\Models\Company;
 
 class EducationalOrganizationsMapController extends Controller
 {
-    public function map() {
-
+    public function map()
+    {
         $educationalOrganizations = Company::educational()
             ->whereHas('locations')
             ->with(['locations', 'focus', 'investors', 'clinicaltrials'])
@@ -18,15 +18,13 @@ class EducationalOrganizationsMapController extends Controller
         $chartData = json_encode($this->processChartData($educationalOrganizations), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 
         return view('discover.insights.educational-organizations.map', compact('chartData'));
-
     }
 
-    private function processChartData($educationalOrganizations) {
-
+    private function processChartData($educationalOrganizations)
+    {
         $chartData = [];
 
         foreach ($educationalOrganizations as $organization) {
-
             $firstLocation = $organization->locations->first();
 
             $focusString = implode(' / ', $organization->focus->pluck('name')->toArray());
@@ -48,7 +46,6 @@ class EducationalOrganizationsMapController extends Controller
             ];
 
             array_push($chartData, $organizationData);
-
         }
 
         return $chartData;

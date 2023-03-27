@@ -12,7 +12,7 @@ return [
     */
 
     // Date & Datetime Format Syntax: https://carbon.nesbot.com/docs/#api-localization
-    'default_date_format'     => 'D MMM YYYY',
+    'default_date_format' => 'D MMM YYYY',
     'default_datetime_format' => 'D MMM YYYY, HH:mm',
 
     // Direction, according to language
@@ -51,7 +51,7 @@ return [
         // 'packages/noty/noty.css',
 
         // Load the fonts separately (so that you can replace them at will):
-//        'packages/source-sans-pro/source-sans-pro.css',
+        //        'packages/source-sans-pro/source-sans-pro.css',
         'packages/line-awesome/css/line-awesome.min.css',
         'https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap',
 
@@ -68,13 +68,12 @@ return [
         // 'css/app.css' => '',
     ],
 
-
     // ------
     // HEADER
     // ------
 
     // Menu logo. You can replace this with an <img> tag if you have a logo.
-    'project_logo'   => '<img src="https://neuly.com/images/neuly-logo-dark.png" alt="Neuly" class="backpack-logo">',
+    'project_logo' => '<img src="https://neuly.com/images/neuly-logo-dark.png" alt="Neuly" class="backpack-logo">',
 
     // Show / hide breadcrumbs on admin panel pages.
     'breadcrumbs' => true,
@@ -228,7 +227,7 @@ return [
     // Username column for authentication
     // The Backpack default is the same as the Laravel default (email)
     // If you need to switch to username, you also need to create that column in your db
-    'authentication_column'      => 'email',
+    'authentication_column' => 'email',
     'authentication_column_name' => 'Email',
 
     // The guard that protects the Backpack admin panel.

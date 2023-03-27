@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\Events\RegisteredAndVerified;
 use App\Events\SendNotification;
 use App\Listeners\CreateAppNotification;
 use App\Listeners\CreateMailNotification;
@@ -22,14 +21,14 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         SendNotification::class => [
             CreateAppNotification::class,
-            CreateMailNotification::class
+            CreateMailNotification::class,
         ],
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
         AccessTokenCreated::class => [
-            RevokeOldOauthTokens::class
-        ]
+            RevokeOldOauthTokens::class,
+        ],
     ];
 
     /**

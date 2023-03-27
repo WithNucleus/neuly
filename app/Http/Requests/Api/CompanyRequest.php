@@ -12,7 +12,7 @@ class CompanyRequest extends ApiBaseRequest
     public function rules()
     {
         $rules = [
-            'name' => 'required|min:3|max:255|unique:companies,name,' . $this->route('id'),
+            'name' => 'required|min:3|max:255|unique:companies,name,'.$this->route('id'),
             'ownership' => 'max:255',
             'website' => 'max:255',
             'ticker_symbol' => 'max:255',

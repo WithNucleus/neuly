@@ -13,7 +13,6 @@ class VisibilityOptionsForCompaniesAndPeople extends Migration
      */
     public function up()
     {
-
         // Drop Original Visibility Column for People
         Schema::table('people', function (Blueprint $table) {
             $table->dropColumn('visibility');

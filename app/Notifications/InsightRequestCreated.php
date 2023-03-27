@@ -14,9 +14,6 @@ class InsightRequestCreated extends Notification
      */
     public $insightRequest;
 
-    /**
-     * @param \App\Models\InsightRequest $insightRequest
-     */
     public function __construct(InsightRequest $insightRequest)
     {
         $this->insightRequest = $insightRequest;
@@ -44,28 +41,28 @@ class InsightRequestCreated extends Notification
         return (new MailMessage)
             ->markdown('emails.insight-request', [
                 'name' => $this->insightRequest->name,
-                'text' => $this->insightRequest->text
+                'text' => $this->insightRequest->text,
             ])
             ->replyTo($this->insightRequest->email)
-            ->subject('Insight Request from ' . $this->insightRequest->name);
+            ->subject('Insight Request from '.$this->insightRequest->name);
     }
 
     /**
-     * @param mixed $notifiable
+     * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\SlackMessage
      */
     public function toSlack($notifiable)
     {
         $url = route('insightRequest.show', $this->insightRequest->id);
-        $from = $this->insightRequest->name . ' [' . $this->insightRequest->email . ']';
+        $from = $this->insightRequest->name.' ['.$this->insightRequest->email.']';
         $text = $this->insightRequest->text;
 
         return (new SlackMessage)
-            ->content('New Insight Request from ' . $from)
-            ->attachment(function ($attachment) use ($url, $from, $text) {
+            ->content('New Insight Request from '.$from)
+            ->attachment(function ($attachment) use ($url, $text) {
                 $attachment->title('View in Neuly', $url)
                     ->fields([
-                        'Request' => $text
+                        'Request' => $text,
                     ]);
             });
     }

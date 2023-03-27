@@ -1,9 +1,9 @@
 <?php
 
+use App\Models\Country;
+use App\Models\Location;
 use Illuminate\Database\Migrations\Migration;
 use Symfony\Component\Console\Output\ConsoleOutput;
-use App\Models\Location;
-use App\Models\Country;
 
 class UpdateLocationsTableWithCountryData extends Migration
 {
@@ -18,12 +18,12 @@ class UpdateLocationsTableWithCountryData extends Migration
         $countries = Country::pluck('alpha2code', 'name')->toArray();
         $output = new ConsoleOutput();
 
-        foreach($locations as $location) {
+        foreach ($locations as $location) {
             if (array_key_exists($location->country, $countries)) {
                 $location->alpha2code = $countries[$location->country];
                 $location->save();
             } else {
-                $output->writeln($location->name . ' alpha2code not found');
+                $output->writeln($location->name.' alpha2code not found');
             }
         }
     }

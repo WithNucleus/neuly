@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Models\Investor;
+use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 
 class updateInvestorSlugs extends Command
@@ -43,7 +43,6 @@ class updateInvestorSlugs extends Command
         $investors = Investor::whereNull('slug')->take(20)->get();
 
         foreach ($investors as $investor) {
-
             // Get Name
             $name = $investor->name;
 
@@ -55,7 +54,7 @@ class updateInvestorSlugs extends Command
             $investor->update();
 
             // Print Info
-            $this->info('Updated slug for ' . $investor->name);
+            $this->info('Updated slug for '.$investor->name);
         }
     }
 }

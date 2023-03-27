@@ -12,8 +12,8 @@ use Illuminate\Support\Str;
 class ImportFailureCorrector
 {
     /**
-     * @param \App\Models\ImportFailure $importFailure
-     * @param array $requestArray
+     * @param  \App\Models\ImportFailure  $importFailure
+     * @param  array  $requestArray
      * @return bool
      */
     public static function correctFailure($importFailure, $requestArray)
@@ -39,8 +39,8 @@ class ImportFailureCorrector
     /**
      * Update or create new Company/Person entity from ImportFailure and attach to Clinicaltrial.
      *
-     * @param \App\Models\ImportFailure $importFailure
-     * @param array $requestArray
+     * @param  \App\Models\ImportFailure  $importFailure
+     * @param  array  $requestArray
      * @return bool
      */
     private static function correctSponsorCollaborators($importFailure, $requestArray)
@@ -85,8 +85,8 @@ class ImportFailureCorrector
             }
         } catch (\Throwable $e) {
             Log::error(
-                "Unable to resolve ImportFailure [id = {$importFailure->id}, nct_number = {$nctNumber}].\n" .
-                'ErrorMessage: ' . $e->getMessage()
+                "Unable to resolve ImportFailure [id = {$importFailure->id}, nct_number = {$nctNumber}].\n".
+                'ErrorMessage: '.$e->getMessage()
             );
         }
 
@@ -96,8 +96,8 @@ class ImportFailureCorrector
     /**
      * Update or create new Location entity from ImportFailure and attach to Clinicaltrial.
      *
-     * @param \App\Models\ImportFailure $importFailure
-     * @param array $requestArray
+     * @param  \App\Models\ImportFailure  $importFailure
+     * @param  array  $requestArray
      * @return bool
      */
     private static function correctLocations($importFailure, $requestArray)
@@ -120,8 +120,8 @@ class ImportFailureCorrector
             }
         } catch (\Throwable $e) {
             Log::error(
-                "Unable to resolve ImportFailure [id = {$importFailure->id}, nct_number = {$nctNumber}].\n" .
-                'ErrorMessage: ' . $e->getMessage()
+                "Unable to resolve ImportFailure [id = {$importFailure->id}, nct_number = {$nctNumber}].\n".
+                'ErrorMessage: '.$e->getMessage()
             );
         }
 

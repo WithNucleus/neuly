@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\User;
 use App\Http\Requests\Api\UserRoleRequest;
+use App\User;
 use Spatie\Permission\Models\Role;
 
 class UserRolesController

@@ -14,13 +14,13 @@ class Follow extends Model
     /**
      * RELATIONS
      */
-
-    public function followable() :MorphTo
+    public function followable(): MorphTo
     {
         return $this->morphTo();
     }
 
-    public function list() {
+    public function list()
+    {
         return $this->belongsTo(FollowList::class, 'follow_list_id');
     }
 }

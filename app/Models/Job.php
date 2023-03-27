@@ -33,6 +33,7 @@ class Job extends Model implements EntityContract
     ];
 
     const STATUS_OPEN = 'open';
+
     const STATUS_ARCHIVED = 'archived';
 
     const STATUS_VALUES = [
@@ -46,7 +47,9 @@ class Job extends Model implements EntityContract
     ];
 
     protected $table = 'jobs';
+
     protected $guarded = ['id'];
+
     protected $fillable = [
         'job_title',
         'slug',
@@ -57,7 +60,7 @@ class Job extends Model implements EntityContract
         'posted_date',
         'salary',
         'hourly_rate',
-        'status'
+        'status',
     ];
 
     protected $casts = [
@@ -66,6 +69,7 @@ class Job extends Model implements EntityContract
 
     // log activity for all attributes, which not listed in $guarded array
     protected static $logUnguarded = true;
+
     protected static $logName = 'entities';
 
     private $searchableRelationships = [
@@ -74,15 +78,15 @@ class Job extends Model implements EntityContract
     ];
 
     private $searchableMorphs = [
-        'owner' => 'name'
+        'owner' => 'name',
     ];
 
     private $searchableDateFields = [
-        'posted_date'
+        'posted_date',
     ];
 
     private $searchableRenamedFields = [
-        'job_title' => 'name'
+        'job_title' => 'name',
     ];
 
     /*
@@ -97,14 +101,15 @@ class Job extends Model implements EntityContract
         $slugCount = self::where('slug', $slug)->count();
 
         if ($slugCount > 0) {
-            $slug = $slug . '-' . uniqid();
+            $slug = $slug.'-'.uniqid();
         }
 
         return $slug;
     }
 
-    public function getShowLink() {
-        return '<a href="' . route('discover.jobs.show', $this->slug) . '">' . $this->job_title . '</a>';
+    public function getShowLink()
+    {
+        return '<a href="'.route('discover.jobs.show', $this->slug).'">'.$this->job_title.'</a>';
     }
 
     /**
@@ -138,17 +143,20 @@ class Job extends Model implements EntityContract
             ->where('owner_type', Investor::class);
     }
 
-    public function focus() {
+    public function focus()
+    {
         return $this->belongsToMany(Focus::class, 'focus_job', 'job_id', 'focus_id')
                     ->withTimestamps();
     }
 
-    public function locations() {
+    public function locations()
+    {
         return $this->belongsToMany(Location::class, 'job_location', 'job_id', 'location_id')
                     ->withTimestamps();
     }
 
-    public function jobApplications() {
+    public function jobApplications()
+    {
         return $this->hasMany(JobApplication::class);
     }
 
@@ -159,14 +167,16 @@ class Job extends Model implements EntityContract
     */
 
     /**
-     * @param \Illuminate\Database\Query\Builder $query
+     * @param  \Illuminate\Database\Query\Builder  $query
      * @return \Illuminate\Database\Query\Builder
      */
-    public function scopeOpen($query) {
+    public function scopeOpen($query)
+    {
         return $query->where('status', self::STATUS_OPEN);
     }
 
-    public function scopeArchived($query) {
+    public function scopeArchived($query)
+    {
         return $query->where('status', self::STATUS_ARCHIVED);
     }
 
@@ -234,9 +244,9 @@ class Job extends Model implements EntityContract
     {
         return [
             //this relation should be first in the fields order
-            'owner'    => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_ONE_ONE_MORPHABLE,
+            'owner' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_ONE_ONE_MORPHABLE,
                 'relationMorphableTypes' => [
                     Company::class,
                     Investor::class,
@@ -246,43 +256,43 @@ class Job extends Model implements EntityContract
                 'relationField' => 'name',
             ],
             //attributes
-            'job_title'      => [
+            'job_title' => [
                 'type' => FieldsMapping::TYPE_STRING,
                 'label' => 'Job Title',
                 'required' => true,
             ],
-            'slug'      => [
+            'slug' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'job_description'   => [
+            'job_description' => [
                 'type' => FieldsMapping::TYPE_TEXT_EDITOR,
                 'label' => 'Job Description',
             ],
-            'employment_type'      => [
+            'employment_type' => [
                 'type' => FieldsMapping::TYPE_ENUM,
                 'label' => 'Type',
                 'values' => self::getEmploymentTypeValues(),
             ],
-            'posted_date'      => [
+            'posted_date' => [
                 'type' => FieldsMapping::TYPE_DATE,
                 'label' => 'Posted date',
             ],
-            'salary'      => [
+            'salary' => [
                 'type' => FieldsMapping::TYPE_INTEGER,
             ],
-            'hourly_rate'      => [
+            'hourly_rate' => [
                 'type' => FieldsMapping::TYPE_INTEGER,
                 'label' => 'Hourly Rate',
             ],
             //relations
             'locations' => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
-            'focus'     => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'focus' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
         ];

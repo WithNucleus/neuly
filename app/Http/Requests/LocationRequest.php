@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Http\Requests\Request;
 use Illuminate\Foundation\Http\FormRequest;
 
 class LocationRequest extends FormRequest
@@ -26,7 +25,7 @@ class LocationRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|min:5|max:255|unique:locations,name,' . $this->get('id'),
+            'name' => 'required|min:5|max:255|unique:locations,name,'.$this->get('id'),
             'country' => 'required|min:2|max:255',
         ];
     }
