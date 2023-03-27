@@ -19,8 +19,6 @@ class Metric extends Model
 
     protected $guarded = ['id'];
 
-    protected $dates = ['date'];
-
     protected $casts = [
         'date' => 'date:Y-m-d',
     ];

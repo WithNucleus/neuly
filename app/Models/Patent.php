@@ -25,10 +25,10 @@ class Patent extends Model
 
     // protected $fillable = [];
     // protected $hidden = [];
-    protected $dates = [
-        'priority_date',
-        'granted_date',
-        'expiration_date',
+    protected $casts = [
+        'priority_date' => 'datetime',
+        'granted_date' => 'datetime',
+        'expiration_date' => 'datetime',
     ];
 
     protected static $logUnguarded = true;

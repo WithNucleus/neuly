@@ -40,7 +40,9 @@ class MediaItem extends Model
 
     protected $guarded = ['id'];
 
-    protected $dates = ['date'];
+    protected $casts = [
+        'date' => 'datetime',
+    ];
 
     protected static $logUnguarded = true;
 
