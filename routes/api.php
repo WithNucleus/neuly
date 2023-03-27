@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\EntityDataController;
-use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\Api\BookableListingsController;
 use App\Http\Controllers\Api\ClinicaltrialsController;
 use App\Http\Controllers\Api\CompaniesController;
@@ -14,6 +12,8 @@ use App\Http\Controllers\Api\ResearchController;
 use App\Http\Controllers\Api\UserRolesController;
 use App\Http\Controllers\Api\UsersController;
 use App\Http\Controllers\Auth\OauthController;
+use App\Http\Controllers\EntityDataController;
+use App\Http\Controllers\FeedbackController;
 use Illuminate\Support\Facades\Route;
 
 /*

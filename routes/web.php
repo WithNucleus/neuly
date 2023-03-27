@@ -3,16 +3,16 @@
 use App\Http\Controllers\Auth;
 use App\Http\Controllers\Content;
 use App\Http\Controllers\Dashboard;
+use App\Http\Controllers\Dashboard\TeamController;
 use App\Http\Controllers\Enterprise;
+use App\Http\Controllers\ExternalScriptController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\Index;
+use App\Http\Controllers\index;
+use App\Http\Controllers\Index\UserOauthController;
 use App\Http\Controllers\Insights;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\index;
-use App\Http\Controllers\Dashboard\TeamController;
-use App\Http\Controllers\ExternalScriptController;
-use App\Http\Controllers\Index\UserOauthController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -289,11 +289,11 @@ Route::middleware('auth', 'verifiedIfAuthorized')->group(function () {
         Route::post('/follow-lists/ajax-store', [Dashboard\FollowListsController::class, 'ajaxStore'])->name('member.follow-lists.ajaxStore');
         Route::post('/follow-lists/validate-name', [Dashboard\FollowListsController::class, 'validateName'])->name('member.follow-lists.validateName');
         Route::resource('/follow-lists', 'Dashboard\FollowListsController', [
-            'as' => 'member',]);
+            'as' => 'member', ]);
 
         // Follow
         Route::resource('/follow', 'Dashboard\FollowController', [
-            'as' => 'member',]);
+            'as' => 'member', ]);
         Route::get('/follow//get-modal/{id}/{type}', [Dashboard\FollowController::class, 'getModal'])->name('member.follow.getModal');
         Route::post('/follow/attach', [Dashboard\FollowController::class, 'attach'])->name('member.follow.attach');
         Route::post('/follow/detach', [Dashboard\FollowController::class, 'detach'])->name('member.follow.detach');
