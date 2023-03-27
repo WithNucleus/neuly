@@ -18,7 +18,7 @@
         "backpack/permissionmanager": "^6.0",
         "backpack/pro": "*",
         "biscolab/laravel-recaptcha": "^6.0",
-        "doctrine/dbal": "^2.13",
+        "doctrine/dbal": "^3.0",
         "fabpot/goutte": "^4.0",
         "guzzlehttp/guzzle": "^7.2",
         "intervention/image": "^2.5",
@@ -44,13 +44,14 @@
         "yadahan/laravel-authentication-log": "^1.5"
     },
     "require-dev": {
+        "backpack/devtools": "*",
         "backpack/generators": "^3.3",
         "barryvdh/laravel-debugbar": "^3.6",
+        "fakerphp/faker": "^1.9.1",
         "laracasts/generators": "^2.0",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^6.3",
         "phpunit/phpunit": "^9.5.10",
-        "fakerphp/faker": "^1.9.1",
         "spatie/laravel-ignition": "^1.4"
     },
     "repositories": [

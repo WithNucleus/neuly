@@ -5,6 +5,8 @@
 	</a>
 </li>
 
+@includeWhen(class_exists(\Backpack\DevTools\DevToolsServiceProvider::class), 'backpack.devtools::buttons.sidebar_item')
+
 @can('edit companies')
     <li class="nav-item nav-dropdown">
         <a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon la la-building"></i> Organizations</a>
