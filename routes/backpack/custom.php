@@ -6,14 +6,7 @@
 // This route file is loaded automatically by Backpack\Base.
 // Routes you generate using Backpack\Generators will be placed here.
 
-Route::group([
-    'prefix' => config('backpack.base.route_prefix', 'admin'),
-    'middleware' => [
-        config('backpack.base.web_middleware', 'web'),
-        config('backpack.base.middleware_key', 'admin'),
-    ],
-    'namespace' => 'App\Http\Controllers\Admin',
-], function () { // custom admin routes
+Route::prefix(config('backpack.base.route_prefix', 'admin'))->middleware(config('backpack.base.web_middleware', 'web'), config('backpack.base.middleware_key', 'admin'))->namespace('App\Http\Controllers\Admin')->group(function () { // custom admin routes
 Route::crud('company', 'CompanyCrudController');
     Route::crud('companybranch', 'CompanyBranchCrudController');
     Route::crud('focus', 'FocusCrudController');
@@ -52,23 +45,16 @@ Route::crud('company', 'CompanyCrudController');
     Route::crud('api-user', 'ApiUserCrudController');
     Route::crud('embeddable-search-widget', 'EmbeddableSearchWidgetCrudController');
 
-    Route::group([
-        'namespace' => 'ClinicalTrialDetails',
-    ], function () {
+    Route::namespace('ClinicalTrialDetails')->group(function () {
         Route::crud('ct_condition', 'CtConditionCrudController');
         Route::crud('ct_intervention', 'CtInterventionCrudController');
         Route::crud('ct_outcome_measure', 'CtOutcomeMeasureCrudController');
         Route::crud('ct_study_design', 'CtStudyDesignCrudController');
     });
 
-    Route::group([
-        'as' => 'admin.',
-    ], function () {
+    Route::name('admin.')->group(function () {
         Route::crud('listingrequest', 'ListingRequestCrudController');
-        Route::group([
-            'prefix' => 'listingrequest',
-            'as' => 'listingrequest.',
-        ], function () {
+        Route::prefix('listingrequest')->name('listingrequest.')->group(function () {
             Route::get('{id}/decline', 'ListingRequestCrudController@getDeclineForm')->name('decline');
             Route::post('{id}/decline', 'ListingRequestCrudController@postDeclineForm');
             Route::get('{id}/accept', 'ListingRequestCrudController@getAcceptForm')->name('accept');
@@ -77,28 +63,15 @@ Route::crud('company', 'CompanyCrudController');
     });
 
     // imports group
-    Route::group([
-        'prefix' => 'import',
-        'namespace' => 'Import',
-        'as' => 'admin.import.',
-        'middleware' => ['permission:import'],
-    ], function () {
-        Route::group([
-            'prefix' => 'clinicaltrial',
-            'namespace' => 'ClinicalTrial',
-            'as' => 'clinicaltrial.',
-        ], function () {
+    Route::prefix('import')->namespace('Import')->name('admin.import.')->middleware('permission:import')->group(function () {
+        Route::prefix('clinicaltrial')->namespace('ClinicalTrial')->name('clinicaltrial.')->group(function () {
             Route::crud('parsing', 'ParsingController');
             Route::post('parsing/bulkImport', 'ParsingController@bulkImport')->name('parsing.bulkImport');
             Route::crud('parsing-results', 'ParsingResultsController');
             Route::get('parsing-results/{id}/approve', 'ParsingResultsController@approve')->name('parsing-results.approve');
         });
 
-        Route::group([
-            'prefix' => 'company',
-            'namespace' => 'Company',
-            'as' => 'company.',
-        ], function () {
+        Route::prefix('company')->namespace('Company')->name('company.')->group(function () {
             Route::crud('serpapi', 'SerpapiController');
             Route::post('serpapi/bulkImport', 'SerpapiController@bulkImport')->name('serpapi.bulkImport');
             Route::crud('serpapi-data', 'SerpapiDataController');
@@ -107,19 +80,14 @@ Route::crud('company', 'CompanyCrudController');
             Route::post('serpapi-data/{id}/review', 'SerpapiDataController@reviewSubmit');
         });
 
-        Route::group([
-            'prefix' => 'people',
-            'as' => 'people.',
-        ], function () {
+        Route::prefix('people')->name('people.')->group(function () {
             Route::get('/', 'PeopleController@index')->name('index');
             Route::post('/process', 'PeopleController@process')->name('process');
         });
     });
     Route::crud('patent', 'PatentCrudController');
 
-    Route::group([
-        'middleware' => 'permission:view logs',
-    ], function () {
+    Route::middleware('permission:view logs')->group(function () {
         Route::crud('activity-log', 'ActivityLogCrudController');
     });
 

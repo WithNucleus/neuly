@@ -10,13 +10,7 @@
 |
 */
 
-Route::group(
-    [
-        'namespace' => 'Backpack\CRUD\app\Http\Controllers',
-        'middleware' => ['firewall.all', config('backpack.base.web_middleware', 'web')],
-        'prefix' => config('backpack.base.route_prefix'),
-    ],
-    function () {
+Route::namespace('Backpack\CRUD\app\Http\Controllers')->middleware('firewall.all', config('backpack.base.web_middleware', 'web'))->prefix(config('backpack.base.route_prefix'))->group(function () {
         // if not otherwise configured, setup the auth routes
         if (config('backpack.base.setup_auth_routes')) {
             // Authentication Routes...

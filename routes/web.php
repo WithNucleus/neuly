@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['middleware' => 'firewall.all'], function () {
+Route::middleware('firewall.all')->group(function () {
     Auth::routes(['verify' => true]);
     Route::get('login/{provider}', 'Auth\LoginController@redirectToProvider')->name('login.social');
     Route::get('login/{provider}/callback', 'Auth\LoginController@handleProviderCallback');
@@ -33,11 +33,7 @@ Route::get('/', 'Content\HomeController@index')->name('index');
 Route::get('/about', 'Content\AboutController@index')->name('about');
 
 // Search Suggestions
-Route::group([
-    'prefix' => '/searchassets',
-    'namespace' => 'Index',
-    'as' => 'searchassets.',
-], function () {
+Route::prefix('/searchassets')->namespace('Index')->name('searchassets.')->group(function () {
     Route::get('/everything.json', 'SearchSuggestionsController@everything')->name('everything');
     Route::get('/researchAuthors.json', 'SearchSuggestionsController@researchAuthors')->name('researchAuthors');
     Route::get('/investorsPeople.json', 'SearchSuggestionsController@investorsPeople')->name('investorsPeople');
@@ -75,9 +71,7 @@ Route::post('/listing/request/finish', 'Index\ListingRequestController@finishReq
 Route::get('/listing/request/getEntityListJson', 'Index\ListingRequestController@getEntityListJson')->name('listing.request.getEntityListJson');
 
 //Global group for registered and verified users only
-Route::group([
-    'middleware' => ['verifiedIfAuthorized'],
-], function () {
+Route::middleware('verifiedIfAuthorized')->group(function () {
     Route::get('/psychedelic-index', 'Content\IndexController@index')->name('discover.index');
 
     // Companies
@@ -200,21 +194,14 @@ Route::group([
 //    Route::get('/patent-filings', 'Index\DataFeeds\PatentFilingController@index')->name('discover.patents.filings');
 
     //Insights main page
-    Route::group([
-        'prefix' => '/insights',
-        'as' => 'discover.',
-    ], function () {
+    Route::prefix('/insights')->name('discover.')->group(function () {
         Route::get('/', 'Index\InsightsController@index')->name('insights');
         Route::get('/request', 'Index\InsightsController@request')->name('insights.request');
         Route::post('/request', 'Index\InsightsController@saveRequest')->name('insights.saveRequest');
     });
 
     //Insights
-    Route::group([
-        'prefix' => '/insights',
-        'namespace' => 'Insights',
-        'as' => 'insights.',
-    ], function () {
+    Route::prefix('/insights')->namespace('Insights')->name('insights.')->group(function () {
         Route::get('/companies-by-type', 'CompaniesByTypeController@index')->name('companies-by-type');
         Route::get('/top-ten-locations', 'TopTenLocationsController@index')->name('top-ten-locations');
         Route::get('/companies-by-focus-drug', 'CompaniesByFocusDrug@index')->name('companies-by-focus-drug');
@@ -251,7 +238,7 @@ Route::post('/listing/request', 'Index\ListingRequestController@submitRequest');
 Route::post('/listing/request/finish', 'Index\ListingRequestController@finishRequest')->name('listing.request.finish');
 
 // Feedback
-Route::group(['middleware' => 'spamprotection'], function () {
+Route::middleware('spamprotection')->group(function () {
     Route::get('/feedback', 'FeedbackController@create')->name('feedback.create');
     Route::post('/feedback', 'FeedbackController@store')->name('feedback.store');
 
@@ -260,12 +247,12 @@ Route::group(['middleware' => 'spamprotection'], function () {
 });
 
 /* Bookable Listings */
-Route::group(['middleware' => 'spamprotection'], function () {
+Route::middleware('spamprotection')->group(function () {
     Route::get('/care', 'Index\BookableListingController@index')->name('discover.bookable-listing.practitioners');
     Route::get('/care/{slug}', 'Index\BookableListingController@show')->name('discover.bookable-listing.show');
     Route::get('/add-care-listing', 'Index\BookableListingController@create')->name('discover.bookable-listing.create');
 
-    Route::group(['middleware' => 'auth'], function () {
+    Route::middleware('auth')->group(function () {
         Route::post('/care', 'Index\BookableListingController@reservationRequest')->name('discover.bookable-listing.reservation-request');
         Route::post('/add-care-listing', 'Index\BookableListingController@store')->name('discover.bookable-listing.store');
     });
@@ -273,12 +260,8 @@ Route::group(['middleware' => 'spamprotection'], function () {
 
 /* MEMBER DASHBOARD */
 
-Route::group([
-    'middleware' => ['auth', 'verifiedIfAuthorized'],
-], function () {
-    Route::group([
-        'prefix' => '/dashboard',
-    ], function () {
+Route::middleware('auth', 'verifiedIfAuthorized')->group(function () {
+    Route::prefix('/dashboard')->group(function () {
         Route::get('/', 'Dashboard\DashboardController@index')->name('member.dashboard');
         Route::post('/updateWidgetsOrder', 'Dashboard\DashboardController@updateWidgetsOrder')->name('member.dashboard.updateWidgetsOrder');
 
@@ -296,24 +279,17 @@ Route::group([
         Route::post('/follow-lists/ajax-store', 'Dashboard\FollowListsController@ajaxStore')->name('member.follow-lists.ajaxStore');
         Route::post('/follow-lists/validate-name', 'Dashboard\FollowListsController@validateName')->name('member.follow-lists.validateName');
         Route::resource('/follow-lists', 'Dashboard\FollowListsController', [
-            'as' => 'member',
-            'except' => ['create'],
-        ]);
+            'as' => 'member',]);
 
         // Follow
         Route::resource('/follow', 'Dashboard\FollowController', [
-            'as' => 'member',
-            'except' => ['create', 'store', 'destroy'],
-        ]);
+            'as' => 'member',]);
         Route::get('/follow//get-modal/{id}/{type}', 'Dashboard\FollowController@getModal')->name('member.follow.getModal');
         Route::post('/follow/attach', 'Dashboard\FollowController@attach')->name('member.follow.attach');
         Route::post('/follow/detach', 'Dashboard\FollowController@detach')->name('member.follow.detach');
 
         // Team
-        Route::group([
-            'prefix' => '/team',
-            'as' => 'member.team.',
-        ], function () {
+        Route::prefix('/team')->name('member.team.')->group(function () {
             Route::get('/', [TeamController::class, 'index'])->name('index');
             Route::post('/create', [TeamController::class, 'create'])->name('create');
             Route::post('/invite', [TeamController::class, 'invite'])->name('invite');
@@ -370,12 +346,8 @@ Route::group([
 });
 
 // Enterprise Dashboard
-Route::group(['middleware' => ['auth', 'enterprise.demo']], function () {
-    Route::group([
-        'as' => 'enterprise.',
-        'namespace' => 'Enterprise',
-        'prefix' => '/enterprise',
-    ], function () {
+Route::middleware('auth', 'enterprise.demo')->group(function () {
+    Route::name('enterprise.')->namespace('Enterprise')->prefix('/enterprise')->group(function () {
         Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
         Route::get('/dashboard/combined-feed', 'DashboardController@combinedFeedWidget')->name('dashboard.combined-feed');
         Route::get('/dashboard/follows', 'DashboardController@userFollowsWidget')->name('dashboard.follows');
@@ -414,10 +386,7 @@ Route::get('/user/retake/{token}', 'Index\UserRetakeController@index')->name('us
 Route::get('/members/{member_url}/lists/{slug}', 'Dashboard\FollowListsController@showPublic')->name('members.follow-lists.public');
 Route::get('/members/{member_url}/{slug}', 'Dashboard\NoteController@showPublic')->name('members.public.note');
 
-Route::group([
-    'prefix' => 'embeds',
-    'as' => 'embeds.',
-], function () {
+Route::prefix('embeds')->name('embeds.')->group(function () {
     Route::get('/jobs', 'Index\JobController@embedIndex')->name('jobs.index');
     Route::get('/events', 'Index\EventController@embedIndex')->name('events.index');
 });
@@ -428,6 +397,6 @@ Route::get('/js/external/embedSearch/template/{code}', [ExternalScriptController
 require __DIR__.'/admin.php';
 
 /* CATCH-ALL ROUTE for Backpack/PageManager - needs to be at the end of your routes.php file  **/
-Route::get('{page}', ['uses' => '\App\Http\Controllers\PageController@index'])
+Route::get('{page}', '\App\Http\Controllers\PageController@index')
     ->where(['page' => '^(((?=(?!admin))(?=(?!\/)).))*$'])
     ->name('page');

@@ -2,15 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::group([
-    'middleware' => ['auth'],
-    'prefix' => '/admin',
-    'namespace' => 'Admin',
-    'as' => 'admin.',
-], function () {
-    Route::group([
-        'middleware' => 'role:Admin',
-    ], function () {
+Route::middleware('auth')->prefix('/admin')->namespace('Admin')->name('admin.')->group(function () {
+    Route::middleware('role:Admin')->group(function () {
         // Related Entities
         Route::get('/person/{id}/company', 'PersonCompanyController@index');
         Route::post('/person/{id}/company', 'PersonCompanyController@add');
@@ -23,9 +16,7 @@ Route::group([
         Route::post('/person/{id}/investor', 'PersonInvestorController@add');
 
         // Entity Merge
-        Route::group([
-            'prefix' => 'entity-merge',
-        ], function () {
+        Route::prefix('entity-merge')->group(function () {
             Route::get('/', 'EntityMergeController@index')
                 ->name('entityMerge');
             Route::get('/get-list', 'EntityMergeController@getEntityListJson')
@@ -37,12 +28,7 @@ Route::group([
         });
     });
 
-    Route::group([
-        'prefix' => '/company/{company_id}',
-        'namespace' => 'Company',
-        'as' => 'company.',
-        'middleware' => 'permission:edit companies',
-    ], function () {
+    Route::prefix('/company/{company_id}')->namespace('Company')->name('company.')->middleware('permission:edit companies')->group(function () {
         Route::get('/person', 'PersonController@index')->name('person.index');
         Route::post('/person', 'PersonController@store')->name('person.store');
         Route::get('/person/{person_id}', 'PersonController@remove')->name('person.remove');
@@ -57,14 +43,9 @@ Route::group([
     });
 
     // Data Feed
-    Route::group([
-        'middleware' => 'permission:import',
-    ], function () {
+    Route::middleware('permission:import')->group(function () {
         Route::crud('datafeed', 'DataFeedCrudController');
-        Route::group([
-            'prefix' => '/datafeed',
-            'as' => 'datafeed.',
-        ], function () {
+        Route::prefix('/datafeed')->name('datafeed.')->group(function () {
             Route::get('/{id}/get', 'DataFeedCrudController@getFeedItems')->name('get');
         });
 
@@ -83,12 +64,7 @@ Route::group([
         Route::crud('course', 'CourseCrudController');
     });
 
-    Route::group([
-        'prefix' => '/nav-tiles',
-        'as' => 'nav-tiles.',
-        'namespace' => 'NavigationTiles',
-        'middleware' => 'permission:manage navigation tiles',
-    ], function () {
+    Route::prefix('/nav-tiles')->name('nav-tiles.')->namespace('NavigationTiles')->middleware('permission:manage navigation tiles')->group(function () {
         Route::get('/', 'NavigationTileController@index')->name('index');
         Route::get('/create', 'NavigationTileController@create')->name('create');
         Route::post('/create', 'NavigationTileController@store')->name('store');
@@ -109,12 +85,7 @@ Route::get('/nav-tiles/{slug}.js', 'Admin\NavigationTiles\NavigationTileControll
 Route::get('/nav-tiles/{slug}.css', 'Admin\NavigationTiles\NavigationTileController@style')->name('nav-tiles.style');
 
 //TODO update route's names to match 'admin.' pattern and move to common admin group
-Route::group([
-    'middleware' => ['permission:import'],
-    'prefix' => '/admin/import',
-    'namespace' => 'Admin\Import',
-    'as' => 'import.',
-], function () {
+Route::middleware('permission:import')->prefix('/admin/import')->namespace('Admin\Import')->name('import.')->group(function () {
     // Import Clinical Trials
     Route::get('/clinicaltrials', 'ClinicalTrialController@importClinicaltrials')
         ->name('clinicaltrials');
@@ -151,28 +122,17 @@ Route::group([
     Route::get('/{id}/failures/{type}', 'FailuresController@showByType')
         ->name('failures.showByType');
 
-    Route::group([
-        'prefix' => '/related-entities',
-        'as' => 'related-entities.',
-    ], function () {
+    Route::prefix('/related-entities')->name('related-entities.')->group(function () {
         Route::get('/', 'RelatedEntitiesController@index')->name('index');
 
-        Route::group([
-            'prefix' => '/locations',
-            'namespace' => 'RelatedEntities',
-            'as' => 'locations.',
-        ], function () {
+        Route::prefix('/locations')->namespace('RelatedEntities')->name('locations.')->group(function () {
             Route::get('/', 'LocationsController@index')->name('index');
             Route::post('/import', 'LocationsController@import')->name('import');
             Route::get('/results/{id}', 'LocationsController@results')->name('results');
             Route::get('/failures/{id}', 'LocationsController@failures')->name('failures');
         });
 
-        Route::group([
-            'prefix' => '/people-organization',
-            'namespace' => 'RelatedEntities',
-            'as' => 'people-organization.',
-        ], function () {
+        Route::prefix('/people-organization')->namespace('RelatedEntities')->name('people-organization.')->group(function () {
             Route::get('/', 'PeopleOrganizationController@index')->name('index');
             Route::post('/import', 'PeopleOrganizationController@import')->name('import');
             Route::get('/results/{id}', 'PeopleOrganizationController@results')->name('results');
@@ -180,10 +140,7 @@ Route::group([
         });
     });
 
-    Route::group([
-        'prefix' => '/batch-images-upload',
-        'as' => 'batch-images-upload.',
-    ], function () {
+    Route::prefix('/batch-images-upload')->name('batch-images-upload.')->group(function () {
         Route::get('/', 'BatchImagesUploadController@index')->name('index');
         Route::post('/import', 'BatchImagesUploadController@import')->name('import');
         Route::get('/results/{id}', 'BatchImagesUploadController@results')->name('results');
@@ -193,10 +150,7 @@ Route::group([
 
 //TODO update route's names and middleware to match 'admin' pattern and move to common admin group
 //TODO check if it possible to move methods tos Admin namespace and controller
-Route::group([
-    'middleware' => ['auth'],
-    'prefix' => '/admin',
-], function () {
+Route::middleware('auth')->prefix('/admin')->group(function () {
     //Job Application Files
     Route::get('/jobapps/{id}/resume', 'Index\JobApplicationController@getResume')->name('jobsapp.resume');
     Route::get('/jobapps/{id}/coverletter', 'Index\JobApplicationController@getCoverLetter')->name('jobsapp.coverletter');

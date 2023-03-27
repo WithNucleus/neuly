@@ -10,11 +10,7 @@
 |
 */
 
-Route::group([
-    'namespace' => 'App\Http\Controllers\Admin',
-    'middleware' => ['web', config('backpack.base.middleware_key', 'admin')],
-    'prefix' => config('backpack.base.route_prefix', 'admin'),
-], function () {
+Route::namespace('App\Http\Controllers\Admin')->middleware('web', config('backpack.base.middleware_key', 'admin'))->prefix(config('backpack.base.route_prefix', 'admin'))->group(function () {
     Route::get('log', 'LogController@index')->name('log.index');
     Route::get('log/preview/{file_name}', 'LogController@preview')->name('log.show');
     Route::get('log/download/{file_name}', 'LogController@download')->name('log.download');

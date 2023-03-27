@@ -29,15 +29,11 @@ Route::get('/api/entities/list/{alias}', 'EntityDataController@getEntitiesListBy
 
 Route::post('/feedback', 'FeedbackController@apiStore')->name('feedback.api.store');
 
-Route::group([
-    'middleware' => ['auth:api-users'],
-], function () {
+Route::middleware('auth:api-users')->group(function () {
     Route::get('/user', [OauthController::class, 'getUser']);
 });
 
-Route::group([
-    'middleware' => ['api.auth:api'],
-], function () {
+Route::middleware('api.auth:api')->group(function () {
     Route::get('/users/{id}', [UsersController::class, 'show']);
     Route::post('/users', [UsersController::class, 'create']);
     Route::put('/users/{id}', [UsersController::class, 'update']);

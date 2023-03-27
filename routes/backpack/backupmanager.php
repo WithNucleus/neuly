@@ -10,11 +10,7 @@
 |
 */
 
-Route::group([
-    'namespace' => 'App\Http\Controllers\Admin',
-    'prefix' => config('backpack.base.route_prefix', 'admin'),
-    'middleware' => ['web', config('backpack.base.middleware_key', 'admin')],
-], function () {
+Route::namespace('App\Http\Controllers\Admin')->prefix(config('backpack.base.route_prefix', 'admin'))->middleware('web', config('backpack.base.middleware_key', 'admin'))->group(function () {
     Route::get('backup', 'BackupController@index')->name('backup.index');
     Route::put('backup/create', 'BackupController@create')->name('backup.store');
     Route::put('backup/database/create', 'BackupController@createDatabase')->name('backup.database.store');
