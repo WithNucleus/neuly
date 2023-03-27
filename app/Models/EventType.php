@@ -32,7 +32,7 @@ class EventType extends Model
     */
     public function events()
     {
-        return $this->belongsToMany('App\Models\Event', 'event_event_type', 'event_type_id', 'event_id')->withTimestamps();
+        return $this->belongsToMany(\App\Models\Event::class, 'event_event_type', 'event_type_id', 'event_id')->withTimestamps();
     }
 
     /*

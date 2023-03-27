@@ -81,7 +81,7 @@ class SearchSuggestionsController extends Controller
     /* Get Authors (People) of Research Items */
     public function researchAuthors()
     {
-        $researchAuthors = self::getPivotRelationships('person_research', 'person_id', 'App\Models\Person');
+        $researchAuthors = self::getPivotRelationships('person_research', 'person_id', \App\Models\Person::class);
 
         return $researchAuthors;
     }
@@ -89,7 +89,7 @@ class SearchSuggestionsController extends Controller
     /* Get People Related to Investors */
     public function investorsPeople()
     {
-        $investorsPeople = self::getPivotRelationships('investor_person', 'person_id', 'App\Models\Person');
+        $investorsPeople = self::getPivotRelationships('investor_person', 'person_id', \App\Models\Person::class);
 
         return $investorsPeople;
     }
@@ -97,7 +97,7 @@ class SearchSuggestionsController extends Controller
     /* Get Organizations of Investors */
     public function investorsOrganizations()
     {
-        $investorsOrganizations = self::getPivotRelationships('company_investor', 'company_id', 'App\Models\Company');
+        $investorsOrganizations = self::getPivotRelationships('company_investor', 'company_id', \App\Models\Company::class);
 
         return $investorsOrganizations;
     }
@@ -105,7 +105,7 @@ class SearchSuggestionsController extends Controller
     /* Get Organizations of Focus Categories */
     public function focusOrganizations()
     {
-        $focusOrganizations = self::getPivotRelationships('company_focus', 'company_id', 'App\Models\Company');
+        $focusOrganizations = self::getPivotRelationships('company_focus', 'company_id', \App\Models\Company::class);
 
         return $focusOrganizations;
     }
@@ -113,14 +113,14 @@ class SearchSuggestionsController extends Controller
     /* Get Organizations of Clinical Trials */
     public function clinicalTrialCollaborators()
     {
-        $collaborators = self::getPivotRelationships('clinicaltrial_company', 'company_id', 'App\Models\Company');
+        $collaborators = self::getPivotRelationships('clinicaltrial_company', 'company_id', \App\Models\Company::class);
 
         return $collaborators;
     }
 
     public function clinicalTrialResearchers()
     {
-        return self::getPivotRelationships('clinicaltrial_person', 'person_id', 'App\Models\Person');
+        return self::getPivotRelationships('clinicaltrial_person', 'person_id', \App\Models\Person::class);
     }
 
     public function peopleOrganizations()

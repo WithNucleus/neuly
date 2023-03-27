@@ -7,7 +7,7 @@ return [
     'whitelist' => [env('FIREWALL_WHITELIST', '')],
 
     'models' => [
-        'user' => '\App\User',
+        'user' => \App\User::class,
         // 'log' => '\App\YourLogModel',
         // 'ip'  => '\App\YourIpModel',
     ],

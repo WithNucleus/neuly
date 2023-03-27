@@ -49,7 +49,7 @@ class NewsArticle extends Model implements EntityImageContract
     */
     public function focus()
     {
-        return $this->belongsToMany('App\Models\Focus', 'focus_news_article', 'news_article_id', 'focus_id')->withTimestamps();
+        return $this->belongsToMany(\App\Models\Focus::class, 'focus_news_article', 'news_article_id', 'focus_id')->withTimestamps();
     }
 
     /*

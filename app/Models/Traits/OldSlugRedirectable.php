@@ -10,7 +10,7 @@ trait OldSlugRedirectable
 {
     public function redirects()
     {
-        return $this->morphMany('App\Models\Redirect', 'redirectable');
+        return $this->morphMany(\App\Models\Redirect::class, 'redirectable');
     }
 
     public static function bootOldSlugRedirectable()

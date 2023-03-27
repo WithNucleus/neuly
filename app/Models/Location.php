@@ -204,44 +204,44 @@ class Location extends Model implements EntityContract
 
     public function companies()
     {
-        return $this->belongsToMany('App\Models\Company', 'company_location', 'location_id', 'company_id')
+        return $this->belongsToMany(\App\Models\Company::class, 'company_location', 'location_id', 'company_id')
             ->withTimestamps();
     }
 
     public function people()
     {
-        return $this->belongsToMany('App\Models\Person', 'location_person', 'location_id', 'person_id')
+        return $this->belongsToMany(\App\Models\Person::class, 'location_person', 'location_id', 'person_id')
             ->withTimestamps();
     }
 
     public function investors()
     {
-        return $this->belongsToMany('App\Models\Investor', 'investor_location', 'location_id', 'investor_id')
+        return $this->belongsToMany(\App\Models\Investor::class, 'investor_location', 'location_id', 'investor_id')
             ->withTimestamps();
     }
 
     public function jobs()
     {
-        return $this->belongsToMany('App\Models\Job', 'job_location', 'location_id', 'job_id')
+        return $this->belongsToMany(\App\Models\Job::class, 'job_location', 'location_id', 'job_id')
             ->withTimestamps();
     }
 
     public function events()
     {
-        return $this->belongsToMany('App\Models\Event', 'event_location', 'location_id', 'event_id')
+        return $this->belongsToMany(\App\Models\Event::class, 'event_location', 'location_id', 'event_id')
             ->withTimestamps();
     }
 
     public function clinicaltrials()
     {
-        return $this->belongsToMany('App\Models\Clinicaltrial', 'clinicaltrial_location', 'location_id', 'clinicaltrial_id')
+        return $this->belongsToMany(\App\Models\Clinicaltrial::class, 'clinicaltrial_location', 'location_id', 'clinicaltrial_id')
             ->withTimestamps();
     }
 
     // Each Location can have exactly one country
     public function officialCountry()
     {
-        return $this->belongsTo('App\Models\Country', 'country', 'name');
+        return $this->belongsTo(\App\Models\Country::class, 'country', 'name');
     }
 
     /*

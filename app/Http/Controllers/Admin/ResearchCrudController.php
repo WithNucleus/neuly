@@ -59,7 +59,7 @@ class ResearchCrudController extends CrudController
             'name' => 'focus',
             'entity' => 'focus',
             'attribute' => 'name',
-            'model' => 'App\Models\Focus',
+            'model' => \App\Models\Focus::class,
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
@@ -70,7 +70,7 @@ class ResearchCrudController extends CrudController
             'name' => 'companies',
             'entity' => 'companies',
             'attribute' => 'name',
-            'model' => 'App\Models\Company',
+            'model' => \App\Models\Company::class,
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
@@ -81,7 +81,7 @@ class ResearchCrudController extends CrudController
             'name' => 'people',
             'entity' => 'people',
             'attribute' => 'name',
-            'model' => 'App\Models\Person',
+            'model' => \App\Models\Person::class,
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
@@ -149,7 +149,7 @@ class ResearchCrudController extends CrudController
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
-            'model' => "App\Models\Focus",
+            'model' => \App\Models\Focus::class,
         ]);
         $this->crud->addField([
             'label' => 'Companies',
@@ -161,7 +161,7 @@ class ResearchCrudController extends CrudController
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
-            'model' => "App\Models\Company",
+            'model' => \App\Models\Company::class,
         ]);
         $this->crud->addField([
             'label' => 'People',
@@ -173,7 +173,7 @@ class ResearchCrudController extends CrudController
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
-            'model' => "App\Models\Person",
+            'model' => \App\Models\Person::class,
         ]);
     }
 

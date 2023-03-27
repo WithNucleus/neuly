@@ -36,6 +36,6 @@ class ImportFailure extends Model
 
     public function result()
     {
-        return $this->belongsTo('App\Models\ImportResult', 'import_result_id', 'id');
+        return $this->belongsTo(\App\Models\ImportResult::class, 'import_result_id', 'id');
     }
 }

@@ -34,7 +34,7 @@ class Country extends Model
 
     public function locations()
     {
-        return $this->hasMany('App\Models\Location', 'country', 'name');
+        return $this->hasMany(\App\Models\Location::class, 'country', 'name');
     }
 
     /*

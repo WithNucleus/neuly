@@ -27,7 +27,7 @@ class FocusCrudController extends CrudController
             abort(404);
         }
 
-        $this->crud->setModel('App\Models\Focus');
+        $this->crud->setModel(\App\Models\Focus::class);
         $this->crud->setRoute(config('backpack.base.route_prefix').'/focus');
         $this->crud->setEntityNameStrings('focus', 'focus categories');
     }

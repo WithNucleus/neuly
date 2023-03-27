@@ -47,7 +47,7 @@ class ClinicaltrialCrudController extends CrudController
                 'name' => 'focus',
                 'entity' => 'focus',
                 'attribute' => 'name',
-                'model' => 'App\Models\Focus',
+                'model' => \App\Models\Focus::class,
                 'options' => (function ($query) {
                     return $query->orderBy('name', 'ASC')->get();
                 }),
@@ -59,7 +59,7 @@ class ClinicaltrialCrudController extends CrudController
                 'name' => 'companies',
                 'entity' => 'companies',
                 'attribute' => 'name',
-                'model' => 'App\Models\Company',
+                'model' => \App\Models\Company::class,
                 'options' => (function ($query) {
                     return $query->orderBy('name', 'ASC')->get();
                 }),
@@ -82,7 +82,7 @@ class ClinicaltrialCrudController extends CrudController
             'name' => 'focus',
             'entity' => 'focus',
             'attribute' => 'name',
-            'model' => 'App\Models\Focus',
+            'model' => \App\Models\Focus::class,
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
@@ -94,7 +94,7 @@ class ClinicaltrialCrudController extends CrudController
             'name' => 'companies',
             'entity' => 'companies',
             'attribute' => 'name',
-            'model' => 'App\Models\Company',
+            'model' => \App\Models\Company::class,
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
@@ -106,7 +106,7 @@ class ClinicaltrialCrudController extends CrudController
             'name' => 'locations',
             'entity' => 'locations',
             'attribute' => 'name',
-            'model' => 'App\Models\Location',
+            'model' => \App\Models\Location::class,
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
@@ -118,7 +118,7 @@ class ClinicaltrialCrudController extends CrudController
             'name' => 'people',
             'entity' => 'people',
             'attribute' => 'name',
-            'model' => 'App\Models\Person',
+            'model' => \App\Models\Person::class,
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
@@ -251,7 +251,7 @@ class ClinicaltrialCrudController extends CrudController
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
-            'model' => "App\Models\Location",
+            'model' => \App\Models\Location::class,
         ]);
 
         $this->crud->addField([
@@ -264,7 +264,7 @@ class ClinicaltrialCrudController extends CrudController
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
-            'model' => "App\Models\Person",
+            'model' => \App\Models\Person::class,
         ]);
 
         $this->crud->addField([
@@ -277,7 +277,7 @@ class ClinicaltrialCrudController extends CrudController
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
-            'model' => "App\Models\Company",
+            'model' => \App\Models\Company::class,
         ]);
 
         $this->crud->addField([
@@ -290,7 +290,7 @@ class ClinicaltrialCrudController extends CrudController
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
-            'model' => "App\Models\Focus",
+            'model' => \App\Models\Focus::class,
         ]);
 
         $this->crud->addField([

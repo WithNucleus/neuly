@@ -55,7 +55,7 @@ class PersonCrudController extends CrudController
             'name' => 'companies',
             'entity' => 'companies',
             'attribute' => 'name',
-            'model' => 'App\Models\Company',
+            'model' => \App\Models\Company::class,
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
@@ -66,7 +66,7 @@ class PersonCrudController extends CrudController
             'name' => 'investors',
             'entity' => 'investors',
             'attribute' => 'name',
-            'model' => 'App\Models\Investor',
+            'model' => \App\Models\Investor::class,
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
@@ -77,7 +77,7 @@ class PersonCrudController extends CrudController
             'name' => 'locations',
             'entity' => 'locations',
             'attribute' => 'name',
-            'model' => 'App\Models\Location',
+            'model' => \App\Models\Location::class,
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
@@ -88,7 +88,7 @@ class PersonCrudController extends CrudController
             'name' => 'focus',
             'entity' => 'focus',
             'attribute' => 'name',
-            'model' => 'App\Models\Focus',
+            'model' => \App\Models\Focus::class,
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
@@ -172,7 +172,7 @@ class PersonCrudController extends CrudController
             'name' => 'companies',
             'entity' => 'companies',
             'attribute' => 'name',
-            'model' => 'App\Models\Company',
+            'model' => \App\Models\Company::class,
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
@@ -183,7 +183,7 @@ class PersonCrudController extends CrudController
             'name' => 'locations',
             'entity' => 'locations',
             'attribute' => 'name',
-            'model' => 'App\Models\Location',
+            'model' => \App\Models\Location::class,
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
@@ -194,7 +194,7 @@ class PersonCrudController extends CrudController
             'name' => 'investors',
             'entity' => 'investors',
             'attribute' => 'name',
-            'model' => 'App\Models\Investor',
+            'model' => \App\Models\Investor::class,
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
@@ -205,7 +205,7 @@ class PersonCrudController extends CrudController
             'name' => 'focus',
             'entity' => 'focus',
             'attribute' => 'name',
-            'model' => 'App\Models\Focus',
+            'model' => \App\Models\Focus::class,
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
@@ -325,7 +325,7 @@ class PersonCrudController extends CrudController
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
-            'model' => "App\Models\Location",
+            'model' => \App\Models\Location::class,
         ]);
         $this->crud->addField([
             'label' => 'Focus',
@@ -333,7 +333,7 @@ class PersonCrudController extends CrudController
             'name' => 'focus',
             'entity' => 'focus',
             'attribute' => 'name',
-            'model' => "App\Models\Focus",
+            'model' => \App\Models\Focus::class,
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),

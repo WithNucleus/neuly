@@ -58,7 +58,7 @@ class JobApplicationCrudController extends CrudController
             'type' => 'relationship',
             'entity' => 'job',
             'attribute' => 'job_title',
-            'model' => 'App\Models\Job',
+            'model' => \App\Models\Job::class,
         ]);
         $this->crud->addColumn([
             'name' => 'owner',

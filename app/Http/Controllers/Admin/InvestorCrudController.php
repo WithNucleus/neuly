@@ -131,7 +131,7 @@ class InvestorCrudController extends CrudController
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
-            'model' => "App\Models\Location", // foreign key model
+            'model' => \App\Models\Location::class, // foreign key model
         ]);
         $this->crud->addField([
             'label' => 'Companies',
@@ -143,7 +143,7 @@ class InvestorCrudController extends CrudController
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
-            'model' => "App\Models\Company",
+            'model' => \App\Models\Company::class,
         ]);
         $this->crud->addField([
             'label' => 'Logo',

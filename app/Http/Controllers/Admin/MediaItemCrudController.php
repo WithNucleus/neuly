@@ -189,7 +189,7 @@ class MediaItemCrudController extends CrudController
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
-            'model' => "App\Models\Focus",
+            'model' => \App\Models\Focus::class,
         ]);
 
         $this->crud->addField([
@@ -202,7 +202,7 @@ class MediaItemCrudController extends CrudController
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
-            'model' => "App\Models\Company",
+            'model' => \App\Models\Company::class,
         ]);
 
         $this->crud->addField([
@@ -215,7 +215,7 @@ class MediaItemCrudController extends CrudController
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
-            'model' => "App\Models\Person",
+            'model' => \App\Models\Person::class,
         ]);
 
         CRUD::setFromDb(); // fields

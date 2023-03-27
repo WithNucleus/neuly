@@ -147,7 +147,7 @@ class Clinicaltrial extends Model implements EntityContract
 
     public function phase()
     {
-        return $this->hasMany('App\Models\ClinicaltrialPhase', 'phases');
+        return $this->hasMany(\App\Models\ClinicaltrialPhase::class, 'phases');
     }
 
     /*

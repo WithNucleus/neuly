@@ -99,7 +99,7 @@ class CompanyBranchCrudController extends CrudController
             'type' => 'select2',
             'name' => 'company_id',
             'entity' => 'company',
-            'model' => "App\Models\Company",
+            'model' => \App\Models\Company::class,
             'attribute' => 'name',
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
@@ -111,7 +111,7 @@ class CompanyBranchCrudController extends CrudController
             'type' => 'select2',
             'name' => 'location_id',
             'entity' => 'location',
-            'model' => "App\Models\Location",
+            'model' => \App\Models\Location::class,
             'attribute' => 'name',
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();

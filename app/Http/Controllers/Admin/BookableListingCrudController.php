@@ -58,7 +58,7 @@ class BookableListingCrudController extends CrudController
             'name' => 'directories',
             'entity' => 'directories',
             'attribute' => 'name',
-            'model' => "App\Models\Directory",
+            'model' => \App\Models\Directory::class,
         ]);
         CRUD::column('bookable_type');
         CRUD::column('created_at');
@@ -115,7 +115,7 @@ class BookableListingCrudController extends CrudController
             'attribute' => 'name',
             'pivot' => true,
             'select_all' => true,
-            'model' => "App\Models\Directory",
+            'model' => \App\Models\Directory::class,
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),

@@ -122,10 +122,10 @@ class BookableListingController extends Controller
         ])->firstOrFail();
 
         $bookableEntity = match ($bookableListing->bookable_type) {
-            'App\Models\Company' => 'organizations',
-            'App\Models\Person' => 'people',
-            'App\Models\Course' => 'courses',
-            'App\Models\Event' => 'events',
+            \App\Models\Company::class => 'organizations',
+            \App\Models\Person::class => 'people',
+            \App\Models\Course::class => 'courses',
+            \App\Models\Event::class => 'events',
         };
 
         return view('discover.bookable-listings.show', [

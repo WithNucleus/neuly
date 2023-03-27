@@ -36,12 +36,12 @@ class ImportResult extends Model
 
     public function focus()
     {
-        return $this->belongsTo('App\Models\Focus');
+        return $this->belongsTo(\App\Models\Focus::class);
     }
 
     public function failures()
     {
-        return $this->hasMany('App\Models\ImportFailure', 'import_result_id', 'id');
+        return $this->hasMany(\App\Models\ImportFailure::class, 'import_result_id', 'id');
     }
 
     /*

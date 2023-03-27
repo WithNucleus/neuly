@@ -118,7 +118,7 @@ class CourseCrudController extends CrudController
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
-            'model' => "App\Models\Focus",
+            'model' => \App\Models\Focus::class,
         ]);
 
         $this->crud->addField([
@@ -131,7 +131,7 @@ class CourseCrudController extends CrudController
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
-            'model' => "App\Models\Company",
+            'model' => \App\Models\Company::class,
         ]);
 
         $this->crud->addField([

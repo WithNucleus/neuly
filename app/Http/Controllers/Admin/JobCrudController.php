@@ -123,7 +123,7 @@ class JobCrudController extends CrudController
             'name' => 'focus',
             'entity' => 'focus',
             'attribute' => 'name',
-            'model' => 'App\Models\Focus',
+            'model' => \App\Models\Focus::class,
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
@@ -134,7 +134,7 @@ class JobCrudController extends CrudController
             'name' => 'locations',
             'entity' => 'locations',
             'attribute' => 'name',
-            'model' => 'App\Models\Location',
+            'model' => \App\Models\Location::class,
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
@@ -240,7 +240,7 @@ class JobCrudController extends CrudController
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
-            'model' => "App\Models\Location",
+            'model' => \App\Models\Location::class,
         ]);
 
         $this->crud->addField([
@@ -253,7 +253,7 @@ class JobCrudController extends CrudController
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
-            'model' => "App\Models\Focus",
+            'model' => \App\Models\Focus::class,
         ]);
 
         $this->crud->addField([

@@ -33,12 +33,12 @@ class CompanyBranch extends Model
     */
     public function company(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo('\App\Models\Company', 'company_id');
+        return $this->belongsTo(\App\Models\Company::class, 'company_id');
     }
 
     public function location(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo('\App\Models\Location', 'location_id');
+        return $this->belongsTo(\App\Models\Location::class, 'location_id');
     }
 
     /*
