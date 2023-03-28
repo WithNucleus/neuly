@@ -21,19 +21,33 @@ use App\GarbageCollection\RelationshipCleaner\UserCleaner;
 class RelationshipCleaner
 {
     private $trialCleaner = null;
+
     private $companyCleaner = null;
+
     private $eventCleaner = null;
+
     private $focusCleaner = null;
+
     private $investorCleaner = null;
+
     private $jobCleaner = null;
+
     private $locationCleaner = null;
+
     private $personCleaner = null;
+
     private $userCleaner = null;
+
     private $followListCleaner = null;
+
     private $notificationCleaner = null;
+
     private $emailNotificationCleaner = null;
+
     private $roleCleaner = null;
+
     private $permissionCleaner = null;
+
     private $redirectCleaner = null;
 
     public function __construct()

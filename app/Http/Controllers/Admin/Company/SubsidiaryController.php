@@ -3,27 +3,27 @@
 namespace App\Http\Controllers\Admin\Company;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Company;
+use Illuminate\Http\Request;
 
 class SubsidiaryController extends Controller
 {
     /**
-     * @param int $id
+     * @param  int  $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index($id) {
+    public function index($id)
+    {
         $company = Company::with(['parents', 'subsidiaries'])->findOrFail($id);
         $ignoreCompanyIds = $company->getParentsAndSubsidiariesIgnoredIds();
         $companiesList = Company::whereNotIn('id', $ignoreCompanyIds)->orderBy('name')->get();
         $types = Company::COMPANY_TO_COMPANY_TYPES;
 
-    	return view('admin.company.subsidiary', compact('company', 'companiesList', 'types'));
+        return view('admin.company.subsidiary', compact('company', 'companiesList', 'types'));
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param  int  $id
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request, $id)
@@ -41,8 +41,8 @@ class SubsidiaryController extends Controller
     }
 
     /**
-     * @param int $id
-     * @param int $parentId
+     * @param  int  $id
+     * @param  int  $parentId
      * @return \Illuminate\Http\RedirectResponse
      */
     public function remove($id, $subsidiaryId)

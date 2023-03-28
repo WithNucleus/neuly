@@ -8,84 +8,78 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\DB;
 
 class NoteController extends Controller
 {
-
-	public function index() {
-		$notes = MemberNote::where('user_id', Auth::id())
+    public function index()
+    {
+        $notes = MemberNote::where('user_id', Auth::id())
             ->orderBy('updated_at', 'desc')
             ->get();
 
-		return view('members.notes.index', compact('notes'));
-	}
+        return view('members.notes.index', compact('notes'));
+    }
 
-    public function create() {
-    	return view('members.notes.create');
+    public function create()
+    {
+        return view('members.notes.create');
     }
 
     // Check Slug via ajax
-    public function checkSlug(Request $request) {
-
+    public function checkSlug(Request $request)
+    {
         // New Note?
         if ($request->input('note_id') == 'new') {
-
             $validator = Validator::make($request->all(), [
                 'title' => 'required|max:255',
-                'slug' => 'required|max:80|unique:member_notes,slug,NULL,id,user_id,' . Auth::user()->id,
+                'slug' => 'required|max:80|unique:member_notes,slug,NULL,id,user_id,'.Auth::user()->id,
             ]);
-
         } else {
-
             $note = MemberNote::findOrFail($request->input('note_id'));
 
             // Updated Note -- Check if this Matches Current URL
             if ($request->input('slug') != $note->slug) {
-
                 $validator = Validator::make($request->all(), [
-                    'slug' => 'required|max:80|unique:member_notes,slug,NULL,id,user_id,' . Auth::user()->id,
+                    'slug' => 'required|max:80|unique:member_notes,slug,NULL,id,user_id,'.Auth::user()->id,
                 ]);
-
             } else {
-
                 return response()->json(['success' => 'Looks good!']);
-
             }
         }
 
         if ($validator->passes()) {
+            return response()->json(['success' => 'Looks good!']);
+        }
 
-	    	return response()->json(['success' => 'Looks good!']);
-	    }
-
-	    return response()->json(['error'=>$validator->errors()->all()]);
-
+        return response()->json(['error' => $validator->errors()->all()]);
     }
 
     // Store Note
-    public function store(Request $request) {
-    	$request->validate([
-    		'title' => 'required|max:255',
-    		'slug' => 'required|max:80|unique:member_notes,slug,NULL,id,user_id,' . Auth::user()->id,
-	        'description' => 'nullable|max:255',
-	        'visibility' => 'required'
-	    ]);
+    public function store(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|max:255',
+            'slug' => 'required|max:80|unique:member_notes,slug,NULL,id,user_id,'.Auth::user()->id,
+            'description' => 'nullable|max:255',
+            'visibility' => 'required',
+        ]);
 
-    	$note = MemberNote::create([
-		    'title' => $request->input('title'),
-		    'slug' => $request->input('slug'),
-		    'user_id' => Auth::id(),
-		    'visibility' => $request->input('visibility'),
-		]);
+        $note = MemberNote::create([
+            'title' => $request->input('title'),
+            'slug' => $request->input('slug'),
+            'user_id' => Auth::id(),
+            'visibility' => $request->input('visibility'),
+        ]);
 
-    	$note->saveTrixRichText($request->input('membernote-trixFields'));
+        $note->saveTrixRichText($request->input('membernote-trixFields'));
 
-	    session()->flash('success', $note->title . ' saved!');
-	    return redirect(route('member.notes.index'));
+        session()->flash('success', $note->title.' saved!');
+
+        return redirect(route('member.notes.index'));
     }
 
-    public function show($slug) {
+    public function show($slug)
+    {
         $note = MemberNote::where('user_id', Auth::id())
             ->where('slug', $slug)
             ->firstOrFail();
@@ -96,8 +90,8 @@ class NoteController extends Controller
         return view('members.notes.show', compact('note', 'entity', 'member'));
     }
 
-    public function showPublic($member_url, $slug) {
-
+    public function showPublic($member_url, $slug)
+    {
         $member = User::where('member_url', $member_url)->firstOrFail();
 
         $note = MemberNote::where('user_id', $member->id)
@@ -108,16 +102,17 @@ class NoteController extends Controller
         return view('members.notes.public', compact('note', 'member'));
     }
 
-    public function edit($slug) {
+    public function edit($slug)
+    {
         $note = MemberNote::where('user_id', Auth::id())
             ->where('slug', $slug)
             ->firstOrFail();
 
-    	return view('members.notes.edit', compact('note'));
+        return view('members.notes.edit', compact('note'));
     }
 
-    public function update($id, Request $request) {
-
+    public function update($id, Request $request)
+    {
         $note = MemberNote::where('user_id', Auth::id())->findOrFail($id);
 
         $note->title = $request->input('title', 'Untitled');
@@ -130,12 +125,12 @@ class NoteController extends Controller
         return redirect(route('member.notes.show', $note->slug));
     }
 
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $note = MemberNote::where('user_id', Auth::id())->findOrFail($id);
         $note_title = $note->title;
         $note->delete();
 
-        return redirect(route('member.notes.index'))->with('success', $note_title . ' was deleted.');
+        return redirect(route('member.notes.index'))->with('success', $note_title.' was deleted.');
     }
-
 }

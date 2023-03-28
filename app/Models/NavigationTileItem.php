@@ -20,20 +20,20 @@ class NavigationTileItem extends Model
 
     public function getMenuHtmlAttribute(): string
     {
-        $html = '<li class="nav-tile-item" data-nav-link-id="' . $this->id . '">';
+        $html = '<li class="nav-tile-item" data-nav-link-id="'.$this->id.'">';
         $html .= '<div class="d-flex justify-content-between align-items-center">';
-        $html .= '<span class="' . $this->type . '">';
+        $html .= '<span class="'.$this->type.'">';
 
         if ($this->url == '') {
             $html .= $this->name;
         } else {
-            $html .= '<a href="' . $this->url . '" target="_blank" rel="noopener noreferrer">' . $this->name . '</a>';
+            $html .= '<a href="'.$this->url.'" target="_blank" rel="noopener noreferrer">'.$this->name.'</a>';
         }
 
         $html .= '</div></li>';
 
         if ($this->badge != '') {
-            $html .= '<span class="badge badge-info">' . $this->badge .'</span>';
+            $html .= '<span class="badge badge-info">'.$this->badge.'</span>';
         }
 
         return $html;

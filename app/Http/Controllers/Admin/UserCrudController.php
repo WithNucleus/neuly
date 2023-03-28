@@ -17,7 +17,7 @@ class UserCrudController extends CrudController
 
     public function setup()
     {
-        if(!backpack_user()->can('edit users')) {
+        if (! backpack_user()->can('edit users')) {
             abort(404);
         }
 
@@ -30,42 +30,42 @@ class UserCrudController extends CrudController
     {
         $this->crud->setColumns([
             [
-                'name'  => 'name',
+                'name' => 'name',
                 'label' => 'First Name',
-                'type'  => 'text',
+                'type' => 'text',
             ],
             [
-                'name'  => 'last_name',
+                'name' => 'last_name',
                 'label' => 'Last Name',
-                'type'  => 'text',
+                'type' => 'text',
             ],
             [
-                'name'  => 'email',
+                'name' => 'email',
                 'label' => trans('backpack::permissionmanager.email'),
-                'type'  => 'email',
+                'type' => 'email',
             ],
             [
-                'label'     => trans('backpack::permissionmanager.roles'),
-                'type'      => 'select_multiple',
-                'name'      => 'roles',
-                'entity'    => 'roles',
+                'label' => trans('backpack::permissionmanager.roles'),
+                'type' => 'select_multiple',
+                'name' => 'roles',
+                'entity' => 'roles',
                 'attribute' => 'name',
-                'model'     => config('permission.models.role'),
+                'model' => config('permission.models.role'),
             ],
             [
-                'label'     => trans('backpack::permissionmanager.extra_permissions'),
-                'type'      => 'select_multiple',
-                'name'      => 'permissions',
-                'entity'    => 'permissions',
+                'label' => trans('backpack::permissionmanager.extra_permissions'),
+                'type' => 'select_multiple',
+                'name' => 'permissions',
+                'entity' => 'permissions',
                 'attribute' => 'name',
-                'model'     => config('permission.models.permission'),
+                'model' => config('permission.models.permission'),
             ],
         ]);
 
         $this->crud->addFilter(
             [
-                'name'  => 'role',
-                'type'  => 'dropdown',
+                'name' => 'role',
+                'type' => 'dropdown',
                 'label' => trans('backpack::permissionmanager.role'),
             ],
             config('permission.models.role')::all()->pluck('name', 'id')->toArray(),
@@ -78,8 +78,8 @@ class UserCrudController extends CrudController
 
         $this->crud->addFilter(
             [
-                'name'  => 'permissions',
-                'type'  => 'select2',
+                'name' => 'permissions',
+                'type' => 'select2',
                 'label' => trans('backpack::permissionmanager.extra_permissions'),
             ],
             config('permission.models.permission')::all()->pluck('name', 'id')->toArray(),
@@ -160,54 +160,54 @@ class UserCrudController extends CrudController
     {
         $this->crud->addFields([
             [
-                'name'  => 'name',
+                'name' => 'name',
                 'label' => 'First Name',
-                'type'  => 'text',
+                'type' => 'text',
             ],
             [
-                'name'  => 'last_name',
+                'name' => 'last_name',
                 'label' => 'Last Name',
-                'type'  => 'text',
+                'type' => 'text',
             ],
             [
-                'name'  => 'email',
+                'name' => 'email',
                 'label' => trans('backpack::permissionmanager.email'),
-                'type'  => 'email',
+                'type' => 'email',
             ],
             [
-                'name'  => 'password',
+                'name' => 'password',
                 'label' => trans('backpack::permissionmanager.password'),
-                'type'  => 'password',
+                'type' => 'password',
             ],
             [
-                'name'  => 'password_confirmation',
+                'name' => 'password_confirmation',
                 'label' => trans('backpack::permissionmanager.password_confirmation'),
-                'type'  => 'password',
+                'type' => 'password',
             ],
             [
-                'label'             => trans('backpack::permissionmanager.user_role_permission'),
+                'label' => trans('backpack::permissionmanager.user_role_permission'),
                 'field_unique_name' => 'user_role_permission',
-                'type'              => 'checklist_dependency',
-                'name'              => ['roles', 'permissions'],
-                'subfields'         => [
+                'type' => 'checklist_dependency',
+                'name' => ['roles', 'permissions'],
+                'subfields' => [
                     'primary' => [
-                        'label'            => trans('backpack::permissionmanager.roles'),
-                        'name'             => 'roles',
-                        'entity'           => 'roles',
+                        'label' => trans('backpack::permissionmanager.roles'),
+                        'name' => 'roles',
+                        'entity' => 'roles',
                         'entity_secondary' => 'permissions',
-                        'attribute'        => 'name',
-                        'model'            => config('permission.models.role'),
-                        'pivot'            => true,
-                        'number_columns'   => 3,
+                        'attribute' => 'name',
+                        'model' => config('permission.models.role'),
+                        'pivot' => true,
+                        'number_columns' => 3,
                     ],
                     'secondary' => [
-                        'label'          => ucfirst(trans('backpack::permissionmanager.permission_singular')),
-                        'name'           => 'permissions',
-                        'entity'         => 'permissions',
+                        'label' => ucfirst(trans('backpack::permissionmanager.permission_singular')),
+                        'name' => 'permissions',
+                        'entity' => 'permissions',
                         'entity_primary' => 'roles',
-                        'attribute'      => 'name',
-                        'model'          => config('permission.models.permission'),
-                        'pivot'          => true,
+                        'attribute' => 'name',
+                        'model' => config('permission.models.permission'),
+                        'pivot' => true,
                         'number_columns' => 3,
                     ],
                 ],

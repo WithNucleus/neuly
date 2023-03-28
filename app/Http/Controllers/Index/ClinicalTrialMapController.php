@@ -14,7 +14,6 @@ use Illuminate\Support\Str;
 class ClinicalTrialMapController extends Controller
 {
     /**
-     * @param Request $request
      * @return \Illuminate\View\View
      */
     public function showMap(Request $request)
@@ -76,8 +75,6 @@ class ClinicalTrialMapController extends Controller
     }
 
     /**
-     * @param $values
-     * @param $query
      * @return mixed
      */
     private function filterFocus($values, $query)
@@ -90,7 +87,6 @@ class ClinicalTrialMapController extends Controller
     }
 
     /**
-     * @param $request
      * @return array|false|string[]
      */
     private function filterFocusValues($request)
@@ -104,7 +100,6 @@ class ClinicalTrialMapController extends Controller
     }
 
     /**
-     * @param $request
      * @return array|false|string[]
      */
     private function filterStatusValues($request)
@@ -118,7 +113,6 @@ class ClinicalTrialMapController extends Controller
     }
 
     /**
-     * @param $request
      * @return bool
      */
     private function filterHasFocus($request)
@@ -132,7 +126,6 @@ class ClinicalTrialMapController extends Controller
     }
 
     /**
-     * @param $filter
      * @return false|string[]
      */
     private function getFilteredValues($filter)
@@ -141,7 +134,6 @@ class ClinicalTrialMapController extends Controller
     }
 
     /**
-     * @param $sortParameter
      * @return string
      */
     private function getOrderDirection($sortParameter)
@@ -156,7 +148,6 @@ class ClinicalTrialMapController extends Controller
     }
 
     /**
-     * @param $request
      * @return string
      */
     private function getSortParameter($request)

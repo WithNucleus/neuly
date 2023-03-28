@@ -8,7 +8,7 @@ use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
  * Class Insight_requestCrudController
- * @package App\Http\Controllers\Admin
+ *
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
 class InsightRequestCrudController extends CrudController
@@ -24,12 +24,12 @@ class InsightRequestCrudController extends CrudController
      */
     public function setup()
     {
-        if(!backpack_user()->can('manage insight requests')) {
+        if (! backpack_user()->can('manage insight requests')) {
             abort(403);
         }
 
         CRUD::setModel(InsightRequest::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/insightRequest');
+        CRUD::setRoute(config('backpack.base.route_prefix').'/insightRequest');
         CRUD::setEntityNameStrings('insight request', 'insight requests');
     }
 
@@ -37,6 +37,7 @@ class InsightRequestCrudController extends CrudController
      * Define what happens when the List operation is loaded.
      *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
+     *
      * @return void
      */
     protected function setupListOperation()
@@ -48,6 +49,7 @@ class InsightRequestCrudController extends CrudController
      * Define what happens when the Create operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-create
+     *
      * @return void
      */
     protected function setupCreateOperation()
@@ -59,6 +61,7 @@ class InsightRequestCrudController extends CrudController
      * Define what happens when the Update operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
+     *
      * @return void
      */
     protected function setupUpdateOperation()

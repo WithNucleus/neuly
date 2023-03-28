@@ -50,12 +50,12 @@ class ActivityLogFillIPAdresses extends Command
             $activity->save();
         }
 
-        $this->info($activities->count() . ' IPs were processed');
+        $this->info($activities->count().' IPs were processed');
 
         $left_to_process = Activity::where('log_name', 'pageview')->whereNull('ip')->count();
 
         if ($left_to_process > 0) {
-            $this->info('There are ' . $left_to_process . ' activity records left to parse');
+            $this->info('There are '.$left_to_process.' activity records left to parse');
         }
 
         return 0;

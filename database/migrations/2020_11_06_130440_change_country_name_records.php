@@ -1,11 +1,11 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
 use App\Models\Country;
 use App\Models\Location;
+use Illuminate\Database\Migrations\Migration;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
-class ChangeCountryNameRecords extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -23,7 +23,7 @@ class ChangeCountryNameRecords extends Migration
             'Iran (Islamic Republic of)' => 'Iran',
             'Viet Nam' => 'Vietnam',
             'Tanzania, United Republic of' => 'Tanzania',
-            'Republic of Kosovo' => 'Kosovo'
+            'Republic of Kosovo' => 'Kosovo',
         ];
 
         $output = new ConsoleOutput();
@@ -33,9 +33,9 @@ class ChangeCountryNameRecords extends Migration
             if ($country) {
                 $country->name = $new_name;
                 $country->save();
-                $output->writeln($new_name . ' successfully changed') ;
+                $output->writeln($new_name.' successfully changed');
             } else {
-                $output->writeln($new_name . ' failed to change') ;
+                $output->writeln($new_name.' failed to change');
             }
         }
 
@@ -47,7 +47,7 @@ class ChangeCountryNameRecords extends Migration
             $new_name = str_replace('UK', 'United Kingdom', $old_name);
             $uk_location->name = $new_name;
             $uk_location->save();
-            $output->writeln($uk_location->name . ' changed UK name') ;
+            $output->writeln($uk_location->name.' changed UK name');
         }
     }
-}
+};

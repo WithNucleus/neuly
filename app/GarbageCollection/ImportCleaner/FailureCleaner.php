@@ -9,7 +9,8 @@ class FailureCleaner
 {
     private $lifetime = 60;
 
-    public function __construct() {
+    public function __construct()
+    {
         $lifetime = 60;
     }
 
@@ -22,6 +23,6 @@ class FailureCleaner
 
         DB::table('import_failures')->whereIn('id', $oldFailures)->delete();
 
-        return "Cleaned ".$oldFailures->count()." Import Failures older then ".$this->lifetime." days.";
+        return 'Cleaned '.$oldFailures->count().' Import Failures older then '.$this->lifetime.' days.';
     }
 }

@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Spatie\Permission\Models\Role;
 
-class CreateTeamUserTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -46,4 +46,4 @@ class CreateTeamUserTable extends Migration
 
         Role::where('name', 'Team member')->delete();
     }
-}
+};

@@ -8,7 +8,7 @@ use Illuminate\Http\Response;
 class EntityDataController extends Controller
 {
     /**
-     * @param string $alias
+     * @param  string  $alias
      * @return \Illuminate\Http\JsonResponse
      */
     public function getEntitiesListByAlias($alias)

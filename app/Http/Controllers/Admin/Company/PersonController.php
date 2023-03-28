@@ -2,28 +2,28 @@
 
 namespace App\Http\Controllers\Admin\Company;
 
+use App\Events\SendNotification;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Company;
 use App\Models\Person;
-use App\Events\SendNotification;
+use Illuminate\Http\Request;
 
 class PersonController extends Controller
 {
     /**
-     * @param int $id
+     * @param  int  $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index($id) {
-    	$company = Company::with('people')->find($id);
-    	$people = Person::orderBy('name')->get();
+    public function index($id)
+    {
+        $company = Company::with('people')->find($id);
+        $people = Person::orderBy('name')->get();
 
-    	return view('admin.company.person', compact('company', 'people'));
+        return view('admin.company.person', compact('company', 'people'));
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param  int  $id
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request, $id)
@@ -33,10 +33,10 @@ class PersonController extends Controller
 
         // TODO Verify if this person is already attached? Does someone can
         // have multiple position in a company?
-        $title_company = $company->name . ' added a new person';
-        $title_person = $person->name . ' added to an organization';
+        $title_company = $company->name.' added a new person';
+        $title_person = $person->name.' added to an organization';
 
-        $description = $person->getShowLink() . ' has the position of ' . $request->input('position') . ' at ' . $company->getShowLink() . ', ' . $company->getTypeDescription() . '.';
+        $description = $person->getShowLink().' has the position of '.$request->input('position').' at '.$company->getShowLink().', '.$company->getTypeDescription().'.';
 
         SendNotification::dispatch($company, $title_company, $description, 'organizations');
         SendNotification::dispatch($person, $title_person, $description, 'people');
@@ -50,9 +50,9 @@ class PersonController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     * @param int $company_id
-     * @param int $person_id
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $company_id
+     * @param  int  $person_id
      * @return \Illuminate\Http\RedirectResponse
      */
     public function remove($company_id, $person_id)
@@ -60,8 +60,8 @@ class PersonController extends Controller
         $company = Company::findOrFail($company_id);
         $person = Person::findOrFail($person_id);
 
-        $title = $person->name . ' left ' . $company->name;
-        $description = $person->getShowLink() . ' no longer works at ' . $company->getShowLink() . ', ' . $company->getTypeDescription() . '.';
+        $title = $person->name.' left '.$company->name;
+        $description = $person->getShowLink().' no longer works at '.$company->getShowLink().', '.$company->getTypeDescription().'.';
 
         SendNotification::dispatch($company, $title, $description, 'organizations');
         SendNotification::dispatch($person, $title, $description, 'people');

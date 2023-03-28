@@ -13,10 +13,15 @@ use Illuminate\Support\Facades\DB;
 class NotificationCleaner
 {
     private $companies = null;
+
     private $people = null;
+
     private $focus = null;
+
     private $investors = null;
+
     private $locations = null;
+
     private $jobs = null;
 
     public function __construct()
@@ -53,7 +58,7 @@ class NotificationCleaner
 
         DB::table('notifications')->whereIn('id', $orphened)->delete();
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Notifications and Companies.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Notifications and Companies.';
     }
 
     public function cleanPersonRelation()
@@ -66,7 +71,7 @@ class NotificationCleaner
 
         DB::table('notifications')->whereIn('id', $orphened)->delete();
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Notifications and People.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Notifications and People.';
     }
 
     public function cleanFocusRelation()
@@ -79,7 +84,7 @@ class NotificationCleaner
 
         DB::table('notifications')->whereIn('id', $orphened)->delete();
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Notifications and Focus.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Notifications and Focus.';
     }
 
     public function cleanInvestorRelation()
@@ -92,7 +97,7 @@ class NotificationCleaner
 
         DB::table('notifications')->whereIn('id', $orphened)->delete();
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Notifications and Investors.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Notifications and Investors.';
     }
 
     public function cleanLocationRelation()
@@ -105,7 +110,7 @@ class NotificationCleaner
 
         DB::table('notifications')->whereIn('id', $orphened)->delete();
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Notifications and Locations.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Notifications and Locations.';
     }
 
     public function cleanJobRelation()
@@ -118,6 +123,6 @@ class NotificationCleaner
 
         DB::table('notifications')->whereIn('id', $orphened)->delete();
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Notifications and Jobs.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Notifications and Jobs.';
     }
 }

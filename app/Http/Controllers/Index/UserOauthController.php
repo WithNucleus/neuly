@@ -23,7 +23,7 @@ class UserOauthController extends Controller
     }
 
     /**
-     * @param string $provider
+     * @param  string  $provider
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function disconnectClient($clientId)
@@ -32,9 +32,8 @@ class UserOauthController extends Controller
         $user = Auth::user();
         $client->tokens()->where('user_id', $user->id)->delete();
 
-        Session::flash('success', 'Your integration with app "' . $client->name . '" was removed.');
+        Session::flash('success', 'Your integration with app "'.$client->name.'" was removed.');
 
         return redirect()->route('user.settings.oauth');
     }
-
 }

@@ -39,6 +39,7 @@ class DailyMetrics extends Command
     public function handle()
     {
         CollectMetrics::dispatch();
+
         return 0;
     }
 }

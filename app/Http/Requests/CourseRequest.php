@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Http\Requests\Request;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CourseRequest extends FormRequest
@@ -30,7 +29,7 @@ class CourseRequest extends FormRequest
             'summary' => 'required',
             'url' => 'required|url',
             'type' => 'required',
-            'lowest_cost' => 'required'
+            'lowest_cost' => 'required',
         ];
     }
 

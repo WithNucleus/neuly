@@ -12,9 +12,8 @@ class LocationsGeocoding extends Model
 
     protected $table = 'location_geocoding';
 
-    protected $dates = ['finished_at'];
-
     protected $casts = [
+        'finished_at' => 'datetime',
         'payload' => 'array',
         'processed' => 'array',
         'failed' => 'array',

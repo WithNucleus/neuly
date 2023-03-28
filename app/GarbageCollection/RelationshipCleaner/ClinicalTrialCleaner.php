@@ -12,9 +12,13 @@ use Illuminate\Support\Facades\DB;
 class ClinicalTrialCleaner
 {
     private $trials = null;
+
     private $companies = null;
+
     private $focus = null;
+
     private $locations = null;
+
     private $people = null;
 
     public function __construct()
@@ -33,7 +37,7 @@ class ClinicalTrialCleaner
         $messages[] = $this->cleanCompanyRelation();
         $messages[] = $this->cleanFocusRelation();
         $messages[] = $this->cleanLocationRelation();
-        $messages[]  = $this->cleanPersonRelation();
+        $messages[] = $this->cleanPersonRelation();
 
         return $messages;
     }
@@ -48,7 +52,7 @@ class ClinicalTrialCleaner
 
         DB::table('clinicaltrial_company')->whereIn('id', $orphened)->delete();
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Clinicaltrials and Companies.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Clinicaltrials and Companies.';
     }
 
     public function cleanFocusRelation()
@@ -59,15 +63,14 @@ class ClinicalTrialCleaner
             ->orWhereNotIn('clinicaltrial_id', $this->trials)
             ->get();
 
-        foreach($orphened as $entry)
-        {
+        foreach ($orphened as $entry) {
             DB::table('clinicaltrial_focus')
-                ->where('focus_id','=', $entry->focus_id)
-                ->where('clinicaltrial_id','=', $entry->clinicaltrial_id)
+                ->where('focus_id', '=', $entry->focus_id)
+                ->where('clinicaltrial_id', '=', $entry->clinicaltrial_id)
                 ->delete();
         }
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Clinicaltrials and Focus.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Clinicaltrials and Focus.';
     }
 
     public function cleanLocationRelation()
@@ -78,15 +81,14 @@ class ClinicalTrialCleaner
             ->orWhereNotIn('clinicaltrial_id', $this->trials)
             ->get();
 
-        foreach($orphened as $entry)
-        {
+        foreach ($orphened as $entry) {
             DB::table('clinicaltrial_location')
-                ->where('location_id','=', $entry->location_id)
-                ->where('clinicaltrial_id','=', $entry->clinicaltrial_id)
+                ->where('location_id', '=', $entry->location_id)
+                ->where('clinicaltrial_id', '=', $entry->clinicaltrial_id)
                 ->delete();
         }
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Clinicaltrials and Location.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Clinicaltrials and Location.';
     }
 
     public function cleanPersonRelation()
@@ -99,6 +101,6 @@ class ClinicalTrialCleaner
 
         DB::table('clinicaltrial_person')->whereIn('id', $orphened)->delete();
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Clinicaltrials and People.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Clinicaltrials and People.';
     }
 }

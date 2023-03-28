@@ -5,6 +5,8 @@
 	</a>
 </li>
 
+@includeWhen(class_exists(\Backpack\DevTools\DevToolsServiceProvider::class), 'backpack.devtools::buttons.sidebar_item')
+
 @can('edit companies')
     <li class="nav-item nav-dropdown">
         <a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon la la-building"></i> Organizations</a>
@@ -417,3 +419,5 @@
         word-wrap: break-word;       /* Internet Explorer 5.5+ */
     }
 </style>
+
+<li class="nav-item"><a class="nav-link" href="{{ backpack_url('test-entity') }}"><i class="nav-icon la la-question"></i> Test entities</a></li>

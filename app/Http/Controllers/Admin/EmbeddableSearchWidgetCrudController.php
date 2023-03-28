@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
 
 /**
  * Class EmbeddableSearchWidgetCrudController
- * @package App\Http\Controllers\Admin
+ *
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
 class EmbeddableSearchWidgetCrudController extends CrudController
@@ -35,12 +35,12 @@ class EmbeddableSearchWidgetCrudController extends CrudController
      */
     public function setup()
     {
-        if (!backpack_user()->can('nucleus tools')) {
+        if (! backpack_user()->can('nucleus tools')) {
             abort(404);
         }
 
         CRUD::setModel(EmbeddableSearchWidget::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/embeddable-search-widget');
+        CRUD::setRoute(config('backpack.base.route_prefix').'/embeddable-search-widget');
         CRUD::setEntityNameStrings('embeddable search widget', 'embeddable search widgets');
     }
 
@@ -48,6 +48,7 @@ class EmbeddableSearchWidgetCrudController extends CrudController
      * Define what happens when the List operation is loaded.
      *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
+     *
      * @return void
      */
     protected function setupListOperation()
@@ -67,6 +68,7 @@ class EmbeddableSearchWidgetCrudController extends CrudController
      * Define what happens when the Create operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-create
+     *
      * @return void
      */
     protected function setupCreateOperation()
@@ -76,7 +78,7 @@ class EmbeddableSearchWidgetCrudController extends CrudController
         $this->crud->addField([
             'name' => 'name',
             'type' => 'text',
-            'label' => 'Name'
+            'label' => 'Name',
         ]);
 
         $this->crud->addField([
@@ -85,8 +87,8 @@ class EmbeddableSearchWidgetCrudController extends CrudController
             'label' => 'Code',
             'default' => Str::random(32),
             'attributes' => [
-                'readonly' => 'readonly'
-            ]
+                'readonly' => 'readonly',
+            ],
         ]);
 
         $this->crud->addField([
@@ -168,6 +170,7 @@ class EmbeddableSearchWidgetCrudController extends CrudController
      * Define what happens when the Update operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
+     *
      * @return void
      */
     protected function setupUpdateOperation()
@@ -194,10 +197,10 @@ class EmbeddableSearchWidgetCrudController extends CrudController
 </pre>
 <p>2. Paste this code to the end of the web page (after jQuery library which is required):</p>
 <pre style="padding: 10px; background-color: lightgrey;">
-&lt;link href="' . asset('/css/external/embed-search.css') . '" rel="stylesheet" type="text/css"&gt;
-&lt;script src="'. asset('/js/external/embed-search.js') .'"&gt;&lt;/script&gt;
+&lt;link href="'.asset('/css/external/embed-search.css').'" rel="stylesheet" type="text/css"&gt;
+&lt;script src="'.asset('/js/external/embed-search.js').'"&gt;&lt;/script&gt;
 &lt;script&gt;
-    $("#nes-open-modal-btn").neulyEmbedSearch("' . URL::to('/') . '","{{widget code}}");
+    $("#nes-open-modal-btn").neulyEmbedSearch("'.URL::to('/').'","{{widget code}}");
 &lt;/script&gt;
 </pre>
 <p>3. Replace <code>{{widget code}}</code> with the "Code" value of the widget.</p>

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFeedbackTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -17,7 +17,7 @@ class CreateFeedbackTable extends Migration
             $table->id();
             $table->string('title');
             $table->enum('type', ['problem', 'feedback', 'bug', 'suggestion', 'feature request']);
-            $table->enum('status', ['open','awaiting response', 'in progress', 'closed'])->default('open');
+            $table->enum('status', ['open', 'awaiting response', 'in progress', 'closed'])->default('open');
             $table->text('content');
             $table->bigInteger('user_id')->nullable(true);
             $table->bigInteger('assignee_id')->nullable(true);
@@ -36,4 +36,4 @@ class CreateFeedbackTable extends Migration
     {
         Schema::dropIfExists('feedback');
     }
-}
+};

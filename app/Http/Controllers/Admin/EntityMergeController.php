@@ -21,7 +21,6 @@ class EntityMergeController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function getEntityListJson(Request $request)
@@ -35,26 +34,26 @@ class EntityMergeController extends Controller
 
         $data = $entityModel::all()->map(function ($item, $key) {
             return [
-                'id'   => $item->id,
-                'name' => $item->name
+                'id' => $item->id,
+                'name' => $item->name,
             ];
         });
 
         return response()->json([
             'status' => 'ok',
-            'data'   => $data
+            'data' => $data,
         ]);
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
+     *
      * @throws \Throwable
      */
     public function getEntityForm(Request $request)
     {
         $entityAlias = $request->input('entity_type');
-        $masterId    = $request->input('master_id');
+        $masterId = $request->input('master_id');
         $secondaryId = $request->input('secondary_id');
         $entityModel = EntityHelper::getClassByAlias($entityAlias);
 
@@ -62,29 +61,28 @@ class EntityMergeController extends Controller
             return response()->json(['status' => 'error'], 404);
         }
 
-        $mapping         = $entityModel::getFieldsMapping();
-        $masterEntity    = $entityModel::findOrFail($masterId);
+        $mapping = $entityModel::getFieldsMapping();
+        $masterEntity = $entityModel::findOrFail($masterId);
         $secondaryEntity = $entityModel::findOrFail($secondaryId);
 
         $view = view('admin.entity_merge.entity_form', compact('mapping', 'masterEntity', 'secondaryEntity'))->render();
 
         return response()->json([
             'status' => 'ok',
-            'data'   => $view
+            'data' => $view,
         ]);
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function merge(Request $request)
     {
         $entityAlias = $request->input('entity_type');
-        $masterId    = $request->input('master_id');
+        $masterId = $request->input('master_id');
         $secondaryId = $request->input('secondary_id');
-        $attributes  = $request->input('attributes');
-        $relations   = $request->input('relations');
+        $attributes = $request->input('attributes');
+        $relations = $request->input('relations');
 
         $entityModel = EntityHelper::getClassByAlias($entityAlias);
 
@@ -92,10 +90,10 @@ class EntityMergeController extends Controller
             return redirect()->back()->with('error', 'Wrong entity type!');
         }
 
-        $masterEntity    = $entityModel::findOrFail($masterId);
+        $masterEntity = $entityModel::findOrFail($masterId);
         $secondaryEntity = $entityModel::findOrFail($secondaryId);
 
-        $masterEntity   = $this->mergeEntities($masterEntity, $secondaryEntity, $attributes, $relations);
+        $masterEntity = $this->mergeEntities($masterEntity, $secondaryEntity, $attributes, $relations);
         $successMessage = "Merged succesfully! \"{$masterEntity->name}\" was updated. \"{$secondaryEntity->name}\" was removed.";
 
         // delete secondaryEntity first to avoid unique fields duplicate error
@@ -106,10 +104,10 @@ class EntityMergeController extends Controller
     }
 
     /**
-     * @param \Illuminate\Database\Eloquent\Model $masterEntity
-     * @param \Illuminate\Database\Eloquent\Model $secondaryEntity
-     * @param array $attributes
-     * @param array $relations
+     * @param  \Illuminate\Database\Eloquent\Model  $masterEntity
+     * @param  \Illuminate\Database\Eloquent\Model  $secondaryEntity
+     * @param  array  $attributes
+     * @param  array  $relations
      * @return \Illuminate\Database\Eloquent\Model
      */
     private function mergeEntities($masterEntity, $secondaryEntity, $attributes, $relations)
@@ -124,7 +122,6 @@ class EntityMergeController extends Controller
 
         foreach ($relations as $relationName => $source) {
             if ($source === EntityMergeHelper::SOURCE_SECONDARY || $source === EntityMergeHelper::SOURCE_MERGE) {
-
                 if ($mapping[$relationName]['relation'] === FieldsMapping::RELATION_ONE_N) {
                     $masterEntity = $this->mergeRelationOneToMany($masterEntity, $secondaryEntity, $relationName, $source);
                 } elseif ($mapping[$relationName]['relation'] === FieldsMapping::RELATION_N_N) {
@@ -138,10 +135,10 @@ class EntityMergeController extends Controller
     }
 
     /**
-     * @param \Illuminate\Database\Eloquent\Model $masterEntity
-     * @param \Illuminate\Database\Eloquent\Model $secondaryEntity
-     * @param string $relationName
-     * @param string $source
+     * @param  \Illuminate\Database\Eloquent\Model  $masterEntity
+     * @param  \Illuminate\Database\Eloquent\Model  $secondaryEntity
+     * @param  string  $relationName
+     * @param  string  $source
      * @return \Illuminate\Database\Eloquent\Model
      */
     private function mergeRelationOneToMany($masterEntity, $secondaryEntity, $relationName, $source)
@@ -157,11 +154,11 @@ class EntityMergeController extends Controller
     }
 
     /**
-     * @param \Illuminate\Database\Eloquent\Model $masterEntity
-     * @param \Illuminate\Database\Eloquent\Model $secondaryEntity
-     * @param string $relationName
-     * @param string $source
-     * @param array $pivotColumns
+     * @param  \Illuminate\Database\Eloquent\Model  $masterEntity
+     * @param  \Illuminate\Database\Eloquent\Model  $secondaryEntity
+     * @param  string  $relationName
+     * @param  string  $source
+     * @param  array  $pivotColumns
      * @return \Illuminate\Database\Eloquent\Model
      */
     private function mergeRelationManyToMany($masterEntity, $secondaryEntity, $relationName, $source, $pivotColumns)
@@ -174,7 +171,6 @@ class EntityMergeController extends Controller
         $relationData = [];
         // add relation's data from secondary entity to master entity
         foreach ($secondaryEntity->{$relationName} as $relation) {
-
             if ($pivotColumns !== []) {
                 foreach ($pivotColumns as $pivotColumn) {
                     $relationData[$relation->getKey()][$pivotColumn] = $relation->pivot->{$pivotColumn};

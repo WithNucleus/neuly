@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Events\SendNotification;
 use App\Http\Controllers\Controller;
 use App\Models\Investor;
-use Illuminate\Http\Request;
 use App\Models\Person;
+use Illuminate\Http\Request;
 
 class InvestorPersonController extends Controller
 {
@@ -20,8 +20,8 @@ class InvestorPersonController extends Controller
         $this->middleware(['permission:edit investors']);
     }
 
-    public function index(Request $request, $id) {
-
+    public function index(Request $request, $id)
+    {
         $investor = Investor::with('people')->find($id);
 
         $people = Person::orderBy('name')->pluck('name')->toJson();
@@ -38,8 +38,9 @@ class InvestorPersonController extends Controller
 
         $person = Person::where('name', $request->input('person'))->first();
 
-        if (!$person) {
+        if (! $person) {
             $request->session()->flash('error', 'Uh oh - could not find the person. Try again.');
+
             return redirect()->back();
         }
 
@@ -48,12 +49,12 @@ class InvestorPersonController extends Controller
         ]);
         $investor->touch();
 
-        $request->session()->flash('success', 'Successfully added ' . $person->name);
+        $request->session()->flash('success', 'Successfully added '.$person->name);
 
-        $title_investor = $investor->name . ' added a person';
-        $title_person = $person->name . ' was added an investor';
+        $title_investor = $investor->name.' added a person';
+        $title_person = $person->name.' was added an investor';
 
-        $description = $person->getShowLink() . ' has the role of ' . $request->input('role') . ' at ' . $investor->getShowLink() . ', ' . $investor->getTypeDescription() . '.';
+        $description = $person->getShowLink().' has the role of '.$request->input('role').' at '.$investor->getShowLink().', '.$investor->getTypeDescription().'.';
 
         SendNotification::dispatch($investor, $title_investor, $description, 'investors');
         SendNotification::dispatch($person, $title_person, $description, 'people');
@@ -72,17 +73,16 @@ class InvestorPersonController extends Controller
         $investor->people()->detach($person_id);
         $investor->touch();
 
-        $request->session()->flash('success', 'Successfully removed ' . $person->name);
+        $request->session()->flash('success', 'Successfully removed '.$person->name);
 
-        $title_investor = $investor->name . ' removed a person';
-        $title_person = $person->name . ' was removed from an investor';
+        $title_investor = $investor->name.' removed a person';
+        $title_person = $person->name.' was removed from an investor';
 
-        $description = $person->getShowLink() . ' is no longer with ' . $investor->getShowLink() . ', ' . $investor->getTypeDescription() . '.';
+        $description = $person->getShowLink().' is no longer with '.$investor->getShowLink().', '.$investor->getTypeDescription().'.';
 
         SendNotification::dispatch($investor, $title_investor, $description, 'investors');
         SendNotification::dispatch($person, $title_person, $description, 'people');
 
         return redirect()->back();
     }
-
 }

@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Activity;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
-use App\Models\Activity;
 use Illuminate\Support\Facades\Storage;
 use League\Csv\Writer;
 
@@ -58,12 +58,12 @@ class ActivityLogArchive extends Command
 
         Activity::where('log_name', 'pageview')
                 ->where('created_at', '<', $dateLimit)
-                ->chunk(1000, function($items) use ($csv, $hiddenColumns) {
+                ->chunk(1000, function ($items) use ($csv, $hiddenColumns) {
                     $csv->insertAll($items->makeHidden($hiddenColumns)->toArray());
                 });
 
-        $fileName = 'archive_activitylog_pageview_' . $currentDate->toDateTimeString() . '.csv';
+        $fileName = 'archive_activitylog_pageview_'.$currentDate->toDateTimeString().'.csv';
 
-        Storage::disk('archive')->put('activity_log/' . $fileName, $csv->toString());
+        Storage::disk('archive')->put('activity_log/'.$fileName, $csv->toString());
     }
 }

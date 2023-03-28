@@ -15,6 +15,7 @@ class CompanyMapController extends Controller
 {
     /**
      * Show.
+     *
      * @return \Illuminate\View\View
      */
     public function showMap(Request $request)
@@ -44,8 +45,6 @@ class CompanyMapController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param $country
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|void
      */
     public function showCountry(Request $request, $country)
@@ -80,8 +79,6 @@ class CompanyMapController extends Controller
     }
 
     /**
-     * @param $values
-     * @param $query
      * @return mixed
      */
     private function filterFocus($values, $query)
@@ -94,7 +91,6 @@ class CompanyMapController extends Controller
     }
 
     /**
-     * @param $request
      * @return array|false|string[]
      */
     private function filterFocusValues($request)
@@ -108,7 +104,6 @@ class CompanyMapController extends Controller
     }
 
     /**
-     * @param $filter
      * @return false|string[]
      */
     private function getFilteredOptions($filter)
@@ -117,7 +112,6 @@ class CompanyMapController extends Controller
     }
 
     /**
-     * @param $request
      * @return bool
      */
     private function filterHasFocus($request)
@@ -126,7 +120,6 @@ class CompanyMapController extends Controller
     }
 
     /**
-     * @param $request
      * @return bool
      */
     private function filterHasType($request)
@@ -135,7 +128,6 @@ class CompanyMapController extends Controller
     }
 
     /**
-     * @param $filter
      * @return array
      */
     private function filteredTypeToArray($filter)
@@ -144,7 +136,6 @@ class CompanyMapController extends Controller
     }
 
     /**
-     * @param $sortParameter
      * @return string
      */
     private function getOrderDirection($sortParameter)
@@ -159,7 +150,6 @@ class CompanyMapController extends Controller
     }
 
     /**
-     * @param $request
      * @return string
      */
     private function getSortParameter($request)
@@ -173,7 +163,6 @@ class CompanyMapController extends Controller
     }
 
     /**
-     * @param $locations
      * @return array
      */
     private function getCompaniesByLocations($locations, $companies)
@@ -201,7 +190,6 @@ class CompanyMapController extends Controller
     }
 
     /**
-     * @param $locationsByCountries
      * @return array
      */
     private function getCompaniesByCountries($locationsByCountries, $companies)
@@ -228,7 +216,6 @@ class CompanyMapController extends Controller
 
     /**
      * @param $jobsByCountries
-     * @param $focus
      * @return array
      */
     private function getCompaniesMappingByCountriesAndFocus($companiesByCountries, $focus)
@@ -271,8 +258,6 @@ class CompanyMapController extends Controller
     }
 
     /**
-     * @param $sort
-     * @param $focus
      * @return array
      */
     private function getCountriesResultByCode($sort, $focus, $companies)

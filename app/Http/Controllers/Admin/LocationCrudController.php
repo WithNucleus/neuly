@@ -13,7 +13,7 @@ use Backpack\CRUD\app\Library\Widget;
 
 /**
  * Class LocationCrudController
- * @package App\Http\Controllers\Admin
+ *
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
 class LocationCrudController extends CrudController
@@ -31,12 +31,12 @@ class LocationCrudController extends CrudController
      */
     public function setup()
     {
-        if(!backpack_user()->can('edit locations')) {
+        if (! backpack_user()->can('edit locations')) {
             abort(404);
         }
 
         CRUD::setModel(Location::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/location');
+        CRUD::setRoute(config('backpack.base.route_prefix').'/location');
         CRUD::setEntityNameStrings('location', 'locations');
     }
 
@@ -44,6 +44,7 @@ class LocationCrudController extends CrudController
      * Define what happens when the List operation is loaded.
      *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
+     *
      * @return void
      */
     protected function setupListOperation()
@@ -86,6 +87,7 @@ class LocationCrudController extends CrudController
      * Define what happens when the Create operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-create
+     *
      * @return void
      */
     protected function setupCreateOperation()
@@ -135,6 +137,7 @@ class LocationCrudController extends CrudController
      * Define what happens when the Update operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
+     *
      * @return void
      */
     protected function setupUpdateOperation()

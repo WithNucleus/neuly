@@ -39,10 +39,10 @@ class SerpapiDataController extends CrudController
         ]);
 
         $this->crud->addFilter([
-                'type' => 'simple',
-                'name' => 'reviewed',
-                'label' => 'Reviewed',
-            ],
+            'type' => 'simple',
+            'name' => 'reviewed',
+            'label' => 'Reviewed',
+        ],
             false,
             function () {
                 $this->crud->addClause('reviewed');
@@ -57,7 +57,7 @@ class SerpapiDataController extends CrudController
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return \Illuminate\Http\RedirectResponse
      */
     public function markAsReviewed($id)
@@ -72,7 +72,7 @@ class SerpapiDataController extends CrudController
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function review($id)
@@ -89,8 +89,7 @@ class SerpapiDataController extends CrudController
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param  int  $id
      * @return \Illuminate\Http\RedirectResponse
      */
     public function reviewSubmit(Request $request, $id)
@@ -108,10 +107,6 @@ class SerpapiDataController extends CrudController
         return redirect()->route('admin.import.company.serpapi-data.index');
     }
 
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Company $company
-     */
     private function applyCompanyData(Request $request, Company $company)
     {
         $fieldsMapping = $company::getImportSerpapiMapping();
@@ -132,8 +127,7 @@ class SerpapiDataController extends CrudController
     }
 
     /**
-     * @param \App\Models\Company $company
-     * @param array $relationsData
+     * @param  array  $relationsData
      */
     private function applyRelationData(Company $company, $relationData)
     {

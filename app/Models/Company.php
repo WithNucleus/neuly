@@ -14,8 +14,8 @@ use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Company extends Model implements EntityContract, EntityImageContract
@@ -50,14 +50,16 @@ class Company extends Model implements EntityContract, EntityImageContract
     ];
 
     const VISIBILITY_PUBLIC = 'public';
+
     const VISIBILITY_PENDING = 'pending';
 
     const VISIBILITY_TYPES = [
         self::VISIBILITY_PUBLIC,
-        self::VISIBILITY_PENDING
+        self::VISIBILITY_PENDING,
     ];
 
     protected $table = 'companies';
+
     protected $guarded = ['id'];
 
     protected $casts = [
@@ -67,10 +69,13 @@ class Company extends Model implements EntityContract, EntityImageContract
 
     // log activity for all attributes, which not listed in $guarded array
     protected static $logUnguarded = true;
+
     protected static $logName = 'entities';
 
     protected static $imageAttribute = 'logo';
+
     protected static $imageFolderPath = 'logos';
+
     protected static $imageFilenameAttribute = 'name';
 
     private $searchableRelationships = [
@@ -111,22 +116,17 @@ class Company extends Model implements EntityContract, EntityImageContract
 
     public function getShowLink(): string
     {
-        return '<a href="' . route('discover.organizations.show', $this->slug) . '">' . $this->name . '</a>';
+        return '<a href="'.route('discover.organizations.show', $this->slug).'">'.$this->name.'</a>';
     }
 
     public function getTypeDescription(): string
     {
-        if ($this->ownership === 'Privately Held' OR $this->ownership === 'Non-Profit') {
-
-            return 'a ' . strtolower($this->ownership) . ' organization';
-
+        if ($this->ownership === 'Privately Held' or $this->ownership === 'Non-Profit') {
+            return 'a '.strtolower($this->ownership).' organization';
         } elseif ($this->ownership === 'Educational Institution') {
-
-            return 'an ' . strtolower($this->ownership);
-
+            return 'an '.strtolower($this->ownership);
         } else {
-
-            return 'a ' . strtolower($this->ownership);
+            return 'a '.strtolower($this->ownership);
         }
     }
 
@@ -251,12 +251,12 @@ class Company extends Model implements EntityContract, EntityImageContract
 
     public function patents(): \Illuminate\Database\Eloquent\Relations\MorphToMany
     {
-        return $this->morphToMany(Patent::class, 'entity' , 'patent_relationships')->withTimestamps();
+        return $this->morphToMany(Patent::class, 'entity', 'patent_relationships')->withTimestamps();
     }
 
     public function mediaItems(): \Illuminate\Database\Eloquent\Relations\MorphToMany
     {
-        return $this->morphToMany(MediaItem::class, 'entity' , 'media_item_relationships')->withTimestamps();
+        return $this->morphToMany(MediaItem::class, 'entity', 'media_item_relationships')->withTimestamps();
     }
 
     /*
@@ -266,39 +266,42 @@ class Company extends Model implements EntityContract, EntityImageContract
     */
 
     /**
-     * @param \Illuminate\Database\Query\Builder $query
+     * @param  \Illuminate\Database\Query\Builder  $query
      * @return \Illuminate\Database\Query\Builder
      */
-    public function scopeHasJobs($query) {
-        return $query->whereHas('jobs', function($query)
-        {
+    public function scopeHasJobs($query)
+    {
+        return $query->whereHas('jobs', function ($query) {
             $query->open();
         });
     }
 
     /**
-     * @param \Illuminate\Database\Query\Builder $query
+     * @param  \Illuminate\Database\Query\Builder  $query
      * @return \Illuminate\Database\Query\Builder
      */
-    public function scopeHasUpcomingEvents($query) {
-        return $query->whereHas('events', function($subquery){
+    public function scopeHasUpcomingEvents($query)
+    {
+        return $query->whereHas('events', function ($subquery) {
             $subquery->where('start_date', '>=', Carbon::now()->toDateString());
         });
     }
 
     /**
-     * @param \Illuminate\Database\Query\Builder $query
+     * @param  \Illuminate\Database\Query\Builder  $query
      * @return \Illuminate\Database\Query\Builder
      */
-    public function scopeNonprofits($query) {
+    public function scopeNonprofits($query)
+    {
         return $query->where('ownership', 'Non-Profit');
     }
 
     /**
-     * @param \Illuminate\Database\Query\Builder $query
+     * @param  \Illuminate\Database\Query\Builder  $query
      * @return \Illuminate\Database\Query\Builder
      */
-    public function scopeEducational($query) {
+    public function scopeEducational($query)
+    {
         return $query->where('ownership', 'Educational Institution');
     }
 
@@ -331,35 +334,33 @@ class Company extends Model implements EntityContract, EntityImageContract
     |--------------------------------------------------------------------------
     */
 
-    public function setNameAttribute($value) {
+    public function setNameAttribute($value)
+    {
         $this->attributes['name'] = $value;
         $this->attributes['slug'] = Str::slug($value);
     }
 
-    public function setpeopleRelationshipAttribute($value) {
-
+    public function setpeopleRelationshipAttribute($value)
+    {
         $company_id = $this->id;
         $company = Company::find($company_id);
         $person_relationship = json_decode($value, true);
 
         if ($value != '[{"person":"","position":""}]') {
-            $sync_array = array();
+            $sync_array = [];
 
-            foreach($person_relationship as $relationship) {
-
+            foreach ($person_relationship as $relationship) {
                 $person_id = $relationship['person'];
                 $position = $relationship['position'];
 
                 // Push this Array to Sync Relationships
                 $sync_array[$person_id] = ['position' => $position];
-
             }
 
             $company->people()->attach(
                 $sync_array
             );
         }
-
     }
 
     public function setLogoAttribute($value)
@@ -374,112 +375,112 @@ class Company extends Model implements EntityContract, EntityImageContract
     {
         return [
             //attributes
-            'name'                 => [
+            'name' => [
                 'type' => FieldsMapping::TYPE_STRING,
                 'required' => true,
             ],
-            'slug'                 => [
+            'slug' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'ownership'            => [
-                'type'  => FieldsMapping::TYPE_ENUM,
+            'ownership' => [
+                'type' => FieldsMapping::TYPE_ENUM,
                 'label' => 'Type',
                 'values' => self::getOwnershipValues(),
             ],
-            'ticker_symbol'        => [
+            'ticker_symbol' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'website'              => [
+            'website' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'facebook'              => [
+            'facebook' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'instagram'              => [
+            'instagram' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'linkedin'              => [
+            'linkedin' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'founded_date'         => [
+            'founded_date' => [
                 'type' => FieldsMapping::TYPE_DATE,
             ],
-            'valuation'            => [
+            'valuation' => [
                 'type' => FieldsMapping::TYPE_INTEGER,
             ],
             'total_funding_amount' => [
                 'type' => FieldsMapping::TYPE_INTEGER,
             ],
-            'last_funding_date'    => [
+            'last_funding_date' => [
                 'type' => FieldsMapping::TYPE_DATE,
             ],
-            'number_employees'     => [
-                'type'  => FieldsMapping::TYPE_INTEGER,
+            'number_employees' => [
+                'type' => FieldsMapping::TYPE_INTEGER,
                 'label' => '# of Employees',
             ],
-            'notes'                => [
+            'notes' => [
                 'type' => FieldsMapping::TYPE_TEXT,
             ],
-            'summary'              => [
+            'summary' => [
                 'type' => FieldsMapping::TYPE_TEXT,
             ],
-            'logo'                 => [
+            'logo' => [
                 'type' => FieldsMapping::TYPE_IMAGE,
             ],
             'visibility' => [
-                'type'  => FieldsMapping::TYPE_ENUM,
+                'type' => FieldsMapping::TYPE_ENUM,
                 'values' => self::getVisibilityValues(),
             ],
             'visibility_code' => [
-                'type'  => FieldsMapping::TYPE_STRING,
+                'type' => FieldsMapping::TYPE_STRING,
             ],
             //relations
-            'focus'                => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'focus' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
-            'locations'            => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'locations' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
-            'people'               => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'people' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
-                'pivotColumns'  => [
+                'pivotColumns' => [
                     'position',
                 ],
             ],
-            'investors'            => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'investors' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
-            'research'             => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'research' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
-            'jobs'                 => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_ONE_N_MORPHABLE,
+            'jobs' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_ONE_N_MORPHABLE,
                 'relationField' => 'job_title',
             ],
-            'events'               => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'events' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
-            'clinicaltrials'       => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'clinicaltrials' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'title',
             ],
-            'valuations'           => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_ONE_N,
+            'valuations' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_ONE_N,
                 'relationField' => ['date', 'amount'],
             ],
         ];
@@ -507,5 +508,11 @@ class Company extends Model implements EntityContract, EntityImageContract
         }
 
         return $mapping;
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->useLogName(self::$logName);
     }
 }

@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers\Index;
 
+use App\Http\Controllers\Controller;
 use App\Models\Clinicaltrial;
 use App\Models\Focus;
 use App\Models\Location;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class RecruitingClinicalTrialController extends Controller
 {
@@ -26,8 +24,7 @@ class RecruitingClinicalTrialController extends Controller
         $filters_gender = [];
         $filters_age = 50;
 
-        if($request->has('filter'))
-        {
+        if ($request->has('filter')) {
             $filterInput = $request->input('filter');
             $filter = array_map(function ($entity) {
                 return explode('|', $entity);
@@ -40,8 +37,7 @@ class RecruitingClinicalTrialController extends Controller
             $filters_gender = $this->getFilterValues($filter, 'gender');
             $filters_age = $this->getFirstValueFromArray($this->getFilterValues($filter, 'age'));
 
-            if($filters_age === [])
-            {
+            if ($filters_age === []) {
                 $filters_age = 50;
             }
         }
@@ -64,7 +60,6 @@ class RecruitingClinicalTrialController extends Controller
         $age_min = 0;
         $age_max = 100;
 
-
         $path = route('discover.clinicaltrials.recruiting');
 
         return view('discover.recruitingtrials.index', compact(
@@ -85,27 +80,22 @@ class RecruitingClinicalTrialController extends Controller
 
     private function getQuery()
     {
-        return Clinicaltrial::select('clinicaltrials.id','title', 'gender', 'age', 'study_type', 'clinicaltrials.slug', 'start_date', 'last_update_posted')
+        return Clinicaltrial::select('clinicaltrials.id', 'title', 'gender', 'age', 'study_type', 'clinicaltrials.slug', 'start_date', 'last_update_posted')
             ->where('status', '=', self::RECRUITING_STATUS);
     }
 
     private function filterQuery($query, $request)
     {
-
-        if(array_key_exists('gender', $request))
-        {
+        if (array_key_exists('gender', $request)) {
             $query = $this->filterByGender($query, $request['gender'][0]);
         }
-        if(array_key_exists('age', $request))
-        {
+        if (array_key_exists('age', $request)) {
             $query = $this->filterByAge($query, $request['age']);
         }
-        if(array_key_exists('locations', $request))
-        {
+        if (array_key_exists('locations', $request)) {
             $query = $this->filterByLocation($query, $request['locations']);
         }
-        if(array_key_exists('focus', $request))
-        {
+        if (array_key_exists('focus', $request)) {
             $query = $this->filterByFocus($query, $request['focus']);
         }
 
@@ -119,20 +109,20 @@ class RecruitingClinicalTrialController extends Controller
 
     private function filterByAge($query, $age)
     {
-        return $query->where(function($ageQuery) use ($age) {
-            $ageQuery->where(function($tmpQuery) use ($age) {
+        return $query->where(function ($ageQuery) use ($age) {
+            $ageQuery->where(function ($tmpQuery) use ($age) {
                 $tmpQuery->where('min_age', '>=', $age);
                 $tmpQuery->where('max_age', '<=', $age);
             })
-            ->orWhere(function($tmpQuery) use ($age) {
+            ->orWhere(function ($tmpQuery) use ($age) {
                 $tmpQuery->whereNull('min_age');
                 $tmpQuery->where('max_age', '>=', $age);
             })
-            ->orWhere(function($tmpQuery) use ($age) {
+            ->orWhere(function ($tmpQuery) use ($age) {
                 $tmpQuery->whereNull('max_age');
                 $tmpQuery->where('min_age', '<=', $age);
             })
-            ->orWhere(function($tmpQuery) {
+            ->orWhere(function ($tmpQuery) {
                 $tmpQuery->whereNull('min_age');
                 $tmpQuery->whereNull('max_age');
             });
@@ -156,7 +146,6 @@ class RecruitingClinicalTrialController extends Controller
     private function getFilterValues($filter, $type)
     {
         return array_key_exists($type, $filter) ? $filter[$type] : [];
-
     }
 
     private function getFirstValueFromArray($array)

@@ -18,6 +18,7 @@ return [
         'domain' => env('MAILGUN_DOMAIN'),
         'secret' => env('MAILGUN_SECRET'),
         'endpoint' => env('MAILGUN_ENDPOINT', 'api.mailgun.net'),
+        'scheme' => 'https',
     ],
 
     'postmark' => [
@@ -33,25 +34,25 @@ return [
     'google' => [
         'client_id' => env('GOOGLE_CLIENT_ID'),
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
-        'redirect' => env('APP_URL') . '/login/google/callback',
+        'redirect' => env('APP_URL').'/login/google/callback',
     ],
 
     'facebook' => [
         'client_id' => env('FACEBOOK_CLIENT_ID'),
         'client_secret' => env('FACEBOOK_CLIENT_SECRET'),
-        'redirect' => env('APP_URL') . '/login/facebook/callback',
+        'redirect' => env('APP_URL').'/login/facebook/callback',
     ],
 
     'twitter' => [
         'client_id' => env('TWITTER_CLIENT_ID'),
         'client_secret' => env('TWITTER_CLIENT_SECRET'),
-        'redirect' => env('APP_URL') . '/login/twitter/callback',
+        'redirect' => env('APP_URL').'/login/twitter/callback',
     ],
 
     'linkedin' => [
         'client_id' => env('LINKEDIN_CLIENT_ID'),
         'client_secret' => env('LINKEDIN_CLIENT_SECRET'),
-        'redirect' => env('APP_URL') . '/login/linkedin/callback',
+        'redirect' => env('APP_URL').'/login/linkedin/callback',
     ],
 
     'slack' => [
@@ -61,7 +62,7 @@ return [
             'metrics' => 'https://hooks.slack.com/services/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',
             'metrics_change' => 'https://hooks.slack.com/services/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',
             'duplicate_media' => 'https://hooks.slack.com/services/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',
-            'sales_pipeline' => 'https://hooks.slack.com/services/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'
+            'sales_pipeline' => 'https://hooks.slack.com/services/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',
         ],
     ],
 

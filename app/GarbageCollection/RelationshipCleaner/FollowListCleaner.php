@@ -32,6 +32,6 @@ class FollowListCleaner
 
         DB::table('followables')->whereIn('id', $orphened)->delete();
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Follow Lists and Followables.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Follow Lists and Followables.';
     }
 }

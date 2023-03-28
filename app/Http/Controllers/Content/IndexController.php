@@ -3,9 +3,6 @@
 namespace App\Http\Controllers\Content;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Spatie\Activitylog\Models\Activity;
-use Auth;
 
 class IndexController extends Controller
 {

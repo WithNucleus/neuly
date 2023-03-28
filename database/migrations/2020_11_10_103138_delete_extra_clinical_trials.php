@@ -1,10 +1,10 @@
 <?php
 
+use App\Models\Clinicaltrial;
 use Illuminate\Database\Migrations\Migration;
 use Symfony\Component\Console\Output\ConsoleOutput;
-use App\Models\Clinicaltrial;
 
-class DeleteExtraClinicalTrials extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -272,7 +272,6 @@ class DeleteExtraClinicalTrials extends Migration
         $failed = 0;
 
         foreach ($trials_to_delete as $nct_number) {
-
             $clinical_trial = Clinicaltrial::where('nct_number', $nct_number)->first();
 
             if ($clinical_trial) {
@@ -280,10 +279,10 @@ class DeleteExtraClinicalTrials extends Migration
                 $success++;
             } else {
                 $failed++;
-                $output->writeln($nct_number . ' not found') ;
+                $output->writeln($nct_number.' not found');
             }
         }
 
-        $output->writeln($success . ' clinical trials successfully deleted' . ' and ' . $failed . ' failed') ;
+        $output->writeln($success.' clinical trials successfully deleted'.' and '.$failed.' failed');
     }
-}
+};

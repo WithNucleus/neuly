@@ -46,11 +46,10 @@ class updateClinicalTrialPhases extends Command
             ->get();
 
         foreach ($clinicaltrials as $clinicaltrial) {
-
             if (array_key_exists($clinicaltrial->phases, $phases)) {
                 $phase_name = $clinicaltrial->phases;
                 $integer = $phases[$phase_name];
-            }else {
+            } else {
                 $integer = 0;
             }
 

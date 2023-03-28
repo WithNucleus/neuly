@@ -52,7 +52,7 @@ class TeamController extends Controller
 
         Mail::to($email)->send(new TeamInvitationMail($team->name, $user->fullname, $code));
 
-        return redirect()->back()->with('success', 'Invitation to ' . $email . ' was sent!');
+        return redirect()->back()->with('success', 'Invitation to '.$email.' was sent!');
     }
 
     // Store Note

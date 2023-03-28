@@ -18,11 +18,13 @@ class FollowList extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function followItems() {
+    public function followItems()
+    {
         return $this->hasMany(Follow::class);
     }
 
@@ -32,7 +34,8 @@ class FollowList extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function setNameAttribute($value) {
+    public function setNameAttribute($value)
+    {
         $this->attributes['name'] = $value;
         $this->attributes['slug'] = isset($this->attributes['slug']) ? $this->attributes['slug'] : Str::slug($value);
     }

@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
 use App\Models\Location;
+use Illuminate\Database\Migrations\Migration;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
-class AddRegionCodesToCountriesRoundTwo extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -28,7 +28,7 @@ class AddRegionCodesToCountriesRoundTwo extends Migration
                 'Newfoundland and Labrador' => 'CA-NL',
                 'Ontario' => 'CA-ON',
                 'Alberta' => 'CA-AB',
-                ],
+            ],
             'Australia' => [
                 'Australian Capital Territory' => 'AU-ACT',
                 'Western Australia' => 'AU-WA',
@@ -257,13 +257,12 @@ class AddRegionCodesToCountriesRoundTwo extends Migration
                 'Glarus' => 'CH-GL',
                 'Graubünden' => 'CH-GR',
                 'Appenzell Ausserrhoden' => 'CH-AR',
-            ]
+            ],
         ];
 
-        foreach($countries as $country => $regions) {
+        foreach ($countries as $country => $regions) {
             $this->findLocationsToUpdate($regions, $country);
         }
-
     }
 
     private function findLocationsToUpdate(array $regions, string $country)
@@ -271,13 +270,13 @@ class AddRegionCodesToCountriesRoundTwo extends Migration
         $locations = Location::where('country', $country)->get();
 
         $output = new ConsoleOutput();
-        $output->writeln('----- ' . "\n" . $country . "\n" . '-----');
+        $output->writeln('----- '."\n".$country."\n".'-----');
 
         foreach ($locations as $location) {
             if (array_key_exists($location->region, $regions)) {
                 $location->region_code = $regions[$location->region];
                 $location->save();
-                $output->writeln($location->name . ' region updated');
+                $output->writeln($location->name.' region updated');
             }
         }
     }
@@ -291,4 +290,4 @@ class AddRegionCodesToCountriesRoundTwo extends Migration
     {
         // no need
     }
-}
+};

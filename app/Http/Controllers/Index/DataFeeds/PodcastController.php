@@ -24,7 +24,7 @@ class PodcastController extends Controller
             ->with([
                 'mediaItems' => function ($query) {
                     $query->orderBy('date', 'DESC');
-                }
+                },
             ])
             ->withCount(['mediaItems'])
             ->allowedIncludes(['mediaItems'])
@@ -58,5 +58,4 @@ class PodcastController extends Controller
 
         return view('discover.data-feeds.podcasts.episodes-list', compact('feed', 'episodes'));
     }
-
 }

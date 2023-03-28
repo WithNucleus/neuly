@@ -4,9 +4,7 @@ namespace App\Http\Controllers\Admin\Import\ClinicalTrial;
 
 use App\Jobs\Import\ClinicalTrial\ParseDetails;
 use App\Models\Clinicaltrial;
-use App\Models\ClinicaltrialParsingQueue;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 

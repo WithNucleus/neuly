@@ -19,14 +19,14 @@ class EntityHelper
      */
     private static $entities = [
         'clinicaltrials' => Clinicaltrial::class,
-        'organizations'  => Company::class,
-        'events'         => Event::class,
-        'focus'          => Focus::class,
-        'investors'      => Investor::class,
-        'jobs'           => Job::class,
-        'locations'      => Location::class,
-        'people'         => Person::class,
-        'research'       => Research::class,
+        'organizations' => Company::class,
+        'events' => Event::class,
+        'focus' => Focus::class,
+        'investors' => Investor::class,
+        'jobs' => Job::class,
+        'locations' => Location::class,
+        'people' => Person::class,
+        'research' => Research::class,
     ];
 
     /**
@@ -38,7 +38,6 @@ class EntityHelper
     }
 
     /**
-     * @param string $alias
      * @return string|bool
      */
     public static function getClassByAlias(string $alias)
@@ -47,7 +46,6 @@ class EntityHelper
     }
 
     /**
-     * @param string $class
      * @return string|bool
      */
     public static function getAliasByClass(string $class)

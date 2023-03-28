@@ -13,12 +13,19 @@ class Feedback extends Model
     use CrudTrait;
 
     const TYPE_FEEDBACK = 'feedback';
+
     const TYPE_PROBLEM = 'problem';
+
     const TYPE_BUG = 'bug';
+
     const TYPE_SUGGESTION = 'suggestion';
+
     const TYPE_FEATURE = 'feature request';
+
     const TYPE_DEMO_REQUEST = 'demo request';
+
     const TYPE_ENTERPRISE_REQUEST = 'enterprise request';
+
     const TYPE_CT_PARTICIPATING = 'clinical trial participating';
 
     const TYPES = [
@@ -38,6 +45,7 @@ class Feedback extends Model
     */
 
     protected $table = 'feedback';
+
     protected $guarded = ['id'];
 
     /*

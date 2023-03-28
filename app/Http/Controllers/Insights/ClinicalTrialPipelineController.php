@@ -12,11 +12,10 @@ use Illuminate\Support\Facades\DB;
 class ClinicalTrialPipelineController extends Controller
 {
     /**
-     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function show(Request $request) {
-
+    public function show(Request $request)
+    {
         $query = $this->getQuery();
 
         $filters_focus = [];
@@ -33,44 +32,44 @@ class ClinicalTrialPipelineController extends Controller
             $filterInput = $request->input('filter');
 
             $filter = array_map(function ($entity) {
-                    return explode('|', $entity);
-                }, $filterInput);
+                return explode('|', $entity);
+            }, $filterInput);
 
             $query = $this->filterQuery($query, $filter);
 
-            if(isset($filter['focus'])) {
+            if (isset($filter['focus'])) {
                 $filters_focus = $filter['focus'];
             }
 
-            if(isset($filter['company'])) {
+            if (isset($filter['company'])) {
                 $filters_organizations = $filter['company'];
             }
 
-            if(isset($filter['status'])) {
+            if (isset($filter['status'])) {
                 $filters_status = $filter['status'];
             }
 
-            if(isset($filter['phase'])) {
+            if (isset($filter['phase'])) {
                 $filters_phases = $filter['phase'];
             }
 
-            if(isset($filter['researchers'])) {
+            if (isset($filter['researchers'])) {
                 $filters_researchers = $filter['researchers'];
             }
 
-            if(isset($filter['conditions'])) {
+            if (isset($filter['conditions'])) {
                 $filters_conditions = $filter['conditions'];
             }
 
-            if(isset($filter['interventions'])) {
+            if (isset($filter['interventions'])) {
                 $filters_interventions = $filter['interventions'];
             }
 
-            if(isset($filter['outcome_measures'])) {
+            if (isset($filter['outcome_measures'])) {
                 $filters_outcome_measures = $filter['outcome_measures'];
             }
 
-            if(isset($filter['study_designs'])) {
+            if (isset($filter['study_designs'])) {
                 $filters_study_designs = $filter['study_designs'];
             }
         }
@@ -101,6 +100,7 @@ class ClinicalTrialPipelineController extends Controller
             'filters_study_designs'
         ));
     }
+
     /**
      * @return \Illuminate\Database\Query\Builder
      */
@@ -127,8 +127,8 @@ class ClinicalTrialPipelineController extends Controller
     }
 
     /**
-     * @param \Illuminate\Database\Query\Builder $query
-     * @param string $filter
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  string  $filter
      * @return \Illuminate\Database\Query\Builder
      */
     private function sortQuery($query, $sort)
@@ -159,49 +159,45 @@ class ClinicalTrialPipelineController extends Controller
     }
 
     /**
-     * @param \Illuminate\Database\Query\Builder $query
-     * @param array $filter
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  array  $filter
      * @return \Illuminate\Database\Query\Builder
      */
     private function filterQuery($query, $filter)
     {
-        if(isset($filter['focus']))
-        {
+        if (isset($filter['focus'])) {
             $query = $this->filterByFocus($query, $filter['focus']);
         }
 
-        if(isset($filter['company']))
-        {
+        if (isset($filter['company'])) {
             $query = $this->filterByOrganizations($query, $filter['company']);
         }
 
-        if(isset($filter['status']))
-        {
+        if (isset($filter['status'])) {
             $query = $this->filterByStatus($query, $filter['status']);
         }
 
-        if(isset($filter['phase']))
-        {
+        if (isset($filter['phase'])) {
             $query = $this->filterByPhase($query, $filter['phase']);
         }
 
-        if(isset($filter['researchers'])) {
+        if (isset($filter['researchers'])) {
             $query = $this->filterByResearchers($query, $filter['researchers']);
         }
 
-        if(isset($filter['conditions'])) {
+        if (isset($filter['conditions'])) {
             $query = $this->filterByConditions($query, $filter['conditions']);
         }
 
-        if(isset($filter['interventions'])) {
+        if (isset($filter['interventions'])) {
             $query = $this->filterByInterventions($query, $filter['interventions']);
         }
 
-        if(isset($filter['outcome_measures'])) {
+        if (isset($filter['outcome_measures'])) {
             $query = $this->filterByOutcomeMeasures($query, $filter['outcome_measures']);
         }
 
-        if(isset($filter['study_designs'])) {
+        if (isset($filter['study_designs'])) {
             $query = $this->filterByStudyDesigns($query, $filter['study_designs']);
         }
 
@@ -209,8 +205,8 @@ class ClinicalTrialPipelineController extends Controller
     }
 
     /**
-     * @param \Illuminate\Database\Query\Builder $query
-     * @param array $params
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  array  $params
      * @return \Illuminate\Database\Query\Builder
      */
     private function filterByFocus($query, $params)
@@ -219,8 +215,8 @@ class ClinicalTrialPipelineController extends Controller
     }
 
     /**
-     * @param \Illuminate\Database\Query\Builder $query
-     * @param array $params
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  array  $params
      * @return \Illuminate\Database\Query\Builder
      */
     private function filterByOrganizations($query, $params)
@@ -229,8 +225,8 @@ class ClinicalTrialPipelineController extends Controller
     }
 
     /**
-     * @param \Illuminate\Database\Query\Builder $query
-     * @param array $params
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  array  $params
      * @return \Illuminate\Database\Query\Builder
      */
     private function filterByStatus($query, $params)
@@ -239,8 +235,8 @@ class ClinicalTrialPipelineController extends Controller
     }
 
     /**
-     * @param \Illuminate\Database\Query\Builder $query
-     * @param array $params
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  array  $params
      * @return \Illuminate\Database\Query\Builder
      */
     private function filterByPhase($query, $params)
@@ -249,8 +245,8 @@ class ClinicalTrialPipelineController extends Controller
     }
 
     /**
-     * @param \Illuminate\Database\Query\Builder $query
-     * @param array $params
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  array  $params
      * @return \Illuminate\Database\Query\Builder
      */
     private function filterByResearchers($query, $params)
@@ -262,8 +258,8 @@ class ClinicalTrialPipelineController extends Controller
     }
 
     /**
-     * @param \Illuminate\Database\Query\Builder $query
-     * @param array $params
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  array  $params
      * @return \Illuminate\Database\Query\Builder
      */
     private function filterByConditions($query, $params)
@@ -274,8 +270,8 @@ class ClinicalTrialPipelineController extends Controller
     }
 
     /**
-     * @param \Illuminate\Database\Query\Builder $query
-     * @param array $params
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  array  $params
      * @return \Illuminate\Database\Query\Builder
      */
     private function filterByInterventions($query, $params)
@@ -286,8 +282,8 @@ class ClinicalTrialPipelineController extends Controller
     }
 
     /**
-     * @param \Illuminate\Database\Query\Builder $query
-     * @param array $params
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  array  $params
      * @return \Illuminate\Database\Query\Builder
      */
     private function filterByOutcomeMeasures($query, $params)
@@ -298,8 +294,8 @@ class ClinicalTrialPipelineController extends Controller
     }
 
     /**
-     * @param \Illuminate\Database\Query\Builder $query
-     * @param array $params
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  array  $params
      * @return \Illuminate\Database\Query\Builder
      */
     private function filterByStudyDesigns($query, $params)

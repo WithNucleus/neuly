@@ -8,7 +8,7 @@ use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
  * Class JobReportEntriesCrudController
- * @package App\Http\Controllers\Admin
+ *
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
 class JobReportEntryCrudController extends CrudController
@@ -24,12 +24,12 @@ class JobReportEntryCrudController extends CrudController
      */
     public function setup()
     {
-        if(!backpack_user()->can('manage job reports')) {
+        if (! backpack_user()->can('manage job reports')) {
             abort(403);
         }
 
         CRUD::setModel(JobReportEntry::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/jobreportentries');
+        CRUD::setRoute(config('backpack.base.route_prefix').'/jobreportentries');
         CRUD::setEntityNameStrings('job report entry', 'job report entries');
     }
 
@@ -37,6 +37,7 @@ class JobReportEntryCrudController extends CrudController
      * Define what happens when the List operation is loaded.
      *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
+     *
      * @return void
      */
     protected function setupListOperation()
@@ -46,9 +47,9 @@ class JobReportEntryCrudController extends CrudController
         CRUD::addColumn(['name' => 'company', 'type' => 'text']);
         CRUD::addColumn(['name' => 'position', 'type' => 'text']);
         CRUD::addColumn([
-            'name'    => 'currently_hiring',
-            'type'    => 'select_from_array',
-            'options' => JobReportEntry::getCurrentlyHiringValues()
+            'name' => 'currently_hiring',
+            'type' => 'select_from_array',
+            'options' => JobReportEntry::getCurrentlyHiringValues(),
         ]);
     }
 

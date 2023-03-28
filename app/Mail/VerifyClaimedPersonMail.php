@@ -12,6 +12,7 @@ class VerifyClaimedPersonMail extends Mailable
     use SerializesModels;
 
     protected $claim = null;
+
     protected $person = null;
 
     /**
@@ -35,7 +36,7 @@ class VerifyClaimedPersonMail extends Mailable
         return $this->markdown('emails.users.verify_claim')
             ->with([
                 'person_name' => $this->person->name,
-                'verification_token' => $this->claim->verification_token
+                'verification_token' => $this->claim->verification_token,
             ]);
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Http\Requests\Request;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ApiUserRequest extends FormRequest
@@ -26,9 +25,9 @@ class ApiUserRequest extends FormRequest
     public function rules()
     {
         return [
-             'name' => 'required|min:5|max:255',
-             'email' => 'required|email|min:5|max:255|unique:api_users,email,'.$this->get('id'),
-             'access_token' => 'required|min:60|max:60|unique:api_users,access_token,'.$this->get('id'),
+            'name' => 'required|min:5|max:255',
+            'email' => 'required|email|min:5|max:255|unique:api_users,email,'.$this->get('id'),
+            'access_token' => 'required|min:60|max:60|unique:api_users,access_token,'.$this->get('id'),
         ];
     }
 }

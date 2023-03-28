@@ -7,6 +7,7 @@ use App\Models\Traits\HasMediaTypes;
 use App\Models\Traits\SearchableEntity;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class MediaItem extends Model
@@ -22,22 +23,30 @@ class MediaItem extends Model
     |--------------------------------------------------------------------------
     */
     const STATUS_PUBLIC = 'Public';
+
     const STATUS_PENDING = 'Pending';
+
     const STATUS_DECLINED = 'Declined';
+
     const STATUS_DUPLICATE = 'Duplicate';
 
     const STATUSES = [
         self::STATUS_PUBLIC,
         self::STATUS_PENDING,
         self::STATUS_DECLINED,
-        self::STATUS_DUPLICATE
+        self::STATUS_DUPLICATE,
     ];
 
     protected $table = 'media_items';
+
     protected $guarded = ['id'];
-    protected $dates = ['date'];
+
+    protected $casts = [
+        'date' => 'datetime',
+    ];
 
     protected static $logUnguarded = true;
+
     protected static $logName = 'entities';
 
     /*
@@ -72,12 +81,12 @@ class MediaItem extends Model
 
     public function companies(): \Illuminate\Database\Eloquent\Relations\MorphToMany
     {
-        return $this->morphedByMany(Company::class, 'entity' , 'media_item_relationships')->withTimestamps();
+        return $this->morphedByMany(Company::class, 'entity', 'media_item_relationships')->withTimestamps();
     }
 
     public function people(): \Illuminate\Database\Eloquent\Relations\MorphToMany
     {
-        return $this->morphedByMany(Person::class, 'entity' , 'media_item_relationships')->withTimestamps();
+        return $this->morphedByMany(Person::class, 'entity', 'media_item_relationships')->withTimestamps();
     }
 
     public function source(): \Illuminate\Database\Eloquent\Relations\MorphTo
@@ -115,4 +124,10 @@ class MediaItem extends Model
     | MUTATORS
     |--------------------------------------------------------------------------
     */
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->useLogName(self::$logName);
+    }
 }

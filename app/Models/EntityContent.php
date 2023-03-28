@@ -22,6 +22,7 @@ class EntityContent extends Model
     |--------------------------------------------------------------------------
     */
     protected $table = 'entity_content';
+
     protected $guarded = ['id'];
 
     /*

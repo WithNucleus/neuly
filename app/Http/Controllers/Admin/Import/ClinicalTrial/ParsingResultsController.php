@@ -85,9 +85,9 @@ class ParsingResultsController extends CrudController
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param  int  $id
      * @return \Backpack\CRUD\app\Http\Controllers\Operations\Response|\Illuminate\Http\RedirectResponse
+     *
      * @throws \Exception
      */
     public function update(Request $request, $id)
@@ -104,8 +104,9 @@ class ParsingResultsController extends CrudController
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return \Illuminate\Http\RedirectResponse
+     *
      * @throws \Exception
      */
     public function approve($id)
@@ -118,8 +119,8 @@ class ParsingResultsController extends CrudController
     }
 
     /**
-     * @param \App\Models\ClinicaltrialParsingResult $parsingResult
      * @return bool
+     *
      * @throws \Exception
      */
     private function approveParsedData(ClinicaltrialParsingResult $parsingResult)

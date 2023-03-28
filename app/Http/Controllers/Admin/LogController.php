@@ -7,7 +7,6 @@ use Illuminate\Routing\Controller;
 
 class LogController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware(['permission:view logs']);
@@ -51,11 +50,10 @@ class LogController extends Controller
     /**
      * Downloads a log file.
      *
-     * @param $file_name
-     *
-     * @throws \Exception
      *
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     *
+     * @throws \Exception
      */
     public function download($file_name)
     {
@@ -65,11 +63,10 @@ class LogController extends Controller
     /**
      * Deletes a log file.
      *
-     * @param $file_name
-     *
-     * @throws \Exception
      *
      * @return string
+     *
+     * @throws \Exception
      */
     public function delete($file_name)
     {

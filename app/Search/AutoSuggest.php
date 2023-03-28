@@ -3,24 +3,24 @@
 namespace App\Search;
 
 use Algolia\ScoutExtended\Searchable\Aggregator;
-use App\Enum\MediaTypes;
 use App\Models\BookableListing;
+use App\Models\Clinicaltrial;
+use App\Models\Company;
 use App\Models\Course;
 use App\Models\DataFeed;
+use App\Models\Event;
+use App\Models\Investor;
+use App\Models\Job;
 use App\Models\MediaItem;
-use \App\Models\Company;
-use \App\Models\Person;
-use \App\Models\Investor;
-use \App\Models\Research;
-use \App\Models\Clinicaltrial;
-use \App\Models\Event;
-use \App\Models\Job;
+use App\Models\Person;
+use App\Models\Research;
 use Illuminate\Support\Str;
 
 class AutoSuggest extends Aggregator
 {
 //    private const INDEX = 'general_query_suggestions';
     private const INDEX = 'everything';
+
     /**
      * The names of the models that should be aggregated.
      *
@@ -36,7 +36,7 @@ class AutoSuggest extends Aggregator
         Job::class,
         MediaItem::class,
         Course::class,
-        BookableListing::class
+        BookableListing::class,
     ];
 
     public function toSearchableArray(): array
@@ -48,7 +48,7 @@ class AutoSuggest extends Aggregator
             'byline' => $this->getByline($this->model),
             'image' => $this->getImage($this->model),
             'type' => $this->getModelType($this->model),
-            'keywords' => $this->getKeywords($this->model)
+            'keywords' => $this->getKeywords($this->model),
         ];
 
         // TODO: Add date fields (if model has date field, use that, otherwise use updated_at)
@@ -56,7 +56,7 @@ class AutoSuggest extends Aggregator
 
     public function searchableAs(): string
     {
-        return config('scout.prefix') . self::INDEX;
+        return config('scout.prefix').self::INDEX;
     }
 
     private function getUrl($model): string
@@ -91,12 +91,11 @@ class AutoSuggest extends Aggregator
         $byline = '';
 
         if (get_class($model) === MediaItem::class) {
-
             $byline = $model->media_type;
 
             if ($model->source) {
                 if ($model->source->source_category !== DataFeed::SOURCE_GOOGLE_ALERT) {
-                    $byline = $model->media_type . ' - ' . $model->source->name;
+                    $byline = $model->media_type.' - '.$model->source->name;
                 }
             }
         }
@@ -109,7 +108,7 @@ class AutoSuggest extends Aggregator
 
         if (get_class($model) === BookableListing::class) {
             if ($model->bookable) {
-                $byline = $model->type . ' - ' . $model->bookable->name;
+                $byline = $model->type.' - '.$model->bookable->name;
             }
         }
 
@@ -132,31 +131,31 @@ class AutoSuggest extends Aggregator
         if ($model->focus) {
             foreach ($model->focus as $focus) {
                 if ($focus->name !== 'Clinic') {
-                    $keywords .= $focus->name . " " . $type . " ";
+                    $keywords .= $focus->name.' '.$type.' ';
                 }
             }
         }
 
         if ($model->locations) {
             foreach ($model->locations as $location) {
-                $keywords .= $location->name . " ";
+                $keywords .= $location->name.' ';
             }
         }
 
         if (get_class($model) === Company::class) {
-            $keywords .= $model->ownership . " ";
+            $keywords .= $model->ownership.' ';
         }
 
         if (get_class($model) === Investor::class) {
-            $keywords .= $model->type . " ";
+            $keywords .= $model->type.' ';
         }
 
         if (get_class($model) === BookableListing::class) {
-            $keywords .= $model->location_name . " ";
+            $keywords .= $model->location_name.' ';
         }
 
         if (get_class($model) === Job::class) {
-            $keywords .= $model->employment_type . " at " . $model->owner->name . " ";
+            $keywords .= $model->employment_type.' at '.$model->owner->name.' ';
         }
 
         return $keywords;
@@ -166,7 +165,6 @@ class AutoSuggest extends Aggregator
     {
         // Organization
         if (get_class($model) === Company::class) {
-
             if ($model->ownership) {
                 return $model->ownership;
             }
@@ -189,7 +187,7 @@ class AutoSuggest extends Aggregator
 
         // Clinical Trial
         if (get_class($model) === Clinicaltrial::class) {
-            return $model->nct_number . ' ' . strip_tags($model->brief_summary);
+            return $model->nct_number.' '.strip_tags($model->brief_summary);
         }
 
         // Event
@@ -214,7 +212,6 @@ class AutoSuggest extends Aggregator
 
         // BookableListing
         if (get_class($model) === BookableListing::class) {
-
             $firstContent = $model->content()->first();
 
             if ($firstContent) {
@@ -227,17 +224,16 @@ class AutoSuggest extends Aggregator
                 }
             }
 
-            return 'Bookable ' . $model->type;
+            return 'Bookable '.$model->type;
         }
 
         return '';
-
     }
 
     private function getImage($model): string
     {
         $image = match (get_class($model)) {
-            Company::class, Investor::class, Person::class, Event::class =>  $model->entityImageUrl,
+            Company::class, Investor::class, Person::class, Event::class => $model->entityImageUrl,
             Research::class => '/images/icons/research.svg',
             Clinicaltrial::class => '/images/icons/clinicaltrials.svg',
             Job::class => '/images/icons/jobs.svg',
@@ -245,14 +241,14 @@ class AutoSuggest extends Aggregator
             default => '/images/favicons/android-chrome-192x192.png'
         };
 
-        if (!$image) {
-            return config('scout.image_url_prefix') . '/images/favicons/android-chrome-192x192.png';
+        if (! $image) {
+            return config('scout.image_url_prefix').'/images/favicons/android-chrome-192x192.png';
         }
 
         if (get_class($model) === MediaItem::class) {
             return $image;
         }
 
-        return config('scout.image_url_prefix') . $image;
+        return config('scout.image_url_prefix').$image;
     }
 }

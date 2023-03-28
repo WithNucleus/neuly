@@ -2,7 +2,6 @@
 
 namespace App\Helpers\Import\BatchImageUpload;
 
-use App\Helpers\EntityHelper;
 use App\Models\Contracts\EntityImageContract;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -11,9 +10,10 @@ use Illuminate\Support\Facades\Validator;
 class ImportFailureCorrector
 {
     /**
-     * @param \App\Models\ImportFailure $importFailure
-     * @param \Illuminate\Http\UploadedFile $imageFile
+     * @param  \App\Models\ImportFailure  $importFailure
+     * @param  \Illuminate\Http\UploadedFile  $imageFile
      * @return bool
+     *
      * @throws \Exception
      */
     public static function correctFailure($importFailure, $imageFile)
@@ -36,29 +36,29 @@ class ImportFailureCorrector
     /**
      * Upload image for entity
      *
-     * @param \App\Models\ImportFailure $importFailure
-     * @param \Illuminate\Http\UploadedFile $imageFile
+     * @param  \App\Models\ImportFailure  $importFailure
+     * @param  \Illuminate\Http\UploadedFile  $imageFile
      * @return bool
      */
     private static function addImage($importFailure, $imageFile)
     {
-        $isSuccess   = false;
-        $targetId    = $importFailure->details['target_id'];
+        $isSuccess = false;
+        $targetId = $importFailure->details['target_id'];
         $targetClass = $importFailure->details['target_class'];
-        $diskPublic  = Storage::disk('public');
+        $diskPublic = Storage::disk('public');
 
         try {
-            $targetEntity  = $targetClass::findOrFail($targetId);
+            $targetEntity = $targetClass::findOrFail($targetId);
 
             if ($targetEntity instanceof EntityImageContract === false) {
-                $message = "Entity '$targetClass' is not an instance of '" . EntityImageContract::class . "'." ;
+                $message = "Entity '$targetClass' is not an instance of '".EntityImageContract::class."'.";
                 throw new \Exception($message);
             }
 
             $imageSettings = $targetClass::getImageImportSettings();
-            $entityImageField  = $imageSettings['field'];
+            $entityImageField = $imageSettings['field'];
             $entityImageFolder = $imageSettings['folder'];
-            $newImageValue  = $entityImageFolder .  DIRECTORY_SEPARATOR . uniqid() . '.' . $imageFile->extension();
+            $newImageValue = $entityImageFolder.DIRECTORY_SEPARATOR.uniqid().'.'.$imageFile->extension();
 
             if ($oldImage = $targetEntity->{$entityImageField}) {
                 $diskPublic->delete($oldImage);
@@ -70,8 +70,8 @@ class ImportFailureCorrector
             }
         } catch (\Throwable $e) {
             Log::error(
-                "Unable to resolve ImportFailure [id = {$importFailure->id}].\n" .
-                "ErrorMessage: " . $e->getMessage()
+                "Unable to resolve ImportFailure [id = {$importFailure->id}].\n".
+                'ErrorMessage: '.$e->getMessage()
             );
         }
 

@@ -12,7 +12,7 @@ use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
  * Class ClaimPersonCrudControllerCrudController
- * @package App\Http\Controllers\Admin
+ *
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
 class ClaimPersonCrudController extends CrudController
@@ -30,11 +30,11 @@ class ClaimPersonCrudController extends CrudController
      */
     public function setup()
     {
-        if(!backpack_user()->can('edit person claims')) {
+        if (! backpack_user()->can('edit person claims')) {
             abort(404);
         }
         CRUD::setModel(RaisedClaim::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/person-claim');
+        CRUD::setRoute(config('backpack.base.route_prefix').'/person-claim');
         CRUD::setEntityNameStrings('person claim', 'person claims');
     }
 
@@ -42,6 +42,7 @@ class ClaimPersonCrudController extends CrudController
      * Define what happens when the List operation is loaded.
      *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
+     *
      * @return void
      */
     protected function setupListOperation()
@@ -63,6 +64,7 @@ class ClaimPersonCrudController extends CrudController
      * Define what happens when the Create operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-create
+     *
      * @return void
      */
     protected function setupCreateOperation()
@@ -70,24 +72,24 @@ class ClaimPersonCrudController extends CrudController
         CRUD::setValidation(PersonClaimRequest::class);
 
         $this->crud->addField([
-            'label'     => "Person",
-            'type'      => 'select2',
-            'name'      => 'person_id',
-            'entity'    => 'person',
+            'label' => 'Person',
+            'type' => 'select2',
+            'name' => 'person_id',
+            'entity' => 'person',
             'attribute' => 'name',
-            'pivot'     => false,
-            'options'   => (function ($query) {
+            'pivot' => false,
+            'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
         ]);
 
         $this->crud->addField([
-            'label'     => "Person",
-            'type'      => 'select2',
-            'name'      => 'user_id',
-            'entity'    => 'user',
+            'label' => 'Person',
+            'type' => 'select2',
+            'name' => 'user_id',
+            'entity' => 'user',
             'attribute' => 'fullname',
-            'options'   => (function ($query) {
+            'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
         ]);
@@ -95,15 +97,15 @@ class ClaimPersonCrudController extends CrudController
         $this->crud->addField([
             'name' => 'verification_token',
             'type' => 'hidden',
-            'value' => RaisedClaim::generateToken()
+            'value' => RaisedClaim::generateToken(),
         ]);
     }
-
 
     /**
      * Define what happens when the Update operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
+     *
      * @return void
      */
     protected function setupUpdateOperation()

@@ -29,13 +29,13 @@ class FollowListRequest extends FormRequest
             $id = $this->route()->parameter('follow_list');
 
             return [
-                'name' => 'required|min:3|max:255|unique:follow_lists,name,' . $id . ',id,user_id,' . auth()->user()->id,
-                'slug' => 'required|min:3|max:255|unique:follow_lists,slug,' . $id . ',id,user_id,' . auth()->user()->id,
+                'name' => 'required|min:3|max:255|unique:follow_lists,name,'.$id.',id,user_id,'.auth()->user()->id,
+                'slug' => 'required|min:3|max:255|unique:follow_lists,slug,'.$id.',id,user_id,'.auth()->user()->id,
             ];
         }
 
         return [
-            'name' => 'required|min:3|max:255|unique:follow_lists,name,NULL,id,user_id,' . auth()->user()->id,
+            'name' => 'required|min:3|max:255|unique:follow_lists,name,NULL,id,user_id,'.auth()->user()->id,
         ];
     }
 }

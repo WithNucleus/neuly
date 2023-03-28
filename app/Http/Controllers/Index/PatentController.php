@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers\Index;
 
-use App\Enum\MediaTypes;
 use App\Http\Controllers\Controller;
 use App\Models\Company;
 use App\Models\Focus;
 use App\Models\Patent;
 use App\Models\Person;
-use Illuminate\Database\Eloquent\Builder;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -34,8 +32,8 @@ class PatentController extends Controller
         return view('discover.patents.index', compact('patents', 'focusCategories', 'patentStatuses', 'people', 'organizations'));
     }
 
-
-    public function tracker() {
+    public function tracker()
+    {
         $patents = $this->getPatentsQuery()
             ->defaultSort('-priority_date')
             ->paginate(300)
@@ -55,12 +53,12 @@ class PatentController extends Controller
             ->with([
                 'companies',
                 'people',
-                'focus'
+                'focus',
             ])->allowedSorts([
                 'name',
                 'priority_date',
                 'granted_date',
-                'expiration_date'
+                'expiration_date',
             ])
             ->allowedFilters([
                 'status',

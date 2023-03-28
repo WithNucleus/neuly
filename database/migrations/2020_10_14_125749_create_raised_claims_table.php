@@ -7,10 +7,10 @@ use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
 
-class CreateRaisedClaimsTable extends Migration
+return new class extends Migration
 {
-
     const PERMISSION_MANAGE_CLAIMS = 'edit person claims';
+
     /**
      * Run the migrations.
      *
@@ -41,7 +41,7 @@ class CreateRaisedClaimsTable extends Migration
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
         $permission = Permission::create(['name' => self::PERMISSION_MANAGE_CLAIMS]);
-        $role       = Role::where(['name' => 'Admin'])->first();
+        $role = Role::where(['name' => 'Admin'])->first();
 
         if ($role) {
             $role->givePermissionTo($permission);
@@ -58,7 +58,7 @@ class CreateRaisedClaimsTable extends Migration
         Schema::dropIfExists('raised_claims');
 
         $permission = Permission::where(['name' => self::PERMISSION_MANAGE_CLAIMS])->first();
-        $role       = Role::where(['name' => 'Admin'])->first();
+        $role = Role::where(['name' => 'Admin'])->first();
 
         if ($permission && $role) {
             $role->revokePermissionTo($permission);
@@ -68,4 +68,4 @@ class CreateRaisedClaimsTable extends Migration
         // Reset cached roles and permissions
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
     }
-}
+};

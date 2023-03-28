@@ -10,9 +10,7 @@ class RedirectOldSlugs
     /**
      * Handle an incoming request.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \Closure $next
-     *
+     * @param  \Illuminate\Http\Request  $request
      * @return mixed
      */
     public function handle($request, Closure $next)
@@ -44,9 +42,8 @@ class RedirectOldSlugs
     /**
      * Check if request need redirect
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \Illuminate\Http\Response|\Illuminate\View\View $response
-     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Response|\Illuminate\View\View  $response
      * @return bool
      */
     private function needsRedirect($request, $response)

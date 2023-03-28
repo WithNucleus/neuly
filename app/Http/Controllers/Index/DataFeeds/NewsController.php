@@ -8,7 +8,6 @@ use App\Models\Company;
 use App\Models\Focus;
 use App\Models\MediaItem;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\Request;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -25,7 +24,7 @@ class NewsController extends Controller
             ->with(['source'])
             ->allowedSorts([
                 'name',
-                'date'
+                'date',
             ])
             ->allowedFilters([
                 AllowedFilter::partial('focus', 'focus.name'),

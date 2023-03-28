@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Patent extends Model
@@ -18,26 +19,29 @@ class Patent extends Model
     */
 
     protected $table = 'patents';
+
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
+
     // protected $fillable = [];
     // protected $hidden = [];
-    protected $dates = [
-        'priority_date',
-        'granted_date',
-        'expiration_date',
+    protected $casts = [
+        'priority_date' => 'datetime',
+        'granted_date' => 'datetime',
+        'expiration_date' => 'datetime',
     ];
 
     protected static $logUnguarded = true;
+
     protected static $logName = 'entities';
 
-     const STATUSES_ACTIVE = [
+    const STATUSES_ACTIVE = [
         'Filed',
         'Pending',
         'Published',
-        'Granted'
-     ];
+        'Granted',
+    ];
 
     /*
     |--------------------------------------------------------------------------
@@ -52,17 +56,17 @@ class Patent extends Model
     */
     public function companies(): \Illuminate\Database\Eloquent\Relations\MorphToMany
     {
-        return $this->morphedByMany(Company::class, 'entity' , 'patent_relationships')->withTimestamps();
+        return $this->morphedByMany(Company::class, 'entity', 'patent_relationships')->withTimestamps();
     }
 
     public function focus(): \Illuminate\Database\Eloquent\Relations\MorphToMany
     {
-        return $this->morphedByMany(Focus::class, 'entity' , 'patent_relationships')->withTimestamps();
+        return $this->morphedByMany(Focus::class, 'entity', 'patent_relationships')->withTimestamps();
     }
 
     public function people(): \Illuminate\Database\Eloquent\Relations\MorphToMany
     {
-        return $this->morphedByMany(Person::class, 'entity' , 'patent_relationships')->withTimestamps();
+        return $this->morphedByMany(Person::class, 'entity', 'patent_relationships')->withTimestamps();
     }
 
     /*
@@ -82,4 +86,10 @@ class Patent extends Model
     | MUTATORS
     |--------------------------------------------------------------------------
     */
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->useLogName(self::$logName);
+    }
 }

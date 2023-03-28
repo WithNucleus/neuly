@@ -15,12 +15,19 @@ use Illuminate\Support\Facades\DB;
 class RedirectCleaner
 {
     private $trials = null;
+
     private $companies = null;
+
     private $events = null;
+
     private $focus = null;
+
     private $investors = null;
+
     private $jobs = null;
+
     private $locations = null;
+
     private $people = null;
 
     public function __construct()
@@ -61,7 +68,7 @@ class RedirectCleaner
 
         DB::table('redirects')->whereIn('id', $orphened)->delete();
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Redirects and Clinical Trials.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Redirects and Clinical Trials.';
     }
 
     public function cleanCompanyRelation()
@@ -74,7 +81,7 @@ class RedirectCleaner
 
         DB::table('redirects')->whereIn('id', $orphened)->delete();
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Redirects and Companies.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Redirects and Companies.';
     }
 
     public function cleanEventRelation()
@@ -87,7 +94,7 @@ class RedirectCleaner
 
         DB::table('redirects')->whereIn('id', $orphened)->delete();
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Redirects and Events.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Redirects and Events.';
     }
 
     public function cleanFocusRelation()
@@ -100,7 +107,7 @@ class RedirectCleaner
 
         DB::table('redirects')->whereIn('id', $orphened)->delete();
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Redirects and Focus.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Redirects and Focus.';
     }
 
     public function cleanInvestorRelation()
@@ -113,7 +120,7 @@ class RedirectCleaner
 
         DB::table('redirects')->whereIn('id', $orphened)->delete();
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Redirects and Investors.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Redirects and Investors.';
     }
 
     public function cleanJobRelation()
@@ -126,7 +133,7 @@ class RedirectCleaner
 
         DB::table('redirects')->whereIn('id', $orphened)->delete();
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Redirects and Jobs.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Redirects and Jobs.';
     }
 
     public function cleanLocationRelation()
@@ -139,7 +146,7 @@ class RedirectCleaner
 
         DB::table('redirects')->whereIn('id', $orphened)->delete();
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Redirects and Locations.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Redirects and Locations.';
     }
 
     public function cleanPersonRelation()
@@ -152,6 +159,6 @@ class RedirectCleaner
 
         DB::table('redirects')->whereIn('id', $orphened)->delete();
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Redirects and People.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Redirects and People.';
     }
 }

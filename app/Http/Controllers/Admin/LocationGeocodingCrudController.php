@@ -11,6 +11,7 @@ use Prologue\Alerts\Facades\Alert;
 
 /**
  * Class LocationCrudController.
+ *
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
 class LocationGeocodingCrudController extends CrudController
@@ -39,6 +40,7 @@ class LocationGeocodingCrudController extends CrudController
      * Define what happens when the List operation is loaded.
      *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
+     *
      * @return void
      */
     protected function setupListOperation()

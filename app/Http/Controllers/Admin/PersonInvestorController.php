@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Events\SendNotification;
 use App\Http\Controllers\Controller;
 use App\Models\Investor;
-use Illuminate\Http\Request;
 use App\Models\Person;
+use Illuminate\Http\Request;
 
 class PersonInvestorController extends Controller
 {
@@ -20,7 +20,8 @@ class PersonInvestorController extends Controller
         $this->middleware(['permission:edit investors']);
     }
 
-    public function index($id) {
+    public function index($id)
+    {
         $person = Person::with('companies')->findOrFail($id);
         $investors = Investor::orderBy('name')->get();
 
@@ -43,15 +44,14 @@ class PersonInvestorController extends Controller
         ]);
         $person->touch();
 
-        $title_investor = $investor->name . ' added a person';
-        $title_person = $person->name . ' was added an investor';
+        $title_investor = $investor->name.' added a person';
+        $title_person = $person->name.' was added an investor';
 
-        $description = $person->getShowLink() . ' has the role of ' . $request->input('role') . ' at ' . $investor->getShowLink() . ', ' . $investor->getTypeDescription() . '.';
+        $description = $person->getShowLink().' has the role of '.$request->input('role').' at '.$investor->getShowLink().', '.$investor->getTypeDescription().'.';
 
         SendNotification::dispatch($investor, $title_investor, $description, 'investors');
         SendNotification::dispatch($person, $title_person, $description, 'people');
 
         return redirect()->back();
     }
-
 }

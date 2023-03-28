@@ -4,18 +4,18 @@ namespace App\Http\Controllers\Index;
 
 use App\Helpers\PagePreviewHelper;
 use App\Http\Controllers\Controller;
-use App\Repositories\FollowRepository;
-use Illuminate\Http\Request;
 use App\Models\Company;
 use App\Models\Focus;
 use App\Models\Job;
-use Illuminate\Support\Facades\Auth;
-use Spatie\Activitylog\Models\Activity;
-use Spatie\QueryBuilder\QueryBuilder;
-use Spatie\QueryBuilder\AllowedSort;
-use Spatie\QueryBuilder\AllowedFilter;
+use App\Repositories\FollowRepository;
 use App\Services\Metas;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Spatie\Activitylog\Models\Activity;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\AllowedSort;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class CompanyController extends Controller
 {
@@ -32,11 +32,10 @@ class CompanyController extends Controller
     /**
      * List of Companies
      *
-     * @param Request $request
      * @return View
      */
-    public function index(Request $request) {
-
+    public function index(Request $request)
+    {
         $companies = QueryBuilder::for(Company::class)
             ->public()
             ->with('focus')
@@ -57,36 +56,34 @@ class CompanyController extends Controller
             ->paginate(12)
             ->appends(request()->query());
 
-        $focus_cats = Focus::has('companies', '>' , 0)->with('companies')->get()->pluck('name')->unique()->sort();
+        $focus_cats = Focus::has('companies', '>', 0)->with('companies')->get()->pluck('name')->unique()->sort();
 
         $metas = Metas::fromPage($request->path());
 
         return view('discover.organizations.index', compact('companies', 'focus_cats', 'metas'));
-
     }
 
     /**
      * Show Company
      *
-     * @param $slug
      * @return mixed
      */
-    public function show(Request $request, $slug) {
-
+    public function show(Request $request, $slug)
+    {
         $company = Company::with([
-                'people',
-                'locations',
-                'investors',
-                'jobs' => function ($query) {
-                    $query->open();
-                },
-                'events',
-                'clinicaltrials',
-                'parents',
-                'subsidiaries',
-                'valuations',
-                'content'
-            ])
+            'people',
+            'locations',
+            'investors',
+            'jobs' => function ($query) {
+                $query->open();
+            },
+            'events',
+            'clinicaltrials',
+            'parents',
+            'subsidiaries',
+            'valuations',
+            'content',
+        ])
             ->where('slug', $slug)
             ->firstOrFail();
 
@@ -102,11 +99,11 @@ class CompanyController extends Controller
             abort(404);
         }
 
-        $metas = Metas::process(array(
-            'title'         => $company->name,
-            'description'   => $company->summary,
-            'image'         => $company->entityImageUrl,
-        ));
+        $metas = Metas::process([
+            'title' => $company->name,
+            'description' => $company->summary,
+            'image' => $company->entityImageUrl,
+        ]);
 
         $related = $this->getReltaedEntities($company);
 
@@ -119,7 +116,7 @@ class CompanyController extends Controller
                 'ip' => $request->ip(),
                 'entity' => 'organizations',
                 'slug' => $company->slug,
-                'image' => $company->logo
+                'image' => $company->logo,
             ])
             ->performedOn($company)
             ->tap(function (Activity $activity) use ($request) {
@@ -156,11 +153,10 @@ class CompanyController extends Controller
     /**
      * Show Jobs for Company
      *
-     * @param $slug
      * @return View
      */
-    public function jobs($slug) {
-
+    public function jobs($slug)
+    {
         $owner = Company::where('slug', $slug)->firstOrFail();
         $jobs = Job::where('owner_id', $owner->id)->where('status', Job::STATUS_OPEN)->orderBy('posted_date', 'desc')->get();
 
@@ -170,11 +166,10 @@ class CompanyController extends Controller
     /**
      * Show Events for Company
      *
-     * @param $slug
      * @return View
      */
-    public function events($slug) {
-
+    public function events($slug)
+    {
         $company = Company::where('slug', $slug)->firstOrFail();
         $entity = 'organizations';
 

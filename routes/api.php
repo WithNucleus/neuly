@@ -1,17 +1,19 @@
 <?php
 
 use App\Http\Controllers\Api\BookableListingsController;
-use App\Http\Controllers\Api\CompaniesController;
 use App\Http\Controllers\Api\ClinicaltrialsController;
+use App\Http\Controllers\Api\CompaniesController;
 use App\Http\Controllers\Api\EventsController;
 use App\Http\Controllers\Api\InvestorsController;
 use App\Http\Controllers\Api\JobsController;
 use App\Http\Controllers\Api\MediaItemsController;
 use App\Http\Controllers\Api\PeopleController;
 use App\Http\Controllers\Api\ResearchController;
-use App\Http\Controllers\Api\UsersController;
 use App\Http\Controllers\Api\UserRolesController;
+use App\Http\Controllers\Api\UsersController;
 use App\Http\Controllers\Auth\OauthController;
+use App\Http\Controllers\EntityDataController;
+use App\Http\Controllers\FeedbackController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,19 +27,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/api/entities/list/{alias}', 'EntityDataController@getEntitiesListByAlias')->name('api.entities.list.byAlias');
+Route::get('/api/entities/list/{alias}', [EntityDataController::class, 'getEntitiesListByAlias'])->name('api.entities.list.byAlias');
 
-Route::post('/feedback', 'FeedbackController@apiStore')->name('feedback.api.store');
+Route::post('/feedback', [FeedbackController::class, 'apiStore'])->name('feedback.api.store');
 
-Route::group([
-    'middleware' => ['auth:api-users'],
-], function () {
+Route::middleware('auth:api-users')->group(function () {
     Route::get('/user', [OauthController::class, 'getUser']);
 });
 
-Route::group([
-    'middleware' => ['api.auth:api'],
-], function () {
+Route::middleware('api.auth:api')->group(function () {
     Route::get('/users/{id}', [UsersController::class, 'show']);
     Route::post('/users', [UsersController::class, 'create']);
     Route::put('/users/{id}', [UsersController::class, 'update']);
@@ -93,4 +91,3 @@ Route::group([
 //    Route::post('/bookable-listings', [BookableListingsController::class, 'create']);
 //    Route::put('/bookable-listings/{id}', [BookableListingsController::class, 'update']);
 });
-

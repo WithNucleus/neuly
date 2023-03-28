@@ -41,8 +41,7 @@ class collectGarbage extends Command
         $collector = new GarbageCollector();
         $messages = $collector->collectGarbage();
 
-        foreach($messages as $message)
-        {
+        foreach ($messages as $message) {
             $this->info($message);
         }
     }

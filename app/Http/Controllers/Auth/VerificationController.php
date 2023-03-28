@@ -50,7 +50,7 @@ class VerificationController extends Controller
     {
         $user = User::findOrFail($request->route('id'));
 
-        if (!hash_equals((string) $request->route('hash'), sha1($user->getEmailForVerification()))) {
+        if (! hash_equals((string) $request->route('hash'), sha1($user->getEmailForVerification()))) {
             throw new AuthorizationException;
         }
 

@@ -9,7 +9,7 @@ use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
  * Class ClinicaltrialPhaseCrudController
- * @package App\Http\Controllers\Admin
+ *
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
 class ClinicaltrialPhaseCrudController extends CrudController
@@ -27,12 +27,12 @@ class ClinicaltrialPhaseCrudController extends CrudController
      */
     public function setup()
     {
-        if(!backpack_user()->can('edit clinical trials')) {
+        if (! backpack_user()->can('edit clinical trials')) {
             abort(404);
         }
 
         CRUD::setModel(ClinicaltrialPhase::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/clinicaltrialphase');
+        CRUD::setRoute(config('backpack.base.route_prefix').'/clinicaltrialphase');
         CRUD::setEntityNameStrings('clinical trial phase', 'clinical trial phases');
     }
 
@@ -40,6 +40,7 @@ class ClinicaltrialPhaseCrudController extends CrudController
      * Define what happens when the List operation is loaded.
      *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
+     *
      * @return void
      */
     protected function setupListOperation()
@@ -52,6 +53,7 @@ class ClinicaltrialPhaseCrudController extends CrudController
      * Define what happens when the Create operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-create
+     *
      * @return void
      */
     protected function setupCreateOperation()
@@ -67,6 +69,7 @@ class ClinicaltrialPhaseCrudController extends CrudController
      * Define what happens when the Update operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
+     *
      * @return void
      */
     protected function setupUpdateOperation()

@@ -7,7 +7,7 @@ use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
  * Class MetricCrudController
- * @package App\Http\Controllers\Admin
+ *
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
 class MetricCrudController extends CrudController
@@ -24,7 +24,7 @@ class MetricCrudController extends CrudController
     public function setup()
     {
         CRUD::setModel(\App\Models\Metric::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/metric');
+        CRUD::setRoute(config('backpack.base.route_prefix').'/metric');
         CRUD::setEntityNameStrings('metric', 'metrics');
     }
 
@@ -32,6 +32,7 @@ class MetricCrudController extends CrudController
      * Define what happens when the List operation is loaded.
      *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
+     *
      * @return void
      */
     protected function setupListOperation()

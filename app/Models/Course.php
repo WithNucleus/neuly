@@ -7,6 +7,7 @@ use App\Models\Traits\SearchableEntity;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Course extends Model
@@ -22,6 +23,7 @@ class Course extends Model
     */
 
     protected $table = 'courses';
+
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
@@ -30,26 +32,31 @@ class Course extends Model
     // protected $dates = [];
 
     protected static $logUnguarded = true;
+
     protected static $logName = 'entities';
 
     const TYPE_ONLINE = 'Online';
+
     const TYPE_OFFLINE = 'In-Person';
+
     const TYPE_HYBRID = 'Hybrid';
 
     const TYPES = [
         self::TYPE_ONLINE,
         self::TYPE_OFFLINE,
-        self::TYPE_HYBRID
+        self::TYPE_HYBRID,
     ];
 
     const SCHEDULE_RECURRING = 'Recurring';
+
     const SCHEDULE_UPCOMING = 'Upcoming';
+
     const SCHEDULE_PAST = 'Past';
 
     const SCHEDULE = [
         self::SCHEDULE_RECURRING,
         self::SCHEDULE_UPCOMING,
-        self::SCHEDULE_PAST
+        self::SCHEDULE_PAST,
     ];
 
     private $searchableRelationships = [
@@ -96,7 +103,8 @@ class Course extends Model
     | SCOPES
     |--------------------------------------------------------------------------
     */
-    public function scopeFree($query) {
+    public function scopeFree($query)
+    {
         return $query->where('lowest_cost', 0);
     }
 
@@ -117,10 +125,10 @@ class Course extends Model
 
         $cost = '';
 
-        if ($lowestCost === 0 AND $highestCost == '') {
+        if ($lowestCost === 0 and $highestCost == '') {
             $cost = 'Free';
         } else {
-            $cost = '$' . number_format($lowestCost);
+            $cost = '$'.number_format($lowestCost);
 
             if ($highestCost != '') {
                 $cost .= '+';
@@ -148,47 +156,47 @@ class Course extends Model
     {
         return [
             //attributes
-            'name'                   => [
+            'name' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'slug'                    => [
+            'slug' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'summary'              => [
-                'type'  => FieldsMapping::TYPE_TEXT,
+            'summary' => [
+                'type' => FieldsMapping::TYPE_TEXT,
             ],
-            'url'                 => [
+            'url' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'type'                  => [
+            'type' => [
                 'type' => FieldsMapping::TYPE_ENUM,
                 'values' => self::getTypes(),
             ],
-            'lowest_cost'           => [
+            'lowest_cost' => [
                 'type' => FieldsMapping::TYPE_INTEGER,
             ],
-            'highest_cost'                  => [
+            'highest_cost' => [
                 'type' => FieldsMapping::TYPE_INTEGER,
             ],
-            'schedule'                     => [
+            'schedule' => [
                 'type' => FieldsMapping::TYPE_ENUM,
                 'values' => self::getSchedules(),
             ],
-            'education_credits'                  => [
+            'education_credits' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'next_date'              => [
+            'next_date' => [
                 'type' => FieldsMapping::TYPE_DATE,
             ],
             //relations
-            'companies'               => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'companies' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
-            'focus'                   => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'focus' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
         ];
@@ -204,5 +212,11 @@ class Course extends Model
         }
 
         return $mapping;
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->useLogName(self::$logName);
     }
 }

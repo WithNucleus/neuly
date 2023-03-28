@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 
 /**
  * Class RankableListCrudController
- * @package App\Http\Controllers\Admin
+ *
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
 class RankedListCrudController extends CrudController
@@ -35,7 +35,7 @@ class RankedListCrudController extends CrudController
         }
 
         $this->crud->setModel(RankedList::class);
-        $this->crud->setRoute(config('backpack.base.route_prefix') . '/rankedList');
+        $this->crud->setRoute(config('backpack.base.route_prefix').'/rankedList');
         $this->crud->setEntityNameStrings('ranked list', 'ranked lists');
     }
 
@@ -43,31 +43,32 @@ class RankedListCrudController extends CrudController
      * Define what happens when the List operation is loaded.
      *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
+     *
      * @return void
      */
     protected function setupListOperation()
     {
         $this->crud->addColumn([
-            'type'      => 'string',
-            'name'      => 'name',
+            'type' => 'string',
+            'name' => 'name',
         ]);
 
         $this->crud->addColumn([
-            'type'      => 'relationship_count',
-            'name'      => 'entities',
+            'type' => 'relationship_count',
+            'name' => 'entities',
         ]);
     }
 
     protected function setupShowOperation()
     {
         $this->crud->addColumn([
-            'type'      => 'string',
-            'name'      => 'name',
+            'type' => 'string',
+            'name' => 'name',
         ]);
 
         $this->crud->addColumn([
-            'type'      => 'string',
-            'name'      => 'description',
+            'type' => 'string',
+            'name' => 'description',
         ]);
 
         $entityTypes = array_keys(EntityHelper::getEntities());
@@ -79,7 +80,7 @@ class RankedListCrudController extends CrudController
             'view' => 'admin.widgets.rankedListEntities',
             'entityTypes' => $entityTypes,
             'rankedList' => $rankedList,
-            'entities' => $entities
+            'entities' => $entities,
         ])->to('after_content');
     }
 
@@ -87,6 +88,7 @@ class RankedListCrudController extends CrudController
      * Define what happens when the Create operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-create
+     *
      * @return void
      */
     protected function setupCreateOperation()
@@ -94,13 +96,13 @@ class RankedListCrudController extends CrudController
         CRUD::setValidation(RankedListRequest::class);
 
         CRUD::addField([
-            'type'      => 'text',
-            'name'      => 'name',
+            'type' => 'text',
+            'name' => 'name',
         ]);
 
         CRUD::addField([
-            'type'      => 'textarea',
-            'name'      => 'description',
+            'type' => 'textarea',
+            'name' => 'description',
         ]);
     }
 
@@ -108,6 +110,7 @@ class RankedListCrudController extends CrudController
      * Define what happens when the Update operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
+     *
      * @return void
      */
     protected function setupUpdateOperation()
@@ -125,11 +128,11 @@ class RankedListCrudController extends CrudController
         $success = $rankedList->attachEntity($id, $classname);
 
         return response()->json([
-                'success' => $success,
-                'id' => $id,
-                'classname' => $classname,
-                'alias' => $alias,
-            ]);
+            'success' => $success,
+            'id' => $id,
+            'classname' => $classname,
+            'alias' => $alias,
+        ]);
     }
 
     public function updateEntities(Request $request, $id)

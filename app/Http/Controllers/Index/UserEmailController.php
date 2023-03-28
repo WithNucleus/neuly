@@ -15,11 +15,12 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 
- class UserEmailController extends Controller
+class UserEmailController extends Controller
 {
     public function index(Request $request)
     {
         $currentEmail = Auth::user()->email;
+
         return view('members.settings.email', compact('currentEmail'));
     }
 
@@ -28,8 +29,9 @@ use Illuminate\Support\Str;
         $user = Auth::user();
         $password = $request->input('password');
 
-        if (!$validateUserHandler->execute($password, $user->password)) {
+        if (! $validateUserHandler->execute($password, $user->password)) {
             Session::flash('error', 'Request validation failed. Please try again.');
+
             return redirect(route('user.settings.email'));
         }
 

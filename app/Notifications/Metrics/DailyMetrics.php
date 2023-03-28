@@ -28,7 +28,6 @@ class DailyMetrics extends Notification
      * Get the notification's delivery channels.
      *
      * @param  mixed  $notifiable
-     * @return array
      */
     public function via($notifiable): array
     {
@@ -39,7 +38,7 @@ class DailyMetrics extends Notification
     {
         $url = route('admin.metric.show', $this->metric->id);
 
-        $title = 'Neuly ' . ucfirst($this->metric->frequency) . ' Metrics ' . Carbon::now()->format('Y-m-d');
+        $title = 'Neuly '.ucfirst($this->metric->frequency).' Metrics '.Carbon::now()->format('Y-m-d');
 
         return (new SlackMessage)->content($title)
             ->attachment(function ($attachment) use ($url) {
@@ -57,21 +56,21 @@ class DailyMetrics extends Notification
                     ]);
             })
             ->attachment(function ($attachment) use ($url) {
-                $attachment->title($this->metric->events_total . ' Events', $url)
+                $attachment->title($this->metric->events_total.' Events', $url)
                     ->fields([
                         'Upcoming' => $this->metric->events_upcoming,
                         'Past' => $this->metric->events_past,
                     ]);
             })
             ->attachment(function ($attachment) use ($url) {
-                $attachment->title($this->metric->jobs_total . ' Jobs', $url)
+                $attachment->title($this->metric->jobs_total.' Jobs', $url)
                     ->fields([
                         'Open' => $this->metric->jobs_open,
                         'Archived' => $this->metric->jobs_archived,
                     ]);
             })
             ->attachment(function ($attachment) use ($url) {
-                $attachment->title($this->metric->media_items_total . ' Media Items', $url)
+                $attachment->title($this->metric->media_items_total.' Media Items', $url)
                     ->fields([
                         'News' => $this->metric->news,
                         'Articles' => $this->metric->articles,

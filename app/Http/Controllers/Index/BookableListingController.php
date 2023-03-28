@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Index;
 
 use App\Helpers\NotificationHelper;
 use App\Helpers\StringHelper;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\BookableListingReservationRequest;
 use App\Http\Requests\StoreBookableListingRequest;
-use App\Mail\BookableListingForReviewMail;
 use App\Mail\BookableListingReservationMail;
+use App\Models\BookableListing;
 use App\Models\BookableListingRequest;
 use App\Models\Company;
 use App\Models\Event;
@@ -15,12 +16,10 @@ use App\Models\Focus;
 use App\Models\Location;
 use App\Models\Person;
 use App\Notifications\BookableListingNotification;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use App\Http\Controllers\Controller;
-use App\Models\BookableListing;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -37,12 +36,12 @@ class BookableListingController extends Controller
 //        $this->middleware('query_filters')->only('index');
     }
 
-    public function index(Request $request) {
-
+    public function index(Request $request)
+    {
         // TODO: Validation on LAT/LONG/DISTANCE
 
-        $latitude = $request->input('latitude') ?? NULL;
-        $longitude = $request->input('longitude') ?? NULL;
+        $latitude = $request->input('latitude') ?? null;
+        $longitude = $request->input('longitude') ?? null;
         $locationName = 'your location';
         $locationSearch = false;
         $virtual = false;
@@ -60,7 +59,7 @@ class BookableListingController extends Controller
 
         $bookableListings = QueryBuilder::for(BookableListing::public()->practitioners());
 
-        if ($latitude !== NULL AND $longitude !== NULL) {
+        if ($latitude !== null and $longitude !== null) {
             $bookableListings = $bookableListings->selectRaw('(3959 * acos (
                 cos ( radians(?) )
                 * cos( radians( latitude ) )
@@ -69,18 +68,17 @@ class BookableListingController extends Controller
                 * sin( radians( latitude )))) AS distance', [
                 $latitude,
                 $longitude,
-                $latitude
+                $latitude,
             ])
                 ->havingRaw('distance <= ? OR 0', [$distance])
                 ->orderBy('distance', 'asc');
 
             try {
-                $locationNameRequest = Http::get('https://api.opencagedata.com/geocode/v1/json?q=' . $latitude . '+' . $longitude . '&key=' . config('services.opencage.api_key'));
+                $locationNameRequest = Http::get('https://api.opencagedata.com/geocode/v1/json?q='.$latitude.'+'.$longitude.'&key='.config('services.opencage.api_key'));
 
-                $locationName = $locationNameRequest['results'][0]['components']['city'] . ", " . $locationNameRequest['results'][0]['components']['state_code'] . ", " . $locationNameRequest['results'][0]['components']['ISO_3166-1_alpha-3'];
-
+                $locationName = $locationNameRequest['results'][0]['components']['city'].', '.$locationNameRequest['results'][0]['components']['state_code'].', '.$locationNameRequest['results'][0]['components']['ISO_3166-1_alpha-3'];
             } catch(\Throwable $throwable) {
-                Log::warning('Problem during practitioners search' . $throwable->getMessage());
+                Log::warning('Problem during practitioners search'.$throwable->getMessage());
             }
 
             $locationSearch = true;
@@ -95,7 +93,7 @@ class BookableListingController extends Controller
             ->allowedFilters([
                 AllowedFilter::partial('focus', 'focus.name'),
                 'type',
-                'virtual'
+                'virtual',
             ])
             ->paginate(15)
             ->appends(request()->query());
@@ -113,21 +111,21 @@ class BookableListingController extends Controller
             'filterTypes' => $filterTypes,
             'filterVirtual' => $virtual,
             'locationName' => $locationName,
-            'locationSearch' => $locationSearch
+            'locationSearch' => $locationSearch,
         ]);
     }
 
-    public function show($slug) {
-
+    public function show($slug)
+    {
         $bookableListing = BookableListing::with('bookable')->where([
-            'slug' => $slug
+            'slug' => $slug,
         ])->firstOrFail();
 
-        $bookableEntity = match($bookableListing->bookable_type) {
-            'App\Models\Company' => 'organizations',
-            'App\Models\Person' => 'people',
-            'App\Models\Course' => 'courses',
-            'App\Models\Event' => 'events',
+        $bookableEntity = match ($bookableListing->bookable_type) {
+            \App\Models\Company::class => 'organizations',
+            \App\Models\Person::class => 'people',
+            \App\Models\Course::class => 'courses',
+            \App\Models\Event::class => 'events',
         };
 
         return view('discover.bookable-listings.show', [
@@ -146,11 +144,10 @@ class BookableListingController extends Controller
 
         // TODO: where these going??
         $emails = config('mail.custom.admin_notifications_email');
-        $emailArray    = StringHelper::explodeAndFilterEmpty($emails, ',');
+        $emailArray = StringHelper::explodeAndFilterEmpty($emails, ',');
         Mail::to($emailArray)->send(new BookableListingReservationMail($bookableRequest));
 
         return redirect()->back()->with('success', 'Your request was sent successfully!');
-
     }
 
     public function create(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
@@ -167,7 +164,7 @@ class BookableListingController extends Controller
             'organizations' => $organizations,
             'people' => $people,
             'events' => $events,
-            'focuses' => $focuses
+            'focuses' => $focuses,
         ]);
     }
 
@@ -180,7 +177,7 @@ class BookableListingController extends Controller
         $attributes['user_id'] = Auth::id();
         $attributes['bookable_id'] = $bookableDetails[1];
 
-        $attributes['bookable_type'] = match($bookableDetails[0]) {
+        $attributes['bookable_type'] = match ($bookableDetails[0]) {
             'person' => Person::class,
             'organization' => Company::class,
             'event' => Event::class,
@@ -202,7 +199,6 @@ class BookableListingController extends Controller
         }
 
         if ($attributes['bookable_type'] == Event::class) {
-
             $event = Event::find($attributes['bookable_id']);
 
             if ($event) {
@@ -214,15 +210,15 @@ class BookableListingController extends Controller
         $bookableListing->save();
 
         // Focus
-        if (!empty($attributes['focus'])) {
+        if (! empty($attributes['focus'])) {
             $bookableListing->focus()->syncWithoutDetaching(array_keys($attributes['focus']));
         }
 
         // Add Description to Entity Content
         $bookableListing->content()->create([
-           'name' => 'Description',
-           'order' => 1,
-           'content' => $attributes['description']
+            'name' => 'Description',
+            'order' => 1,
+            'content' => $attributes['description'],
         ]);
 
         if ($bookableListing->status == BookableListing::STATUS_PENDING) {

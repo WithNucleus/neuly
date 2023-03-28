@@ -10,6 +10,7 @@ use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Focus extends Model implements EntityContract
@@ -29,10 +30,12 @@ class Focus extends Model implements EntityContract
     */
 
     protected $table = 'focus';
+
     protected $guarded = ['id'];
 
     // log activity for all attributes, which not listed in $guarded array
     protected static $logUnguarded = true;
+
     protected static $logName = 'entities';
 
     /*
@@ -53,12 +56,12 @@ class Focus extends Model implements EntityContract
 
     public function clinicaltrials(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany('App\Models\Clinicaltrial', 'clinicaltrial_focus', 'focus_id', 'clinicaltrial_id')->withTimestamps();
+        return $this->belongsToMany(\App\Models\Clinicaltrial::class, 'clinicaltrial_focus', 'focus_id', 'clinicaltrial_id')->withTimestamps();
     }
 
     public function companies(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany('App\Models\Company', 'company_focus', 'focus_id', 'company_id')->withTimestamps();
+        return $this->belongsToMany(\App\Models\Company::class, 'company_focus', 'focus_id', 'company_id')->withTimestamps();
     }
 
     public function courses(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
@@ -68,27 +71,27 @@ class Focus extends Model implements EntityContract
 
     public function events(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany('App\Models\Event', 'event_focus', 'focus_id', 'event_id')->withTimestamps();
+        return $this->belongsToMany(\App\Models\Event::class, 'event_focus', 'focus_id', 'event_id')->withTimestamps();
     }
 
     public function importResults(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany('App\Models\ImportResult');
+        return $this->hasMany(\App\Models\ImportResult::class);
     }
 
     public function jobs(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany('App\Models\Job', 'focus_job', 'focus_id', 'job_id')->withTimestamps();
+        return $this->belongsToMany(\App\Models\Job::class, 'focus_job', 'focus_id', 'job_id')->withTimestamps();
     }
 
     public function mediaItems(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany('App\Models\MediaItem', 'focus_media_item', 'focus_id', 'media_item_id');
+        return $this->belongsToMany(\App\Models\MediaItem::class, 'focus_media_item', 'focus_id', 'media_item_id');
     }
 
     public function patents(): \Illuminate\Database\Eloquent\Relations\MorphToMany
     {
-        return $this->morphToMany(Patent::class, 'entity' , 'patent_relationships')->withTimestamps();
+        return $this->morphToMany(Patent::class, 'entity', 'patent_relationships')->withTimestamps();
     }
 
     public function people(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
@@ -98,7 +101,7 @@ class Focus extends Model implements EntityContract
 
     public function research(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany('App\Models\Research', 'focus_research', 'focus_id', 'research_id')->withTimestamps();
+        return $this->belongsToMany(\App\Models\Research::class, 'focus_research', 'focus_id', 'research_id')->withTimestamps();
     }
 
     /*
@@ -108,7 +111,6 @@ class Focus extends Model implements EntityContract
     */
 
     /**
-     * @param $query
      * @return mixed
      */
     public function scopeDrugs($query)
@@ -122,7 +124,7 @@ class Focus extends Model implements EntityContract
     }
 
     /**
-     * @param \Illuminate\Database\Query\Builder $query
+     * @param  \Illuminate\Database\Query\Builder  $query
      * @return \Illuminate\Database\Query\Builder
      */
     public function scopeHasJobs($query)
@@ -165,41 +167,41 @@ class Focus extends Model implements EntityContract
     {
         return [
             //attributes
-            'name'           => [
+            'name' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'slug'           => [
+            'slug' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
             //relations
             'clinicaltrials' => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'title',
             ],
-            'companies'      => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'companies' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
-            'events'         => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'events' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
-            'jobs'           => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'jobs' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'job_title',
             ],
-            'people'       => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'people' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
-            'research'       => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'research' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
         ];
@@ -215,5 +217,11 @@ class Focus extends Model implements EntityContract
         }
 
         return $mapping;
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->useLogName(self::$logName);
     }
 }

@@ -41,13 +41,11 @@ class ParseClinicalTrialAge extends Command
     {
         $trials = Clinicaltrial::all();
 
-        foreach($trials as $trial)
-        {
+        foreach ($trials as $trial) {
             $ages = [];
             $matches = ParsingAgeHelper::getRelevantPassages($trial->age);
 
-            foreach($matches as $match)
-            {
+            foreach ($matches as $match) {
                 $ages[] = ParsingAgeHelper::getAgeValue($match);
             }
 

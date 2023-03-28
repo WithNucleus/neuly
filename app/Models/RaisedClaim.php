@@ -11,6 +11,7 @@ class RaisedClaim extends Model
     use CrudTrait;
 
     protected $table = 'raised_claims';
+
     protected $guarded = ['id'];
 
     public static function generateToken()
@@ -30,6 +31,6 @@ class RaisedClaim extends Model
 
     public function getApproveButton()
     {
-        return '<a href="'. route('admin.person-claim.approve', $this->id).'" class="btn btn-sm btn-link"><i class="la la-thumbs-up"></i> approve claim</a>';
+        return '<a href="'.route('admin.person-claim.approve', $this->id).'" class="btn btn-sm btn-link"><i class="la la-thumbs-up"></i> approve claim</a>';
     }
 }

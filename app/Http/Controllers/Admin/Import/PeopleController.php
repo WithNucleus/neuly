@@ -18,7 +18,7 @@ class PeopleController extends Controller
 
     /**
      * Processes the CSV upload for people import.
-     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
     public function process(Request $request)
@@ -42,8 +42,9 @@ class PeopleController extends Controller
 
     /**
      * Process each CSV record.
-     * @param array $record
-     * @param array $headings
+     *
+     * @param  array  $record
+     * @param  array  $headings
      * @return array
      */
     private function processRecord($record, $headings, $idIndex, $nameIndex)

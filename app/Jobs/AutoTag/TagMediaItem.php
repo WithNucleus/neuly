@@ -7,12 +7,10 @@ use App\Models\Focus;
 use App\Models\MediaItem;
 use App\Models\Person;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
 class TagMediaItem implements ShouldQueue
 {
@@ -41,7 +39,7 @@ class TagMediaItem implements ShouldQueue
         $organizations = Company::pluck('name', 'id')->toArray();
         $people = Person::pluck('name', 'id')->toArray();
 
-        $content = $this->mediaItem->name . " " . $this->mediaItem->summary . " " . $this->mediaItem->content;
+        $content = $this->mediaItem->name.' '.$this->mediaItem->summary.' '.$this->mediaItem->content;
 
         $focusArray = $this->searchRelationships($focuses, $content);
         $organizationArray = $this->searchRelationships($organizations, $content);
@@ -57,7 +55,6 @@ class TagMediaItem implements ShouldQueue
         $termArray = [];
 
         foreach ($termList as $id => $term) {
-
             $termSearch = str_replace(['/', '&'], '', $term);
 
             if ($caseSensitive === true) {

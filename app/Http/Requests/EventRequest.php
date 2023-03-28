@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Http\Requests\Request;
 use Illuminate\Foundation\Http\FormRequest;
 
 class EventRequest extends FormRequest
@@ -27,8 +26,8 @@ class EventRequest extends FormRequest
     {
         return [
             'name' => 'required|min:5|max:255',
-            'slug' => 'required|min:3|max:255|unique:events,slug,' . $this->get('id'),
-            'start_date' => 'required'
+            'slug' => 'required|min:3|max:255|unique:events,slug,'.$this->get('id'),
+            'start_date' => 'required',
         ];
     }
 

@@ -10,7 +10,6 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 
 class FollowListsController extends Controller
 {
@@ -33,25 +32,24 @@ class FollowListsController extends Controller
     }
 
     /**
-     * @param \App\Http\Requests\FollowListRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(FollowListRequest $request)
     {
-        $list              = new FollowList();
-        $list->user_id     = Auth::id();
-        $list->name        = $request->input('name');
+        $list = new FollowList();
+        $list->user_id = Auth::id();
+        $list->name = $request->input('name');
         $list->description = $request->input('description');
-        $list->is_public   = $request->input('is_public', 0);
+        $list->is_public = $request->input('is_public', 0);
         $list->save();
 
-        session()->flash('success', $list->name . ' was created!');
+        session()->flash('success', $list->name.' was created!');
 
         return redirect()->back();
     }
 
     /**
-     * @param string $slug
+     * @param  string  $slug
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function show($slug)
@@ -65,7 +63,7 @@ class FollowListsController extends Controller
     }
 
     /**
-     * @param string $slug
+     * @param  string  $slug
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit($slug)
@@ -78,8 +76,7 @@ class FollowListsController extends Controller
     }
 
     /**
-     * @param \App\Http\Requests\FollowListRequest $request
-     * @param int $id
+     * @param  int  $id
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(FollowListRequest $request, $id)
@@ -87,24 +84,24 @@ class FollowListsController extends Controller
         $list = FollowList::where('user_id', Auth::id())
             ->findOrFail($id);
 
-        $list->name        = $request->input('name');
-        $list->slug        = $request->input('slug');
+        $list->name = $request->input('name');
+        $list->slug = $request->input('slug');
         $list->description = $request->input('description');
-        $list->is_public   = $request->input('is_public', 0);
+        $list->is_public = $request->input('is_public', 0);
         $list->save();
 
         return redirect()
             ->route('member.follow-lists.index')
-            ->with('success', $list->name . ' was updated');
+            ->with('success', $list->name.' was updated');
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy($id)
     {
-        $list     = FollowList::where('user_id', Auth::id())
+        $list = FollowList::where('user_id', Auth::id())
             ->findOrFail($id);
         $listName = $list->name;
 
@@ -112,12 +109,12 @@ class FollowListsController extends Controller
 
         return redirect()
             ->route('member.follow-lists.index')
-            ->with('success', $listName . ' was deleted.');
+            ->with('success', $listName.' was deleted.');
     }
 
     /**
-     * @param string $member_url
-     * @param string $slug
+     * @param  string  $member_url
+     * @param  string  $slug
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function showPublic($member_url, $slug)
@@ -133,13 +130,12 @@ class FollowListsController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function validateName(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|min:3|max:255|unique:follow_lists,name,NULL,id,user_id,' . auth()->user()->id,
+            'name' => 'required|min:3|max:255|unique:follow_lists,name,NULL,id,user_id,'.auth()->user()->id,
         ]);
 
         if ($validator->passes()) {
@@ -148,21 +144,20 @@ class FollowListsController extends Controller
 
         return response()->json([
             'status' => 'error',
-            'errors' => $validator->errors()->all()
+            'errors' => $validator->errors()->all(),
         ]);
     }
 
     /**
-     * @param \App\Http\Requests\FollowListRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function ajaxStore(FollowListRequest $request)
     {
-        $list              = new FollowList();
-        $list->user_id     = Auth::id();
-        $list->name        = $request->input('name');
+        $list = new FollowList();
+        $list->user_id = Auth::id();
+        $list->name = $request->input('name');
         $list->description = $request->input('description');
-        $list->is_public   = $request->input('is_public', 0);
+        $list->is_public = $request->input('is_public', 0);
         $list->save();
 
         return response()->json([
@@ -170,7 +165,7 @@ class FollowListsController extends Controller
             'data' => [
                 'id' => $list->id,
                 'name' => $list->name,
-            ]
+            ],
         ]);
     }
 }

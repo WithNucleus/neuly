@@ -24,14 +24,14 @@ class WidgetRequest extends FormRequest
     public function rules()
     {
         return [
-             'content' => 'required',
+            'content' => 'required',
         ];
     }
 
     public function messages()
     {
         return [
-            'content.required' => 'Please enter a request.'
+            'content.required' => 'Please enter a request.',
         ];
     }
 }

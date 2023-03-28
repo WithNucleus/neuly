@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddForeignKeysToRelationships extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,35 +13,35 @@ class AddForeignKeysToRelationships extends Migration
      */
     public function up()
     {
-        Schema::table('clinicaltrial_condition', function(Blueprint $table) {
-           $table->dropForeign(['clinicaltrial_id']);
-        });
-
-        Schema::table('clinicaltrial_intervention', function(Blueprint $table) {
+        Schema::table('clinicaltrial_condition', function (Blueprint $table) {
             $table->dropForeign(['clinicaltrial_id']);
         });
 
-        Schema::table('clinicaltrial_outcome_measure', function(Blueprint $table) {
+        Schema::table('clinicaltrial_intervention', function (Blueprint $table) {
             $table->dropForeign(['clinicaltrial_id']);
         });
 
-        Schema::table('clinicaltrial_study_design', function(Blueprint $table) {
+        Schema::table('clinicaltrial_outcome_measure', function (Blueprint $table) {
             $table->dropForeign(['clinicaltrial_id']);
         });
 
-        Schema::table('clinicaltrials', function (Blueprint  $table) {
+        Schema::table('clinicaltrial_study_design', function (Blueprint $table) {
+            $table->dropForeign(['clinicaltrial_id']);
+        });
+
+        Schema::table('clinicaltrials', function (Blueprint $table) {
             $table->bigIncrements('id')->change();
         });
 
-        Schema::table('locations', function (Blueprint  $table) {
+        Schema::table('locations', function (Blueprint $table) {
             $table->bigIncrements('id')->change();
         });
 
-        Schema::table('people', function (Blueprint  $table) {
+        Schema::table('people', function (Blueprint $table) {
             $table->bigIncrements('id')->change();
         });
 
-        Schema::table('clinicaltrial_condition', function(Blueprint $table) {
+        Schema::table('clinicaltrial_condition', function (Blueprint $table) {
             $table->unsignedBigInteger('clinicaltrial_id')->change();
 
             $table->foreign('clinicaltrial_id')
@@ -51,7 +51,7 @@ class AddForeignKeysToRelationships extends Migration
                 ->onDelete('cascade');
         });
 
-        Schema::table('clinicaltrial_intervention', function(Blueprint $table) {
+        Schema::table('clinicaltrial_intervention', function (Blueprint $table) {
             $table->unsignedBigInteger('clinicaltrial_id')->change();
 
             $table->foreign('clinicaltrial_id')
@@ -61,7 +61,7 @@ class AddForeignKeysToRelationships extends Migration
                 ->onDelete('cascade');
         });
 
-        Schema::table('clinicaltrial_outcome_measure', function(Blueprint $table) {
+        Schema::table('clinicaltrial_outcome_measure', function (Blueprint $table) {
             $table->unsignedBigInteger('clinicaltrial_id')->change();
 
             $table->foreign('clinicaltrial_id')
@@ -71,7 +71,7 @@ class AddForeignKeysToRelationships extends Migration
                 ->onDelete('cascade');
         });
 
-        Schema::table('clinicaltrial_study_design', function(Blueprint $table) {
+        Schema::table('clinicaltrial_study_design', function (Blueprint $table) {
             $table->unsignedBigInteger('clinicaltrial_id')->change();
 
             $table->foreign('clinicaltrial_id')
@@ -98,7 +98,7 @@ class AddForeignKeysToRelationships extends Migration
                 ->onDelete('cascade');
         });
 
-        Schema::table('clinicaltrial_focus', function (Blueprint  $table) {
+        Schema::table('clinicaltrial_focus', function (Blueprint $table) {
             $table->unsignedBigInteger('focus_id')->change();
             $table->unsignedBigInteger('clinicaltrial_id')->change();
 
@@ -424,7 +424,7 @@ class AddForeignKeysToRelationships extends Migration
                 ->onDelete('cascade');
         });
 
-        Schema::table('email_resets', function (Blueprint  $table) {
+        Schema::table('email_resets', function (Blueprint $table) {
             $table->unsignedBigInteger('user_id')->change();
 
             $table->foreign('user_id')
@@ -434,7 +434,7 @@ class AddForeignKeysToRelationships extends Migration
                 ->onDelete('cascade');
         });
 
-        Schema::table('followables', function (Blueprint  $table) {
+        Schema::table('followables', function (Blueprint $table) {
             $table->unsignedBigInteger('user_id')->change();
 
             $table->foreign('user_id')
@@ -674,27 +674,27 @@ class AddForeignKeysToRelationships extends Migration
             $table->bigInteger('user_id')->change();
         });
 
-        Schema::table('clinicaltrial_condition', function(Blueprint $table) {
+        Schema::table('clinicaltrial_condition', function (Blueprint $table) {
             $table->dropForeign(['clinicaltrial_id']);
         });
 
-        Schema::table('clinicaltrial_intervention', function(Blueprint $table) {
+        Schema::table('clinicaltrial_intervention', function (Blueprint $table) {
             $table->dropForeign(['clinicaltrial_id']);
         });
 
-        Schema::table('clinicaltrial_outcome_measure', function(Blueprint $table) {
+        Schema::table('clinicaltrial_outcome_measure', function (Blueprint $table) {
             $table->dropForeign(['clinicaltrial_id']);
         });
 
-        Schema::table('clinicaltrial_study_design', function(Blueprint $table) {
+        Schema::table('clinicaltrial_study_design', function (Blueprint $table) {
             $table->dropForeign(['clinicaltrial_id']);
         });
 
-        Schema::table('clinicaltrials', function (Blueprint  $table) {
+        Schema::table('clinicaltrials', function (Blueprint $table) {
             $table->increments('id')->change();
         });
 
-        Schema::table('clinicaltrial_condition', function(Blueprint $table) {
+        Schema::table('clinicaltrial_condition', function (Blueprint $table) {
             $table->unsignedInteger('clinicaltrial_id')->change();
 
             $table->foreign('clinicaltrial_id')
@@ -704,7 +704,7 @@ class AddForeignKeysToRelationships extends Migration
                 ->onDelete('cascade');
         });
 
-        Schema::table('clinicaltrial_intervention', function(Blueprint $table) {
+        Schema::table('clinicaltrial_intervention', function (Blueprint $table) {
             $table->unsignedInteger('clinicaltrial_id')->change();
 
             $table->foreign('clinicaltrial_id')
@@ -714,7 +714,7 @@ class AddForeignKeysToRelationships extends Migration
                 ->onDelete('cascade');
         });
 
-        Schema::table('clinicaltrial_outcome_measure', function(Blueprint $table) {
+        Schema::table('clinicaltrial_outcome_measure', function (Blueprint $table) {
             $table->unsignedInteger('clinicaltrial_id')->change();
 
             $table->foreign('clinicaltrial_id')
@@ -724,7 +724,7 @@ class AddForeignKeysToRelationships extends Migration
                 ->onDelete('cascade');
         });
 
-        Schema::table('clinicaltrial_study_design', function(Blueprint $table) {
+        Schema::table('clinicaltrial_study_design', function (Blueprint $table) {
             $table->unsignedInteger('clinicaltrial_id')->change();
 
             $table->foreign('clinicaltrial_id')
@@ -734,12 +734,12 @@ class AddForeignKeysToRelationships extends Migration
                 ->onDelete('cascade');
         });
 
-        Schema::table('locations', function (Blueprint  $table) {
+        Schema::table('locations', function (Blueprint $table) {
             $table->increments('id')->change();
         });
 
-        Schema::table('people', function (Blueprint  $table) {
+        Schema::table('people', function (Blueprint $table) {
             $table->increments('id')->change();
         });
     }
-}
+};

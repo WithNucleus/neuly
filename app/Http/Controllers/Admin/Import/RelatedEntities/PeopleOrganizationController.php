@@ -34,13 +34,13 @@ class PeopleOrganizationController extends Controller
         $records = array_map('str_getcsv', file($request->file('csv')));
 
         $importResult = ImportResult::create([
-            'type'    => ImportResult::TYPE_RELATED_ENTITIES_PEOPLE_ORGANIZATION,
-            'csv'     => json_encode($records),
+            'type' => ImportResult::TYPE_RELATED_ENTITIES_PEOPLE_ORGANIZATION,
+            'csv' => json_encode($records),
             'user_id' => Auth::id(),
         ]);
 
         $columnIndexes = [];
-        $headings      = array_shift($records);
+        $headings = array_shift($records);
 
         foreach ($headings as $index => $column) {
             $lowerColumn = strtolower(trim($column));
@@ -57,21 +57,21 @@ class PeopleOrganizationController extends Controller
         foreach ($records as $record) {
             try {
                 $recordTrimmed = array_map('trim', $record);
-                $companyId     = $recordTrimmed[$columnIndexes['organization id']];
-                $personData    = [
-                    'name'     => $recordTrimmed[$columnIndexes['person name']],
-                    'email'    => $recordTrimmed[$columnIndexes['email']],
+                $companyId = $recordTrimmed[$columnIndexes['organization id']];
+                $personData = [
+                    'name' => $recordTrimmed[$columnIndexes['person name']],
+                    'email' => $recordTrimmed[$columnIndexes['email']],
                     'position' => $recordTrimmed[$columnIndexes['position']],
                     'location' => $recordTrimmed[$columnIndexes['location']],
                     'linkedin' => $recordTrimmed[$columnIndexes['linkedin']],
                 ];
 
-                if (!empty($personData['name'])) {
+                if (! empty($personData['name'])) {
                     ProcessPeopleOrganization::dispatch($importResult, $companyId, $personData);
                 }
             } catch (\Exception $e) {
                 Log::error('CSV row import exception!
-                Row data: ' . json_encode($recordTrimmed) . '. Error message: ' . $e->getMessage());
+                Row data: '.json_encode($recordTrimmed).'. Error message: '.$e->getMessage());
 
                 continue;
             }
@@ -83,7 +83,7 @@ class PeopleOrganizationController extends Controller
     public function results($id)
     {
         $result = ImportResult::relatedEntitiesPeopleOrganization()->findOrFail($id);
-        $peopleMessages   = json_decode($result->people_messages);
+        $peopleMessages = json_decode($result->people_messages);
         $locationMessages = json_decode($result->location_messages);
         $csv = json_decode($result->csv);
 

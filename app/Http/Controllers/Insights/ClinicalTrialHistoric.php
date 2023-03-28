@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Insights;
 
 use App\Http\Controllers\Controller;
-use App\Models\Focus;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 

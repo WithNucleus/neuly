@@ -15,7 +15,7 @@ class UserClaimPersonController extends Controller
 {
     public function status()
     {
-        $user= Auth::user();
+        $user = Auth::user();
         $claims = RaisedClaim::where('user_id', '=', $user->id)
             ->whereNotNull('verification_token')
             ->get();
@@ -23,7 +23,8 @@ class UserClaimPersonController extends Controller
         return view('members.person.status', compact('claims', 'user'));
     }
 
-    public function verifyEmail() {
+    public function verifyEmail()
+    {
         return view('members.person.verify-mail');
     }
 
@@ -62,7 +63,8 @@ class UserClaimPersonController extends Controller
             ->with('success', 'Your claim was successfully granted.');
     }
 
-    public function verifySocial() {
+    public function verifySocial()
+    {
         $user = Auth::user();
         $claim = RaisedClaim::where('user_id', $user->id)
             ->whereNotNull('verification_token')
@@ -85,7 +87,7 @@ class UserClaimPersonController extends Controller
 
         if (ClaimPersonHelper::checkBySocials($user, $person) === false) {
             return redirect()->route('user.person.status')
-                ->with('error', 'You need to connect one of these social profiles to your account: ' . implode(', ', $personSocials) . '.');
+                ->with('error', 'You need to connect one of these social profiles to your account: '.implode(', ', $personSocials).'.');
         }
 
         ClaimPersonHelper::acceptClaim($user, $person, $claim);

@@ -16,6 +16,7 @@ class CompanyValuation extends Model
     */
 
     protected $table = 'company_valuations';
+
     protected $guarded = ['id'];
 
     /*

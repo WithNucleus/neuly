@@ -7,13 +7,13 @@ use App\Http\Controllers\Controller;
 use App\Jobs\Import\ClinicalTrial\ProcessLocation;
 use App\Jobs\Import\ClinicalTrial\ProcessSimpleRelationValues;
 use App\Jobs\Import\ClinicalTrial\ProcessSponsorCollaborators;
+use App\Models\Clinicaltrial;
 use App\Models\Focus;
+use App\Models\ImportResult;
+use Auth;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Carbon\Carbon;
-use App\Models\Clinicaltrial;
-use Auth;
-use App\Models\ImportResult;
 
 class ClinicalTrialController extends Controller
 {
@@ -24,26 +24,26 @@ class ClinicalTrialController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(['role:Admin','permission:import']);
+        $this->middleware(['role:Admin', 'permission:import']);
     }
 
     public function importClinicaltrials()
     {
-    	$focusCats = Focus::drugs()->orderBy('name')->get();
-    	$importResults = ImportResult::clinicalTrials()
-    		->latest()
-    		->take(20)
-    		->get();
+        $focusCats = Focus::drugs()->orderBy('name')->get();
+        $importResults = ImportResult::clinicalTrials()
+            ->latest()
+            ->take(20)
+            ->get();
 
-    	return view('admin.import.clinicaltrials', compact('importResults', 'focusCats'));
+        return view('admin.import.clinicaltrials', compact('importResults', 'focusCats'));
     }
 
     public function processClinicaltrials(Request $request)
     {
-    	$validated = $request->validate([
-        	'focus_id' => 'required|integer',
-        	'csv' => 'required|mimes:csv,txt',
-    	]);
+        $validated = $request->validate([
+            'focus_id' => 'required|integer',
+            'csv' => 'required|mimes:csv,txt',
+        ]);
 
         $focusId = $request->input('focus_id');
         $useOrganisationMapping = $request->input('organisation_mapping');
@@ -57,86 +57,76 @@ class ClinicalTrialController extends Controller
             'last_update_posted',
         ];
 
-        $records          = array_map('str_getcsv', file($request->file('csv')));
+        $records = array_map('str_getcsv', file($request->file('csv')));
         $importAttributes = [
-            'type'     => ImportResult::TYPE_CLINICAL_TRIALS,
-            'entity'   => 'Clinical Trials',
-            'csv'      => json_encode($records),
-            'user_id'  => Auth::id(),
+            'type' => ImportResult::TYPE_CLINICAL_TRIALS,
+            'entity' => 'Clinical Trials',
+            'csv' => json_encode($records),
+            'user_id' => Auth::id(),
             'focus_id' => $focusId,
-            'options'  => [
+            'options' => [
                 'useOrganisationMapping' => $useOrganisationMapping,
             ],
         ];
-        $importResult     = ImportResult::create($importAttributes);
+        $importResult = ImportResult::create($importAttributes);
 
         $headings = array_shift($records);
 
-    	foreach ($headings as $key => $value) {
-    		$new_value = Str::slug($value, '_');
+        foreach ($headings as $key => $value) {
+            $new_value = Str::slug($value, '_');
 
-    		if ($new_value == 'url') {
-    			$new_value = 'study_url';
-    		}
+            if ($new_value == 'url') {
+                $new_value = 'study_url';
+            }
 
-    		$headings[$key] = $new_value;
-    	}
+            $headings[$key] = $new_value;
+        }
 
-    	foreach ($records as $record) {
-
-            $nctNumber            = '';
-            $locations            = [];
+        foreach ($records as $record) {
+            $nctNumber = '';
+            $locations = [];
             $sponsorCollaborators = [];
-            $conditions           = [];
-            $interventions        = [];
-            $outcomeMeasures      = [];
-            $studyDesigns         = [];
-            $attributes           = [];
+            $conditions = [];
+            $interventions = [];
+            $outcomeMeasures = [];
+            $studyDesigns = [];
+            $attributes = [];
 
-    		// Loop through columns in a record
-    		foreach ($record as $key => $value) {
-	    		$column = $headings[$key];
+            // Loop through columns in a record
+            foreach ($record as $key => $value) {
+                $column = $headings[$key];
                 $value = trim($value);
 
                 if ($value == '') {
                     continue;
                 }
 
-	    		// if column name
-	    		if ($column == 'nct_number') {
+                // if column name
+                if ($column == 'nct_number') {
                     $nctNumber = $value;
-	    			$attributes['nct_number'] = $nctNumber;
-
-	    		} elseif (in_array($column, $dateColumns)) {
-	    			$attributes[$column] = Carbon::parse($value)->format('Y-m-d');
-
+                    $attributes['nct_number'] = $nctNumber;
+                } elseif (in_array($column, $dateColumns)) {
+                    $attributes[$column] = Carbon::parse($value)->format('Y-m-d');
                 } elseif ($column == 'locations') {
                     $locations = StringHelper::explodeAndFilterEmpty($value, '|');
-
                 } elseif ($column == 'sponsorcollaborators') {
                     $sponsorCollaborators = StringHelper::explodeAndFilterEmpty($value, '|');
-
                 } elseif ($column == 'conditions') {
                     $conditions = StringHelper::explodeAndFilterEmpty($value, '|');
-
                 } elseif ($column == 'interventions') {
                     $interventions = StringHelper::explodeAndFilterEmpty($value, '|');
-
                 } elseif ($column == 'outcome_measures') {
                     $outcomeMeasures = StringHelper::explodeAndFilterEmpty($value, '|');
-
                 } elseif ($column == 'study_designs') {
                     $studyDesigns = StringHelper::explodeAndFilterEmpty($value, '|');
+                } elseif ($column == 'rank' or $column == 'study_documents') {
+                    // ignore these
+                } else {
+                    $attributes[$column] = $value;
+                }
+            }
 
-                } elseif ($column == 'rank' OR $column == 'study_documents') {
-	    			// ignore these
-
-	    		} else {
-	    			$attributes[$column] = $value;
-	    		}
-	    	}
-
-    		if (!isset($clinicaltrialCache[$nctNumber])) {
+            if (! isset($clinicaltrialCache[$nctNumber])) {
                 $clinicaltrialCache[$nctNumber] = Clinicaltrial::updateOrCreate(
                     ['nct_number' => $nctNumber],
                     $attributes
@@ -145,11 +135,11 @@ class ClinicalTrialController extends Controller
 
             $clinicaltrial = $clinicaltrialCache[$nctNumber];
 
-			if ($locations !== []) {
+            if ($locations !== []) {
                 ProcessLocation::dispatch($clinicaltrial, $importResult, $locations);
-			}
+            }
 
-			if ($sponsorCollaborators !== []) {
+            if ($sponsorCollaborators !== []) {
                 ProcessSponsorCollaborators::dispatch($clinicaltrial, $importResult, $sponsorCollaborators);
             }
 
@@ -169,9 +159,9 @@ class ClinicalTrialController extends Controller
                 ProcessSimpleRelationValues::dispatch($clinicaltrial, $studyDesigns, 'studyDesigns');
             }
 
-	    	$clinicaltrial->focus()->syncWithoutDetaching($focusId);
-    	}
+            $clinicaltrial->focus()->syncWithoutDetaching($focusId);
+        }
 
-    	return redirect(route('import.clinicaltrials'));
+        return redirect(route('import.clinicaltrials'));
     }
 }

@@ -7,7 +7,6 @@ use Illuminate\Support\Str;
 class MapHelper
 {
     /**
-     * @param $country
      * @return array $map
      */
     public static function getCountryMap(string $country)

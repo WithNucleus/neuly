@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\Rule;
 
 class FeedbackApiRequest extends FormRequest
@@ -33,18 +33,18 @@ class FeedbackApiRequest extends FormRequest
             'url' => 'sometimes|nullable|url',
             'type' => [
                 'required',
-                Rule::in(['problem', 'feedback', 'bug', 'suggestion', 'feature request'])
-            ]
+                Rule::in(['problem', 'feedback', 'bug', 'suggestion', 'feature request']),
+            ],
         ];
 
         $unauthedUserRules = [
             'user_name' => 'required|string',
-            'user_email' => 'required|email'
+            'user_email' => 'required|email',
         ];
 
         $rules = $generalRules;
 
-        if(!Auth::user()) {
+        if (! Auth::user()) {
             $rules = array_merge($unauthedUserRules, $generalRules);
         }
 

@@ -17,7 +17,7 @@ return [
          * --disable-notifications
          */
         'backpack_flags' => [
-            '--disable-notifications'=> true,
+            '--disable-notifications' => true,
         ],
 
         /*
@@ -46,7 +46,7 @@ return [
                     base_path('vendor'),
                     base_path('node_modules'),
                     base_path('storage/backups'),
-                    base_path('.git')
+                    base_path('.git'),
                 ],
 
                 /*
@@ -174,10 +174,10 @@ return [
      */
     'monitor_backups' => [
         [
-            'name'          => env('APP_NAME', 'laravel-backup'),
-            'disks'         => ['local'],
+            'name' => env('APP_NAME', 'laravel-backup'),
+            'disks' => ['local'],
             'health_checks' => [
-                \Spatie\Backup\Tasks\Monitor\HealthChecks\MaximumAgeInDays::class          => 1,
+                \Spatie\Backup\Tasks\Monitor\HealthChecks\MaximumAgeInDays::class => 1,
                 \Spatie\Backup\Tasks\Monitor\HealthChecks\MaximumStorageInMegabytes::class => 5000,
             ],
         ],

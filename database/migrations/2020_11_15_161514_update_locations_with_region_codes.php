@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
 use App\Models\Location;
+use Illuminate\Database\Migrations\Migration;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
-class UpdateLocationsWithRegionCodes extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -75,7 +75,7 @@ class UpdateLocationsWithRegionCodes extends Migration
             if (array_key_exists($location->region, $us_regions)) {
                 $location->region_code = $us_regions[$location->region];
                 $location->save();
-                $output->writeln($location->name . ' region updated');
+                $output->writeln($location->name.' region updated');
             }
         }
     }
@@ -89,4 +89,4 @@ class UpdateLocationsWithRegionCodes extends Migration
     {
         // no need
     }
-}
+};

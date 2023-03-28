@@ -18,9 +18,9 @@ class PageController extends Controller
         $this->data['page'] = $page->withFakes();
 
         $this->data['metas'] = [
-            'title'         => $page->extras['meta_title'],
-            'description'   => $page->extras['meta_description'],
-            'image'         => $page->meta_image,
+            'title' => $page->extras['meta_title'],
+            'description' => $page->extras['meta_description'],
+            'image' => $page->meta_image,
         ];
 
         return view('pages.'.$page->template, $this->data);

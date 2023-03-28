@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Http\Requests\Request;
 use Illuminate\Foundation\Http\FormRequest;
 
 class JobRequest extends FormRequest
@@ -27,10 +26,9 @@ class JobRequest extends FormRequest
     {
         return [
             'job_title' => 'required|min:5|max:255',
-            'slug' => 'required|min:3|max:255|unique:jobs,slug,' . $this->get('id'),
+            'slug' => 'required|min:3|max:255|unique:jobs,slug,'.$this->get('id'),
             'posted_date' => 'required',
-            'owner_id' => 'required',
-            'owner_type' => 'required',
+            'owner' => 'required',
             'employment_type' => 'required',
             'job_description' => 'required',
         ];

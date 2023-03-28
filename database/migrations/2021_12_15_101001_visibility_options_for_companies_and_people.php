@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class VisibilityOptionsForCompaniesAndPeople extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,6 @@ class VisibilityOptionsForCompaniesAndPeople extends Migration
      */
     public function up()
     {
-
         // Drop Original Visibility Column for People
         Schema::table('people', function (Blueprint $table) {
             $table->dropColumn('visibility');
@@ -51,4 +50,4 @@ class VisibilityOptionsForCompaniesAndPeople extends Migration
             $table->enum('visibility', ['neuly', 'public'])->default('public');
         });
     }
-}
+};

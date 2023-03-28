@@ -1,9 +1,10 @@
 <?php
+
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class RolesAndPermissionsSeeder extends Seeder
 {
@@ -19,7 +20,7 @@ class RolesAndPermissionsSeeder extends Seeder
 
         // Create permissions
 
-        $permissions = array(
+        $permissions = [
             'admin login',
             'edit companies',
             'edit users',
@@ -49,7 +50,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'manage navigation tiles',
             'enterprise demo',
             'nucleus tools',
-        );
+        ];
 
         foreach ($permissions as $permission) {
             Permission::updateOrCreate(['name' => $permission]);
@@ -62,7 +63,7 @@ class RolesAndPermissionsSeeder extends Seeder
 
         // Create roles and assign permissions
 
-        $roles = array(
+        $roles = [
             'Subscriber' => [],
             'Premium' => [],
             'Editor' => ['edit companies', 'admin login', 'edit investors', 'edit people', 'edit events', 'enterprise demo'],
@@ -70,7 +71,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'Enterprise' => [],
             'Team owner' => [],
             'Team member' => [],
-        );
+        ];
 
         foreach ($roles as $roleName => $permissions) {
             $role = Role::create(['name' => $roleName]);

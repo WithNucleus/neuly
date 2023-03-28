@@ -9,6 +9,7 @@ class RankableEntity extends Model
     public $timestamps = false;
 
     protected $table = 'rankable_entities';
+
     protected $guarded = ['ranked_list_id'];
 
     public function rankable()

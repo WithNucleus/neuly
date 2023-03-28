@@ -18,6 +18,7 @@ class InsightRequest extends Model
     */
 
     protected $table = 'insight_requests';
+
     protected $guarded = ['id'];
 
     /*

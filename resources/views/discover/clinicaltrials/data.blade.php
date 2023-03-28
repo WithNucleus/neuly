@@ -1,5 +1,5 @@
 <?php
-$primary_fields = array(
+$primary_fields = [
     'study_type' => ['type' => 'text', 'label' => 'Study type'],
     'status' => ['type' => 'text', 'label' => 'Status'],
     'study_results' => ['type' => 'text', 'label' => 'Study results'],
@@ -8,23 +8,23 @@ $primary_fields = array(
     'age' => ['type' => 'text', 'label' => 'Age'],
     'enrollment' => ['type' => 'text', 'label' => 'Enrollment'],
     'funded_bys' => ['type' => 'text', 'label' => 'Funded by'],
-);
+];
 
-$secondary_fields = array(
+$secondary_fields = [
     'nct_number' => ['type' => 'text', 'label' => 'NCT Number'],
     'acronym' => ['type' => 'text', 'label' => 'Acronym'],
     'other_ids' => ['type' => 'text', 'label' => 'Other IDs'],
     'study_url' => ['type' => 'url', 'label' => 'Study URL']
-);
+];
 
-$dates = array(
+$dates = [
     'start_date' => ['type' => 'date', 'label' => 'Start date'],
     'primary_completion_date' => ['type' => 'date', 'label' => 'Primary completion date'],
     'completion_date' => ['type' => 'date', 'label' => 'Completion date'],
     'first_posted' => ['type' => 'date', 'label' => 'First posted'],
     'results_first_posted' => ['type' => 'date', 'label' => 'Results first posted'],
     'last_update_posted' => ['type' => 'date', 'label' => 'Last update posted'],
-);
+];
 ?>
 
 @auth

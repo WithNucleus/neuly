@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Insights;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
@@ -40,7 +39,6 @@ class ClinicalTrialDistributionController extends Controller
 
     private function buildCountryQuery()
     {
-
         $query = $this->getQuery($this->getSubQuery());
         $query = $this->selectByCountries($query);
         $query = $this->groupByCountries($query);
@@ -109,10 +107,10 @@ class ClinicalTrialDistributionController extends Controller
     {
         $mappedArray = [];
 
-        foreach($items as $item) {
+        foreach ($items as $item) {
             $mappedArray[$item->alpha2code] = [
                 'country' => $item->country,
-                'total' => $item->trials
+                'total' => $item->trials,
             ];
         }
 
@@ -121,10 +119,10 @@ class ClinicalTrialDistributionController extends Controller
 
     private function getMappedFocusByCountry($items)
     {
-        return $items->mapToGroups(function($item, $key) {
+        return $items->mapToGroups(function ($item, $key) {
             return [$item->country => [
                 'name' => $item->name,
-                'trials' => $item->trials
+                'trials' => $item->trials,
             ]];
         });
     }
@@ -133,8 +131,7 @@ class ClinicalTrialDistributionController extends Controller
     {
         $mappedArray = [];
 
-        foreach($items as $item)
-        {
+        foreach ($items as $item) {
             $mappedArray[$item->alpha2code] = [
                 'country' => $item->country,
                 'focus' => $countries[$item->country],
@@ -148,14 +145,10 @@ class ClinicalTrialDistributionController extends Controller
     private function getTotalTrialsOfCountry($items)
     {
         $total = 0;
-        foreach($items as $item)
-        {
+        foreach ($items as $item) {
             $total += $item['trials'];
         }
 
         return $total;
     }
-
-
-
 }

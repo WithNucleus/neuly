@@ -24,7 +24,7 @@ class CtConditionRequest extends FormRequest
     public function rules()
     {
         return [
-             'value' => 'required|min:5|max:255|unique:ct_conditions,value,' . $this->get('id'),
+            'value' => 'required|min:5|max:255|unique:ct_conditions,value,'.$this->get('id'),
         ];
     }
 }

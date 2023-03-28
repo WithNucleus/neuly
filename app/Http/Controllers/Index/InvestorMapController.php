@@ -59,8 +59,6 @@ class InvestorMapController extends Controller
     }
 
     /**
-     * @param $values
-     * @param $query
      * @return mixed
      */
     private function filterTypes($values, $query)
@@ -73,7 +71,6 @@ class InvestorMapController extends Controller
     }
 
     /**
-     * @param $request
      * @return array|false|string[]
      */
     private function filterTypeValues($request)
@@ -96,7 +93,6 @@ class InvestorMapController extends Controller
     }
 
     /**
-     * @param $request
      * @return bool
      */
     private function filterHasTypes($request)
@@ -110,7 +106,6 @@ class InvestorMapController extends Controller
     }
 
     /**
-     * @param $filter
      * @return false|string[]
      */
     private function getFilteredTypes($filter)
@@ -119,7 +114,6 @@ class InvestorMapController extends Controller
     }
 
     /**
-     * @param $sortParameter
      * @return string
      */
     private function getOrderDirection($sortParameter)
@@ -134,7 +128,6 @@ class InvestorMapController extends Controller
     }
 
     /**
-     * @param $request
      * @return string
      */
     private function getSortParameter($request)
@@ -148,7 +141,6 @@ class InvestorMapController extends Controller
     }
 
     /**
-     * @param $locationsByCountries
      * @return array
      */
     private function getInvestorsByCountries($locationsByCountries)
@@ -163,7 +155,6 @@ class InvestorMapController extends Controller
     }
 
     /**
-     * @param $locationsByRegions
      * @return mixed
      */
     public function getInvestorsByRegions($locationsByRegions)
@@ -178,7 +169,6 @@ class InvestorMapController extends Controller
     }
 
     /**
-     * @param $locations
      * @return array
      */
     private function getInvestorsByLocations($locations)
@@ -253,7 +243,6 @@ class InvestorMapController extends Controller
     }
 
     /**
-     * @param $sort
      * @return array
      */
     private function getCountriesResultByCode($sort, $types, $hiring)

@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\DB;
 class ResearchOrganizationsController extends Controller
 {
     /**
-     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(Request $request)
@@ -37,12 +36,11 @@ class ResearchOrganizationsController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function widget(Request $request)
     {
-        $data  = $this->getQuery()
+        $data = $this->getQuery()
             ->orderBy('total', 'desc')
             ->take(10)
             ->get();
@@ -52,7 +50,7 @@ class ResearchOrganizationsController extends Controller
 
             foreach ($data as $key => $item) {
                 $data[$key]->percent = round(round($item->total / $maxTotal, 2) * 100 / 5);
-                $data[$key]->link    = route('discover.organizations.show', $item->slug);
+                $data[$key]->link = route('discover.organizations.show', $item->slug);
             }
         }
 
@@ -67,14 +65,14 @@ class ResearchOrganizationsController extends Controller
         return DB::table('company_research')
             ->select([
                 'companies.id', 'companies.name', 'companies.slug',
-                DB::raw('COUNT(company_research.research_id) AS total')
+                DB::raw('COUNT(company_research.research_id) AS total'),
             ])
             ->join('companies', 'companies.id', '=', 'company_research.company_id')
             ->groupBy('companies.id');
     }
 
     /**
-     * @param string $filter
+     * @param  string  $filter
      * @return array
      */
     private function getFiltersArray($filter)
@@ -89,22 +87,22 @@ class ResearchOrganizationsController extends Controller
     }
 
     /**
-     * @param \Illuminate\Database\Query\Builder $query
-     * @param array $filter
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  array  $filter
      * @return \Illuminate\Database\Query\Builder
      */
     private function filterQuery($query, $filter)
     {
         if (isset($filter['focus'])) {
-            $query = $this->filterByFocus($query, $filter['focus']);;
+            $query = $this->filterByFocus($query, $filter['focus']);
         }
 
         return $query;
     }
 
     /**
-     * @param \Illuminate\Database\Query\Builder $query
-     * @param array $focusNames
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  array  $focusNames
      * @return mixed
      */
     private function filterByFocus($query, $focusNames)

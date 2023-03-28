@@ -9,7 +9,7 @@ use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
  * Class CourseCrudController
- * @package App\Http\Controllers\Admin
+ *
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
 class CourseCrudController extends CrudController
@@ -28,7 +28,7 @@ class CourseCrudController extends CrudController
     public function setup()
     {
         CRUD::setModel(\App\Models\Course::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/course');
+        CRUD::setRoute(config('backpack.base.route_prefix').'/course');
         CRUD::setEntityNameStrings('course', 'courses');
     }
 
@@ -36,50 +36,51 @@ class CourseCrudController extends CrudController
      * Define what happens when the List operation is loaded.
      *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
+     *
      * @return void
      */
     protected function setupListOperation()
     {
         $this->crud->addColumn([
-            'name'    => 'name',
-            'label'   => 'Name',
-            'type'    => 'text',
+            'name' => 'name',
+            'label' => 'Name',
+            'type' => 'text',
         ]);
 
         $this->crud->addColumn([
-            'name'    => 'schedule',
-            'label'   => 'Schedule',
-            'type'    => 'text',
+            'name' => 'schedule',
+            'label' => 'Schedule',
+            'type' => 'text',
         ]);
 
         $this->crud->addColumn([
-            'name'    => 'url',
-            'label'   => 'URL',
-            'type'    => 'text',
+            'name' => 'url',
+            'label' => 'URL',
+            'type' => 'text',
         ]);
 
         $this->crud->addColumn([
-            'name'    => 'focus',
-            'label'   => 'Focus',
-            'type'    => 'relationship',
+            'name' => 'focus',
+            'label' => 'Focus',
+            'type' => 'relationship',
         ]);
 
         $this->crud->addColumn([
-            'name'    => 'companies',
-            'label'   => 'Organization',
-            'type'    => 'relationship',
+            'name' => 'companies',
+            'label' => 'Organization',
+            'type' => 'relationship',
         ]);
 
         $this->crud->addColumn([
-            'name'    => 'created_at',
-            'label'   => 'Created',
-            'type'    => 'date',
+            'name' => 'created_at',
+            'label' => 'Created',
+            'type' => 'date',
         ]);
 
         $this->crud->addColumn([
-            'name'    => 'updated_at',
-            'label'   => 'Updated',
-            'type'    => 'date',
+            'name' => 'updated_at',
+            'label' => 'Updated',
+            'type' => 'date',
         ]);
 
         /**
@@ -100,6 +101,7 @@ class CourseCrudController extends CrudController
      * Define what happens when the Create operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-create
+     *
      * @return void
      */
     protected function setupCreateOperation()
@@ -107,87 +109,87 @@ class CourseCrudController extends CrudController
         CRUD::setValidation(CourseRequest::class);
 
         $this->crud->addField([
-            'label'     => "Focus",
-            'type'      => 'select2_multiple',
-            'name'      => 'focus',
-            'entity'    => 'focus',
+            'label' => 'Focus',
+            'type' => 'select2_multiple',
+            'name' => 'focus',
+            'entity' => 'focus',
             'attribute' => 'name',
-            'pivot'   => true,
+            'pivot' => true,
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
-            'model'   => "App\Models\Focus",
+            'model' => \App\Models\Focus::class,
         ]);
 
         $this->crud->addField([
-            'label'     => "Organization",
-            'type'      => 'select2_multiple',
-            'name'      => 'companies',
-            'entity'    => 'companies',
+            'label' => 'Organization',
+            'type' => 'select2_multiple',
+            'name' => 'companies',
+            'entity' => 'companies',
             'attribute' => 'name',
-            'pivot'   => true,
+            'pivot' => true,
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
             }),
-            'model'   => "App\Models\Company",
+            'model' => \App\Models\Company::class,
         ]);
 
         $this->crud->addField([
-            'name'    => 'name',
-            'label'   => 'Name',
-            'type'    => 'text',
+            'name' => 'name',
+            'label' => 'Name',
+            'type' => 'text',
         ]);
 
         $this->crud->addField([
-            'name'    => 'url',
-            'label'   => 'URL',
-            'type'    => 'text',
+            'name' => 'url',
+            'label' => 'URL',
+            'type' => 'text',
         ]);
 
         $this->crud->addField([
-            'name'    => 'type',
-            'label'   => 'Type',
-            'type'        => 'select2_from_array',
-            'options'     => Course::getTypes(),
+            'name' => 'type',
+            'label' => 'Type',
+            'type' => 'select2_from_array',
+            'options' => Course::getTypes(),
             'allows_null' => false,
         ]);
 
         $this->crud->addField([
-            'name'    => 'summary',
-            'label'   => 'Summary',
-            'type'    => 'textarea',
+            'name' => 'summary',
+            'label' => 'Summary',
+            'type' => 'textarea',
         ]);
 
         $this->crud->addField([
-            'name'    => 'schedule',
-            'label'   => 'Schedule',
-            'type'        => 'select2_from_array',
-            'options'     => Course::getSchedules(),
+            'name' => 'schedule',
+            'label' => 'Schedule',
+            'type' => 'select2_from_array',
+            'options' => Course::getSchedules(),
             'allows_null' => true,
         ]);
 
         $this->crud->addField([
-            'name'    => 'lowest_cost',
-            'label'   => 'Lowest Cost',
-            'type'    => 'number',
+            'name' => 'lowest_cost',
+            'label' => 'Lowest Cost',
+            'type' => 'number',
         ]);
 
         $this->crud->addField([
-            'name'    => 'highest_cost',
-            'label'   => 'Highest Cost',
-            'type'    => 'number',
+            'name' => 'highest_cost',
+            'label' => 'Highest Cost',
+            'type' => 'number',
         ]);
 
         $this->crud->addField([
-            'name'    => 'education_credits',
-            'label'   => 'Education Credits',
-            'type'    => 'text',
+            'name' => 'education_credits',
+            'label' => 'Education Credits',
+            'type' => 'text',
         ]);
 
         $this->crud->addField([
-            'name'    => 'next_date',
-            'label'   => 'Next Date (optional)',
-            'type'    => 'date',
+            'name' => 'next_date',
+            'label' => 'Next Date (optional)',
+            'type' => 'date',
         ]);
 
         /**
@@ -201,6 +203,7 @@ class CourseCrudController extends CrudController
      * Define what happens when the Update operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
+     *
      * @return void
      */
     protected function setupUpdateOperation()

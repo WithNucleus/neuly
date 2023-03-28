@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\DB;
 class CompaniesByTypeController extends Controller
 {
     /**
-     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function index(Request $request)
@@ -20,7 +19,7 @@ class CompaniesByTypeController extends Controller
             ->select('ownership', DB::raw('count(*) as total'))
             ->groupBy('ownership');
         $query = $this->filterQuery($query, $request);
-        $data  = $query->get();
+        $data = $query->get();
 
         $response = [
             'labels' => $data->pluck('ownership'),
@@ -32,8 +31,8 @@ class CompaniesByTypeController extends Controller
     }
 
     /**
-     * @param \Illuminate\Database\Query\Builder $query
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Database\Query\Builder
      */
     private function filterQuery($query, $request)
@@ -55,8 +54,8 @@ class CompaniesByTypeController extends Controller
     }
 
     /**
-     * @param \Illuminate\Database\Query\Builder $query
-     * @param array $value
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  array  $value
      * @return \Illuminate\Database\Query\Builder
      */
     private function filterByOwnership($query, $values)
@@ -65,7 +64,7 @@ class CompaniesByTypeController extends Controller
     }
 
     /**
-     * @param \Illuminate\Database\Query\Builder $query
+     * @param  \Illuminate\Database\Query\Builder  $query
      * @return \Illuminate\Database\Query\Builder
      */
     private function filterByClinicalTrialInvolved($query)
@@ -78,5 +77,4 @@ class CompaniesByTypeController extends Controller
 
         return $query->whereIn('id', $involvedCompanyIds);
     }
-
 }

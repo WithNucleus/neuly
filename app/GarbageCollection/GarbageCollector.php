@@ -5,6 +5,7 @@ namespace App\GarbageCollection;
 class GarbageCollector
 {
     private $importCleaner = null;
+
     private $relationshipCleaner = null;
 
     public function __construct()

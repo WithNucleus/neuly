@@ -2,10 +2,8 @@
 
 use App\Models\ImportFailure;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
-class UpdateImportFailuresChangeTypeValues extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -28,4 +26,4 @@ class UpdateImportFailuresChangeTypeValues extends Migration
     {
         //no need to revert column's data
     }
-}
+};

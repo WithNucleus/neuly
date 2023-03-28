@@ -10,8 +10,8 @@ class NonProfitFocusController extends Controller
     /**
      * Shows the Non-Profit Focus Chart
      */
-    public function chart() {
-
+    public function chart()
+    {
         $focusGroups = Focus::with(['companies' => function ($query) {
             $query->nonprofits()->withCount('jobs', 'events', 'clinicaltrials', 'people');
         }, 'companies.locations:name', 'companies.focus:name'])
@@ -24,30 +24,28 @@ class NonProfitFocusController extends Controller
 
     /**
      * Process each Focus's children for the chart
-     * @param $focusGroups
+     *
      * @return array
      */
-    private function processFocusChildren($focusGroups) {
-
+    private function processFocusChildren($focusGroups)
+    {
         $chartData = [];
         $otherFocusData = [];
 
         foreach ($focusGroups as $focus) {
-
             $nonprofits = $focus->companies;
 
             $focusData = [
                 'name' => $focus->name,
                 'value' => $focus->companies->count(),
-                'image' => asset('images/focus/' . $focus->slug . '.svg'),
+                'image' => asset('images/focus/'.$focus->slug.'.svg'),
                 'type' => 'focus',
-                'color' => '#A7ABDD'
+                'color' => '#A7ABDD',
             ];
 
             $children = [];
 
             foreach ($nonprofits as $nonprofit) {
-
                 $locationString = implode(' / ', $nonprofit->locations->pluck('name')->toArray());
                 $focusString = implode(' / ', $nonprofit->focus->pluck('name')->toArray());
 
@@ -66,7 +64,6 @@ class NonProfitFocusController extends Controller
                     'clinicalTrials' => $nonprofit->clinicaltrials_count,
                     'people' => $nonprofit->people_count,
                 ]);
-
             }
 
             $focusData['children'] = $children;
@@ -76,7 +73,6 @@ class NonProfitFocusController extends Controller
             } else {
                 array_push($otherFocusData, $focusData);
             }
-
         }
 
         $otherFocus = [
@@ -85,7 +81,7 @@ class NonProfitFocusController extends Controller
             'image' => asset('images/focus/other.svg'),
             'children' => $otherFocusData,
             'type' => 'focus',
-            'color' => '#A7ABDD'
+            'color' => '#A7ABDD',
         ];
 
         array_push($chartData, $otherFocus);

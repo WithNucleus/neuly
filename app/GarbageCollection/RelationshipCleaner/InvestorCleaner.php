@@ -10,7 +10,9 @@ use Illuminate\Support\Facades\DB;
 class InvestorCleaner
 {
     private $investors = null;
+
     private $locations = null;
+
     private $people = null;
 
     public function __construct()
@@ -40,7 +42,7 @@ class InvestorCleaner
 
         DB::table('investor_location')->whereIn('id', $orphened)->delete();
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Investors and Locations.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Investors and Locations.';
     }
 
     public function cleanPersonRelation()
@@ -53,6 +55,6 @@ class InvestorCleaner
 
         DB::table('investor_person')->whereIn('id', $orphened)->delete();
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Investors and People.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Investors and People.';
     }
 }

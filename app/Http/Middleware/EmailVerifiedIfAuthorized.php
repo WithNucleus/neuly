@@ -12,7 +12,6 @@ class EmailVerifiedIfAuthorized
      * If user authorized but not verified his email
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
      * @param  string|null  $redirectToRoute
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
@@ -29,4 +28,3 @@ class EmailVerifiedIfAuthorized
         return $next($request);
     }
 }
-

@@ -38,7 +38,7 @@ class TeamInvitationRequest extends FormRequest
     public function messages()
     {
         return [
-            'email.unique' => 'This email has already been invited.'
+            'email.unique' => 'This email has already been invited.',
         ];
     }
 }

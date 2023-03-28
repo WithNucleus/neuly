@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Follow;
 use App\Models\FollowList;
 use App\Models\MemberNote;
-use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -39,7 +38,7 @@ class DashboardController extends Controller
 
         $lastActivityIdsByType = Activity::select(DB::raw('MAX(id) AS id, MAX(created_at) AS created_at'))
             ->where('causer_id', Auth::id())
-            ->where('causer_type', 'App\User')
+            ->where('causer_type', \App\User::class)
             ->where('log_name', 'pageview')
             ->groupBy(['subject_id', 'subject_type'])
             ->orderBy('created_at', 'desc')
@@ -94,7 +93,7 @@ class DashboardController extends Controller
         $newWidgetsOrder = $request->input('order');
 
         foreach ($this->defaultWidgetsOrder as $widget) {
-            if (!in_array($widget, $newWidgetsOrder)) {
+            if (! in_array($widget, $newWidgetsOrder)) {
                 $newWidgetsOrder[] = $widget;
             }
         }

@@ -4,13 +4,11 @@ namespace App\Http\Controllers\Index;
 
 use App\Helpers\Entity\FieldsMapping;
 use App\Helpers\ListingRequestHelper;
-use App\Helpers\PagePreviewHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Job;
 use App\Models\ListingRequest;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class ListingRequestController extends Controller
@@ -115,8 +113,8 @@ class ListingRequestController extends Controller
     }
 
     /**
-     * @param string $entityClass
-     * @param array $requestData
+     * @param  string  $entityClass
+     * @param  array  $requestData
      * @return array
      */
     private function handleFilesUpload($entityClass, $requestData)

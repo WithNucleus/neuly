@@ -4,12 +4,9 @@ namespace App\Http\Controllers\Index\DataFeeds;
 
 use App\Enum\MediaTypes;
 use App\Http\Controllers\Controller;
-use App\Models\DataFeed;
 use App\Models\Focus;
 use App\Models\MediaItem;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\Request;
-use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class VideoController extends Controller
@@ -25,7 +22,7 @@ class VideoController extends Controller
             ->with(['source'])
             ->allowedSorts([
                 'name',
-                'date'
+                'date',
             ])
             ->defaultSort('-date')
             ->paginate(20)

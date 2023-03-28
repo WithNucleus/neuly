@@ -25,7 +25,7 @@ class LocationMapCodesNotFound extends Notification
     protected $regionCodeNotFound;
 
     /**
-     * @param \App\Models\Location $feedback
+     * @param  \App\Models\Location  $feedback
      */
     public function __construct(Location $location, $countryCodeNotFound, $regionCodeNotFound)
     {
@@ -37,7 +37,7 @@ class LocationMapCodesNotFound extends Notification
     /**
      * Get the notification's delivery channels.
      *
-     * @param mixed $notifiable
+     * @param  mixed  $notifiable
      * @return array
      */
     public function via($notifiable)
@@ -48,7 +48,7 @@ class LocationMapCodesNotFound extends Notification
     /**
      * Get the mail representation of the notification.
      *
-     * @param mixed $notifiable
+     * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
     public function toMail($notifiable)
@@ -63,7 +63,7 @@ class LocationMapCodesNotFound extends Notification
     }
 
     /**
-     * @param mixed $notifiable
+     * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\SlackMessage
      */
     public function toSlack($notifiable)

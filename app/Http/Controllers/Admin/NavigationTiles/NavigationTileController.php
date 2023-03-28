@@ -10,19 +10,21 @@ use Illuminate\Http\Request;
 
 class NavigationTileController extends Controller
 {
-
     /**
      * Index listing of all Navigation Tiles
      */
-    public function index() {
+    public function index()
+    {
         $navigationTiles = NavigationTile::orderBy('name', 'asc')->get();
+
         return view('admin.nav-tiles.index', compact('navigationTiles'));
     }
 
     /**
      * Create a New Navigation Tile
      */
-    public function create() {
+    public function create()
+    {
         return view('admin.nav-tiles.create');
     }
 
@@ -33,14 +35,17 @@ class NavigationTileController extends Controller
     {
         $attributes = $request->except('_token');
         $navigationTile = NavigationTile::create($attributes);
-        return redirect()->route('admin.nav-tiles.edit', $navigationTile->id)->with('navigationTileSuccess', 'Created the navigation tile for ' . $navigationTile->name . '!');
+
+        return redirect()->route('admin.nav-tiles.edit', $navigationTile->id)->with('navigationTileSuccess', 'Created the navigation tile for '.$navigationTile->name.'!');
     }
 
     /**
      * View with form to edit a Navigation Tile & form to add links
      */
-    public function edit($id) {
+    public function edit($id)
+    {
         $navigationTile = NavigationTile::with('navItems')->findOrFail($id);
+
         return view('admin.nav-tiles.edit', compact('navigationTile'));
     }
 
@@ -52,6 +57,7 @@ class NavigationTileController extends Controller
         $navigationTile = NavigationTile::findOrFail($id);
         $attributes = $request->except('_token');
         $navigationTile->update($attributes);
+
         return redirect()->route('admin.nav-tiles.edit', $id)->with('navigationTileSuccess', 'Updated nav tile!');
     }
 
@@ -60,7 +66,7 @@ class NavigationTileController extends Controller
         $oldNavTile = NavigationTile::with('navItems')->findOrFail($id);
 
         $newNavTile = $oldNavTile->replicate();
-        $newNavTile->name = $oldNavTile->name . ' ' . uniqid();
+        $newNavTile->name = $oldNavTile->name.' '.uniqid();
         $newNavTile->save();
 
         foreach ($oldNavTile->navItems as $item) {
@@ -70,7 +76,6 @@ class NavigationTileController extends Controller
         }
 
         return redirect()->route('admin.nav-tiles.edit', $newNavTile->id)->with('navigationTileSuccess', 'Created cloned navigation tile!');
-
     }
 
     /**
@@ -80,13 +85,13 @@ class NavigationTileController extends Controller
     {
         $response = [
             'status' => 'success',
-            'message' => 'Deleted'
+            'message' => 'Deleted',
         ];
 
         $navigationTile = NavigationTile::find($id);
 
         if ($navigationTile) {
-            $response['message'] = 'Deleted ' . $navigationTile->name;
+            $response['message'] = 'Deleted '.$navigationTile->name;
             $navigationTile->delete();
         } else {
             $response['status'] = 'error';
@@ -117,10 +122,10 @@ class NavigationTileController extends Controller
 
         $response = [
             'status' => 'success',
-            'message' => 'Updated the links!'
+            'message' => 'Updated the links!',
         ];
 
-        if (!empty($errors)) {
+        if (! empty($errors)) {
             $response['status'] = 'error';
             $response['message'] = 'There was a problem updating the order.';
             $response['errors'] = $errors;

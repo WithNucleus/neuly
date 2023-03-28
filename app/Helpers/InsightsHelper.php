@@ -5,7 +5,7 @@ namespace App\Helpers;
 class InsightsHelper
 {
     /**
-     * @param int $length
+     * @param  int  $length
      * @return array
      */
     public static function getChartColors($length)

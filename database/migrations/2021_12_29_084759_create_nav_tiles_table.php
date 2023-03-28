@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
-class CreateNavTilesTable extends Migration
+return new class extends Migration
 {
     private $newPermissions = [
         'manage navigation tiles',
@@ -56,7 +56,7 @@ class CreateNavTilesTable extends Migration
      */
     public function down()
     {
-        Permission::whereIn('name' , $this->newPermissions)->delete();
+        Permission::whereIn('name', $this->newPermissions)->delete();
 
         $adminRole = Role::where('name', 'Admin')->first();
 
@@ -66,4 +66,4 @@ class CreateNavTilesTable extends Migration
 
         Schema::dropIfExists('navigation_tiles');
     }
-}
+};

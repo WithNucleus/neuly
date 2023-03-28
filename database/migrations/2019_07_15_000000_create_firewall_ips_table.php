@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateFirewallIpsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -19,7 +19,7 @@ class CreateFirewallIpsTable extends Migration
             $table->boolean('blocked')->default(1);
             $table->timestamps();
             $table->softDeletes();
-            
+
             $table->index('ip');
         });
     }
@@ -33,4 +33,4 @@ class CreateFirewallIpsTable extends Migration
     {
         Schema::drop('firewall_ips');
     }
-}
+};

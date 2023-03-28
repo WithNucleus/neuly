@@ -10,11 +10,11 @@ class ExternalScriptController extends Controller
     {
         $widget = EmbeddableSearchWidget::where('code', $code)->first();
 
-        if (!$widget) {
+        if (! $widget) {
             return response()->json(['message' => 'Template not found'], 404);
         }
 
-        list($activeTab) = $widget->tabs;
+        [$activeTab] = $widget->tabs;
 
         return response()->view('external-scripts.embed-search.modal', [
             'widget' => $widget,

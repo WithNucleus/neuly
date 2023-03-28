@@ -25,7 +25,7 @@ class CompanyRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:255|unique:companies,name,' . $this->get('id'),
+            'name' => 'required|max:255|unique:companies,name,'.$this->get('id'),
             // 'ownership' => 'required',
             // 'location' => 'required',
         ];

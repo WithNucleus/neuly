@@ -10,6 +10,7 @@ class ClinicaltrialParsingResult extends Model
     use CrudTrait;
 
     protected $table = 'clinicaltrial_parsing_results';
+
     protected $guarded = ['id'];
 
     public function clinicaltrial()

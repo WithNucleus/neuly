@@ -3,18 +3,17 @@
 namespace App\Http\Controllers\Index;
 
 use App\Http\Controllers\Controller;
-use App\Repositories\FollowRepository;
-use Illuminate\Http\Request;
-use App\Models\Research;
 use App\Models\Focus;
-use App\Models\Person;
+use App\Models\Research;
+use App\Repositories\FollowRepository;
 use App\Services\Metas;
-use Illuminate\Support\Facades\DB;
-use Spatie\QueryBuilder\QueryBuilder;
-use Spatie\QueryBuilder\AllowedSort;
-use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\Activitylog\Models\Activity;
 use Auth;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Spatie\Activitylog\Models\Activity;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\AllowedSort;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class ResearchController extends Controller
 {
@@ -29,8 +28,8 @@ class ResearchController extends Controller
     }
 
     // Index
-    public function index(Request $request) {
-
+    public function index(Request $request)
+    {
         $research_items = QueryBuilder::for(Research::class)
             ->allowedFilters([
                 'name',
@@ -54,20 +53,19 @@ class ResearchController extends Controller
 
         // Return View
         return view('discover.research.index', compact('research_items', 'focus_cats', 'metas'));
-
     }
 
     // Show
-    public function show(Request $request, $slug) {
-
+    public function show(Request $request, $slug)
+    {
         // Get Research
         $research = Research::where('slug', $slug)->firstOrFail();
 
-        $metas = Metas::process(array(
-            'title'         => $research->name,
-            'description'   => $research->abstract,
-            'image'         => '',
-        ));
+        $metas = Metas::process([
+            'title' => $research->name,
+            'description' => $research->abstract,
+            'image' => '',
+        ]);
 
         $related = $this->getReltaedEntities($research);
 
@@ -82,7 +80,7 @@ class ResearchController extends Controller
             ->withProperties([
                 'ip' => $request->ip(),
                 'entity' => 'research',
-                'slug' => $research->slug
+                'slug' => $research->slug,
             ])
             ->performedOn($research)
             ->tap(function (Activity $activity) use ($request) {
@@ -90,7 +88,7 @@ class ResearchController extends Controller
             })
             ->log($research->name);
 
-        return view('discover.research.show', compact('research','related', 'metas', 'entity', 'resources', 'isFollowed'));
+        return view('discover.research.show', compact('research', 'related', 'metas', 'entity', 'resources', 'isFollowed'));
     }
 
     public function namesJson()

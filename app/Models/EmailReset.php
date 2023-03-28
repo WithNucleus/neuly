@@ -12,6 +12,7 @@ class EmailReset extends Model
     |--------------------------------------------------------------------------
     */
     protected $table = 'email_resets';
+
     protected $guarded = ['id'];
 
     /*
@@ -28,7 +29,7 @@ class EmailReset extends Model
 
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo(\App\User::class);
     }
 
     /*

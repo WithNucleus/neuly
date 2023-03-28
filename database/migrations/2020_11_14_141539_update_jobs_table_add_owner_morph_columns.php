@@ -6,7 +6,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateJobsTableAddOwnerMorphColumns extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -22,7 +22,7 @@ class UpdateJobsTableAddOwnerMorphColumns extends Migration
 
         DB::table('jobs')->update([
             'owner_id' => DB::raw('company_id'),
-            'owner_type' => Company::class
+            'owner_type' => Company::class,
         ]);
 
         Schema::table('jobs', function (Blueprint $table) {
@@ -49,4 +49,4 @@ class UpdateJobsTableAddOwnerMorphColumns extends Migration
             $table->dropColumn(['owner_id', 'owner_type']);
         });
     }
-}
+};

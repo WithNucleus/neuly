@@ -30,5 +30,4 @@ class CompanyValuationRequest extends FormRequest
             'date' => 'required|date',
         ];
     }
-
 }

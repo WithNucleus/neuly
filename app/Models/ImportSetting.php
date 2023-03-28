@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ImportSetting extends Model
 {
-	protected $table = 'import_settings';
+    protected $table = 'import_settings';
 
     protected $guarded = ['id'];
 

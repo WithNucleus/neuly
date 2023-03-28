@@ -8,7 +8,7 @@ use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
  * Class JobApplicationCrudController
- * @package App\Http\Controllers\Admin
+ *
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
 class JobApplicationCrudController extends CrudController
@@ -24,12 +24,12 @@ class JobApplicationCrudController extends CrudController
      */
     public function setup()
     {
-        if(!backpack_user()->can('view job applications')) {
+        if (! backpack_user()->can('view job applications')) {
             abort(403);
         }
 
         CRUD::setModel(JobApplication::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/jobapplication');
+        CRUD::setRoute(config('backpack.base.route_prefix').'/jobapplication');
         CRUD::setEntityNameStrings('job application', 'job applications');
     }
 
@@ -37,32 +37,33 @@ class JobApplicationCrudController extends CrudController
      * Define what happens when the List operation is loaded.
      *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
+     *
      * @return void
      */
     protected function setupListOperation()
     {
         $this->crud->addColumn([
-            'name'  => 'created_at',
+            'name' => 'created_at',
             'label' => 'Date',
-            'type'  => 'date',
+            'type' => 'date',
         ]);
         $this->crud->addColumn([
-            'name'  => 'applicantName',
+            'name' => 'applicantName',
             'label' => 'Applicant',
-            'type'  => 'text',
+            'type' => 'text',
         ]);
         $this->crud->addColumn([
-            'name'      => 'job',
-            'label'     => 'Job',
-            'type'      => 'relationship',
-            'entity'    => 'job',
+            'name' => 'job',
+            'label' => 'Job',
+            'type' => 'relationship',
+            'entity' => 'job',
             'attribute' => 'job_title',
-            'model'     => 'App\Models\Job',
+            'model' => \App\Models\Job::class,
         ]);
         $this->crud->addColumn([
-            'name'  => 'owner',
+            'name' => 'owner',
             'label' => 'Owner', // Table column heading
-            'type'  => 'model_function',
+            'type' => 'model_function',
             'function_name' => 'getOwnerName',
         ]);
     }
@@ -70,44 +71,44 @@ class JobApplicationCrudController extends CrudController
     protected function setupShowOperation()
     {
         $this->crud->addColumn([
-            'name'  => 'created_at',
+            'name' => 'created_at',
             'label' => 'Date',
-            'type'  => 'date',
+            'type' => 'date',
         ]);
         $this->crud->addColumn([
-            'name'  => 'applicantName',
+            'name' => 'applicantName',
             'label' => 'Applicant',
-            'type'  => 'text',
+            'type' => 'text',
         ]);
         $this->crud->addColumn([
-            'name'  => 'email',
+            'name' => 'email',
             'label' => 'Applicant Email',
-            'type'  => 'model_function',
-            'function_name' => 'getApplicantEmail'
+            'type' => 'model_function',
+            'function_name' => 'getApplicantEmail',
         ]);
         $this->crud->addColumn([
-            'name'  => 'job_id',
+            'name' => 'job_id',
             'label' => 'Job',
-            'type'  => 'model_function',
-            'function_name' => 'getJobLink'
+            'type' => 'model_function',
+            'function_name' => 'getJobLink',
         ]);
         $this->crud->addColumn([
-            'name'  => 'owner',
+            'name' => 'owner',
             'label' => 'Owner',
-            'type'  => 'model_function',
-            'function_name' => 'getOwnerLink'
+            'type' => 'model_function',
+            'function_name' => 'getOwnerLink',
         ]);
         $this->crud->addColumn([
-            'name'  => 'cover_letter',
+            'name' => 'cover_letter',
             'label' => 'Cover Letter',
-            'type'  => 'model_function',
-            'function_name' => 'getCoverLetter'
+            'type' => 'model_function',
+            'function_name' => 'getCoverLetter',
         ]);
         $this->crud->addColumn([
-            'name'  => 'resume',
+            'name' => 'resume',
             'label' => 'Resume',
-            'type'  => 'model_function',
-            'function_name' => 'getResume'
+            'type' => 'model_function',
+            'function_name' => 'getResume',
         ]);
     }
 }

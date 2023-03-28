@@ -47,7 +47,7 @@ class TeamInvitationMail extends Mailable
             ->with([
                 'teamName' => $this->teamName,
                 'inviterName' => $this->inviterName,
-                'url' => route('invitation.show', ['code' => $this->invitationCode])
+                'url' => route('invitation.show', ['code' => $this->invitationCode]),
             ])
             ->subject('You have been invited to join the Neuly team.');
     }

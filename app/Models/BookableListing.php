@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Akaunting\Firewall\Models\Log;
 use App\Models\Scopes\PublicStatusScope;
 use App\Models\Traits\HasEntityContent;
 use App\Models\Traits\SearchableEntity;
@@ -23,12 +22,17 @@ class BookableListing extends Model
     |--------------------------------------------------------------------------
     */
     const TYPE_CLINIC = 'Clinic';
+
     const TYPE_COACH = 'Coach';
+
     const TYPE_COURSE = 'Course';
+
     const TYPE_RETREAT = 'Retreat';
+
     const TYPE_THERAPIST = 'Therapist';
 
     const STATUS_PENDING = 'Pending';
+
     const STATUS_PUBLIC = 'Public';
 
     const TYPES_CARE = [
@@ -48,7 +52,7 @@ class BookableListing extends Model
 
     const STATUSES = [
         self::STATUS_PENDING,
-        self::STATUS_PUBLIC
+        self::STATUS_PUBLIC,
     ];
 
     private array $searchableRelationships = [
@@ -56,7 +60,7 @@ class BookableListing extends Model
     ];
 
     private $searchableMorphs = [
-        'bookable' => 'name'
+        'bookable' => 'name',
     ];
 
     private array $searchableSkippedFields = [];
@@ -66,6 +70,7 @@ class BookableListing extends Model
     private array $geoSearch;
 
     protected $table = 'bookable_listings';
+
     protected $guarded = ['id'];
 
     /*
@@ -89,7 +94,7 @@ class BookableListing extends Model
         $slugCount = BookableListing::where('slug', $slug)->count();
 
         if ($slugCount > 0) {
-            $slug = $slug . '-' . uniqid();
+            $slug = $slug.'-'.uniqid();
         }
 
         return $slug;
@@ -140,11 +145,13 @@ class BookableListing extends Model
     | SCOPES
     |--------------------------------------------------------------------------
     */
-    public function scopePractitioners($query) {
+    public function scopePractitioners($query)
+    {
         return $query->whereIn('type', self::TYPES_CARE);
     }
 
-    public function scopePublic($query) {
+    public function scopePublic($query)
+    {
         return $query->where('status', self::STATUS_PUBLIC);
     }
 
@@ -155,7 +162,7 @@ class BookableListing extends Model
     */
     public function getBookableEntityShowUrlAttribute(): string
     {
-        $route = match($this->bookable_type) {
+        $route = match ($this->bookable_type) {
             Company::class => 'discover.organizations.show',
             Person::class => 'discover.people.show',
         };
@@ -178,7 +185,7 @@ class BookableListing extends Model
 
     public function backpackViewButton($crud = false): string
     {
-        return '<a class="btn btn-sm btn-link" target="_blank" href="' . $this->bookable_url . '">View</a>';
+        return '<a class="btn btn-sm btn-link" target="_blank" href="'.$this->bookable_url.'">View</a>';
     }
 
     public function getBookableImageAttribute(): string
@@ -186,7 +193,7 @@ class BookableListing extends Model
         if ($this->bookable->entityImageUrl) {
             return $this->bookable->entityImageUrl;
         } else {
-            return match($this->bookable_type) {
+            return match ($this->bookable_type) {
                 Company::class => '/images/image-placeholder.jpg',
                 Person::class => '/images/person-blank.png'
             };
@@ -202,7 +209,7 @@ class BookableListing extends Model
         }
 
         if ($this->location) {
-            $address .= "<br>" . $this->location->name;
+            $address .= '<br>'.$this->location->name;
         }
 
         return nl2br($address);
@@ -213,15 +220,16 @@ class BookableListing extends Model
         $addressForGoogle = str_replace(',', '', $this->fullAddress);
         $addressForGoogle = str_replace('<br>', '+', $addressForGoogle);
         $addressForGoogle = str_replace(' ', '+', $addressForGoogle);
-        return "https://google.com/maps/place/" . $addressForGoogle;
+
+        return 'https://google.com/maps/place/'.$addressForGoogle;
     }
 
     public function getPluralTypeAttribute(): string
     {
         if ($this->type === self::TYPE_COACH) {
-            return $this->type . 'es';
+            return $this->type.'es';
         } else {
-            return $this->type . 's';
+            return $this->type.'s';
         }
     }
 
@@ -230,12 +238,14 @@ class BookableListing extends Model
     | MUTATORS
     |--------------------------------------------------------------------------
     */
-    public function setNameAttribute($value) {
+    public function setNameAttribute($value)
+    {
         $this->attributes['name'] = $value;
         $this->attributes['slug'] = self::generateUniqueSlug($value);
     }
 
-    public function setLocationIdAttribute($value) {
+    public function setLocationIdAttribute($value)
+    {
         $this->attributes['location_id'] = $value;
 
         $location = Location::find($value);

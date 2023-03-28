@@ -16,6 +16,7 @@ class SearchLog extends Model
     */
 
     protected $table = 'search_log';
+
     protected $guarded = ['id'];
 
     /*

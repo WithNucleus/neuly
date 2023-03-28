@@ -20,7 +20,7 @@ class BatchImagesUploadController extends Controller
     private $allowedCsvColumns = [
         'id',
         'name',
-        'image'
+        'image',
     ];
 
     public function index()
@@ -33,7 +33,7 @@ class BatchImagesUploadController extends Controller
             Investor::class,
             Event::class,
         ];
-        $entityTypes    = array_intersect(EntityHelper::getEntities(), $entitiesWithImages);
+        $entityTypes = array_intersect(EntityHelper::getEntities(), $entitiesWithImages);
         $allowedColumns = implode(', ', $this->allowedCsvColumns);
 
         return view('admin.import.batch-images-upload.index',
@@ -46,8 +46,8 @@ class BatchImagesUploadController extends Controller
         $disk->delete($disk->allFiles());
 
         //Validate CSV header and map columns
-        $records       = array_map('str_getcsv', file($request->file('csv')));
-        $headings      = array_shift($records);
+        $records = array_map('str_getcsv', file($request->file('csv')));
+        $headings = array_shift($records);
         $columnIndexes = [];
 
         foreach ($headings as $index => $column) {
@@ -56,7 +56,7 @@ class BatchImagesUploadController extends Controller
             if (in_array($lowerColumn, $this->allowedCsvColumns) === false) {
                 return redirect()
                     ->back()
-                    ->with('error', "Column '$column' is not allowed! Allowed columns are: " . implode(', ', $this->allowedCsvColumns) . ".");
+                    ->with('error', "Column '$column' is not allowed! Allowed columns are: ".implode(', ', $this->allowedCsvColumns).'.');
             }
 
             $columnIndexes[$lowerColumn] = $index;
@@ -78,17 +78,17 @@ class BatchImagesUploadController extends Controller
         $zip->close();
 
         //begin parse CSV file
-        $entityClass  = $request->input('entity_type');
+        $entityClass = $request->input('entity_type');
         $importResult = ImportResult::create([
-            'type'    => ImportResult::TYPE_BATCH_IMAGES_UPLOAD,
-            'entity'  => $entityClass,
-            'csv'     => json_encode($records),
+            'type' => ImportResult::TYPE_BATCH_IMAGES_UPLOAD,
+            'entity' => $entityClass,
+            'csv' => json_encode($records),
             'user_id' => Auth::id(),
         ]);
 
         foreach ($records as $record) {
-            $entityId  = $record[$columnIndexes['id']];
-            $imageFilename     = trim($record[$columnIndexes['image']]);
+            $entityId = $record[$columnIndexes['id']];
+            $imageFilename = trim($record[$columnIndexes['image']]);
 
             if ($imageFilename) {
                 BatchImageUpload::dispatch($importResult, $entityClass, $entityId, $imageFilename);
@@ -101,7 +101,7 @@ class BatchImagesUploadController extends Controller
     public function results($id)
     {
         $result = ImportResult::batchImagesUpload()->findOrFail($id);
-        $csv    = json_decode($result->csv);
+        $csv = json_decode($result->csv);
 
         return view('admin.import.batch-images-upload.results', compact('result', 'csv'));
     }

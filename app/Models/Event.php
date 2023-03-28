@@ -12,8 +12,9 @@ use App\Models\Traits\SearchableEntity;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Event extends Model implements EntityContract, EntityImageContract
@@ -33,6 +34,7 @@ class Event extends Model implements EntityContract, EntityImageContract
     */
 
     protected $table = 'events';
+
     protected $guarded = ['id'];
 
     protected $casts = [
@@ -42,10 +44,13 @@ class Event extends Model implements EntityContract, EntityImageContract
 
     // log activity for all attributes, which not listed in $guarded array
     protected static $logUnguarded = true;
+
     protected static $logName = 'entities';
 
     protected static $imageAttribute = 'image';
+
     protected static $imageFolderPath = 'events';
+
     protected static $imageFilenameAttribute = 'name';
 
     private array $searchableRelationships = [
@@ -66,6 +71,23 @@ class Event extends Model implements EntityContract, EntityImageContract
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
+    public function getEventUrlLink(): ?string
+    {
+        if ($this->event_url != null) {
+            return '<a href="'.$this->event_url.'" target="_blank" rel="noopener noreferrer">'.$this->event_url.'</a>';
+        } else {
+            return NULL;
+        }
+    }
+
+    public function getEventRegistrationLink(): ?string
+    {
+        if ($this->registration_url != null) {
+            return '<a href="'.$this->registration_url.'" target="_blank" rel="noopener noreferrer">'.$this->registration_url.'</a>';
+        } else {
+            return NULL;
+        }
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -73,23 +95,28 @@ class Event extends Model implements EntityContract, EntityImageContract
     |--------------------------------------------------------------------------
     */
 
-    public function companies() {
+    public function companies()
+    {
         return $this->belongsToMany(Company::class, 'company_event', 'event_id', 'company_id')->withTimestamps();
     }
 
-    public function focus() {
+    public function focus()
+    {
         return $this->belongsToMany(Focus::class, 'event_focus', 'event_id', 'focus_id')->withTimestamps();
     }
 
-    public function locations() {
+    public function locations()
+    {
         return $this->belongsToMany(Location::class, 'event_location', 'event_id', 'location_id')->withTimestamps();
     }
 
-    public function people() {
+    public function people()
+    {
         return $this->belongsToMany(Person::class, 'event_person', 'event_id', 'person_id')->withTimestamps();
     }
 
-    public function eventTypes() {
+    public function eventTypes()
+    {
         return $this->belongsToMany(EventType::class, 'event_event_type', 'event_id', 'event_type_id')->withTimestamps();
     }
 
@@ -126,66 +153,63 @@ class Event extends Model implements EntityContract, EntityImageContract
         $this->updateImageAttribute($value);
     }
 
-    /**
-     * @return array
-     */
     public static function getFieldsMapping(): array
     {
         return [
             //attributes
-            'name'             => [
+            'name' => [
                 'type' => FieldsMapping::TYPE_STRING,
                 'required' => true,
             ],
-            'slug'             => [
+            'slug' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'start_date'       => [
+            'start_date' => [
                 'type' => FieldsMapping::TYPE_DATE,
             ],
-            'end_date'         => [
+            'end_date' => [
                 'type' => FieldsMapping::TYPE_DATE,
             ],
-            'event_url'        => [
+            'event_url' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
             'registration_url' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'description'      => [
-                'type'  => FieldsMapping::TYPE_TEXT_EDITOR,
+            'description' => [
+                'type' => FieldsMapping::TYPE_TEXT_EDITOR,
             ],
-            'image'            => [
-                'type'  => FieldsMapping::TYPE_IMAGE,
+            'image' => [
+                'type' => FieldsMapping::TYPE_IMAGE,
                 'label' => 'Image',
             ],
             //relations
-            'eventTypes'       => [
-                'label'         => 'Event type',
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'eventTypes' => [
+                'label' => 'Event type',
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
-            'focus'            => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'focus' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
-            'locations'        => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'locations' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
-            'people'           => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'people' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
-            'companies'        => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'companies' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
-                'label'         => 'Exhibitors'
+                'label' => 'Exhibitors',
             ],
         ];
     }
@@ -200,5 +224,11 @@ class Event extends Model implements EntityContract, EntityImageContract
         }
 
         return $mapping;
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->useLogName(self::$logName);
     }
 }

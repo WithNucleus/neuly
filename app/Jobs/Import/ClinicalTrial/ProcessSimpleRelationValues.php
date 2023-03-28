@@ -2,12 +2,12 @@
 
 namespace App\Jobs\Import\ClinicalTrial;
 
+use App\Models\Clinicaltrial;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use App\Models\Clinicaltrial;
 
 class ProcessSimpleRelationValues implements ShouldQueue
 {
@@ -35,16 +35,13 @@ class ProcessSimpleRelationValues implements ShouldQueue
 
     /**
      * ProcessLocation constructor.
-     * @param \App\Models\Clinicaltrial $clinicaltrial
-     * @param array $values
-     * @param string $relationName
      */
     public function __construct(Clinicaltrial $clinicaltrial, array $values, string $relationName)
     {
-        $this->clinicaltrial  = $clinicaltrial;
-        $this->values         = $values;
-        $this->relationName   = $relationName;
-        $this->relationClass  = get_class($clinicaltrial->{$relationName}()->getRelated());
+        $this->clinicaltrial = $clinicaltrial;
+        $this->values = $values;
+        $this->relationName = $relationName;
+        $this->relationClass = get_class($clinicaltrial->{$relationName}()->getRelated());
     }
 
     /**

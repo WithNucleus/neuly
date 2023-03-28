@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Index;
 
 use App\Http\Controllers\Controller;
-use App\Models\Focus;
 use App\Models\Course;
+use App\Models\Focus;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -24,7 +24,7 @@ class CourseController extends Controller
             ->allowedSorts([
                 'name',
                 AllowedSort::field('price', 'lowest_cost'),
-                ])
+            ])
             ->defaultSort('name')
             ->allowedFilters([
                 AllowedFilter::partial('focus', 'focus.name'),
@@ -39,5 +39,4 @@ class CourseController extends Controller
 
         return view('discover.courses.index', compact('courses', 'focus_cats', 'types'));
     }
-
 }

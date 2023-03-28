@@ -28,8 +28,6 @@ class AccessTokenUserProvider implements UserProvider
     /**
      * Create a new database user provider.
      *
-     * @param  \Illuminate\Contracts\Hashing\Hasher  $hasher
-     * @param  $model
      * @return void
      */
     //TODO find why DI for eloquent driver model from config not working here
@@ -102,7 +100,6 @@ class AccessTokenUserProvider implements UserProvider
     /**
      * Retrieve a user by the given credentials.
      *
-     * @param  array  $credentials
      * @return \Illuminate\Contracts\Auth\Authenticatable|null
      */
     public function retrieveByCredentials(array $credentials)
@@ -136,7 +133,6 @@ class AccessTokenUserProvider implements UserProvider
     /**
      * Get the first key from the credential array.
      *
-     * @param  array  $credentials
      * @return string|null
      */
     protected function firstCredentialKey(array $credentials)
@@ -149,8 +145,6 @@ class AccessTokenUserProvider implements UserProvider
     /**
      * Validate a user against the given credentials.
      *
-     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
-     * @param  array  $credentials
      * @return bool
      */
     public function validateCredentials(UserContract $user, array $credentials)
@@ -198,7 +192,6 @@ class AccessTokenUserProvider implements UserProvider
     /**
      * Sets the hasher implementation.
      *
-     * @param  \Illuminate\Contracts\Hashing\Hasher  $hasher
      * @return $this
      */
     public function setHasher(HasherContract $hasher)

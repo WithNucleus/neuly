@@ -24,7 +24,7 @@ class RedirectRecordRequest extends FormRequest
     public function rules()
     {
         return [
-            'old_slug' => 'required|min:3|max:255|string|unique:redirects,old_slug,'. $this->get('id')
+            'old_slug' => 'required|min:3|max:255|string|unique:redirects,old_slug,'.$this->get('id'),
         ];
     }
 }

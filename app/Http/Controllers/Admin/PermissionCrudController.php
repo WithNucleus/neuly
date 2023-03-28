@@ -15,7 +15,7 @@ class PermissionCrudController extends CrudController
 
     public function setup()
     {
-        if(!backpack_user()->can('edit users')) {
+        if (! backpack_user()->can('edit users')) {
             abort(404);
         }
 
@@ -41,16 +41,16 @@ class PermissionCrudController extends CrudController
     public function setupListOperation()
     {
         $this->crud->addColumn([
-            'name'  => 'name',
+            'name' => 'name',
             'label' => trans('backpack::permissionmanager.name'),
-            'type'  => 'text',
+            'type' => 'text',
         ]);
 
         if (config('backpack.permissionmanager.multiple_guards')) {
             $this->crud->addColumn([
-                'name'  => 'guard_name',
+                'name' => 'guard_name',
                 'label' => trans('backpack::permissionmanager.guard_type'),
-                'type'  => 'text',
+                'type' => 'text',
             ]);
         }
     }
@@ -76,16 +76,16 @@ class PermissionCrudController extends CrudController
     private function addFields()
     {
         $this->crud->addField([
-            'name'  => 'name',
+            'name' => 'name',
             'label' => trans('backpack::permissionmanager.name'),
-            'type'  => 'text',
+            'type' => 'text',
         ]);
 
         if (config('backpack.permissionmanager.multiple_guards')) {
             $this->crud->addField([
-                'name'    => 'guard_name',
-                'label'   => trans('backpack::permissionmanager.guard_type'),
-                'type'    => 'select_from_array',
+                'name' => 'guard_name',
+                'label' => trans('backpack::permissionmanager.guard_type'),
+                'type' => 'select_from_array',
                 'options' => $this->getGuardTypes(),
             ]);
         }

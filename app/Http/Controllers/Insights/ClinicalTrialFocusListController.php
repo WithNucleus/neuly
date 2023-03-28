@@ -37,16 +37,15 @@ class ClinicalTrialFocusListController extends Controller
         $filters_companies = [];
         $filters_locations = [];
 
-        if ($request->has('filter'))
-        {
+        if ($request->has('filter')) {
             $filter = $request->input('filter');
             $query = $this->filterQuery($query, $filter);
 
-            if(isset($filter['company'])) {
+            if (isset($filter['company'])) {
                 $filters_companies = $this->getCompaniesNameArray($filter['company']);
             }
 
-            if(isset($filter['locations'])) {
+            if (isset($filter['locations'])) {
                 $filters_locations = $this->getLocationsNameArray($filter['locations']);
             }
         }
@@ -63,13 +62,12 @@ class ClinicalTrialFocusListController extends Controller
         $path = route('insights.most-interest.show');
 
         // Get All Focus Values
-        $company_cats = Company::has('clinicaltrials', '>' , 0)->with('clinicaltrials')->get()->pluck('name')->unique()->sort();
+        $company_cats = Company::has('clinicaltrials', '>', 0)->with('clinicaltrials')->get()->pluck('name')->unique()->sort();
 
         $location_cats = Location::has('clinicaltrials', '>', 0)->with('clinicaltrials')->get()->pluck('name')->unique()->sort();
 
         return view('discover.insights.most-interest.show', compact('focus', 'sort', 'metas', 'path', 'company_cats', 'filters_companies', 'location_cats', 'filters_locations'));
     }
-
 
     private function getQuery()
     {
@@ -80,13 +78,11 @@ class ClinicalTrialFocusListController extends Controller
 
     private function filterQuery($query, $filter)
     {
-        if(isset($filter['companies']))
-        {
+        if (isset($filter['companies'])) {
             $query = $this->filterByCompanies($query, $filter['companies']);
         }
 
-        if(isset($filter['locations']))
-        {
+        if (isset($filter['locations'])) {
             $query = $this->filterByLocations($query, $filter['locations']);
         }
 
@@ -120,7 +116,8 @@ class ClinicalTrialFocusListController extends Controller
         return $query->take($limit);
     }
 
-    private function getLocationsNameArray($locations) {
+    private function getLocationsNameArray($locations)
+    {
         return explode('|', $locations);
     }
 

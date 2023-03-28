@@ -5,11 +5,11 @@ namespace App\GarbageCollection\RelationshipCleaner;
 use App\User;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
 
 class PermissionCleaner
 {
     private $permissions = null;
+
     private $user = null;
 
     public function __construct()
@@ -34,15 +34,14 @@ class PermissionCleaner
             ->whereNotIn('model_id', $this->user)
             ->get();
 
-        foreach($orphened as $entry)
-        {
+        foreach ($orphened as $entry) {
             DB::table('model_has_permissions')
-                ->where('permission_id','=', $entry->role_id)
-                ->where('model_id','=', $entry->model_id)
+                ->where('permission_id', '=', $entry->role_id)
+                ->where('model_id', '=', $entry->model_id)
                 ->where('model_type', '=', User::class)
                 ->delete();
         }
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Permissions and Users.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Permissions and Users.';
     }
 }

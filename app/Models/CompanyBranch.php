@@ -17,6 +17,7 @@ class CompanyBranch extends Model
     */
 
     protected $table = 'company_branches';
+
     protected $guarded = ['id'];
 
     /*
@@ -32,12 +33,12 @@ class CompanyBranch extends Model
     */
     public function company(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo('\App\Models\Company', 'company_id');
+        return $this->belongsTo(\App\Models\Company::class, 'company_id');
     }
 
     public function location(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo('\App\Models\Location', 'location_id');
+        return $this->belongsTo(\App\Models\Location::class, 'location_id');
     }
 
     /*
@@ -61,11 +62,11 @@ class CompanyBranch extends Model
         }
 
         if ($this->address2 != '') {
-            $address .= " " . $this->address2;
+            $address .= ' '.$this->address2;
         }
 
         if ($this->location) {
-            $address .= "<br>" . $this->location->name;
+            $address .= '<br>'.$this->location->name;
         }
 
         return $address;
@@ -75,6 +76,7 @@ class CompanyBranch extends Model
     {
         $addressForGoogle = str_replace(',', '', $this->fullAddress);
         $addressForGoogle = str_replace('<br>', '+', $addressForGoogle);
+
         return str_replace(' ', '+', $addressForGoogle);
     }
 

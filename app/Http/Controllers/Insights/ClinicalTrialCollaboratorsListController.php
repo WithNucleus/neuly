@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Insights;
 
 use App\Http\Controllers\Controller;
-use App\Models\Company;
 use App\Models\Focus;
 use App\Models\Location;
 use App\Services\Metas;
@@ -36,16 +35,15 @@ class ClinicalTrialCollaboratorsListController extends Controller
         $query = $this->getQuery();
         $filters_focus = [];
 
-        if ($request->has('filter'))
-        {
+        if ($request->has('filter')) {
             $filter = $request->input('filter');
             $query = $this->filterQuery($query, $filter);
 
-            if(isset($filter['focus'])) {
+            if (isset($filter['focus'])) {
                 $filters_focus = $this->getFocusNameArray($filter['focus']);
             }
 
-            if(isset($filter['locations'])) {
+            if (isset($filter['locations'])) {
                 $filters_locations = $this->getLocationsNameArray($filter['locations']);
             }
         }
@@ -62,7 +60,7 @@ class ClinicalTrialCollaboratorsListController extends Controller
         $path = route('insights.collaborators.show');
 
         // Get All Focus Values
-        $focus_cats = Focus::has('clinicaltrials', '>' , 0)->with('clinicaltrials')->get()->pluck('name')->unique()->sort();
+        $focus_cats = Focus::has('clinicaltrials', '>', 0)->with('clinicaltrials')->get()->pluck('name')->unique()->sort();
 
         return view('discover.insights.collaborators.show', compact('collaborators', 'sort', 'metas', 'path', 'focus_cats', 'filters_focus'));
     }
@@ -76,13 +74,11 @@ class ClinicalTrialCollaboratorsListController extends Controller
 
     private function filterQuery($query, $filter)
     {
-        if(isset($filter['focus']))
-        {
+        if (isset($filter['focus'])) {
             $query = $this->filterByFocus($query, $filter['focus']);
         }
 
-        if(isset($filter['locations']))
-        {
+        if (isset($filter['locations'])) {
             $query = $this->filterByLocations($query, $filter['locations']);
         }
 
@@ -91,7 +87,6 @@ class ClinicalTrialCollaboratorsListController extends Controller
 
     private function filterByFocus($query, $focus)
     {
-
         $trialIds = DB::table('clinicaltrial_focus')
             ->select('clinicaltrial_id')
             ->whereIn('focus_id', $this->getFocusIds($this->getFocusNameArray($focus)))
@@ -117,15 +112,18 @@ class ClinicalTrialCollaboratorsListController extends Controller
         return $query->take($limit);
     }
 
-    private function getFocusNameArray($focus) {
+    private function getFocusNameArray($focus)
+    {
         return explode('|', $focus);
     }
 
-    private function getFocusIds($focus) {
+    private function getFocusIds($focus)
+    {
         return Focus::whereIn('name', $focus)->get()->pluck('id');
     }
 
-    private function getLocationsNameArray($locations) {
+    private function getLocationsNameArray($locations)
+    {
         return explode('|', $locations);
     }
 

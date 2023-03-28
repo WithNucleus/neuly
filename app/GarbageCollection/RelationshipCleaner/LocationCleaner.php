@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 class LocationCleaner
 {
     private $locations = null;
+
     private $people = null;
 
     public function __construct()
@@ -36,6 +37,6 @@ class LocationCleaner
 
         DB::table('location_person')->whereIn('id', $orphened)->delete();
 
-        return "Cleaned ".$orphened->count()." orphened Relationships between Locations and People.";
+        return 'Cleaned '.$orphened->count().' orphened Relationships between Locations and People.';
     }
 }

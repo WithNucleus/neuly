@@ -6,15 +6,18 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCtInterventionsTable extends Migration
+return new class extends Migration
 {
     const CT_TABLE = 'clinicaltrials';
+
     const CT_ATTRIBUTE = 'interventions';
 
     const CT_ATTRIBUTE_TABLE = 'ct_interventions';
+
     const CT_ATTRIBUTE_RELATION_TABLE = 'clinicaltrial_intervention';
 
     const CT_FOREIGN_COLUMN_NAME = 'clinicaltrial_id';
+
     const CT_ATTRIBUTE_FOREIGN_COLUMN_NAME = 'ct_intervention_id';
 
     /**
@@ -79,7 +82,7 @@ class CreateCtInterventionsTable extends Migration
 
         Clinicaltrial::chunk(100, function ($clinicaltrials) use ($cache) {
             foreach ($clinicaltrials as $ct) {
-                if (!empty($ct->{self::CT_ATTRIBUTE})) {
+                if (! empty($ct->{self::CT_ATTRIBUTE})) {
                     $relationIds = [];
                     $values = array_map('trim', explode('|', $ct->{self::CT_ATTRIBUTE}));
 
@@ -98,4 +101,4 @@ class CreateCtInterventionsTable extends Migration
             }
         });
     }
-}
+};

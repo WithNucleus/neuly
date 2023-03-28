@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\DB;
 class JobsByTypeController extends Controller
 {
     /**
-     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function index(Request $request)
@@ -20,7 +19,7 @@ class JobsByTypeController extends Controller
             ->select('employment_type', DB::raw('COUNT(id) as total'))
             ->groupBy('employment_type');
         $query = $this->filterQuery($query, $request);
-        $data  = $query->get();
+        $data = $query->get();
 
         $response = [
             'labels' => $data->pluck('employment_type'),
@@ -32,8 +31,8 @@ class JobsByTypeController extends Controller
     }
 
     /**
-     * @param \Illuminate\Database\Query\Builder $query
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Database\Query\Builder
      */
     private function filterQuery($query, $request)
@@ -46,8 +45,8 @@ class JobsByTypeController extends Controller
     }
 
     /**
-     * @param \Illuminate\Database\Query\Builder $query
-     * @param mixed $value
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  mixed  $value
      * @return \Illuminate\Database\Query\Builder
      */
     private function filterByType($query, $value)

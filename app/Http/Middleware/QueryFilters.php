@@ -10,12 +10,10 @@ class QueryFilters
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
      * @return mixed
      */
     public function handle($request, Closure $next)
     {
-
         // Get Path
         $path = $request->getPathInfo();
 
@@ -30,7 +28,7 @@ class QueryFilters
             $focus_array = $request->query('filter')['focus'];
             $focus_array = explode('|', $focus_array);
         } else {
-            $focus_array = array();
+            $focus_array = [];
         }
 
         // If locations
@@ -38,56 +36,55 @@ class QueryFilters
             $location_string = $request->query('filter')['locations'];
             $location_array = explode('|', $location_string);
         } else {
-            $location_array = array();
+            $location_array = [];
         }
 
         // If region
         if (isset($request->query('filter')['region'])) {
             $regions_array = explode('|', $request->query('filter')['region']);
         } else {
-            $regions_array = array();
+            $regions_array = [];
         }
 
         // If countries
         if (isset($request->query('filter')['countries'])) {
             $countries_array = explode('|', $request->query('filter')['countries']);
         } else {
-            $countries_array = array();
+            $countries_array = [];
         }
 
         // If company
         if (isset($request->query('filter')['company'])) {
             $company_name_array = explode('|', $request->query('filter')['company']);
         } else {
-            $company_name_array = array();
+            $company_name_array = [];
         }
 
         if (isset($request->query('filter')['investor'])) {
             $investor_name_array = explode('|', $request->query('filter')['investor']);
         } else {
-            $investor_name_array = array();
+            $investor_name_array = [];
         }
-
 
         // If status
         if (isset($request->query('filter')['status'])) {
             $status_array = explode('|', $request->query('filter')['status']);
         } else {
-            $status_array = array();
+            $status_array = [];
         }
 
         // If type
         if (isset($request->query('filter')['type'])) {
             $type_array = explode('|', $request->query('filter')['type']);
         } else {
-            $type_array = array();
+            $type_array = [];
         }
 
         // If people
         if (isset($request->query('filter')['people'])) {
             $person_name_array = explode('|', $request->query('filter')['people']);
         } else {
-            $person_name_array = array();
+            $person_name_array = [];
         }
 
         if (isset($request->query('filter')['hiring'])) {
@@ -106,7 +103,7 @@ class QueryFilters
         if (isset($request->query('filter')['education'])) {
             $filter_education_credits = explode('|', $request->query('filter')['education']);
         } else {
-            $filter_education_credits = array();
+            $filter_education_credits = [];
         }
 
         if (isset($request->query('filter')['is_investor'])) {
@@ -120,7 +117,6 @@ class QueryFilters
         } else {
             $filter_with_email = 0;
         }
-
 
         // Share with Blade
         view()->share('filters', $filters);

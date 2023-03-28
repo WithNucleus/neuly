@@ -6,6 +6,7 @@ use App\Models\Traits\HasMediaTypes;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class DataFeed extends Model
@@ -21,15 +22,17 @@ class DataFeed extends Model
     */
 
     protected $table = 'data_feeds';
+
     protected $guarded = ['id'];
 
     protected static $logUnguarded = true;
+
     protected static $logName = 'entities';
 
     const FEED_TYPE_RSS = 'RSS';
 
     const FEED_TYPES = [
-        self::FEED_TYPE_RSS
+        self::FEED_TYPE_RSS,
     ];
 
     const SOURCE_GOOGLE_ALERT = 'Google Alert';
@@ -42,10 +45,11 @@ class DataFeed extends Model
         'Video',
         'Mindfulness',
         self::SOURCE_GOOGLE_ALERT,
-        'Podcast'
+        'Podcast',
     ];
 
     const STATUS_ACTIVE = 'Active';
+
     const STATUS_INACTIVE = 'Inactive';
 
     const STATUSES = [
@@ -55,7 +59,7 @@ class DataFeed extends Model
 
     const AUTO_APPROVAL_VALUES = [
         'No',
-        'Yes'
+        'Yes',
     ];
 
     /*
@@ -123,5 +127,11 @@ class DataFeed extends Model
     {
         $this->attributes['name'] = $name;
         $this->attributes['slug'] = Str::slug($name);
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->useLogName(self::$logName);
     }
 }

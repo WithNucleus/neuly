@@ -50,17 +50,17 @@ class ProcessPeopleOrganization implements ShouldQueue
 
     /**
      * ProcessLocation constructor.
-     * @param \App\Models\ImportResult $importResult
-     * @param int $companyId
-     * @param array $personData
+     *
+     * @param  int  $companyId
+     * @param  array  $personData
      *
      * @throws \Exception
      */
     public function __construct(ImportResult $importResult, $companyId, $personData)
     {
-        $this->importResult  = $importResult;
-        $this->company       = Company::findOrFail($companyId);
-        $this->personData    = $personData;
+        $this->importResult = $importResult;
+        $this->company = Company::findOrFail($companyId);
+        $this->personData = $personData;
     }
 
     /**
@@ -90,7 +90,7 @@ class ProcessPeopleOrganization implements ShouldQueue
                 ],
             ]);
 
-            if (!empty($this->personData['location'])) {
+            if (! empty($this->personData['location'])) {
                 ProcessLocation::dispatch($this->importResult, Person::class, $person->id, [$this->personData['location']]);
             }
 
@@ -102,16 +102,16 @@ class ProcessPeopleOrganization implements ShouldQueue
     }
 
     /**
-     * @param \App\Models\Person $person
+     * @param  \App\Models\Person  $person
      */
     private function addSuccessMessage($person)
     {
         $message = [
-            'import_id'    => $person->id,
-            'import_value' => $person->name
+            'import_id' => $person->id,
+            'import_value' => $person->name,
         ];
 
-        if (!isset($this->importSuccessMessages[$this->company->id])) {
+        if (! isset($this->importSuccessMessages[$this->company->id])) {
             $this->importSuccessMessages[$this->company->id] = [
                 'target_id' => $this->company->id,
                 'messages' => [$message],
@@ -122,16 +122,16 @@ class ProcessPeopleOrganization implements ShouldQueue
     }
 
     /**
-     * @param \App\Models\Person $existingPerson
+     * @param  \App\Models\Person  $existingPerson
      */
     private function addFailedRecord($existingPerson)
     {
         $this->importFailedRecords[] = [
-            'company_id'   => $this->company->id,
-            'target_id'    => $existingPerson->id,
+            'company_id' => $this->company->id,
+            'target_id' => $existingPerson->id,
             'target_class' => get_class($existingPerson),
             'existing_data' => $existingPerson->toArray(),
-            'import_value' => $this->personData
+            'import_value' => $this->personData,
         ];
     }
 
@@ -142,7 +142,7 @@ class ProcessPeopleOrganization implements ShouldQueue
     {
         $oldMessages = json_decode($this->importResult->people_messages, true);
 
-        if (!empty($oldMessages)) {
+        if (! empty($oldMessages)) {
             $this->importSuccessMessages = array_merge($oldMessages, $this->importSuccessMessages);
         }
 
@@ -160,31 +160,31 @@ class ProcessPeopleOrganization implements ShouldQueue
         }
 
         $failedRecords = [];
-        $datetime      = Carbon::now();
+        $datetime = Carbon::now();
 
         foreach ($this->importFailedRecords as $record) {
             $this->logError($record);
 
             $failedRecords[] = [
                 'import_result_id' => $this->importResult->id,
-                'type'             => ImportFailure::TYPE_PEOPLE_ORGANIZATION,
-                'details'          => json_encode($record),
-                'created_at'       => $datetime,
-                'updated_at'       => $datetime,
+                'type' => ImportFailure::TYPE_PEOPLE_ORGANIZATION,
+                'details' => json_encode($record),
+                'created_at' => $datetime,
+                'updated_at' => $datetime,
             ];
         }
 
         ImportFailure::insert($failedRecords);
     }
+
     /**
-     * @param array $record
+     * @param  array  $record
      */
     private function logError($record)
     {
         Log::error(
-            $this->company->id . ' ' . $this->company->name . ':\n' .
-            'Can\'t import person to company, person already exist. .' . '\n' . json_encode($record)
+            $this->company->id.' '.$this->company->name.':\n'.
+            'Can\'t import person to company, person already exist. .'.'\n'.json_encode($record)
         );
     }
-
 }

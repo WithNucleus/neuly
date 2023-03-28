@@ -5,8 +5,6 @@ namespace App\Console\Commands;
 use App\Models\Company;
 use App\Models\Person;
 use Illuminate\Console\Command;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class GenerateEntityPreviewLinks extends Command
@@ -44,11 +42,10 @@ class GenerateEntityPreviewLinks extends Command
     {
         $allowedEntities = [
             Company::class,
-            Person::class
+            Person::class,
         ];
 
         foreach ($allowedEntities as $entity) {
-
             $entities = $entity::notPublic()->whereNull('visibility_code')->get();
 
             foreach ($entities as $entityItem) {

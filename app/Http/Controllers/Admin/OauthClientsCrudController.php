@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 
 /**
  * Class OauthClientsCrudController
- * @package App\Http\Controllers\Admin
+ *
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
 class OauthClientsCrudController extends CrudController
@@ -27,12 +27,12 @@ class OauthClientsCrudController extends CrudController
      */
     public function setup()
     {
-        if (!backpack_user()->can('edit users')) {
+        if (! backpack_user()->can('edit users')) {
             abort(404);
         }
 
         CRUD::setModel(OauthClient::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/oauth-clients');
+        CRUD::setRoute(config('backpack.base.route_prefix').'/oauth-clients');
         CRUD::setEntityNameStrings('oauth clients', 'oauth clients');
     }
 
@@ -40,6 +40,7 @@ class OauthClientsCrudController extends CrudController
      * Define what happens when the List operation is loaded.
      *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
+     *
      * @return void
      */
     protected function setupListOperation()
@@ -67,6 +68,7 @@ class OauthClientsCrudController extends CrudController
      * Define what happens when the Create operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-create
+     *
      * @return void
      */
     protected function setupCreateOperation()
@@ -131,6 +133,7 @@ class OauthClientsCrudController extends CrudController
      * Define what happens when the Update operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
+     *
      * @return void
      */
     protected function setupUpdateOperation()

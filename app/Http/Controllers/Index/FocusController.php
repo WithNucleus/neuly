@@ -3,16 +3,14 @@
 namespace App\Http\Controllers\Index;
 
 use App\Http\Controllers\Controller;
-use App\Repositories\FollowRepository;
-use Illuminate\Http\Request;
 use App\Models\Focus;
-use App\Models\Company;
+use App\Repositories\FollowRepository;
 use App\Services\Metas;
-use Spatie\QueryBuilder\QueryBuilder;
-use Spatie\QueryBuilder\AllowedSort;
-use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\Activitylog\Models\Activity;
 use Auth;
+use Illuminate\Http\Request;
+use Spatie\Activitylog\Models\Activity;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class FocusController extends Controller
 {
@@ -27,8 +25,8 @@ class FocusController extends Controller
     }
 
     // Index
-    public function index(Request $request) {
-
+    public function index(Request $request)
+    {
         // Get Focus
         // $focus_items = Focus::with('companies')->orderBy('name')->get();
         $focus_items = QueryBuilder::for(Focus::class)
@@ -38,7 +36,7 @@ class FocusController extends Controller
             ])
             ->defaultSort('name')
             ->allowedSorts([
-                'name'
+                'name',
             ])
             ->paginate(10)
             ->appends(request()->query());
@@ -50,19 +48,19 @@ class FocusController extends Controller
     }
 
     // Show
-    public function show(Request $request, $slug) {
-
+    public function show(Request $request, $slug)
+    {
         // Get Focus
         $focus = Focus::where('slug', $slug)->firstOrFail();
         $focus = Focus::where('slug', $slug)->with(['companies', 'jobs', 'research', 'events', 'clinicaltrials'])->firstOrFail();
 
         $focusCats = Focus::drugs()->orderBy('name')->get();
 
-        $metas = Metas::process(array(
-            'title'         => $focus->name,
-            'description'   => '',
-            'image'         => '',
-        ));
+        $metas = Metas::process([
+            'title' => $focus->name,
+            'description' => '',
+            'image' => '',
+        ]);
 
         $entity = 'focus';
         $isFollowed = (bool) count(FollowRepository::fromuser(Focus::class, $focus->id));
@@ -73,7 +71,7 @@ class FocusController extends Controller
             ->withProperties([
                 'ip' => $request->ip(),
                 'entity' => 'focus',
-                'slug' => $focus->slug
+                'slug' => $focus->slug,
             ])
             ->performedOn($focus)
             ->tap(function (Activity $activity) use ($request) {

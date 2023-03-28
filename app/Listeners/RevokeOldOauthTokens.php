@@ -2,7 +2,6 @@
 
 namespace App\Listeners;
 
-use App\Models\OauthAccessToken;
 use Laravel\Passport\Client;
 use Laravel\Passport\Events\AccessTokenCreated;
 
@@ -21,7 +20,6 @@ class RevokeOldOauthTokens
     /**
      * Handle the event.
      *
-     * @param  AccessTokenCreated  $event
      * @return void
      */
     public function handle(AccessTokenCreated $event)

@@ -5,7 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddColumnTypeFocusTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -31,7 +31,7 @@ class AddColumnTypeFocusTable extends Migration
             'Ayahuasca',
             'Arketamine',
             'Mescaline',
-            'Noribogaine'
+            'Noribogaine',
         ];
 
         Focus::whereIn('name', $drugFocusNames)->update(['type' => Focus::TYPE_DRUG]);
@@ -48,4 +48,4 @@ class AddColumnTypeFocusTable extends Migration
             $table->dropColumn('type');
         });
     }
-}
+};

@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
-class FixCompaniesAndJobsEnumValues extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -24,7 +24,6 @@ class FixCompaniesAndJobsEnumValues extends Migration
             DB::table('companies')
                 ->where('ownership', (string) $wrongValue)
                 ->update(['ownership' => $correctValue]);
-
         }
 
         $jobEmploymentTypeValuesToFix = [
@@ -49,4 +48,4 @@ class FixCompaniesAndJobsEnumValues extends Migration
     {
         //not needed
     }
-}
+};

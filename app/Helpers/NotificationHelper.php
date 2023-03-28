@@ -13,13 +13,12 @@ class NotificationHelper
     }
 
     /**
-     * @param \Illuminate\Notifications\Notification $notification
      * @return void
      */
     public static function sendAdminNotifications(Notification $notification)
     {
         $emailSettings = config('mail.custom.admin_notifications_email');
-        $emailArray    = StringHelper::explodeAndFilterEmpty($emailSettings, ',');
+        $emailArray = StringHelper::explodeAndFilterEmpty($emailSettings, ',');
 
         foreach ($emailArray as $email) {
             if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -34,15 +33,15 @@ class NotificationHelper
 
     public static function sendSlackNotification(Notification $notification, string $channel)
     {
-        if (config('services.slack.webhooks.' . $channel)) {
-            NotificationFacade::route('slack', config('services.slack.webhooks.' . $channel))->notify($notification);
+        if (config('services.slack.webhooks.'.$channel)) {
+            NotificationFacade::route('slack', config('services.slack.webhooks.'.$channel))->notify($notification);
         }
     }
 
     public static function sendSalesNotifications(Notification $notification)
     {
         $emailSettings = config('mail.custom.sales_notifications_email');
-        $emailArray    = StringHelper::explodeAndFilterEmpty($emailSettings, ',');
+        $emailArray = StringHelper::explodeAndFilterEmpty($emailSettings, ',');
 
         foreach ($emailArray as $email) {
             if (filter_var($email, FILTER_VALIDATE_EMAIL)) {

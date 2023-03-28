@@ -3,16 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\BookableListingCrudRequest;
-use App\Http\Requests\StoreBookableListingRequest;
-use App\Models\BookableListing;
-use App\Models\Company;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
-use Illuminate\Support\Facades\Route;
 
 /**
  * Class BookableListingCrudController
- * @package App\Http\Controllers\Admin
+ *
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
 class BookableListingCrudController extends CrudController
@@ -30,12 +26,12 @@ class BookableListingCrudController extends CrudController
      */
     public function setup()
     {
-        if(!backpack_user()->can('edit companies')) {
+        if (! backpack_user()->can('edit companies')) {
             abort(404);
         }
 
         CRUD::setModel(\App\Models\BookableListing::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/bookable-listing');
+        CRUD::setRoute(config('backpack.base.route_prefix').'/bookable-listing');
         CRUD::setEntityNameStrings('bookable listing', 'bookable listings');
 
         $this->crud->query = $this->crud->query->withoutGlobalScopes();
@@ -46,6 +42,7 @@ class BookableListingCrudController extends CrudController
      * Define what happens when the List operation is loaded.
      *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
+     *
      * @return void
      */
     protected function setupListOperation()
@@ -56,12 +53,12 @@ class BookableListingCrudController extends CrudController
         CRUD::column('type');
         CRUD::column('status');
         $this->crud->addColumn([
-            'label' => "Directories",
-            'type' => "select_multiple",
+            'label' => 'Directories',
+            'type' => 'select_multiple',
             'name' => 'directories',
             'entity' => 'directories',
-            'attribute' => "name",
-            'model' => "App\Models\Directory",
+            'attribute' => 'name',
+            'model' => \App\Models\Directory::class,
         ]);
         CRUD::column('bookable_type');
         CRUD::column('created_at');
@@ -80,6 +77,7 @@ class BookableListingCrudController extends CrudController
      * Define what happens when the Create operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-create
+     *
      * @return void
      */
     protected function setupCreateOperation()
@@ -110,17 +108,17 @@ class BookableListingCrudController extends CrudController
         ]);
 
         $this->crud->addField([
-            'label'     => "Directories",
-            'type'      => 'select2_multiple',
-            'name'      => 'directories',
-            'entity'    => 'directories',
+            'label' => 'Directories',
+            'type' => 'select2_multiple',
+            'name' => 'directories',
+            'entity' => 'directories',
             'attribute' => 'name',
-            'pivot'     => true,
+            'pivot' => true,
             'select_all' => true,
-            'model'     => "App\Models\Directory",
-            'options'   => (function ($query) {
+            'model' => \App\Models\Directory::class,
+            'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->get();
-             }),
+            }),
         ]);
 
         /**
@@ -134,6 +132,7 @@ class BookableListingCrudController extends CrudController
      * Define what happens when the Update operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
+     *
      * @return void
      */
     protected function setupUpdateOperation()

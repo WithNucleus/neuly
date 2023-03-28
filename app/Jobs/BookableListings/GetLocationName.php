@@ -4,7 +4,6 @@ namespace App\Jobs\BookableListings;
 
 use App\Models\BookableListing;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -47,10 +46,10 @@ class GetLocationName implements ShouldQueue
                 $this->bookableListing->location_name = $results['results'][0]['formatted'];
                 $this->bookableListing->save();
             } catch(Throwable $exception) {
-                Log::warning('Bad results for Bookable Listing lookup ' . $this->bookableListing->name . "\n" . $exception->getMessage());
+                Log::warning('Bad results for Bookable Listing lookup '.$this->bookableListing->name."\n".$exception->getMessage());
             }
         } catch(Throwable $exception) {
-            Log::warning('Error when getting location name of Bookable Listing ' . $this->bookableListing->name . "\n" . $exception->getMessage());
+            Log::warning('Error when getting location name of Bookable Listing '.$this->bookableListing->name."\n".$exception->getMessage());
         }
     }
 }

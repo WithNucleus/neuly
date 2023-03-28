@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Clinicaltrial extends Model implements EntityContract
@@ -35,10 +36,12 @@ class Clinicaltrial extends Model implements EntityContract
     */
 
     protected $table = 'clinicaltrials';
+
     protected $guarded = ['id'];
 
     // log activity for all attributes, which not listed in $guarded array
     protected static $logUnguarded = true;
+
     protected static $logName = 'entities';
 
     private $searchableRelationships = [
@@ -48,7 +51,7 @@ class Clinicaltrial extends Model implements EntityContract
     ];
 
     private $searchableRenamedFields = [
-        'title' => 'name'
+        'title' => 'name',
     ];
 
     private $searchableModelName = 'Clinical Trial';
@@ -72,7 +75,7 @@ class Clinicaltrial extends Model implements EntityContract
 
     private function setSlug()
     {
-        $this->attributes['slug'] = $this->attributes['nct_number'] . '-' . Str::slug($this->attributes['title']);
+        $this->attributes['slug'] = $this->attributes['nct_number'].'-'.Str::slug($this->attributes['title']);
     }
 
     /*
@@ -81,22 +84,26 @@ class Clinicaltrial extends Model implements EntityContract
     |--------------------------------------------------------------------------
     */
 
-    public function locations() {
+    public function locations()
+    {
         return $this->belongsToMany(Location::class, 'clinicaltrial_location', 'clinicaltrial_id', 'location_id')
                     ->withTimestamps();
     }
 
-    public function companies() {
+    public function companies()
+    {
         return $this->belongsToMany(Company::class, 'clinicaltrial_company', 'clinicaltrial_id', 'company_id')
                     ->withTimestamps();
     }
 
-    public function people() {
+    public function people()
+    {
         return $this->belongsToMany(Person::class, 'clinicaltrial_person', 'clinicaltrial_id', 'person_id')
                     ->withTimestamps();
     }
 
-    public function focus() {
+    public function focus()
+    {
         return $this->belongsToMany(Focus::class, 'clinicaltrial_focus', 'clinicaltrial_id', 'focus_id')
                     ->withTimestamps();
     }
@@ -139,8 +146,9 @@ class Clinicaltrial extends Model implements EntityContract
             ->sortBy('name');
     }
 
-    public function phase() {
-        return $this->hasMany('App\Models\ClinicaltrialPhase', 'phases');
+    public function phase()
+    {
+        return $this->hasMany(\App\Models\ClinicaltrialPhase::class, 'phases');
     }
 
     /*
@@ -166,8 +174,7 @@ class Clinicaltrial extends Model implements EntityContract
     }
 
     /**
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param array $years
+     * @param  array  $years
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeStartYear(Builder $query, ...$years)
@@ -193,11 +200,13 @@ class Clinicaltrial extends Model implements EntityContract
         return $this->attributes['title'];
     }
 
-    public function setConditionsAttribute($value) {
+    public function setConditionsAttribute($value)
+    {
         $this->attributes['conditions'] = str_replace('|', ';', $value);
     }
 
-    public function setInterventionsAttribute($value) {
+    public function setInterventionsAttribute($value)
+    {
         $this->attributes['interventions'] = str_replace('|', ';', $value);
     }
 
@@ -208,121 +217,121 @@ class Clinicaltrial extends Model implements EntityContract
     {
         return [
             //attributes
-            'title'                   => [
+            'title' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'slug'                    => [
+            'slug' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'nct_number'              => [
-                'type'  => FieldsMapping::TYPE_STRING,
+            'nct_number' => [
+                'type' => FieldsMapping::TYPE_STRING,
                 'label' => 'NCT Number',
             ],
-            'acronym'                 => [
+            'acronym' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'status'                  => [
+            'status' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'study_results'           => [
+            'study_results' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'gender'                  => [
+            'gender' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'age'                     => [
+            'age' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'phases'                  => [
+            'phases' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'enrollment'              => [
+            'enrollment' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'funded_bys'              => [
+            'funded_bys' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'study_type'              => [
+            'study_type' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'other_ids'               => [
+            'other_ids' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'start_date'              => [
+            'start_date' => [
                 'type' => FieldsMapping::TYPE_DATE,
             ],
             'primary_completion_date' => [
                 'type' => FieldsMapping::TYPE_DATE,
             ],
-            'completion_date'         => [
+            'completion_date' => [
                 'type' => FieldsMapping::TYPE_DATE,
             ],
-            'first_posted'            => [
+            'first_posted' => [
                 'type' => FieldsMapping::TYPE_DATE,
             ],
-            'results_first_posted'    => [
+            'results_first_posted' => [
                 'type' => FieldsMapping::TYPE_DATE,
             ],
-            'last_update_posted'      => [
+            'last_update_posted' => [
                 'type' => FieldsMapping::TYPE_DATE,
             ],
-            'study_url'               => [
+            'study_url' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'brief_summary'               => [
+            'brief_summary' => [
                 'type' => FieldsMapping::TYPE_TEXT,
             ],
-            'detailed_description'               => [
+            'detailed_description' => [
                 'type' => FieldsMapping::TYPE_TEXT_EDITOR,
             ],
-            'min_age'               => [
+            'min_age' => [
                 'type' => FieldsMapping::TYPE_INTEGER,
             ],
-            'max_age'               => [
+            'max_age' => [
                 'type' => FieldsMapping::TYPE_INTEGER,
             ],
             //relations
-            'companies'               => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'companies' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
-            'locations'               => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'locations' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
-            'people'                  => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'people' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
-            'focus'                   => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'focus' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
-            'conditions'              => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_ONE_N,
+            'conditions' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_ONE_N,
                 'relationField' => 'value',
             ],
-            'interventions'           => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_ONE_N,
+            'interventions' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_ONE_N,
                 'relationField' => 'value',
             ],
-            'outcomeMeasures'        => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_ONE_N,
+            'outcomeMeasures' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_ONE_N,
                 'relationField' => 'value',
-                'label'         => 'Outcome Measures',
+                'label' => 'Outcome Measures',
             ],
-            'studyDesigns'           => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_ONE_N,
+            'studyDesigns' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_ONE_N,
                 'relationField' => 'value',
-                'label'         => 'Study Designs',
+                'label' => 'Study Designs',
             ],
         ];
     }
@@ -337,5 +346,11 @@ class Clinicaltrial extends Model implements EntityContract
         }
 
         return $mapping;
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->useLogName(self::$logName);
     }
 }

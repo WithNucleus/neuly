@@ -22,15 +22,15 @@ class CompaniesByFocusDrug extends Controller
             ->get();
 
         $response = [
-            "chart" => [
-                "labels" => $data->pluck('name'),
+            'chart' => [
+                'labels' => $data->pluck('name'),
             ],
-            "datasets" => [
+            'datasets' => [
                 [
-                    "name" => "Number of Companies",
-                    "values" => $data->pluck('total')
-                ]
-            ]
+                    'name' => 'Number of Companies',
+                    'values' => $data->pluck('total'),
+                ],
+            ],
         ];
 
         return response()->json($response, Response::HTTP_OK);

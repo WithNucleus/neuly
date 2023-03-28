@@ -1,11 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use App\Models\ClinicaltrialPhase;
+use Illuminate\Database\Migrations\Migration;
 
-class AddClinicalTrialPhaseRecords extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -20,7 +18,7 @@ class AddClinicalTrialPhaseRecords extends Migration
             ClinicaltrialPhase::create([
                 'name' => $phase['name'],
                 'pretty_name' => $phase['pretty_name'],
-                'integer' => $phase['integer']
+                'integer' => $phase['integer'],
             ]);
         }
     }
@@ -38,4 +36,4 @@ class AddClinicalTrialPhaseRecords extends Migration
             ClinicaltrialPhase::find($phase['name'])->delete();
         }
     }
-}
+};

@@ -11,6 +11,7 @@ use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Research extends Model implements EntityContract
@@ -29,10 +30,12 @@ class Research extends Model implements EntityContract
     */
 
     protected $table = 'research';
+
     protected $guarded = ['id'];
 
     // log activity for all attributes, which not listed in $guarded array
     protected static $logUnguarded = true;
+
     protected static $logName = 'entities';
 
     private $searchableRelationships = [
@@ -47,8 +50,9 @@ class Research extends Model implements EntityContract
     |--------------------------------------------------------------------------
     */
 
-    public function getShowLink() {
-        return '<a href="' . route('discover.research.show', $this->slug) . '">' . $this->name . '</a>';
+    public function getShowLink()
+    {
+        return '<a href="'.route('discover.research.show', $this->slug).'">'.$this->name.'</a>';
     }
 
     /*
@@ -57,17 +61,20 @@ class Research extends Model implements EntityContract
     |--------------------------------------------------------------------------
     */
 
-    public function focus() {
+    public function focus()
+    {
         return $this->belongsToMany(Focus::class, 'focus_research', 'research_id', 'focus_id')
                     ->withTimestamps();
     }
 
-    public function companies() {
+    public function companies()
+    {
         return $this->belongsToMany(Company::class, 'company_research', 'research_id', 'company_id')
                     ->withTimestamps();
     }
 
-    public function people() {
+    public function people()
+    {
         return $this->belongsToMany(Person::class, 'person_research', 'research_id', 'person_id')
                     ->withTimestamps();
     }
@@ -90,7 +97,8 @@ class Research extends Model implements EntityContract
     |--------------------------------------------------------------------------
     */
 
-    public function setNameAttribute($value) {
+    public function setNameAttribute($value)
+    {
         $this->attributes['name'] = $value;
         $this->attributes['slug'] = isset($this->attributes['slug']) ? $this->attributes['slug'] : Str::slug($value);
     }
@@ -102,45 +110,45 @@ class Research extends Model implements EntityContract
     {
         return [
             //attributes
-            'name'             => [
+            'name' => [
                 'type' => FieldsMapping::TYPE_STRING,
                 'required' => true,
             ],
-            'slug'             => [
+            'slug' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'abstract'         => [
+            'abstract' => [
                 'type' => FieldsMapping::TYPE_TEXT_EDITOR,
             ],
-            'link'             => [
+            'link' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'publish_date'     => [
+            'publish_date' => [
                 'type' => FieldsMapping::TYPE_DATE,
             ],
             'publication_info' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'api_identifier'   => [
+            'api_identifier' => [
                 'type' => FieldsMapping::TYPE_STRING,
             ],
-            'resources'        => [
+            'resources' => [
                 'type' => FieldsMapping::TYPE_TEXT_EDITOR,
             ],
             //relations
-            'focus'            => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'focus' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
-            'companies'        => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'companies' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
-            'people'           => [
-                'type'          => FieldsMapping::TYPE_RELATION,
-                'relation'      => FieldsMapping::RELATION_N_N,
+            'people' => [
+                'type' => FieldsMapping::TYPE_RELATION,
+                'relation' => FieldsMapping::RELATION_N_N,
                 'relationField' => 'name',
             ],
         ];
@@ -156,5 +164,11 @@ class Research extends Model implements EntityContract
         }
 
         return $mapping;
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->useLogName(self::$logName);
     }
 }

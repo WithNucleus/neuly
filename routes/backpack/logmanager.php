@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Backpack\LogManager Routes
@@ -10,13 +12,9 @@
 |
 */
 
-Route::group([
-    'namespace'  => 'App\Http\Controllers\Admin',
-    'middleware' => ['web', config('backpack.base.middleware_key', 'admin')],
-    'prefix'     => config('backpack.base.route_prefix', 'admin'),
-], function () {
-    Route::get('log', 'LogController@index')->name('log.index');
-    Route::get('log/preview/{file_name}', 'LogController@preview')->name('log.show');
-    Route::get('log/download/{file_name}', 'LogController@download')->name('log.download');
-    Route::delete('log/delete/{file_name}', 'LogController@delete')->name('log.destroy');
+Route::middleware('web', config('backpack.base.middleware_key', 'admin'))->prefix(config('backpack.base.route_prefix', 'admin'))->group(function () {
+    Route::get('log', [App\Http\Controllers\Admin\LogController::class, 'index'])->name('log.index');
+    Route::get('log/preview/{file_name}', [App\Http\Controllers\Admin\LogController::class, 'preview'])->name('log.show');
+    Route::get('log/download/{file_name}', [App\Http\Controllers\Admin\LogController::class, 'download'])->name('log.download');
+    Route::delete('log/delete/{file_name}', [App\Http\Controllers\Admin\LogController::class, 'delete'])->name('log.destroy');
 });

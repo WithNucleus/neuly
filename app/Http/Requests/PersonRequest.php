@@ -26,7 +26,7 @@ class PersonRequest extends FormRequest
     {
         return [
             'name' => 'required|min:3|max:255',
-            'slug' => 'required|min:3|max:255|unique:people,slug,' . $this->get('id'),
+            'slug' => 'required|min:3|max:255|unique:people,slug,'.$this->get('id'),
         ];
     }
 

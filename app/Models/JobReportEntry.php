@@ -16,11 +16,15 @@ class JobReportEntry extends Model
     */
 
     const CURRENTLY_HIRING_NO = 0;
+
     const CURRENTLY_HIRING_YES = 1;
+
     const CURRENTLY_HIRING_PLANNED = 2;
 
     protected $table = 'job_report_entries';
+
     protected $guarded = ['id'];
+
     protected $fillable = [
         'name',
         'email',

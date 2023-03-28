@@ -51,7 +51,6 @@ class SerpapiData implements ShouldQueue
 //            }
 //
 //            $serpapiData->save();
-
         } catch (\Exception $e) {
             Log::error("An error occurred while trying to get SerpApi data for company: '".$this->company->name."' . Error message: ".$e->getMessage());
         }
