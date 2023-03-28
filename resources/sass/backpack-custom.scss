@@ -115,6 +115,19 @@ a:hover {
 	border-color: #2a2a2a;
 }
 
+.btn-default {
+    color: #fefefe !important;
+	background-color: #222 !important;
+	border-color: #2a2a2a !important;
+}
+
+.btn-default:hover {
+    color: #fefefe !important;
+	background-color: #181818 !important;
+	border-color: #181818 !important;
+    cursor: pointer;
+}
+
 .btn-primary,
 .dataTables_wrapper .dataTables_paginate .paginate_button.current {
 	color: #fff;
@@ -319,9 +332,59 @@ div.dataTables_wrapper div.dataTables_length select {
     color: #dedede;
 }
 
+.datepicker table tr td.active:active,
+.datepicker table tr td.active.highlighted:active,
+.datepicker table tr td.active.active,
+.datepicker table tr td.active.highlighted.active {
+    color: #fff !important;
+	background-color: #5b62bd !important;
+	border-color: #5b62bd !important;
+}
+
+.datepicker table tr td:hover,
+.datepicker table tr th:hover {
+    color: #fff !important;
+	background-color: #5b62bd !important;
+	border-color: #5b62bd !important;
+}
+
 .custom-file .custom-file-label,
 .custom-file .custom-file-label:after{
     background-color: #222 !important;
     border-color: #222;
     color: #fefefe;
+}
+
+.list-group-item {
+    background: transparent;
+}
+
+.modal-content {
+    background-color: #222;
+}
+
+.close {
+    color: #dedede;
+    text-shadow: none;
+    opacity: 1;
+}
+
+.close:hover {
+    color: #5b62bd;
+    text-shadow: none;
+}
+table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>td.dtr-control:before,
+table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>th.dtr-control:before {
+    border: 2px solid #7c69ef !important;
+    background-color: #7c69ef !important;
+}
+
+.tt-menu {
+    background-color: #222 !important;
+    color: #fff !important;
+}
+
+.tt-suggestion,
+.tt-selectable {
+    color: #fff !important;
 }
