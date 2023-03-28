@@ -46,7 +46,6 @@
         "yadahan/laravel-authentication-log": "^1.5"
     },
     "require-dev": {
-        "backpack/devtools": "*",
         "backpack/generators": "^3.3",
         "barryvdh/laravel-debugbar": "^3.6",
         "fakerphp/faker": "^1.9.1",
