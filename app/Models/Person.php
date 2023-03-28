@@ -122,35 +122,52 @@ class Person extends Model implements EntityContract, EntityImageContract
         }
     }
 
-    public function getLinkedIn()
+    public function getLinkedIn(): ?string
     {
         if ($this->linkedin != null) {
             return '<a href="https://www.linkedin.com/in/'.$this->linkedin.'" target="_blank" rel="noopener noreferrer"><i class="lab la-linkedin-in"></i> '.$this->linkedin.'</a>';
+        } else {
+            return NULL;
         }
     }
 
-    public function getFacebook()
+    public function getFacebook(): ?string
     {
         if ($this->facebook != null) {
             return '<a href="https://www.facebook.com/'.$this->facebook.'" target="_blank" rel="noopener noreferrer"><i class="lab la-facebook-f"></i> '.$this->facebook.'</a>';
+        } else {
+            return NULL;
         }
     }
 
-    public function getTwitter()
+    public function getTwitter(): ?string
     {
         if ($this->twitter != null) {
             return '<a href="https://www.twitter.com/'.$this->twitter.'" target="_blank" rel="noopener noreferrer"><i class="lab la-twitter"></i> '.$this->twitter.'</a>';
+        } else {
+            return NULL;
         }
     }
 
-    public function getInstagram()
+    public function getInstagram(): ?string
     {
         if ($this->instagram != null) {
             return '<a href="https://www.instagram.com/'.$this->instagram.'" target="_blank" rel="noopener noreferrer"><i class="lab la-instagram"></i> '.$this->instagram.'</a>';
+        } else {
+            return NULL;
         }
     }
 
-    public function getShowLink()
+    public function getWebsite(): ?string
+    {
+        if ($this->website != null) {
+            return '<a href="'.$this->website.'" target="_blank" rel="noopener noreferrer"><i class="lab la-link"></i> '.$this->website.'</a>';
+        } else {
+            return NULL;
+        }
+    }
+
+    public function getShowLink(): string
     {
         return '<a href="'.route('discover.people.show', $this->slug).'">'.$this->name.'</a>';
     }

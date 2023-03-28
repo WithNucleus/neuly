@@ -6,11 +6,6 @@ use App\Http\Requests\DirectoryRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
-/**
- * Class DirectoryCrudController
- *
- * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
- */
 class DirectoryCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
@@ -19,11 +14,6 @@ class DirectoryCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 
-    /**
-     * Configure the CrudPanel object. Apply settings to all operations.
-     *
-     * @return void
-     */
     public function setup()
     {
         CRUD::setModel(\App\Models\Directory::class);
@@ -31,24 +21,12 @@ class DirectoryCrudController extends CrudController
         CRUD::setEntityNameStrings('directory', 'directories');
     }
 
-    /**
-     * Define what happens when the List operation is loaded.
-     *
-     * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
-     *
-     * @return void
-     */
     protected function setupListOperation()
     {
         CRUD::column('name');
+        CRUD::column('url_prefix');
         CRUD::column('created_at');
         CRUD::column('updated_at');
-
-        /**
-         * Columns can be defined using the fluent syntax or array syntax:
-         * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
-         */
     }
 
     /**
@@ -62,12 +40,7 @@ class DirectoryCrudController extends CrudController
     {
         CRUD::setValidation(DirectoryRequest::class);
         CRUD::field('name');
-
-        /**
-         * Fields can be defined using the fluent syntax or array syntax:
-         * - CRUD::field('price')->type('number');
-         * - CRUD::addField(['name' => 'price', 'type' => 'number']));
-         */
+        CRUD::field('url_prefix');
     }
 
     /**

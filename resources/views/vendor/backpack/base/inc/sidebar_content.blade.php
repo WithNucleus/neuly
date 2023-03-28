@@ -419,3 +419,5 @@
         word-wrap: break-word;       /* Internet Explorer 5.5+ */
     }
 </style>
+
+<li class="nav-item"><a class="nav-link" href="{{ backpack_url('test-entity') }}"><i class="nav-icon la la-question"></i> Test entities</a></li>

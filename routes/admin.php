@@ -44,24 +44,18 @@ Route::middleware('auth')->prefix('/admin')->name('admin.')->group(function () {
 
     // Data Feed
     Route::middleware('permission:import')->group(function () {
-//        Route::crud('datafeed', [App\Http\Controllers\Admin\DataFeedCrudController::class]);
         Route::prefix('/datafeed')->name('datafeed.')->group(function () {
             Route::get('/{id}/get', [App\Http\Controllers\Admin\DataFeedCrudController::class, 'getFeedItems'])->name('get');
         });
 
         // Media Items
-//        Route::crud('media-item', [App\Http\Controllers\Admin\MediaItemCrudController::class]);
         Route::get('/media-dashboard', [App\Http\Controllers\Admin\DataFeeds\DashboardController::class, 'index'])->name('media-dashboard');
         Route::post('/media-dashboard/update/{id}', [App\Http\Controllers\Admin\DataFeeds\DashboardController::class, 'update'])->name('media-dashboard.update');
 
         // Metrics
-//        Route::crud('metric', [App\Http\Controllers\Admin\MetricCrudController::class]);
         Route::get('/metrics/charts', [App\Http\Controllers\Admin\Metrics\DashboardController::class, 'charts'])->name('metrics.charts');
         Route::get('/metrics/tiles', [App\Http\Controllers\Admin\Metrics\DashboardController::class, 'tiles'])->name('metrics.tiles');
         Route::get('/metrics/tiles/details', [App\Http\Controllers\Admin\Metrics\DashboardController::class, 'tileDetails'])->name('metrics.tiles.details');
-
-        // Courses
-//        Route::crud('course', [App\Http\Controllers\Admin\CourseCrudController::class]);
     });
 
     Route::prefix('/nav-tiles')->name('nav-tiles.')->middleware('permission:manage navigation tiles')->group(function () {

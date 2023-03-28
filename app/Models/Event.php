@@ -71,6 +71,23 @@ class Event extends Model implements EntityContract, EntityImageContract
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
+    public function getEventUrlLink(): ?string
+    {
+        if ($this->event_url != null) {
+            return '<a href="'.$this->event_url.'" target="_blank" rel="noopener noreferrer">'.$this->event_url.'</a>';
+        } else {
+            return NULL;
+        }
+    }
+
+    public function getEventRegistrationLink(): ?string
+    {
+        if ($this->registration_url != null) {
+            return '<a href="'.$this->registration_url.'" target="_blank" rel="noopener noreferrer">'.$this->registration_url.'</a>';
+        } else {
+            return NULL;
+        }
+    }
 
     /*
     |--------------------------------------------------------------------------

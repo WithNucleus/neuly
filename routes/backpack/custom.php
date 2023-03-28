@@ -103,9 +103,11 @@ Route::group([
     Route::crud('oauth-access-token', 'OauthAccessTokenCrudController');
 
     Route::middleware('permission:import')->group(function () {
-        Route::crud('datafeed', 'DataFeedCrudController');
-        Route::crud('media-item', 'MediaItemCrudController');
-        Route::crud('metric', 'MetricCrudController');
-        Route::crud('course', 'CourseCrudController');
+        Route::name('admin.')->group(function() {
+            Route::crud('datafeed', 'DataFeedCrudController');
+            Route::crud('media-item', 'MediaItemCrudController');
+            Route::crud('metric', 'MetricCrudController');
+            Route::crud('course', 'CourseCrudController');
+        });
     });
 }); // this should be the absolute last line of this file

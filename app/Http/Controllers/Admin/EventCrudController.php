@@ -2,31 +2,21 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Backpack\CRUD\Operations\UpdateOperationWithTouching;
 use App\Http\Requests\EventRequest;
 use App\Models\Event;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Backpack\CRUD\app\Library\Widget;
+use Illuminate\Support\Facades\Route;
 
-/**
- * Class EventCrudController
- *
- * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
- */
 class EventCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
-    use UpdateOperationWithTouching;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 
-    /**
-     * Configure the CrudPanel object. Apply settings to all operations.
-     *
-     * @return void
-     */
     public function setup()
     {
         if (! backpack_user()->can('edit events')) {
@@ -38,13 +28,6 @@ class EventCrudController extends CrudController
         CRUD::setEntityNameStrings('event', 'events');
     }
 
-    /**
-     * Define what happens when the List operation is loaded.
-     *
-     * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
-     *
-     * @return void
-     */
     protected function setupListOperation()
     {
         $this->crud->addColumn([
@@ -54,74 +37,42 @@ class EventCrudController extends CrudController
         );
         $this->crud->addColumn([
             'name' => 'start_date',
-            'type' => 'text',
+            'type' => 'date',
             'label' => 'Start Date']
         );
         $this->crud->addColumn([
             'label' => 'Focus',
-            'type' => 'select_multiple',
+            'type' => 'relationship',
             'name' => 'focus',
-            'entity' => 'focus',
             'attribute' => 'name',
-            'model' => \App\Models\Focus::class,
-            'options' => (function ($query) {
-                return $query->orderBy('name', 'ASC')->get();
-            }),
         ]);
         $this->crud->addColumn([
             'label' => 'Locations',
-            'type' => 'select_multiple',
+            'type' => 'relationship',
             'name' => 'locations',
-            'entity' => 'locations',
-            'attribute' => 'name',
-            'model' => \App\Models\Location::class,
-            'options' => (function ($query) {
-                return $query->orderBy('name', 'ASC')->get();
-            }),
+            'attribute' => 'name'
         ]);
         $this->crud->addColumn([
             'label' => 'People',
-            'type' => 'select_multiple',
+            'type' => 'relationship',
             'name' => 'people',
-            'entity' => 'people',
             'attribute' => 'name',
-            'model' => \App\Models\Person::class,
-            'options' => (function ($query) {
-                return $query->orderBy('name', 'ASC')->get();
-            }),
         ]);
         $this->crud->addColumn([
             'label' => 'Exhibitors',
-            'type' => 'select_multiple',
+            'type' => 'relationship',
             'name' => 'companies',
-            'entity' => 'companies',
             'attribute' => 'name',
-            'model' => \App\Models\Company::class,
-            'options' => (function ($query) {
-                return $query->orderBy('name', 'ASC')->get();
-            }),
         ]);
     }
 
-    /**
-     * Define what happens when the Show operation is loaded.
-     *
-     * @see https://backpackforlaravel.com/docs/crud-operation-update
-     *
-     * @return void
-     */
     protected function setupShowOperation()
     {
-        $this->crud->addColumn([
-            'name' => 'name',
-            'type' => 'text',
-            'label' => 'Event Name']
-        );
-        $this->crud->addColumn([
-            'name' => 'start_date',
-            'type' => 'date',
-            'label' => 'Start Date']
-        );
+        $eventId = Route::current()->parameter('id');
+        $event = Event::find($eventId);
+
+        $this->setupListOperation();
+
         $this->crud->addColumn([
             'name' => 'end_date',
             'type' => 'date',
@@ -129,74 +80,30 @@ class EventCrudController extends CrudController
         );
         $this->crud->addColumn([
             'name' => 'event_url',
-            'type' => 'text',
-            'label' => 'Event URL']
-        );
+            'type' => 'custom_html',
+            'label' => 'Event URL',
+            'value' => $event->getEventUrlLink(),
+            'escaped' => false
+        ]);
         $this->crud->addColumn([
             'name' => 'registration_url',
-            'type' => 'text',
-            'label' => 'Registration URL']
-        );
-        $this->crud->addColumn([
-            'label' => 'Focus',
-            'type' => 'select_multiple',
-            'name' => 'focus',
-            'entity' => 'focus',
-            'attribute' => 'name',
-            'model' => \App\Models\Focus::class,
-            'options' => (function ($query) {
-                return $query->orderBy('name', 'ASC')->get();
-            }),
-        ]);
-        $this->crud->addColumn([
-            'label' => 'Locations',
-            'type' => 'select_multiple',
-            'name' => 'locations',
-            'entity' => 'locations',
-            'attribute' => 'name',
-            'model' => \App\Models\Location::class,
-            'options' => (function ($query) {
-                return $query->orderBy('name', 'ASC')->get();
-            }),
-        ]);
-        $this->crud->addColumn([
-            'label' => 'People',
-            'type' => 'select_multiple',
-            'name' => 'people',
-            'entity' => 'people',
-            'attribute' => 'name',
-            'model' => \App\Models\Person::class,
-            'options' => (function ($query) {
-                return $query->orderBy('name', 'ASC')->get();
-            }),
-        ]);
-        $this->crud->addColumn([
-            'label' => 'Exhibitors',
-            'type' => 'select_multiple',
-            'name' => 'companies',
-            'entity' => 'companies',
-            'attribute' => 'name',
-            'model' => \App\Models\Company::class,
-            'options' => (function ($query) {
-                return $query->orderBy('name', 'ASC')->get();
-            }),
+            'type' => 'custom_html',
+            'label' => 'Registration URL',
+            'value' => $event->getEventRegistrationLink(),
+            'escaped' => false
         ]);
         $this->crud->addColumn([
             'label' => 'Event Type',
-            'type' => 'select_multiple',
+            'type' => 'relationship',
             'name' => 'eventTypes',
-            'entity' => 'eventTypes',
             'attribute' => 'name',
-            'model' => \App\Models\EventType::class,
-            'options' => (function ($query) {
-                return $query->orderBy('name', 'ASC')->get();
-            }),
         ]);
         $this->crud->addColumn([
             'name' => 'description',
-            'type' => 'text',
-            'label' => 'Description']
-        );
+            'type' => 'textarea',
+            'label' => 'Description',
+            'escaped' => false
+        ]);
         $this->crud->addColumn([
             'label' => 'Image',
             'name' => 'image',
@@ -335,13 +242,6 @@ class EventCrudController extends CrudController
         ]);
     }
 
-    /**
-     * Define what happens when the Update operation is loaded.
-     *
-     * @see https://backpackforlaravel.com/docs/crud-operation-update
-     *
-     * @return void
-     */
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();

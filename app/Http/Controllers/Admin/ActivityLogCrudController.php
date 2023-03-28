@@ -6,21 +6,11 @@ use App\Models\Activity;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
-/**
- * Class ApiUserCrudController.
- *
- * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
- */
 class ActivityLogCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 
-    /**
-     * Configure the CrudPanel object. Apply settings to all operations.
-     *
-     * @return void
-     */
     public function setup()
     {
         CRUD::setModel(Activity::class);
@@ -28,13 +18,6 @@ class ActivityLogCrudController extends CrudController
         CRUD::setEntityNameStrings('Activity Log', 'Activity Logs');
     }
 
-    /**
-     * Define what happens when the List operation is loaded.
-     *
-     * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
-     *
-     * @return void
-     */
     protected function setupListOperation()
     {
         $this->crud->addColumns([
@@ -60,8 +43,8 @@ class ActivityLogCrudController extends CrudController
             ],
             [
                 'label' => 'Subject',
-                'type' => 'closure',
-                'function' => function ($activity) {
+                'type' => 'custom_html',
+                'value' => function ($activity) {
                     if ($activity->subject_id == null) {
                         return $activity->subject_type;
                     }
@@ -74,8 +57,8 @@ class ActivityLogCrudController extends CrudController
             ],
             [
                 'label' => 'Causer',
-                'type' => 'closure',
-                'function' => function ($activity) {
+                'type' => 'custom_html',
+                'value' => function ($activity) {
                     if ($activity->causer_id == null) {
                         return $activity->causer_type;
                     }
@@ -175,55 +158,11 @@ class ActivityLogCrudController extends CrudController
      */
     protected function setupShowOperation()
     {
-        $this->crud->addColumns([
-            [
-                'name' => 'log_name',
-                'label' => 'Log Name',
-                'type' => 'text',
-            ],
-            [
-                'name' => 'description',
-                'label' => 'Description',
-                'type' => 'text',
-            ],
-            [
-                'name' => 'description',
-                'label' => 'Description',
-                'type' => 'text',
-            ],
-            [
-                'label' => 'Subject',
-                'type' => 'closure',
-                'function' => function ($activity) {
-                    if ($activity->subject_id == null) {
-                        return $activity->subject_type;
-                    }
-                    try {
-                        return $activity->subject->name.'<br>'.'<small>'.$activity->subject_type.' #'.$activity->subject_id.'</small>';
-                    } catch (\Throwable $throwable) {
-                        return '';
-                    }
-                },
-            ],
-            [
-                'label' => 'Causer',
-                'type' => 'closure',
-                'function' => function ($activity) {
-                    if ($activity->causer_id == null) {
-                        return $activity->causer_type;
-                    }
-                    try {
-                        return $activity->causer->name.' '.$activity->causer->last_name.'<br>'.'<small>'.$activity->causer_type.' #'.$activity->causer_id.'</small>';
-                    } catch (\Throwable $throwable) {
-                        return '';
-                    }
-                },
-            ],
-            [
-                'name' => 'properties',
-                'label' => 'Properties',
-                'type' => 'json',
-            ],
+        $this->setupListOperation();
+        $this->crud->addColumn([
+            'name' => 'properties',
+            'label' => 'Properties',
+            'type' => 'json',
         ]);
     }
 }

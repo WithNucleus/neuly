@@ -2,26 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Events\SendNotification;
-use App\Http\Controllers\Backpack\CRUD\Operations\UpdateOperationWithTouching;
 use App\Http\Requests\CompanyRequest;
 use App\Models\Company;
-use App\Models\Focus;
-use App\Models\Investor;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
+use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Backpack\CRUD\app\Library\Widget;
 use Illuminate\Support\Facades\Route;
 
-/**
- * Class CompanyCrudController
- *
- * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
- */
 class CompanyCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation { store as traitStore; }
-    use UpdateOperationWithTouching { update as traitUpdate; }
+    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 
@@ -31,9 +23,9 @@ class CompanyCrudController extends CrudController
             abort(404);
         }
 
-        $this->crud->setModel(\App\Models\Company::class);
-        $this->crud->setRoute(config('backpack.base.route_prefix').'/company');
-        $this->crud->setEntityNameStrings('organization', 'organizations');
+        CRUD::setModel(\App\Models\Company::class);
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/company');
+        CRUD::setEntityNameStrings('organization', 'organizations');
     }
 
     protected function setupListOperation()
@@ -80,8 +72,7 @@ class CompanyCrudController extends CrudController
         ]);
     }
 
-    protected function setupShowOperation()
-    {
+    public function setupShowOperation() {
         $this->crud->set('show.setFromDb', false);
 
         $companyId = Route::current()->parameter('id');
@@ -174,7 +165,7 @@ class CompanyCrudController extends CrudController
 
     protected function setupCreateOperation()
     {
-        $this->crud->setValidation(CompanyRequest::class);
+        CRUD::setValidation(CompanyRequest::class);
 
         $this->crud->addField([
             'name' => 'name',
@@ -190,43 +181,21 @@ class CompanyCrudController extends CrudController
         ]);
         $this->crud->addField([
             'label' => 'Focus',
-            'type' => 'select2_multiple',
+            'type' => 'relationship',
             'name' => 'focus',
-            'entity' => 'focus',
             'attribute' => 'name',
-
-            'pivot' => true,
-            'options' => (function ($query) {
-                return $query->orderBy('name', 'ASC')->get();
-            }),
-            'model' => \App\Models\Focus::class,
         ]);
         $this->crud->addField([
             'label' => 'Locations',
-            'type' => 'select2_multiple',
+            'type' => 'relationship',
             'name' => 'locations',
-            'entity' => 'locations',
             'attribute' => 'name',
-
-            'pivot' => true,
-
-            'options' => (function ($query) {
-                return $query->orderBy('name', 'ASC')->get();
-            }),
-            'model' => \App\Models\Location::class,
         ]);
         $this->crud->addField([
             'label' => 'Investors',
-            'type' => 'select2_multiple',
+            'type' => 'relationship',
             'name' => 'investors',
-            'entity' => 'investors',
             'attribute' => 'name',
-            'pivot' => true,
-
-            'options' => (function ($query) {
-                return $query->orderBy('name', 'ASC')->get();
-            }),
-            'model' => \App\Models\Investor::class,
         ]);
         $this->crud->addField([
             'name' => 'ticker_symbol',
@@ -320,141 +289,8 @@ class CompanyCrudController extends CrudController
         ]);
     }
 
-    public function store()
-    {
-        $response = $this->traitStore();
-        $request = $response->getRequest();
-
-        $company = $this->data['entry'];
-
-        if ($request->has('focus') && $request->input('focus') !== null) {
-            foreach ($request->input('focus') as $focusId) {
-                $focus = Focus::find($focusId);
-
-                $title = $focus->name.' has a new organization';
-
-                $description = $company->getShowLink().' is '.$company->getTypeDescription().' with a focus on '.$focus->getShowLink().'.';
-
-                SendNotification::dispatch($focus, $title, $description, 'focus');
-            }
-        }
-
-        if ($request->has('investors') && $request->input('investors') !== null) {
-            foreach ($request->input('investors') as $investorId) {
-                $investor = Investor::find($investorId);
-
-                $title = 'A new organization has been added to '.$investor->name;
-
-                $description = $investor->getShowLink().' is investing in '.$company->getShowLink().', '.$company->getTypeDescription().'.';
-
-                SendNotification::dispatch($investor, $title, $description, 'investors');
-            }
-        }
-
-        return $response;
-    }
-
-    public function update()
-    {
-        $originalCompany = $this->getOriginalModel($this->crud);
-        $oldInvestors = $this->getInvestorIds($originalCompany);
-        $oldFocus = $this->getFocusIds($originalCompany);
-
-        $response = $this->traitUpdate();
-
-        $company = $this->data['entry'];
-        $newInvestors = $this->getInvestorIds($company);
-        $newFocus = $this->getFocusIds($company);
-
-        $addedInvestors = array_diff($newInvestors, $oldInvestors);
-        $removedInvestors = array_diff($oldInvestors, $newInvestors);
-        $addedFocus = array_diff($newFocus, $oldFocus);
-        $removedFocus = array_diff($oldFocus, $newFocus);
-
-        if ($addedInvestors !== []) {
-            foreach ($addedInvestors as $key => $investorId) {
-                $investor = Investor::find($investorId);
-
-                $title_investor = $investor->name.' was added to an organization';
-                $title_organization = $company->name.' has a new investor';
-
-                $description = $investor->getShowLink().' is an investor in '.$company->getShowLink().', '.$company->getTypeDescription().'.';
-
-                SendNotification::dispatch($investor, $title_investor, $description, 'investors');
-                SendNotification::dispatch($company, $title_organization, $description, 'organizations');
-            }
-        }
-
-        if ($removedInvestors !== []) {
-            foreach ($removedInvestors as $key => $investorId) {
-                $investor = Investor::find($investorId);
-
-                $title = $investor->name.' was removed as an investor for '.$company->name;
-
-                $description = $investor->getShowLink().' was removed as an investor in '.$company->getShowLink().', '.$company->getTypeDescription().'.';
-
-                SendNotification::dispatch($investor, $title, $description, 'investors');
-                SendNotification::dispatch($company, $title, $description, 'organizations');
-            }
-        }
-
-        if ($addedFocus !== []) {
-            foreach ($addedFocus as $key => $focusId) {
-                $focus = Focus::find($focusId);
-
-                $title_focus = $focus->name.' was added to an organization';
-                $title_company = $company->name.' has a new focus';
-
-                $description = $company->getShowLink().' is '.$company->getTypeDescription().' with a focus on '.$focus->getShowLink().'.';
-
-                SendNotification::dispatch($focus, $title_focus, $description, 'focus');
-                SendNotification::dispatch($company, $title_company, $description, 'organizations');
-            }
-        }
-
-        if ($removedFocus !== []) {
-            foreach ($removedFocus as $key => $focusId) {
-                $focus = Focus::find($focusId);
-
-                $title = $focus->name.' was removed from '.$company->name;
-
-                if ($company->ownership === 'Privately Held') {
-                    $company_ownership = 'a privately held organization';
-                } elseif ($company->ownership === 'Educational Institution') {
-                    $company_ownership = 'an '.$company->ownership;
-                } else {
-                    $company_ownership = 'a '.$company->ownership;
-                }
-
-                $description = $company->getShowLink().', '.$company->getTypeDescription().' is no longer focusing on '.$focus->getShowLink().'.';
-
-                SendNotification::dispatch($focus, $title, $description, 'focus');
-                SendNotification::dispatch($company, $title, $description, 'organizations');
-            }
-        }
-
-        return $response;
-    }
-
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
-    }
-
-    private function getInvestorIds($model)
-    {
-        return $model->investors()->pluck('investor_id')->toArray();
-    }
-
-    private function getFocusIds($model)
-    {
-        return $model->focus()->pluck('focus_id')->toArray();
-    }
-
-    private function getOriginalModel($crud)
-    {
-        $request = $crud->validateRequest();
-
-        return Company::find($request->get($crud->model->getKeyName()));
     }
 }

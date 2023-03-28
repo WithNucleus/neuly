@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class DirectoryRequest extends FormRequest
+class TestEntityRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,8 +25,7 @@ class DirectoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|min:3|max:255|unique:directories,name,'.$this->get('id'),
-            'url_prefix' => 'required|url'
+            
         ];
     }
 

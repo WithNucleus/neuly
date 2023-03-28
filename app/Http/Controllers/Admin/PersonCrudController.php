@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Backpack\CRUD\Operations\UpdateOperationWithTouching;
 use App\Http\Requests\PersonRequest;
 use App\Models\Person;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
@@ -10,24 +9,14 @@ use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Backpack\CRUD\app\Library\Widget;
 use Illuminate\Support\Facades\Route;
 
-/**
- * Class PersonCrudController.
- *
- * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
- */
 class PersonCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
-    use UpdateOperationWithTouching;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 
-    /**
-     * Configure the CrudPanel object. Apply settings to all operations.
-     *
-     * @return void
-     */
     public function setup()
     {
         if (! backpack_user()->can('edit people')) {
@@ -39,13 +28,6 @@ class PersonCrudController extends CrudController
         CRUD::setEntityNameStrings('person', 'people');
     }
 
-    /**
-     * Define what happens when the List operation is loaded.
-     *
-     * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
-     *
-     * @return void
-     */
     protected function setupListOperation()
     {
         $this->crud->addColumn(['name' => 'name']);
@@ -118,8 +100,6 @@ class PersonCrudController extends CrudController
 
         $this->crud->addColumn([
             'name' => 'name',
-            'type' => 'model_function',
-            'function_name' => 'getShowLink',
         ]);
         $this->crud->addColumn([
             'name' => 'email',
@@ -143,28 +123,30 @@ class PersonCrudController extends CrudController
         ]);
         $this->crud->addColumn([
             'name' => 'website',
-            'type' => 'text',
             'label' => 'Website',
+            'type' => 'custom_html',
+            'value' => $person->getWebsite(),
         ]);
         $this->crud->addColumn([
             'name' => 'linkedin',
-            'type' => 'model_function',
-            'function_name' => 'getLinkedIn',
+            'label' => 'Linked In',
+            'type' => 'custom_html',
+            'value' => $person->getLinkedIn(),
         ]);
         $this->crud->addColumn([
             'name' => 'facebook',
-            'type' => 'model_function',
-            'function_name' => 'getFacebook',
+            'type' => 'custom_html',
+            'value' => $person->getFacebook(),
         ]);
         $this->crud->addColumn([
             'name' => 'twitter',
-            'type' => 'model_function',
-            'function_name' => 'getTwitter',
+            'type' => 'custom_html',
+            'value' => $person->getTwitter(),
         ]);
         $this->crud->addColumn([
             'name' => 'instagram',
-            'type' => 'model_function',
-            'function_name' => 'getInstagram',
+            'type' => 'custom_html',
+            'value' => $person->getInstagram(),
         ]);
         $this->crud->addColumn([
             'label' => 'Organizations',
@@ -220,13 +202,6 @@ class PersonCrudController extends CrudController
         $this->crud->addButtonFromModelFunction('line', 'show_entity', 'getShowEntityPageButton', 'beginning');
     }
 
-    /**
-     * Define what happens when the Create operation is loaded.
-     *
-     * @see https://backpackforlaravel.com/docs/crud-operation-create
-     *
-     * @return void
-     */
     protected function setupCreateOperation()
     {
         $jobTypes = config('static.person_job_types');
@@ -317,26 +292,15 @@ class PersonCrudController extends CrudController
         ]);
         $this->crud->addField([
             'label' => 'Locations',
-            'type' => 'select2_multiple',
+            'type' => 'relationship',
             'name' => 'locations',
-            'entity' => 'locations',
             'attribute' => 'name',
-            'pivot' => true,
-            'options' => (function ($query) {
-                return $query->orderBy('name', 'ASC')->get();
-            }),
-            'model' => \App\Models\Location::class,
         ]);
         $this->crud->addField([
             'label' => 'Focus',
-            'type' => 'select2_multiple',
+            'type' => 'relationship',
             'name' => 'focus',
-            'entity' => 'focus',
             'attribute' => 'name',
-            'model' => \App\Models\Focus::class,
-            'options' => (function ($query) {
-                return $query->orderBy('name', 'ASC')->get();
-            }),
         ]);
         $this->crud->addField([
             'name' => 'visibility',
@@ -353,13 +317,6 @@ class PersonCrudController extends CrudController
         ]);
     }
 
-    /**
-     * Define what happens when the Update operation is loaded.
-     *
-     * @see https://backpackforlaravel.com/docs/crud-operation-update
-     *
-     * @return void
-     */
     protected function setupUpdateOperation()
     {
         $this->crud->addField([

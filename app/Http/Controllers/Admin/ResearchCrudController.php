@@ -2,32 +2,19 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Events\SendNotification;
-use App\Http\Controllers\Backpack\CRUD\Operations\UpdateOperationWithTouching;
 use App\Http\Requests\ResearchRequest;
-use App\Models\Focus;
 use App\Models\Research;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
-/**
- * Class ResearchCrudController
- *
- * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
- */
 class ResearchCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation { store as traitStore; }
-    use UpdateOperationWithTouching { update as traitUpdate; }
+    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 
-    /**
-     * Configure the CrudPanel object. Apply settings to all operations.
-     *
-     * @return void
-     */
     public function setup()
     {
         if (! backpack_user()->can('edit research')) {
@@ -39,13 +26,6 @@ class ResearchCrudController extends CrudController
         CRUD::setEntityNameStrings('research', 'research');
     }
 
-    /**
-     * Define what happens when the List operation is loaded.
-     *
-     * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
-     *
-     * @return void
-     */
     protected function setupListOperation()
     {
         $this->crud->addColumn([
@@ -55,46 +35,24 @@ class ResearchCrudController extends CrudController
         ]);
         $this->crud->addColumn([
             'label' => 'Focus',
-            'type' => 'select_multiple',
+            'type' => 'relationship',
             'name' => 'focus',
-            'entity' => 'focus',
             'attribute' => 'name',
-            'model' => \App\Models\Focus::class,
-            'options' => (function ($query) {
-                return $query->orderBy('name', 'ASC')->get();
-            }),
         ]);
         $this->crud->addColumn([
             'label' => 'Companies',
-            'type' => 'select_multiple',
+            'type' => 'relationship',
             'name' => 'companies',
-            'entity' => 'companies',
             'attribute' => 'name',
-            'model' => \App\Models\Company::class,
-            'options' => (function ($query) {
-                return $query->orderBy('name', 'ASC')->get();
-            }),
         ]);
         $this->crud->addColumn([
             'label' => 'People',
-            'type' => 'select_multiple',
+            'type' => 'relationship',
             'name' => 'people',
-            'entity' => 'people',
             'attribute' => 'name',
-            'model' => \App\Models\Person::class,
-            'options' => (function ($query) {
-                return $query->orderBy('name', 'ASC')->get();
-            }),
         ]);
     }
 
-    /**
-     * Define what happens when the Show operation is loaded.
-     *
-     * @see https://backpackforlaravel.com/docs/crud-operation-update
-     *
-     * @return void
-     */
     protected function setupShowOperation()
     {
         $this->setupListOperation();
@@ -113,13 +71,6 @@ class ResearchCrudController extends CrudController
         $this->crud->addButtonFromModelFunction('line', 'show_entity', 'getShowEntityPageButton', 'beginning');
     }
 
-    /**
-     * Define what happens when the Create operation is loaded.
-     *
-     * @see https://backpackforlaravel.com/docs/crud-operation-create
-     *
-     * @return void
-     */
     protected function setupCreateOperation()
     {
         CRUD::setValidation(ResearchRequest::class);
@@ -141,106 +92,26 @@ class ResearchCrudController extends CrudController
         ]);
         $this->crud->addField([
             'label' => 'Focus',
-            'type' => 'select2_multiple',
+            'type' => 'relationship',
             'name' => 'focus',
-            'entity' => 'focus',
             'attribute' => 'name',
-            'pivot' => true,
-            'options' => (function ($query) {
-                return $query->orderBy('name', 'ASC')->get();
-            }),
-            'model' => \App\Models\Focus::class,
         ]);
         $this->crud->addField([
             'label' => 'Companies',
-            'type' => 'select2_multiple',
+            'type' => 'relationship',
             'name' => 'companies',
-            'entity' => 'companies',
             'attribute' => 'name',
-            'pivot' => true,
-            'options' => (function ($query) {
-                return $query->orderBy('name', 'ASC')->get();
-            }),
-            'model' => \App\Models\Company::class,
         ]);
         $this->crud->addField([
             'label' => 'People',
-            'type' => 'select2_multiple',
+            'type' => 'relationship',
             'name' => 'people',
-            'entity' => 'people',
             'attribute' => 'name',
-            'pivot' => true,
-            'options' => (function ($query) {
-                return $query->orderBy('name', 'ASC')->get();
-            }),
-            'model' => \App\Models\Person::class,
         ]);
     }
 
-    public function store()
-    {
-        $response = $this->traitStore();
-        $request = $response->getRequest();
-        $research = $this->data['entry'];
-
-        if ($request->has('focus') && $request->input('focus') !== null) {
-            foreach ($request->input('focus') as $focusId) {
-                $focus = Focus::find($focusId);
-
-                $title = 'New research related to '.$focus->name;
-                $description = $research->getShowLink().' has been added to '.$focus->getShowLink().'.';
-
-                SendNotification::dispatch($focus, $title, $description, 'focus');
-            }
-        }
-
-        return $response;
-    }
-
-    public function update()
-    {
-        $originalResearch = $this->getOriginalModel($this->crud);
-        $oldFocus = $this->getFocusIds($originalResearch);
-        $response = $this->traitUpdate();
-        $research = $this->data['entry'];
-        $newFocus = $this->getFocusIds($research);
-        $addedFocus = array_diff($newFocus, $oldFocus);
-
-        if ($addedFocus !== []) {
-            foreach ($addedFocus as $key => $focusId) {
-                $focus = Focus::find($focusId);
-
-                $title = 'Research updated related to '.$focus->name;
-                $description = $research->getShowLink().' has been updated with a focus on '.$focus->getShowLink().'.';
-
-                SendNotification::dispatch($focus, $title, $description, 'focus');
-            }
-        }
-
-        return $response;
-    }
-
-    /**
-     * Define what happens when the Update operation is loaded.
-     *
-     * @see https://backpackforlaravel.com/docs/crud-operation-update
-     *
-     * @return void
-     */
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
-    }
-
-    private function getFocusIds($model)
-    {
-        return $model->focus()->pluck('focus_id')->toArray();
-    }
-
-    private function getOriginalModel($crud)
-    {
-        $request = $crud->validateRequest();
-
-        return Research::find($request->get($crud->model->getKeyName()));
     }
 }
