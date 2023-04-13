@@ -75,6 +75,56 @@
             <div class="container py-5">
                 <h3 class="h1 text-center">Grow With Us</h3>
                 <p>Neuly is an ongoing project that is constantly being updated and built. This will allow for an ever-growing source of information, as well as a deeper understanding of the neuroscience industry. As more data is compiled, Neuly will distribute industry insights by cross referencing datasets. This will give new perspectives on how the body’s neural network operates and how we, as humans, can become healthier and more productive people.</p>
+
+                <p>Our database keeps growing everyday. Right now, this is a snapshot of the data in Neuly:</p>
+
+                <ul class="d-flex row flex-wrap">
+                    <li class="bananas col-12 col-md-6 col-lg-4">
+                        {{ number_format($organizationsCount, 0) }} Organizations
+                    </li>
+                    <li class="bananas col-12 col-md-6 col-lg-4">
+                        {{ number_format($peopleCount, 0) }} People
+                    </li>
+                    <li class="bananas col-12 col-md-6 col-lg-4">
+                        {{ number_format($investorsCount, 0) }} Investors
+                    </li>
+                    <li class="bananas col-12 col-md-6 col-lg-4">
+                        {{ number_format($locationsCount, 0) }} Locations
+                    </li>
+                    <li class="bananas col-12 col-md-6 col-lg-4">
+                        {{ number_format($researchCount, 0) }} Research Articles / Papers
+                    </li>
+                    <li class="bananas col-12 col-md-6 col-lg-4">
+                        {{ number_format($clinicalTrialsCount, 0) }} Clinical Trials
+                    </li>
+                    <li class="bananas col-12 col-md-6 col-lg-4">
+                        {{ number_format($eventsCount, 0) }} Events
+                    </li>
+                    <li class="bananas col-12 col-md-6 col-lg-4">
+                        {{ number_format($jobsCount, 0) }} Jobs
+                    </li>
+                    <li class="bananas col-12 col-md-6 col-lg-4">
+                        {{ number_format($newsCount, 0) }} News Articles
+                    </li>
+                    <li class="bananas col-12 col-md-6 col-lg-4">
+                        {{ number_format($booksCount, 0) }} Books
+                    </li>
+                    <li class="bananas col-12 col-md-6 col-lg-4">
+                        {{ number_format($podcastsCount, 0) }} Podcast Episodes
+                    </li>
+                    <li class="bananas col-12 col-md-6 col-lg-4">
+                        {{ number_format($coursesCount, 0) }} Courses / Classes
+                    </li>
+                    <li class="bananas col-12 col-md-6 col-lg-4">
+                        {{ number_format($videosCount, 0) }} Videos
+                    </li>
+                    <li class="bananas col-12 col-md-6 col-lg-4">
+                        {{ number_format($careCount, 0) }} Practitioners / Care Experts
+                    </li>
+                    <li class="bananas col-12 col-md-6 col-lg-4">
+                        50+ Insights
+                    </li>
+                </ul>
             </div>
         </div>
 

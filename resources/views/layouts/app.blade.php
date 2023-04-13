@@ -132,5 +132,6 @@
 
 @yield('after_scripts')
 <script src="https://neuly.com/nav-tiles/nucleus.js" type="text/javascript"></script>
+<script src="https://cdn.jsdelivr.net/gh/yasserelsaid/chatbot@latest/index.min.js" id="neuly-com-6x0fy8rdt"></script>
 </body>
 </html>
