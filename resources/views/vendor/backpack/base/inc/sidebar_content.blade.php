@@ -354,9 +354,9 @@
             <li class='nav-item'><a class='nav-link' href='{{ backpack_url('api-user') }}'><i
                         class='nav-icon la la-exchange-alt'></i> API Users</a></li>
             <li class='nav-item'><a class='nav-link' href='{{ backpack_url('oauth-clients') }}'>
-                    <i class='nav-icon la la-key'></i> Oauth clients</a></li>
+                    <i class='nav-icon la la-key'></i> OAuth Clients</a></li>
             <li class='nav-item'><a class='nav-link' href='{{ backpack_url('oauth-access-token') }}'>
-                    <i class='nav-icon la la-key'></i> Oauth access tokens</a>
+                    <i class='nav-icon la la-key'></i> OAuth Access Tokens</a>
             </li>
         </ul>
     </li>
@@ -419,5 +419,3 @@
         word-wrap: break-word;       /* Internet Explorer 5.5+ */
     }
 </style>
-
-<li class="nav-item"><a class="nav-link" href="{{ backpack_url('test-entity') }}"><i class="nav-icon la la-question"></i> Test entities</a></li>

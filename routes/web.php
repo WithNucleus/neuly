@@ -279,7 +279,7 @@ Route::middleware('auth', 'verifiedIfAuthorized')->group(function () {
             'as' => 'member', ]);
 
         // Follow
-        Route::resource('/follow', 'Dashboard\FollowController', [
+        Route::resource('/follow', App\Http\Controllers\Dashboard\FollowController::class, [
             'as' => 'member', ]);
         Route::get('/follow//get-modal/{id}/{type}', [App\Http\Controllers\Dashboard\FollowController::class, 'getModal'])->name('member.follow.getModal');
         Route::post('/follow/attach', [App\Http\Controllers\Dashboard\FollowController::class, 'attach'])->name('member.follow.attach');

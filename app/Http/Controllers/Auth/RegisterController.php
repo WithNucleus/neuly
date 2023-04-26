@@ -27,29 +27,14 @@ class RegisterController extends Controller
 
     use RegistersUsers;
 
-    /**
-     * Where to redirect users after registration.
-     *
-     * @var string
-     */
-    protected $redirectTo = '/dashboard';
+    protected string $redirectTo = '/dashboard';
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('guest');
     }
 
-    /**
-     * Show the application registration form.
-     *
-     * @return \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
-     */
-    public function showRegistrationForm(Request $request)
+    public function showRegistrationForm(Request $request): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
     {
         $invitation = null;
         $invitedByName = null;
@@ -71,12 +56,7 @@ class RegisterController extends Controller
         ]);
     }
 
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
+    protected function validator(array $data): \Illuminate\Validation\Validator
     {
         $rules = [
             'role' => 'required',
@@ -85,6 +65,7 @@ class RegisterController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'g-recaptcha-response' => 'required',
+            'registration_code' => ['nullable', 'string']
         ];
 
         if ($data['role'] == 'Team owner') {
@@ -94,11 +75,6 @@ class RegisterController extends Controller
         return Validator::make($data, $rules);
     }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @return \App\User
-     */
     protected function create(array $data)
     {
         $user = User::create([
@@ -106,6 +82,7 @@ class RegisterController extends Controller
             'last_name' => $data['last_name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'registration_code' => $data['registration_code']
         ])->assignRole($data['role']);
 
         //registered as team

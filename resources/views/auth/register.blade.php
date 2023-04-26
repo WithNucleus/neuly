@@ -113,6 +113,13 @@
                         </div>
                     </div>
 
+                    <div class="form-group row">
+                        <div class="col-12 col-md-6">
+                            <label for="registration_code" class="font-weight-bold">Registration Code</label>
+                            <input id="registration_code" type="text" class="form-control" name="registration_code">
+                        </div>
+                    </div>
+
                     <div class="form-group mb-0 mt-4">
                         <div class="mb-4">
                             {!! htmlFormSnippet() !!}
