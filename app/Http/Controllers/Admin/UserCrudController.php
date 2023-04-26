@@ -53,6 +53,11 @@ class UserCrudController extends CrudController
                 'model' => config('permission.models.role'),
             ],
             [
+                'name' => 'registration_code',
+                'label' => 'Registration Code',
+                'type' => 'text',
+            ],
+            [
                 'label' => trans('backpack::permissionmanager.extra_permissions'),
                 'type' => 'select_multiple',
                 'name' => 'permissions',
