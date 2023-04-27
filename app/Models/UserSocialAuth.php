@@ -13,7 +13,6 @@ class UserSocialAuth extends Model
         'facebook',
         'google',
         'linkedin',
-        'twitter',
     ];
 
     public static function getProviders()
