@@ -48,10 +48,10 @@ class EventController extends Controller
         // Get Events
         $events = QueryBuilder::for(Event::class)
             ->where('start_date', '<=', Carbon::now('America/Chicago'))
-            ->with('companies')
+            ->with(['companies', 'eventTypes', 'locations', 'focus', 'eventTypes'])
             ->allowedFilters([
                 'name',
-                AllowedFilter::partial('type', 'event_types.name'),
+                AllowedFilter::partial('type', 'eventTypes.name'),
                 AllowedFilter::partial('company', 'companies.name'),
                 AllowedFilter::partial('locations', 'locations.name'),
                 AllowedFilter::partial('focus', 'focus.name'),
@@ -151,10 +151,10 @@ class EventController extends Controller
 
         $events = QueryBuilder::for(Event::class)
             ->where('start_date', '>=', $now)
-            ->with(['companies', 'eventTypes', 'locations', 'focus'])
+            ->with(['companies', 'eventTypes', 'locations', 'focus', 'eventTypes'])
             ->allowedFilters([
                 'name',
-                AllowedFilter::partial('type', 'event_types.name'),
+                AllowedFilter::partial('type', 'eventTypes.name'),
                 AllowedFilter::partial('company', 'companies.name'),
                 AllowedFilter::partial('locations', 'locations.name'),
                 AllowedFilter::partial('focus', 'focus.name'),
