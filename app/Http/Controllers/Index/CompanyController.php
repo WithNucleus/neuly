@@ -19,21 +19,11 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class CompanyController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('query_filters')->only('index');
     }
 
-    /**
-     * List of Companies
-     *
-     * @return View
-     */
     public function index(Request $request)
     {
         $companies = QueryBuilder::for(Company::class)
@@ -63,12 +53,7 @@ class CompanyController extends Controller
         return view('discover.organizations.index', compact('companies', 'focus_cats', 'metas'));
     }
 
-    /**
-     * Show Company
-     *
-     * @return mixed
-     */
-    public function show(Request $request, $slug)
+    public function show(Request $request, $slug): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Contracts\Foundation\Application
     {
         $company = Company::with([
             'people',

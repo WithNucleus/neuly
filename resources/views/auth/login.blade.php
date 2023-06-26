@@ -10,11 +10,11 @@
 
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card shadow-sm">
+            <div class="card">
 
                 <div class="card-body">
 
-                    <h1 class="h2 text-center text-primary page-title-default mb-4">{{ config('app.name', 'Neuly') }} Login</h1>
+                    <h1 class="h2 text-center text-primary mb-4">Login to Neuly</h1>
 
                     @if(session()->has('message'))
                         <div class="alert alert-danger text-center mb-4">
@@ -67,7 +67,7 @@
 
                         <div class="form-group row">
                             <div class="col-md-8 offset-md-4 pb-3">
-                                <button type="submit" class="btn btn-dark">
+                                <button type="submit" class="btn btn-primary">
                                     {{ __('Login') }}
                                 </button>
 

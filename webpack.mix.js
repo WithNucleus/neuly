@@ -34,12 +34,15 @@ mix
 // Mix CSS
 mix
 	.sass('resources/sass/app.scss', 'public/css')
-	.sass('resources/sass/index-qm.scss', 'public/css')
-	.sass('resources/sass/datatables.scss', 'public/css')
-    .sass('resources/sass/nav-tiles.scss', 'public/css')
-    .sass('resources/sass/enterprise-dashboard.scss', 'public/css')
-    .sass('resources/sass/embed-search.scss', 'public/css/external')
     .sass('resources/sass/backpack-custom.scss', 'public/css');
+// mix
+// 	.sass('resources/sass/app.scss', 'public/css')
+// 	.sass('resources/sass/index-qm.scss', 'public/css')
+// 	.sass('resources/sass/datatables.scss', 'public/css')
+//     .sass('resources/sass/nav-tiles.scss', 'public/css')
+//     .sass('resources/sass/enterprise-dashboard.scss', 'public/css')
+//     .sass('resources/sass/embed-search.scss', 'public/css/external')
+//     .sass('resources/sass/backpack-custom.scss', 'public/css');
 
 // Copy Images
 mix.copyDirectory('resources/images', 'public/images');

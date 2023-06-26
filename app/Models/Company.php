@@ -212,7 +212,7 @@ class Company extends Model implements EntityContract, EntityImageContract
 
     public function jobs(): \Illuminate\Database\Eloquent\Relations\MorphMany
     {
-        return $this->morphMany(Job::class, 'owner');
+        return $this->morphMany(Job::class, 'owner')->orderByDesc('posted_date');
     }
 
     public function events(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
@@ -326,6 +326,28 @@ class Company extends Model implements EntityContract, EntityImageContract
         $latestValuation = $this->valuations()->latest('date')->first();
 
         return $latestValuation ? $latestValuation->amount : null;
+    }
+
+    public function getOwnershipTypePhraseAttribute(): string
+    {
+        return match($this->ownership) {
+            'Public Company' => 'A public company',
+            'Privately Held' => 'A privately held company',
+            'Educational Institution' => 'An educational institution',
+            'Government Agency' => 'A government agency',
+            'Non-Profit' => 'A non-profit organization',
+            default => 'Unknown ownership'
+        };
+    }
+
+    public function getShowExtendedSummaryAttribute(): bool
+    {
+        return (Str::wordCount($this->summary) > 60);
+    }
+
+    public function getShortSummaryAttribute(): string
+    {
+        return Str::words($this->summary, 60);
     }
 
     /*

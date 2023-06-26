@@ -9,17 +9,7 @@
 <div class="container-fluid">
 
     <div class="row">
-        <div class="col-12 navbar-tabs-container">
-            @include('navbars.tabs')
-        </div>
-    </div>
-
-    <div class="row">
-        @include('navbars.tabs-mobile')
-    </div>
-
-    <div class="row">
-        <div class="col-12 breadcrumbs-container bg-white shadow-sm">
+        <div class="col-12 breadcrumbs-container bg-primary-subtle py-2">
 
             @if(Route::is('discover.organizations.show'))
 
@@ -90,10 +80,10 @@
 <div class="container-fluid">
 
 @if ($full_width == true)
-    <main id="show-main" role="main" class="full-width-show-view mx-auto">
-        <div class="p-4">
+    <main id="show-main" role="main" class="container-fluid">
+        <div class="py-4">
 
 @else
-    <main id="show-main" role="main" class="col-md-11 col-xl-8 mx-auto">
-        <div class="p-4 bg-white shadow-sm">
+    <main id="show-main" role="main" class="container">
+        <div class="py-4">
 @endif

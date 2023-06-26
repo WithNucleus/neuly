@@ -13,6 +13,7 @@ use App\Models\Traits\OldSlugRedirectable;
 use App\Models\Traits\SearchableEntity;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -187,6 +188,23 @@ class Clinicaltrial extends Model implements EntityContract
     | ACCESSORS
     |--------------------------------------------------------------------------
     */
+    public function getPrettyStartDateAttribute(): ?string
+    {
+        if ($this->start_date) {
+            return Carbon::parse($this->start_date)->format('M Y');
+        } else {
+            return null;
+        }
+    }
+
+    public function getPrettyLastUpdatePostedAttribute(): ?string
+    {
+        if ($this->last_update_posted) {
+            return Carbon::parse($this->last_update_posted)->format('M Y');
+        } else {
+            return null;
+        }
+    }
 
     /*
     |--------------------------------------------------------------------------

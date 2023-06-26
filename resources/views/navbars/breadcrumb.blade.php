@@ -1,6 +1,6 @@
 @if(count($items) > 0)
 	<nav aria-label="breadcrumb">
-		<ol class="breadcrumb">
+		<ol class="breadcrumb m-0">
 			<li class="breadcrumb-item">
 				<a href="/">
 					Neuly

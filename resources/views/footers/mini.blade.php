@@ -3,10 +3,10 @@
         <div class="row">
             <div class="col-12 text-center">
                 <p class="terms mb-0">
-                    <a href="/listing/request" class="text-dark">Request Listing</a> &bull;
-                    <a href="{{ route('job-report-entry.index') }}" class="text-dark">Jobs Report</a> &bull;
-                    <a href="/terms-of-use" class="text-dark">Terms of Use</a> &bull;
-                    <a href="/privacy-policy" class="text-dark">Privacy Policy</a>
+                    <a href="/listing/request">Request Listing</a> &bull;
+                    <a href="{{ route('job-report-entry.index') }}">Jobs Report</a> &bull;
+                    <a href="/terms-of-use">Terms of Use</a> &bull;
+                    <a href="/privacy-policy">Privacy Policy</a>
                 </p>
                 <p class="terms mb-0">
                 	&copy; {{ date('Y') }} Neuly
