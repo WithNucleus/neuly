@@ -3,47 +3,16 @@
         <x-entities.offcanvas-sidebar>
             <h3 class="d-none d-lg-block mb-4 text-body-emphasis">Filters</h3>
 
-            <div class="d-flex align-items-center">
-                <input wire:model="search" type="text" class="form-control me-2" placeholder="Search" aria-label="Search companies">
-                <span>
-                    <i class="fa-sharp fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Search by name, keyword, location, focus..."></i>
-                </span>
-            </div>
-
-
-            <div class="small mt-2">
-                @if($search)
-                    <span class="me-1">Searching for:</span>
-                    <strong>{{ $search }}</strong>
-                    <button wire:click="clearSearch" class="btn text-danger px-1 border-0" aria-label="Clear search"><i class="fa-sharp fa-solid fa-circle-xmark"></i></button>
-                @endif
-            </div>
+            <x-livewire-filters.search label="Search Companies" placeholder="Search" search="{{ $search }}" />
 
             <div class="my-4">
-                <div class="form-check lead">
-                    <input wire:model="filters.now-hiring" class="form-check-input" type="checkbox" value="true" id="now-hiring">
-                    <label class="form-check-label" for="now-hiring">
-                        Now Hiring
-                    </label>
-                </div>
-                <div class="form-check lead">
-                    <input wire:model="filters.upcoming-events" class="form-check-input" type="checkbox" value="true" id="upcoming-events">
-                    <label class="form-check-label" for="upcoming-events">
-                        Upcoming Events
-                    </label>
-                </div>
+                <x-livewire-filters.checkbox-single wireModel="filters.now-hiring" id="filter-now-hiring" label="Now Hiring" />
+                <x-livewire-filters.checkbox-single wireModel="filters.upcoming-events" id="filter-upcoming-events" label="Upcoming Events" />
             </div>
 
             <div class="my-4">
                 <h4 class="h5 text-body-emphasis">Type</h4>
-                @foreach ($typeOptions as $typeOption)
-                    <div class="form-check">
-                        <input wire:model="filters.type" class="form-check-input" type="checkbox" value="{{ $typeOption }}" id="filter-type-{{ $typeOption }}" @if(in_array($typeOption, $filters['type'])) checked @endif>
-                        <label class="form-check-label" for="filter-type-{{ $typeOption }}">
-                            {{ $typeOption }}
-                        </label>
-                    </div>
-                @endforeach
+                <x-livewire-filters.checkbox-multiple wireModel="filters.type" id="filter-type" :options="$typeOptions" :currentFilters="$filters['type']" />
             </div>
             <div class="my-4">
                 <h4 class="h5 text-body-emphasis">Location</h4>
@@ -91,25 +60,11 @@
             </div>
             <div class="my-4">
                 <h4 class="h5 text-body-emphasis">Focus</h4>
-                @foreach ($focusDrugOptions as $option)
-                    <div class="form-check">
-                        <input wire:model="filters.focus" class="form-check-input" type="checkbox" value="{{ $option['name'] }}" id="filter-focus-{{ $option['name'] }}" @if(in_array($option['name'], $filters['focus'])) checked @endif>
-                        <label class="form-check-label" for="filter-focus-{{ $option['name'] }}">
-                            {{ $option['name'] }} <span class="text-secondary small">({{ $option['companies_count'] }})</span>
-                        </label>
-                    </div>
-                @endforeach
+                <x-livewire-filters.checkbox-multiple-with-count wireModel="filters.focus" id="filter-focus" :options="$focusDrugOptions" :currentFilters="$filters['focus']" countName="companies_count" />
             </div>
             <div class="my-4">
                 <h4 class="h5 text-body-emphasis">Industry</h4>
-                @foreach ($focusOtherOptions as $option)
-                    <div class="form-check">
-                        <input wire:model="filters.industry" class="form-check-input" type="checkbox" value="{{ $option['name'] }}" id="filter-industry-{{ $option['name'] }}" @if(in_array($option['name'], $filters['focus'])) checked @endif>
-                        <label class="form-check-label" for="filter-industry-{{ $option['name'] }}">
-                            {{ $option['name'] }} <span class="text-secondary small">({{ $option['companies_count'] }})</span>
-                        </label>
-                    </div>
-                @endforeach
+                <x-livewire-filters.checkbox-multiple-with-count wireModel="filters.industry" id="filter-industry" :options="$focusOtherOptions" :currentFilters="$filters['focus']" countName="companies_count" />
             </div>
             <div>
                 <button wire:click="clearFilters" class="btn btn-sm btn-secondary">Clear Filters</button>
@@ -143,7 +98,7 @@
                         @endif
 
                         <div class="logo-is-contained" style="background-image: url('{{ $company->entityImageUrl }}')"></div>
-                        <p class="my-3 h5 px-1">{{ $company->name }}</p>
+                        <p class="my-3 h5 px-1 text-success">{{ $company->name }}</p>
 
                         <div class="text-body-emphasis fw-bold text-uppercase my-3">{{ $company->ownership ?? 'Unknown Type' }}</div>
 
@@ -181,7 +136,6 @@
 
     <script>
         window.addEventListener('clearLocationSearchBox', event => {
-            console.log("clear it please!");
             document.getElementById('location-search-box').value = "";
             document.getElementById("locationSearchOptions").innerHTML = "";
         });

@@ -4,6 +4,8 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
+// TODO: Split out this file into new includes after getting rid of old stuff
+
 body {
     min-height: 100vh;
     min-height: -webkit-fill-available;
@@ -20,20 +22,34 @@ html {
     padding-top: 2rem;
 }
 
+// Dark Theme Color Overrides
+[data-bs-theme=dark] {
+    --bs-success: $neulyGreenBright;
+    --bs-success-rgb: 40, 185, 142;
+}
+
 // Nav Logo
 svg#neulyLogo {
+    .icon {
+        fill: $neulyGreenBright;
+        transition: all .2s ease-in-out;
+    }
+
     .text {
         fill: $white;
+        transition: all .2s ease-in-out;
     }
 }
 
-//@include color-mode(dark) {
-//    svg#neulyLogo {
-//        .text {
-//            fill: $white;
-//        }
-//    }
-//} don't need this if bg is always primary
+svg#neulyLogo:hover {
+    .icon {
+        fill: $white;
+    }
+
+    .text {
+        fill: $neulyGreenBright;
+    }
+}
 
 .navbar.bg-primary {
     .navbar-nav>li {

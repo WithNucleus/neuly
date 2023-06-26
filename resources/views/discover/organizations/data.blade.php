@@ -1,6 +1,6 @@
 <div class="row">
 	<div class="col-12 col-md-8 col-lg-7">
-        <p class="h5 text-body-secondary">
+        <p class="h5 text-body-emphasis">
             {{ $company->ownership_type_phrase }}
             @if($company->ticker_symbol != '')
                 &bull; {{ $company->ticker_symbol }}
@@ -40,7 +40,9 @@
 
         @if($company->locations->count() === 1)
             <div class="mb-2 lead">
-                <a href="{{ route('discover.locations.show', $company->locations->first()->slug) }}" class="text-decoration-none text-secondary"><i class="fa-sharp fa-solid fa-location-dot me-2"></i>{{ $company->locations->first()->name }}</a>
+                <a href="{{ route('discover.locations.show', $company->locations->first()->slug) }}" class="text-decoration-none text-body-secondary">
+                    <i class="fa-sharp fa-solid fa-location-dot me-2"></i>{{ $company->locations->first()->name }}
+                </a>
             </div>
         @endif
 
