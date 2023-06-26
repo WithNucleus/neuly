@@ -41,16 +41,6 @@ svg#neulyLogo {
     }
 }
 
-svg#neulyLogo:hover {
-    .icon {
-        fill: $white;
-    }
-
-    .text {
-        fill: $neulyGreenBright;
-    }
-}
-
 .navbar.bg-primary {
     .navbar-nav>li {
         color: $gray-300;

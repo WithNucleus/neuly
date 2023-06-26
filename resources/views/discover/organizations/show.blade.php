@@ -1,14 +1,19 @@
-@extends('layouts.app')
+@extends('layouts.entity-show')
 
-@section('body-class', 'company-show')
+@section('breadcrumbs')
+    @include('navbars.breadcrumb', [
+        'items' => [
+            'Organizations' => route('discover.organizations'),
+            $company->name  => false
+        ]
+    ])
+@endsection
 
 @section('content')
 
-    @include('discover.includes.show-begin', ['full_width' => false])
+    <div class="container py-4">
 
-    <div class="d-md-flex flex-wrap justify-content-between mb-3">
-        <h1 class="text-success mb-2 mb-md-0 ">{{ $company->name }}</h1>
-        <div class="d-flex flex-wrap align-items-center">
+        <x-entities.entity-show-title-meta title="{{ $company->name }}">
             <div class="me-3">
                 @include('members.follow.button', [
                     'followable_type' => get_class($company),
@@ -18,7 +23,7 @@
             </div>
 
             @if ($company->jobs->count() > 0)
-        		<a href="{{ route('discover.organizations.jobs', $company->slug) }}" class="text-decoration-none text-uppercase me-3 text-danger">
+                <a href="{{ route('discover.organizations.jobs', $company->slug) }}" class="text-decoration-none text-uppercase me-3 text-danger">
                     <i class="fad fa-briefcase"></i> Hiring
                 </a>
             @endif
@@ -28,29 +33,31 @@
                     <i class="fad fa-calendar-alt"></i> Events
                 </a>
             @endif
-        </div>
+        </x-entities.entity-show-title-meta>
+
+        @include('discover.organizations.data')
+
+        @include('discover.includes.related.organization')
+
+        @isset($preview)
+            @include('discover.includes.update-listing-form', ['entity' => $company])
+        @else
+            @auth
+                <div class="d-flex flex-wrap justify-content-between align-items-center text-uppercase small fw-bold text-secondary-emphasis mt-4">
+                    <div class="me-4">
+                        Last updated: {{ Carbon\Carbon::parse($company->updated_at)->format('M d, Y') }}
+                    </div>
+                    @can('edit companies')
+                        <div>
+                            <a href="{{ route('company.edit', $company->id) }}" class="text-secondary-emphasis">Edit Company</a>
+                        </div>
+                    @endcan
+                    <div>
+                        @include('discover.includes.update-listing-form', ['entity' => $company])
+                    </div>
+                </div>
+            @endauth
+        @endisset
     </div>
-
-    @include('discover.includes.status-messages')
-
-	@include('discover.organizations.data')
-
-    @isset($preview)
-        @include('discover.includes.update-listing-form', ['entity' => $company])
-    @else
-        @auth
-            <div class="d-flex flex-wrap justify-content-between align-items-center text-uppercase">
-                <div class="me-4">
-                    <small>Last updated: {{ Carbon\Carbon::parse($company->updated_at)->format('M d, Y') }}</small>
-                </div>
-                <div>
-                    @include('discover.includes.update-listing-form', ['entity' => $company])
-                </div>
-            </div>
-        @endauth
-    @endisset
-
-	@include('discover.includes.show-end')
-    @include('discover.includes.limited-access-modal')
 
 @endsection

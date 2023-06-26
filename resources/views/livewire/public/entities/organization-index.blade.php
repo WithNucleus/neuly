@@ -89,7 +89,7 @@
                 </div>
             </div>
             @forelse($records as $company)
-                <div class="col-12 col-md-6 col-xl-4 col-xxl-3 mb-4">
+                <div wire:key="{{ $company->slug }}" class="col-12 col-md-6 col-xl-4 col-xxl-3 mb-4">
                     <x-entities.entity-logo-card url="{{ route('discover.organizations.show', $company->slug) }}" linkClasses="py-5">
                         @if($company->jobs_count > 0)
                             <span class="position-top-left ms-1 lead">

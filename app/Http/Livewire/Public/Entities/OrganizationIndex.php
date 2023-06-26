@@ -9,6 +9,7 @@ use App\Http\Livewire\DataTable\WithSorting;
 use App\Models\Company;
 use App\Models\Focus;
 use App\Models\Location;
+use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 
 class OrganizationIndex extends Component
@@ -90,7 +91,9 @@ class OrganizationIndex extends Component
     public function getRowsQueryProperty()
     {
         $query = Company::with(['focus'])
-                ->withCount(['focus', 'events', 'jobs', 'locations', 'investors'])
+                ->withCount(['focus', 'events', 'jobs' => function (Builder $query) {
+                    $query->open();
+                }, 'locations', 'investors'])
                 ->when($this->search, function($query, $search) {
                     return $query
                         ->where('name', 'like', '%' . $search . '%')

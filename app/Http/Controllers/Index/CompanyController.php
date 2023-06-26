@@ -112,7 +112,7 @@ class CompanyController extends Controller
         return view('discover.organizations.show', compact('company', 'related', 'metas', 'entity', 'isFollowed', 'preview'));
     }
 
-    public function namesJson()
+    public function namesJson(): \Illuminate\Http\JsonResponse
     {
         return response()->json(Company::all()->pluck('name'));
     }
@@ -135,12 +135,7 @@ class CompanyController extends Controller
         return $entities;
     }
 
-    /**
-     * Show Jobs for Company
-     *
-     * @return View
-     */
-    public function jobs($slug)
+    public function jobs($slug): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         $owner = Company::where('slug', $slug)->firstOrFail();
         $jobs = Job::where('owner_id', $owner->id)->where('status', Job::STATUS_OPEN)->orderBy('posted_date', 'desc')->get();
@@ -148,12 +143,7 @@ class CompanyController extends Controller
         return view('discover.jobs.listing-by-owner', compact('owner', 'jobs'));
     }
 
-    /**
-     * Show Events for Company
-     *
-     * @return View
-     */
-    public function events($slug)
+    public function events($slug): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         $company = Company::where('slug', $slug)->firstOrFail();
         $entity = 'organizations';

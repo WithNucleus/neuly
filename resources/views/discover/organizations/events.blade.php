@@ -1,20 +1,27 @@
-@extends('layouts.app')
+@extends('layouts.entity-show')
 
-@section('body-class', 'bg-light')
+@section('breadcrumbs')
+    @include('navbars.breadcrumb', [
+        'items' => [
+            'Organizations' => route('discover.organizations'),
+            $company->name  => route('discover.organizations.show', $company->slug),
+            'Events' => false
+        ]
+    ])
+@endsection
 
 @section('content')
 
-    @include('discover.includes.show-begin', ['full_width' => false])
+    <div class="container py-4">
+        <h1>Events at {{ $company->name }}</h1>
 
-	<h1>Events at {{ $company->name }}</h1>
+        <div class="list-group list-group-flush">
+            @forelse($company->events as $event)
+                <div class="list-group-item py-3 px-0">
 
-    <div class="list-group list-group-flush">
-        @forelse($company->events as $event)
-            <div class="list-group-item">
-
-                    <p class="lead-smaller mb-0">
-                       <a href="{{ route('discover.events.show', $event->slug) }}">{{ $event->name }}</a>
-                    </p>
+                    <h2 class="h4">
+                        <a href="{{ route('discover.events.show', $event->slug) }}" class="text-decoration-none">{{ $event->name }}</a>
+                    </h2>
 
                     <div>
                         <span class="text-danger"><i class="fad fa-calendar-star"></i></span>
@@ -39,12 +46,12 @@
                         </div>
                     @endif
 
-            </div>
-        @empty
-            No events
-        @endforelse
+                </div>
+            @empty
+                No events
+            @endforelse
         </div>
 
-	@include('discover.includes.show-end')
-    @include('discover.includes.limited-access-modal')
+    </div>
+
 @endsection

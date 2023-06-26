@@ -79,6 +79,40 @@
 	</div>
 </div>
 
+@if($company->total_funding_amount != '' OR $company->last_funding_date != '' OR $company->valuation != '' OR $company->founded_date != '' OR $company->number_employees != '')
+    <div class="row">
+        @if($company->total_funding_amount != '')
+            <x-entities.entity-show-data-card title="Total Funding Amount">
+                ${{ number_format($company->total_funding_amount, 0) }}
+            </x-entities.entity-show-data-card>
+        @endif
+
+        @if($company->last_funding_date != '')
+            <x-entities.entity-show-data-card title="Last Funding Date">
+                {{ Carbon\Carbon::parse($company->last_funding_date)->format('M d, Y') }}
+            </x-entities.entity-show-data-card>
+        @endif
+
+        @if($company->valuation != '')
+            <x-entities.entity-show-data-card title="Valuation">
+                ${{ number_format($company->valuation, 0) }}
+            </x-entities.entity-show-data-card>
+        @endif
+
+        @if($company->founded_date != '')
+            <x-entities.entity-show-data-card title="Founded">
+                {{ Carbon\Carbon::parse($company->founded_date)->format('M d, Y') }}
+            </x-entities.entity-show-data-card>
+        @endif
+
+        @if($company->number_employees != '')
+            <x-entities.entity-show-data-card title="Employees">
+                {{ $company->number_employees }}
+            </x-entities.entity-show-data-card>
+        @endif
+    </div>
+@endif
+
 @if($company->bookableListings->count() > 0)
     <x-entities.collapsable-related-entity collapsableId="bookableList" label="Book with {{ $company->name }}">
         @foreach ($company->bookableListings as $bookableListing)
@@ -246,58 +280,3 @@
         @endforeach
     </x-entities.collapsable-related-entity>
 @endif
-
-<div class="row my-4">
-    <div class="col-12">
-        @if($company->total_funding_amount != '')
-            <p class="mb-2">
-                <strong>Total Funding Amount:</strong><br>
-                ${{ number_format($company->total_funding_amount, 0) }}
-            </p>
-        @endif
-
-        @if($company->last_funding_date != '')
-            <p class="mb-2">
-                <strong>Last Funding Date:</strong><br>
-                {{ Carbon\Carbon::parse($company->last_funding_date)->format('M d, Y') }}
-            </p>
-        @endif
-
-        @if($company->latestValuationAmount)
-            <p class="mb-2">
-                <strong>Valuation:</strong><br>
-                ${{ $company->latestValuationAmount }}
-            </p>
-        @endif
-
-        @if($company->valuation != '')
-            <p class="mb-2">
-                <strong>Valuation:</strong><br>
-                ${{ number_format($company->valuation, 0) }}
-            </p>
-        @endif
-
-        @if($company->founded_date != '')
-            <p class="mb-2">
-                <strong>Founded:</strong><br>
-                {{ Carbon\Carbon::parse($company->founded_date)->format('M d, Y') }}
-            </p>
-        @endif
-
-        @if($company->number_employees != '')
-            <p class="mb-2">
-                <strong>Employees:</strong><br>
-                {{ $company->number_employees }}
-            </p>
-        @endif
-    </div>
-</div>
-
-<div class="row">
-    @foreach ($company->content as $content)
-        <div class="col-12 col-lg-7 mb-3">
-            <strong>{{ $content->name }}</strong><br>
-            {!! $content->formattedContent !!}
-        </div>
-    @endforeach
-</div>

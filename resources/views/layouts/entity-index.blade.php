@@ -5,6 +5,7 @@
 @endsection
 
 @include('navbars.primary')
+
 <main class="entity-index-container" role="main">
     @yield('content')
 </main>
