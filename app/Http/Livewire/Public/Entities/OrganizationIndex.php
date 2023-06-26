@@ -14,7 +14,6 @@ use Livewire\Component;
 
 class OrganizationIndex extends Component
 {
-    /* TODO: Note to self -- use bg-primary-subtle for the breadcrumb bar */
     use WithPerPagePagination, WithBulkActions, WithCachedRows, WithSorting;
 
     protected string $paginationTheme = 'bootstrap';
@@ -32,7 +31,7 @@ class OrganizationIndex extends Component
         'upcoming-events' => false
     ];
 
-    public string $locationSearch = '';
+    public ?string $locationSearch = null;
     public array $locationSearchResults = [];
 
     public function updatingSearch() {
@@ -73,19 +72,19 @@ class OrganizationIndex extends Component
         $this->emit('gotoTop');
     }
 
-    public function updatedLocationSearch()
-    {
-        if($this->locationSearch != '') {
-            $this->locationSearchResults = Location::where('name', 'like', '%' . $this->locationSearch . '%')->get()->toArray();
+    // Locations
+    public function updatedLocationSearch() {
+        if($this->locationSearch) {
+            $this->locationSearchResults = Location::whereHas('companies')->where('name', 'like', '%' . $this->locationSearch . '%')->get()->toArray();
         } else {
-            $this->locationSearchResults = [];
+            $this->locationSearchResults = Location::whereHas('companies')->withCount('companies')->orderByDesc('companies_count')->take(5)->get()->toArray();
         }
     }
 
-    public function updateSearchLocation($name) {
-        $this->filters['locations'][] = $name;
+    public function setLocationFilter($value) {
+        $this->filters['locations'][] = $value;
         $this->reset('locationSearch');
-        $this->dispatchBrowserEvent('clearLocationSearchBox');
+        $this->reset('locationSearchResults');
     }
 
     public function getRowsQueryProperty()

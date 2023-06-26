@@ -16,47 +16,15 @@
             </div>
             <div class="my-4">
                 <h4 class="h5 text-body-emphasis">Location</h4>
-                <form
-                    x-data='{
-                        locationSelected(e) {
-                            let value = e.target.value
-                            Livewire.emit("updateSearchLocation", value);
-                        }
-                    }'
-                >
-                    <input
-                        aria-label="Search locations"
-                        type="text"
-                        list="locationSearchOptions"
-                        wire:model="locationSearch"
-                        class="form-control"
-                        x-on:change.debounce="locationSelected($event)"
-                        placeholder="Search locations"
-                        id="location-search-box"
-                    >
-
-                    <datalist id="locationSearchOptions">
-                        @foreach($locationSearchResults as $result)
-                            <option
-                                wire:key="{{ $result['id'] }}"
-                                data-value="{{ $result['id'] }}"
-                                value="{{ $result['name'] }}"
-                            ></option>
-                        @endforeach
-                    </datalist>
-                </form>
-                <div>
-                    @if($filters['locations'])
-                        @foreach($filters['locations'] as $location)
-                            <div class="form-check my-2">
-                                <input wire:model="filters.locations" class="form-check-input" type="checkbox" value="{{ $location }}" id="filter-locations-{{ $location }}" @if(in_array($location, $filters['locations'])) checked @endif>
-                                <label class="form-check-label" for="filter-locations-{{ $location }}">
-                                    {{ $location }}
-                                </label>
-                            </div>
-                        @endforeach
-                    @endif
-                </div>
+                <x-livewire-filters.faux-multi-select
+                    wireModelSearch="locationSearch"
+                    wireModelFilter="filters.locations"
+                    label="Search locations"
+                    checkboxIdPrefix="filter-location"
+                    setFilterFunction="setLocationFilter"
+                    :searchResults="$locationSearchResults"
+                    :currentFilters="$filters['locations']"
+                />
             </div>
             <div class="my-4">
                 <h4 class="h5 text-body-emphasis">Focus</h4>
@@ -121,7 +89,7 @@
                 </div>
 
             @empty
-                <div class="w-100">
+                <div wire:key="empty" class="w-100">
                     <p class="lead mb-0">
                         No companies match your search criteria.
                     </p>
