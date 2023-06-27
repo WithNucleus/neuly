@@ -55,6 +55,12 @@ class InvestorsIndex extends Component
         $this->reset('search');
         $this->reset('filters');
         $this->reset('sorts');
+        $this->reset('locationSearch');
+        $this->reset('locationSearchResults');
+        $this->reset('personSearch');
+        $this->reset('personSearchResults');
+        $this->reset('companySearch');
+        $this->reset('companySearchResults');
         $this->resetPage();
     }
 
@@ -79,9 +85,19 @@ class InvestorsIndex extends Component
     // Locations
     public function updatedLocationSearch() {
         if($this->locationSearch) {
-            $this->locationSearchResults = Location::whereHas('investors')->where('name', 'like', '%' . $this->locationSearch . '%')->get()->toArray();
+            $this->locationSearchResults = Location::whereHas('investors')
+                ->withCount('investors as related_count')
+                ->where('name', 'like', '%' . $this->locationSearch . '%')
+                ->orderByDesc('related_count')
+                ->get()
+                ->toArray();
         } else {
-            $this->locationSearchResults = Location::whereHas('investors')->withCount('investors')->orderByDesc('investors_count')->take(5)->get()->toArray();
+            $this->locationSearchResults = Location::whereHas('investors')
+                ->withCount('investors as related_count')
+                ->orderByDesc('related_count')
+                ->take(5)
+                ->get()
+                ->toArray();
         }
     }
 
@@ -94,9 +110,19 @@ class InvestorsIndex extends Component
     // People
     public function updatedPersonSearch() {
         if($this->personSearch) {
-            $this->personSearchResults = Person::whereHas('investors')->where('name', 'like', '%' . $this->personSearch . '%')->get()->toArray();
+            $this->personSearchResults = Person::whereHas('investors')
+                ->withCount('investors as related_count')
+                ->orderByDesc('related_count')
+                ->where('name', 'like', '%' . $this->personSearch . '%')
+                ->get()
+                ->toArray();
         } else {
-            $this->personSearchResults = Person::whereHas('investors')->withCount('investors')->orderByDesc('investors_count')->take(5)->get()->toArray();
+            $this->personSearchResults = Person::whereHas('investors')
+                ->withCount('investors as related_count')
+                ->orderByDesc('related_count')
+                ->take(5)
+                ->get()
+                ->toArray();
         }
     }
 
@@ -109,9 +135,19 @@ class InvestorsIndex extends Component
     // Companies
     public function updatedCompanySearch() {
         if($this->companySearch) {
-            $this->companySearchResults = Company::whereHas('investors')->where('name', 'like', '%' . $this->companySearch . '%')->get()->toArray();
+            $this->companySearchResults = Company::whereHas('investors')
+                ->withCount('investors as related_count')
+                ->where('name', 'like', '%' . $this->companySearch . '%')
+                ->orderByDesc('related_count')
+                ->get()
+                ->toArray();
         } else {
-            $this->companySearchResults = Company::whereHas('investors')->withCount('investors')->orderByDesc('investors_count')->take(5)->get()->toArray();
+            $this->companySearchResults = Company::whereHas('investors')
+                ->withCount('investors as related_count')
+                ->orderByDesc('related_count')
+                ->take(5)
+                ->get()
+                ->toArray();
         }
     }
 

@@ -1,91 +1,63 @@
-@auth
-	<div class="row">
-		<div class="col-12 col-md-8 col-lg-7">
-			@if($investor->type != '')
-				<p class="mb-2">
-						<i class="fad fa-funnel-dollar text-quaternary"></i> {{ $investor->type }}
-					</a>
-				</p>
-			@endif
+<div class="row">
+	<div class="col-12 col-md-8 col-lg-7">
+        <p class="h5 text-body-emphasis">
+            {{ $investor->type ?? 'Unknown Type' }}
+        </p>
 
-			@if($investor->website != '')
-				<p class="mb-2">
-					<a href="{{ $investor->website }}" target="_blank" rel="noopener noreferrer">
-						{{ $investor->website }} <i class="fad fa-external-link fa-xs"></i>
-					</a>
-				</p>
-			@endif
+        @if($investor->locations->count() === 1)
+            <div class="mb-2 lead">
+                <a href="{{ route('discover.locations.show', $investor->locations->first()->slug) }}" class="text-decoration-none text-body-secondary">
+                    <i class="fa-sharp fa-solid fa-location-dot me-2"></i>{{ $investor->locations->first()->name }}
+                </a>
+            </div>
+        @endif
 
-			@if($investor->people->count() > 0)
-				<p class="mb-2">
-					<strong>People:</strong><br>
+        @if($investor->website != '')
+            <div class="lead mb-3">
+                <a href="{{ $investor->website }}" target="_blank" rel="noopener noreferrer">{{ $investor->website }}</a>
+            </div>
+        @endif
 
-					@foreach ($investor->people as $person)
-					    <a href="{{ route('discover.people.show', $person->slug) }}">{{ $person->name }} <span class="text-dark">({{ $person->pivot->role }})</span></a>
-
-					    @if (!$loop->last)<br>@endif
-					@endforeach
-				</p>
-			@endif
-
-			@if($investor->locations->count() > 0)
-				<p class="mb-2">
-					<strong>Location:</strong><br>
-
-					@foreach ($investor->locations as $location)
-					    <a href="{{ route('discover.locations.show', $location->slug) }}">{{ $location->name }}</a>
-
-					    @if (!$loop->last)<br>@endif
-					@endforeach
-				</p>
-			@endif
-
-		</div>
-		<div class="col-12 col-md-4 col-lg-5">
-
-			@if($investor->entityImageUrl)
-				<img src="{{ $investor->entityImageUrl }}" alt="{{ $investor->name }}" class="company-logo mb-4">
-			@endif
-		</div>
-
-	</div>
-
-	@if($investor->companies->count() > 0)
-		<div class="row mt-4">
-			<div class="col-12">
-				<h2 class="h3">Organizations:</h2>
-			</div>
-			@foreach ($investor->companies as $company)
-				<div class="card col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
-	                <div class="card-body border border-bottom-0 text-center d-flex justify-content-center align-items-center">
-	                    @if($company->entityImageUrl)
-	                        <a href="{{ route('discover.organizations.show', ['slug' => $company->slug]) }}" data-toggle="tooltip" data-placement="top" title="{{$company->name}}">
-	                            <img src="{{ $company->entityImageUrl }}" alt="{{ $company->name }}" class="company-logo mx-auto" alt="{{$company->name}}">
-	                        </a>
-	                    @else
-	                        <a href="{{ route('discover.organizations.show', ['slug' => $company->slug]) }}">{{$company->name}}</a>
-	                    @endif
-	                </div>
-	                <div class="card-footer font-size-small">
-	                    <strong>Focus:</strong>
-	                    @foreach ($company->focus as $focus)
-	                        <a href="{{ route('discover.focus.show', $focus->slug) }}">{{ $focus->name }}</a>@if (!$loop->last),@endif
-	                    @endforeach
-	                </div>
-	            </div>
-			@endforeach
-		</div>
-	@endif
-
-	@else
-
-		<div class="row">
-			<div class="col-12">
-				@include('discover.includes.register-gate', ['details' => $investor->name . ' details'])
-			</div>
-		</div>
-
-	@endauth
-
-
+        @if($investor->locations->count() > 1)
+            <div class="my-4">
+                <h3 class="mb-0">Locations</h3>
+                <div class="w-auto d-flex">
+                    <ul class="list-group list-group-flush lead me-auto w-auto">
+                        @foreach ($investor->locations as $location)
+                            <x-entities.related.location-list-item :location="$location" />
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        @endif
+    </div>
+    <div class="col-12 col-md-4 col-lg-5">
+		<div class="text-center">
+            <div class="logo-is-contained mb-3" style="background-image: url('{{ $investor->entityImageUrl ?? asset('images/image-placeholder.jpg') }}')"></div>
+        </div>
+    </div>
 </div>
+
+@if($investor->companies->count() > 0)
+    <x-entities.collapsable-related-entity collapsableId="companyList" label="Organizations">
+        @foreach ($investor->companies as $company)
+            <x-entities.related.company-card :company="$company" />
+        @endforeach
+    </x-entities.collapsable-related-entity>
+@endif
+
+@if($investor->people->count() > 0)
+    <x-entities.collapsable-related-entity collapsableId="peopleList" label="People">
+        @foreach ($investor->people as $person)
+            <x-entities.related.person-card :person="$person" />
+        @endforeach
+    </x-entities.collapsable-related-entity>
+@endif
+
+@if($investor->jobs->count() > 0)
+    <x-entities.collapsable-related-entity collapsableId="jobsList" label="Jobs">
+        @foreach ($investor->jobs as $job)
+            <x-entities.related.job-card :job="$job" />
+        @endforeach
+    </x-entities.collapsable-related-entity>
+@endif

@@ -9,7 +9,7 @@ use App\Models\Location;
 use App\Repositories\FollowRepository;
 use App\Services\Metas;
 use App\Services\StringLengthSort;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -18,56 +18,17 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class InvestorController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('query_filters')->only('index');
     }
 
-    /**
-     * List of Investors
-     *
-     * @return View
-     */
-    public function index(Request $request)
+    public function index(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        $investors = QueryBuilder::for(Investor::class)
-            ->with('companies')
-            ->allowedFilters([
-                'name', 'type',
-                AllowedFilter::partial('locations', 'locations.name'),
-                AllowedFilter::partial('people', 'people.name'),
-                AllowedFilter::partial('company', 'companies.name'),
-                AllowedFilter::scope('hiring', 'hasJobs'),
-            ])
-            ->defaultSort('name')
-            ->allowedSorts([
-                'name', 'type',
-                AllowedSort::custom('thisIsATest', new StringLengthSort(), 'name'),
-            ])
-            ->paginate(12)
-            ->appends(request()->query());
-
-        $types = Investor::pluck('type')->unique()->sort();
-
-        $locations = Location::has('investors', '>', 0)->with('investors')->get()->pluck('country')->unique()->sort();
-
-        $metas = Metas::fromPage($request->path());
-
-        // Return View
-        return view('discover.investors.index', compact('investors', 'types', 'metas', 'locations'));
+        return view('discover.investors.index');
     }
 
-    /**
-     * Show Investor
-     *
-     * @return View
-     */
-    public function show(Request $request, $slug)
+    public function show(Request $request, $slug): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         $investor = Investor::where('slug', $slug)->firstOrFail();
 

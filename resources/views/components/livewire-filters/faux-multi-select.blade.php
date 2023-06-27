@@ -6,7 +6,7 @@
                 @foreach($searchResults as $result)
                     <div>
                         <button wire:click="{{ $setFilterFunction }}('{{$result['name']}}')" class="btn faux-select-item">
-                            <span>{{ $result['name'] }}</span>
+                            <span>{{ $result['name'] }}</span> <small class="text-secondary">({{ $result['related_count'] }})</small>
                         </button>
                     </div>
                 @endforeach

@@ -16,7 +16,7 @@
                     </button>
                 </form>
             </div>
-            <ul class="navbar-nav ms-auto me-0">
+            <ul class="navbar-nav ms-auto me-0 align-items-center">
                 <li class="nav-item me-xl-3">
                     <a class="nav-link" href="#">Why Neuly</a>
                 </li>
@@ -87,7 +87,7 @@
                         <a class="nav-link" href="{{ route('login') }}">Login</a>
                     </li>
                     <li class="nav-item me-xl-3">
-                        <a class="btn btn-primary btn-cta" href="{{ route('register') }}">Register</a>
+                        <a class="btn btn-accent text-white btn-cta" href="{{ route('register') }}">Register</a>
                     </li>
                 @endauth
                 <li class="nav-item dropdown">

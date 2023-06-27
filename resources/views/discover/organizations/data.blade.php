@@ -116,17 +116,7 @@
 @if($company->bookableListings->count() > 0)
     <x-entities.collapsable-related-entity collapsableId="bookableList" label="Book with {{ $company->name }}">
         @foreach ($company->bookableListings as $bookableListing)
-            <div class="col-12 col-md-6 col-xl-4 mb-4">
-                <x-entities.entity-logo-card url="{{ route('discover.bookable-listing.show', $bookableListing->slug) }}" linkClasses="py-3">
-                    <div class="fw-bold text-uppercase m-0">{{ $bookableListing->name }}</div>
-                    <div class="text-body m-0 w-100">
-                        <div>
-                            {!! $bookableListing->fullAddress !!}
-                        </div>
-                        <div>{{ $bookableListing->phone }}</div>
-                    </div>
-                </x-entities.entity-logo-card>
-            </div>
+            <x-entities.related.bookable-listing-card :bookableListing="$bookableListing" />
         @endforeach
     </x-entities.collapsable-related-entity>
 @endif
@@ -134,12 +124,7 @@
 @if($company->investors->count() > 0)
     <x-entities.collapsable-related-entity collapsableId="investorsList" label="Investors">
         @foreach ($company->investors as $investor)
-            <div class="col-6 col-md-4 col-lg-3 mb-4">
-                <x-entities.entity-logo-card url="{{ route('discover.investors.show', $investor->slug) }}">
-                    <div class="logo-is-contained" style="background-image: url('{{ $investor->entityImageUrl ?? asset('images/image-placeholder.jpg') }}');"></div>
-                    <p class="fw-bold text-uppercase m-0">{{ $investor->name }}</p>
-                </x-entities.entity-logo-card>
-            </div>
+            <x-entities.related.investor-card :investor="$investor" />
         @endforeach
     </x-entities.collapsable-related-entity>
 @endif
@@ -147,13 +132,7 @@
 @if($company->people->count() > 0)
     <x-entities.collapsable-related-entity collapsableId="peopleList" label="People">
         @foreach ($company->people as $person)
-            <div class="col-6 col-md-4 col-xl-3 mb-4">
-                <x-entities.entity-logo-card url="{{ route('discover.people.show', $person->slug) }}" linkClasses="py-2">
-                    <div class="logo-square-is-contained rounded-circle mb-1" style="background-image: url('{{ $person->entityImageUrl ?? asset('images/person-blank.png') }}');"></div>
-                    <p class="fw-bold text-uppercase m-0">{{ $person->name }}</p>
-                    <p class="text-body-secondary m-0">{{ $person->pivot->position }}</p>
-                </x-entities.entity-logo-card>
-            </div>
+            <x-entities.related.person-card :person="$person" />
         @endforeach
     </x-entities.collapsable-related-entity>
 @endif
@@ -161,16 +140,7 @@
 @if($company->jobs->count() > 0)
     <x-entities.collapsable-related-entity collapsableId="jobsList" label="Jobs">
         @foreach ($company->jobs as $job)
-            <div class="col-12 col-lg-6 mb-4">
-                <x-entities.entity-logo-card url="{{ route('discover.jobs.show', $job->slug) }}" linkClasses="py-2">
-                    <p class="text-start fw-bold text-uppercase m-0">{{ $job->name }}</p>
-                    <p class="text-start text-body-secondary m-0">
-                        {{ $job->pretty_posted_date }}
-                        &bull;
-                        {{ $job->employment_type }}
-                    </p>
-                </x-entities.entity-logo-card>
-            </div>
+            <x-entities.related.job-card :job="$job" />
         @endforeach
     </x-entities.collapsable-related-entity>
 @endif
@@ -178,13 +148,7 @@
 @if($company->events->count() > 0)
     <x-entities.collapsable-related-entity collapsableId="eventsList" label="Events">
         @foreach ($company->events as $event)
-            <div class="col-6 col-md-4 col-xl-3 mb-4">
-                <x-entities.entity-logo-card url="{{ route('discover.events.show', $event->slug) }}" linkClasses="py-2">
-                    <div class="logo-is-contained mb-1" style="background-image: url('{{ $event->entityImageUrl ?? asset('images/image-placeholder.jpg') }}');"></div>
-                    <p class="fw-bold text-uppercase m-0">{{ $event->name }}</p>
-                    <p class="text-body-secondary m-0">{{ $event->pretty_start_date }}</p>
-                </x-entities.entity-logo-card>
-            </div>
+            <x-entities.related.event-card :event="$event" />
         @endforeach
     </x-entities.collapsable-related-entity>
 @endif
@@ -192,31 +156,7 @@
 @if($company->clinicaltrials->count() > 0)
     <x-entities.collapsable-related-entity collapsableId="clinicalTrialsList" label="Clinical Trials">
         @foreach ($company->clinicaltrials as $clinicalTrial)
-            <div class="col-12 col-lg-6 mb-4">
-                <x-entities.entity-logo-card url="{{ route('discover.clinicaltrials.show', $clinicalTrial->slug) }}" linkClasses="py-1 text-start">
-                    <p class="fs-6 fw-bold text-uppercase m-0">{{ $clinicalTrial->name }}</p>
-                    @if($clinicalTrial->conditions->count() > 0)
-                        <div class="fs-6 mt-2 mb-3 text-body">
-                            @foreach ($clinicalTrial->conditions as $item)
-                                <div>{{ $item->value }}</div>
-                            @endforeach
-                        </div>
-                    @endif
-                    <div class="d-flex justify-content-start text-body-secondary mb-3">
-                        @foreach ($clinicalTrial->focus as $focus)
-                            <span class="badge bg-secondary text-uppercase">{{ $focus->name }}</span>
-                        @endforeach
-                    </div>
-                    <div class="text-body-secondary d-flex flex-wrap">
-                        <div class="me-3">
-                            <strong>Start Date:</strong> {{ $clinicalTrial->pretty_start_date }}
-                        </div>
-                        <div>
-                            <strong>Last Updated:</strong> {{ $clinicalTrial->pretty_last_update_posted }}
-                        </div>
-                    </div>
-                </x-entities.entity-logo-card>
-            </div>
+            <x-entities.related.clinical-trial-card :clinicalTrial="$clinicalTrial" />
         @endforeach
     </x-entities.collapsable-related-entity>
 @endif
@@ -227,27 +167,14 @@
         @if($company->companyBranches->count() > 0)
             <div class="row">
                 @foreach ($company->companyBranches as $branch)
-                    <div class="col-12 col-md-6 col-xl-4 mb-3 lead">
-                        <address class="mb-1">
-                            <a href="https://google.com/maps/place/{!! $branch->fullAddressForGoogle !!}" class="text-decoration-none" target="_blank" rel="noopener noreferrer">{!! $branch->fullAddress !!}</a>
-                        </address>
-                        @if ($branch->phone != '')
-                            <span class="d-block">
-                                <a href="tel:{{ $branch->phone }}" class="text-decoration-none">
-                                    <i class="fa-sharp fa-solid fa-square-phone me-1"></i>{{ $branch->phone }}
-                                </a>
-                            </span>
-                        @endif
-                    </div>
+                    <x-entities.related.company-branch-card :companyBranch="$branch" />
                 @endforeach
             </div>
         @else
             <div class="w-auto d-flex">
                 <ul class="list-group list-group-flush lead me-auto w-auto">
                     @foreach ($company->locations as $location)
-                        <li class="list-group-item px-0">
-                            <a href="{{ route('discover.locations.show', $location->slug) }}">{{ $location->name }}</a>
-                        </li>
+                        <x-entities.related.location-list-item :location="$location" />
                     @endforeach
                 </ul>
             </div>
@@ -258,12 +185,7 @@
 @if($company->subsidiaries->count() > 0)
     <x-entities.collapsable-related-entity collapsableId="subsidiariesList" label="Subsidiaries">
         @foreach ($company->subsidiaries as $subsidiary)
-            <div class="col-6 col-md-4 col-xl-3 mb-4">
-                <x-entities.entity-logo-card url="{{ route('discover.organizations.show', $subsidiary->slug) }}" linkClasses="py-2">
-                    <div class="logo-is-contained mb-1" style="background-image: url('{{ $subsidiary->entityImageUrl ?? asset('images/image-placeholder.jpg') }}');"></div>
-                    <p class="fw-bold text-uppercase m-0">{{ $subsidiary->name }}</p>
-                </x-entities.entity-logo-card>
-            </div>
+            <x-entities.related.company-subsidiary-card :subsidiary="$subsidiary" />
         @endforeach
     </x-entities.collapsable-related-entity>
 @endif
@@ -271,12 +193,7 @@
 @if($company->parents->count() > 0)
     <x-entities.collapsable-related-entity collapsableId="parentsList" label="Subsidiary of">
         @foreach ($company->parents as $parent)
-            <div class="col-6 col-md-4 col-xl-3 mb-4">
-                <x-entities.entity-logo-card url="{{ route('discover.organizations.show', $parent->slug) }}" linkClasses="py-2">
-                    <div class="logo-is-contained mb-1" style="background-image: url('{{ $parent->entityImageUrl ?? asset('images/image-placeholder.jpg') }}');"></div>
-                    <p class="fw-bold text-uppercase m-0">{{ $parent->name }}</p>
-                </x-entities.entity-logo-card>
-            </div>
+            <x-entities.related.company-parent-card :parent="$parent" />
         @endforeach
     </x-entities.collapsable-related-entity>
 @endif
