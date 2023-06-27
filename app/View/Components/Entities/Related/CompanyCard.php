@@ -8,10 +8,12 @@ use Illuminate\View\Component;
 class CompanyCard extends Component
 {
     public Company $company;
+    public ?string $pivot;
 
-    public function __construct(Company $company)
+    public function __construct(Company $company, ?string $pivot = null)
     {
         $this->company = $company;
+        $this->pivot = $pivot;
     }
 
     public function render(): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Support\Htmlable|\Closure|string|\Illuminate\Contracts\Foundation\Application

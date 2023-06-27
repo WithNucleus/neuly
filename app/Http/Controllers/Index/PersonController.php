@@ -27,74 +27,17 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class PersonController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('query_filters')->only('index');
     }
 
-    // Public / Private Index for Homepage
-    public function index(Request $request)
+    public function index(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         $metas = Metas::fromPage($request->path());
 
-        $people = QueryBuilder::for(Person::class)
-            ->public()
-            ->with('companies')
-            ->allowedFilters([
-                'name',
-                AllowedFilter::partial('locations', 'locations.name'),
-                AllowedFilter::partial('company', 'companies.name'),
-                AllowedFilter::scope('is_investor', 'hasInvestors'),
-                AllowedFilter::callback('with_email', function (Builder $query, $value) {
-                    $query->whereNotNull('email');
-                }),
-                AllowedFilter::custom('focus', new PeopleCompanyFocusFilter),
-            ])
-            ->defaultSort('-created_at')
-            ->allowedSorts([
-                'name',
-                AllowedSort::field('date', 'created_at'),
-            ])
-            ->paginate(25)
-            ->appends(request()->query());
-
-        $locations = Location::has('people')->with('people')->get()->pluck('country')->unique()->sort()->toArray();
-        $companiesWithFocus = Company::has('people')->has('focus')->with('focus')->get();
-        $focuses = [];
-
-        foreach ($companiesWithFocus as $company) {
-            foreach ($company->focus as $focus) {
-                $focuses[] = $focus->name;
-            }
-        }
-
-        $focuses = array_unique($focuses);
-        sort($focuses);
-
-        if ($request->has('filter')) {
-            $filterInput = $request->input('filter');
-
-            $filter = array_map(function ($entity) {
-                return explode('|', $entity);
-            }, $filterInput);
-        }
-
-        $filters_companies = $filter['company'] ?? [];
-        $filters_focuses = $filter['focus'] ?? [];
-
-        // Return View
         return view('discover.people.index', compact(
-            'people',
             'metas',
-            'locations',
-            'focuses',
-            'filters_companies',
-            'filters_focuses',
         ));
     }
 
@@ -112,6 +55,7 @@ class PersonController extends Controller
                 'research',
                 'events',
                 'clinicaltrials',
+                'mediaItems'
             ])
             ->firstOrFail();
 

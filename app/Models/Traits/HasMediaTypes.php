@@ -73,13 +73,13 @@ trait HasMediaTypes
     public function getMediaIconAttribute(): string
     {
         return [
-            MediaTypes::MEDIA_TYPE_ARTICLE => '<i class="fad fa-file-alt"></i>',
-            MediaTypes::MEDIA_TYPE_IMAGE => '<i class="fad fa-image"></i>',
-            MediaTypes::MEDIA_TYPE_VIDEO => '<i class="fad fa-video"></i>',
-            MediaTypes::MEDIA_TYPE_PODCAST => '<i class="fad fa-podcast"></i>',
-            MediaTypes::MEDIA_TYPE_BOOK => '<i class="fad fa-book fa-fw"></i>',
-            MediaTypes::MEDIA_TYPE_NEWS => '<i class="fad fa-newspaper fa-fw"></i>',
-            MediaTypes::MEDIA_TYPE_PATENT_FILING => '<i class="fad fa-cabinet-filing"></i>',
-        ][$this->media_type] ?? '<i class="fad fa-photo-video"></i>';
+            MediaTypes::MEDIA_TYPE_ARTICLE => '<i class="fa-sharp fa-typewriter"></i>',
+            MediaTypes::MEDIA_TYPE_IMAGE => '<i class="fa-sharp fa-image"></i>',
+            MediaTypes::MEDIA_TYPE_VIDEO => '<i class="fa-sharp fa-video"></i>',
+            MediaTypes::MEDIA_TYPE_PODCAST => '<i class="fa-sharp fa-podcast"></i>',
+            MediaTypes::MEDIA_TYPE_BOOK => '<i class="fa-sharp fa-book fa-fw"></i>',
+            MediaTypes::MEDIA_TYPE_NEWS => '<i class="fa-sharp fa-newspaper fa-fw"></i>',
+            MediaTypes::MEDIA_TYPE_PATENT_FILING => '<i class="fa-sharp fa-cabinet-filing"></i>',
+        ][$this->media_type] ?? '<i class="fa-sharp fa-photo-video"></i>';
     }
 }

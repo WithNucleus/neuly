@@ -211,6 +211,12 @@ h5, .h5 {
     text-transform: uppercase;
 }
 
+.lead {
+    strong {
+        font-weight: bold;
+    }
+}
+
 // Images
 .logo-is-contained,
 .logo-square-is-contained,

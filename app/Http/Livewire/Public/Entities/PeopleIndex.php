@@ -9,10 +9,11 @@ use App\Http\Livewire\DataTable\WithSorting;
 use App\Models\Company;
 use App\Models\Focus;
 use App\Models\Location;
+use App\Models\Person;
 use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 
-class OrganizationIndex extends Component
+class PeopleIndex extends Component
 {
     use WithPerPagePagination, WithBulkActions, WithCachedRows, WithSorting;
 
@@ -23,11 +24,9 @@ class OrganizationIndex extends Component
     public ?string $search = null;
 
     public array $filters = [
-        'type' => [],
+        'companies' => [],
         'focus' => [],
-        'industry' => [],
         'locations' => [],
-        'now-hiring' => false,
         'upcoming-events' => false
     ];
 
@@ -75,15 +74,15 @@ class OrganizationIndex extends Component
     // Locations
     public function updatedLocationSearch() {
         if($this->locationSearch) {
-            $this->locationSearchResults = Location::whereHas('companies')
-                ->withCount('companies as related_count')
+            $this->locationSearchResults = Location::whereHas('people')
+                ->withCount('people as related_count')
                 ->where('name', 'like', '%' . $this->locationSearch . '%')
                 ->orderByDesc('related_count')
                 ->get()
                 ->toArray();
         } else {
             $this->locationSearchResults = Location::whereHas('investors')
-                ->withCount('companies as related_count')
+                ->withCount('people as related_count')
                 ->orderByDesc('related_count')
                 ->take(5)
                 ->get()
@@ -99,41 +98,28 @@ class OrganizationIndex extends Component
 
     public function getRowsQueryProperty()
     {
-        $query = Company::with(['focus'])
-                ->withCount(['focus', 'events', 'jobs' => function (Builder $query) {
-                    $query->open();
-                }, 'locations', 'investors'])
+        $query = Person::public()
+                ->with(['focus'])
+                ->withCount(['focus', 'companies', 'locations', 'investors', 'events'])
                 ->when($this->search, function($query, $search) {
                     return $query
                         ->where('name', 'like', '%' . $search . '%')
-                        ->orWhere('summary', 'like', '%' . $search . '%')
-                        ->orWhereHas('focus', function($query) use ($search) {
-                            $query->where('name', 'like', '%' . $search . '%');
-                        })
-                        ->orWhereHas('locations', function($query) use ($search) {
-                            $query->where('name', 'like', '%' . $search . '%');
-                        });
+                        ->orWhere('bio', 'like', '%' . $search . '%');
                 })
-                ->when($this->filters['type'], function($query, $value) {
-                    return $query->where('ownership', $value);
-                })
-                ->when($this->filters['focus'], function($query, $value) {
-                    return $query->whereHas('focus', function($query) use ($value) {
-                        $query->where('name', $value);
+                ->when($this->filters['companies'], function($query, $valueArray) {
+                    return $query->whereHas('companies', function($query) use ($valueArray) {
+                        $query->whereIn('name', $valueArray);
                     });
                 })
-                ->when($this->filters['industry'], function($query, $value) {
-                    return $query->whereHas('focus', function($query) use ($value) {
-                        $query->where('name', $value);
+                ->when($this->filters['focus'], function($query, $valueArray) {
+                    return $query->whereHas('focus', function($query) use ($valueArray) {
+                        $query->whereIn('name', $valueArray);
                     });
                 })
                 ->when($this->filters['locations'], function($query, $valueArray) {
                     return $query->whereHas('locations', function($query) use ($valueArray) {
                         $query->whereIn('name', $valueArray);
                     });
-                })
-                ->when($this->filters['now-hiring'], function($query, $value) {
-                    return $query->hasJobs();
                 })
                 ->when($this->filters['upcoming-events'], function($query, $value) {
                     return $query->hasUpcomingEvents();
@@ -149,13 +135,17 @@ class OrganizationIndex extends Component
         });
     }
 
-    public function render(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    public function render()
     {
-        $focusOptions = Focus::whereHas('companies')->withCount('companies')->orderBy('type')->orderByDesc('companies_count')->get()->groupBy('type')->toArray();
+        $focusOptions = Focus::whereHas('people', function (Builder $query) {
+                $query->where('visibility', Person::VISIBILITY_PUBLIC);
+            })->withCount(['people' => function (Builder $query) {
+                $query->where('visibility', Person::VISIBILITY_PUBLIC);
+            }])->orderBy('type')->orderByDesc('people_count')->get()->groupBy('type')->toArray();
         $focusDrugOptions = $focusOptions['drug'];
         $focusOtherOptions = $focusOptions[''];
 
-        return view('livewire.public.entities.organization-index', [
+        return view('livewire.public.entities.people-index', [
             'records' => $this->rows,
             'typeOptions' => Company::OWNERSHIP,
             'focusDrugOptions' => $focusDrugOptions,

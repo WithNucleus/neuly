@@ -65,7 +65,7 @@
                             </span>
                         @endif
 
-                        <div class="logo-is-contained" style="background-image: url('{{ $company->entityImageUrl }}')"></div>
+                        <div class="logo-is-contained" style="background-image: url('{{ $company->entityImageUrl ?? asset('images/image-placeholder.jpg') }}')"></div>
                         <p class="my-3 h5 px-1 text-success">{{ $company->name }}</p>
 
                         <div class="text-body-emphasis fw-bold text-uppercase my-3">{{ $company->ownership ?? 'Unknown Type' }}</div>
