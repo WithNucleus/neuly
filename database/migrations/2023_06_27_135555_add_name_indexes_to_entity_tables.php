@@ -19,7 +19,7 @@ return new class extends Migration
         'locations' => ['name'],
         'media_items' => ['name'],
         'people' => ['name', 'email', 'bio'],
-        'research' => ['name', 'abstract'],
+        'research' => ['name', 'abstract', 'publication_info'],
         'users' => ['name'],
     ];
 

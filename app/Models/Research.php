@@ -61,19 +61,19 @@ class Research extends Model implements EntityContract
     |--------------------------------------------------------------------------
     */
 
-    public function focus()
+    public function focus(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Focus::class, 'focus_research', 'research_id', 'focus_id')
                     ->withTimestamps();
     }
 
-    public function companies()
+    public function companies(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Company::class, 'company_research', 'research_id', 'company_id')
                     ->withTimestamps();
     }
 
-    public function people()
+    public function people(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Person::class, 'person_research', 'research_id', 'person_id')
                     ->withTimestamps();

@@ -8,11 +8,13 @@ use Illuminate\View\Component;
 class CompanyCard extends Component
 {
     public Company $company;
+    public ?string $classes;
     public ?string $pivot;
 
-    public function __construct(Company $company, ?string $pivot = null)
+    public function __construct(Company $company, ?string $classes = null, ?string $pivot = null)
     {
         $this->company = $company;
+        $this->classes = $classes;
         $this->pivot = $pivot;
     }
 

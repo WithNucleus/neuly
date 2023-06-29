@@ -7,10 +7,12 @@ use Illuminate\View\Component;
 class EntityShowTitleMeta extends Component
 {
     public string $title;
+    public ?string $headingClasses;
 
-    public function __construct(string $title)
+    public function __construct(string $title, ?string $headingClasses = null)
     {
         $this->title = $title;
+        $this->headingClasses = $headingClasses;
     }
 
     public function render(): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Support\Htmlable|string|\Closure|\Illuminate\Contracts\Foundation\Application

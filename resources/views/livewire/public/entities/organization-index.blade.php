@@ -102,11 +102,4 @@
         </div>
     </div>
 
-    <script>
-        window.addEventListener('clearLocationSearchBox', event => {
-            document.getElementById('location-search-box').value = "";
-            document.getElementById("locationSearchOptions").innerHTML = "";
-        });
-    </script>
-
 </div>

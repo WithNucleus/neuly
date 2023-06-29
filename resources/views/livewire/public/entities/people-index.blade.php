@@ -7,6 +7,8 @@
 
             <div class="my-4">
                 <x-livewire-filters.checkbox-single wireModel="filters.upcoming-events" id="filter-upcoming-events" label="Upcoming Events" />
+                <x-livewire-filters.checkbox-single wireModel="filters.has-research" id="filter-has-research" label="Has Research" />
+                <x-livewire-filters.checkbox-single wireModel="filters.has-clinical-trials" id="filter-has-clinical-trials" label="Clinical Trials" />
             </div>
 
             <div class="my-4">
@@ -56,7 +58,7 @@
                             </span>
                         @endif
 
-                        <div class="logo-is-contained" style="background-image: url('{{ $person->entityImageUrl ?? asset('images/image-placeholder.jpg') }}')"></div>
+                        <div class="logo-square-is-contained rounded-circle mb-3" style="background-image: url('{{ $person->entityImageUrl ?? asset('images/person-blank.png') }}')"></div>
                         <p class="my-3 h5 px-1 text-success">{{ $person->name }}</p>
 
                         <div class="text-body-emphasis fw-bold text-uppercase my-3">{{ $person->byline }}</div>
@@ -87,12 +89,5 @@
             {{ $records->links() }}
         </div>
     </div>
-
-    <script>
-        window.addEventListener('clearLocationSearchBox', event => {
-            document.getElementById('location-search-box').value = "";
-            document.getElementById("locationSearchOptions").innerHTML = "";
-        });
-    </script>
 
 </div>

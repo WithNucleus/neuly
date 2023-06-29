@@ -82,7 +82,7 @@ class OrganizationIndex extends Component
                 ->get()
                 ->toArray();
         } else {
-            $this->locationSearchResults = Location::whereHas('investors')
+            $this->locationSearchResults = Location::whereHas('companies')
                 ->withCount('companies as related_count')
                 ->orderByDesc('related_count')
                 ->take(5)
@@ -117,14 +117,14 @@ class OrganizationIndex extends Component
                 ->when($this->filters['type'], function($query, $value) {
                     return $query->where('ownership', $value);
                 })
-                ->when($this->filters['focus'], function($query, $value) {
-                    return $query->whereHas('focus', function($query) use ($value) {
-                        $query->where('name', $value);
+                ->when($this->filters['focus'], function($query, $valueArray) {
+                    return $query->whereHas('focus', function($query) use ($valueArray) {
+                        $query->whereIn('name', $valueArray);
                     });
                 })
-                ->when($this->filters['industry'], function($query, $value) {
-                    return $query->whereHas('focus', function($query) use ($value) {
-                        $query->where('name', $value);
+                ->when($this->filters['industry'], function($query, $valueArray) {
+                    return $query->whereHas('focus', function($query) use ($valueArray) {
+                        $query->whereIn('name', $valueArray);
                     });
                 })
                 ->when($this->filters['locations'], function($query, $valueArray) {

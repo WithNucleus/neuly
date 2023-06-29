@@ -27,7 +27,9 @@ class PeopleIndex extends Component
         'companies' => [],
         'focus' => [],
         'locations' => [],
-        'upcoming-events' => false
+        'upcoming-events' => false,
+        'has-research' => false,
+        'has-clinical-trials' => false
     ];
 
     public ?string $locationSearch = null;
@@ -121,8 +123,14 @@ class PeopleIndex extends Component
                         $query->whereIn('name', $valueArray);
                     });
                 })
-                ->when($this->filters['upcoming-events'], function($query, $value) {
+                ->when($this->filters['upcoming-events'], function($query) {
                     return $query->hasUpcomingEvents();
+                })
+                ->when($this->filters['has-research'], function($query) {
+                    return $query->hasResearch();
+                })
+                ->when($this->filters['has-clinical-trials'], function($query) {
+                    return $query->hasClinicalTrials();
                 });
 
         return $this->applySorting($query);

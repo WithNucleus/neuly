@@ -17,9 +17,9 @@
                     <span class="me-3 text-body-tertiary">
                         @isset($resource->file_format)
                             @if($resource->file_format == 'PDF')
-                                <i class="fad fa-file-pdf fa-lg text-quaternary me-1"></i>
+                                <i class="fad fa-file-pdf fa-lg me-1"></i>
                             @elseif($resource->file_format == 'HTML')
-                                <i class="fad fa-link fa-lg text-quaternary me-1"></i>
+                                <i class="fad fa-link fa-lg me-1"></i>
                             @else
                                 [{{ $resource->file_format }}]
                             @endif

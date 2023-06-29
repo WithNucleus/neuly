@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Index;
 use App\Helpers\PagePreviewHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Company;
-use App\Models\Focus;
 use App\Models\Job;
 use App\Repositories\FollowRepository;
 use App\Services\Metas;
@@ -13,44 +12,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Models\Activity;
-use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\AllowedSort;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class CompanyController extends Controller
 {
-    public function __construct()
+
+    public function index(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        $this->middleware('query_filters')->only('index');
-    }
-
-    public function index(Request $request)
-    {
-        $companies = QueryBuilder::for(Company::class)
-            ->public()
-            ->with('focus')
-            ->allowedFilters([
-                'name',
-                AllowedFilter::partial('locations', 'locations.name'),
-                AllowedFilter::partial('focus', 'focus.name'),
-                AllowedFilter::exact('type', 'ownership'),
-                AllowedFilter::scope('hiring', 'hasJobs'),
-                AllowedFilter::scope('upcoming_events', 'hasUpcomingEvents'),
-            ])
-            ->defaultSort('name')
-            ->allowedSorts([
-                'name',
-                AllowedSort::field('date', 'created_at'),
-                AllowedSort::field('type', 'ownership'),
-            ])
-            ->paginate(12)
-            ->appends(request()->query());
-
-        $focus_cats = Focus::has('companies', '>', 0)->with('companies')->get()->pluck('name')->unique()->sort();
-
         $metas = Metas::fromPage($request->path());
 
-        return view('discover.organizations.index', compact('companies', 'focus_cats', 'metas'));
+        return view('discover.organizations.index', [
+            'metas' => $metas
+        ]);
     }
 
     public function show(Request $request, $slug): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Contracts\Foundation\Application

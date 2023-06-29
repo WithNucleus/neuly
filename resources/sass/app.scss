@@ -217,6 +217,10 @@ h5, .h5 {
     }
 }
 
+.text-transform-none {
+    text-transform: none;
+}
+
 // Images
 .logo-is-contained,
 .logo-square-is-contained,
@@ -247,7 +251,18 @@ h5, .h5 {
 .logo-square-is-contained {
     width: 100%;
     max-width: 150px;
+    max-height: 150px;
+	height: auto;
+    aspect-ratio: 1;
     background-size: cover;
+}
+
+.small-square-card {
+    max-width: 200px;
+
+    .logo-square-is-contained {
+        width: 100px;
+    }
 }
 
 // Collapse Heading - Flip Icon
@@ -274,5 +289,14 @@ h5, .h5 {
         i {
             transform: rotate(180deg);
         }
+    }
+}
+
+// Max Widths
+$max-widths: 200 250 300 780;
+
+@each $size in $max-widths {
+    .max-width-#{$size} {
+        max-width: #{$size}px;
     }
 }

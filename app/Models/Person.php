@@ -284,6 +284,16 @@ class Person extends Model implements EntityContract, EntityImageContract
         });
     }
 
+    public function scopeHasResearch($query)
+    {
+        return $query->whereHas('research');
+    }
+
+    public function scopeHasClinicalTrials($query)
+    {
+        return $query->whereHas('clinicaltrials');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | ACCESSORS
