@@ -1,6 +1,6 @@
 @extends('layouts.entity-index')
 
-@section('body-class', 'page-companies')
+@section('body-class', 'page-investors')
 
 @section('content')
 

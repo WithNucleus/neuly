@@ -6,21 +6,18 @@ use App\Http\Livewire\DataTable\WithBulkActions;
 use App\Http\Livewire\DataTable\WithCachedRows;
 use App\Http\Livewire\DataTable\WithPerPagePagination;
 use App\Http\Livewire\DataTable\WithSorting;
-use App\Models\Company;
+use App\Http\Livewire\Public\Entities\Traits\HasCompanyFilter;
+use App\Http\Livewire\Public\Entities\Traits\HasPersonFilter;
 use App\Models\Focus;
-use App\Models\Location;
-use App\Models\Person;
 use App\Models\Research;
-use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 
 class ResearchIndex extends Component
 {
-    use WithPerPagePagination, WithBulkActions, WithCachedRows, WithSorting;
+    use WithPerPagePagination, WithBulkActions, WithCachedRows, WithSorting, HasCompanyFilter, HasPersonFilter;
 
     protected string $paginationTheme = 'bootstrap';
-    protected $queryString = ['search', 'sorts'];
-    protected $listeners = ['updateSearchLocation'];
+    protected $queryString = ['search'];
 
     public ?string $search = null;
 
@@ -30,11 +27,11 @@ class ResearchIndex extends Component
         'companies' => []
     ];
 
-    public ?string $personSearch = null;
-    public array $personSearchResults = [];
-
-    public ?string $companySearch = null;
-    public array $companySearchResults = [];
+    public function mount() {
+        $this->sorts = [
+            'updated_at' => 'desc'
+        ];
+    }
 
     public function updatingSearch() {
         $this->resetPage();
@@ -53,6 +50,10 @@ class ResearchIndex extends Component
         $this->reset('search');
         $this->reset('filters');
         $this->reset('sorts');
+        $this->reset('personSearch');
+        $this->reset('personSearchResults');
+        $this->reset('companySearch');
+        $this->reset('companySearchResults');
         $this->resetPage();
     }
 
@@ -74,54 +75,12 @@ class ResearchIndex extends Component
         $this->emit('gotoTop');
     }
 
-    // People
     public function updatedPersonSearch() {
-        if($this->personSearch) {
-            $this->personSearchResults = Person::whereHas('research')
-                ->withCount('research as related_count')
-                ->where('name', 'like', '%' . $this->personSearch . '%')
-                ->orderByDesc('related_count')
-                ->get()
-                ->toArray();
-        } else {
-            $this->personSearchResults = Person::whereHas('research')
-                ->withCount('research as related_count')
-                ->orderByDesc('related_count')
-                ->take(5)
-                ->get()
-                ->toArray();
-        }
+        $this->returnPersonSearch('research');
     }
 
-    public function setPersonFilter($value) {
-        $this->filters['people'][] = $value;
-        $this->reset('personSearch');
-        $this->reset('personSearchResults');
-    }
-
-    // Companies
     public function updatedCompanySearch() {
-        if($this->companySearch) {
-            $this->companySearchResults = Company::whereHas('research')
-                ->withCount('research as related_count')
-                ->where('name', 'like', '%' . $this->companySearch . '%')
-                ->orderByDesc('related_count')
-                ->get()
-                ->toArray();
-        } else {
-            $this->companySearchResults = Company::whereHas('research')
-                ->withCount('research as related_count')
-                ->orderByDesc('related_count')
-                ->take(5)
-                ->get()
-                ->toArray();
-        }
-    }
-
-    public function setCompanyFilter($value) {
-        $this->filters['companies'][] = $value;
-        $this->reset('companySearch');
-        $this->reset('companySearchResults');
+        $this->returnCompanySearch('research');
     }
 
     public function getRowsQueryProperty()

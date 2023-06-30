@@ -25,6 +25,19 @@
             </div>
 
             <div class="my-4">
+                <h4 class="h5 text-body-emphasis">Companies</h4>
+                <x-livewire-filters.faux-multi-select
+                    wireModelSearch="companySearch"
+                    wireModelFilter="filters.companies"
+                    label="Search companies"
+                    checkboxIdPrefix="filter-company"
+                    setFilterFunction="setCompanyFilter"
+                    :searchResults="$companySearchResults"
+                    :currentFilters="$filters['companies']"
+                />
+            </div>
+
+            <div class="my-4">
                 <h4 class="h5 text-body-emphasis">Focus</h4>
                 <x-livewire-filters.checkbox-multiple-with-count wireModel="filters.focus" id="filter-focus" :options="$focusDrugOptions" :currentFilters="$filters['focus']" countName="people_count" />
             </div>

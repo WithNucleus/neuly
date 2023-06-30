@@ -9,7 +9,7 @@ return new class extends Migration
 {
     private array $tables = [
         'bookable_listings' => ['name'],
-        'clinicaltrials' => ['title'],
+        'clinicaltrials' => ['title', 'nct_number'],
         'companies' => ['name', 'summary'],
         'courses' => ['name', 'summary'],
         'events' => ['name', 'description'],

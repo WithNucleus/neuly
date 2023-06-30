@@ -85,51 +85,51 @@ class Clinicaltrial extends Model implements EntityContract
     |--------------------------------------------------------------------------
     */
 
-    public function locations()
+    public function locations(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Location::class, 'clinicaltrial_location', 'clinicaltrial_id', 'location_id')
                     ->withTimestamps();
     }
 
-    public function companies()
+    public function companies(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Company::class, 'clinicaltrial_company', 'clinicaltrial_id', 'company_id')
                     ->withTimestamps();
     }
 
-    public function people()
+    public function people(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Person::class, 'clinicaltrial_person', 'clinicaltrial_id', 'person_id')
                     ->withTimestamps();
     }
 
-    public function focus()
+    public function focus(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Focus::class, 'clinicaltrial_focus', 'clinicaltrial_id', 'focus_id')
                     ->withTimestamps();
     }
 
-    public function conditions()
+    public function conditions(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(CtCondition::class, 'clinicaltrial_condition');
     }
 
-    public function interventions()
+    public function interventions(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(CtIntervention::class, 'clinicaltrial_intervention');
     }
 
-    public function outcomeMeasures()
+    public function outcomeMeasures(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(CtOutcomeMeasure::class, 'clinicaltrial_outcome_measure');
     }
 
-    public function studyDesigns()
+    public function studyDesigns(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(CtStudyDesign::class, 'clinicaltrial_study_design');
     }
 
-    public function parsingResult()
+    public function parsingResult(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(ClinicaltrialParsingResult::class);
     }

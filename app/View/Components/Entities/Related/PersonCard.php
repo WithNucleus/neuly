@@ -10,7 +10,7 @@ class PersonCard extends Component
     public Person $person;
     public ?string $classes;
 
-    public function __construct(Person $person, ?string $classes)
+    public function __construct(Person $person, ?string $classes = null)
     {
         $this->person = $person;
         $this->classes = $classes;

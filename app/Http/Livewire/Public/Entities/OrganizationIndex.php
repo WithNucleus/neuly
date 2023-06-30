@@ -6,19 +6,18 @@ use App\Http\Livewire\DataTable\WithBulkActions;
 use App\Http\Livewire\DataTable\WithCachedRows;
 use App\Http\Livewire\DataTable\WithPerPagePagination;
 use App\Http\Livewire\DataTable\WithSorting;
+use App\Http\Livewire\Public\Entities\Traits\HasLocationFilter;
 use App\Models\Company;
 use App\Models\Focus;
-use App\Models\Location;
 use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 
 class OrganizationIndex extends Component
 {
-    use WithPerPagePagination, WithBulkActions, WithCachedRows, WithSorting;
+    use WithPerPagePagination, WithBulkActions, WithCachedRows, WithSorting, HasLocationFilter;
 
     protected string $paginationTheme = 'bootstrap';
-    protected $queryString = ['search', 'sorts'];
-    protected $listeners = ['updateSearchLocation'];
+    protected $queryString = ['search'];
 
     public ?string $search = null;
 
@@ -31,8 +30,11 @@ class OrganizationIndex extends Component
         'upcoming-events' => false
     ];
 
-    public ?string $locationSearch = null;
-    public array $locationSearchResults = [];
+    public function mount() {
+        $this->sorts = [
+            'updated_at' => 'desc'
+        ];
+    }
 
     public function updatingSearch() {
         $this->resetPage();
@@ -51,6 +53,8 @@ class OrganizationIndex extends Component
         $this->reset('search');
         $this->reset('filters');
         $this->reset('sorts');
+        $this->reset('locationSearch');
+        $this->reset('locationSearchResults');
         $this->resetPage();
     }
 
@@ -70,31 +74,6 @@ class OrganizationIndex extends Component
     {
         $this->setPage(max($this->page - 1, 1));
         $this->emit('gotoTop');
-    }
-
-    // Locations
-    public function updatedLocationSearch() {
-        if($this->locationSearch) {
-            $this->locationSearchResults = Location::whereHas('companies')
-                ->withCount('companies as related_count')
-                ->where('name', 'like', '%' . $this->locationSearch . '%')
-                ->orderByDesc('related_count')
-                ->get()
-                ->toArray();
-        } else {
-            $this->locationSearchResults = Location::whereHas('companies')
-                ->withCount('companies as related_count')
-                ->orderByDesc('related_count')
-                ->take(5)
-                ->get()
-                ->toArray();
-        }
-    }
-
-    public function setLocationFilter($value) {
-        $this->filters['locations'][] = $value;
-        $this->reset('locationSearch');
-        $this->reset('locationSearchResults');
     }
 
     public function getRowsQueryProperty()

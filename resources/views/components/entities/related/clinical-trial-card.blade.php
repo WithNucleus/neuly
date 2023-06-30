@@ -1,4 +1,4 @@
-<div class="col-12 col-lg-6 mb-4">
+<div class="{{ $classes ?? 'col-12 col-lg-6 mb-4' }}">
     <x-entities.entity-logo-card url="{{ route('discover.clinicaltrials.show', $clinicalTrial->slug) }}" linkClasses="py-1 text-start">
         <p class="fs-6 fw-bold text-uppercase m-0">{{ $clinicalTrial->name }}</p>
         @if($clinicalTrial->conditions->count() > 0)
@@ -10,7 +10,7 @@
         @endif
         <div class="d-flex justify-content-start text-body-secondary mb-3">
             @foreach ($clinicalTrial->focus as $focus)
-                <span class="badge bg-secondary text-uppercase">{{ $focus->name }}</span>
+                <span class="badge bg-secondary text-uppercase me-2">{{ $focus->name }}</span>
             @endforeach
         </div>
         <div class="text-body-secondary d-flex flex-wrap">

@@ -9,11 +9,13 @@ use App\Http\Livewire\DataTable\WithSorting;
 use App\Http\Livewire\Public\Entities\Traits\HasCompanyFilter;
 use App\Http\Livewire\Public\Entities\Traits\HasLocationFilter;
 use App\Http\Livewire\Public\Entities\Traits\HasPersonFilter;
+use App\Models\Event;
+use App\Models\EventType;
+use App\Models\Focus;
 use App\Models\Investor;
-use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 
-class InvestorsIndex extends Component
+class EventsIndex extends Component
 {use WithPerPagePagination, WithBulkActions, WithCachedRows, WithSorting, HasCompanyFilter, HasLocationFilter, HasPersonFilter;
 
     protected string $paginationTheme = 'bootstrap';
@@ -23,15 +25,17 @@ class InvestorsIndex extends Component
 
     public array $filters = [
         'type' => [],
+        'focus' => [],
+        'industry' => [],
         'locations' => [],
         'people' => [],
         'companies' => [],
-        'now-hiring' => false
+        'upcoming' => false
     ];
 
     public function mount() {
         $this->sorts = [
-            'name' => 'asc'
+            'start_date' => 'desc'
         ];
     }
 
@@ -80,22 +84,23 @@ class InvestorsIndex extends Component
     }
 
     public function updatedCompanySearch() {
-        $this->returnCompanySearch('investors');
+        $this->returnCompanySearch('events');
     }
 
     public function updatedPersonSearch() {
-        $this->returnPersonSearch('investors');
+        $this->returnPersonSearch('events');
     }
 
     public function updatedLocationSearch() {
-        $this->returnLocationSearch('investors');
+        $this->returnLocationSearch('events');
     }
 
     public function getRowsQueryProperty()
     {
-        $query = Investor::withCount(['companies', 'jobs' => function (Builder $query) {
-                    $query->open();
-                }, 'locations'])
+        $query = Event::withCount(['companies', 'locations', 'people', 'eventTypes'])
+                ->when($this->filters['upcoming'], function($query) {
+                    $query->upcoming();
+                })
                 ->when($this->search, function($query, $search) {
                     return $query
                         ->where('name', 'like', '%' . $search . '%')
@@ -106,8 +111,10 @@ class InvestorsIndex extends Component
                             $query->where('name', 'like', '%' . $search . '%');
                         });
                 })
-                ->when($this->filters['type'], function($query, $value) {
-                    return $query->where('type', $value);
+                ->when($this->filters['type'], function($query, $valueArray) {
+                    return $query->whereHas('eventTypes', function($query) use ($valueArray) {
+                        $query->whereIn('name', $valueArray);
+                    });
                 })
                 ->when($this->filters['locations'], function($query, $valueArray) {
                     return $query->whereHas('locations', function($query) use ($valueArray) {
@@ -124,8 +131,15 @@ class InvestorsIndex extends Component
                         $query->whereIn('name', $valueArray);
                     });
                 })
-                ->when($this->filters['now-hiring'], function($query, $value) {
-                    return $query->hasJobs();
+                ->when($this->filters['focus'], function($query, $valueArray) {
+                    return $query->whereHas('focus', function($query) use ($valueArray) {
+                        $query->whereIn('name', $valueArray);
+                    });
+                })
+                ->when($this->filters['industry'], function($query, $valueArray) {
+                    return $query->whereHas('focus', function($query) use ($valueArray) {
+                        $query->whereIn('name', $valueArray);
+                    });
                 });
 
         return $this->applySorting($query);
@@ -140,9 +154,16 @@ class InvestorsIndex extends Component
 
     public function render()
     {
-        return view('livewire.public.entities.investors-index', [
+        $focusOptions = Focus::whereHas('events')->withCount('events')->orderBy('type')->orderByDesc('events_count')->get()->groupBy('type')->toArray();
+        $focusDrugOptions = $focusOptions['drug'];
+        $focusOtherOptions = $focusOptions[''];
+        $focusOtherOptions = array_slice($focusOtherOptions, 0, 10);
+
+        return view('livewire.public.entities.events-index', [
             'records' => $this->rows,
-            'typeOptions' => Investor::TYPE,
+            'typeOptions' => EventType::whereHas('events')->pluck('name')->toArray(),
+            'focusDrugOptions' => $focusDrugOptions,
+            'focusOtherOptions' => $focusOtherOptions
         ]);
     }
 }

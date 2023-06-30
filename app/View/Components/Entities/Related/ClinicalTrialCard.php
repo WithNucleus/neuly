@@ -8,10 +8,12 @@ use Illuminate\View\Component;
 class ClinicalTrialCard extends Component
 {
     public Clinicaltrial $clinicalTrial;
+    public ?string $classes;
 
-    public function __construct(Clinicaltrial $clinicalTrial)
+    public function __construct(Clinicaltrial $clinicalTrial, ?string $classes = null)
     {
         $this->clinicalTrial = $clinicalTrial;
+        $this->classes = $classes;
     }
 
     public function render(): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Support\Htmlable|string|\Closure|\Illuminate\Contracts\Foundation\Application

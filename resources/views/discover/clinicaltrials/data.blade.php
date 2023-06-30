@@ -27,135 +27,143 @@ $dates = [
 ];
 ?>
 
-@auth
+@if($clinicalTrial->focus->count() > 0)
+    <div class="d-flex flex-wrap align-items-center">
+        @foreach ($clinicalTrial->focus as $item)
+            <a href="{{ route('discover.focus.show', $item->slug) }}" class="btn btn-secondary rounded-0 my-2 me-3 fs-6 py-1">{{ $item->name }}</a>
+        @endforeach
+    </div>
+@endif
 
-    <div class="row mb-5">
-        <div class="col-12 col-lg-6">
-            @if($clinicaltrial->people->count() > 0 OR $clinicaltrial->companies->count() > 0)
-                <h2 class="lead font-normal font-weight-bold mb-1">Sponsors/Collaborators:</h2>
-                <p class="mb-0">
-                    @if($clinicaltrial->companies->count() > 0)
-                        @foreach ($clinicaltrial->companies as $company)
-                            <a href="{{ route('discover.organizations.show', $company->slug )}} ">{{ $company->name }}</a><br>
+@if($clinicalTrial->brief_summary != '' AND $clinicalTrial->brief_summary != 'Not applicable')
+    <div class="my-4">
+        <h3 class="h4 font-normal border-bottom">Brief Summary</h3>
+        <div class="max-width-780">{!! $clinicalTrial->brief_summary !!}</div>
+    </div>
+@endif
+
+<div class="table-responsive my-5">
+    <table class="table table-bordered border-secondary-subtle">
+        <tr>
+            <th class="bg-secondary-subtle">
+                <span class="h5 m-0 d-block" style="padding-top: .25rem">Condition or Disease</span>
+            </th>
+            <th class="bg-secondary-subtle">
+                <span class="h5 m-0 d-block" style="padding-top: .25rem">Intervention / Treatment</span>
+            </th>
+            <th class="bg-secondary-subtle">
+                <span class="h5 m-0 d-block" style="padding-top: .25rem">Phase</span>
+            </th>
+        </tr>
+        <tr>
+            <td>
+                @if($clinicalTrial->conditions->count() > 0)
+                    <ul class="mb-0">
+                        @foreach ($clinicalTrial->conditions as $item)
+                            <li>{{ $item->value }}</li>
                         @endforeach
-                    @endif
-
-                    @if($clinicaltrial->companies->count() > 0)
-                        @foreach ($clinicaltrial->people as $person)
-                            <a href="{{ route('discover.people.show', $person->slug) }}">{{ $person->name }}</a>
-
-                            @if (!$loop->last)<br>@endif
+                    </ul>
+                @endif
+            </td>
+            <td>
+                @if($clinicalTrial->interventions->count() > 0)
+                    <ul class="mb-0">
+                        @foreach ($clinicalTrial->interventions as $item)
+                            <li>{{ $item->value }}</li>
                         @endforeach
-                    @endif
-                </p>
+                    </ul>
+                @endif
+            </td>
+            <td>
+                @php
+                    $phases = explode('|', $clinicalTrial->phases)
+                @endphp
+                @foreach ($phases as $phase)
+                    <ul class="mb-0">
+                        <li>{{ $phase }}</li>
+                    </ul>
+                @endforeach
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="my-4">
+    @if($clinicalTrial->people->count() > 0 OR $clinicalTrial->companies->count() > 0)
+        <div class="row">
+            <div class="col-12">
+                <h2 class="h3">Sponsors / Collaborators</h2>
+            </div>
+
+            @if($clinicalTrial->companies->count() > 0)
+                @foreach ($clinicalTrial->companies as $company)
+                    <x-entities.related.company-card :company="$company" />
+                @endforeach
+            @endif
+
+            @if($clinicalTrial->companies->count() > 0)
+                @foreach ($clinicalTrial->people as $person)
+                    <x-entities.related.person-card :person="$person" />
+                @endforeach
             @endif
         </div>
-        <div class="col-12 col-lg-6">
-            @if($clinicaltrial->locations->count() > 0)
-                <h3 class="lead font-normal font-weight-bold mb-1">Location:</h3>
-                <p class="mb-0">
-                    @foreach ($clinicaltrial->locations as $location)
-                        <a href="{{ route('discover.locations.show', $location->slug) }}">{{ $location->name }}</a>
+    @endif
+</div>
 
-                        @if (!$loop->last)<br>@endif
-                    @endforeach
-                </p>
-            @endif
-        </div>
-    </div>
-    <div class="table-responsive mb-5">
-        <table class="table table-bordered">
-            <tr>
-                <th class="bg-light text-no-wrap lead-smaller">Condition or Disease</th>
-                <th class="bg-light text-no-wrap lead-smaller">Intervention / Treatment</th>
-                <th class="bg-light text-no-wrap lead-smaller">Phase</th>
-            </tr>
-            <tr>
-                <td>
-                    @if($clinicaltrial->conditions->count() > 0)
-                        <ul class="mb-0">
-                            @foreach ($clinicaltrial->conditions as $item)
-                                <li>{{ $item->value }}</li>
-                            @endforeach
-                        </ul>
-                    @endif
-                </td>
-                <td>
-                    @if($clinicaltrial->interventions->count() > 0)
-                        <ul class="mb-0">
-                            @foreach ($clinicaltrial->interventions as $item)
-                                <li>{{ $item->value }}</li>
-                            @endforeach
-                        </ul>
-                    @endif
-                </td>
-                <td>
-                    @php
-                        $phases = explode('|', $clinicaltrial->phases)
-                    @endphp
-                    @foreach ($phases as $phase)
-                        <ul class="mb-0">
-                            <li>{{ $phase }}</li>
-                        </ul>
-                    @endforeach
-                </td>
-            </tr>
-        </table>
-    </div>
+@if($clinicalTrial->locations->count() > 0)
+    <h3 class="lead font-normal font-weight-bold mb-1">Location:</h3>
+    <p class="mb-0">
+        @foreach ($clinicalTrial->locations as $location)
+            <a href="{{ route('discover.locations.show', $location->slug) }}">{{ $location->name }}</a>
 
-    <style>
-        .has-arrow-icon.collapsed i {
-            transform: scaleY(-1);
-        }
-    </style>
+            @if (!$loop->last)<br>@endif
+        @endforeach
+    </p>
+@endif
 
-    @if($clinicaltrial->brief_summary != '' AND $clinicaltrial->brief_summary != 'Not applicable')
-        <div class="row mb-5">
-            <div class="col-12">
-                <h3 class="h4 font-normal border-bottom">Brief Summary</h3>
-                {!! $clinicaltrial->brief_summary !!}
+@if($clinicalTrial->detailed_description != '' AND $clinicalTrial->detailed_description != 'Not applicable')
+    <div class="my-4">
+        <h3 class="h4 collapse-heading border-bottom">
+            <button data-bs-toggle="collapse" href="#detailedDescription" aria-expanded="true" aria-controls="detailedDescription" class="btn px-0">
+                <span class="d-block mt-1">Detailed Description</span>
+                <i class="fa-sharp fa-solid fa-angle-down"></i>
+            </button>
+        </h3>
+        <div class="collapse multi-collapse show" id="detailedDescription">
+            <div class="pt-3">
+                {!! $clinicalTrial->detailed_description !!}
             </div>
         </div>
-    @endif
+    </div>
+@endif
 
-    @if($clinicaltrial->detailed_description != '' AND $clinicaltrial->detailed_description != 'Not applicable')
-        <div class="row mb-5">
-            <div class="col-12">
-                <h3 class="h4 font-normal border-bottom has-arrow-icon collapsed" data-toggle="collapse" href="#detailedDescription" role="button" aria-expanded="false" aria-controls="detailedDescription">Detailed Description <small class="float-right"><i class="far fa-angle-up"></i></small></h3>
-                <div class="collapse" id="detailedDescription">
-                    {!! $clinicaltrial->detailed_description !!}
-                </div>
-            </div>
-        </div>
-    @endif
-
-    <div class="row mb-5">
+<div class="row">
     <div class="col-12 col-xl-6">
-        <h2 class="h4 font-normal border-bottom">Study Design</h2>
+        <h2 class="h4 border-bottom">Study Design</h2>
         <div class="table-responsive">
             <table class="table table-sm table-borderless mr-4">
                 @foreach($primary_fields as $key => $field)
-                    @if($clinicaltrial->$key != '')
+                    @if($clinicalTrial->$key != '')
                         <tr>
                             <th class="pl-4 py-2 text-right @if($loop->first) border-top-0 @endif">{{ $field['label'] }}:</th>
                             <td class="pr-4 py-2 @if($loop->first) border-top-0 @endif">
                                 @if($field['type'] == 'text')
-                                    {{ $clinicaltrial->$key }}
+                                    {{ $clinicalTrial->$key }}
                                 @endif
                                 @if($field['type'] == 'date')
-                                    {{ Carbon\Carbon::parse($clinicaltrial->$key)->format('M d, Y') }}
+                                    {{ Carbon\Carbon::parse($clinicalTrial->$key)->format('M d, Y') }}
                                 @endif
                                 @if($field['type'] == 'url')
-                                    <a href="{{ $clinicaltrial->$key }}" target="_blank" rel="noopener noreferrer">
-                                        {{ $clinicaltrial->$key }}
+                                    <a href="{{ $clinicalTrial->$key }}" target="_blank" rel="noopener noreferrer">
+                                        {{ $clinicalTrial->$key }}
                                     </a>
                                 @endif
                             </td>
                         </tr>
                     @endif
                 @endforeach
-                @if($clinicaltrial->studyDesigns->count() > 0)
-                    @foreach ($clinicaltrial->studyDesigns as $item)
+                @if($clinicalTrial->studyDesigns->count() > 0)
+                    @foreach ($clinicalTrial->studyDesigns as $item)
                         @php
                             $itemArray = explode(':', $item->value);
                         @endphp
@@ -172,68 +180,57 @@ $dates = [
             </table>
         </div>
     </div>
-        <div class="col-12 col-xl-5 ml-xl-3">
-            <h3 class="h4 font-normal border-bottom">Clinical Trial Dates</h3>
-            <table class="table table-sm table-borderless auto-width">
-                @foreach($dates as $key => $field)
-                    @if($clinicaltrial->$key != '')
-                        <tr>
-                            <th class="text-right @if($loop->first) border-top-0 @endif">{{ $field['label'] }}:</th>
-                            <td class="@if($loop->first) border-top-0 @endif">
-                                {{ Carbon\Carbon::parse($clinicaltrial->$key)->format('M d, Y') }}
-                            </td>
-                        </tr>
-                    @endif
-                @endforeach
-            </table>
-        </div>
+    <div class="col-12 col-xl-5 ml-xl-3">
+        <h3 class="h4 border-bottom">Clinical Trial Dates</h3>
+        <table class="table table-sm table-borderless auto-width">
+            @foreach($dates as $key => $field)
+                @if($clinicalTrial->$key != '')
+                    <tr>
+                        <th class="text-right @if($loop->first) border-top-0 @endif">{{ $field['label'] }}:</th>
+                        <td class="@if($loop->first) border-top-0 @endif">
+                            {{ Carbon\Carbon::parse($clinicalTrial->$key)->format('M d, Y') }}
+                        </td>
+                    </tr>
+                @endif
+            @endforeach
+        </table>
     </div>
+</div>
 
-    <div class="row mb-5">
-        <div class="col-12">
-            @if($clinicaltrial->outcomeMeasures->count() > 0)
-                <h3 class="h4 font-normal border-bottom">Outcome Measures</h3>
-                <ul>
-                    @foreach ($clinicaltrial->outcomeMeasures as $item)
-                        <li>{{ $item->value }}</li>
-                    @endforeach
-                </ul>
-            @endif
-        </div>
+
+@if($clinicalTrial->outcomeMeasures->count() > 0)
+    <div class="my-5 max-width-780">
+        <h3 class="h4 font-normal border-bottom">Outcome Measures</h3>
+        <ul>
+            @foreach ($clinicalTrial->outcomeMeasures as $item)
+                <li>{{ $item->value }}</li>
+            @endforeach
+        </ul>
     </div>
+@endif
 
-    <div class="row">
-        <div class="col-12 col-lg-6">
-            <h4 class="h5 border-bottom font-normal">More Details</h4>
-            <div class="table-responsive">
-                <table class="table table-borderless table-sm auto-width">
-                    @foreach($secondary_fields as $key => $field)
-                        @if($clinicaltrial->$key != '')
-                            <tr>
-                                <th class="text-right text-no-wrap">{{ $field['label'] }}:</th>
-                                <td>
-                                    @if($field['type'] == 'text')
-                                        {{ $clinicaltrial->$key }}
-                                    @endif
-                                    @if($field['type'] == 'url')
-                                        <a href="{{ $clinicaltrial->$key }}" target="_blank" rel="noopener noreferrer">
-                                            {{ $clinicaltrial->$key }}
-                                        </a>
-                                    @endif
-                                </td>
-                            </tr>
-                        @endif
-                    @endforeach
-                </table>
-            </div>
-        </div>
+
+<div class="my-5 max-width-780">
+    <h4 class="h5 border-bottom font-normal">More Details</h4>
+    <div class="table-responsive">
+        <table class="table table-borderless table-sm auto-width">
+            @foreach($secondary_fields as $key => $field)
+                @if($clinicalTrial->$key != '')
+                    <tr>
+                        <th class="text-right text-no-wrap">{{ $field['label'] }}:</th>
+                        <td>
+                            @if($field['type'] == 'text')
+                                {{ $clinicalTrial->$key }}
+                            @endif
+                            @if($field['type'] == 'url')
+                                <a href="{{ $clinicalTrial->$key }}" target="_blank" rel="noopener noreferrer">
+                                    {{ $clinicalTrial->$key }}
+                                </a>
+                            @endif
+                        </td>
+                    </tr>
+                @endif
+            @endforeach
+        </table>
     </div>
-    @else
-
-    <div class="row">
-        <div class="col-12 mx-auto">
-            @include('discover.includes.register-gate', ['details' => ' the details of this Clinical Trial'])
-        </div>
-    </div>
-
-@endauth
+</div>

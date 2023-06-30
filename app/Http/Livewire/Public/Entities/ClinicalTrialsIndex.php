@@ -6,15 +6,17 @@ use App\Http\Livewire\DataTable\WithBulkActions;
 use App\Http\Livewire\DataTable\WithCachedRows;
 use App\Http\Livewire\DataTable\WithPerPagePagination;
 use App\Http\Livewire\DataTable\WithSorting;
+use App\Http\Livewire\Public\Entities\Traits\ClinicalTrialFilters;
 use App\Http\Livewire\Public\Entities\Traits\HasCompanyFilter;
 use App\Http\Livewire\Public\Entities\Traits\HasLocationFilter;
 use App\Http\Livewire\Public\Entities\Traits\HasPersonFilter;
-use App\Models\Investor;
-use Illuminate\Database\Eloquent\Builder;
+use App\Models\Clinicaltrial;
+use App\Models\Focus;
 use Livewire\Component;
 
-class InvestorsIndex extends Component
-{use WithPerPagePagination, WithBulkActions, WithCachedRows, WithSorting, HasCompanyFilter, HasLocationFilter, HasPersonFilter;
+class ClinicalTrialsIndex extends Component
+{
+    use WithPerPagePagination, WithBulkActions, WithCachedRows, WithSorting, HasLocationFilter, HasCompanyFilter, HasPersonFilter, ClinicalTrialFilters;
 
     protected string $paginationTheme = 'bootstrap';
     protected $queryString = ['search'];
@@ -22,16 +24,16 @@ class InvestorsIndex extends Component
     public ?string $search = null;
 
     public array $filters = [
-        'type' => [],
-        'locations' => [],
+        'focus' => [],
         'people' => [],
         'companies' => [],
-        'now-hiring' => false
+        'locations' => [],
+        'conditions' => []
     ];
 
     public function mount() {
         $this->sorts = [
-            'name' => 'asc'
+            'updated_at' => 'desc'
         ];
     }
 
@@ -80,52 +82,54 @@ class InvestorsIndex extends Component
     }
 
     public function updatedCompanySearch() {
-        $this->returnCompanySearch('investors');
+        $this->returnCompanySearch('clinicaltrials');
     }
 
     public function updatedPersonSearch() {
-        $this->returnPersonSearch('investors');
+        $this->returnPersonSearch('clinicaltrials');
     }
 
     public function updatedLocationSearch() {
-        $this->returnLocationSearch('investors');
+        $this->returnLocationSearch('clinicaltrials');
+    }
+
+    public function updatedConditionSearch() {
+        $this->returnConditionSearch();
     }
 
     public function getRowsQueryProperty()
     {
-        $query = Investor::withCount(['companies', 'jobs' => function (Builder $query) {
-                    $query->open();
-                }, 'locations'])
+        $query = Clinicaltrial::with(['focus', 'companies', 'people', 'locations', 'conditions'])
+                ->withCount(['focus', 'companies', 'people'])
                 ->when($this->search, function($query, $search) {
                     return $query
-                        ->where('name', 'like', '%' . $search . '%')
-                        ->orWhereHas('locations', function($query) use ($search) {
-                            $query->where('name', 'like', '%' . $search . '%');
-                        })
-                        ->orWhereHas('people', function($query) use ($search) {
-                            $query->where('name', 'like', '%' . $search . '%');
-                        });
+                        ->where('title', 'like', '%' . $search . '%')
+                        ->orWhere('nct_number', 'like', '%' . $search . '%');
                 })
-                ->when($this->filters['type'], function($query, $value) {
-                    return $query->where('type', $value);
-                })
-                ->when($this->filters['locations'], function($query, $valueArray) {
-                    return $query->whereHas('locations', function($query) use ($valueArray) {
-                        $query->whereIn('name', $valueArray);
+                ->when($this->filters['focus'], function($query, $value) {
+                    return $query->whereHas('focus', function($query) use ($value) {
+                        $query->whereIn('name', $value);
                     });
                 })
-                ->when($this->filters['companies'], function($query, $valueArray) {
-                    return $query->whereHas('companies', function($query) use ($valueArray) {
-                        $query->whereIn('name', $valueArray);
+                ->when($this->filters['people'], function($query, $value) {
+                    return $query->whereHas('people', function($query) use ($value) {
+                        $query->whereIn('name', $value);
                     });
                 })
-                ->when($this->filters['people'], function($query, $valueArray) {
-                    return $query->whereHas('people', function($query) use ($valueArray) {
-                        $query->whereIn('name', $valueArray);
+                ->when($this->filters['companies'], function($query, $value) {
+                    return $query->whereHas('companies', function($query) use ($value) {
+                        $query->whereIn('name', $value);
                     });
                 })
-                ->when($this->filters['now-hiring'], function($query, $value) {
-                    return $query->hasJobs();
+                ->when($this->filters['locations'], function($query, $value) {
+                    return $query->whereHas('locations', function($query) use ($value) {
+                        $query->whereIn('name', $value);
+                    });
+                })
+                ->when($this->filters['conditions'], function($query, $value) {
+                    return $query->whereHas('conditions', function($query) use ($value) {
+                        $query->whereIn('value', $value);
+                    });
                 });
 
         return $this->applySorting($query);
@@ -140,9 +144,9 @@ class InvestorsIndex extends Component
 
     public function render()
     {
-        return view('livewire.public.entities.investors-index', [
+        return view('livewire.public.entities.clinical-trials-index', [
             'records' => $this->rows,
-            'typeOptions' => Investor::TYPE,
+            'focusDrugOptions' => Focus::whereHas('clinicaltrials')->withCount('clinicaltrials')->orderByDesc('clinicaltrials_count')->get()->toArray()
         ]);
     }
 }
