@@ -8,6 +8,7 @@ use App\Models\Traits\CrudShowEntityPageButton;
 use App\Models\Traits\OldSlugRedirectable;
 use App\Models\Traits\SearchableEntity;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\LogOptions;
@@ -224,6 +225,11 @@ class Job extends Model implements EntityContract
     public function getOwnerNameAttribute()
     {
         return $this->owner ? $this->owner->name : null;
+    }
+
+    public function getPrettyPostedDateAttribute(): string
+    {
+        return Carbon::parse($this->posted_date)->format('M d, Y');
     }
 
     /*

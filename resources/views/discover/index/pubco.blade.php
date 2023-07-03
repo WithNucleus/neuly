@@ -1,35 +1,11 @@
-@extends('layouts.app')
+@extends('layouts.entity-index')
 
-@section('body-class', 'bg-light')
+@section('body-class', 'page-pubco-index')
 
 @section('content')
 
-    @include('navbars.primary')
-
-    <div class="container-fluid">
-
-        <div class="row">
-            <div class="col-12 navbar-tabs-container">
-                @include('navbars.tabs')
-            </div>
-        </div>
-
-        <div class="row">
-            @include('navbars.tabs-mobile')
-        </div>
-
-        <div class="row">
-            <div class="col-12 breadcrumbs-container bg-white shadow-sm">
-
-                @include('discover.includes.breadcrumbs.index')
-
-            </div>
-        </div>
-    </div>
-
-    <main id="show-main" role="main" class="col-12">
-        <div class="container-fluid text-center">
-            <h1 class="page-title-default text-primary mb-3">Public Company Index</h1>
+    <div class="container-fluid pt-4">
+        <h1 class="text-center mb-3">Public Company Index</h1>
 
             <div id="psych-index" class="container-fluid">
                 <div class="row">
@@ -97,12 +73,8 @@
               data-qmod-version=""
             ></script>
         </div>
+    </div>
 
-        <link rel="stylesheet" href="{{ mix('css/index-qm.css') }}">
-
-    </main>
-
-    @include('footers.mini')
-    @include('discover.includes.limited-access-modal')
+    <link rel="stylesheet" href="{{ mix('css/index-qm.css') }}">
 
 @endsection

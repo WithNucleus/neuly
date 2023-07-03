@@ -31,6 +31,7 @@
         "laravel/ui": "^3.3",
         "league/csv": "^9.8",
         "league/flysystem-aws-s3-v3": "^3.0",
+        "livewire/livewire": "^2.12",
         "opencage/geocode": "^3.0",
         "sentry/sentry-laravel": "^3.4",
         "simplepie/simplepie": "^1.5",
@@ -47,7 +48,6 @@
     },
     "require-dev": {
         "backpack/generators": "^3.3",
-        "barryvdh/laravel-debugbar": "^3.6",
         "fakerphp/faker": "^1.9.1",
         "laracasts/generators": "^2.0",
         "mockery/mockery": "^1.4.4",

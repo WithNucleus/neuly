@@ -1,32 +1,68 @@
 <div class="row">
 	<div class="col-12 col-md-8 col-lg-7">
-        @if($company->website != '')
-            <p class="mb-2 lead">
-                <a href="{{ $company->website }}" target="_blank" rel="noopener noreferrer">{{ $company->website }}</a>
-            </p>
-        @endif
-
-        @if($company->ownership != '')
-            <p class="mb-2">
-                <strong>Type:</strong><br>
-                {{ $company->ownership }}
-            </p>
-        @endif
-
-        <p class="mb-2">
-            <strong>Focus:</strong><br>
-            @foreach ($company->focus as $item)
-                <a href="{{ route('discover.focus.show', $item->slug) }}">{{ $item->name }}</a>@if (!$loop->last),@endif
-            @endforeach
+        <p class="h5 text-body-emphasis">
+            {{ $company->ownership_type_phrase }}
+            @if($company->ticker_symbol != '')
+                &bull; {{ $company->ticker_symbol }}
+            @endif
         </p>
+
+        @if($company->summary != '')
+            <div class="lead my-3">
+                @if ($company->show_extended_summary)
+                    <div>
+                        {{ $company->short_summary }}
+                        <button type="button" class="btn btn-link text-primary px-0" data-bs-toggle="modal" data-bs-target="#companySummaryModal">
+                            read more
+                        </button>
+
+                        <div class="modal fade" id="companySummaryModal" tabindex="-1" aria-labelledby="companySummaryModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog modal-xl">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <p class="modal-title fs-5 m-0" id="companySummaryModalLabel">{{ $company->name }}</p>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p class="m-0">{{ $company->summary }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @else
+                    <p class="m-0">{{ $company->summary }}</p>
+                @endif
+            </div>
+        @endif
+
+        @if($company->locations->count() === 1)
+            <div class="mb-2 lead">
+                <a href="{{ route('discover.locations.show', $company->locations->first()->slug) }}" class="text-decoration-none text-body-secondary">
+                    <i class="fa-sharp fa-solid fa-location-dot me-2"></i>{{ $company->locations->first()->name }}
+                </a>
+            </div>
+        @endif
+
+        @if($company->website != '')
+            <div class="lead mb-3">
+                <a href="{{ $company->website }}" target="_blank" rel="noopener noreferrer">{{ $company->website }}</a>
+            </div>
+        @endif
+
+        @if($company->focus->count() > 0)
+            <div class="d-flex flex-wrap align-items-center mt-4">
+                @foreach ($company->focus as $item)
+                    <a href="{{ route('discover.focus.show', $item->slug) }}" class="btn btn-secondary rounded-0 my-2 me-3 fs-6 py-1">{{ $item->name }}</a>
+                @endforeach
+            </div>
+        @endif
 	</div>
 	<div class="col-12 col-md-4 col-lg-5">
 		<div class="text-center">
-            @if($company->entityImageUrl)
-                <img src="{{ $company->entityImageUrl }}" alt="{{ $company->name }}" class="company-logo mb-4">
-            @else
-                <img src="{{ asset('images/image-placeholder.jpg') }}" alt="{{ $company->name }}" class="company-logo mb-4">
-            @endif
+            <div class="logo-is-contained mb-3" style="background-image: url('{{ $company->entityImageUrl ?? asset('images/image-placeholder.jpg') }}')"></div>
 
             <div class="d-flex flex-wrap align-items-center justify-content-center">
                 @if ($company->linkedin)
@@ -43,178 +79,121 @@
 	</div>
 </div>
 
-<div class="row my-4">
-	<div class="col-12">
-        <div style="max-width: 700px">
-            @if($company->summary != '')
-                <p>
-                    <strong>Summary:</strong><br>
-                    {{ $company->summary }}
-                </p>
-            @endif
-        </div>
-	</div>
-</div>
-
-<div class="row">
-    <div class="col-12">
-        @if($company->companyBranches->count() > 0)
-            <div class="row mb-2">
-                <div class="col-12">
-                    <strong>Locations:</strong>
-                </div>
-                @foreach ($company->companyBranches as $branch)
-                    <div class="col-12 col-md-6 col-lg-4 mb-2 pr-3 mb-4">
-                        <address class="mb-1">
-                            <a href="https://google.com/maps/place/{!! $branch->fullAddressForGoogle !!}" target="_blank" rel="noopener noreferrer">{!! $branch->fullAddress !!}</a>
-                        </address>
-                        @if ($branch->phone != '')
-                            <span class="d-block">
-                                <a href="tel:{{ $branch->phone }}"><i class="fa fa-phone-square-alt mr-1 text-primary"></i>{{ $branch->phone }}</a>
-                            </span>
-                        @endif
-                    </div>
-                @endforeach
-            </div>
-        @else
-            @if($company->locations->count() > 0)
-                <p class="mb-2">
-                    <strong>Location:</strong><br>
-                    @foreach ($company->locations as $location)
-                        <a href="{{ route('discover.locations.show', $location->slug) }}">{{ $location->name }}</a> @if (!$loop->last)<br>@endif
-                    @endforeach
-                </p>
-            @endif
-        @endif
-    </div>
-    <div class="col-12">
-        @if($company->people->count() > 0)
-            <p class="mb-2">
-                <strong>People:</strong><br>
-                @foreach ($company->people as $person)
-                    <a href="{{ route('discover.people.show', $person->slug) }}">{{ $person->name }} ({{ $person->pivot->position }})</a> @if (!$loop->last)<br>@endif
-                @endforeach
-            </p>
-        @endif
-
-        @if($company->investors->count() > 0)
-            <p class="mb-2">
-                <strong>Investors:</strong><br>
-                @foreach ($company->investors as $investor)
-                    <a href="{{ route('discover.investors.show', $investor->slug) }}">{{ $investor->name }}</a> @if (!$loop->last)<br>@endif
-                @endforeach
-            </p>
-        @endif
-
-        @if($company->jobs->count() > 0)
-            <p class="mb-2">
-                <strong>Jobs:</strong><br>
-                @foreach ($company->jobs as $job)
-                    <a href="{{ route('discover.jobs.show', $job->slug) }}">{{ $job->job_title }}</a> @if (!$loop->last)<br>@endif
-                @endforeach
-            </p>
-        @endif
-
-        @if($company->events->count() > 0)
-            <p class="mb-2">
-                <strong>Events:</strong><br>
-                @foreach ($company->events as $event)
-                    <a href="{{ route('discover.events.show', $event->slug) }}">{{ $event->name }}</a> @if (!$loop->last)<br>@endif
-                @endforeach
-            </p>
-        @endif
-
-        @if($company->clinicaltrials->count() > 0)
-            <p class="mb-1">
-                <strong>Clinical Trials:</strong>
-            </p>
-            <ul class="list-group list-group-flush">
-                @foreach ($company->clinicaltrials as $clinicaltrial)
-                    <li class="list-group-item px-0 py-1">
-                        <a class="d-block" href="{{ route('discover.clinicaltrials.show', $clinicaltrial->slug) }}">{{ $clinicaltrial->title }}</a>
-                    </li>
-                @endforeach
-            </ul>
-        @endif
-
-        @if($company->subsidiaries->count() > 0)
-            <div class="mt-4">
-                <h2 class="h4 mb-2">Parent for:</h2>
-                @foreach ($company->subsidiaries as $subsidiary)
-                    <p class="mb-2"><a href="{{ route('discover.organizations.show', $subsidiary->slug) }}">{{ $subsidiary->name }}</a></p>
-                @endforeach
-            </div>
-        @endif
-
-        @if($company->parents->count() > 0)
-            <div class="mt-4">
-                <h2 class="h4 mb-2">Subsidiary of:</h2>
-                @foreach ($company->parents as $parent)
-                    <p class="mb-2"><a href="{{ route('discover.organizations.show', $parent->slug) }}">{{ $parent->name }}</a> </>
-                @endforeach
-            </div>
-        @endif
-    </div>
-</div>
-
-<div class="row my-4">
-    <div class="col-12">
+@if($company->total_funding_amount != '' OR $company->last_funding_date != '' OR $company->valuation != '' OR $company->founded_date != '' OR $company->number_employees != '')
+    <div class="row">
         @if($company->total_funding_amount != '')
-            <p class="mb-2">
-                <strong>Total Funding Amount:</strong><br>
+            <x-entities.entity-show-data-card title="Total Funding Amount">
                 ${{ number_format($company->total_funding_amount, 0) }}
-            </p>
+            </x-entities.entity-show-data-card>
         @endif
 
         @if($company->last_funding_date != '')
-            <p class="mb-2">
-                <strong>Last Funding Date:</strong><br>
+            <x-entities.entity-show-data-card title="Last Funding Date">
                 {{ Carbon\Carbon::parse($company->last_funding_date)->format('M d, Y') }}
-            </p>
-        @endif
-
-        @if($company->latestValuationAmount)
-            <p class="mb-2">
-                <strong>Valuation:</strong><br>
-                ${{ $company->latestValuationAmount }}
-            </p>
+            </x-entities.entity-show-data-card>
         @endif
 
         @if($company->valuation != '')
-            <p class="mb-2">
-                <strong>Valuation:</strong><br>
+            <x-entities.entity-show-data-card title="Valuation">
                 ${{ number_format($company->valuation, 0) }}
-            </p>
-        @endif
-
-        @if($company->ticker_symbol != '')
-            <p class="mb-2">
-                <strong>Ticker Symbol:</strong><br>
-                {{ $company->ticker_symbol }}
-            </p>
+            </x-entities.entity-show-data-card>
         @endif
 
         @if($company->founded_date != '')
-            <p class="mb-2">
-                <strong>Founded:</strong><br>
+            <x-entities.entity-show-data-card title="Founded">
                 {{ Carbon\Carbon::parse($company->founded_date)->format('M d, Y') }}
-            </p>
+            </x-entities.entity-show-data-card>
         @endif
 
         @if($company->number_employees != '')
-            <p class="mb-2">
-                <strong>Employees:</strong><br>
+            <x-entities.entity-show-data-card title="Employees">
                 {{ $company->number_employees }}
-            </p>
+            </x-entities.entity-show-data-card>
         @endif
     </div>
-</div>
+@endif
 
-<div class="row">
-    @foreach ($company->content as $content)
-        <div class="col-12 col-lg-7 mb-3">
-            <strong>{{ $content->name }}</strong><br>
-            {!! $content->formattedContent !!}
-        </div>
-    @endforeach
-</div>
+@if($company->bookableListings->count() > 0)
+    <x-entities.collapsable-related-entity collapsableId="bookableList" label="Book with {{ $company->name }}">
+        @foreach ($company->bookableListings as $bookableListing)
+            <x-entities.related.bookable-listing-card :bookableListing="$bookableListing" />
+        @endforeach
+    </x-entities.collapsable-related-entity>
+@endif
+
+@if($company->investors->count() > 0)
+    <x-entities.collapsable-related-entity collapsableId="investorsList" label="Investors">
+        @foreach ($company->investors as $investor)
+            <x-entities.related.investor-card :investor="$investor" />
+        @endforeach
+    </x-entities.collapsable-related-entity>
+@endif
+
+@if($company->people->count() > 0)
+    <x-entities.collapsable-related-entity collapsableId="peopleList" label="People">
+        @foreach ($company->people as $person)
+            <x-entities.related.person-card :person="$person" />
+        @endforeach
+    </x-entities.collapsable-related-entity>
+@endif
+
+@if($company->jobs->count() > 0)
+    <x-entities.collapsable-related-entity collapsableId="jobsList" label="Jobs">
+        @foreach ($company->jobs as $job)
+            <x-entities.related.job-card :job="$job" />
+        @endforeach
+    </x-entities.collapsable-related-entity>
+@endif
+
+@if($company->events->count() > 0)
+    <x-entities.collapsable-related-entity collapsableId="eventsList" label="Events">
+        @foreach ($company->events as $event)
+            <x-entities.related.event-card :event="$event" />
+        @endforeach
+    </x-entities.collapsable-related-entity>
+@endif
+
+@if($company->clinicaltrials->count() > 0)
+    <x-entities.collapsable-related-entity collapsableId="clinicalTrialsList" label="Clinical Trials">
+        @foreach ($company->clinicaltrials as $clinicalTrial)
+            <x-entities.related.clinical-trial-card :clinicalTrial="$clinicalTrial" />
+        @endforeach
+    </x-entities.collapsable-related-entity>
+@endif
+
+@if($company->locations->count() > 1 AND $company->bookableListings->count() < 1)
+    <div class="my-4">
+        <h3 class="mb-0">Locations</h3>
+        @if($company->companyBranches->count() > 0)
+            <div class="row">
+                @foreach ($company->companyBranches as $branch)
+                    <x-entities.related.company-branch-card :companyBranch="$branch" />
+                @endforeach
+            </div>
+        @else
+            <div class="w-auto d-flex">
+                <ul class="list-group list-group-flush lead me-auto w-auto">
+                    @foreach ($company->locations as $location)
+                        <x-entities.related.location-list-item :location="$location" />
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+    </div>
+@endif
+
+@if($company->subsidiaries->count() > 0)
+    <x-entities.collapsable-related-entity collapsableId="subsidiariesList" label="Subsidiaries">
+        @foreach ($company->subsidiaries as $subsidiary)
+            <x-entities.related.company-subsidiary-card :subsidiary="$subsidiary" />
+        @endforeach
+    </x-entities.collapsable-related-entity>
+@endif
+
+@if($company->parents->count() > 0)
+    <x-entities.collapsable-related-entity collapsableId="parentsList" label="Subsidiary of">
+        @foreach ($company->parents as $parent)
+            <x-entities.related.company-parent-card :parent="$parent" />
+        @endforeach
+    </x-entities.collapsable-related-entity>
+@endif

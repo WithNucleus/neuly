@@ -6,7 +6,9 @@ use App\Models\Scopes\PublicStatusScope;
 use App\Models\Traits\HasMediaTypes;
 use App\Models\Traits\SearchableEntity;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -117,6 +119,16 @@ class MediaItem extends Model
     public function getFormattedContentAttribute(): string
     {
         return nl2br(e($this->content));
+    }
+
+    public function getFormattedDateAttribute(): string
+    {
+        return Carbon::parse($this->date)->format('M d, Y');
+    }
+
+    public function getShortSummaryAttribute(): string
+    {
+        return Str::words($this->summary, 25);
     }
 
     /*

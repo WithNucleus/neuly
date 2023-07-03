@@ -202,20 +202,20 @@ body.noscroll {
 // Card Deck - Medium Breakpoint
 .card-deck-medium-breakpoint {
     .card {
-        margin-bottom: $card-deck-margin;
+        margin-bottom: 1rem;
     }
 
     @media (min-width: 768px) {
         display: flex;
         flex-flow: row wrap;
-        margin-right: -$card-deck-margin;
-        margin-left: -$card-deck-margin;
+        margin-right: -1rem;
+        margin-left: -1rem;
 
         .card {
-            flex: 1 0 0%;
-            margin-right: $card-deck-margin;
+            flex: 1 0 0;
+            margin-right: 1rem;
             margin-bottom: 0;
-            margin-left: $card-deck-margin;
+            margin-left: 1rem;
         }
     }
 }

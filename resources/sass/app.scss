@@ -3,92 +3,300 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
-@import 'utilities';
-@import 'navbars';
-@import 'sidebar';
-@import 'tables';
-@import 'discover-menus';
-@import 'homepage';
-@import 'footer';
-@import 'search-forms';
-@import 'trix';
-@import 'images';
-@import 'practitioners';
 
-/*
- * Content
- */
-#index-main,
-#content-main {
-	padding: 1rem 2rem 2rem 2rem;
+// TODO: Split out this file into new includes after getting rid of old stuff
+
+body {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    display: flex;
+    align-items: stretch;
+    flex-direction: column;
 }
 
-#content-main {
-	padding-top: 5.5rem
+html {
+    min-height: -webkit-fill-available;
 }
 
-#show-main {
-	padding-top: 2rem;
+.main-content-container {
+    padding-top: 2rem;
 }
 
-#home-main {
-	padding-top: 3rem;
+.faux-select-item {
+    width: 100%;
+    border-radius: 0;
+    text-align: left;
+    font-weight: 400;
+    text-transform: none !important;
+    font-size: $font-size-sm;
 }
 
-@media (min-width: 768px) {
-	#index-main {
-		padding-top: 2rem; /* space underneath filters */
-	}
+.faux-select-item:hover {
+    background-color: $neulyGreen;
+    color: $gray-100;
 }
 
-@media (min-width: 992px) {
-	#index-main {
-		padding-top: 12rem; /* Space for fixed navbar + discovertabs + breadcrumbs */
-	}
-
-	#show-main {
-		padding-top: 12rem; /* Space for fixed navbar + discovertabs + breadcrumbs */
-	}
+// Dark Theme Color Overrides
+[data-bs-theme=dark] {
+    --bs-success: $neulyGreenBright;
+    --bs-success-rgb: 40, 185, 142;
 }
 
-.full-width-show-view {
-	max-width: 1280px;
+// Nav Logo
+svg#neulyLogo {
+    .icon {
+        fill: $neulyGreenBright;
+        transition: all .2s ease-in-out;
+    }
+
+    .text {
+        fill: $white;
+        transition: all .2s ease-in-out;
+    }
 }
 
-// Breadcrumbs Container
-.breadcrumbs-container {
-	padding-top: 1rem;
-	width: 100%;
-	position: relative;
-	z-index: 100;
+.navbar.bg-primary {
+    .navbar-nav>li {
+        color: $gray-300;
 
-	.breadcrumb {
-		margin-bottom: 1rem;
-		width: 100%;
-	}
+        >a {
+            color: $gray-300;
+        }
+
+        >a:hover {
+            color: $gray-100;
+        }
+    }
 }
 
-	@media (min-width: 992px) {
-		.breadcrumbs-container {
-			padding-top: 9rem;
-			font-size: .85rem;
-			position: fixed;
-			z-index: 100;
+// Breadcrumbs with Primary Background
+.breadcrumb {
+    text-transform: uppercase;
+    font-family: $headings-font-family;
+    margin-left: 0;
 
-			.breadcrumb {
-				margin-bottom: .5rem;
-			}
-		}
-	}
+    a {
+        text-decoration: none;
+    }
 
-.tt-menu {
-	text-align: left;
+    a:hover {
+        text-decoration: underline;
+    }
+
+    .breadcrumb-item.active {
+        font-weight: 600;
+    }
 }
 
-.notification-badge {
-    display: none;
+// TODO: Only keep if navbar is not primary
+.bg-primary {
+    .breadcrumb {
+        text-transform: uppercase;
 
-    &.has-content {
-        display: inline-block;
+        a {
+            color: $gray-200;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb-item.active {
+            font-weight: bold;
+            color: $gray-100;
+        }
+
+        .breadcrumb-item + .breadcrumb-item::before {
+            color: $gray-400;
+        }
+    }
+}
+
+// Entity Index
+.entity-index-container {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    display: flex;
+    align-self: stretch;
+
+    @media (min-width: 992px) {
+        max-height: 100vh;
+        height: calc(100vh - $nav-height);
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+}
+
+.entity-index-container {
+    --sidebar-width-sm: 300px;
+    --sidebar-width-lg: 350px;
+
+    .entity-index-sidebar {
+        flex-shrink: 0;
+        padding: 1rem;
+    }
+
+    .entity-index-listings {
+        padding: 1rem;
+    }
+
+    @media (min-width: 992px) {
+        .entity-index-sidebar {
+            width: var(--sidebar-width-sm);
+            max-height: calc(100vh - $nav-height);
+            overflow-y: auto;
+        }
+
+        .entity-index-listings {
+            max-height: calc(100vh - $nav-height);
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+    }
+
+    @media(min-width: 1500px) {
+        .entity-index-sidebar {
+            width: var(--sidebar-width-lg);
+        }
+
+        .entity-index-listings {
+            padding: 1rem 2rem;
+        }
+    }
+}
+
+// Hiring Badge
+.position-top-left {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+// Events Badge
+.position-top-right {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+// Cards
+.card-hover:hover {
+    box-shadow: var(--bs-focus-ring-x, 0) var(--bs-focus-ring-y, 0) var(--bs-focus-ring-blur, 0) var(--bs-focus-ring-width) var(--bs-focus-ring-color);
+}
+
+// Pagination
+ul.pagination {
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+// Buttons
+.btn {
+    text-transform: uppercase;
+}
+
+.btn-cta {
+    border-radius: 2.75rem;
+    padding: .25rem 1.5rem;
+    font-size: $font-size-base * 1.1;
+}
+
+// Headings
+h1, .h1,
+h2, .h2,
+h3, .h3,
+h4, .h4,
+h5, .h5 {
+    text-transform: uppercase;
+}
+
+.lead {
+    strong {
+        font-weight: bold;
+    }
+}
+
+.text-transform-none {
+    text-transform: none;
+}
+
+// Images
+.logo-is-contained,
+.logo-square-is-contained,
+.logo-event {
+    height: 150px;
+    margin-left: auto;
+    margin-right: auto;
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.logo-is-contained {
+    width: 100%;
+    max-width: 280px;
+
+    img {
+        margin: 0 auto;
+        width: 70px;
+        height: auto;
+    }
+}
+
+.logo-square-is-contained {
+    width: 100%;
+    max-width: 150px;
+    max-height: 150px;
+	height: auto;
+    aspect-ratio: 1;
+    background-size: cover;
+}
+
+.small-square-card {
+    max-width: 200px;
+
+    .logo-square-is-contained {
+        width: 100px;
+    }
+}
+
+// Collapse Heading - Flip Icon
+.collapse-heading {
+    .btn {
+        font-size: inherit;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        line-height: 1.2;
+        outline: 0;
+        border: 0;
+        border-radius: 0;
+    }
+
+    .btn:focus {
+        outline: 0;
+        border: 0;
+        border-radius: 0;
+    }
+
+    .btn[aria-expanded="false"] {
+        i {
+            transform: rotate(180deg);
+        }
+    }
+}
+
+// Max Widths
+$max-widths: 200 250 300 780;
+
+@each $size in $max-widths {
+    .max-width-#{$size} {
+        max-width: #{$size}px;
     }
 }

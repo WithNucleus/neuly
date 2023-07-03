@@ -13,6 +13,7 @@ use App\Models\Traits\SearchableEntity;
 use App\Traits\HasFollowers;
 use App\User;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Log;
@@ -192,55 +193,55 @@ class Person extends Model implements EntityContract, EntityImageContract
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    public function bookableListings()
+    public function bookableListings(): \Illuminate\Database\Eloquent\Relations\MorphMany
     {
         return $this->morphMany(BookableListing::class, 'bookable');
     }
 
-    public function companies()
+    public function companies(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Company::class, 'company_person', 'person_id', 'company_id')
             ->withPivot(['position'])
             ->withTimestamps();
     }
 
-    public function focus()
+    public function focus(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Focus::class, 'focus_person', 'person_id', 'focus_id');
     }
 
-    public function locations()
+    public function locations(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Location::class, 'location_person', 'person_id', 'location_id')
             ->withTimestamps();
     }
 
-    public function investors()
+    public function investors(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Investor::class, 'investor_person', 'person_id', 'investor_id')
             ->withPivot(['role'])
             ->withTimestamps();
     }
 
-    public function research()
+    public function research(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Research::class, 'person_research', 'person_id', 'research_id')
             ->withTimestamps();
     }
 
-    public function events()
+    public function events(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Event::class, 'event_person', 'person_id', 'event_id')
             ->withTimestamps();
     }
 
-    public function clinicaltrials()
+    public function clinicaltrials(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Clinicaltrial::class, 'clinicaltrial_person', 'person_id', 'clinicaltrial_id')
             ->withTimestamps();
     }
 
-    public function relatedUser()
+    public function relatedUser(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
@@ -252,7 +253,7 @@ class Person extends Model implements EntityContract, EntityImageContract
 
     public function mediaItems(): \Illuminate\Database\Eloquent\Relations\MorphToMany
     {
-        return $this->morphToMany(MediaItem::class, 'entity', 'media_item_relationships')->withTimestamps();
+        return $this->morphToMany(MediaItem::class, 'entity', 'media_item_relationships')->orderByDesc('date')->withTimestamps();
     }
 
     /*
@@ -276,11 +277,37 @@ class Person extends Model implements EntityContract, EntityImageContract
         return $query->whereHas('investors');
     }
 
+    public function scopeHasUpcomingEvents($query)
+    {
+        return $query->whereHas('events', function ($subquery) {
+            $subquery->where('start_date', '>=', Carbon::now()->toDateString());
+        });
+    }
+
+    public function scopeHasResearch($query)
+    {
+        return $query->whereHas('research');
+    }
+
+    public function scopeHasClinicalTrials($query)
+    {
+        return $query->whereHas('clinicaltrials');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | ACCESSORS
     |--------------------------------------------------------------------------
     */
+    public function getShowExtendedBioAttribute(): bool
+    {
+        return (Str::wordCount($this->bio) > 60);
+    }
+
+    public function getShortBioAttribute(): string
+    {
+        return strip_tags(Str::words($this->bio, 60));
+    }
 
     /*
     |--------------------------------------------------------------------------

@@ -11,7 +11,7 @@ use App\Models\Focus;
 use App\Models\Location;
 use App\Repositories\FollowRepository;
 use App\Services\Metas;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -23,20 +23,9 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class EventController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('query_filters')->only('index', 'past', 'embedIndex');
-    }
 
-    // Upcoming Events
-    public function index(Request $request)
+    public function index(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        $data = $this->getIndexData($request);
         $data['metas'] = Metas::fromPage($request->path());
 
         return view('discover.events.index', $data);

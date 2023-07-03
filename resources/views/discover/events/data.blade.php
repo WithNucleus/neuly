@@ -1,104 +1,79 @@
 <div class="row">
-	<div class="col-12 col-md-6">
-		<p class="lead mb-2">
-			<span class="sr-only">Date:</span> {{ Carbon\Carbon::parse($event->start_date)->format('M d, Y') }}
-			@if($event->end_date != '')
-				- {{ Carbon\Carbon::parse($event->end_date)->format('M d, Y') }}
-			@endif
-		</p>
+    <div class="col-12 col-md-6 order-2 order-md-1">
+        <div class="h3 text-primary">
+            @if($event->end_date != '')
+                {{ Carbon\Carbon::parse($event->start_date)->format('M j') }} &ndash; {{ Carbon\Carbon::parse($event->end_date)->format('M j, Y') }}
+            @else
+                {{ Carbon\Carbon::parse($event->start_date)->format('M j, Y') }}
+            @endif
+        </div>
 
-		@if($event->eventTypes()->count() > 0)
-			<p class="mb-2">
-				<strong>Event Type:</strong><br>
+        @if($event->eventTypes->count() > 0)
+            <div class="d-flex align-items-center h5 my-3">
+                @foreach($event->eventTypes as $eventType)
+                    <span class="me-2">{{ $eventType->name }}</span>
+                @endforeach
+            </div>
+        @endif
 
-				@foreach ($event->eventTypes as $type)
-					{{ $type->name }}@if (!$loop->last)<br>@endif
-				@endforeach
-			</p>
-		@endif
-
-		@if($event->event_url != '')
-			<p class="mb-2">
-				<strong>Event URL:</strong><br>
-				<a href="{{ $event->event_url }}" target="_blank" rel="noopener noreferrer">{{ $event->event_url }} <small><i class="fad fa-external-link"></i></small></a>
-			</p>
-		@endif
-
-		@if($event->registration_url != '')
-			<p class="mb-2">
-				<strong>Registration URL:</strong><br>
-				<a href="{{ $event->registration_url }}" target="_blank" rel="noopener noreferrer">{{ $event->registration_url }} <small><i class="fad fa-external-link"></i></small></a>
-			</p>
-		@endif
-
-		@if($event->locations->count() > 0)
-			<p class="mb-2">
-				<strong>Locations:</strong><br>
-
-				@foreach ($event->locations as $location)
-				    <a href="{{ route('discover.locations.show', $location->slug) }}">{{ $location->name }}</a>@if (!$loop->last)<br>@endif
-				@endforeach
-			</p>
-		@endif
-
-		@if($event->description != '')
-			<p class="mb-2">
-				<strong>Description:</strong><br>
-				{!! $event->description !!}
-			</p>
-		@endif
-	</div>
-
-	<div class="col-12 col-md-6">
-
-		@if($event->entityImageUrl)
-			 <div class="text-center">
-			 	<img src="{{ $event->entityImageUrl }}" alt="{{ $event->name }}" class="event-show-logo mx-auto mb-4">
-			 </div>
-		@endif
-
-		@if($event->focus->count() > 0)
-			<p class="mb-2">
-				<strong>Focus:</strong><br>
-
-				@foreach ($event->focus as $item)
-				    <a href="{{ route('discover.focus.show', $item->slug )}} ">{{ $item->name }}</a> @if (!$loop->last)<br>@endif
-				@endforeach
-			</p>
-		@endif
-
-		@if($event->people->count() > 0)
-			<p class="mb-2">
-				<strong>People:</strong><br>
-
-				@foreach ($event->people as $person)
-				    <a href="{{ route('discover.people.show', $person->slug )}} ">{{ $person->name }}</a> @if (!$loop->last)<br>@endif
-				@endforeach
-			</p>
-		@endif
-	</div>
-
+        @if($event->focus->count() > 0)
+            <div class="d-flex flex-wrap align-items-center my-3">
+                @foreach ($event->focus as $item)
+                    <a href="{{ route('discover.focus.show', $item->slug) }}" class="btn btn-secondary rounded-0 my-2 me-3 fs-6 py-1">{{ $item->name }}</a>
+                @endforeach
+            </div>
+        @endif
+    </div>
+    <div class="col-12 col-md-6 order-1 order-md-2 mb-4 mb-md-0">
+        <div class="logo-is-contained" style="background-image: url('{{ $event->entityImageUrl ?? asset('images/image-placeholder.jpg') }}')"></div>
+    </div>
 </div>
 
-@if($event->companies->count() > 0)
-	<div class="row mt-3">
-		<div class="col-12">
-			<h2>Exhibitors:</h2>
-		</div>
-	</div>
-	<div class="row mb-5">
-		@foreach ($event->companies as $company)
-			<div class="card col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
-                <div class="card-body border text-center d-flex justify-content-center align-items-center">
-                    @if($company->entityImageUrl)
-                        <a href="{{ route('discover.organizations.show', ['slug' => $company->slug]) }}" data-toggle="tooltip" data-placement="top" title="{{$company->name}}">
-                            <img src="{{ $company->entityImageUrl }}" alt="{{ $company->name }}" class="company-logo mx-auto" alt="{{$company->name}}">
-                        </a>
-                    @else
-                        <a href="{{ route('discover.organizations.show', ['slug' => $company->slug]) }}">{{$company->name}}</a>
-                    @endif
-                </div>
+<div class="d-lg-flex">
+    <div class="my-4 max-width-780 flex-grow-1">
+        <h3 class="h4 border-bottom">Description</h3>
+        <div class="lead">
+            {!! $event->description !!}
+        </div>
+    </div>
+    <div class="my-4 ms-lg-5 flex-shrink-0">
+        @if($event->locations->count() > 0)
+            <h3 class="h4 border-bottom">Locations</h3>
+            <div class="w-auto d-flex">
+                <ul class="list-group list-group-flush lead me-auto w-auto">
+                    @foreach ($event->locations as $location)
+                        <x-entities.related.location-list-item :location="$location" />
+                    @endforeach
+                </ul>
             </div>
-		@endforeach
-	</div>
+        @endif
+    </div>
+</div>
+
+<div class="d-flex align-items-center">
+    @if($event->event_url)
+        <div class="me-3">
+            <a href="{{ $event->event_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">More Info</a>
+        </div>
+    @endif
+
+    @if($event->registration_url)
+        <div class="me-3">
+            <a href="{{ $event->registration_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-accent btn-lg">Register</a>
+        </div>
+    @endif
+</div>
+
+@if($event->companies->count() > 0 OR $event->people->count() > 0)
+    <div class="mt-5">
+        <h2 class="h3">Exhibitors / Speakers</h2>
+        <div class="row">
+            @foreach ($event->companies as $company)
+                <x-entities.related.company-card :company="$company" />
+            @endforeach
+            @foreach ($event->people as $person)
+                <x-entities.related.person-card :person="$person" />
+            @endforeach
+        </div>
+    </div>
 @endif

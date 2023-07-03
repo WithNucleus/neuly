@@ -1,15 +1,24 @@
 // Typography
-//$font-family-sans-serif: "Roboto", Avenir, "Helvetica", Arial, sans-serif;
-//$headings-font-family: "Bebas Neue", Avenir, "Helvetica", Arial, sans-serif;
 $font-family-sans-serif: 'DM Sans', Avenir, "Helvetica", Arial, sans-serif;
-$headings-font-family: 'DM Sans', Avenir, "Helvetica", Arial, sans-serif;
+$headings-font-family: 'Heebo', Avenir, "Helvetica", Arial, sans-serif;
 $font-size-base: 1rem;
 $line-height-base: 1.6;
 
-// $body-bg: #3a3d3a;
-// $body-color: #f8f9fa;
+// Heading Sizes
+$h1-font-size: $font-size-base * 3;
+$h2-font-size: $font-size-base * 2.25;
+$h3-font-size: $font-size-base * 2;
+$h4-font-size: $font-size-base * 1.75;
+$h5-font-size: $font-size-base * 1.5;
+$h6-font-size: $font-size-base * 1.25;
 
-// Colors
+// Neuly Colors
+$neulyIndigo:  #454a91;
+//$neulyGreen: #176f55; // darker
+$neulyGreen: #1d8c6b; // brighter
+$neulyGreenBright: #28b98e;
+
+// scss-docs-start gray-color-variables
 $white:    #fff !default;
 $gray-100: #f8f9fa !default;
 $gray-200: #e9ecef !default;
@@ -20,177 +29,121 @@ $gray-600: #6c757d !default;
 $gray-700: #495057 !default;
 $gray-800: #343a40 !default;
 $gray-900: #212529 !default;
-$black:    #000 !default;
+$black:    #111;
+// scss-docs-end gray-color-variables
 
-$grays: () !default;
-// stylelint-disable-next-line scss/dollar-variable-default
-$grays: map-merge(
-  (
-    "100": $gray-100,
-    "200": $gray-200,
-    "300": $gray-300,
-    "400": $gray-400,
-    "500": $gray-500,
-    "600": $gray-600,
-    "700": $gray-700,
-    "800": $gray-800,
-    "900": $gray-900
-  ),
-  $grays
+// fusv-disable
+// scss-docs-start gray-colors-map
+$grays: (
+  "100": $gray-100,
+  "200": $gray-200,
+  "300": $gray-300,
+  "400": $gray-400,
+  "500": $gray-500,
+  "600": $gray-600,
+  "700": $gray-700,
+  "800": $gray-800,
+  "900": $gray-900
+) !default;
+// scss-docs-end gray-colors-map
+// fusv-enable
+
+// scss-docs-start color-variables
+$blue:    #0d6efd !default;
+$indigo:  $neulyIndigo;
+$purple:  #6f42c1 !default;
+$pink:    #d63384 !default;
+$red:     #dc3545 !default;
+$orange:  #fd7e14 !default;
+$yellow:  #ffc107 !default;
+$green:   $neulyGreen;
+$teal:    $neulyGreenBright;
+$cyan:    #0dcaf0 !default;
+// scss-docs-end color-variables
+
+// scss-docs-start colors-map
+$colors: (
+  "blue":       $blue,
+  "indigo":     $neulyIndigo,
+  "purple":     $purple,
+  "pink":       $pink,
+  "red":        $red,
+  "orange":     $orange,
+  "yellow":     $yellow,
+  "green":      $neulyGreen,
+  "teal":       $teal,
+  "cyan":       $cyan,
+  "black":      $black,
+  "white":      $white,
+  "gray":       $gray-600,
+  "gray-dark":  $gray-800
+) !default;
+// scss-docs-end colors-map
+
+// The contrast ratio to reach against white, to determine if color changes from "light" to "dark". Acceptable values for WCAG 2.0 are 3, 4.5 and 7.
+// See https://www.w3.org/TR/WCAG20/#visual-audio-contrast-contrast
+$min-contrast-ratio:   4.5 !default;
+
+// Customize the light and dark text colors for use in our color contrast function.
+$color-contrast-dark:      $black !default;
+$color-contrast-light:     $white !default;
+
+// scss-docs-start theme-color-variables
+$primary:       $neulyIndigo;
+$secondary:     $gray-600 !default;
+$success:       $neulyGreen;
+$info:          $cyan !default;
+$warning:       $yellow !default;
+$danger:        $red !default;
+$light:         $gray-100 !default;
+$dark:          $gray-900 !default;
+// scss-docs-end theme-color-variables
+
+// scss-docs-start theme-colors-map
+$theme-colors: (
+  "primary":    $primary,
+  "secondary":  $secondary,
+  "accent":     $teal,
+  "success":    $success,
+  "info":       $info,
+  "warning":    $warning,
+  "danger":     $danger,
+  "light":      $light,
+  "dark":       $dark
+) !default;
+// scss-docs-end theme-colors-map
+
+// Breakpoints
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1900px
 );
 
-$blue:    #275DAD;
-$indigo:  #454a91; // new primary color
-$purple:  #A7ABDD;
-$purple-darker:  darken(#A7ABDD, 15%);
-$pink:    #e83e8c !default;
-$red:     #D81E5B;
-$orange:  #f56235;
-$yellow:  #F0F600;
-$green:   #388972;
-//$teal:    #6bbca4;
-//$cyan:    #73FBD3;
-$teal: #176F55;
-$cyan: #6bbca4;
-
-// $darkblue: #225096;
-$darkblue: #A7ABDD;
-$darkcyan: #048B62;
-$darkgreen: #3F4531;
-
-$colors: () !default;
-// stylelint-disable-next-line scss/dollar-variable-default
-$colors: map-merge(
-  (
-    "blue":       $blue,
-    "indigo":     $indigo,
-    "purple":     $purple,
-    "pink":       $pink,
-    "red":        $red,
-    "orange":     $orange,
-    "yellow":     $yellow,
-    "green":      $green,
-    "teal":       $teal,
-    "cyan":       $cyan,
-    "white":      $white,
-    "gray":       $gray-600,
-    "gray-dark":  $gray-800
-  ),
-  $colors
-);
-
-$primary:       $indigo;
-$secondary:     $darkblue;
-$secondarydark: $purple-darker;
-$tertiary:      $cyan;
-$quaternary:      $darkgreen;
-$success:       $green;
-$info:          $teal;
-$warning:       $yellow;
-$danger:        $red;
-$light:         $gray-100;
-$dark:          $gray-900;
-
-$theme-colors: ();
-
-$theme-colors: map-merge(
-  (
-    "primary":    $primary,
-    "secondary":  $secondary,
-    "secondarydark":  $secondarydark,
-    "tertiary":   $tertiary,
-    "quaternary":   $quaternary,
-    "success":    $success,
-    "info":       $info,
-    "warning":    $warning,
-    "danger":     $danger,
-    "light":      $light,
-    "dark":       $dark,
-  ),
-  $theme-colors
-);
-
-// Heading Sizes
-$h1-font-size: $font-size-base * 2.75;
-$h2-font-size: $font-size-base * 2.25;
-$h3-font-size: $font-size-base * 2;
-$h4-font-size: $font-size-base * 1.75;
-$h5-font-size: $font-size-base * 1.5;
-$h6-font-size: $font-size-base * 1.25;
-
-// Alerts
-$alert-bg-level: -8 !default;
-$alert-border-level: -9 !default;
-$alert-color-level: 7 !default;
-
-$alert-padding-y:                   .5rem;
-$alert-padding-x:                   1rem;
-$alert-margin-bottom:               1rem;
-
-// Navbar
-$navbar-dark-color:                 rgba($white, .75);
-$navbar-dark-hover-color:           rgba($white, .95) !default;
-$navbar-dark-active-color:          $white !default;
-$navbar-dark-disabled-color:        rgba($white, .25) !default;
-
-// Breadcrumbs
-$breadcrumb-font-size:              null !default;
-
-$breadcrumb-padding-y:              0;
-$breadcrumb-padding-x:              .5rem;
-$breadcrumb-item-padding:           .5rem;
-
-$breadcrumb-margin-bottom:          .5rem;
-
-$breadcrumb-bg:                     transparent;
-$breadcrumb-divider-color:          $tertiary;
-$breadcrumb-active-color:           $gray-600 !default;
-$breadcrumb-divider:                quote("\2192");
-
-$breadcrumb-border-radius:          0;
+// Nav
+$nav-height: 60.25px;
 
 // Cards
-$card-spacer-y:                     .75rem !default;
-$card-spacer-x:                     1.25rem !default;
-$card-border-width:                 0;
-// $card-border-radius:                $border-radius !default;
-// $card-border-color:                 rgba($black, .125) !default;
-// $card-inner-border-radius:          subtract($card-border-radius, $card-border-width) !default;
-// $card-cap-bg:                       rgba($black, .03) !default;
-// $card-cap-color:                    null !default;
-// $card-height:                       null !default;
-// $card-color:                        null !default;
-// $card-bg:                           $white !default;
+$card-border-radius: 0;
 
-// $card-img-overlay-padding:          1.25rem !default;
+// Badges
+$badge-border-radius: 0;
 
-// $card-group-margin:                 $grid-gutter-width / 2 !default;
-// $card-deck-margin:                  $card-group-margin !default;
+// Inputs
+$input-border-radius: 0;
 
-// $card-columns-count:                3 !default;
-// $card-columns-gap:                  1.25rem !default;
-// $card-columns-margin:               $card-spacer-y !default;
+// Pagination
+$pagination-border-radius: 0;
+$pagination-border-width: 0;
+$pagination-hover-bg: $success;
+$pagination-hover-color: $gray-200;
 
-// List group
-// $list-group-color:                  null !default;
-// $list-group-bg:                     $white !default;
-// $list-group-border-color:           rgba($black, .125) !default;
-// $list-group-border-width:           $border-width !default;
-$list-group-border-radius:          0;
+// Buttons
+$btn-font-weight: 700;
+$btn-border-radius-lg: 0;
 
-// $list-group-item-padding-y:         .75rem !default;
-// $list-group-item-padding-x:         1.25rem !default;
-
-// $list-group-hover-bg:               $gray-100 !default;
-// $list-group-active-color:           $component-active-color !default;
-// $list-group-active-bg:              $component-active-bg !default;
-// $list-group-active-border-color:    $list-group-active-bg !default;
-
-// $list-group-disabled-color:         $gray-600 !default;
-// $list-group-disabled-bg:            $list-group-bg !default;
-
-// $list-group-action-color:           $gray-700 !default;
-// $list-group-action-hover-color:     $list-group-action-color !default;
-
-// $list-group-action-active-color:    $body-color !default;
-// $list-group-action-active-bg:       $gray-200 !default;
+// Dropdowns
+$dropdown-border-radius: 0;

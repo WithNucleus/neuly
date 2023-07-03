@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Index;
 use App\Helpers\PagePreviewHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Company;
-use App\Models\Focus;
 use App\Models\Job;
 use App\Repositories\FollowRepository;
 use App\Services\Metas;
@@ -13,62 +12,20 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Models\Activity;
-use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\AllowedSort;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class CompanyController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+
+    public function index(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        $this->middleware('query_filters')->only('index');
-    }
-
-    /**
-     * List of Companies
-     *
-     * @return View
-     */
-    public function index(Request $request)
-    {
-        $companies = QueryBuilder::for(Company::class)
-            ->public()
-            ->with('focus')
-            ->allowedFilters([
-                'name',
-                AllowedFilter::partial('locations', 'locations.name'),
-                AllowedFilter::partial('focus', 'focus.name'),
-                AllowedFilter::exact('type', 'ownership'),
-                AllowedFilter::scope('hiring', 'hasJobs'),
-                AllowedFilter::scope('upcoming_events', 'hasUpcomingEvents'),
-            ])
-            ->defaultSort('name')
-            ->allowedSorts([
-                'name',
-                AllowedSort::field('date', 'created_at'),
-                AllowedSort::field('type', 'ownership'),
-            ])
-            ->paginate(12)
-            ->appends(request()->query());
-
-        $focus_cats = Focus::has('companies', '>', 0)->with('companies')->get()->pluck('name')->unique()->sort();
-
         $metas = Metas::fromPage($request->path());
 
-        return view('discover.organizations.index', compact('companies', 'focus_cats', 'metas'));
+        return view('discover.organizations.index', [
+            'metas' => $metas
+        ]);
     }
 
-    /**
-     * Show Company
-     *
-     * @return mixed
-     */
-    public function show(Request $request, $slug)
+    public function show(Request $request, $slug): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Contracts\Foundation\Application
     {
         $company = Company::with([
             'people',
@@ -127,7 +84,7 @@ class CompanyController extends Controller
         return view('discover.organizations.show', compact('company', 'related', 'metas', 'entity', 'isFollowed', 'preview'));
     }
 
-    public function namesJson()
+    public function namesJson(): \Illuminate\Http\JsonResponse
     {
         return response()->json(Company::all()->pluck('name'));
     }
@@ -150,12 +107,7 @@ class CompanyController extends Controller
         return $entities;
     }
 
-    /**
-     * Show Jobs for Company
-     *
-     * @return View
-     */
-    public function jobs($slug)
+    public function jobs($slug): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         $owner = Company::where('slug', $slug)->firstOrFail();
         $jobs = Job::where('owner_id', $owner->id)->where('status', Job::STATUS_OPEN)->orderBy('posted_date', 'desc')->get();
@@ -163,12 +115,7 @@ class CompanyController extends Controller
         return view('discover.jobs.listing-by-owner', compact('owner', 'jobs'));
     }
 
-    /**
-     * Show Events for Company
-     *
-     * @return View
-     */
-    public function events($slug)
+    public function events($slug): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         $company = Company::where('slug', $slug)->firstOrFail();
         $entity = 'organizations';
