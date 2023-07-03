@@ -1,77 +1,58 @@
-@extends('layouts.app')
+@extends('layouts.entity-show')
 
-@section('body-class', 'bg-light')
+@section('breadcrumbs')
+    @include('navbars.breadcrumb', [
+        'items' => [
+            'Jobs' => route('discover.jobs'),
+            $job->name  => false
+        ]
+    ])
+@endsection
 
 @section('content')
 
-    @include('discover.includes.show-begin', ['full_width' => false])
+    <div class="container py-4">
 
-    <div class="d-flex align-items-start justify-content-between">
-        <h1 class="mr-4 flex-shrink-1">{{ $job->job_title }}</h1>
+        <x-entities.entity-show-title-meta title="{{ $job->name }}" headingClasses="text-success h2 text-transform-none mb-2 max-width-780">
+            <div class="me-3">
+                @include('members.follow.button', [
+                    'followable_type' => get_class($job),
+                    'followable_id' => $job->id,
+                    'name' => $job->name
+                ])
+            </div>
+        </x-entities.entity-show-title-meta>
 
-        <div class="dashboard-actions-container flex-shrink-0 m-2 float-right">
-            @include('members.follow.button', [
-                'followable_type' => get_class($job),
-                'followable_id' => $job->id,
-                'name' => $job->job_title,
-            ])
+        @if ($job->status == App\Models\Job::STATUS_ARCHIVED)
+            <div class="h5 mb-4 bg-warning-subtle pt-2 pb-1 px-2 d-inline-block">
+                <i class="fa-sharp fa-regular fa-circle-exclamation me-2"></i>This job listing is no longer active or it's been a long time since it was posted.
+            </div>
+        @endif
+
+        @include('discover.jobs.data')
+
+        @if(count($related) > 0)
+            <h2 class="h3 mt-5 ">Related Jobs:</h2>
+            <div class="row">
+                @foreach($related as $item)
+                    <x-entities.related.job-card :job="$item" withOwner="true" />
+                @endforeach
+            </div>
+        @endif
+
+        <div class="d-flex flex-wrap justify-content-between align-items-center text-uppercase small fw-bold text-secondary-emphasis mt-4">
+            <div class="me-4">
+                Last updated: {{ Carbon\Carbon::parse($job->updated_at)->format('M d, Y') }}
+            </div>
+            @can('edit jobs')
+                <div>
+                    <a href="{{ route('job.edit', $job->id) }}" class="text-secondary-emphasis">Edit Job</a>
+                </div>
+            @endcan
+            <div>
+                @include('discover.includes.update-listing-form', ['entity' => $job])
+            </div>
         </div>
     </div>
 
-    @if ($job->status == 'archived')
-        <p class="my-3 text-secondarydark font-weight-bold">
-            This job listing is no longer active or it's been a long time since it was posted.
-        </p>
-    @endif
-
-    @include('discover.jobs.data')
-
-    @auth
-        <p class="mt-2 mb-0 mr-2">
-            @if ($job->status == App\Models\Job::STATUS_OPEN)
-                <a href="{{ route('discover.jobs.apply', $job->slug) }}" class="btn btn-lg btn-danger">Apply Now</a>
-            @endif
-        </p>
-    @endauth
-
-    @if(count($related) > 0)
-        <h2 class="h3 mt-5 ">Related Jobs:</h2>
-        <div class="row">
-            @foreach($related as $index => $item)
-                <div class="col-12 col-md-6 mb-3">
-                    <div class="border-top pt-3 d-md-flex">
-                        <div class="image mr-5 flex-shrink-0">
-                            <a href="{{ route('discover.jobs.show', ['slug' => $item->slug]) }}">
-                                <div class="job-org-logo" style="background-image: url('{{ $item->owner->entityImageUrl }}');"></div>
-                            </a>
-                        </div>
-                        <div class="flex-grow-1">
-                            <h3 class="font-normal lead">
-                                <a href="{{ route('discover.jobs.show', ['slug' => $item->slug]) }}">{{$item->job_title}}</a>
-                            </h3>
-                            @if($item->locations->count() > 0)
-                                <p class="mb-0">
-                                    <span class="text-info"><i class="fad fa-globe-stand"></i></span>
-                                    @foreach ($item->locations as $location)
-                                        {{ $location->name }}@if (!$loop->last),@endif
-                                    @endforeach
-                                </p>
-                            @endif
-                            @if($item->focus->count() > 0)
-                                <p class="mb-0">
-                                    <span class="text-secondarydark"><i class="fad fa-flask"></i></span>
-                                    @foreach ($item->focus as $focus)
-                                        {{ $focus->name }}@if (!$loop->last) / @endif
-                                    @endforeach
-                                </p>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-    @endif
-
-    @include('discover.includes.show-end')
-    @include('discover.includes.limited-access-modal')
 @endsection

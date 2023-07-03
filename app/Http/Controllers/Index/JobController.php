@@ -20,19 +20,9 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class JobController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('query_filters')->only('index', 'archive', 'embedIndex');
-    }
 
-    public function index(Request $request)
+    public function index(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        $data = $this->getIndexData($request, 'open');
         $data['metas'] = Metas::fromPage($request->path());
 
         return view('discover.jobs.index', $data);

@@ -8,10 +8,12 @@ use Illuminate\View\Component;
 class JobCard extends Component
 {
     public Job $job;
+    public bool $withOwner;
 
-    public function __construct(Job $job)
+    public function __construct(Job $job, bool $withOwner = false)
     {
         $this->job = $job;
+        $this->withOwner = $withOwner;
     }
 
     public function render(): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Support\Htmlable|string|\Closure|\Illuminate\Contracts\Foundation\Application

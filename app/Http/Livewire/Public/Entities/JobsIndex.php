@@ -9,10 +9,11 @@ use App\Http\Livewire\DataTable\WithSorting;
 use App\Http\Livewire\Public\Entities\Traits\HasLocationFilter;
 use App\Models\Company;
 use App\Models\Focus;
+use App\Models\Job;
 use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 
-class OrganizationIndex extends Component
+class JobsIndex extends Component
 {
     use WithPerPagePagination, WithBulkActions, WithCachedRows, WithSorting, HasLocationFilter;
 
@@ -77,19 +78,17 @@ class OrganizationIndex extends Component
     }
 
     public function updatedLocationSearch() {
-        $this->returnLocationSearch('companies');
+        $this->returnLocationSearch('jobs');
     }
 
     public function getRowsQueryProperty()
     {
-        $query = Company::with(['focus'])
-                ->withCount(['focus', 'events', 'jobs' => function (Builder $query) {
-                    $query->open();
-                }, 'locations', 'investors'])
+        $query = Job::with(['focus', 'owner'])
+                ->withCount(['focus'])
                 ->when($this->search, function($query, $search) {
                     return $query
-                        ->where('name', 'like', '%' . $search . '%')
-                        ->orWhere('summary', 'like', '%' . $search . '%')
+                        ->where('job_title', 'like', '%' . $search . '%')
+                        ->orWhere('job_description', 'like', '%' . $search . '%')
                         ->orWhereHas('focus', function($query) use ($search) {
                             $query->where('name', 'like', '%' . $search . '%');
                         })
@@ -98,7 +97,7 @@ class OrganizationIndex extends Component
                         });
                 })
                 ->when($this->filters['type'], function($query, $value) {
-                    return $query->where('ownership', $value);
+                    return $query->where('employment_type', $value);
                 })
                 ->when($this->filters['focus'], function($query, $valueArray) {
                     return $query->whereHas('focus', function($query) use ($valueArray) {
@@ -134,13 +133,14 @@ class OrganizationIndex extends Component
 
     public function render(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        $focusOptions = Focus::whereHas('companies')->withCount('companies')->orderBy('type')->orderByDesc('companies_count')->get()->groupBy('type')->toArray();
+        $focusOptions = Focus::whereHas('jobs')->withCount('jobs')->orderBy('type')->orderByDesc('jobs_count')->get()->groupBy('type')->toArray();
         $focusDrugOptions = $focusOptions['drug'];
         $focusOtherOptions = $focusOptions[''];
+        $focusOtherOptions = array_slice($focusOtherOptions, 0, 10);
 
-        return view('livewire.public.entities.organization-index', [
+        return view('livewire.public.entities.jobs-index', [
             'records' => $this->rows,
-            'typeOptions' => Company::OWNERSHIP,
+            'typeOptions' => Job::EMPLOYMENT_TYPE,
             'focusDrugOptions' => $focusDrugOptions,
             'focusOtherOptions' => $focusOtherOptions
         ]);

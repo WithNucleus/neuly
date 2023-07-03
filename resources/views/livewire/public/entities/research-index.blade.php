@@ -43,20 +43,21 @@
     </div>
     <div class="entity-index-listings w-100">
         <div class="row">
-            <div class="col-12 d-md-flex justify-content-between align-items-end mb-3">
+            <div class="col-12 d-md-flex justify-content-between align-items-end">
                 <h1 class="me-4 mb-md-0 text-body-emphasis">Research</h1>
                 <div class="lead">
                     {{ $records->total() }} Research Items
                 </div>
             </div>
-            <div class="col-12 mb-3">
+            <div class="col-12 my-3">
+                <x-entities.offcanvas-sidebar-toggle />
                 <div>
                     <x-entities.entity-index-sort-button label="Name" field="name" :sorts="$sorts" />
                     <x-entities.entity-index-sort-button label="Last Updated" field="updated_at" :sorts="$sorts" />
                 </div>
             </div>
             @forelse($records as $research)
-                <div wire:key="{{ $research->slug }}" class="col-12 col-md-6 col-xxl-4 mb-4">
+                <div wire:key="{{ $research->slug }}" class="col-12 col-lg-6 col-xxl-4 mb-4">
                     <x-entities.show.research-card :research="$research" />
                 </div>
 

@@ -1,6 +1,4 @@
 <div>
-    <button class="btn btn-primary d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar">Toggle Filters</button>
-
     <div class="offcanvas-lg offcanvas-start" tabindex="-1" id="offcanvasSidebar"
          aria-labelledby="offcanvasSidebarLabel">
         <div class="offcanvas-header">

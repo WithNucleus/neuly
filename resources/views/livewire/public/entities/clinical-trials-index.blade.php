@@ -56,13 +56,14 @@
     </div>
     <div class="entity-index-listings w-100">
         <div class="row">
-            <div class="col-12 d-md-flex justify-content-between align-items-end mb-3">
+            <div class="col-12 d-md-flex justify-content-between align-items-end">
                 <h1 class="me-4 mb-md-0 text-body-emphasis">Clinical Trials</h1>
                 <div class="lead">
                     {{ $records->total() }} Clinical Trials
                 </div>
             </div>
-            <div class="col-12 mb-3">
+            <div class="col-12 my-3">
+                <x-entities.offcanvas-sidebar-toggle />
                 <div>
                     <x-entities.entity-index-sort-button label="Title" field="title" :sorts="$sorts" />
                     <x-entities.entity-index-sort-button label="Last Updated" field="updated_at" :sorts="$sorts" />

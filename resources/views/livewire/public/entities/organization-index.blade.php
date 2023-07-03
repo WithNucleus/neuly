@@ -41,13 +41,14 @@
     </div>
     <div class="entity-index-listings w-100">
         <div class="row">
-            <div class="col-12 d-md-flex justify-content-between align-items-end mb-3">
+            <div class="col-12 d-md-flex justify-content-between align-items-end">
                 <h1 class="me-4 mb-md-0 text-body-emphasis">Organizations</h1>
                 <div class="lead">
                     {{ $records->total() }} Organizations
                 </div>
             </div>
-            <div class="col-12 mb-3">
+            <div class="col-12 my-3">
+                <x-entities.offcanvas-sidebar-toggle />
                 <div>
                     <x-entities.entity-index-sort-button label="Company Name" field="name" :sorts="$sorts" />
                     <x-entities.entity-index-sort-button label="Last Updated" field="updated_at" :sorts="$sorts" />
@@ -57,7 +58,7 @@
                 </div>
             </div>
             @forelse($records as $company)
-                <div wire:key="{{ $company->slug }}" class="col-12 col-md-6 col-xl-4 col-xxl-3 mb-4">
+                <div wire:key="{{ $company->slug }}" class="col-12 col-md-6 col-xxl-3 mb-4">
                     <x-entities.entity-logo-card url="{{ route('discover.organizations.show', $company->slug) }}" linkClasses="py-5">
                         @if($company->jobs_count > 0)
                             <span class="position-top-left ms-1 lead">
