@@ -202,6 +202,35 @@ ul.pagination {
     font-size: $font-size-base * 1.1;
 }
 
+// Links & Text Effects
+.underline-on-hover {
+    text-decoration: none;
+}
+
+.underline-on-hover:hover {
+    text-decoration: underline;
+}
+
+.truncate-200 {
+    max-width: 200px;
+	overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    display: block;
+}
+
+$truncate-sizes: 100 200;
+
+@each $size in $truncate-sizes {
+    .truncate-#{$size} {
+        max-width: #{$size}px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        display: block;
+    }
+}
+
 // Headings
 h1, .h1,
 h2, .h2,
@@ -223,8 +252,7 @@ h5, .h5 {
 
 // Images
 .logo-is-contained,
-.logo-square-is-contained,
-.logo-event {
+.logo-square-is-contained {
     height: 150px;
     margin-left: auto;
     margin-right: auto;
@@ -265,6 +293,11 @@ h5, .h5 {
     }
 }
 
+.img-height-30 {
+    height: 30px;
+    width: auto;
+}
+
 // Collapse Heading - Flip Icon
 .collapse-heading {
     .btn {
@@ -293,7 +326,7 @@ h5, .h5 {
 }
 
 // Max Widths
-$max-widths: 200 250 300 780;
+$max-widths: 60 200 250 300 780;
 
 @each $size in $max-widths {
     .max-width-#{$size} {

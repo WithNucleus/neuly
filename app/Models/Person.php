@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enum\MediaTypes;
 use App\Helpers\Entity\FieldsMapping;
 use App\Models\Contracts\EntityContract;
 use App\Models\Contracts\EntityImageContract;
@@ -254,6 +255,11 @@ class Person extends Model implements EntityContract, EntityImageContract
     public function mediaItems(): \Illuminate\Database\Eloquent\Relations\MorphToMany
     {
         return $this->morphToMany(MediaItem::class, 'entity', 'media_item_relationships')->orderByDesc('date')->withTimestamps();
+    }
+
+    public function news(): \Illuminate\Database\Eloquent\Relations\MorphToMany
+    {
+        return $this->morphToMany(MediaItem::class, 'entity', 'media_item_relationships')->where('media_type', MediaTypes::MEDIA_TYPE_NEWS)->withTimestamps();
     }
 
     /*

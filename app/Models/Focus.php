@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enum\MediaTypes;
 use App\Helpers\Entity\FieldsMapping;
 use App\Models\Contracts\EntityContract;
 use App\Models\Traits\CrudShowEntityPageButton;
@@ -87,6 +88,11 @@ class Focus extends Model implements EntityContract
     public function mediaItems(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(\App\Models\MediaItem::class, 'focus_media_item', 'focus_id', 'media_item_id');
+    }
+
+    public function news(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(\App\Models\MediaItem::class, 'focus_media_item', 'focus_id', 'media_item_id')->where('media_type', MediaTypes::MEDIA_TYPE_NEWS);
     }
 
     public function patents(): \Illuminate\Database\Eloquent\Relations\MorphToMany

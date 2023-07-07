@@ -7,15 +7,14 @@ use App\Http\Livewire\DataTable\WithCachedRows;
 use App\Http\Livewire\DataTable\WithPerPagePagination;
 use App\Http\Livewire\DataTable\WithSorting;
 use App\Http\Livewire\Public\Entities\Traits\HasCompanyFilter;
-use App\Http\Livewire\Public\Entities\Traits\HasLocationFilter;
 use App\Http\Livewire\Public\Entities\Traits\HasPersonFilter;
-use App\Models\Investor;
-use Illuminate\Database\Eloquent\Builder;
+use App\Models\Focus;
+use App\Models\MediaItem;
 use Livewire\Component;
 
-class InvestorsIndex extends Component
+class NewsIndex extends Component
 {
-    use WithPerPagePagination, WithBulkActions, WithCachedRows, WithSorting, HasCompanyFilter, HasLocationFilter, HasPersonFilter;
+    use WithPerPagePagination, WithBulkActions, WithCachedRows, WithSorting, HasCompanyFilter, HasPersonFilter;
 
     protected string $paginationTheme = 'bootstrap';
     protected $queryString = ['search'];
@@ -23,16 +22,14 @@ class InvestorsIndex extends Component
     public ?string $search = null;
 
     public array $filters = [
-        'type' => [],
-        'locations' => [],
+        'focus' => [],
         'people' => [],
         'companies' => [],
-        'now-hiring' => false
     ];
 
     public function mount() {
         $this->sorts = [
-            'name' => 'asc'
+            'date' => 'desc'
         ];
     }
 
@@ -53,8 +50,6 @@ class InvestorsIndex extends Component
         $this->reset('search');
         $this->reset('filters');
         $this->reset('sorts');
-        $this->reset('locationSearch');
-        $this->reset('locationSearchResults');
         $this->reset('personSearch');
         $this->reset('personSearchResults');
         $this->reset('companySearch');
@@ -81,39 +76,19 @@ class InvestorsIndex extends Component
     }
 
     public function updatedCompanySearch() {
-        $this->returnCompanySearch('investors');
+        $this->returnCompanySearch('news');
     }
 
     public function updatedPersonSearch() {
-        $this->returnPersonSearch('investors');
-    }
-
-    public function updatedLocationSearch() {
-        $this->returnLocationSearch('investors');
+        $this->returnPersonSearch('news');
     }
 
     public function getRowsQueryProperty()
     {
-        $query = Investor::withCount(['companies', 'jobs' => function (Builder $query) {
-                    $query->open();
-                }, 'locations'])
+        $query = MediaItem::news()->with(['companies', 'people', 'focus', 'source'])
                 ->when($this->search, function($query, $search) {
                     return $query
-                        ->where('name', 'like', '%' . $search . '%')
-                        ->orWhereHas('locations', function($query) use ($search) {
-                            $query->where('name', 'like', '%' . $search . '%');
-                        })
-                        ->orWhereHas('people', function($query) use ($search) {
-                            $query->where('name', 'like', '%' . $search . '%');
-                        });
-                })
-                ->when($this->filters['type'], function($query, $value) {
-                    return $query->where('type', $value);
-                })
-                ->when($this->filters['locations'], function($query, $valueArray) {
-                    return $query->whereHas('locations', function($query) use ($valueArray) {
-                        $query->whereIn('name', $valueArray);
-                    });
+                        ->where('name', 'like', '%' . $search . '%');
                 })
                 ->when($this->filters['companies'], function($query, $valueArray) {
                     return $query->whereHas('companies', function($query) use ($valueArray) {
@@ -125,8 +100,10 @@ class InvestorsIndex extends Component
                         $query->whereIn('name', $valueArray);
                     });
                 })
-                ->when($this->filters['now-hiring'], function($query, $value) {
-                    return $query->hasJobs();
+                ->when($this->filters['focus'], function($query, $valueArray) {
+                    return $query->whereHas('focus', function($query) use ($valueArray) {
+                        $query->whereIn('name', $valueArray);
+                    });
                 });
 
         return $this->applySorting($query);
@@ -141,9 +118,9 @@ class InvestorsIndex extends Component
 
     public function render()
     {
-        return view('livewire.public.entities.investors-index', [
+        return view('livewire.public.entities.news-index', [
             'records' => $this->rows,
-            'typeOptions' => Investor::TYPE,
+            'focusOptions' => Focus::whereHas('news')->withCount('news')->orderByDesc('news_count')->get()->toArray()
         ]);
     }
 }
