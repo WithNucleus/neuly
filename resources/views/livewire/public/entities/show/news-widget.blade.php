@@ -25,7 +25,7 @@
             @if($record->companies->count() > 0 OR $record->people->count() > 0)
                 <div class="d-flex flex-wrap align-items-center justify-content-start">
                     @foreach($record->companies as $company)
-                        <a href="{{ $company->show_url }}" class="d-block mt-4 me-3">
+                        <a href="{{ $company->show_url }}" class="d-block mt-4 me-3" title="{{ $company->name }}">
                             @if($company->entityImageUrl)
                                 <img src="{{ $company->entityImageUrl }}" class="img-height-30" alt="{{ $company->name }}" height="30">
                             @else
