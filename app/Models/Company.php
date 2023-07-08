@@ -265,16 +265,17 @@ class Company extends Model implements EntityContract, EntityImageContract
         return $this->morphToMany(MediaItem::class, 'entity', 'media_item_relationships')->where('media_type', MediaTypes::MEDIA_TYPE_NEWS)->withTimestamps();
     }
 
+    public function podcasts(): \Illuminate\Database\Eloquent\Relations\MorphToMany
+    {
+        return $this->morphToMany(MediaItem::class, 'entity', 'media_item_relationships')->where('media_type', MediaTypes::MEDIA_TYPE_PODCAST)->withTimestamps();
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES
     |--------------------------------------------------------------------------
     */
 
-    /**
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @return \Illuminate\Database\Query\Builder
-     */
     public function scopeHasJobs($query)
     {
         return $query->whereHas('jobs', function ($query) {
@@ -282,10 +283,6 @@ class Company extends Model implements EntityContract, EntityImageContract
         });
     }
 
-    /**
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @return \Illuminate\Database\Query\Builder
-     */
     public function scopeHasUpcomingEvents($query)
     {
         return $query->whereHas('events', function ($subquery) {
@@ -293,19 +290,11 @@ class Company extends Model implements EntityContract, EntityImageContract
         });
     }
 
-    /**
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @return \Illuminate\Database\Query\Builder
-     */
     public function scopeNonprofits($query)
     {
         return $query->where('ownership', 'Non-Profit');
     }
 
-    /**
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @return \Illuminate\Database\Query\Builder
-     */
     public function scopeEducational($query)
     {
         return $query->where('ownership', 'Educational Institution');

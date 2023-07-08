@@ -14,7 +14,6 @@
             @if($record->summary)
                 <div class="my-2">{{ $record->summary }}</div>
             @endif
-            <div>{{ $record->source->name }}</div>
             @if($record->focus->count() > 0)
                 <div class="d-flex flex-wrap align-items-center lead">
                     @foreach($record->focus as $focus)

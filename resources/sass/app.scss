@@ -303,6 +303,19 @@ h5, .h5 {
     height: auto;
 }
 
+.podcast-image {
+    width: 50px;
+    height: auto;
+
+    @media (min-width: 768px) {
+        width: 100px;
+    }
+
+    @media (min-width: 1200px) {
+        width: 200px;
+    }
+}
+
 // Collapse Heading - Flip Icon
 .collapse-heading {
     .btn {
