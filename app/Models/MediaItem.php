@@ -131,6 +131,11 @@ class MediaItem extends Model
         return Str::words($this->summary, 25);
     }
 
+    public function getShortContentExcerptAttribute(): string
+    {
+        return Str::words($this->content, 25);
+    }
+
     /*
     |--------------------------------------------------------------------------
     | MUTATORS

@@ -47,9 +47,6 @@
                 <div>
                     <x-entities.entity-index-sort-button label="Job Title" field="job_title" :sorts="$sorts" />
                     <x-entities.entity-index-sort-button label="Last Updated" field="updated_at" :sorts="$sorts" />
-                    <x-entities.entity-index-sort-button label="# of Investors" field="investors_count" :sorts="$sorts" />
-                    <x-entities.entity-index-sort-button label="# of Events" field="events_count" :sorts="$sorts" />
-                    <x-entities.entity-index-sort-button label="# of Jobs" field="jobs_count" :sorts="$sorts" />
                 </div>
             </div>
             @forelse($records as $job)

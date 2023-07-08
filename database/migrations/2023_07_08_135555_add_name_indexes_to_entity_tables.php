@@ -17,7 +17,7 @@ return new class extends Migration
         'investors' => ['name'],
         'jobs' => ['job_title', 'job_description'],
         'locations' => ['name'],
-        'media_items' => ['name'],
+        'media_items' => ['name', 'summary', 'content'],
         'people' => ['name', 'email', 'bio'],
         'research' => ['name', 'abstract', 'publication_info'],
         'users' => ['name'],

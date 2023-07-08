@@ -12,11 +12,11 @@ use App\Http\Livewire\Public\Entities\Traits\HasPersonFilter;
 use App\Models\Event;
 use App\Models\EventType;
 use App\Models\Focus;
-use App\Models\Investor;
 use Livewire\Component;
 
 class EventsIndex extends Component
-{use WithPerPagePagination, WithBulkActions, WithCachedRows, WithSorting, HasCompanyFilter, HasLocationFilter, HasPersonFilter;
+{
+    use WithPerPagePagination, WithBulkActions, WithCachedRows, WithSorting, HasCompanyFilter, HasLocationFilter, HasPersonFilter;
 
     protected string $paginationTheme = 'bootstrap';
     protected $queryString = ['search'];

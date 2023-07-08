@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->prefix('/admin')->name('admin.')->group(function () {
     Route::middleware('role:Admin')->group(function () {
+        // Choices.js
+        Route::get('/choices/focus.json', [App\Http\Controllers\Admin\ChoicesController::class, 'focusDrugs'])->name('choices.focus');
+
         // Related Entities
         Route::get('/person/{id}/company', [App\Http\Controllers\Admin\PersonCompanyController::class, 'index']);
         Route::post('/person/{id}/company', [App\Http\Controllers\Admin\PersonCompanyController::class, 'add']);

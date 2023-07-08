@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\DataFeedRequest;
 use App\Jobs\DataFeeds\GetRssFeed;
+use App\Models\Company;
 use App\Models\DataFeed;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
@@ -86,6 +87,13 @@ class DataFeedCrudController extends CrudController
             'name' => 'media_items_count', // name of relationship method in the model
             'type' => 'text',
             'label' => 'Media Items', // Table column heading
+        ]);
+
+        $this->crud->addColumn([
+            'name' => 'image',
+            'label' => 'Image',
+            'type' => 'image',
+            'prefix' => DataFeed::getImageUrlPrefix(),
         ]);
 
         $this->crud->addButtonFromView('line', 'datafeed.get-feed', 'datafeed.get-feed', 'beginning');
@@ -206,6 +214,16 @@ class DataFeedCrudController extends CrudController
             'name' => 'auto_approval',
             'type' => 'boolean',
             'label' => 'Auto Approval',
+        ]);
+
+        $this->crud->addField([
+            'label' => 'Image',
+            'name' => 'image',
+            'type' => 'image',
+            'upload' => true,
+            'crop' => true,
+            'aspect_ratio' => 0,
+            'prefix' => DataFeed::getImageUrlPrefix(),
         ]);
 
         /**

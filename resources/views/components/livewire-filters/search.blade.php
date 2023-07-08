@@ -1,6 +1,6 @@
 <div>
     <div class="d-flex align-items-center">
-        <input wire:model="search" type="text" class="form-control me-2" placeholder="{{ $placeholder }}" aria-label="{{ $label }}">
+        <input wire:model.lazy="search" type="text" class="form-control me-2" placeholder="{{ $placeholder }}" aria-label="{{ $label }}">
         <span>
             <i class="fa-sharp fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{{ $tooltip }}"></i>
         </span>
