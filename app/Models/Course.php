@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Helpers\Entity\FieldsMapping;
+use App\Models\Traits\EntityImage;
 use App\Models\Traits\SearchableEntity;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -12,9 +13,10 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Course extends Model
 {
-    use CrudTrait;
-    use SearchableEntity;
-    use LogsActivity;
+    use CrudTrait,
+        SearchableEntity,
+        LogsActivity,
+        EntityImage;
 
     /*
     |--------------------------------------------------------------------------
@@ -32,31 +34,46 @@ class Course extends Model
     // protected $dates = [];
 
     protected static $logUnguarded = true;
-
     protected static $logName = 'entities';
 
+    protected static $imageAttribute = 'image';
+    protected static $imageFolderPath = 'courses';
+    protected static $imageFilenameAttribute = 'name';
+
     const TYPE_ONLINE = 'Online';
-
     const TYPE_OFFLINE = 'In-Person';
-
     const TYPE_HYBRID = 'Hybrid';
 
     const TYPES = [
         self::TYPE_ONLINE,
         self::TYPE_OFFLINE,
-        self::TYPE_HYBRID,
+        self::TYPE_HYBRID
     ];
 
     const SCHEDULE_RECURRING = 'Recurring';
-
     const SCHEDULE_UPCOMING = 'Upcoming';
-
     const SCHEDULE_PAST = 'Past';
 
     const SCHEDULE = [
         self::SCHEDULE_RECURRING,
         self::SCHEDULE_UPCOMING,
-        self::SCHEDULE_PAST,
+        self::SCHEDULE_PAST
+    ];
+
+    const EDUCATION_CREDIT_CE = 'CE';
+    const EDUCATION_CREDIT_CEU = 'CEU';
+    const EDUCATION_CREDIT_CPD = 'CPD';
+    const EDUCATION_CREDIT_CME = 'CME';
+    const EDUCATION_CREDIT_CPE = 'CPE';
+    const EDUCATION_CREDIT_ECTP = 'ECTP';
+
+    const EDUCATION_CREDITS = [
+        self::EDUCATION_CREDIT_CE,
+        self::EDUCATION_CREDIT_CEU,
+        self::EDUCATION_CREDIT_CPD,
+        self::EDUCATION_CREDIT_CME,
+        self::EDUCATION_CREDIT_CPE,
+        self::EDUCATION_CREDIT_ECTP
     ];
 
     private $searchableRelationships = [
@@ -118,6 +135,11 @@ class Course extends Model
         return nl2br(e($this->summary));
     }
 
+    public function getShortSummaryAttribute(): string
+    {
+        return Str::words($this->summary, 40);
+    }
+
     public function getFormattedCostAttribute(): string
     {
         $lowestCost = $this->lowest_cost;
@@ -147,6 +169,11 @@ class Course extends Model
     {
         $this->attributes['name'] = $name;
         $this->attributes['slug'] = Str::slug($name);
+    }
+
+    public function setImageAttribute($value)
+    {
+        $this->updateImageAttribute($value);
     }
 
     /**

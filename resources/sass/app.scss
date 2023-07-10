@@ -211,15 +211,7 @@ ul.pagination {
     text-decoration: underline;
 }
 
-.truncate-200 {
-    max-width: 200px;
-	overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    display: block;
-}
-
-$truncate-sizes: 100 200;
+$truncate-sizes: 100 200 600;
 
 @each $size in $truncate-sizes {
     .truncate-#{$size} {
@@ -303,7 +295,7 @@ h5, .h5 {
     height: auto;
 }
 
-.podcast-image {
+.entity-square-image {
     width: 50px;
     height: auto;
 
@@ -344,7 +336,7 @@ h5, .h5 {
 }
 
 // Max Widths
-$max-widths: 60 200 250 300 780;
+$max-widths: 60 200 250 300 780 1000;
 
 @each $size in $max-widths {
     .max-width-#{$size} {

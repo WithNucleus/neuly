@@ -133,10 +133,6 @@ class DataFeed extends Model
     | ACCESSORS
     |--------------------------------------------------------------------------
     */
-    public function setImageAttribute($value)
-    {
-        $this->updateImageAttribute($value);
-    }
 
     /*
     |--------------------------------------------------------------------------
@@ -147,6 +143,11 @@ class DataFeed extends Model
     {
         $this->attributes['name'] = $name;
         $this->attributes['slug'] = Str::slug($name);
+    }
+
+    public function setImageAttribute($value)
+    {
+        $this->updateImageAttribute($value);
     }
 
     public function getActivitylogOptions(): LogOptions

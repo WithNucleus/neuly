@@ -8,6 +8,7 @@ use Livewire\Component;
 class PodcastWidget extends Component
 {
     public MediaItem $record;
+    public bool $hideSource = false;
 
     public function render()
     {

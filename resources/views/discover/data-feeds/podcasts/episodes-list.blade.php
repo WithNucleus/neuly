@@ -1,48 +1,51 @@
-@extends('layouts.app')
+@extends('layouts.entity-show')
 
-@section('body-class', 'bg-light')
+@section('breadcrumbs')
+    @include('navbars.breadcrumb', [
+        'items' => [
+            'Podcasts' => route('discover.podcasts'),
+            $feed->name  => false
+        ]
+    ])
+@endsection
 
 @section('content')
 
-    @include('discover.includes.show-begin', ['full_width' => false])
+    <div class="container py-4">
 
-    @include('discover.includes.status-messages')
+        <div class="max-width-1000 mx-auto">
+            <x-entities.entity-show-title-meta title="{{ $feed->name }}"></x-entities.entity-show-title-meta>
 
-    <h1>{{ $feed->name }}</h1>
-    <p class="lead mb-2 text-secondarydark">
-        {{ $feed->mediaItems->count() }} episodes
-    </p>
-    <div class="row col-12 col-xl-8">
-        <p class="lead mb-0 text-muted">
-            {{ $feed->summary }}
-        </p>
+            <div class="d-md-flex pb-5 mb-5 border-bottom">
+                <div class="flex-shrink-0">
+                    <img src="{{ $feed->entity_image_url ?? asset('images/image-placeholder-podcast.png') }}" alt="{{ $feed->name }}" class="d-none d-md-block entity-square-image mb-3">
+                </div>
+                <div class="lead ms-md-4">
+                    <p class="h4 text-body-tertiary">
+                        {{ $feed->mediaItems->count() }} episodes
+                    </p>
+                    <div class="text-body-secondary">{{ $feed->summary }}</div>
+                </div>
+            </div>
+        </div>
 
-        <ul class="list-group list-group-flush">
-            @foreach($episodes as $item)
-                <li class="list-group-item px-0 pb-4 pt-4">
-                    <a href="{{ $item->url }}" class="lead" target="_blank" rel="noopener noreferrer">
-                        {{ $item->name }}
-                    </a>
-                    <span class="d-block text-muted">
-                    {{ \Carbon\Carbon::parse($item->date)->format('M d, Y') }}
-                </span>
-                    <span class="d-block">
-                    {{ $item->summary }}
-                </span>
-                </li>
+        <div>
+            @foreach($episodes as $episode)
+                <div class="d-flex justify-content-center">
+                    <livewire:public.entities.show.podcast-widget :record="$episode" :wire:key="$episode->slug" hideSource="true" />
+                </div>
             @endforeach
-        </ul>
+
+            <div>
+                {{ $episodes->links() }}
+            </div>
+        </div>
+
+        @can('import')
+            <div class="text-uppercase small fw-bold text-secondary-emphasis mt-4">
+                <a href="{{ route('admin.datafeed.edit', $feed->id) }}" class="text-secondary-emphasis">Edit Data Feed</a>
+            </div>
+        @endcan
     </div>
-
-    {{ $episodes->links() }}
-
-    @include('discover.includes.show-end')
-
-    <style>
-        .episode-date {
-            display: inline-block;
-            min-width: 110px;
-        }
-    </style>
 
 @endsection
