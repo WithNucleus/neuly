@@ -1,25 +1,29 @@
-@extends('layouts.app')
+@extends('layouts.entity-show')
 
-@section('body-class', 'bg-light')
+@section('breadcrumbs')
+    @include('navbars.breadcrumb', [
+        'items' => [
+            'Focus' => route('discover.focus'),
+            $focus->name  => false
+        ]
+    ])
+@endsection
 
 @section('content')
 
-    @include('discover.includes.show-begin', ['full_width' => true])
+    <div class="container py-4">
 
-    	<p class="dashboard-actions-container m-2 float-right">
-            @include('members.follow.button', [
-                'followable_type' => get_class($focus),
-                'followable_id' => $focus->id,
-                'name' => $focus->name,
-            ])
-        </p>
-
-        <h1>{{ $focus->name }}</h1>
-
-        @include('discover.includes.status-messages')
+        <x-entities.entity-show-title-meta title="{{ $focus->name }}" headingClasses="max-width-780 text-success mb-2">
+            <div class="me-3">
+                @include('members.follow.button', [
+                    'followable_type' => get_class($focus),
+                    'followable_id' => $focus->id,
+                    'name' => $focus->name
+                ])
+            </div>
+        </x-entities.entity-show-title-meta>
 
         @include('discover.focus.data')
+    </div>
 
-    @include('discover.includes.show-end')
-    @include('discover.includes.limited-access-modal')
 @endsection

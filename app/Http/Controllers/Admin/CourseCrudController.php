@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\CourseRequest;
 use App\Models\Course;
+use App\Models\DataFeed;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -69,6 +70,13 @@ class CourseCrudController extends CrudController
             'name' => 'companies',
             'label' => 'Organization',
             'type' => 'relationship',
+        ]);
+
+        $this->crud->addColumn([
+            'name' => 'image',
+            'label' => 'Image',
+            'type' => 'image',
+            'prefix' => Course::getImageUrlPrefix(),
         ]);
 
         $this->crud->addColumn([
@@ -190,6 +198,16 @@ class CourseCrudController extends CrudController
             'name' => 'next_date',
             'label' => 'Next Date (optional)',
             'type' => 'date',
+        ]);
+
+        $this->crud->addField([
+            'label' => 'Image',
+            'name' => 'image',
+            'type' => 'image',
+            'upload' => true,
+            'crop' => true,
+            'aspect_ratio' => 0,
+            'prefix' => Course::getImageUrlPrefix(),
         ]);
 
         /**
