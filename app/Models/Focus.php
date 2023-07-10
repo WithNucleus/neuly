@@ -105,6 +105,11 @@ class Focus extends Model implements EntityContract
         return $this->belongsToMany(\App\Models\MediaItem::class, 'focus_media_item', 'focus_id', 'media_item_id')->where('media_type', MediaTypes::MEDIA_TYPE_PODCAST);
     }
 
+    public function videos(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(\App\Models\MediaItem::class, 'focus_media_item', 'focus_id', 'media_item_id')->where('media_type', MediaTypes::MEDIA_TYPE_VIDEO);
+    }
+
     public function patents(): \Illuminate\Database\Eloquent\Relations\MorphToMany
     {
         return $this->morphToMany(Patent::class, 'entity', 'patent_relationships')->withTimestamps();
@@ -117,7 +122,7 @@ class Focus extends Model implements EntityContract
 
     public function research(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(\App\Models\Research::class, 'focus_research', 'focus_id', 'research_id')->withTimestamps();
+        return $this->belongsToMany(Research::class, 'focus_research', 'focus_id', 'research_id');
     }
 
     /*
