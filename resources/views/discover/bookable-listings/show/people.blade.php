@@ -14,7 +14,7 @@
 
     <div class="col-12 col-lg-5 order-1 order-lg-2 mb-5 mb-lg-0">
         <div class="text-center mb-4">
-            <div class="person-photo-large mb-3" style="background-image: url('{{ ($bookableListing->image) ?? $bookableListing->bookableImage }}');"></div>
+            @include('discover.bookable-listings.show._image')
 
             @include('discover.bookable-listings.show._locations')
 

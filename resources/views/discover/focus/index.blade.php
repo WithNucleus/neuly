@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('body-class', 'page-home')
+@section('body-class', 'page-focus')
 
 @section('head')
     @livewireStyles
