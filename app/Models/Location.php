@@ -240,9 +240,14 @@ class Location extends Model implements EntityContract
     }
 
     // Each Location can have exactly one country
-    public function officialCountry()
+    public function officialCountry(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(\App\Models\Country::class, 'country', 'name');
+    }
+
+    public function locationSearches(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(LocationSearch::class);
     }
 
     /*

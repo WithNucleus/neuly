@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\User;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 
 class SearchLog extends Model
 {
     use CrudTrait;
+
+    const TYPE_NEULY_CARE = 'Neuly Care';
 
     /*
     |--------------------------------------------------------------------------
@@ -18,6 +21,9 @@ class SearchLog extends Model
     protected $table = 'search_log';
 
     protected $guarded = ['id'];
+    protected $casts = [
+        'data' => 'array'
+    ];
 
     /*
     |--------------------------------------------------------------------------
@@ -30,6 +36,16 @@ class SearchLog extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+    /* RELATIONSHIPS */
+    public function location(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Location::class);
+    }
+
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 
     /*
     |--------------------------------------------------------------------------

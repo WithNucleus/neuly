@@ -5,16 +5,14 @@
 @endif
 
     @csrf
-    <div class="form-group row">
-        <div class="col-12">
-            <label for="name" class="font-weight-bold">List Name</label>
-            <input type="text" class="form-control" name="name" placeholder="List Name" required>
-            <div class="alert alert-danger mt-2 mb-2 js-error-block" style="display: none;"></div>
-        </div>
+    <div class="form-group mb-3">
+        <label for="name" class="fw-bold">List Name</label>
+        <input type="text" class="form-control" id="name" name="name" placeholder="List Name" required>
+        <div class="text-danger fw-bold text-uppercase mt-2 js-error-block" style="display: none;"></div>
     </div>
 
-    <div class="form-group">
-        <label for="public" class="font-weight-bold">Visibility</label>
+    <div class="form-group mb-3">
+        <label for="public" class="fw-bold">Visibility</label>
         <div>
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="is_public" id="private" value="0" checked>
@@ -27,9 +25,9 @@
         </div>
     </div>
 
-    <div class="form-group">
-        <label for="description" class="font-weight-bold">Description</label>
-        <textarea class="form-control" name="description" placeholder="Description"></textarea>
+    <div class="form-group mb-3">
+        <label for="description" class="fw-bold">Description</label>
+        <textarea class="form-control" id="description" name="description" placeholder="Description"></textarea>
     </div>
 
     <div class="form-group mb-0 mt-2">
@@ -58,7 +56,7 @@ $(document).on('click', '.js-submit-follow-list-btn', function (e) {
         } else {
             errorBlock.empty();
             $.each(response.errors, function( i, value ) {
-                errorBlock.append('<p>' + value + '</p>');
+                errorBlock.append('<span>' + value + '</span>');
                 errorBlock.show();
             });
         }

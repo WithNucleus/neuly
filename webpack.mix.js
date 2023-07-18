@@ -35,7 +35,10 @@ mix
 mix
 	.sass('resources/sass/app.scss', 'public/css')
     .sass('resources/sass/index-qm.scss', 'public/css')
-    .sass('resources/sass/backpack-custom.scss', 'public/css');
+    .sass('resources/sass/backpack-custom.scss', 'public/css')
+    .sass('resources/sass/choices.scss', 'public/css')
+    .sass('resources/sass/nav-tiles.scss', 'public/css')
+    .sass('resources/sass/enterprise-dashboard.scss', 'public/css');
 // mix
 // 	.sass('resources/sass/app.scss', 'public/css')
 // 	.sass('resources/sass/index-qm.scss', 'public/css')

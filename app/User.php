@@ -6,6 +6,7 @@ use App\Models\BookableListing;
 use App\Models\BookableListingRequest;
 use App\Models\Dashboard;
 use App\Models\FollowList;
+use App\Models\LocationSearch;
 use App\Models\Person;
 use App\Models\RaisedClaim;
 use App\Models\Team;
@@ -121,5 +122,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function dashboards(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Dashboard::class);
+    }
+
+    public function locationSearches(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(LocationSearch::class);
     }
 }

@@ -19,25 +19,24 @@
 
                         <form action="{{ route('user.settings.email') }}" method="post" class="needs-validation" novalidate>
                             @csrf
-                            <div class="form-group">
-                                <label for="new_email" class="font-weight-bold">Current Email</label>
-                                <p>{{ $currentEmail }}</p>
+                            <div class="form-group mb-3">
+                                <strong>Current Email:</strong> {{ $currentEmail }}
                             </div>
-                            <div class="form-group">
+                            <div class="form-group mb-3">
                                 <label for="new_email" class="font-weight-bold">New Email</label>
                                 <input type="email" class="form-control" name="new_email" placeholder="Enter your new email" required>
                                 <div class="invalid-feedback">
                                     Please enter your new email.
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group mb-3">
                                 <label for="new_email_confirmation" class="font-weight-bold">New Email Confirmation</label>
                                 <input type="email" class="form-control" name="new_email_confirmation" placeholder="Confirm your new email" required>
                                 <div class="invalid-feedback">
                                     Please confirm your new email.
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group mb-3">
                                 <label for="password" class="font-weight-bold">Current Password</label>
                                 <input type="password" class="form-control" name="password" placeholder="Confirm your email change with your current password" required>
                                 <div class="invalid-feedback">

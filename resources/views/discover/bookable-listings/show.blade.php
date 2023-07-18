@@ -1,20 +1,25 @@
-@extends('layouts.app')
+@extends('layouts.entity-show')
 
-@section('body-class', 'bg-light')
+@section('breadcrumbs')
+    @include('navbars.breadcrumb', [
+        'items' => [
+            'Find a Care Provider' => route('discover.bookable-listing.practitioners'),
+            $bookableListing->name  => false
+        ]
+    ])
+@endsection
 
 @section('content')
 
-    @include('discover.includes.show-begin', ['full_width' => false])
+    <div class="container py-4">
 
-    @if($bookableListing->status == \App\Models\BookableListing::STATUS_PENDING)
-        <div class="alert alert-warning">This listing is pending. We'll review it as soon as possible to include in our care provider directory.</div>
-    @endif
+        <x-entities.entity-show-title-meta title="{{ $bookableListing->name }}" headingClasses="max-width-780 text-success mb-2" />
 
-    <h1>{{ $bookableListing->bookable->name }}</h1>
+        @if($bookableListing->status == \App\Models\BookableListing::STATUS_PENDING)
+            <div class="alert alert-warning">This listing is pending. We'll review it as soon as possible to include in our care provider directory.</div>
+        @endif
 
-    @include('discover.bookable-listings.show.' . $bookableEntity)
-
-    @include('discover.includes.show-end')
-    @include('discover.includes.limited-access-modal')
+        @include('discover.bookable-listings.show.' . $bookableEntity)
+    </div>
 
 @endsection

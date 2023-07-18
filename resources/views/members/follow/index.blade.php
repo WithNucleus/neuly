@@ -1,35 +1,29 @@
-@extends('layouts.app')
+@extends('layouts.entity-show')
 
-@section('body-class', 'bg-light')
+@section('breadcrumbs')
+    @include('navbars.breadcrumb', [
+        'items' => [
+            'Dashboard' => route('member.dashboard'),
+            'Following'  => false
+        ]
+    ])
+@endsection
 
 @section('content')
 
-    @include('members.includes.dashboard-begin')
+    <div class="container my-4">
+        <h1>Following</h1>
 
-    <div class="container">
-        <div class="row">
-            <div class="col-12 clearfix">
-                <h1 class="h2 float-left">
-                    <i class="fad fa-star text-info"></i> Following
-                </h1>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                @include('members.includes.status-messages')
+        @include('members.includes.status-messages')
 
-                <div class="p-4 bg-white shadow-sm">
-                    @include('members.data.follows', [
-                        'shadow' => false,
-                        'show_more' => false,
-                        'show_list_name' => true,
-                        'show_action_items' => true
-                    ])
-                </div>
-            </div>
+        <div>
+            @include('members.data.follows', [
+                'shadow' => false,
+                'show_more' => false,
+                'show_list_name' => true,
+                'show_action_items' => true
+            ])
         </div>
     </div>
-
-    @include('members.includes.dashboard-end')
 
 @endsection

@@ -1,15 +1,7 @@
 @import 'variables';
 
 .enterprise-dashboard-container {
-    padding-top: 70px;
-    padding-right: 2.5rem;
-    padding-bottom: 3rem;
-}
 
-@media (min-width: 1500px) {
-    .enterprise-dashboard-container {
-        padding-left: 2.5rem;
-    }
 }
 
 .enterprise-dashboard-controls {
@@ -509,7 +501,21 @@
     }
 
     .table {
-        color: $gray-500;
+        --bs-table-color-type: initial;
+        --bs-table-bg-type: initial;
+        --bs-table-color-state: initial;
+        --bs-table-bg-state: initial;
+        --bs-table-color: $gray-500;
+        --bs-table-bg: $gray-900;
+        --bs-table-border-color: $gray-900;
+        --bs-table-accent-bg: transparent;
+        --bs-table-striped-color: $gray-900;
+        --bs-table-striped-bg: $gray-900;
+        --bs-table-active-color: $gray-500;
+        --bs-table-active-bg: $gray-900;
+        --bs-table-hover-color: $gray-500;
+        --bs-table-hover-bg: $gray-900;
+        border-color: $gray-900;
     }
 
     .custom-select {
