@@ -10,6 +10,7 @@ use App\Models\BookableListing;
 use App\Models\Focus;
 use App\Models\Location;
 use App\Models\SearchLog;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
@@ -48,10 +49,10 @@ class BookableListingsIndex extends Component
         'id' => null
     ];
 
-    public function mount() {
+    public function mount(Request $request) {
 
-        // $this->ip = $request->getClientIp(); // PRODUCTION
-        $this->ip = '207.46.13.74'; // TEST - Chicago
+         $this->ip = $request->getClientIp(); // PRODUCTION
+//        $this->ip = '207.46.13.74'; // TEST - Chicago
 
         $this->getLocalLocation();
 
