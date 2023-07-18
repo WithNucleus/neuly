@@ -20,21 +20,21 @@
 
                         <form action="{{ route('user.settings.password') }}" method="post" class="needs-validation" novalidate>
                             @csrf
-                            <div class="form-group">
+                            <div class="form-group mb-3">
                                 <label for="new_password" class="font-weight-bold">New Password</label>
                                 <input type="password" class="form-control" name="new_password" placeholder="Enter your new password" required>
                                 <div class="invalid-feedback">
                                     Please enter your new password.
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group mb-3">
                                 <label for="new_password_confirmation" class="font-weight-bold">New Password Confirmation</label>
                                 <input type="password" class="form-control" name="new_password_confirmation" placeholder="Confirm your new password" required>
                                 <div class="invalid-feedback">
                                     Please confirm your new password.
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group mb-3">
                                 <label for="password" class="font-weight-bold">Current Password</label>
                                 <input type="password" class="form-control" name="password" placeholder="Confirm your password change with your current password" required>
                                 <div class="invalid-feedback">

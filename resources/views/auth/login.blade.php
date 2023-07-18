@@ -1,6 +1,6 @@
 @extends('layouts.plain')
 
-@section('body-class', 'home-hero')
+@section('body-class', 'plain-layout')
 
 @section('content')
 

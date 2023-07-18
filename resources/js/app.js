@@ -15,6 +15,17 @@ let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
     return new bootstrap.Tooltip(tooltipTriggerEl)
 });
 
+/* Confirm */
+let confirmationButtons = document.querySelectorAll('.confirm-action');
+
+confirmationButtons.forEach(button => {
+    button.addEventListener('click', function(event) {
+        if (confirm("Are you sure?") !== true) {
+            event.preventDefault();
+        }
+    });
+});
+
 $.ajaxSetup({
     headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

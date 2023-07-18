@@ -1,6 +1,7 @@
 <h1 class="h2">
-    <span class="text-dark"><i class="fad fa-clock text-secondary"></i> Recently Viewed</span>
+    <i class="fa-sharp fa-solid fa-clock text-accent"></i>
+    <span>Recently Viewed</span>
 </h1>
-<div class="p-4 bg-white shadow-sm">
+<div>
     @include('members.data.recently-viewed', ['shadow' => false, 'show_more' => false])
 </div>

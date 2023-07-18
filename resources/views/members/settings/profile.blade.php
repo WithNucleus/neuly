@@ -9,7 +9,7 @@
     <div class="container">
         <main id="content-main" role="main" class="col-12">
             <div class="row">
-                <div class="col-12 col-xl-10 mx-auto bg-white p-4 shadow-sm">
+                <div class="col-12 col-xl-10 mx-auto bg-white p-4">
 
                     <h1 class="page-title-default text-primary mb-4">Account Settings</h1>
 
@@ -28,7 +28,7 @@
 
                         <form id="user-profile" action="{{ route('user.settings') }}" method="post" class="needs-validation" novalidate>
                             @csrf
-                            <div class="form-group row">
+                            <div class="form-group row mb-3">
                                 <div class="col-12 col-md-6 mb-3 mb-md-0">
                                     <label for="new_name" class="font-weight-bold">First Name</label>
                                     <input type="text" class="form-control" name="new_name" value="{{ $user->name }}" required>
@@ -45,7 +45,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group mb-3">
                                 <label for="member_url" class="font-weight-bold">Member URL</label>
                                 <div class="input-group mb-2">
                                     <div class="input-group-prepend">

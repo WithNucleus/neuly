@@ -10,7 +10,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <div class="ms-lg-3 me-auto my-3 my-lg-0">
                 <form class="d-flex" role="search">
-                    <input class="form-control me-2 border-primary-subtle" type="search" placeholder="Search" aria-label="Search">
+                    <input id="primary-search-box" class="form-control me-2 border-primary-subtle" type="search" placeholder="Search" aria-label="Search">
                     <button class="btn text-primary rounded-0 px-2" type="submit" aria-label="Search">
                         <i class="far fa-search"></i>
                     </button>
@@ -60,7 +60,11 @@
                 </li>
                 @auth
                     <li class="nav-item me-xl-3 d-lg-none d-xl-block">
-                        <a href="" class="nav-link">Dashboard</a>
+                        @can('enterprise demo')
+                            <a href="{{ route('enterprise.dashboard') }}" class="nav-link">Dashboard</a>
+                        @else
+                            <a href="{{ route('member.dashboard') }}" class="nav-link">Dashboard</a>
+                        @endcan
                     </li>
                     <li class="nav-item dropdown me-xl-3">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">

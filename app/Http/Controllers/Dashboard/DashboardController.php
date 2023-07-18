@@ -24,9 +24,9 @@ class DashboardController extends Controller
     ];
 
     // Member Dashboard Page
-    public function index()
+    public function index(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        $user = auth()->user();
+        $user = Auth::user();
         $widgetsOrder = $this->defaultWidgetsOrder;
 
         if ($user->dashboard_widgets_order !== null) {
