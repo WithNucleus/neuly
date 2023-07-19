@@ -104,6 +104,11 @@ class DataFeed extends Model
         return $this->morphMany(MediaItem::class, 'source')->podcasts()->orderBy('date', 'desc');
     }
 
+    public function articles(): \Illuminate\Database\Eloquent\Relations\MorphMany
+    {
+        return $this->morphMany(MediaItem::class, 'source')->articles()->orderBy('date', 'desc');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES

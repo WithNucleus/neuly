@@ -3,40 +3,49 @@
 namespace App\Http\Controllers\Content;
 
 use App\Http\Controllers\Controller;
-use App\Models\Clinicaltrial;
-use App\Models\Event;
-use App\Models\Job;
+use App\Models\Course;
 use App\Models\MediaItem;
-use App\Services\Metas;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-
-    // Homepage
-    public function index(Request $request)
+    public function index(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        $latest_events = Event::where('start_date', '>=', Carbon::now('America/Chicago'))
-            ->orderBy('start_date', 'asc')
-            ->take(3)
-            ->get();
-        $jobs = Job::where('status', Job::STATUS_OPEN)->orderBy('posted_date', 'desc')->take(3)->get();
-        $news_articles = MediaItem::news()->public()->orderBy('date', 'desc')->take(3)->get();
-        $metas = Metas::fromPage($request->path());
-        $count_recruiting_trials = Clinicaltrial::where('status', 'Recruiting')->count();
+        $investors = [
+            [
+                'name' => 'Dustin Robinson',
+                'title' => 'Investor',
+                'image' => 'investor-dustin.jpg'
+            ],
+            [
+                'name' => 'Dustin Robinson',
+                'title' => 'Investor',
+                'image' => 'investor-dustin.jpg'
+            ],
+            [
+                'name' => 'Dustin Robinson',
+                'title' => 'Investor',
+                'image' => 'investor-dustin.jpg'
+            ],
+            [
+                'name' => 'Dustin Robinson',
+                'title' => 'Investor',
+                'image' => 'investor-dustin.jpg'
+            ],
+            [
+                'name' => 'Dustin Robinson',
+                'title' => 'Investor',
+                'image' => 'investor-dustin.jpg'
+            ]
+        ];
 
-        return view('content.homepage.index', compact(
-            'count_recruiting_trials',
-            'latest_events',
-            'jobs',
-            'news_articles',
-            'metas'
-        ));
+        $articles = MediaItem::articles()->orderByDesc('date')->take(6)->get();
+        $courses = Course::whereHas('focus')->take(8)->get();
+
+        return view('content.home.index', [
+            'investors' => $investors,
+            'articles' => $articles,
+            'courses' => $courses
+        ]);
     }
 }

@@ -8,7 +8,6 @@ use App\Http\Livewire\DataTable\WithPerPagePagination;
 use App\Http\Livewire\DataTable\WithSorting;
 use App\Models\BookableListing;
 use App\Models\Focus;
-use App\Models\Location;
 use App\Models\SearchLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;

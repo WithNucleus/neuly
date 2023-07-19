@@ -212,6 +212,16 @@ svg#neulyLogo {
     cursor: pointer;
 }
 
+.card-hover-drop {
+    display: block;
+    text-decoration: none;
+    transition: transform .2s ease-in-out;
+}
+
+.card-hover-drop:hover {
+    transform: translateY(2px);
+}
+
 // Pagination
 ul.pagination {
     flex-wrap: wrap;
@@ -227,6 +237,11 @@ ul.pagination {
     border-radius: 2.75rem;
     padding: .25rem 1.5rem;
     font-size: $font-size-base * 1.1;
+}
+
+.btn-cta.btn-lg {
+    padding: .75rem 2rem;
+    font-size: $font-size-base * 1.25;
 }
 
 // Links & Text Effects
@@ -269,7 +284,17 @@ h5, .h5 {
     text-transform: none;
 }
 
+.text-small {
+    font-size: $font-size-base * .9;
+}
+
 // Images
+img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+}
+
 .logo-is-contained,
 .logo-square-is-contained {
     height: 150px;
@@ -312,9 +337,13 @@ h5, .h5 {
     }
 }
 
-.img-height-30 {
-    height: 30px;
-    width: auto;
+$img-heights: 30 80 120;
+
+@each $size in $img-heights {
+    .img-height-#{$size} {
+        height: #{$size}px;
+        width: auto;
+    }
 }
 
 .book-image {
@@ -381,7 +410,7 @@ h5, .h5 {
 }
 
 // Max Widths
-$max-widths: 60 200 250 300 400 780 1000;
+$max-widths: 60 200 250 300 400 600 740 780 1000;
 
 @each $size in $max-widths {
     .max-width-#{$size} {
@@ -424,5 +453,116 @@ svg#neulyCareLogo {
 
     input[type="number"] {
         max-width: 100px;
+    }
+}
+
+/* ----------
+    Homepage
+------------- */
+// Section Spacing
+.home-hero,
+.home-clinical-research,
+.home-neuly-care {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+
+    h1,
+    h2 {
+        text-transform: none;
+    }
+
+    @media (min-width: 1024px) {
+        padding-top: 8rem;
+        padding-bottom: 8rem;
+    }
+}
+
+.home-news,
+.home-explore,
+.home-courses {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+
+    h1 {
+        text-transform: none;
+    }
+
+    @media (min-width: 1024px) {
+        padding-top: 4rem;
+        padding-bottom: 4rem;
+    }
+}
+
+.home-hero {
+    .email-optin {
+        max-width: 400px;
+
+        @media (min-width: 1024px) {
+            max-width: 480px;
+        }
+
+        .form-control {
+            border-radius: 2.75rem;
+            padding: .5rem 1.5rem;
+            font-size: $font-size-base * 1.1;
+        }
+
+        .btn {
+            border-radius: 2.75rem;
+            margin-left: -2.75rem;
+            padding: .5rem 1.5rem;
+            text-transform: none;
+            font-weight: 500;
+            color: $gray-100;
+        }
+    }
+}
+
+[data-bs-theme=dark] {
+    .home-hero .email-optin .form-control {
+        border-color: $gray-300;
+        color: $gray-100;
+    }
+}
+
+@media (min-width: 1024px) {
+    .home-hero h1 {
+        font-size: 6.25rem;
+    }
+
+    .home-clinical-research h2,
+    .home-neuly-care h2 {
+        font-size: 4.5rem;
+    }
+}
+
+// Footer
+footer {
+    a {
+        text-decoration: none;
+    }
+
+    svg#neulyLogo {
+        .text {
+            fill: $gray-900;
+        }
+    }
+}
+
+[data-bs-theme=dark] {
+    footer {
+        svg#neulyLogo {
+            .text {
+                fill: $white;
+            }
+        }
+
+        a {
+            color: $gray-500;
+        }
+
+        a:hover {
+            color: $gray-200;
+        }
     }
 }
