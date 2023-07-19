@@ -137,6 +137,7 @@ Route::middleware('verifiedIfAuthorized')->group(function () {
 
     // News Articles
     Route::get('/news', [App\Http\Controllers\Index\DataFeeds\NewsController::class, 'index'])->name('discover.news');
+    Route::get('/articles', [App\Http\Controllers\Index\DataFeeds\NewsController::class, 'articles'])->name('discover.articles');
 
     // Listing Requests
     Route::get('/listing', [App\Http\Controllers\Index\ListingRequestController::class, 'index'])->name('listing');

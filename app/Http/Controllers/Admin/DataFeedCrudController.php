@@ -222,7 +222,7 @@ class DataFeedCrudController extends CrudController
             'type' => 'image',
             'upload' => true,
             'crop' => true,
-            'aspect_ratio' => 0,
+            'aspect_ratio' => 1,
             'prefix' => DataFeed::getImageUrlPrefix(),
         ]);
 

@@ -262,6 +262,11 @@ class Person extends Model implements EntityContract, EntityImageContract
         return $this->morphToMany(MediaItem::class, 'entity', 'media_item_relationships')->where('media_type', MediaTypes::MEDIA_TYPE_NEWS)->withTimestamps();
     }
 
+    public function articles(): \Illuminate\Database\Eloquent\Relations\MorphToMany
+    {
+        return $this->morphToMany(MediaItem::class, 'entity', 'media_item_relationships')->where('media_type', MediaTypes::MEDIA_TYPE_ARTICLE)->withTimestamps();
+    }
+
     public function podcasts(): \Illuminate\Database\Eloquent\Relations\MorphToMany
     {
         return $this->morphToMany(MediaItem::class, 'entity', 'media_item_relationships')->where('media_type', MediaTypes::MEDIA_TYPE_PODCAST)->withTimestamps();

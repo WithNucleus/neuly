@@ -55,6 +55,10 @@ trait HasMediaTypes
         $query->where('media_type', MediaTypes::MEDIA_TYPE_NEWS);
     }
 
+    public function scopeNewsArticles($query) {
+        $query->where('media_type', MediaTypes::MEDIA_TYPE_NEWS)->orWhere('media_type', MediaTypes::MEDIA_TYPE_ARTICLE);
+    }
+
     public function scopePatentFilings($query)
     {
         $query->where('media_type', MediaTypes::MEDIA_TYPE_PATENT_FILING);

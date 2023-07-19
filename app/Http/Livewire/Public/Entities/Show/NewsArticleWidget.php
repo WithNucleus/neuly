@@ -8,7 +8,7 @@ use App\Models\MediaItem;
 use App\Models\Person;
 use Livewire\Component;
 
-class NewsWidget extends Component
+class NewsArticleWidget extends Component
 {
     public MediaItem $record;
     public bool $error = false;
@@ -40,8 +40,8 @@ class NewsWidget extends Component
 
     public function saveOrganization($id) {
         $this->record->companies()->syncWithoutDetaching($id);
-        $this->reset('personSearch');
-        $this->reset('peopleList');
+        $this->reset('organizationSearch');
+        $this->reset('organizationsList');
     }
 
     public function updatedPersonSearch() {
@@ -68,7 +68,7 @@ class NewsWidget extends Component
 
     public function render()
     {
-        return view('livewire.public.entities.show.news-widget', [
+        return view('livewire.public.entities.show.news-article-widget', [
             'tags' => Focus::drugs()->orderBy('name')->get(),
             'organizations' => Company::public()->orderBy('name')->get(),
         ]);

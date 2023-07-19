@@ -3,11 +3,24 @@
         <x-entities.offcanvas-sidebar>
             <h3 class="d-none d-lg-block mb-4 text-body-emphasis">Filters</h3>
 
-            <x-livewire-filters.search label="Search news" placeholder="Search" search="{{ $search }}" tooltip="Search by keyword, organization, person..." />
+            <x-livewire-filters.search label="Search articles" placeholder="Search" search="{{ $search }}" tooltip="Search by keyword, organization, person..." />
 
             <div class="my-4">
                 <h4 class="h5 text-body-emphasis">Focus</h4>
-                <x-livewire-filters.checkbox-multiple-with-count wireModel="filters.focus" id="filter-focus" :options="$focusOptions" :currentFilters="$filters['focus']" countName="news_count" />
+                <x-livewire-filters.checkbox-multiple-with-count wireModel="filters.focus" id="filter-focus" :options="$focusOptions" :currentFilters="$filters['focus']" countName="articles_count" />
+            </div>
+
+            <div class="my-4">
+                <h4 class="h5 text-body-emphasis">Publisher</h4>
+                <x-livewire-filters.faux-multi-select
+                    wireModelSearch="sourceSearch"
+                    wireModelFilter="filters.sources"
+                    label="Search people"
+                    checkboxIdPrefix="filter-source"
+                    setFilterFunction="setSourceFilter"
+                    :searchResults="$sourceSearchResults"
+                    :currentFilters="$filters['sources']"
+                />
             </div>
 
             <div class="my-4">
@@ -44,9 +57,9 @@
     <div class="entity-index-listings w-100">
         <div class="row">
             <div class="col-12 d-md-flex justify-content-between align-items-end">
-                <h1 class="me-4 mb-md-0 text-body-emphasis">News</h1>
+                <h1 class="me-4 mb-md-0 text-body-emphasis">Articles</h1>
                 <div class="lead">
-                    {{ $records->total() }} News Articles
+                    {{ $records->total() }} Articles
                 </div>
             </div>
             <div class="col-12 my-3">
@@ -63,7 +76,7 @@
             @empty
                 <div wire:key="empty" class="w-100">
                     <p class="lead mb-0">
-                        No new articles match your search criteria.
+                        No articles match your search criteria.
                     </p>
                 </div>
             @endforelse

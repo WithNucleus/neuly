@@ -135,6 +135,11 @@ class Course extends Model
         return nl2br(e($this->summary));
     }
 
+    public function getVeryShortSummaryAttribute(): string
+    {
+        return Str::words($this->summary, 15);
+    }
+
     public function getShortSummaryAttribute(): string
     {
         return Str::words($this->summary, 40);
