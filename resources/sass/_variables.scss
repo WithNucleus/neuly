@@ -17,6 +17,7 @@ $neulyIndigo:  #454a91;
 //$neulyGreen: #176f55; // darker
 $neulyGreen: #1d8c6b; // brighter
 $neulyGreenBright: #28b98e;
+$neulyDarkIndigo: #10093D;
 
 // scss-docs-start gray-color-variables
 $white:    #fff !default;
@@ -65,7 +66,7 @@ $cyan:    #0dcaf0 !default;
 $colors: (
   "blue":       $blue,
   "indigo":     $neulyIndigo,
-  "purple":     $purple,
+  "purple":     $neulyDarkIndigo,
   "pink":       $pink,
   "red":        $red,
   "orange":     $orange,
@@ -91,6 +92,7 @@ $color-contrast-light:     $white !default;
 // scss-docs-start theme-color-variables
 $primary:       $neulyIndigo;
 $secondary:     $gray-600 !default;
+$tertiary:      $neulyDarkIndigo;
 $success:       $neulyGreen;
 $info:          $cyan !default;
 $warning:       $yellow !default;
@@ -103,6 +105,7 @@ $dark:          $gray-900 !default;
 $theme-colors: (
   "primary":    $primary,
   "secondary":  $secondary,
+  "tertiary":   $tertiary,
   "accent":     $teal,
   "success":    $success,
   "info":       $info,
@@ -110,7 +113,7 @@ $theme-colors: (
   "danger":     $danger,
   "light":      $light,
   "dark":       $dark
-) !default;
+);
 // scss-docs-end theme-colors-map
 
 // Breakpoints

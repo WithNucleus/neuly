@@ -1,7 +1,18 @@
-<div class="bg-body">
-    <div class="container-fluid home-explore text-center">
-        <img src="{{ asset('images/home/brain-healthy.png') }}" alt="Become Brain Healthy with Neuly" class="max-width-1000 mb-5 mx-auto">
-        <div class="pt-5">
+<div class="home-explore bg-body">
+    <div class="container-fluid text-center">
+        <div class="position-relative max-width-1000 mx-auto">
+            <div class="rounded-4 bg-accent px-4 py-4 pb-0 d-flex flex-column flex-lg-row">
+                <div class="healthy-doctor-text">
+                    <h3 class="h2 text-tertiary">Become 'Brain Healthy'</h3>
+                    <p class="text-dark">We're creating a world where every human can be more well through stronger access to critical health data.</p>
+                    <a href="{{ route('register') }}" class="btn btn-light btn-cta text-transform-none">Register for Neuly</a>
+                </div>
+                <div class="healthy-doctor-image">
+                    <img src="{{ asset('images/home/brain-healthy-doctors.png') }}" alt="Become 'brain healthy' with Neuly">
+                </div>
+            </div>
+        </div>
+        <div class="mt-5 pt-5">
             <h2 class="h1 text-body-emphasis">Explore Our Content</h2>
             <div class="d-flex flex-wrap justify-content-center">
                 <div class="max-width-300 bg-body-secondary p-3 rounded text-start m-3">

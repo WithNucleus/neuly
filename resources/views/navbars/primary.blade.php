@@ -11,12 +11,12 @@
             <div class="ms-lg-3 me-auto my-3 my-lg-0">
                 <form class="d-flex" role="search">
                     <input id="primary-search-box" class="form-control me-2 border-primary-subtle" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn text-primary rounded-0 px-2" type="submit" aria-label="Search">
+                    <button class="btn text-white rounded-0 px-2" type="submit" aria-label="Search">
                         <i class="far fa-search"></i>
                     </button>
                 </form>
             </div>
-            <ul class="navbar-nav ms-auto me-0 align-items-center">
+            <ul class="navbar-nav ms-auto me-0 align-items-lg-center">
                 <li class="nav-item me-xl-3">
                     <a class="nav-link" href="#">Why Neuly</a>
                 </li>

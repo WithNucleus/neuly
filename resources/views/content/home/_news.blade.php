@@ -1,5 +1,5 @@
-<div class="bg-body-secondary">
-    <div class="container home-news text-center">
+<div class="home-news bg-body-secondary">
+    <div class="container text-center">
         <h2 class="h1 text-body-emphasis">From News to Neuly</h2>
         <div class="row" data-masonry='{"percentPosition": true }'>
             @foreach($articles as  $article)
