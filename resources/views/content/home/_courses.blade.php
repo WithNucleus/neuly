@@ -1,5 +1,5 @@
-<div class="bg-body-secondary">
-    <div class="container home-courses text-center">
+<div class="home-courses bg-body-secondary">
+    <div class="container text-center">
         <h2 class="h1 text-body-emphasis max-width-740 mx-auto">Industry Courses That Can Launch Your Career</h2>
         <p class="lead max-width-600 mx-auto mb-5">Psychedelic-assisted therapy is slated to help millions. Therapists and sitters are needed.</p>
         <div class="row" data-masonry='{"percentPosition": true }'>
