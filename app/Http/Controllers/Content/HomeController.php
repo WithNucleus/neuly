@@ -15,27 +15,27 @@ class HomeController extends Controller
             [
                 'name' => 'Dustin Robinson',
                 'title' => 'Investor',
-                'image' => 'investor-dustin.jpg'
+                'image' => 'dustin-robinson.jpg'
             ],
             [
-                'name' => 'Dustin Robinson',
-                'title' => 'Investor',
-                'image' => 'investor-dustin.jpg'
+                'name' => 'Michelle Weiner',
+                'title' => 'Therapist',
+                'image' => 'michelle-weiner.jpg'
             ],
             [
-                'name' => 'Dustin Robinson',
-                'title' => 'Investor',
-                'image' => 'investor-dustin.jpg'
+                'name' => 'Josh Hardman',
+                'title' => 'Researcher',
+                'image' => 'josh-hardman.jpg'
             ],
             [
-                'name' => 'Dustin Robinson',
-                'title' => 'Investor',
-                'image' => 'investor-dustin.jpg'
+                'name' => 'Damien Kettlewell',
+                'title' => 'Founder',
+                'image' => 'damien-kettlewell.jpg'
             ],
             [
-                'name' => 'Dustin Robinson',
-                'title' => 'Investor',
-                'image' => 'investor-dustin.jpg'
+                'name' => 'Christian Gray',
+                'title' => 'Consultant',
+                'image' => 'christian-gray.jpg'
             ]
         ];
 
