@@ -2,10 +2,10 @@
 
 namespace App\Http\Livewire\Public\Entities;
 
-use App\Http\Livewire\DataTable\WithBulkActions;
-use App\Http\Livewire\DataTable\WithCachedRows;
-use App\Http\Livewire\DataTable\WithPerPagePagination;
-use App\Http\Livewire\DataTable\WithSorting;
+use App\Http\Livewire\Traits\WithBulkActions;
+use App\Http\Livewire\Traits\WithCachedRows;
+use App\Http\Livewire\Traits\WithPerPagePagination;
+use App\Http\Livewire\Traits\WithSorting;
 use App\Http\Livewire\Public\Entities\Traits\HasLocationFilter;
 use App\Models\Company;
 use App\Models\Focus;

@@ -409,8 +409,13 @@ $img-heights: 30 80 120;
     }
 }
 
+// Alerts
+.alert *:last-of-type {
+    margin-bottom: 0;
+}
+
 // Max Widths
-$max-widths: 60 200 250 300 400 500 600 740 780 1000;
+$max-widths: 60 200 250 300 400 500 600 740 780 840 1000;
 
 @each $size in $max-widths {
     .max-width-#{$size} {

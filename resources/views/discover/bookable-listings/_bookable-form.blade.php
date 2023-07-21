@@ -1,4 +1,4 @@
-<div class="bookable-form-container">
+<div class="bookable-form-container bg-body-secondary">
     <h2 class="h3 text-success mb-3">Book with {{ $bookableListing->bookable->name }}</h2>
     <div class="text-left">
         @include('discover.includes.status-messages')

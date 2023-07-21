@@ -82,7 +82,7 @@ class RegisterController extends Controller
             'last_name' => $data['last_name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'registration_code' => $data['registration_code']
+            'registration_code' => $data['registration_code'] ?? NULL
         ])->assignRole($data['role']);
 
         //registered as team

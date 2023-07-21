@@ -6,7 +6,6 @@ use App\Models\BookableListing;
 use App\Models\BookableListingRequest;
 use App\Models\Dashboard;
 use App\Models\FollowList;
-use App\Models\LocationSearch;
 use App\Models\Person;
 use App\Models\RaisedClaim;
 use App\Models\Team;
