@@ -135,6 +135,8 @@
     <script src="https://cdn.amcharts.com/lib/4/plugins/overlapBuster.js"></script>
     @endif
 
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js" integrity="sha256-lSjKY0/srUM9BE3dPm+c4fBo1dky2v27Gdjm2uoZaL0=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{{ mix('css/enterprise-dashboard.css') }}">
     <script src="https://unpkg.com/packery@2/dist/packery.pkgd.js"></script>
     <script src="https://unpkg.com/draggabilly@2/dist/draggabilly.pkgd.js"></script>

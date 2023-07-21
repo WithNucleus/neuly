@@ -25,7 +25,6 @@
 
 @section('livewire_scripts')
     <script src="https://unpkg.com/alpinejs" defer></script>
-    @livewireScripts
     <script>
         let directoryElement = document.querySelector('.entity-index-listings');
         let directoryTop = directoryElement.offsetTop - 100;

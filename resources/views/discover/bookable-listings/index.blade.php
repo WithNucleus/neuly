@@ -22,7 +22,6 @@
         </div>
 
         <div id="neuly-care-listings" class="container">
-{{--            <livewire:public.entities.neuly-care />--}}
             <livewire:public.entities.bookable-listings-index />
         </div>
 
@@ -31,7 +30,6 @@
 
 @section('livewire_scripts')
     <script src="https://unpkg.com/alpinejs" defer></script>
-    @livewireScripts
     <script>
         Livewire.on('gotoTop', () => {
             document.querySelector('#neuly-care-listings').scrollIntoView()
