@@ -16,6 +16,7 @@ use App\Notifications\PersonDeletionRequested;
 use App\Notifications\RaisedClaimCreated;
 use App\Repositories\FollowRepository;
 use App\Services\Metas;
+use App\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -59,6 +60,8 @@ class PersonController extends Controller
             ])
             ->firstOrFail();
 
+        $userIsPerson = (Auth::id() === $person->user_id);
+
         $preview = $request->input('preview');
         // Check Visibility
         $previewResult = PagePreviewHelper::checkEntityPreview($request, $person);
@@ -95,7 +98,7 @@ class PersonController extends Controller
             })
             ->log($person->name);
 
-        return view('discover.people.show', compact('person', 'metas', 'entity', 'isFollowed', 'isVerified', 'preview'));
+        return view('discover.people.show', compact('person', 'metas', 'entity', 'isFollowed', 'isVerified', 'preview', 'userIsPerson'));
     }
 
     public function namesJson()

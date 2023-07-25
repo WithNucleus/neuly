@@ -321,26 +321,26 @@ Route::middleware('auth', 'verifiedIfAuthorized')->group(function () {
     Route::get('/user/settings/oauth', [App\Http\Controllers\Index\UserOauthController::class, 'index'])->name('user.settings.oauth');
     Route::post('/user/settings/oauth/{clientId}/disconnect', [App\Http\Controllers\Index\UserOauthController::class, 'disconnectClient'])->name('user.settings.oauth.disconnectClient');
 
-    Route::get('/user/person/status', [App\Http\Controllers\Index\UserClaimPersonController::class, 'status'])->name('user.person.status');
-    Route::get('/user/person/verify/email', [App\Http\Controllers\Index\UserClaimPersonController::class, 'verifyEmail'])->name('user.person.verify.email');
-    Route::get('/user/person/verify/email/send', [App\Http\Controllers\Index\UserClaimPersonController::class, 'sendVerificationMail'])->name('user.person.verify.email.send');
-    Route::get('/user/person/verify/email/{token}', [App\Http\Controllers\Index\UserClaimPersonController::class, 'verifyClaimByEmail'])->name('user.person.verify.email.check');
-    Route::get('/user/person/verify/social', [App\Http\Controllers\Index\UserClaimPersonController::class, 'verifySocial'])->name('user.person.verify.social');
-    Route::get('/user/person/verify/social/check', [App\Http\Controllers\Index\UserClaimPersonController::class, 'verifyClaimBySocial'])->name('user.person.verify.social.check');
-
-    Route::get('/user/person', [App\Http\Controllers\Index\UserPersonController::class, 'index'])->name('user.person.index');
-    Route::post('/user/person', [App\Http\Controllers\Index\UserPersonController::class, 'savePersonal'])->name('user.person.personal.save');
-    Route::get('/user/person/email', [App\Http\Controllers\Index\UserPersonController::class, 'email'])->name('user.person.email');
-    Route::post('/user/person/email', [App\Http\Controllers\Index\UserPersonController::class, 'saveEmail'])->name('user.person.email.save');
-    Route::get('/user/person/social', [App\Http\Controllers\Index\UserPersonController::class, 'social'])->name('user.person.social');
-    Route::post('/user/person/social', [App\Http\Controllers\Index\UserPersonController::class, 'saveSocial'])->name('user.person.social.save');
-
-    Route::get('/user/person/create', [App\Http\Controllers\Index\UserPersonController::class, 'create'])->name('user.person.create');
-    Route::post('/user/person/create/email', [App\Http\Controllers\Index\UserPersonController::class, 'storeBasicInformationShowEmailStep'])->name('user.person.email.store');
-    Route::post('/user/person/create/social', [App\Http\Controllers\Index\UserPersonController::class, 'storeEmailShowSocialStep'])->name('user.person.social.store');
-    Route::post('/user/person/create/finish', [App\Http\Controllers\Index\UserPersonController::class, 'storeSocialShowFinishStep'])->name('user.person.finish.store');
-
-    Route::get('/user/person/search', [App\Http\Controllers\Index\UserPersonController::class, 'search'])->name('user.person.search');
+//    Route::get('/user/person/status', [App\Http\Controllers\Index\UserClaimPersonController::class, 'status'])->name('user.person.status');
+//    Route::get('/user/person/verify/email', [App\Http\Controllers\Index\UserClaimPersonController::class, 'verifyEmail'])->name('user.person.verify.email');
+//    Route::get('/user/person/verify/email/send', [App\Http\Controllers\Index\UserClaimPersonController::class, 'sendVerificationMail'])->name('user.person.verify.email.send');
+//    Route::get('/user/person/verify/email/{token}', [App\Http\Controllers\Index\UserClaimPersonController::class, 'verifyClaimByEmail'])->name('user.person.verify.email.check');
+//    Route::get('/user/person/verify/social', [App\Http\Controllers\Index\UserClaimPersonController::class, 'verifySocial'])->name('user.person.verify.social');
+//    Route::get('/user/person/verify/social/check', [App\Http\Controllers\Index\UserClaimPersonController::class, 'verifyClaimBySocial'])->name('user.person.verify.social.check');
+//
+//    Route::get('/user/person', [App\Http\Controllers\Index\UserPersonController::class, 'index'])->name('user.person.index');
+//    Route::post('/user/person', [App\Http\Controllers\Index\UserPersonController::class, 'savePersonal'])->name('user.person.personal.save');
+//    Route::get('/user/person/email', [App\Http\Controllers\Index\UserPersonController::class, 'email'])->name('user.person.email');
+//    Route::post('/user/person/email', [App\Http\Controllers\Index\UserPersonController::class, 'saveEmail'])->name('user.person.email.save');
+//    Route::get('/user/person/social', [App\Http\Controllers\Index\UserPersonController::class, 'social'])->name('user.person.social');
+//    Route::post('/user/person/social', [App\Http\Controllers\Index\UserPersonController::class, 'saveSocial'])->name('user.person.social.save');
+//
+//    Route::get('/user/person/create', [App\Http\Controllers\Index\UserPersonController::class, 'create'])->name('user.person.create');
+//    Route::post('/user/person/create/email', [App\Http\Controllers\Index\UserPersonController::class, 'storeBasicInformationShowEmailStep'])->name('user.person.email.store');
+//    Route::post('/user/person/create/social', [App\Http\Controllers\Index\UserPersonController::class, 'storeEmailShowSocialStep'])->name('user.person.social.store');
+//    Route::post('/user/person/create/finish', [App\Http\Controllers\Index\UserPersonController::class, 'storeSocialShowFinishStep'])->name('user.person.finish.store');
+//
+//    Route::get('/user/person/search', [App\Http\Controllers\Index\UserPersonController::class, 'search'])->name('user.person.search');
 });
 
 // Enterprise Dashboard

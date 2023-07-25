@@ -23,7 +23,13 @@
             </div>
         </x-entities.entity-show-title-meta>
 
-        @include('discover.people.data')
+        @if($userIsPerson)
+            <livewire:members.settings.person-listing :person="$person" />
+        @else
+            @include('discover.people.data')
+        @endif
+
+        @include('discover.people.relationships')
 
         <div class="d-flex flex-wrap justify-content-between align-items-center text-uppercase small fw-bold text-secondary-emphasis mt-4">
             <div class="me-4">

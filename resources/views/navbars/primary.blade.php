@@ -73,7 +73,6 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="{{ route('user.settings') }}" title="Settings">Settings</a></li>
-                            <li><a class="dropdown-item" href="{{ route('user.person.index') }}" title="Person">Person Listing</a></li>
 
                             @can('admin login')
                                 <a href="/admin" class="dropdown-item">Admin</a>
