@@ -25,7 +25,7 @@
             <div class="max-width-600 mb-4 mx-auto">
                 <div id="autocomplete"></div>
             </div>
-            <livewire:public.entities.bookable-listings-index />
+            <livewire:public.entities.neuly-care />
         </div>
 
     </main>
