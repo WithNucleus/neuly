@@ -67,14 +67,14 @@ body.dark,
     --aa-panel-border-color-alpha: 1;
     --aa-input-border-color-rgb: 73, 80, 87;
     --aa-input-border-color-alpha: 1;
-    --aa-input-background-color-rgb: 0, 0, 0;
-    --aa-background-color-rgb: 21, 24, 42;
+    --aa-input-background-color-rgb: rgb();
+    --aa-background-color-rgb: 33, 37, 41;
     --aa-selected-color-rgb: 41, 185, 142;
     --aa-selected-color-alpha: 0.25;
     --aa-description-highlight-background-color-rgb: 0 255 255;
     --aa-description-highlight-background-color-alpha: 0.25;
     --aa-icon-color-rgb: 41, 185, 142;
-    --aa-panel-shadow: inset 1px 1px 0 0 rgb(44, 46, 64),
+    --aa-panel-shadow: inset 1px 1px 0 0 rgb(0, 0, 0),
     0 3px 8px 0 rgb(0, 3, 9);
     --aa-scrollbar-track-background-color-rgb: 44, 46, 64;
     --aa-scrollbar-thumb-background-color-rgb: var(--aa-background-color-rgb);
@@ -245,14 +245,23 @@ body.dark,
 }
 
 .aa-Panel {
-    background-color: rgba(var(--aa-background-color-rgb), var(--aa-background-color-alpha));
-    border-radius: 0;
-    box-shadow: var(--aa-panel-shadow);
+	background-color: var(--bs-body-bg);
+	background-clip: padding-box;
+	border: var(--bs-border-width) solid var(--bs-border-color);
     margin: 8px 0 0;
     overflow: hidden;
     position: absolute;
     transition: opacity 200ms ease-in, filter 200ms ease-in;
     z-index: 2;
+}
+
+[data-bs-theme=dark] {
+    .aa-Panel {
+        color: var(--bs-body-color);
+        background-color: var(--bs-body-bg);
+        background-clip: padding-box;
+        border: var(--bs-border-width) solid var(--bs-border-color);
+    }
 }
 
 @media screen and (prefers-reduced-motion) {
