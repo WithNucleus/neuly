@@ -54,9 +54,9 @@ class NeulyCare extends Component
 
     public function mount(Request $request) {
 
-//         $this->ip = $request->getClientIp(); // PRODUCTION
+         $this->ip = $request->getClientIp(); // PRODUCTION
         // $this->ip = '207.46.13.74'; // TEST - Chicago
-        $this->ip = "108.92.170.181"; // Sydney
+        // $this->ip = "108.92.170.181"; // Sydney
 
         $this->getLocalLocation();
 
@@ -116,14 +116,17 @@ class NeulyCare extends Component
 
     public function clearFilter($filter, $id) {
         unset($this->filters[$filter][$id]);
+        $this->resetPage();
     }
 
     public function clearLocalLocation() {
         $this->reset('localLocation');
+        $this->resetPage();
     }
 
     public function clearSearchLocation() {
         $this->reset('searchLocation');
+        $this->resetPage();
     }
 
     public function clearFilters() {
@@ -146,6 +149,8 @@ class NeulyCare extends Component
             'longitude' => $longitude,
             'name' => $locationName
         ];
+
+        $this->resetPage();
     }
 
     public function goListing($id) {
@@ -227,10 +232,10 @@ class NeulyCare extends Component
                     return $query->where('virtual', 1);
                 })
                 ->when($this->localLocation['latitude'], function($query) {
-                    return $query->distance($this->localLocation['latitude'], $this->localLocation['longitude'], 100);
+                    return $query->distance($this->localLocation['latitude'], $this->localLocation['longitude'], 500);
                 })
                 ->when($this->searchLocation['latitude'], function($query) {
-                    return $query->distance($this->searchLocation['latitude'], $this->searchLocation['longitude'], 100);
+                    return $query->distance($this->searchLocation['latitude'], $this->searchLocation['longitude'], 500);
                 });
 
         return $this->applySorting($query);
