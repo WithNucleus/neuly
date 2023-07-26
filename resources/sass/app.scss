@@ -512,6 +512,11 @@ body.home {
 
     .home-hero {
         color: $gray-300;
+
+        .form-control,
+        .form-control::placeholder {
+            color: $gray-300;
+        }
     }
 }
 

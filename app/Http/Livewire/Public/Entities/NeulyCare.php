@@ -2,226 +2,175 @@
 
 namespace App\Http\Livewire\Public\Entities;
 
+use App\Http\Livewire\Traits\WithBulkActions;
+use App\Http\Livewire\Traits\WithCachedRows;
+use App\Http\Livewire\Traits\WithPerPagePagination;
+use App\Http\Livewire\Traits\WithSorting;
 use App\Models\BookableListing;
 use App\Models\Focus;
+use App\Models\SearchLog;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
-use Livewire\WithPagination;
 use Throwable;
 
 class NeulyCare extends Component
 {
-    use WithPagination;
+    use WithPerPagePagination, WithBulkActions, WithCachedRows, WithSorting;
+
     protected string $paginationTheme = 'bootstrap';
+    protected $queryString = ['search'];
+    protected $listeners = ['neulyCareGeoSearch', 'clearSearchLocation'];
 
-    protected $listeners = ['geoSearchLocation', 'geoSearchCoordinates', 'clearGeoSearch'];
-
-    protected $queryString = ['latitude', 'longitude'];
-
-    public $perPage = 10;
-
-    public $location = null;
-    public $showResults = false;
-
-    public $ip = null;
-
-    public $ipLatitude = null;
-    public $ipLongitude = null;
-
-    public $latitude = null;
-    public $longitude = null;
-
-    public $virtual = false;
-
-    public $savedLocation = [
-        'latitude' => null,
-        'longitude' => null,
-        'location' => null
-    ];
+    public ?string $search = null;
 
     public array $filters = [
-        'selected-treatments' => [],
-        'selected-conditions' => [],
-        'selected-services' => [],
-        'virtual' => null
+        'focus' => [],
+        'type' => []
     ];
 
+    public string $ip;
+    public ?int $userId = null;
+
+    public bool $virtual = false;
+
+    public array $localLocation = [
+        'latitude' => null,
+        'longitude' => null,
+        'name' => null,
+        'id' => null
+    ];
+
+    public array $searchLocation = [
+        'latitude' => null,
+        'longitude' => null,
+        'name' => null,
+        'id' => null
+    ];
+
+    public array $savedLocations = [];
+
     public function mount(Request $request) {
-//        $this->ip = $request->getClientIp(); // PRODUCTION
-        $this->ip = '207.46.13.74'; // Chicago
 
-        if ($this->latitude AND $this->longitude) {
-            $this->showResults = true;
+//         $this->ip = $request->getClientIp(); // PRODUCTION
+        // $this->ip = '207.46.13.74'; // TEST - Chicago
+        $this->ip = "108.92.170.181"; // Sydney
 
-            if (!$this->location) {
-                try {
-                    $openCageUrl = 'https://api.opencagedata.com/geocode/v1/json?q=' .
-                        $this->latitude . '+' . $this->longitude .
-                        '&key=' . config('services.opencage.geocoding_api_key') .
-                        '&limit=1&abbrv=1';
+        $this->getLocalLocation();
 
-                    $locationNameRequest = Http::get($openCageUrl);
-                    $response = json_decode($locationNameRequest->body(), true);
-                    $locationResponse = $response['results'][0]['components'];
+        $this->sorts = [
+            'updated_at' => 'desc'
+        ];
 
-//                    echo '<textarea class="form-control">';
-//                    print_r($locationResponse);
-//                    echo '</textarea>';
+        if (Auth::id()) {
+            $this->userId = Auth::id();
+        }
+    }
 
-                    $locationArray = [];
+    private function getLocalLocation() {
 
-                    if (array_key_exists('city', $locationResponse)) {
-                        $locationArray[] = $locationResponse['city'];
-                    }
+        try {
+            $ipRequest = Http::get('https://ipapi.co/' . $this->ip . '/json');
+            $ipResponse = json_decode($ipRequest->body(), true);
 
-                    if (array_key_exists('state', $locationResponse)) {
-                        $locationArray[] = $locationResponse['state'];
-                    }
-
-                    if (array_key_exists('postcode', $locationResponse)) {
-                        $locationArray[] = $locationResponse['postcode'];
-                    }
-
-                    if (array_key_exists('country', $locationResponse)) {
-
-                        if ($locationResponse['country'] === 'United States') {
-                            $locationArray[] = 'USA';
-                        } else {
-                            $locationArray[] = $locationResponse['country'];
-                        }
-                    }
-
-                    $this->location = implode(', ', $locationArray);
-
-                } catch (Throwable $throwable) {
-                    // TODO: Log / Slack Alert
-                    Log::emergency('opencagedata ip lookup not working' . "\n" . $throwable->getMessage());
-                }
-            }
-
-        } else {
-            try {
-
-                $ipRequest = Http::get('https://ipapi.co/' . $this->ip . '/json');
-                $ipResponse = json_decode($ipRequest->body(), true);
+            if (array_key_exists('error', $ipResponse)) {
+                Log::info('Error with Neuly Care IP Response', $ipResponse);
+            } else {
+                $thisLocation = [];
 
                 if (array_key_exists('latitude', $ipResponse) AND array_key_exists('longitude', $ipResponse)) {
-                   $this->ipLatitude = $ipResponse['latitude'];
-                   $this->ipLongitude = $ipResponse['longitude'];
+                   $this->localLocation['latitude'] = $ipResponse['latitude'];
+                   $this->localLocation['longitude'] = $ipResponse['longitude'];
+
+                   $thisLocation['latitude'] = $ipResponse['latitude'];
+                   $thisLocation['longitude'] = $ipResponse['longitude'];
                 }
 
                 if (array_key_exists('city', $ipResponse)) {
-                   $this->location = $ipResponse['city'];
+                   $this->localLocation['name'] = $ipResponse['city'];
+                   $thisLocation['name'] = $ipResponse['city'];
                 }
 
-                if ($this->ipLatitude AND $this->ipLongitude) {
-                   $this->showResults = true;
-                }
-
-            } catch(Throwable $throwable) {
-                // TODO: Log / Slack Alert
-                Log::emergency('Cant get info from ipapi.co' . "\n" . $throwable->getMessage());
+                $this->savedLocations[] = $thisLocation;
             }
+        } catch(Throwable $exception) {
+            Log::info('Exception with Neuly Care IP Response ' . $exception->getMessage());
         }
+
     }
 
-    public function updatingFilters()
-    {
-        $this->showResults = true;
+    public function updatingSearch() {
         $this->resetPage();
     }
 
-    public function updatingVirtual($value) {
-
-        if ($value === true) {
-            $this->savedLocation['latitude'] = $this->latitude ?? $this->ipLatitude;
-            $this->savedLocation['longitude'] = $this->longitude ?? $this->ipLongitude;
-            $this->savedLocation['location'] = $this->location ?? 'your location';
-            $this->reset('ipLatitude');
-            $this->reset('ipLongitude');
-            $this->reset('latitude');
-            $this->reset('longitude');
-            $this->reset('location');
-        } else {
-            $this->latitude = $this->savedLocation['latitude'];
-            $this->longitude = $this->savedLocation['longitude'];
-            $this->location = $this->savedLocation['location'];
-            $this->reset('savedLocation');
-        }
+    public function updatingFilters() {
+        $this->resetPage();
     }
 
-    public function resetFilters() {
+    public function clearSearch() {
+        $this->reset('search');
+        $this->resetPage();
+    }
+
+    public function clearFilter($filter, $id) {
+        unset($this->filters[$filter][$id]);
+    }
+
+    public function clearLocalLocation() {
+        $this->reset('localLocation');
+    }
+
+    public function clearSearchLocation() {
+        $this->reset('searchLocation');
+    }
+
+    public function clearFilters() {
+        $this->reset('search');
         $this->reset('filters');
+        $this->reset('sorts');
+        $this->reset('localLocation');
+        $this->reset('searchLocation');
+        $this->resetPage();
     }
 
-    public function resetFilter($filter) {
-        $this->filters[$filter] = null;
+    public function neulyCareGeoSearch($locationName, $latitude, $longitude) {
+        $this->searchLocation['latitude'] = $latitude;
+        $this->searchLocation['longitude'] = $longitude;
+        $this->searchLocation['name'] = $locationName;
+
+        $this->savedLocations[] = [
+            'type' => 'geosearch',
+            'latitude' => $latitude,
+            'longitude' => $longitude,
+            'name' => $locationName
+        ];
     }
 
-    public function resetFilterArray($filter) {
-        $this->filters[$filter] = [];
-    }
+    public function goListing($id) {
+        $listing = BookableListing::find($id);
 
-    public function render()
-    {
-        return view('livewire.public.entities.neuly-care', [
-            'optionsTreatments' => Focus::drugs()->pluck('name')->unique()->toArray(),
-            'optionsConditions' => Focus::other()->pluck('name')->unique()->toArray(),
-            'optionsServices' => Focus::drugs()->pluck('name')->unique()->toArray(),
-            'listings' => BookableListing::public()->orderByDesc('updated_at')
-                ->with(['focus', 'bookable'])
-                ->when($this->virtual, function($query) {
-                    return $query->where('virtual', 1);
-                })
-                ->when($this->ipLatitude, function($query) {
-                    return $query->distance($this->ipLatitude, $this->ipLongitude, 100);
-                })
-                ->when($this->latitude, function($query) {
-                    return $query->distance($this->latitude, $this->longitude, 100);
-                })
-                ->when($this->filters['selected-treatments'], function($query, $selectedOptions) {
-                    return $query->whereHas('tags', function($query) use ($selectedOptions) {
-                        $query->whereIn('name', $this->filters['selected-treatments']);
-                    });
-                })
-                ->when($this->filters['selected-conditions'], function($query, $selectedOptions) {
-                    return $query->whereHas('tags', function($query) use ($selectedOptions) {
-                        $query->whereIn('name', $this->filters['selected-conditions']);
-                    });
-                })
-                ->when($this->filters['selected-services'], function($query, $selectedOptions) {
-                    return $query->whereHas('tags', function($query) use ($selectedOptions) {
-                        $query->whereIn('name', $this->filters['selected-services']);
-                    });
-                })
-                ->paginate($this->perPage)
+        SearchLog::create([
+            'term' => $this->search ?? 'empty',
+            'type' => SearchLog::TYPE_NEULY_CARE,
+            'ip' => $this->ip,
+            'location_id' => $this->searchLocation['id'],
+            'data' => [
+                'filters' => $this->filters,
+                'virtual' => $this->virtual,
+                'locations' => [
+                    'local' => $this->localLocation,
+                    'saved' => $this->savedLocations
+                ]
+            ],
+            'relatable_type' => BookableListing::class,
+            'relatable_id' => $listing->id,
+            'user_id' => $this->userId
         ]);
-    }
 
-    public function geoSearchLocation($locationName, $latitude, $longitude) {
-        $this->latitude = $latitude;
-        $this->longitude = $longitude;
-        $this->location = $locationName;
-        $this->ipLatitude = null;
-        $this->ipLongitude = null;
-        $this->showResults = true;
-    }
+        $this->dispatchBrowserEvent('go-to-listing', ['url' => $listing->bookable_url]);
 
-    public function geoSearchCoordinates($latitude, $longitude) {
-        $this->latitude = $latitude;
-        $this->longitude = $longitude;
-        $this->location = 'your location';
-        $this->ipLatitude = null;
-        $this->ipLongitude = null;
-        $this->showResults = true;
-    }
-
-    public function clearGeoSearch() {
-        $this->latitude = null;
-        $this->longitude = null;
-        $this->location = null;
     }
 
     public function gotoPage($page)
@@ -240,5 +189,66 @@ class NeulyCare extends Component
     {
         $this->setPage(max($this->page - 1, 1));
         $this->emit('gotoTop');
+    }
+
+    public function getRowsQueryProperty()
+    {
+        $query = BookableListing::public()->with([
+                    'focusDrugs',
+                    'bookable',
+                    'location'
+                ])
+                ->when($this->search, function($query, $search) {
+                    return $query->public()->where(function ($query) use ($search) {
+                        return $query
+                            ->where('name', 'like', '%' . $search . '%')
+                            ->orWhere('address', 'like', '%' . $search . '%')
+                            ->orWhere('location_name', 'like', '%' . $search . '%')
+                            ->orwhereHas('focus', function($query) use ($search) {
+                                $query->where('name', 'like', '%' . $search . '%');
+                            })
+                            ->orwhereHas('bookable', function($query) use ($search) {
+                                $query->where('name', 'like', '%' . $search . '%');
+                            })
+                            ->orwhereHas('location', function($query) use ($search) {
+                                $query->where('name', 'like', '%' . $search . '%');
+                            });
+                   });
+                })
+                ->when($this->filters['focus'], function($query, $valueArray) {
+                    return $query->whereHas('focus', function($query) use ($valueArray) {
+                        $query->whereIn('name', $valueArray);
+                    });
+                })
+                ->when($this->filters['type'], function($query, $valueArray) {
+                    return $query->whereIn('type', $valueArray);
+                })
+                ->when($this->virtual, function($query) {
+                    return $query->where('virtual', 1);
+                })
+                ->when($this->localLocation['latitude'], function($query) {
+                    return $query->distance($this->localLocation['latitude'], $this->localLocation['longitude'], 100);
+                })
+                ->when($this->searchLocation['latitude'], function($query) {
+                    return $query->distance($this->searchLocation['latitude'], $this->searchLocation['longitude'], 100);
+                });
+
+        return $this->applySorting($query);
+    }
+
+    public function getRowsProperty()
+    {
+        return $this->cache(function () {
+            return $this->applyPagination($this->rowsQuery);
+        });
+    }
+
+    public function render()
+    {
+        return view('livewire.public.entities.neuly-care', [
+            'records' => $this->rows,
+            'typeOptions' => BookableListing::TYPES_CARE,
+            'focusOptions' => Focus::drugs()->whereHas('bookableListings')->withCount('bookableListings')->orderByDesc('bookable_listings_count')->get()->toArray()
+        ]);
     }
 }

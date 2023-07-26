@@ -1,250 +1,189 @@
-<div>
+<div class="entity-index-listings">
     <div>
-            <div>$ipLatitude: {{ $ipLatitude }}</div>
-            <div>$ipLongitude: {{ $ipLongitude }}</div>
-            <div>$latitude: {{ $latitude }}</div>
-            <div>$longitude: {{ $longitude }}</div>
-            <div>$savedLocation: {{ print_r($savedLocation) }}</div>
-            <div>
-                <div class="d-lg-flex align-items-center">
+        <input wire:model="searchLocation.name" id="locationName" type="hidden">
+        <input wire:model="searchLocation.latitude" id="locationLatitude" type="hidden">
+        <input wire:model="searchLocation.longitude" id="locationLongitude" type="hidden">
+    </div>
+    <div class="d-flex flex-column flex-md-row flex-wrap justify-content-center align-items-center">
+        <div class="filter-widget d-flex align-items-center me-md-4 mb-3">
+            <input wire:model.lazy="search" type="text" class="form-control me-2" placeholder="Search by keyword" aria-label="Search listings">
+            <span>
+                <i class="fa-sharp fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Search by name, location, specialty, condition, etc."></i>
+            </span>
+        </div>
 
-                    <div class="filter-widget me-4">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-md @if($filters['selected-conditions']) has-pink-border @endif btn-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                I would like help with
-                            </button>
-                            <ul class="dropdown-menu" style="min-width: 300px">
-                                @foreach ($optionsConditions as $option)
-                                    <li class="px-3">
-                                        <div class="form-check form-check-small form-check-inline">
-                                            <input wire:model="filters.selected-conditions" class="form-check-input" type="checkbox" value="{{ $option }}"
-                                                   id="filter-condition-{{ $option }}" @if(in_array($option, $filters['selected-conditions'])) checked @endif>
-                                            <label class="form-check-label @if(in_array($option, $filters['selected-conditions'])) fw-bold @endif" for="filter-condition-{{ $option }}">
-                                                {{ $option }}
-                                            </label>
-                                        </div>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
+        <div class="filter-widget me-md-4 mb-3">
+            <div class="btn-group">
+                <button type="button" class="btn btn-md @if($filters['focus']) has-pink-border @endif btn-primary dropdown-toggle rounded-0" data-bs-toggle="dropdown" aria-expanded="false">
+                    I'm interested in
+                </button>
+                <ul class="dropdown-menu" style="min-width: 200px">
+                    @foreach ($focusOptions as $option)
+                        <li class="px-3">
+                            <div class="form-check form-check-small form-check-inline">
+                                <input wire:model="filters.focus" class="form-check-input" type="checkbox" value="{{ $option['name'] }}"
+                                       id="filter-focus-{{ $option['slug'] }}" @if(in_array($option['name'], $filters['focus'])) checked @endif>
+                                <label class="form-check-label @if(in_array($option['name'], $filters['focus'])) fw-bold @endif" for="filter-focus-{{ $option['slug'] }}">
+                                    {{ $option['name'] }} ({{ $option['bookable_listings_count'] }})
+                                </label>
+                            </div>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
 
-                    <div class="filter-widget me-4">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-md @if($filters['selected-services']) has-pink-border @endif btn-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                I'm looking for
-                            </button>
-                            <ul class="dropdown-menu" style="min-width: 300px">
-                                @foreach ($optionsServices as $option)
-                                    <li class="px-3">
-                                        <div class="form-check form-check-inline">
-                                            <input wire:model="filters.selected-services" class="form-check-input" type="checkbox" value="{{ $option }}"
-                                                   id="filter-service-{{ $option }}" @if(in_array($option, $filters['selected-services'])) checked @endif>
-                                            <label class="form-check-label @if(in_array($option, $filters['selected-services'])) fw-bold @endif" for="filter-service-{{ $option }}">
-                                                {{ $option }}
-                                            </label>
-                                        </div>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="filter-widget me-4">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-md @if($filters['selected-treatments']) has-pink-border @endif btn-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                I'm interested in
-                            </button>
-                            <ul class="dropdown-menu">
-                                @foreach ($optionsTreatments as $option)
-                                    <li class="px-3">
-                                        <div class="form-check form-check-inline">
-                                            <input wire:model="filters.selected-treatments" class="form-check-input" type="checkbox" value="{{ $option }}"
-                                                   id="filter-treatment-{{ $option }}" @if(in_array($option, $filters['selected-treatments'])) checked @endif>
-                                            <label class="form-check-label @if(in_array($option, $filters['selected-treatments'])) fw-bold @endif" for="filter-treatment-{{ $option }}">
-                                                {{ $option }}
-                                            </label>
-                                        </div>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="filter-widget me-4">
-                        <div class="lead-lg form-check">
-                            <input wire:model="virtual" class="form-check-input" type="checkbox" id="telehealth">
-                            <label class="form-check-label fw-bold text-tertiary" for="telehealth">
-                                Telehealth / Virtual
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="filter-widget">
-                        @if ($filters['selected-treatments'] OR $filters['selected-conditions'] OR $filters['selected-services'])
-                            <button wire:click="resetFilters()" class="btn p-0 ms-1">
-                                <i class="fa-sharp fa-solid fa-circle-xmark"></i> Clear Filters
-                            </button>
-                        @endif
-                    </div>
-                </div>
-                <div class="d-md-flex flex-wrap mb-3">
-                    @if ($listings->total() > 0)
-                            <div class="me-3 fw-bold">
-                            <span>{{ $listings->total() }}</span>
-                            <span>
-                                @if ($listings->total() > 1)
-                                    <span>results</span>
-                                @else
-                                    <span>result</span>
-                                @endif
-                            </span>
-                        </div>
-                    @endif
-
-                    @if($location)
-                        <div class="d-inline-flex me-3">
-                            <span>{{ $location }}</span>
-                            <button wire:click="clearGeoSearch" class="btn btn-link text-primary p-0 ms-2">
-                                <i class="fa-sharp fa-solid fa-circle-xmark"></i>
-                            </button>
-                        </div>
-                    @endif
-
-                    @if ($filters['selected-conditions'])
-                        <div class="d-inline-flex me-3">
-                            @foreach($filters['selected-conditions'] as $option)
-                                <span>{{ $option }}</span> @if(!$loop->last) <span class="text-muted mx-1">/</span> @endif
-                            @endforeach
-                            <button wire:click="resetFilterArray('selected-conditions')" class="btn btn-link text-primary p-0 ms-1">
-                                <i class="fa-sharp fa-solid fa-circle-xmark"></i>
-                            </button>
-                        </div>
-                    @endif
-
-                    @if ($filters['selected-services'])
-                        <div class="d-inline-flex me-3">
-                            @foreach($filters['selected-services'] as $option)
-                                <span>{{ $option }}</span> @if(!$loop->last) <span class="text-muted mx-1">/</span> @endif
-                            @endforeach
-                            <button wire:click="resetFilterArray('selected-services')" class="btn btn-link text-primary p-0 ms-1">
-                                <i class="fa-sharp fa-solid fa-circle-xmark"></i>
-                            </button>
-                        </div>
-                    @endif
-
-                    @if ($filters['selected-treatments'])
-                        <div class="d-inline-flex me-3">
-                            @foreach($filters['selected-treatments'] as $option)
-                                <span>{{ $option }}</span> @if(!$loop->last) <span class="text-muted mx-1">/</span> @endif
-                            @endforeach
-                            <button wire:click="resetFilterArray('selected-treatments')" class="btn btn-link text-primary p-0 ms-1">
-                                <i class="fa-sharp fa-solid fa-circle-xmark"></i>
-                            </button>
-                        </div>
-                    @endif
-                </div>
-                <div class="mt-5">
-                    <div id="listings-index" class="row">
-                        @foreach($listings as $listing)
-                            <x-entities.entity-logo-card url="{{ route('discover.bookable-listing.show', $listing->slug) }}" linkClasses="py-5">
+        <div class="filter-widget me-md-4 mb-3">
+            <div class="btn-group">
+                <button type="button" class="btn btn-md @if($filters['type']) has-pink-border @endif btn-primary dropdown-toggle rounded-0" data-bs-toggle="dropdown" aria-expanded="false">
+                    I'm looking for
+                </button>
+                <ul class="dropdown-menu" style="min-width: 200px">
+                    @foreach ($typeOptions as $optionId => $option)
+                        <li class="px-3">
+                            <div class="form-check form-check-small form-check-inline">
+                                <input wire:model="filters.type" class="form-check-input" type="checkbox" value="{{ $option }}"
+                                       id="filter-type-{{ $optionId }}" @if(in_array($option, $filters['type'])) checked @endif>
+                                <label class="form-check-label @if(in_array($option, $filters['type'])) fw-bold @endif" for="filter-type-{{ $optionId }}">
+                                    {{ $option }}
+                                </label>
+                            </div>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+        <div class="filter-widget mb-3">
+            <div class="form-check lead">
+                <input wire:model="virtual" class="form-check-input" type="checkbox" id="filter-virtual">
+                <label class="form-check-label" for="filter-virtual">
+                    Telehealth / Virtual
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex flex-wrap" style="min-height: 40px">
+        @if($search)
+            <div class="me-3 mb-3">
+                <span>{{ $search }}</span>
+                <button wire:click="clearSearch" class="btn text-danger px-1 border-0" aria-label="Clear search"><i class="fa-sharp fa-solid fa-circle-xmark"></i></button>
+            </div>
+        @endif
+        @foreach($filters['focus'] as $id => $focus)
+            <div class="me-3 mb-3">
+                <span>{{ $focus }}</span>
+                <button wire:click="clearFilter('focus', '{{ $id }}')" class="btn text-danger px-1 border-0" aria-label="Clear search"><i class="fa-sharp fa-solid fa-circle-xmark"></i></button>
+            </div>
+        @endforeach
+        @foreach($filters['type'] as $id => $type)
+            <div class="me-3 mb-3">
+                <span>{{ $type }}</span>
+                <button wire:click="clearFilter('type', '{{ $id }}')" class="btn text-danger px-1 border-0" aria-label="Clear search"><i class="fa-sharp fa-solid fa-circle-xmark"></i></button>
+            </div>
+        @endforeach
+        @if($localLocation['name'])
+            <div class="me-3 mb-3">
+                <span>{{ $localLocation['name'] }}</span>
+                <button wire:click="clearLocalLocation" class="btn text-danger px-1 border-0" aria-label="Clear location"><i class="fa-sharp fa-solid fa-circle-xmark"></i></button>
+            </div>
+        @endif
+        @if($searchLocation['name'])
+            <div class="me-3 mb-3">
+                <span>{{ $searchLocation['name'] }}</span>
+                <button wire:click="clearSearchLocation" class="btn text-danger px-1 border-0" aria-label="Clear location"><i class="fa-sharp fa-solid fa-circle-xmark"></i></button>
+            </div>
+        @endif
+        <div class="filter-widget ms-auto mt-3">
+            <button wire:click="clearFilters" class="btn btn-sm btn-ghost-primary">Clear Filters</button>
+        </div>
+    </div>
+    <div class="row mt-4">
+        @forelse($records as $record)
+            <div wire:key="{{ $record->id }}" class="col-12 col-lg-6 col-xxl-4 mb-4">
+                <div wire:click="goListing('{{ $record->id }}')" class="card h-100">
+                    <div class="card-body text-center d-flex justify-content-center align-items-stretch card-hover">
+                        <div class="text-decoration-none w-100 px-2 pt-4 pb-0">
+                            <div class="d-flex flex-column justify-content-between h-100 position-relative">
                                 <div>
-                                    @if ($listing->bookable_type == \App\Models\Person::class)
-                                        <div class="bookable-image rounded-circle"
-                                         style="background-image: url('{{ $listing->image ?? asset('images/person-blank.png') }}');">
-                                            <span class="visually-hidden">{{ $listing->name }}</span>
+                                    @if($record->virtual === 1)
+                                        <div class="h4 mb-0 text-accent position-top-right">
+                                            <i class="fa-sharp fa-solid fa-phone-plus"></i>
+                                        </div>
+                                    @endif
+                                    @if ($record->bookable_type == \App\Models\Person::class)
+                                        <div class="logo-square-is-contained rounded-circle"
+                                         style="background-image: url('{{ $record->image ?? asset('images/person-blank.png') }}');">
+                                            <span class="visually-hidden">{{ $record->name }}</span>
                                         </div>
                                     @else
-                                        <div class="bookable-image"
-                                         style="background-image: url('{{ $listing->image ?? asset('images/image-placeholder.jpg') }}');">
-                                            <span class="visually-hidden">{{ $listing->name }}</span>
+                                        <div class="logo-is-contained"
+                                         style="background-image: url('{{ $record->image ?? asset('images/image-placeholder.jpg') }}');">
+                                            <span class="visually-hidden">{{ $record->name }}</span>
                                         </div>
                                     @endif
+                                    <div class="mt-3">
+                                        <h3 class="h5 text-success mb-0">{{ $record->name }}</h3>
+                                    </div>
                                 </div>
-                                <address class="text-dark">
-                                    @if($bookableListing->address)
-                                        <span class="d-block">{{$bookableListing->address }}</span>
-                                    @endif
-                                    @if ($bookableListing->location_name)
-                                        <span class="d-block">{{ $bookableListing->location_name }}</span>
-                                    @endif
-                                </address>
-                                @if($bookableListing->virtual === 1)
-                                    <div class="d-block text-muted">Virtual / Remote</div>
-                                @endif
+                                <div class="mt-3">
+                                    <div class="d-flex flex-wrap align-items-center justify-content-center lead text-uppercase">
+                                        @foreach($record->focusDrugs as $focus)
+                                            <span class="me-2 mt-3 badge bg-body-tertiary text-body-emphasis">{{ $focus->name }}</span>
+                                        @endforeach
+                                    </div>
 
-                            </x-entities.entity-logo-card>
-                        @endforeach
-                        @if ($listings->total() <= 3)
-                            <div class="listing-item">
-                                <div class="listing-item-link no-results">
-                                    <div class="title">We'll find what you're looking for</div>
-                                    <div class="content">
-                                        <livewire:forms.finder-opt-in-form />
+                                    <address class="my-3 lead text-uppercase fw-bold text-body-secondary">
+                                        @if($record->location)
+                                            <div>{{ $record->location->name }}</div>
+                                        @else
+                                            @if ($record->location_name)
+                                                <div>{{ $record->location_name }}</div>
+                                            @endif
+                                        @endif
+                                    </address>
+
+                                    @if ($record->start_date)
+                                        <div class="my-4">
+                                            {{ \Carbon\Carbon::parse($record->start_date)->format('M d') }}
+                                            @if ($record->end_date)
+                                                &ndash; {{ \Carbon\Carbon::parse($record->end_date)->format('M d') }}
+                                            @endif
+                                        </div>
+                                    @endif
+
+                                    <div class="mt-3 d-md-flex justify-content-between">
+                                        <div class="text-uppercase">{{ ucwords($record->type) }}</div>
+                                        <div>
+                                            @if($localLocation['name'])
+                                                <span wire:key="distance-local">{{ number_format($record->distance, 0) }} miles</span>
+                                            @elseif($searchLocation['name'])
+                                                <span wire:key="distance-saved">{{ number_format($record->distance, 0) }} miles</span>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        @endif
-                    </div>
-                    <div id="listings-sidebar" class="col-12 col-md-4 col-lg-3 offset-lg-1 mb-4">
-                        <div class="bg-secondary text-white fw-bolder py-2 px-3">
-                            <h2 class="h1 text-primary text-lowercase">We'll find it</h2>
-                            <p class="fw-bold">Psychedelic Finder Concierge will handle the hard work and find you the perfect match.</p>
-                            <p class="mb-1"><a href="" class="btn btn-info d-block">find my match!</a></p>
-                        </div>
-
-                        <div class="mt-5 bg-white py-2 px-3">
-                            <h2 class="h3 mb-3 fw-bold"><span class="text-primary">Telehealth</span> makes it easy to get help from <em>anywhere</em></h2>
-                            <ul class="lead-sm list-style-plus">
-                                <li>Talk your to provider from your home or office</li>
-                                <li>Schedule appointments when they work for you</li>
-                                <li>You won't spread or catch infectious diseases</li>
-                            </ul>
-                            <h3 class="h5 text-center text-muted">Virtual Care Partners</h3>
-                            <div class="px-4 py-2 mx-auto" style="max-width: 240px">
-                                <a href="/listings/nue-life">
-                                    <img src="https://pf.neuly.com/build/assets/logo-nuelife.4b4615b7.webp" alt="nue.life">
-                                </a>
-                            </div>
-                            <div class="px-4 py-2 mx-auto" style="max-width: 240px">
-                                <a href="/listings/ketamd">
-                                    <img src="https://pf.neuly.com/build/assets/logo-ketamd.135c3d3c.webp" alt="KetaMD">
-                                </a>
-                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="my-3">
-                    {{ $listings->links() }}
                 </div>
             </div>
+        @empty
+            <div wire:key="empty" class="w-100">
+                <div class="h4 text-transform-none text-center">
+                    No care practitioners match your search criteria.
+                </div>
+            </div>
+        @endforelse
     </div>
 
-    @push('end')
-        <script>
-            Livewire.on('gotoTop', () => {
-                window.scrollTo({
-                    top: document.getElementById('listings').offsetTop,
-                    behaviour: 'smooth'
-                })
-            })
-        </script>
+    <div class="d-flex justify-content-center my-5">
+        {{ $records->links() }}
+    </div>
 
-        <script src="{{ asset('resources/sass/choices.scss') }}"></script>
-        <script src="https://cdn.jsdelivr.net/npm/choices.js@9.0.1/public/assets/scripts/choices.min.js"></script>
-        <script>
-            const conditionsElement = document.getElementById('conditions');
+    <script>
+        window.addEventListener('go-to-listing', event => {
+            window.location = event.detail.url;
+        });
+    </script>
 
-            const conditionsChoice = new Choices(conditionsElement);
-            const treatmentsChoice = new Choices(document.getElementById('treatments'));
-            const servicesChoice = new Choices(document.getElementById('services'));
-            // const populationsChoice = new Choices(document.getElementById('populations'));
-            // const racesChoice = new Choices(document.getElementById('races'));
-
-            conditionsElement.addEventListener('addItem', function(event) {
-               console.log(event.detail);
-            });
-        </script>
-    @endpush
 </div>
