@@ -1,85 +1,73 @@
 @extends('layouts.app')
 
-@section('body-class', 'bg-light')
+@section('body-class', 'listing-requests')
+
+@section('head')
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="{{ asset('assets/typeahead.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/bootstrap-tagsinput.css') }}"/>
+@endsection
 
 @section('content')
     @include('navbars.primary')
-    <div class="container-fluid">
 
-        <div class="row">
+    <div class="container my-5">
+        <h1 class="text-center text-body-emphasis">Are we missing something?</h1>
+        <div class="max-width-600 mx-auto lead text-center">
+            <p>Neuly is the most in-depth and comprehensive database for the psychedelics industry, and we're always looking to improve. Please let us know if there's anything we should add or update.</p>
+        </div>
 
-            <main id="content-main" role="main" class="col-lg-8 mx-auto">
-                <div class="row">
+        <div class="max-width-780 mx-auto border p-4">
+            @include('discover.includes.status-messages')
+            <form method="post" action="{{ route('listing.request') }}">
+                @csrf
 
-                    <div class="col-12">
-                        @include('discover.includes.status-messages')
+                <div class="form-group mb-3">
+                    <label class="lead d-block">Are you requesting to add or update a resource?</label>
 
-                        <div class="card shadow-sm mt-3">
-                            <div class="card-body">
-                                <h1 class="text-center text-primary page-title-default">Are we missing something?</h1>
-                                <p class="lead-smaller text-center">
-                                    Neuly is the most in depth database for the psychedelics industry, but we’re always looking for ways to improve.
-                                </p>
-                                <p class="font-size-large text-center">
-                                    Please fill out the following form if you’d like to add or edit an organization, people, event, job, or other data set.
-                                </p>
-                                <div class="col-lg-6 mx-auto mt-4 border-top pt-4">
-                                        <form method="post" action="{{ route('listing.request') }}">
-                                            @csrf
-
-                                            <div class="form-group">
-                                                <label class="d-block font-weight-bold">Are you requesting to add or update a resource?</label>
-                                                <div class="custom-control custom-radio custom-control-inline">
-                                                    <input class="custom-control-input js-listing-request-is-update-input" type="radio" name="is_update" id="new_entry" value="0" checked>
-                                                    <label class="custom-control-label" for="new_entry">
-                                                        Add New
-                                                    </label>
-                                                </div>
-                                                <div class="custom-control custom-radio custom-control-inline">
-                                                    <input class="custom-control-input js-listing-request-is-update-input" type="radio" name="is_update" id="update_entry" value="1">
-                                                    <label class="custom-control-label" for="update_entry">
-                                                        Update Existing
-                                                    </label>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label class="font-weight-bold">Type of listing</label>
-                                                <select class="custom-select js-listing-request-entity-type" name="entity_type"
-                                                        data-action="{{ route('listing.request.getEntityListJson') }}">
-                                                    @foreach($entityTypes as $alias => $entityClass)
-                                                        <option value="{{ $alias }}" class="{{ $alias == 'focus' ? 'js-disable-update' : '' }}">{{ ucfirst($alias) }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-
-                                            <div class="form-group typeahead-wrapper js-listing-request-update-entity-block" style="display: none">
-                                                <label class="font-weight-bold">What entity do you want to update?</label>
-                                                <div class="form-group mb-4 pb-4">
-                                                    <input type="text" class="form-control js-listing-request-update-entity-input" placeholder="Entity name">
-                                                    <input type="hidden" class="js-listing-request-to-update-input" name="to_update_id" value="">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group text-right">
-                                                <button class="btn btn-primary ml-auto mr-0" type="submit">next</button>
-                                            </div>
-                                        </form>
-
-                                        <p class="font-size-small">*Note that Neuly adds new data at the company’s sole discretion.</p>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input js-listing-request-is-update-input" type="radio" name="is_update" id="new_entry" value="0" checked>
+                        <label class="form-check-label" for="new_entry">
+                            Add New
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input js-listing-request-is-update-input" type="radio" name="is_update" id="update_entry" value="1">
+                        <label class="form-check-label" for="update_entry">
+                            Update Existing
+                        </label>
                     </div>
                 </div>
 
-                @include('footers.mini')
+                <div class="form-group mb-3">
+                    <label class="fw-bold">Type of listing</label>
+                    <select class="form-select js-listing-request-entity-type" name="entity_type" aria-label="Type of listing"
+                            data-action="{{ route('listing.request.getEntityListJson') }}">
+                        @foreach($entityTypes as $alias => $entityClass)
+                            <option value="{{ $alias }}" class="{{ $alias == 'focus' ? 'js-disable-update' : '' }}">{{ ucfirst($alias) }}</option>
+                        @endforeach
+                    </select>
+                </div>
 
-            </main>
+                <div class="form-group typeahead-wrapper js-listing-request-update-entity-block" style="display: none">
+                    <label class="fw-bold">What entity do you want to update?</label>
+                    <div class="form-group mb-4 pb-4">
+                        <input type="text" class="form-control js-listing-request-update-entity-input" placeholder="Entity name">
+                        <input type="hidden" class="js-listing-request-to-update-input" name="to_update_id" value="">
+                    </div>
+                </div>
 
+                <div class="form-group mt-4">
+                    <button class="btn btn-primary btn-lg" type="submit">Next</button>
+                </div>
+            </form>
         </div>
 
+        <p class="text-center">*Note that Neuly adds new data at the company’s sole discretion.</p>
+
+        @include('footers.mini')
     </div>
+
 @endsection
 
 @section('after_scripts')
@@ -90,6 +78,11 @@
 </style>
 <script>
     $(document).ready(function () {
+        $('select#general_type').on('change', function(event) {
+            var value = $('select#general_type option:selected').text().toLowerCase();
+            $('form').attr('action', '/listing/request/'+value);
+        });
+
         let isUpdate = 0,
             isUpdateInput = $('.js-listing-request-is-update-input'),
             entityTypeSelect = $('.js-listing-request-entity-type'),

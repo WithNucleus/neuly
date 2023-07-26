@@ -6,92 +6,65 @@ use App\Helpers\Entity\FieldsMapping;
 ?>
 @extends('layouts.app')
 
-@section('body-class', 'bg-light')
+@section('body-class', 'listing-requests')
 
 @section('content')
     @include('navbars.primary')
-    <div class="container-fluid">
-        <div class="row">
-            <main id="content-main" role="main" class="col-md-8 col-lg-6 col-xl-5 mx-auto">
-                <div class="row">
-                    <div class="col-12">
-                        @include('discover.includes.status-messages')
 
-                        <div class="card mt-3 shadow-sm">
-                            <div class="card-body">
-                                <h1 class="text-center text-primary">Neuly Listing Request</h1>
-                                <p class="text-center lead">
-                                @isset($entity)
-                                    Update {{ $entityType }} "{{ $entity->name }}"
-                                @else
-                                    Create {{ $entityType }}
-                                @endisset
-                                </p>
+    <div class="container my-5">
+        <h1 class="text-center text-body-emphasis">Neuly Listing Request</h1>
+        <p class="text-center lead">
+            @isset($entity)
+                Update {{ $entityType }} "{{ $entity->name }}"
+            @else
+                Create {{ $entityType }}
+            @endisset
+        </p>
 
-                                <form method="post" action=" {{ route('listing.request.finish') }}" enctype="multipart/form-data">
-                                    @csrf
+        <div class="max-width-780 mx-auto border p-4">
+            @include('discover.includes.status-messages')
 
-                                    <input type="hidden" name="entity_type" value="{{ $entityType }}"/>
-                                    @isset($entity)
-                                        <input type="hidden" name="to_update_id" value="{{ $entity->id }}"/>
-                                    @endisset
+            <form method="post" action=" {{ route('listing.request.finish') }}" enctype="multipart/form-data">
+                @csrf
 
-                                    {{--collect name and email if user not authorized--}}
-                                    @guest
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <label class="font-weight-bold">Your name:</label>
-                                                    <div class="form-group">
-                                                        <input type="text" class="form-control" name="applicant_name" value="" required>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <label class="font-weight-bold">Your email:</label>
-                                                    <div class="form-group">
-                                                        <input type="email" class="form-control" name="applicant_email" value="" required>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <hr>
-                                    @endguest
-                                    <p class="text-center">Use the form below to add or update information for this {{ $entityType }}.</p>
+                <input type="hidden" name="entity_type" value="{{ $entityType }}"/>
+                @isset($entity)
+                    <input type="hidden" name="to_update_id" value="{{ $entity->id }}"/>
+                @endisset
 
-                                    @foreach($mapping as $field => $options)
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <label
-                                                        class="font-weight-bold">{{ isset($options['label']) ? $options['label'] : FieldsMapping::makeLabelFromFieldName($field) }}</label>
-                                                    @include('discover.listing-requests.fields.' . ListingRequestHelper::getFieldViewByMappingOptions($options))
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endforeach
-
-                                    <div class="form-group">
-                                        <label class="font-weight-bold">Any additional info about this {{ $entityType }} or comments for the Neuly team?</label>
-                                        <textarea class="form-control" name="comment" rows="3"></textarea>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <button class="btn btn-primary float-right" type="submit">send</button>
-                                    </div>
-                                </form>
-                            </div>
+                {{--collect name and email if user not authorized--}}
+                @guest
+                    <div class="row">
+                        <div class="col-12 col-md-6 mb-3">
+                            <label for="applicant_name" class="fw-bold">Your name:</label>
+                            <input type="text" class="form-control" name="applicant_name" id="applicant_name" required>
+                        </div>
+                        <div class="col-12 col-md-6 mb-3">
+                            <label for="applicant_email" class="fw-bold">Your email:</label>
+                                <input type="email" class="form-control" name="applicant_email" id="applicant_email" required>
                         </div>
                     </div>
+                    <hr>
+                @endguest
+                <p class="text-center">Use the form below to add or update information for this {{ $entityType }}.</p>
+
+                @foreach($mapping as $field => $options)
+                    <div class="mb-3">
+                        <label class="fw-bold">{{ isset($options['label']) ? $options['label'] : FieldsMapping::makeLabelFromFieldName($field) }}</label>
+                        @include('discover.listing-requests.fields.' . ListingRequestHelper::getFieldViewByMappingOptions($options))
+                    </div>
+                @endforeach
+
+                <div class="form-group mb-3">
+                    <label for="comment" class="fw-bold">Any additional info about this {{ $entityType }} or comments for the Neuly team?</label>
+                    <textarea class="form-control" name="comment" id="comment" rows="3"></textarea>
                 </div>
 
-                @include('footers.mini')
-
-            </main>
-
+                <div>
+                    <button class="btn btn-primary btn-lg" type="submit">Send</button>
+                </div>
+            </form>
         </div>
-
     </div>
 @endsection
 

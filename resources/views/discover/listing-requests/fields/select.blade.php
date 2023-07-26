@@ -10,7 +10,7 @@ if (isset($entity)) {
     $currentValue = $entity->{$field};
 }
 ?>
-<select name="{{ $field }}" class="form-control {{ $additionalClass }}">
+<select name="{{ $field }}" id="{{ $field }}" class="form-select {{ $additionalClass }}">
     @if(isset($options['required']) && $options['required'] === false)
     <option value="">-</option>
     @endif
