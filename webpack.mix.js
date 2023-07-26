@@ -21,15 +21,15 @@ mix.options({
 // Mix JavaScript
 mix
 	.js('resources/js/app.js', 'public/js')
-	.js('resources/js/discovertabs.js', 'public/js')
-	.js('resources/js/formValidation.js', 'public/js')
+	// .js('resources/js/discovertabs.js', 'public/js')
+	// .js('resources/js/formValidation.js', 'public/js')
     .js('resources/js/appDetailModal.js', 'public/js')
-    .js('resources/js/home-hero.js', 'public/js')
+    // .js('resources/js/home-hero.js', 'public/js')
     .js('resources/js/nav-tiles.js', 'public/js')
     .js('resources/js/metrics/bar.js', 'public/js')
     .js('resources/js/metrics/line.js', 'public/js')
     .js('resources/js/embed-search.js', 'public/js/external')
-    .js('resources/js/practitioners.js', 'public/js');
+    .js('resources/js/neuly-care.js', 'public/js');
 
 // Mix CSS
 mix
@@ -38,7 +38,8 @@ mix
     .sass('resources/sass/backpack-custom.scss', 'public/css')
     .sass('resources/sass/choices.scss', 'public/css')
     .sass('resources/sass/nav-tiles.scss', 'public/css')
-    .sass('resources/sass/enterprise-dashboard.scss', 'public/css');
+    .sass('resources/sass/enterprise-dashboard.scss', 'public/css')
+    .sass('resources/sass/opencage-geosearch.scss', 'public/css');
 // mix
 // 	.sass('resources/sass/app.scss', 'public/css')
 // 	.sass('resources/sass/index-qm.scss', 'public/css')

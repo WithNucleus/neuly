@@ -10,6 +10,7 @@ use App\Models\BookableListing;
 use App\Models\Focus;
 use App\Models\SearchLog;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
@@ -20,6 +21,7 @@ class BookableListingsIndex extends Component
 
     protected string $paginationTheme = 'bootstrap';
     protected $queryString = ['search'];
+    protected $listeners = ['neulyCareGeoSearch', 'clearSearchLocation'];
 
     public ?string $search = null;
 
@@ -28,9 +30,8 @@ class BookableListingsIndex extends Component
         'type' => []
     ];
 
-    public string $latitude;
-    public string $longitude;
     public string $ip;
+    public ?int $userId;
 
     public bool $virtual = false;
 
@@ -41,23 +42,30 @@ class BookableListingsIndex extends Component
         'id' => null
     ];
 
-    public array $savedLocation = [
+    public array $searchLocation = [
         'latitude' => null,
         'longitude' => null,
         'name' => null,
         'id' => null
     ];
 
+    public array $savedLocations = [];
+
     public function mount(Request $request) {
 
-         $this->ip = $request->getClientIp(); // PRODUCTION
-//        $this->ip = '207.46.13.74'; // TEST - Chicago
+//         $this->ip = $request->getClientIp(); // PRODUCTION
+        // $this->ip = '207.46.13.74'; // TEST - Chicago
+        $this->ip = "108.92.170.181"; // Sydney
 
         $this->getLocalLocation();
 
         $this->sorts = [
             'updated_at' => 'desc'
         ];
+
+        if (Auth::id()) {
+            $this->userId = Auth::id();
+        }
     }
 
     private function getLocalLocation() {
@@ -68,14 +76,22 @@ class BookableListingsIndex extends Component
         if (array_key_exists('error', $ipResponse)) {
             Log::info('Error with Neuly Care IP Response', $ipResponse);
         } else {
+            $thisLocation = [];
+
             if (array_key_exists('latitude', $ipResponse) AND array_key_exists('longitude', $ipResponse)) {
                $this->localLocation['latitude'] = $ipResponse['latitude'];
                $this->localLocation['longitude'] = $ipResponse['longitude'];
+
+               $thisLocation['latitude'] = $ipResponse['latitude'];
+               $thisLocation['longitude'] = $ipResponse['longitude'];
             }
 
             if (array_key_exists('city', $ipResponse)) {
                $this->localLocation['name'] = $ipResponse['city'];
+               $thisLocation['name'] = $ipResponse['city'];
             }
+
+            $this->savedLocations[] = $thisLocation;
         }
 
     }
@@ -101,6 +117,10 @@ class BookableListingsIndex extends Component
         $this->reset('localLocation');
     }
 
+    public function clearSearchLocation() {
+        $this->reset('searchLocation');
+    }
+
     public function clearFilters() {
         $this->reset('search');
         $this->reset('filters');
@@ -108,19 +128,38 @@ class BookableListingsIndex extends Component
         $this->resetPage();
     }
 
+    public function neulyCareGeoSearch($locationName, $latitude, $longitude) {
+        $this->searchLocation['latitude'] = $latitude;
+        $this->searchLocation['longitude'] = $longitude;
+        $this->searchLocation['name'] = $locationName;
+
+        $this->savedLocations[] = [
+            'type' => 'geosearch',
+            'latitude' => $latitude,
+            'longitude' => $longitude,
+            'name' => $locationName
+        ];
+    }
+
     public function goListing($id) {
         $listing = BookableListing::find($id);
+
         SearchLog::create([
             'term' => $this->search ?? 'empty',
             'type' => SearchLog::TYPE_NEULY_CARE,
             'ip' => $this->ip,
-            'location_id' => $this->savedLocation['id'],
+            'location_id' => $this->searchLocation['id'],
             'data' => [
                 'filters' => $this->filters,
-                'localLocation' => $this->localLocation
+                'virtual' => $this->virtual,
+                'locations' => [
+                    'local' => $this->localLocation,
+                    'saved' => $this->savedLocations
+                ]
             ],
             'relatable_type' => BookableListing::class,
-            'relatable_id' => $listing->id
+            'relatable_id' => $listing->id,
+            'user_id' => $this->userId
         ]);
 
         $this->dispatchBrowserEvent('go-to-listing', ['url' => $listing->bookable_url]);
@@ -182,6 +221,9 @@ class BookableListingsIndex extends Component
                 })
                 ->when($this->localLocation['latitude'], function($query) {
                     return $query->distance($this->localLocation['latitude'], $this->localLocation['longitude'], 100);
+                })
+                ->when($this->searchLocation['latitude'], function($query) {
+                    return $query->distance($this->searchLocation['latitude'], $this->searchLocation['longitude'], 100);
                 });
 
         return $this->applySorting($query);

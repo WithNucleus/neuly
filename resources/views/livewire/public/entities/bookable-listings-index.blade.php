@@ -1,7 +1,12 @@
 <div class="entity-index-listings">
+    <div>
+        <input wire:model="searchLocation.name" id="locationName" type="hidden">
+        <input wire:model="searchLocation.latitude" id="locationLatitude" type="hidden">
+        <input wire:model="searchLocation.longitude" id="locationLongitude" type="hidden">
+    </div>
     <div class="d-flex flex-column flex-md-row flex-wrap justify-content-center align-items-center">
         <div class="filter-widget d-flex align-items-center me-md-4 mb-3">
-            <input wire:model.lazy="search" type="text" class="form-control me-2" placeholder="Search" aria-label="Search listings">
+            <input wire:model.lazy="search" type="text" class="form-control me-2" placeholder="Search by keyword" aria-label="Search listings">
             <span>
                 <i class="fa-sharp fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Search by name, location, specialty, condition, etc."></i>
             </span>
@@ -82,6 +87,12 @@
                 <button wire:click="clearLocalLocation" class="btn text-danger px-1 border-0" aria-label="Clear location"><i class="fa-sharp fa-solid fa-circle-xmark"></i></button>
             </div>
         @endif
+        @if($searchLocation['name'])
+            <div class="me-3 mb-3">
+                <span>{{ $searchLocation['name'] }}</span>
+                <button wire:click="clearsearchLocation" class="btn text-danger px-1 border-0" aria-label="Clear location"><i class="fa-sharp fa-solid fa-circle-xmark"></i></button>
+            </div>
+        @endif
         <div class="filter-widget ms-auto mt-3">
             <button wire:click="clearFilters" class="btn btn-sm btn-ghost-primary">Clear Filters</button>
         </div>
@@ -144,7 +155,9 @@
                                         <div class="text-uppercase">{{ ucwords($record->type) }}</div>
                                         <div>
                                             @if($localLocation['name'])
-                                                {{ number_format($record->distance, 0) }} miles
+                                                <span wire:key="distance-local">{{ number_format($record->distance, 0) }} miles</span>
+                                            @elseif($searchLocation['name'])
+                                                <span wire:key="distance-saved">{{ number_format($record->distance, 0) }} miles</span>
                                             @endif
                                         </div>
                                     </div>

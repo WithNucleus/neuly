@@ -22,6 +22,9 @@
         </div>
 
         <div id="neuly-care-listings" class="container">
+            <div class="max-width-600 mb-4 mx-auto">
+                <div id="autocomplete"></div>
+            </div>
             <livewire:public.entities.bookable-listings-index />
         </div>
 
@@ -29,6 +32,9 @@
 @endsection
 
 @section('livewire_scripts')
+    <link rel="stylesheet" href="{{ mix('css/opencage-geosearch.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/@opencage/geosearch-bundle" type="text/javascript"></script>
+    <script src="{{ asset('js/neuly-care.js') }}"></script>
     <script src="https://unpkg.com/alpinejs" defer></script>
     <script>
         Livewire.on('gotoTop', () => {
