@@ -33,7 +33,7 @@
                     <div class="right-side font-size-small align-self-end">
                         <a href="{{ route('member.follow-lists.edit', $list->slug) }}" class="text-primary text-decoration-none me-2"><i class="fa-strong far fa-edit"></i> Edit</a>
 
-                        <button type="button" class="btn btn-link btn-sm p-0 text-danger text-decoration-none" data-toggle="modal" data-target="#delete-list-{{$list->id}}">
+                        <button type="button" class="btn btn-link btn-sm p-0 text-danger text-decoration-none" data-bs-toggle="modal" data-bs-target="#delete-list-{{$list->id}}">
                             <i class="fa-strong far fa-trash-alt"></i> Delete
                         </button>
                     </div>

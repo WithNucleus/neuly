@@ -6,46 +6,32 @@ use App\Helpers\ClaimPersonHelper;
 use App\Helpers\NotificationHelper;
 use App\Helpers\PagePreviewHelper;
 use App\Http\Controllers\Controller;
-use App\Http\Filters\PeopleCompanyFocusFilter;
 use App\Mail\VerifyClaimedPersonMail;
-use App\Models\Company;
-use App\Models\Location;
 use App\Models\Person;
 use App\Models\RaisedClaim;
 use App\Notifications\PersonDeletionRequested;
 use App\Notifications\RaisedClaimCreated;
 use App\Repositories\FollowRepository;
 use App\Services\Metas;
-use App\User;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Spatie\Activitylog\Models\Activity;
-use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\AllowedSort;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class PersonController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('query_filters')->only('index');
-    }
 
     public function index(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         $metas = Metas::fromPage($request->path());
 
-        return view('discover.people.index', compact(
-            'metas',
-        ));
+        return view('discover.people.index', [
+            'metas' => $metas
+        ]);
     }
 
-    // Show More Info -- Full Layout
-    public function show(Request $request, $slug)
+    public function show(Request $request, $slug): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Contracts\Foundation\Application
     {
-        // Get Person
         $person = Person::where('slug', $slug)
             ->with([
                 'content',
@@ -80,8 +66,7 @@ class PersonController extends Controller
             'image' => $person->entityImageUrl,
         ]);
 
-        $entity = 'people';
-        $isFollowed = (bool) count(FollowRepository::fromuser(Person::class, $person->id));
+        $entity = $person;
         $isVerified = $person->user_id !== null;
 
         // Log Activity
@@ -98,7 +83,7 @@ class PersonController extends Controller
             })
             ->log($person->name);
 
-        return view('discover.people.show', compact('person', 'metas', 'entity', 'isFollowed', 'isVerified', 'preview', 'userIsPerson'));
+        return view('discover.people.show', compact('person', 'metas', 'entity', 'isVerified', 'preview', 'userIsPerson'));
     }
 
     public function namesJson()

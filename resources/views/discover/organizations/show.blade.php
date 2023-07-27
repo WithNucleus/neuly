@@ -15,11 +15,7 @@
 
         <x-entities.entity-show-title-meta title="{{ $company->name }}">
             <div class="me-3">
-                @include('members.follow.button', [
-                    'followable_type' => get_class($company),
-                    'followable_id' => $company->id,
-                    'name' => $company->name
-                ])
+                @include('members.follow.button')
             </div>
 
             @if ($company->jobs->count() > 0)

@@ -14,7 +14,7 @@ class PodcastController extends Controller
         return view('discover.data-feeds.podcasts.index');
     }
 
-    public function show($slug)
+    public function show($slug): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         $feed = DataFeed::where('slug', $slug)->firstOrFail();
 
@@ -27,6 +27,10 @@ class PodcastController extends Controller
             ->paginate(20)
             ->appends(request()->query());
 
-        return view('discover.data-feeds.podcasts.episodes-list', compact('feed', 'episodes'));
+        return view('discover.data-feeds.podcasts.episodes-list', [
+            'feed' => $feed,
+            'episodes' => $episodes,
+            'entity' => $feed
+        ]);
     }
 }

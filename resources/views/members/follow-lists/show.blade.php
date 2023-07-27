@@ -15,27 +15,27 @@
     <div class="container my-4">
         @include('members.includes.status-messages')
 
-        <div class="d-flex align-items-baseline justify-content-between">
+        <div class="d-flex align-items-center justify-content-between">
             <h1>{{ $list->name }}</h1>
 
-            <div class="mb-0 font-size-small d-inline-block ms-2">
-            @if($list->is_public)
-                @if($list->user->member_url == '')
-                    <a href="{{ route('user.settings') }}" class="btn btn-link lead-smaller p-0 ms-2 text-secondary font-weight-bold text-decoration-none" data-toggle="tooltip" data-placement="top" title="Set your Neuly member URL before sharing">
+            <div class="mb-2">
+                @if($list->is_public)
+                    @if($list->user->member_url == '')
+                        <a href="{{ route('user.settings') }}" class="btn btn-success h5 btn-cta text-white" data-bs-toggle="tooltip" data-placement="top" title="Set your Neuly member URL before sharing">
+                            <i class="fa-strong far fa-share-square fa-lg"></i> SHARE
+                        </a>
+                    @else
+                        <span data-bs-toggle="tooltip" data-placement="top" title="Share {{ $list->name }}">
+                            <button class="btn btn-success h5 btn-cta text-white" data-bs-toggle="modal" data-bs-target="#share-list">
+                                <i class="fa-strong far fa-share-square fa-lg"></i> SHARE
+                            </button>
+                        </span>
+                    @endif
+                @else
+                    <a href="{{ route('member.follow-lists.edit', $list->slug) }}" class="btn btn-success h5 btn-cta text-white" data-bs-toggle="tooltip" data-placement="top" title="This list must be public to share it">
                         <i class="fa-strong far fa-share-square fa-lg"></i> SHARE
                     </a>
-                @else
-                    <span data-toggle="tooltip" data-placement="top" title="Share">
-                        <button class="btn btn-link lead-smaller p-0 ms-2 text-secondary font-weight-bold text-decoration-none" data-toggle="modal" data-target="#share-list" data-toggle="tooltip" data-placement="top" title="Share List">
-                            <i class="fa-strong far fa-share-square fa-lg"></i> SHARE
-                        </button>
-                    </span>
                 @endif
-            @else
-                <a href="{{ route('member.follow-lists.edit', $list->slug) }}" class="btn btn-link lead-smaller p-0 ms-2 text-secondary font-weight-bold text-decoration-none" data-toggle="tooltip" data-placement="top" title="This list must be public to share it">
-                    <i class="fa-strong far fa-share-square fa-lg"></i> SHARE
-                </a>
-            @endif
             </div>
         </div>
         <div class="row">
@@ -50,7 +50,7 @@
                             @if($list->is_public)
                                 <span class="text-success ms-3"><i class="fa-strong far fa-eye"></i> Public</span>
                                 @if($list->user->member_url == '')
-                                    <a href="{{ route('user.settings') }}" data-toggle="tooltip" data-placement="top" title="Set your Neuly member URL before sharing"><span class="ms-3 font-size-small badge badge-warning">Set your Neuly URL</span></a>
+                                    <a href="{{ route('user.settings') }}" data-bs-toggle="tooltip" data-bs-placement="top" title="Set your Neuly member URL before sharing"><span class="ms-3 font-size-small badge badge-warning">Set your Neuly URL</span></a>
                                 @endif
                             @else
                                 <span class="text-muted ms-3"><i class="fa-strong far fa-lock-alt"></i> Private</span>
@@ -59,7 +59,7 @@
 
                         <div class="align-self-end pb-1 font-size-small">
                             @if($list->is_public && $list->user->member_url)
-                                <a href="{{ route('members.follow-lists.public', [$list->user->member_url , $list->slug]) }}" class="btn btn-sm btn-accent me-2">
+                                <a href="{{ route('members.follow-lists.public', [$list->user->member_url , $list->slug]) }}" class="btn btn-sm btn-secondary me-2">
                                     <i class="fa-strong far fa-link"></i>
                                     <span>Public URL</span>
                                 </a>
@@ -68,7 +68,7 @@
                                 <i class="fa-strong far fa-edit"></i>
                                 <span>Edit List
                                 </span></a>
-                            <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete-list-{{$list->id}}">
+                            <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#delete-list-{{$list->id}}">
                                 <i class="fa-strong far fa-trash-alt"></i>
                                 <span>Delete List</span>
                             </button>

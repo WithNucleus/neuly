@@ -92,7 +92,7 @@ class FindOrCreatePersonListing extends Component
             $this->successfulPersonClaimed = true;
         } else {
 
-            SlackAlert::to('test')->blocks([
+            SlackAlert::to('dev')->blocks([
                 [
                     "type" => "section",
                     "text" => [

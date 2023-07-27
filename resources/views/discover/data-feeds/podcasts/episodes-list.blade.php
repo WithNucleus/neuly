@@ -14,7 +14,11 @@
     <div class="container py-4">
 
         <div class="max-width-1000 mx-auto">
-            <x-entities.entity-show-title-meta title="{{ $feed->name }}"></x-entities.entity-show-title-meta>
+            <x-entities.entity-show-title-meta title="{{ $feed->name }}">
+                <div class="me-3">
+                    @include('members.follow.button')
+                </div>
+            </x-entities.entity-show-title-meta>
 
             <div class="d-md-flex pb-5 mb-5 border-bottom">
                 <div class="flex-shrink-0">

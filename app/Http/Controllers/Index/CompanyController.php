@@ -64,9 +64,6 @@ class CompanyController extends Controller
 
         $related = $this->getReltaedEntities($company);
 
-        $entity = 'organizations';
-        $isFollowed = (bool) count(FollowRepository::fromuser(Company::class, $company->id));
-
         activity('pageview')
             ->causedBy(Auth::user())
             ->withProperties([
@@ -81,7 +78,9 @@ class CompanyController extends Controller
             })
             ->log($company->name);
 
-        return view('discover.organizations.show', compact('company', 'related', 'metas', 'entity', 'isFollowed', 'preview'));
+        $entity = $company;
+
+        return view('discover.organizations.show', compact('company', 'related', 'metas', 'entity', 'preview'));
     }
 
     public function namesJson(): \Illuminate\Http\JsonResponse

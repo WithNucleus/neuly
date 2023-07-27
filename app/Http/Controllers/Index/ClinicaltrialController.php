@@ -12,7 +12,6 @@ use Spatie\Activitylog\Models\Activity;
 
 class ClinicaltrialController extends Controller
 {
-
     public function index(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         $metas = Metas::fromPage($request->path());
@@ -22,7 +21,7 @@ class ClinicaltrialController extends Controller
         ]);
     }
 
-    public function show(Request $request, $slug)
+    public function show(Request $request, $slug): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         $clinicalTrial = Clinicaltrial::with([
             'conditions',
@@ -36,8 +35,7 @@ class ClinicaltrialController extends Controller
             ->where('slug', $slug)
             ->firstOrFail();
 
-        $entity = 'clinicaltrials';
-        $isFollowed = (bool) count(FollowRepository::fromuser(Clinicaltrial::class, $clinicalTrial->id));
+        $entity = $clinicalTrial;
 
         // Log Activity
         activity('pageview')
@@ -55,8 +53,7 @@ class ClinicaltrialController extends Controller
 
         return view('discover.clinicaltrials.show', [
             'clinicalTrial' => $clinicalTrial,
-            'entity' => $entity,
-            'isFollowed' => $isFollowed
+            'entity' => $entity
         ]);
     }
 }
