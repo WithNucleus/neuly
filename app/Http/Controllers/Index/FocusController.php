@@ -9,12 +9,9 @@ use App\Services\Metas;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Spatie\Activitylog\Models\Activity;
-use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class FocusController extends Controller
 {
-
     public function index(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         $focusDrugs = Focus::drugs()->orderBy('name')->get();
@@ -26,10 +23,8 @@ class FocusController extends Controller
         ]);
     }
 
-    // Show
-    public function show(Request $request, $slug)
+    public function show(Request $request, $slug): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        // Get Focus
         $focus = Focus::where('slug', $slug)
             ->with([
                 'bookableListings',
@@ -67,8 +62,7 @@ class FocusController extends Controller
             'image' => '',
         ]);
 
-        $entity = 'focus';
-        $isFollowed = (bool) count(FollowRepository::fromuser(Focus::class, $focus->id));
+        $entity = $focus;
 
         // Log Activity
         activity('pageview')
@@ -88,7 +82,6 @@ class FocusController extends Controller
             'focus' => $focus,
             'metas' => $metas,
             'entity' => $entity,
-            'isFollowed' => $isFollowed
         ]);
     }
 }

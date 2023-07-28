@@ -6,7 +6,7 @@ return [
      */
     'webhook_urls' => [
         'default' => 'https://hooks.slack.com/services/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', // #notifications
-        'test' => 'https://hooks.slack.com/services/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'
+        'dev' => 'https://hooks.slack.com/services/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' // #dev-notifications
     ],
 
     /*

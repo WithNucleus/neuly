@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Index;
 
 use App\Http\Controllers\Controller;
-use App\Models\Focus;
 use App\Models\Research;
 use App\Repositories\FollowRepository;
 use App\Services\Metas;
@@ -25,7 +24,6 @@ class ResearchController extends Controller
 
     public function show(Request $request, $slug): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        // Get Research
         $research = Research::where('slug', $slug)->firstOrFail();
 
         $metas = Metas::process([
@@ -36,8 +34,7 @@ class ResearchController extends Controller
 
         $related = $this->getReltaedEntities($research);
 
-        $entity = 'research';
-        $isFollowed = (bool) count(FollowRepository::fromuser(Research::class, $research->id));
+        $entity = $research;
 
         $resources = json_decode($research->resources);
 
@@ -55,7 +52,13 @@ class ResearchController extends Controller
             })
             ->log($research->name);
 
-        return view('discover.research.show', compact('research', 'related', 'metas', 'entity', 'resources', 'isFollowed'));
+        return view('discover.research.show', [
+            'research' => $research,
+            'related' => $related,
+            'metas' => $metas,
+            'entity' => $entity,
+            'resources' => $resources
+        ]);
     }
 
     public function namesJson()

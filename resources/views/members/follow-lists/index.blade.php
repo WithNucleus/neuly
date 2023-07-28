@@ -36,7 +36,7 @@
                 <p class="lead mt-4 mb-1">Recently Added</p>
                 @include('members.data.follows', [
                     'show_more'         => true,
-                    'shadow'            => true,
+                    'shadow'            => false,
                     'show_action_items' => true,
                     'show_list_name'    => true
                 ])

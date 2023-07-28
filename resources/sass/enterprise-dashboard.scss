@@ -1,7 +1,16 @@
 @import 'variables';
 
 .enterprise-dashboard-container {
+    .text-body-emphasis {
+        color: $gray-200 !important;
+    }
+    .text-body {
+        color: $gray-500 !important;
+    }
 
+    .form-control::placeholder {
+        color: $gray-500 !important;
+    }
 }
 
 .enterprise-dashboard-controls {

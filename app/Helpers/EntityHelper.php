@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Models\Clinicaltrial;
 use App\Models\Company;
+use App\Models\DataFeed;
 use App\Models\Event;
 use App\Models\Focus;
 use App\Models\Investor;
@@ -27,6 +28,7 @@ class EntityHelper
         'locations' => Location::class,
         'people' => Person::class,
         'research' => Research::class,
+        'podcasts' => DataFeed::class
     ];
 
     /**

@@ -28,7 +28,7 @@ class PersonListing extends Component
             'person.website' => 'nullable|url|max:255',
             'person.bio' => 'nullable|string',
             'person.facebook' => 'nullable|string',
-            'person.twitter' => 'nullable|string',
+            'person.linkedin' => 'nullable|string',
             'person.instagram' => 'nullable|string',
             'person.google_scholar' => 'nullable|url',
             'photo' => 'nullable|image|max:1024'

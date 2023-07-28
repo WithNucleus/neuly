@@ -5,24 +5,14 @@ namespace App\Http\Controllers\Index;
 use App\Http\Controllers\Controller;
 use App\Models\Investor;
 use App\Models\Job;
-use App\Models\Location;
 use App\Repositories\FollowRepository;
 use App\Services\Metas;
-use App\Services\StringLengthSort;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Spatie\Activitylog\Models\Activity;
-use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\AllowedSort;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class InvestorController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('query_filters')->only('index');
-    }
-
     public function index(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         return view('discover.investors.index');
@@ -38,8 +28,7 @@ class InvestorController extends Controller
             'image' => '',
         ]);
 
-        $entity = 'investors';
-        $isFollowed = (bool) count(FollowRepository::fromuser(Investor::class, $investor->id));
+        $entity = $investor;
 
         activity('pageview')
             ->causedBy(Auth::user())
@@ -55,7 +44,7 @@ class InvestorController extends Controller
             })
             ->log($investor->name);
 
-        return view('discover.investors.show', compact('investor', 'metas', 'entity', 'isFollowed'));
+        return view('discover.investors.show', compact('investor', 'metas', 'entity'));
     }
 
     public function namesJson()

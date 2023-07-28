@@ -7,7 +7,7 @@
 @if ($follows->count() > 0)
     <ul class="list-group @if($shadow == true)shadow-sm @endif">
         @foreach ($follows as $follow)
-            <li class="list-group-item">
+            <li class="list-group-item py-3">
                 <div class="d-flex flex-wrap justify-content-between lead fw-bold">
                     <a href="{{ route('member.follow.show', ['follow' => $follow]) }}">{{ $follow->followable->name }}</a>
                     @if($show_list_name == true)
@@ -31,22 +31,8 @@
                     @endif
 
                     @if($show_action_items == true)
-                        <div class="mt-2 font-size-small">
-                            <a href="{{ route('member.follow.edit', $follow->id) }}" class="btn btn-sm btn-primary me-2">
-                                <i class="fa-strong far fa-edit"></i>
-                                <span>Edit</span>
-                            </a>
-                            <a href="#" class="btn btn-sm btn-danger" data-toggle="modal"
-                               data-target="#unfollow-modal-{{$follow->followable_id}}">
-                                <i class="fa-strong far fa-trash-alt"></i>
-                                <span>Unfollow</span>
-                            </a>
-
-                            @include('members.follow.modals.unfollow', [
-                                'followable_type' => $follow->followable_type,
-                                'followable_id' => $follow->followable_id,
-                                'name' => $follow->followable->name
-                            ])
+                        <div wire:key="follow-settings-{{ $follow->id }}" class="mt-2 font-size-small">
+                            <livewire:members.follow.follow-entity-widget showModal="true" buttonLabel="Settings" :entity="$follow->followable" />
                         </div>
                     @endif
                 </div>

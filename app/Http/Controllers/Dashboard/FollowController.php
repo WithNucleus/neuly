@@ -7,8 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\FollowRequest;
 use App\Models\Follow;
 use App\Models\FollowList;
-use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FollowController extends Controller
 {
@@ -38,13 +38,13 @@ class FollowController extends Controller
 
     public function edit($id)
     {
-        $lists = FollowList::where('user_id', Auth::id())->get();
-        $follow = Follow::with('followable')
+        $entity = Follow::with('followable')
             ->where('user_id', Auth::id())
             ->findOrFail($id);
-        $previousUrl = url()->previous();
 
-        return view('members.follow.edit', compact('follow', 'lists', 'previousUrl'));
+        return view('members.follow.edit', [
+            'entity' => $entity
+        ]);
     }
 
     /**
