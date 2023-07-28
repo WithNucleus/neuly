@@ -1,4 +1,7 @@
 <form wire:submit.prevent="submit">
+    <div class="mb-3 fs-6 text-accent">
+        {{ $entity->name }}
+    </div>
     <div class="mb-3">
         <label for="list" class="fw-bold">List</label>
         <select wire:model="follow.follow_list_id" id="list" class="form-select">

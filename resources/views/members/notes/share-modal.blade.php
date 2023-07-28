@@ -5,21 +5,19 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="h3 modal-title">Share {{ $note->title }}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <div class="modal-body">
                 <div class="py-3 px-2 text-center">
                     <div class="clipboard-container mb-4">
-                            <label data-toggle="tooltip" data-trigger="manual" data-placement="top" title="Copied!" data-clipboard-target="#note-url" for="note_url" id="copy-note-url" class="font-weight-bold text-center text-primary cursor-hover-pointer">
+                            <label data-toggle="tooltip" data-trigger="manual" data-placement="top" title="Copied!" data-clipboard-target="#note-url" for="note_url" id="copy-note-url" class="fw-bold text-center text-primary cursor-hover-pointer">
                             <i class="fad fa-copy"></i> Copy Note URL to Clipboard
                         </label>
                         <input name="note_url" id="note-url" class="form-control form-control-sm" type="text" value="{{ $note_url }}">
                     </div>
 
-                    <p class="mb-1 font-weight-bold">
+                    <p class="mb-1 fw-bold">
                         Share on Social Media:
                     </p>
 
@@ -42,12 +40,11 @@
                     </div>
 
                     <div class="email-container">
-                        <p class="mb-1 p-0 font-weight-bold">Email a Friend:</p>
-                        <a href="mailto:?&subject={{ $note->title }}&body=I saw this on Neuly and thought you'd be interested: {{ $note_url }}">Open your mail app <i class="fad fa-external-link"></i></a>
-                        {{-- <div class="col-10 mx-auto mt-0 pt-0 d-flex align-items-center justify-content-center">
-                            <input type="email" class="form-control" name="email" placeholder="sherlock@holmes.com">
-                            <button id="trigger-email-friend" class="ml-1 btn btn-primary">Send</button>
-                        </div> --}}
+                        <p class="mb-1 p-0 fw-bold">Email a Friend:</p>
+                        <a href="mailto:?&subject={{ $note->title }}&body=I saw this on Neuly and thought you'd be interested: {{ $note_url }}" class="text-decoration-none">
+                            <span class="me-1">Open your mail app</span>
+                            <i class="fad fa-external-link"></i>
+                        </a>
                     </div>
 
                 </div>

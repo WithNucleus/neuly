@@ -39,8 +39,10 @@
 
                     <div class="email-container">
                         <p class="mb-1 p-0 fw-bold">Email a Friend:</p>
-                        <a href="mailto:?&subject={{ $list->name }}&body=I saw this on Neuly and thought you'd be interested: {{ $shareUrl }}">
-                            Open your mail app <i class="fad fa-external-link"></i></a>
+                        <a href="mailto:?&subject={{ $list->name }}&body=I saw this on Neuly and thought you'd be interested: {{ $shareUrl }}" class="text-decoration-none">
+                            <span class="me-1">Open your mail app</span>
+                            <i class="fad fa-external-link"></i>
+                        </a>
                     </div>
 
                 </div>

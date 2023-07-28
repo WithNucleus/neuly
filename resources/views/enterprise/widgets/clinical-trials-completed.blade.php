@@ -25,8 +25,7 @@
     </div>
 </div>
 
-<p class="lead">Total: {{ $totalCompleted }}</p>
-<p>Last completed:</p>
+<p class="lead text-body">Total: {{ $totalCompleted }}</p>
 <ul class="list-group list-group-flush mb-4 border">
     @foreach($clinicalTrials as $clinicalTrial)
         <li class="list-group-item">

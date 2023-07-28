@@ -36,10 +36,10 @@
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label class="fw-bold" for="twitter">Twitter</label>
+                        <label class="fw-bold" for="linkedin">LinkedIn</label>
                         <div class="input-group">
-                            <span class="input-group-text">https://www.twitter.com/</span>
-                            <input wire:model="person.twitter" type="text" class="form-control" id="twitter">
+                            <span class="input-group-text">https://www.linkedin.com/in/</span>
+                            <input wire:model="person.linkedin" type="text" class="form-control" id="linkedin">
                         </div>
                     </div>
                     <div class="mb-3">
