@@ -1,4 +1,4 @@
-<button class="btn btn-sm copy-nav-tile" data-toggle="tooltip" data-placement="top" title="Get code" data-clipboard-text='<script src="{{ route('nav-tiles.script', $navigationTile->slug) }}" type="text/javascript"></script>'>
+<button class="btn btn-sm copy-nav-tile" data-bs-toggle="tooltip" data-placement="top" title="Get code" data-clipboard-text='<script src="{{ route('nav-tiles.script', $navigationTile->slug) }}" type="text/javascript"></script>'>
     <i class="fad fa-code text-tertiary"></i>
 </button>
 <span class="badge badge-info copied" style="display: none">Copied!</span>

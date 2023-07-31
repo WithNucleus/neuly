@@ -8,10 +8,8 @@
 
 @if(Session::has('navigationTileSuccess'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ Session::get('navigationTileSuccess') }}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
+        <span class="me-auto">{{ Session::get('navigationTileSuccess') }}</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 @endif
 
