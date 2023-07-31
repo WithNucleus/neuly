@@ -60,6 +60,11 @@ class Focus extends Model implements EntityContract
         return $this->belongsToMany(\App\Models\Clinicaltrial::class, 'clinicaltrial_focus', 'focus_id', 'clinicaltrial_id')->withTimestamps();
     }
 
+    public function recruitingClinicalTrials(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(\App\Models\Clinicaltrial::class, 'clinicaltrial_focus', 'focus_id', 'clinicaltrial_id')->where('status', 'Recruiting')->withTimestamps();
+    }
+
     public function companies(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(\App\Models\Company::class, 'company_focus', 'focus_id', 'company_id')->withTimestamps();

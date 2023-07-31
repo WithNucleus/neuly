@@ -57,6 +57,12 @@ class Clinicaltrial extends Model implements EntityContract
 
     private $searchableModelName = 'Clinical Trial';
 
+    const GENDERS = [
+        'All',
+        'Male',
+        'Female'
+    ];
+
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS
@@ -134,12 +140,7 @@ class Clinicaltrial extends Model implements EntityContract
         return $this->hasOne(ClinicaltrialParsingResult::class);
     }
 
-    /**
-     * Get all Sponsors and Collaborators combined together.
-     *
-     * @return \Illuminate\Support\Collection
-     */
-    public function sponsorsAndCollaborators()
+    public function sponsorsAndCollaborators(): \Illuminate\Support\Collection
     {
         return collect()
             ->merge($this->companies)
@@ -172,6 +173,10 @@ class Clinicaltrial extends Model implements EntityContract
     public function scopeActive($query)
     {
         return $query->whereIn('status', ['Recruiting', 'Active, not recruiting', 'Available']);
+    }
+
+    public function scopeRecruiting($query) {
+        return $query->where('status', 'Recruiting');
     }
 
     /**

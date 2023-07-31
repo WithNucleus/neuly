@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Livewire\Public\Entities;
+namespace App\Http\Livewire\Public\Featured;
 
+use App\Http\Livewire\Public\Traits\LocalLocationFilter;
 use App\Http\Livewire\Traits\WithBulkActions;
 use App\Http\Livewire\Traits\WithCachedRows;
 use App\Http\Livewire\Traits\WithPerPagePagination;
@@ -11,14 +12,11 @@ use App\Models\Focus;
 use App\Models\SearchLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 use Livewire\Component;
-use Throwable;
 
 class NeulyCare extends Component
 {
-    use WithPerPagePagination, WithBulkActions, WithCachedRows, WithSorting;
+    use WithPerPagePagination, WithBulkActions, WithCachedRows, WithSorting, LocalLocationFilter;
 
     protected string $paginationTheme = 'bootstrap';
     protected $queryString = ['search'];
@@ -54,9 +52,9 @@ class NeulyCare extends Component
 
     public function mount(Request $request) {
 
-         $this->ip = $request->getClientIp(); // PRODUCTION
+//         $this->ip = $request->getClientIp(); // PRODUCTION
         // $this->ip = '207.46.13.74'; // TEST - Chicago
-        // $this->ip = "108.92.170.181"; // Sydney
+         $this->ip = "108.92.170.181"; // Sydney
 
         $this->getLocalLocation();
 
@@ -67,38 +65,6 @@ class NeulyCare extends Component
         if (Auth::id()) {
             $this->userId = Auth::id();
         }
-    }
-
-    private function getLocalLocation() {
-
-        try {
-            $ipRequest = Http::get('https://ipapi.co/' . $this->ip . '/json');
-            $ipResponse = json_decode($ipRequest->body(), true);
-
-            if (array_key_exists('error', $ipResponse)) {
-                Log::info('Error with Neuly Care IP Response', $ipResponse);
-            } else {
-                $thisLocation = [];
-
-                if (array_key_exists('latitude', $ipResponse) AND array_key_exists('longitude', $ipResponse)) {
-                   $this->localLocation['latitude'] = $ipResponse['latitude'];
-                   $this->localLocation['longitude'] = $ipResponse['longitude'];
-
-                   $thisLocation['latitude'] = $ipResponse['latitude'];
-                   $thisLocation['longitude'] = $ipResponse['longitude'];
-                }
-
-                if (array_key_exists('city', $ipResponse)) {
-                   $this->localLocation['name'] = $ipResponse['city'];
-                   $thisLocation['name'] = $ipResponse['city'];
-                }
-
-                $this->savedLocations[] = $thisLocation;
-            }
-        } catch(Throwable $exception) {
-            Log::info('Exception with Neuly Care IP Response ' . $exception->getMessage());
-        }
-
     }
 
     public function updatingSearch() {
@@ -250,7 +216,7 @@ class NeulyCare extends Component
 
     public function render()
     {
-        return view('livewire.public.entities.neuly-care', [
+        return view('livewire.public.featured.neuly-care', [
             'records' => $this->rows,
             'typeOptions' => BookableListing::TYPES_CARE,
             'focusOptions' => Focus::drugs()->whereHas('bookableListings')->withCount('bookableListings')->orderByDesc('bookable_listings_count')->get()->toArray()

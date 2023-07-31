@@ -14,7 +14,7 @@
 
         <div class="filter-widget me-md-4 mb-3">
             <div class="btn-group">
-                <button type="button" class="btn btn-md @if($filters['focus']) has-pink-border @endif btn-primary dropdown-toggle rounded-0" data-bs-toggle="dropdown" aria-expanded="false">
+                <button type="button" class="btn btn-md @if($filters['focus']) btn-accent @else btn-primary @endif btn-primary dropdown-toggle rounded-0" data-bs-toggle="dropdown" aria-expanded="false">
                     I'm interested in
                 </button>
                 <ul class="dropdown-menu" style="min-width: 200px">
@@ -35,7 +35,7 @@
 
         <div class="filter-widget me-md-4 mb-3">
             <div class="btn-group">
-                <button type="button" class="btn btn-md @if($filters['type']) has-pink-border @endif btn-primary dropdown-toggle rounded-0" data-bs-toggle="dropdown" aria-expanded="false">
+                <button type="button" class="btn btn-md @if($filters['type']) btn-accent @else btn-primary @endif btn-primary dropdown-toggle rounded-0" data-bs-toggle="dropdown" aria-expanded="false">
                     I'm looking for
                 </button>
                 <ul class="dropdown-menu" style="min-width: 200px">
