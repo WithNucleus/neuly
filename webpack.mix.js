@@ -28,8 +28,9 @@ mix
     .js('resources/js/nav-tiles.js', 'public/js')
     .js('resources/js/metrics/bar.js', 'public/js')
     .js('resources/js/metrics/line.js', 'public/js')
-    .js('resources/js/embed-search.js', 'public/js/external')
-    .js('resources/js/neuly-care.js', 'public/js');
+    // .js('resources/js/embed-search.js', 'public/js/external')
+    .js('resources/js/neuly-care.js', 'public/js')
+    .js('resources/js/search.js', 'public/js');
 
 // Mix CSS
 mix
@@ -39,7 +40,7 @@ mix
     .sass('resources/sass/choices.scss', 'public/css')
     .sass('resources/sass/nav-tiles.scss', 'public/css')
     .sass('resources/sass/enterprise-dashboard.scss', 'public/css')
-    .sass('resources/sass/opencage-geosearch.scss', 'public/css');
+    .sass('resources/sass/algolia.scss', 'public/css');
 // mix
 // 	.sass('resources/sass/app.scss', 'public/css')
 // 	.sass('resources/sass/index-qm.scss', 'public/css')
@@ -55,4 +56,6 @@ mix.copyDirectory('resources/images', 'public/images');
 // Copy Public Assets
 mix.copyDirectory('resources/assets', 'public/assets');
 
-mix.version();
+if (mix.inProduction()) {
+    mix.version();
+}

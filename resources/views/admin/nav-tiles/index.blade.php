@@ -5,15 +5,13 @@
     @include('admin.nav-tiles._menu')
 
     <div class="container my-5">
-        <p class="lead mb-5">There's an example navigation tile in the bottom right corner</p>
+        <p class="lead mb-5">There's an example navigation tile in the bottom left corner</p>
 
         @include('discover.includes.status-messages')
 
         <div class="alert js-ajax-response position-relative" style="display: none;">
             <span class="message"></span>
-            <button type="button" class="close" data-hide="alert" aria-label="Close">
-                <span aria-hidden="true">×</span>
-            </button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
 
         <table class="table">
@@ -34,13 +32,13 @@
                             {{ $navigationTile->domain }}
                         </td>
                         <td style="min-width: 270px;">
-                            <a href="{{ route('admin.nav-tiles.edit', $navigationTile->id) }}" class="btn btn-sm" data-toggle="tooltip" data-placement="top" title="Edit">
+                            <a href="{{ route('admin.nav-tiles.edit', $navigationTile->id) }}" class="btn btn-sm" data-bs-toggle="tooltip" data-placement="top" title="Edit">
                                 <i class="fad fa-edit text-info"></i>
                             </a>
-                            <button class="btn btn-sm delete-nav-tile" data-delete="{{ $navigationTile->id }}" data-action="{{ route('admin.nav-tiles.delete', $navigationTile->id) }}" data-toggle="tooltip" data-placement="top" title="Delete">
+                            <button class="btn btn-sm delete-nav-tile" data-delete="{{ $navigationTile->id }}" data-action="{{ route('admin.nav-tiles.delete', $navigationTile->id) }}" data-bs-toggle="tooltip" data-placement="top" title="Delete">
                                 <i class="fad fa-trash-alt text-danger"></i>
                             </button>
-                            <a href="{{ route('admin.nav-tiles.clone', $navigationTile->id) }}" class="btn btn-sm" data-toggle="tooltip" data-placement="top" title="Clone">
+                            <a href="{{ route('admin.nav-tiles.clone', $navigationTile->id) }}" class="btn btn-sm" data-bs-toggle="tooltip" data-placement="top" title="Clone">
                                 <i class="fad fa-copy text-secondarydark"></i>
                             </a>
                             @include('admin.nav-tiles._get-code-btn')

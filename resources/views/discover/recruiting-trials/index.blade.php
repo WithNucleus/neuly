@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('body-class', 'page-neuly-care')
+@section('body-class', 'page-recruiting-trials')
 
 @section('head')
     @livewireStyles
@@ -13,19 +13,17 @@
     <main role="main" class="main-content-container pt-0">
 
         <div class="py-4 py-xl-5 px-3 text-center">
-            <div class="max-width-400 mx-auto mb-4">
-                @include('navbars.neuly-care-logo')
-            </div>
-            <h1 class="text-transform-none text-center mb-0 max-width-780 mx-auto">
-                Find practitioners and connect with the care you need. All in one place.
-            </h1>
+            <h1 class="text-accent">Recruting Clinical Trials</h1>
+            <p class="lead mb-0 max-width-780 mx-auto">
+                Interested in participating in a clinical trial as a patient or healthy volunteer? Explore the clinical trials that are actively recruiting to find a match for you.
+            </p>
         </div>
 
         <div id="neuly-care-listings" class="container">
             <div class="max-width-600 mb-4 mx-auto">
                 <div id="autocomplete"></div>
             </div>
-            <livewire:public.featured.neuly-care />
+            <livewire:public.featured.recruiting-clinical-trials />
         </div>
 
     </main>

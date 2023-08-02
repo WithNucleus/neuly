@@ -87,12 +87,10 @@ svg#neulyLogo {
     }
 }
 
-// Navbar Search
-#primary-search-box {
-    border-radius: 3rem;
-    border: 0;
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
+#primary-navbar.bg-primary {
+    .aa-Form {
+        border-color: lighten(#454a91, 20%);
+    }
 }
 
 // Breadcrumbs with Primary Background
@@ -699,4 +697,9 @@ footer {
             }
         }
     }
+}
+
+// Algolia Borders
+#neuly-care-listings .aa-Form {
+    border-color: var(--bs-border-color);
 }
