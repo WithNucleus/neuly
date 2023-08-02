@@ -8,13 +8,8 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <div class="ms-lg-3 me-auto my-3 my-lg-0">
-                <form class="d-flex" role="search">
-                    <input id="primary-search-box" class="form-control me-2 border-primary-subtle" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn text-white rounded-0 px-2" type="submit" aria-label="Search">
-                        <i class="far fa-search"></i>
-                    </button>
-                </form>
+            <div class="ms-lg-3 my-3 my-lg-0 flex-grow-1 max-width-780 me-lg-5">
+                <div id="search-neuly"></div>
             </div>
             <ul class="navbar-nav ms-auto me-0 align-items-lg-center">
                 <li class="nav-item me-xl-3">
