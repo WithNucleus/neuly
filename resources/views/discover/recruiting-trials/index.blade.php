@@ -30,7 +30,6 @@
 @endsection
 
 @section('livewire_scripts')
-    <link rel="stylesheet" href="{{ mix('css/opencage-geosearch.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/@opencage/geosearch-bundle" type="text/javascript"></script>
     <script src="{{ asset('js/neuly-care.js') }}"></script>
     <script src="https://unpkg.com/alpinejs" defer></script>
