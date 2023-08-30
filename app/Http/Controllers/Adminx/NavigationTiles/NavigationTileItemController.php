@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin\NavigationTiles;
+namespace App\Http\Controllers\Adminx\NavigationTiles;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreNavigationTileItemRequest;
@@ -27,7 +27,7 @@ class NavigationTileItemController extends Controller
 
         $navItem = NavigationTileItem::create($attributes);
 
-        return redirect()->route('admin.nav-tiles.edit', $id)->with('navigationTileItemSuccess', 'Added '.$navItem->name.'!');
+        return redirect()->route('adminx.nav-tiles.edit', $id)->with('navigationTileItemSuccess', 'Added '.$navItem->name.'!');
     }
 
     /**
@@ -49,7 +49,7 @@ class NavigationTileItemController extends Controller
             }
         }
 
-        return redirect()->route('admin.nav-tiles.edit', $navItem->navigationTile->id)->with('navItemsSuccess', 'Updated '.$navItem->name.'!');
+        return redirect()->route('adminx.nav-tiles.edit', $navItem->navigationTile->id)->with('navItemsSuccess', 'Updated '.$navItem->name.'!');
     }
 
     /**

@@ -40,6 +40,12 @@ html {
 [data-bs-theme=dark] {
     --bs-success: $neulyGreenBright;
     --bs-success-rgb: 40, 185, 142;
+    --bs-secondary: $gray-300;
+    --bs-secondary-rgb: 222, 226, 230;
+
+    .text-primary {
+        color: $neulyIndigoBright !important;
+    }
 }
 
 // Nav Logo
@@ -137,8 +143,9 @@ svg#neulyLogo {
     }
 }
 
-// Entity Index
-.entity-index-container {
+// Entity Index & Admin Containers -- Scrollable Sidebars
+.entity-index-container,
+.adminx-page-container {
     min-height: 100vh;
     min-height: -webkit-fill-available;
     display: flex;
@@ -152,27 +159,32 @@ svg#neulyLogo {
     }
 }
 
-.entity-index-container {
+.entity-index-container,
+.adminx-page-container {
     --sidebar-width-sm: 300px;
     --sidebar-width-lg: 350px;
 
-    .entity-index-sidebar {
+    .entity-index-sidebar,
+    .adminx-sidebar {
         flex-shrink: 0;
         padding: 1rem;
     }
 
-    .entity-index-listings {
+    .entity-index-listings,
+    .adminx-content {
         padding: 1rem;
     }
 
     @media (min-width: 992px) {
-        .entity-index-sidebar {
+        .entity-index-sidebar,
+        .adminx-sidebar {
             width: var(--sidebar-width-sm);
             max-height: calc(100vh - $nav-height);
             overflow-y: auto;
         }
 
-        .entity-index-listings {
+        .entity-index-listings,
+        .adminx-content{
             max-height: calc(100vh - $nav-height);
             overflow-y: auto;
             overflow-x: hidden;
@@ -180,11 +192,13 @@ svg#neulyLogo {
     }
 
     @media(min-width: 1500px) {
-        .entity-index-sidebar {
+        .entity-index-sidebar,
+        .adminx-sidebar{
             width: var(--sidebar-width-lg);
         }
 
-        .entity-index-listings {
+        .entity-index-listings,
+        .adminx-content{
             padding: 1rem 2rem;
         }
     }
@@ -407,6 +421,68 @@ $img-heights: 30 80 120;
     }
 }
 
+// Btn Toggle
+.btn-toggle {
+    padding: .25rem .5rem;
+    font-weight: 600;
+    color: var(--bs-emphasis-color);
+    background-color: transparent;
+}
+
+.btn-toggle:hover,
+.btn-toggle:focus {
+    color: rgba(var(--bs-emphasis-color-rgb), .85);
+    background-color: var(--bs-tertiary-bg);
+}
+
+.btn-toggle::before {
+    width: 1.25em;
+    line-height: 0;
+    content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba%280,0,0,.5%29' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
+    transition: transform .35s ease;
+    transform-origin: .5em 50%;
+}
+
+[data-bs-theme="dark"] .btn-toggle::before {
+    content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba%28255,255,255,.5%29' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
+}
+
+.btn-toggle[aria-expanded="true"] {
+    color: rgba(var(--bs-emphasis-color-rgb), .85);
+}
+
+.btn-toggle[aria-expanded="true"]::before {
+    transform: rotate(90deg);
+}
+
+.btn-toggle.active {
+    color: var(--bs-primary);
+}
+
+.btn-toggle-nav a {
+    padding: .1875rem .5rem;
+    margin-top: .125rem;
+    margin-left: 1.25rem;
+}
+
+.btn-toggle-tall {
+    text-align: left;
+    position: relative;
+    padding-left: 1.5rem;
+    width: 100%;
+}
+
+.btn-toggle-tall::before {
+    position: absolute;
+    left: 0;
+    top: .5rem;
+}
+
+.btn-toggle-nav a:hover,
+.btn-toggle-nav a:focus {
+    background-color: var(--bs-tertiary-bg);
+}
+
 // Alerts
 .alert *:last-of-type {
     margin-bottom: 0;
@@ -418,6 +494,15 @@ $max-widths: 60 150 200 250 300 400 500 600 740 780 840 1000;
 @each $size in $max-widths {
     .max-width-#{$size} {
         max-width: #{$size}px;
+    }
+}
+
+// Min Widths
+$min-widths: 120;
+
+@each $size in $min-widths {
+    .min-width-#{$size} {
+        min-width: #{$size}px;
     }
 }
 
@@ -702,4 +787,34 @@ footer {
 // Algolia Borders
 #neuly-care-listings .aa-Form {
     border-color: var(--bs-border-color);
+}
+
+// Scrollable Full-screen Code Content
+.scrollable-fullscreen-code {
+    height: calc(100vh - 150px);
+    width: 100%;
+    overflow: scroll;
+    text-align: left;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+}
+
+// Faux Search Box with Dropdown
+.faux-search-box-container {
+    position: relative;
+    padding-top: .25rem;
+
+    .faux-search-box-results {
+        position: absolute;
+        top: .25rem;
+        width: 200px;
+        background: var(--bs-body-bg);
+        border: 1px solid var(--bs-border-color);
+        z-index: 999;
+        font-size: $font-size-sm;
+
+        @media (min-width: 992px) {
+            width: 350px;
+        }
+    }
 }

@@ -28,7 +28,9 @@ class ClinicalTrialsIndex extends Component
         'people' => [],
         'companies' => [],
         'locations' => [],
-        'conditions' => []
+        'conditions' => [],
+        'status' => [],
+        'age' => []
     ];
 
     public function mount() {
@@ -106,6 +108,9 @@ class ClinicalTrialsIndex extends Component
                         ->where('title', 'like', '%' . $search . '%')
                         ->orWhere('nct_number', 'like', '%' . $search . '%');
                 })
+                ->when($this->filters['status'], function($query, $valueArray) {
+                    return $query->whereIn('status', $valueArray);
+                })
                 ->when($this->filters['focus'], function($query, $value) {
                     return $query->whereHas('focus', function($query) use ($value) {
                         $query->whereIn('name', $value);
@@ -130,6 +135,9 @@ class ClinicalTrialsIndex extends Component
                     return $query->whereHas('conditions', function($query) use ($value) {
                         $query->whereIn('value', $value);
                     });
+                })
+                ->when($this->filters['age'], function($query, $value) {
+                    return $query->whereJsonContains('age_groups', $value);
                 });
 
         return $this->applySorting($query);
@@ -146,7 +154,9 @@ class ClinicalTrialsIndex extends Component
     {
         return view('livewire.public.entities.clinical-trials-index', [
             'records' => $this->rows,
-            'focusDrugOptions' => Focus::whereHas('clinicaltrials')->withCount('clinicaltrials')->orderByDesc('clinicaltrials_count')->get()->toArray()
+            'focusDrugOptions' => Focus::whereHas('clinicaltrials')->withCount('clinicaltrials')->orderByDesc('clinicaltrials_count')->get()->toArray(),
+            'statusOptions' => Clinicaltrial::STATUSES,
+            'ageGroupOptions' => Clinicaltrial::STANDARD_AGES
         ]);
     }
 }

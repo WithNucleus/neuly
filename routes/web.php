@@ -393,6 +393,7 @@ Route::get('/js/external/embedSearch/template/{code}', [App\Http\Controllers\Ext
 
 //SPECIAL ADMIN ROUTES
 require __DIR__.'/admin.php';
+require __DIR__.'/adminx.php';
 
 /* CATCH-ALL ROUTE for Backpack/PageManager - needs to be at the end of your routes.php file  **/
 Route::get('{page}', [\App\Http\Controllers\PageController::class, 'index'])

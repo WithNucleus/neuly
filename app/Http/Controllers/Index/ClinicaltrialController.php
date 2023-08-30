@@ -27,7 +27,6 @@ class ClinicaltrialController extends Controller
             'conditions',
             'interventions',
             'outcomeMeasures',
-            'studyDesigns',
             'locations',
             'people',
             'companies',

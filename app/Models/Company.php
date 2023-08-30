@@ -275,6 +275,10 @@ class Company extends Model implements EntityContract, EntityImageContract
         return $this->morphToMany(MediaItem::class, 'entity', 'media_item_relationships')->where('media_type', MediaTypes::MEDIA_TYPE_PODCAST)->withTimestamps();
     }
 
+    public function leadSponsorClinicalTrials() {
+        return $this->morphToMany(Clinicaltrial::class, 'lead_sponsor', 'clinicaltrials');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES

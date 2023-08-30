@@ -13,7 +13,7 @@
     </div>
 @endif
 
-<form action="{{ route('admin.nav-tiles.update', $navigationTile->id) }}" method="post">
+<form action="{{ route('adminx.nav-tiles.update', $navigationTile->id) }}" method="post">
     @csrf
     <div class="form-group row mb-4">
         <div class="col-12 col-md-6">

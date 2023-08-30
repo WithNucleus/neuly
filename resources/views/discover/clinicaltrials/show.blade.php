@@ -13,7 +13,7 @@
 
     <div class="container py-4">
 
-        <x-entities.entity-show-title-meta title="{{ $clinicalTrial->name }}" headingClasses="text-success h2 text-transform-none mb-2 max-width-780">
+        <x-entities.entity-show-title-meta title="{{ urlencode($clinicalTrial->name) }}" headingClasses="text-success h2 text-transform-none mb-2 max-width-780">
             <div class="me-3">
                 @include('members.follow.button', [
                     'followable_type' => get_class($clinicalTrial),
@@ -22,6 +22,14 @@
                 ])
             </div>
         </x-entities.entity-show-title-meta>
+
+        @can('edit clinical trials')
+            @if($clinicalTrial->imported)
+                <div class="mb-4 border border-2 border-success-subtle p-3">
+                    <livewire:admin.import.clinical-trials.match-entity wire:key="record-{{ $clinicalTrial->imported->id }}" :importedEntity="$clinicalTrial->imported" showPage="true" />
+                </div>
+            @endif
+        @endcan
 
         @include('discover.clinicaltrials.data')
 

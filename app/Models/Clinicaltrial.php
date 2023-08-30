@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
+use App\Models\ImportedEntity;
 
 class Clinicaltrial extends Model implements EntityContract
 {
@@ -57,10 +58,149 @@ class Clinicaltrial extends Model implements EntityContract
 
     private $searchableModelName = 'Clinical Trial';
 
-    const GENDERS = [
-        'All',
-        'Male',
-        'Female'
+    const SEXES = [
+        'FEMALE' => 'Female',
+        'MALE' => 'Male',
+        'ALL' => 'All'
+    ];
+
+    const STATUSES = [
+        'ACTIVE_NOT_RECRUITING' => 'Active, not recruiting',
+        'COMPLETED' => 'Completed',
+        'ENROLLING_BY_INVITATION' => 'Enrolling by invitation',
+        'NOT_YET_RECRUITING' => 'Not yet recruiting',
+        'RECRUITING' => 'Recruiting',
+        'SUSPENDED' => 'Suspended',
+        'TERMINATED' => 'Terminated',
+        'WITHDRAWN' => 'Withdrawn',
+        'AVAILABLE' => 'Available',
+        'NO_LONGER_AVAILABLE' => 'No longer available',
+        'TEMPORARILY_NOT_AVAILABLE' => 'Temporarily not available',
+        'APPROVED_FOR_MARKETING' => 'Approved for marketing',
+        'WITHHELD' => 'Withheld',
+        'UNKNOWN' => 'Unknown status'
+    ];
+
+    const AGENCY_CLASSES = [
+        'NIH',
+        'FED',
+        'OTHER_GOV',
+        'INDIV',
+        'INDUSTRY',
+        'NETWORK',
+        'AMBIG',
+        'OTHER',
+        'UNKNOWN'
+    ];
+
+    const AGENCY_CLASSES_ORGANIZATION = [
+        'NIH',
+        'FED',
+        'OTHER_GOV',
+        'INDUSTRY',
+        'NETWORK',
+    ];
+
+    const DESIGN_MASKING = [
+        'NONE' => 'None (Open Label)',
+        'SINGLE' => 'Single',
+        'DOUBLE' => 'Double',
+        'TRIPLE' => 'Triple',
+        'QUADRUPLE' => 'Quadruple'
+    ];
+
+    const WHO_MASKED = [
+        'PARTICIPANT' => 'Participant',
+        'CARE_PROVIDER' => 'Care Provider',
+        'INVESTIGATOR' => 'Investigator',
+        'OUTCOMES_ASSESSOR' => 'Outcomes Assessor'
+    ];
+
+    const RESPONSIBLE_PARTY_TYPES = [
+        'SPONSOR' => 'Sponsor',
+        'PRINCIPAL_INVESTIGATOR' => 'Principal Investigator',
+        'SPONSOR_INVESTIGATOR' => 'Sponsor-Investigator'
+    ];
+
+    const PRIMARY_PURPOSES = [
+        'TREATMENT' => 'Treatment',
+        'PREVENTION' => 'Prevention',
+        'DIAGNOSTIC' => 'Diagnostic',
+        'ECT' => 'Educational/Counseling/Training',
+        'SUPPORTIVE_CARE' => 'Supportive Care',
+        'SCREENING' => 'Screening',
+        'HEALTH_SERVICES_RESEARCH' => 'Health Services Research',
+        'BASIC_SCIENCE' => 'Basic Science',
+        'DEVICE_FEASIBILITY' => 'Device Feasibility',
+        'OTHER' => 'Other'
+    ];
+
+    const INTERVENTIONAL_ASSIGNMENTS = [
+        'SINGLE_GROUP' => 'Single Group Assignment',
+        'PARALLEL' => 'Parallel Assignment',
+        'CROSSOVER' => 'Crossover Assignment',
+        'FACTORIAL' => 'Factorial Assignment',
+        'SEQUENTIAL' => 'Sequential Assignment'
+    ];
+
+    const DESIGN_ALLOCATIONS = [
+        'RANDOMIZED' => 'Randomized',
+        'NON_RANDOMIZED' => 'Non-Randomized',
+        'NA' => 'N/A'
+    ];
+
+    const COLLABORATOR = 'Collaborator';
+
+    const ARM_GROUP_TYPES = [
+        'EXPERIMENTAL' => 'Experimental',
+        'ACTIVE_COMPARATOR' => 'Active Comparator',
+        'PLACEBO_COMPARATOR' => 'Placebo Comparator',
+        'SHAM_COMPARATOR' => 'Sham Comparator',
+        'NO_INTERVENTION' => 'No Intervention',
+        'OTHER' => 'Other'
+    ];
+
+    const STANDARD_AGES = [
+        'CHILD' => 'Child',
+        'ADULT' => 'Adult',
+        'OLDER_ADULT' => 'Older Adult'
+    ];
+
+    const DESIGN_TIME_PERSPECTIVE = [
+        'RETROSPECTIVE' => 'Retrospective',
+        'PROSPECTIVE' => 'Prospective',
+        'CROSS_SECTIONAL' => 'Cross-Sectional',
+        'OTHER' => 'Other'
+    ];
+
+    const OBSERVATIONAL_MODELS = [
+        'COHORT' => 'Cohort',
+        'CASE_CONTROL' => 'Case-Control',
+        'CASE_ONLY' => 'Case-Only',
+        'CASE_CROSSOVER' => 'Case-Crossover',
+        'ECOLOGIC_OR_COMMUNITY' => 'Ecologic or Community',
+        'FAMILY_BASED' => 'Family-Based',
+        'DEFINED_POPULATION' => 'Defined Population',
+        'NATURAL_HISTORY' => 'Natural History',
+        'OTHER' => 'Other'
+    ];
+
+    const PHASES = [
+        'NA' => 'Not Applicable',
+        'EARLY_PHASE1' => 'Early Phase 1',
+        'PHASE1' => 'Phase 1',
+        'PHASE2' => 'Phase 2',
+        'PHASE3' => 'Phase 3',
+        'PHASE4' => 'Phase 4'
+    ];
+
+    protected $casts = [
+        'primary_outcomes' => 'array',
+        'secondary_outcomes' => 'array',
+        'other_outcomes' => 'array',
+        'arm_groups' => 'array',
+        'who_masked' => 'array',
+        'age_groups' => 'array'
     ];
 
     /*
@@ -94,25 +234,27 @@ class Clinicaltrial extends Model implements EntityContract
     public function locations(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Location::class, 'clinicaltrial_location', 'clinicaltrial_id', 'location_id')
-                    ->withTimestamps();
+            ->withTimestamps();
     }
 
     public function companies(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Company::class, 'clinicaltrial_company', 'clinicaltrial_id', 'company_id')
-                    ->withTimestamps();
+            ->withPivot(['type', 'class'])
+            ->withTimestamps();
     }
 
     public function people(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Person::class, 'clinicaltrial_person', 'clinicaltrial_id', 'person_id')
-                    ->withTimestamps();
+            ->withPivot(['type', 'class'])
+            ->withTimestamps();
     }
 
     public function focus(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Focus::class, 'clinicaltrial_focus', 'clinicaltrial_id', 'focus_id')
-                    ->withTimestamps();
+            ->withTimestamps();
     }
 
     public function conditions(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
@@ -122,14 +264,16 @@ class Clinicaltrial extends Model implements EntityContract
 
     public function interventions(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(CtIntervention::class, 'clinicaltrial_intervention');
+        return $this->belongsToMany(CtIntervention::class, 'clinicaltrial_intervention')->withPivot(['type', 'description']);
     }
 
+    // TODO: Remove -- no longer in use
     public function outcomeMeasures(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(CtOutcomeMeasure::class, 'clinicaltrial_outcome_measure');
     }
 
+    // TODO: Remove -- no longer in use
     public function studyDesigns(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(CtStudyDesign::class, 'clinicaltrial_study_design');
@@ -151,6 +295,29 @@ class Clinicaltrial extends Model implements EntityContract
     public function phase()
     {
         return $this->hasMany(\App\Models\ClinicaltrialPhase::class, 'phases');
+    }
+
+    public function imported(): \Illuminate\Database\Eloquent\Relations\MorphOne
+    {
+        return $this->morphOne(ImportedEntity::class, 'importable');
+    }
+
+    public function leadSponsor(): \Illuminate\Database\Eloquent\Relations\MorphTo
+    {
+        return $this->morphTo('lead_sponsor', 'lead_sponsor_type', 'lead_sponsor_id');
+    }
+
+    public function responsibleParty(): \Illuminate\Database\Eloquent\Relations\MorphTo
+    {
+        return $this->morphTo('responsible_party');
+    }
+
+    public function collaborators(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Company::class, 'clinicaltrial_company', 'clinicaltrial_id', 'company_id')
+            ->withPivot(['type', 'class'])
+            ->wherePivot('type', self::COLLABORATOR)
+            ->withTimestamps();
     }
 
     /*
