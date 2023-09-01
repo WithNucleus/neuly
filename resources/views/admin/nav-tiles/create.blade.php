@@ -4,8 +4,6 @@
     {{-- Example --}}
     @include('admin.nav-tiles._example')
 
-    @include('admin.nav-tiles._menu')
-
     <div class="container my-5">
         <h1 class="h2 mb-4">Let's make a new navigation tile!</h1>
 
@@ -19,7 +17,7 @@
                     </div>
                 @endif
 
-                <form action="{{ route('admin.nav-tiles.store') }}" method="post">
+                <form action="{{ route('adminx.nav-tiles.store') }}" method="post">
                     @csrf
 
                     <div class="form-group row mb-4">

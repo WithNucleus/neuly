@@ -60,26 +60,10 @@ Route::middleware('auth')->prefix('/admin')->name('admin.')->group(function () {
         Route::get('/metrics/tiles', [App\Http\Controllers\Admin\Metrics\DashboardController::class, 'tiles'])->name('metrics.tiles');
         Route::get('/metrics/tiles/details', [App\Http\Controllers\Admin\Metrics\DashboardController::class, 'tileDetails'])->name('metrics.tiles.details');
     });
-
-    Route::prefix('/nav-tiles')->name('nav-tiles.')->middleware('permission:manage navigation tiles')->group(function () {
-        Route::get('/', [App\Http\Controllers\Admin\NavigationTiles\NavigationTileController::class, 'index'])->name('index');
-        Route::get('/create', [App\Http\Controllers\Admin\NavigationTiles\NavigationTileController::class, 'create'])->name('create');
-        Route::post('/create', [App\Http\Controllers\Admin\NavigationTiles\NavigationTileController::class, 'store'])->name('store');
-        Route::get('/{id}', [App\Http\Controllers\Admin\NavigationTiles\NavigationTileController::class, 'edit'])->name('edit');
-        Route::post('/{id}', [App\Http\Controllers\Admin\NavigationTiles\NavigationTileController::class, 'update'])->name('update');
-        Route::get('/clone/{id}', [App\Http\Controllers\Admin\NavigationTiles\NavigationTileController::class, 'clone'])->name('clone');
-        Route::post('/delete/{id}', [App\Http\Controllers\Admin\NavigationTiles\NavigationTileController::class, 'delete'])->name('delete');
-
-        Route::post('/reorder/{id}', [App\Http\Controllers\Admin\NavigationTiles\NavigationTileController::class, 'reorder'])->name('items.reorder');
-
-        Route::post('/item/{id}', [App\Http\Controllers\Admin\NavigationTiles\NavigationTileItemController::class, 'store'])->name('items.store');
-        Route::post('/update-item/{id}', [App\Http\Controllers\Admin\NavigationTiles\NavigationTileItemController::class, 'update'])->name('items.update');
-        Route::post('/delete-item/{id}', [App\Http\Controllers\Admin\NavigationTiles\NavigationTileItemController::class, 'delete'])->name('items.delete');
-    });
 });
 
-Route::get('/nav-tiles/{slug}.js', [App\Http\Controllers\Admin\NavigationTiles\NavigationTileController::class, 'script'])->name('nav-tiles.script');
-Route::get('/nav-tiles/{slug}.css', [App\Http\Controllers\Admin\NavigationTiles\NavigationTileController::class, 'style'])->name('nav-tiles.style');
+Route::get('/nav-tiles/{slug}.js', [\App\Http\Controllers\Adminx\NavigationTiles\NavigationTileController::class, 'script'])->name('nav-tiles.script');
+Route::get('/nav-tiles/{slug}.css', [\App\Http\Controllers\Adminx\NavigationTiles\NavigationTileController::class, 'style'])->name('nav-tiles.style');
 
 //TODO update route's names to match 'admin.' pattern and move to common admin group
 Route::middleware('permission:import')->prefix('/admin/import')->name('import.')->group(function () {

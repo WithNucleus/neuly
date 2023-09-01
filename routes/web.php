@@ -59,6 +59,7 @@ Route::get('/podcasts', [App\Http\Controllers\Index\DataFeeds\PodcastController:
 Route::get('/podcasts/{slug}', [App\Http\Controllers\Index\DataFeeds\PodcastController::class, 'show'])->name('discover.podcasts.show');
 Route::get('/books', [App\Http\Controllers\Index\DataFeeds\BookController::class, 'index'])->name('discover.books');
 Route::get('/courses', [App\Http\Controllers\Index\CourseController::class, 'index'])->name('discover.courses');
+Route::get('/courses/{slug}', [App\Http\Controllers\Index\CourseController::class, 'show'])->name('discover.courses.show');
 
 // Listing Requests
 Route::get('/listing', [App\Http\Controllers\Index\ListingRequestController::class, 'index'])->name('listing');
@@ -393,6 +394,7 @@ Route::get('/js/external/embedSearch/template/{code}', [App\Http\Controllers\Ext
 
 //SPECIAL ADMIN ROUTES
 require __DIR__.'/admin.php';
+require __DIR__.'/adminx.php';
 
 /* CATCH-ALL ROUTE for Backpack/PageManager - needs to be at the end of your routes.php file  **/
 Route::get('{page}', [\App\Http\Controllers\PageController::class, 'index'])

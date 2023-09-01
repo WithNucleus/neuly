@@ -17,7 +17,7 @@
     </div>
 @endif
 
-<form action="{{ route('admin.nav-tiles.items.store', $navigationTile->id) }}" method="post">
+<form action="{{ route('adminx.nav-tiles.items.store', $navigationTile->id) }}" method="post">
     @csrf
 
     <div class="form-group">

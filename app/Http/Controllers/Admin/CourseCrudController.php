@@ -49,12 +49,6 @@ class CourseCrudController extends CrudController
         ]);
 
         $this->crud->addColumn([
-            'name' => 'schedule',
-            'label' => 'Schedule',
-            'type' => 'text',
-        ]);
-
-        $this->crud->addColumn([
             'name' => 'url',
             'label' => 'URL',
             'type' => 'text',
@@ -169,14 +163,6 @@ class CourseCrudController extends CrudController
         ]);
 
         $this->crud->addField([
-            'name' => 'schedule',
-            'label' => 'Schedule',
-            'type' => 'select2_from_array',
-            'options' => Course::getSchedules(),
-            'allows_null' => true,
-        ]);
-
-        $this->crud->addField([
             'name' => 'lowest_cost',
             'label' => 'Lowest Cost',
             'type' => 'number',
@@ -189,8 +175,38 @@ class CourseCrudController extends CrudController
         ]);
 
         $this->crud->addField([
+            'name' => 'currency',
+            'label' => 'Currency',
+            'type' => 'text',
+        ]);
+
+        $this->crud->addField([
             'name' => 'education_credits',
             'label' => 'Education Credits',
+            'type' => 'text',
+        ]);
+
+        $this->crud->addField([
+            'name' => 'learning_location',
+            'label' => 'Learning Location',
+            'type' => 'text',
+        ]);
+
+        $this->crud->addField([
+            'name' => 'delivery_method',
+            'label' => 'Delivery Method',
+            'type' => 'text',
+        ]);
+
+        $this->crud->addField([
+            'name' => 'hours',
+            'label' => 'Hours',
+            'type' => 'number',
+        ]);
+
+        $this->crud->addField([
+            'name' => 'length',
+            'label' => 'Length',
             'type' => 'text',
         ]);
 
@@ -198,6 +214,18 @@ class CourseCrudController extends CrudController
             'name' => 'next_date',
             'label' => 'Next Date (optional)',
             'type' => 'date',
+        ]);
+
+        $this->crud->addField([
+            'name' => 'finish_date',
+            'label' => 'Finish Date (optional)',
+            'type' => 'date',
+        ]);
+
+        $this->crud->addField([
+            'name' => 'awarded',
+            'label' => 'Awarded',
+            'type' => 'text',
         ]);
 
         $this->crud->addField([

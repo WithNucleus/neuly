@@ -18,6 +18,8 @@ class Course extends Model
         LogsActivity,
         EntityImage;
 
+    const CURRENCY_USD = 'USD';
+
     /*
     |--------------------------------------------------------------------------
     | GLOBAL VARIABLES
@@ -135,22 +137,26 @@ class Course extends Model
         return nl2br(e($this->summary));
     }
 
-    public function getVeryShortSummaryAttribute(): string
+    public function getVeryShortSummaryAttribute(): ?string
     {
-        return Str::words($this->summary, 15);
+        return Str::words($this->summary, 15) ?? null;
     }
 
-    public function getShortSummaryAttribute(): string
+    public function getShortSummaryAttribute(): ?string
     {
-        return Str::words($this->summary, 40);
+        return Str::words($this->summary, 40) ?? null;
     }
 
-    public function getFormattedCostAttribute(): string
+    public function getFormattedCostAttribute(): ?string
     {
         $lowestCost = $this->lowest_cost;
         $highestCost = $this->highest_cost;
 
-        $cost = '';
+        if ($lowestCost == '') {
+            return null;
+        }
+
+        $cost = null;
 
         if ($lowestCost === 0 and $highestCost == '') {
             $cost = 'Free';

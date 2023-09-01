@@ -1,4 +1,4 @@
-<form class="edit-item-form-{{ $item->id }}" action="{{ route('admin.nav-tiles.items.update', $item->id) }}" method="post">
+<form class="edit-item-form-{{ $item->id }}" action="{{ route('adminx.nav-tiles.items.update', $item->id) }}" method="post">
     @csrf
 
     <div class="form-group">
@@ -47,6 +47,6 @@
     </div>
 
     <div class="form-group mt-3">
-        <button type="submit" class="update-nav-item btn btn-secondarydark" data-action="{{ route('admin.nav-tiles.items.update', $item->id) }}" data-input-class="edit-item-input-{{ $item->id }}">Save</button>
+        <button type="submit" class="update-nav-item btn btn-secondarydark" data-action="{{ route('adminx.nav-tiles.items.update', $item->id) }}" data-input-class="edit-item-input-{{ $item->id }}">Save</button>
     </div>
 </form>

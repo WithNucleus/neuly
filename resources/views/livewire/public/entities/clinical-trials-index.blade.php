@@ -6,6 +6,11 @@
             <x-livewire-filters.search label="Search clinical trials" placeholder="Search" search="{{ $search }}" />
 
             <div class="my-4">
+                <h4 class="h5 text-body-emphasis">Status</h4>
+                <x-livewire-filters.checkbox-multiple wireModel="filters.status" id="filter-status" :options="$statusOptions" :currentFilters="$filters['status']" />
+            </div>
+
+            <div class="my-4">
                 <h4 class="h5 text-body-emphasis">Focus</h4>
                 <x-livewire-filters.checkbox-multiple-with-count wireModel="filters.focus" id="filter-focus" :options="$focusDrugOptions" :currentFilters="$filters['focus']" countName="clinicaltrials_count" />
             </div>
@@ -47,6 +52,10 @@
                     :searchResults="$conditionSearchResults"
                     :currentFilters="$filters['conditions']"
                 />
+            </div>
+
+            <div class="my-4">
+                <x-livewire-filters.checkbox-multiple wireModel="filters.age" id="filter-age" :options="$ageGroupOptions" :currentFilters="$filters['age']" />
             </div>
 
             <div>

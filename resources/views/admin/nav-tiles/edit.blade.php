@@ -2,8 +2,6 @@
 
 @section('content')
 
-    @include('admin.nav-tiles._menu')
-
     <div class="container my-5">
         <h1 class="h2 mb-4">Editing {{ $navigationTile->name }}</h1>
 

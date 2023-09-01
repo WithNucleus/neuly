@@ -1,15 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\Admin\NavigationTiles;
+namespace App\Http\Controllers\Adminx\NavigationTiles;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreNavigationTileRequest;
 use App\Models\NavigationTile;
 use App\Models\NavigationTileItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\View;
 
 class NavigationTileController extends Controller
 {
+    public function __construct() {
+        View::share('currentRoute', 'nav-tiles');
+    }
+
     /**
      * Index listing of all Navigation Tiles
      */
@@ -36,7 +41,7 @@ class NavigationTileController extends Controller
         $attributes = $request->except('_token');
         $navigationTile = NavigationTile::create($attributes);
 
-        return redirect()->route('admin.nav-tiles.edit', $navigationTile->id)->with('navigationTileSuccess', 'Created the navigation tile for '.$navigationTile->name.'!');
+        return redirect()->route('adminx.nav-tiles.edit', $navigationTile->id)->with('navigationTileSuccess', 'Created the navigation tile for '.$navigationTile->name.'!');
     }
 
     /**
@@ -58,7 +63,7 @@ class NavigationTileController extends Controller
         $attributes = $request->except('_token');
         $navigationTile->update($attributes);
 
-        return redirect()->route('admin.nav-tiles.edit', $id)->with('navigationTileSuccess', 'Updated nav tile!');
+        return redirect()->route('adminx.nav-tiles.edit', $id)->with('navigationTileSuccess', 'Updated nav tile!');
     }
 
     public function clone($id): \Illuminate\Http\RedirectResponse
@@ -75,7 +80,7 @@ class NavigationTileController extends Controller
             $newItem->save();
         }
 
-        return redirect()->route('admin.nav-tiles.edit', $newNavTile->id)->with('navigationTileSuccess', 'Created cloned navigation tile!');
+        return redirect()->route('adminx.nav-tiles.edit', $newNavTile->id)->with('navigationTileSuccess', 'Created cloned navigation tile!');
     }
 
     /**

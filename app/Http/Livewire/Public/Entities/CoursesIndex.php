@@ -26,12 +26,15 @@ class CoursesIndex extends Component
         'education' => [],
         'type' => [],
         'education-credits' => null,
-        'free' => null
+        'free' => null,
+        'open-enrollment' => null,
+        'self-paced' => null,
+        'delivery-method' => []
     ];
 
     public function mount() {
         $this->sorts = [
-            'lowest_cost' => 'asc'
+            'name' => 'asc'
         ];
     }
 
@@ -87,23 +90,23 @@ class CoursesIndex extends Component
     {
         $query = Course::with(['companies', 'focus'])
                 ->when($this->search, function($query, $search) {
-                    return $query->books()->where(function ($query) use ($search) {
-                        return $query
-                            ->where('name', 'like', '%' . $search . '%')
-                            ->orWhere('summary', 'like', '%' . $search . '%')
-                            ->orWhere('schedule', 'like', '%' . $search . '%')
-                            ->orWhere('type', 'like', '%' . $search . '%')
-                            ->orWhere('education_credits', 'like', '%' . $search . '%')
-                            ->orwhereHas('focus', function($query) use ($search) {
-                                $query->where('name', 'like', '%' . $search . '%');
-                            });
-                   });
+                    return $query
+                        ->where('name', 'like', '%' . $search . '%')
+                        ->orWhere('summary', 'like', '%' . $search . '%')
+                        ->orWhere('type', 'like', '%' . $search . '%')
+                        ->orWhere('education_credits', 'like', '%' . $search . '%')
+                        ->orwhereHas('focus', function($query) use ($search) {
+                            $query->where('name', 'like', '%' . $search . '%');
+                        });
                 })
                 ->when($this->filters['type'], function($query, $valueArray) {
                     return $query->whereIn('type', $valueArray);
                 })
                 ->when($this->filters['education'], function($query, $valueArray) {
                     $query->whereIn('education_credits', $valueArray);
+                })
+                ->when($this->filters['delivery-method'], function($query, $valueArray) {
+                    $query->whereIn('delivery_method', $valueArray);
                 })
                 ->when($this->filters['focus'], function($query, $valueArray) {
                     return $query->whereHas('focus', function($query) use ($valueArray) {
@@ -120,6 +123,12 @@ class CoursesIndex extends Component
                 })
                 ->when($this->filters['free'], function($query) {
                     return $query->where('lowest_cost', 0);
+                })
+                ->when($this->filters['open-enrollment'], function($query) {
+                    return $query->where('open_enrollment', 1);
+                })
+                ->when($this->filters['self-paced'], function($query) {
+                    return $query->where('self_paced', 1);
                 });
 
         return $this->applySorting($query);
@@ -137,7 +146,8 @@ class CoursesIndex extends Component
         return view('livewire.public.entities.courses-index', [
             'records' => $this->rows,
             'focusOptions' => Focus::whereHas('courses')->withCount('courses')->orderByDesc('courses_count')->get()->toArray(),
-            'typeOptions' => Course::TYPES,
+            'typeOptions' => Course::whereNotNull('type')->orderBy('type')->pluck('type')->unique()->toArray(),
+            'deliveryMethodOptions' => Course::whereNotNull('delivery_method')->orderBy('delivery_method')->pluck('delivery_method')->unique()->toArray(),
             'educationOptions' => Course::whereNotNull('education_credits')->pluck('education_credits')->unique()->sort()->toArray()
         ]);
     }
