@@ -41,6 +41,12 @@
                             @can('import')
                                 <x-sidebar.list-group groupRoute="import" label="Import">
                                     <x-sidebar.list-group-item url="{{ route('adminx.import.clinical-trials.index') }}" label="Clinical Trials" />
+                                    <x-sidebar.list-group-item url="{{ route('adminx.import.courses.index') }}" label="Courses" />
+                                </x-sidebar.list-group>
+                            @endcan
+                            @can('edit companies')
+                                <x-sidebar.list-group groupRoute="entities" label="Entities">
+                                    <x-sidebar.list-group-item url="{{ route('adminx.courses.index') }}" label="Courses" />
                                 </x-sidebar.list-group>
                             @endcan
                             <ul class="list-unstyled ps-0">

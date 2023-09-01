@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Http\Livewire\Public\Entities;
+namespace App\Http\Livewire\Admin\Entities;
 
+use App\Http\Livewire\Public\Entities\Traits\HasCompanyFilter;
 use App\Http\Livewire\Traits\WithBulkActions;
 use App\Http\Livewire\Traits\WithCachedRows;
 use App\Http\Livewire\Traits\WithPerPagePagination;
 use App\Http\Livewire\Traits\WithSorting;
-use App\Http\Livewire\Public\Entities\Traits\HasCompanyFilter;
 use App\Models\Course;
-use App\Models\Focus;
 use Livewire\Component;
 
 class CoursesIndex extends Component
@@ -26,16 +25,11 @@ class CoursesIndex extends Component
         'education' => [],
         'type' => [],
         'education-credits' => null,
-        'free' => null,
-        'open-enrollment' => null,
-        'self-paced' => null,
-        'delivery-method' => []
+        'free' => null
     ];
 
     public function mount() {
-        $this->sorts = [
-            'name' => 'asc'
-        ];
+        $this->perPage = 10;
     }
 
     public function updatingSearch() {
@@ -58,10 +52,6 @@ class CoursesIndex extends Component
         $this->reset('companySearch');
         $this->reset('companySearchResults');
         $this->resetPage();
-
-        $this->sorts = [
-            'lowest_cost' => 'asc'
-        ];
     }
 
     public function gotoPage($page)
@@ -80,10 +70,6 @@ class CoursesIndex extends Component
     {
         $this->setPage(max($this->page - 1, 1));
         $this->emit('gotoTop');
-    }
-
-    public function updatedCompanySearch() {
-        $this->returnCompanySearch('courses');
     }
 
     public function getRowsQueryProperty()
@@ -105,9 +91,6 @@ class CoursesIndex extends Component
                 ->when($this->filters['education'], function($query, $valueArray) {
                     $query->whereIn('education_credits', $valueArray);
                 })
-                ->when($this->filters['delivery-method'], function($query, $valueArray) {
-                    $query->whereIn('delivery_method', $valueArray);
-                })
                 ->when($this->filters['focus'], function($query, $valueArray) {
                     return $query->whereHas('focus', function($query) use ($valueArray) {
                         $query->whereIn('name', $valueArray);
@@ -123,12 +106,6 @@ class CoursesIndex extends Component
                 })
                 ->when($this->filters['free'], function($query) {
                     return $query->where('lowest_cost', 0);
-                })
-                ->when($this->filters['open-enrollment'], function($query) {
-                    return $query->where('open_enrollment', 1);
-                })
-                ->when($this->filters['self-paced'], function($query) {
-                    return $query->where('self_paced', 1);
                 });
 
         return $this->applySorting($query);
@@ -143,12 +120,8 @@ class CoursesIndex extends Component
 
     public function render()
     {
-        return view('livewire.public.entities.courses-index', [
-            'records' => $this->rows,
-            'focusOptions' => Focus::whereHas('courses')->withCount('courses')->orderByDesc('courses_count')->get()->toArray(),
-            'typeOptions' => Course::whereNotNull('type')->orderBy('type')->pluck('type')->unique()->toArray(),
-            'deliveryMethodOptions' => Course::whereNotNull('delivery_method')->orderBy('delivery_method')->pluck('delivery_method')->unique()->toArray(),
-            'educationOptions' => Course::whereNotNull('education_credits')->pluck('education_credits')->unique()->sort()->toArray()
+        return view('livewire.admin.entities.courses-index', [
+            'records' => $this->rows
         ]);
     }
 }

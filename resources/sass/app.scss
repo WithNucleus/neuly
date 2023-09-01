@@ -265,7 +265,7 @@ ul.pagination {
     text-decoration: underline;
 }
 
-$truncate-sizes: 100 200 600;
+$truncate-sizes: 100 200 300 600;
 
 @each $size in $truncate-sizes {
     .truncate-#{$size} {

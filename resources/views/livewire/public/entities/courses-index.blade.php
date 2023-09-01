@@ -6,13 +6,20 @@
             <div class="mb-4">
                 <x-livewire-filters.checkbox-single wireModel="filters.education-credits" id="filter-education-credits" label="Education Credits" />
                 <x-livewire-filters.checkbox-single wireModel="filters.free" id="filter-free" label="Free Courses" />
+                <x-livewire-filters.checkbox-single wireModel="filters.open-enrollment" id="filter-open-enrollment" label="Open Enrollment" />
+                <x-livewire-filters.checkbox-single wireModel="filters.self-paced" id="filter-self-paced" label="Self Paced" />
             </div>
 
             <x-livewire-filters.search label="Search courses" placeholder="Search" search="{{ $search }}" tooltip="Search by title, organization, keyword..." />
 
             <div class="my-4">
-                <h4 class="h5 text-body-emphasis">Type</h4>
+                <h4 class="h5 text-body-emphasis">Course Type</h4>
                 <x-livewire-filters.checkbox-multiple wireModel="filters.type" id="filter-type" :options="$typeOptions" :currentFilters="$filters['type']" />
+            </div>
+
+            <div class="my-4">
+                <h4 class="h5 text-body-emphasis">Delivery Method</h4>
+                <x-livewire-filters.checkbox-multiple wireModel="filters.delivery-method" id="filter-delivery-method" :options="$deliveryMethodOptions" :currentFilters="$filters['delivery-method']" />
             </div>
 
             <div class="my-4">
@@ -56,7 +63,6 @@
                 <div>
                     <x-entities.entity-index-sort-button label="Name" field="name" :sorts="$sorts" />
                     <x-entities.entity-index-sort-button label="Date" field="next_date" :sorts="$sorts" />
-                    <x-entities.entity-index-sort-button label="Cost" field="lowest_cost" :sorts="$sorts" />
                 </div>
             </div>
         </div>
@@ -68,14 +74,13 @@
                             <div class="order-2 order-md-1 flex-shrink-0 mt-3 mt-md-0 me-3 me-lg-4">
                                 <img src="{{ $record->entity_image_url ?? asset('images/image-placeholder-course.png') }}" alt="{{ $record->name }}" class="d-none d-md-block entity-square-image mb-3">
                                 <div class="d-md-flex flex-column justify-content-lg-center align-items-lg-center">
-                                    <a href="{{ $record->url }}" class="btn btn-primary rounded-0 me-2 me-md-0 mb-md-2 text-nowrap" target="_blank" rel="noopener noreferrer">
-                                        <span>Register</span><span class="d-none d-xl-inline ms-1">Now</span>
+                                    <a href="{{ route('discover.courses.show', $record->slug) }}" class="btn btn-primary rounded-0 me-2 me-md-0 mb-md-2 text-nowrap">
+                                        <span class="d-none d-xl-inline ms-1">More</span><span>Details</span>
                                     </a>
-                                    <button type="button" class="btn btn-ghost-primary rounded-0 d-md-block" data-bs-toggle="modal" data-bs-target="#details-{{ $record->id }}">Details</button>
                                 </div>
                             </div>
                             <div class="order-1 order-md-2 flex-grow-1 max-width-780">
-                                <a href="{{ $record->url }}" target="_blank" rel="noopener noreferrer" class="text-success underline-on-hover">
+                                <a href="{{ route('discover.courses.show', $record->slug) }}" class="text-success underline-on-hover">
                                     <h2 class="h4">{{ $record->name }}</h2>
                                 </a>
                                 @if($record->next_date)
@@ -108,25 +113,6 @@
                                 <div class="d-md-flex justify-content-between mt-3 text-body-secondary text-uppercase">
                                     <div class="text-start me-4">{{ $record->type }}</div>
                                     <div class="text-end">{{ $record->formattedCost }}</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <div wire:ignore.self class="modal fade" id="details-{{ $record->id }}" tabindex="-1" aria-labelledby="details-label-details-{{ $record->id }}" aria-hidden="true">
-                                <div class="modal-dialog modal-lg">
-                                    <div class="modal-content">
-                                        <div class="modal-header bg-primary-subtle">
-                                            <h3 class="modal-title h5 mb-0 mt-1" id="details-label-details-{{ $record->id }}">{{ $record->name }}</h3>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            {!! $record->formattedSummary !!}
-
-                                            <div class="mt-3">
-                                                <a href="{{ $record->url }}" target="_blank" rel="noopener noreferrer" class="btn btn-accent text-white btn-lg">Register for Course</a>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
