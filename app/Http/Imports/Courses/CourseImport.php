@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Imports;
+namespace App\Http\Imports\Courses;
 
 use App\Models\Course;
 use Maatwebsite\Excel\Concerns\ToModel;

@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Http\Livewire\Admin\Import\ClinicalTrials;
+namespace App\Http\Livewire\Admin\Import\Courses;
 
 use App\Http\Livewire\Traits\WithBulkActions;
 use App\Http\Livewire\Traits\WithCachedRows;
 use App\Http\Livewire\Traits\WithPerPagePagination;
 use App\Http\Livewire\Traits\WithSorting;
-use App\Models\ImportedEntity;
+use App\Models\Course;
+use App\Models\ImportResult;
 use Livewire\Component;
 
-class Index extends Component
+class ImportResults extends Component
 {
     use WithPerPagePagination, WithBulkActions, WithCachedRows, WithSorting;
 
@@ -25,7 +26,7 @@ class Index extends Component
             'updated_at' => 'desc'
         ];
 
-        $this->perPage = 50;
+        $this->perPage = 20;
     }
 
     public function updatingSearch() {
@@ -43,10 +44,10 @@ class Index extends Component
 
     public function getRowsQueryProperty()
     {
-        $query = ImportedEntity::with(['importable'])
+        $query = ImportResult::where('entity', Course::class)
                 ->when($this->search, function($query, $search) {
                     return $query
-                        ->where('name', 'like', '%' . $search . '%');
+                        ->where('type', 'like', '%' . $search . '%');
                 });
 
         return $this->applySorting($query);
@@ -61,8 +62,8 @@ class Index extends Component
 
     public function render()
     {
-        return view('livewire.admin.import.clinical-trials.index', [
-            'records' => $this->rows,
+        return view('livewire.admin.import.courses.import-results', [
+            'records' => $this->rows
         ]);
     }
 }

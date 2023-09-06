@@ -76,6 +76,7 @@
                 @yield('content')
             </div>
         </div>
+        <div id="toast-container" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
         <script type="text/javascript" src="{{ mix('js/app.js') }}"></script>
         @yield('after_scripts')
         @livewireScripts

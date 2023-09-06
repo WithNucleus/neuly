@@ -44,6 +44,8 @@ Route::middleware('can:admin login')->prefix('/adminx')->name('adminx.')->group(
         // Courses
         Route::prefix('/courses')->name('courses.')->group(function() {
             Route::get('/', [App\Http\Controllers\Adminx\Import\CourseController::class, 'index'])->name('index');
+            Route::get('/results', [App\Http\Controllers\Adminx\Import\CourseController::class, 'results'])->name('results');
+            Route::get('/results/{id}', [App\Http\Controllers\Adminx\Import\CourseController::class, 'show'])->name('show');
         });
     });
 });
