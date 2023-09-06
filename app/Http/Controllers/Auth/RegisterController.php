@@ -38,6 +38,7 @@ class RegisterController extends Controller
     {
         $invitation = null;
         $invitedByName = null;
+        $email = null;
 
         if ($code = $request->get('code')) {
             $invitation = TeamInvitation::where('code', $code)->first();
@@ -50,9 +51,14 @@ class RegisterController extends Controller
             }
         }
 
+        if ($request->input('email')) {
+            $email = $request->input('email');
+        }
+
         return view('auth.register', [
             'invitation' => $invitation,
             'invitedByName' => $invitedByName,
+            'email' => $email
         ]);
     }
 

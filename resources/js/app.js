@@ -83,6 +83,10 @@ window.addEventListener('toast-notification', event => {
     }, time);
 });
 
+window.addEventListener('redirect-to-url', event => {
+    location.href = event.detail.url;
+});
+
 // $(document).ready(function() {
 //
 // 	// Confirm Action
