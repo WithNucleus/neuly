@@ -15,9 +15,17 @@
 
         <x-entities.entity-show-title-meta title="{{ urlencode($course->name) }}" />
 
+        <div class="mb-3">
+            @foreach($course->companies as $company)
+                <div class="fs-4 fw-bold">
+                    <a href="{{ route('discover.organizations.show', $company->slug) }}">{{ $company->name }}</a>
+                </div>
+            @endforeach
+        </div>
+
         <div class="d-lg-flex justify-content-between flex-shrink-1">
             <div class="order-md-2 mb-3 mb-mb-0">
-                <img src="{{ $course->entity_image_url ?? asset('images/image-placeholder-course.png') }}" alt="{{ $course->name }}" class="max-width-500">
+                <img src="{{ $course->companies->first()->entityImageUrl ?? asset('images/image-placeholder-course.png') }}" alt="{{ $course->name }}" class="max-width-500">
             </div>
             <div class="order-md-1 pe-md-5 flex-grow-1 max-width-780">
                 <div class="lead">
@@ -94,13 +102,22 @@
                 </div>
 
                 <div class="mt-4">
-                    <h2 class="h3">Description</h2>
-                        <div class="text-start max-width-1000">{!! nl2br($course->summary) !!}</div>
+                    <h2 class="h4 text-body-emphasis">Description</h2>
+                        <div class="text-start max-width-1000 text-body-secondary">{!! nl2br($course->summary) !!}</div>
                     </div>
 
                     <div class="mt-4">
                         <a href="{{ $course->url }}" target="_blank" rel="noopener noreferrer" class="btn btn-lg btn-primary">Register for Course</a>
                     </div>
+            </div>
+        </div>
+
+        <div class="mt-5 border-top pt-5">
+            <h2 class="h3 text-body-emphasis">Related Courses</h2>
+            <div class="row">
+                @foreach($related as $record)
+                    <x-entities.related.course-card :course="$record" />
+                @endforeach
             </div>
         </div>
 

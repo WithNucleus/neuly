@@ -12,6 +12,7 @@ class EmailOptIn extends Component
     public ?string $success = null;
     public ?string $ip = null;
     public ?string $form = null;
+    public ?string $redirect = null;
 
     protected $rules = [
         'email' => 'required|email'
@@ -30,7 +31,12 @@ class EmailOptIn extends Component
             'ip' => $this->ip
         ]);
 
-        $this->success = "Success! You've been subscribed.";
+        if ($this->redirect) {
+            $redirectUrl = $this->redirect . '?email=' . $this->email;
+            $this->dispatchBrowserEvent('redirect-to-url', ['url' => $redirectUrl]);
+        } else {
+            $this->success = "Success! You've been subscribed.";
+        }
     }
 
     public function render()

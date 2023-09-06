@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Helpers\Entity\FieldsMapping;
+use App\Jobs\AutoTag\TagCourse;
 use App\Models\Traits\EntityImage;
 use App\Models\Traits\SearchableEntity;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
@@ -92,6 +93,17 @@ class Course extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
+    protected static function booted()
+    {
+        static::created(function ($course) {
+            TagCourse::dispatch($course);
+        });
+
+        static::updated(function ($course) {
+            TagCourse::dispatch($course);
+        });
+    }
+
     public static function getTypes(): array
     {
         return array_combine(self::TYPES, self::TYPES);

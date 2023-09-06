@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\Admin\Import\Courses;
 
-use App\Http\Imports\CourseImport;
+use App\Http\Imports\Courses\CourseImport;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Maatwebsite\Excel\Facades\Excel;
@@ -41,7 +41,7 @@ class Import extends Component
     public function upload()
     {
         $this->validate([
-            'file' => 'required|mimes:csv, xls, xlsx'
+            'file' => 'required|mimes:csv,application/vnd.ms-excel'
         ]);
 
         try {

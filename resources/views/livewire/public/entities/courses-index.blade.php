@@ -68,14 +68,16 @@
         </div>
         <div class="row">
             @forelse($records as $record)
-                <div wire:key="{{ $record->id }}">
+                <div wire:key="course-{{ $record->slug }}">
                     <div class="mb-5 d-lg-flex">
                         <div class="d-flex flex-column flex-md-row border-bottom pb-5">
                             <div class="order-2 order-md-1 flex-shrink-0 mt-3 mt-md-0 me-3 me-lg-4">
-                                <img src="{{ $record->entity_image_url ?? asset('images/image-placeholder-course.png') }}" alt="{{ $record->name }}" class="d-none d-md-block entity-square-image mb-3">
+                                <div class="d-none d-md-flex align-items-center justify-content-center" style="min-height: 100px">
+                                    <img src="{{ $record->companies->first()->entityImageUrl ?? asset('images/image-placeholder-course.png') }}" alt="{{ $record->name }}" class="d-none d-md-block entity-square-image mb-3">
+                                </div>
                                 <div class="d-md-flex flex-column justify-content-lg-center align-items-lg-center">
                                     <a href="{{ route('discover.courses.show', $record->slug) }}" class="btn btn-primary rounded-0 me-2 me-md-0 mb-md-2 text-nowrap">
-                                        <span class="d-none d-xl-inline ms-1">More</span><span>Details</span>
+                                        <span class="d-none d-xl-inline me-1">More</span><span>Details</span>
                                     </a>
                                 </div>
                             </div>
@@ -103,17 +105,19 @@
                                     </p>
                                 @endif
                                 <div class="text-start w-100">{{ $record->short_summary }}</div>
-                                @if($record->companies)
-                                    <div class="mb-3">
-                                        @foreach($record->companies as $company)
-                                            <x-entities.related.company-logo :company="$company" />
-                                        @endforeach
-                                    </div>
-                                @endif
-                                <div class="d-md-flex justify-content-between mt-3 text-body-secondary text-uppercase">
+                                <div class="d-md-flex justify-content-between mt-3 text-body-secondary text-uppercase fw-bold">
                                     <div class="text-start me-4">{{ $record->type }}</div>
                                     <div class="text-end">{{ $record->formattedCost }}</div>
                                 </div>
+                                @if($record->companies)
+                                    <div class="mb-3 d-flex flex-wrap">
+                                        @foreach($record->companies as $company)
+                                            <div class="w-auto">
+                                                <x-entities.related.company-logo :company="$company" />
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>

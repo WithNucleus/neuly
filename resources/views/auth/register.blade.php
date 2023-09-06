@@ -64,9 +64,15 @@
 
                 <div class="mb-4">
                     <label for="email" class="fw-bold">{{ __('Email Address') }}</label>
-                    <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
-                           name="email" value="{{ $invitation ? $invitation->email : old('email') }}" required
-                           autocomplete="email" {{ $invitation ? 'readonly' : '' }}>
+                    @if($invitation)
+                        <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
+                           name="email" value="{{ $invitation->email ?? old('email') }}" required
+                           autocomplete="email" readonly>
+                    @else
+                        <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
+                           name="email" value="{{ $email ?? old('email') }}" required
+                           autocomplete="email">
+                    @endif
 
                     @error('email')
                         <div class="invalid-feedback" role="alert">{{ $message }}</div>

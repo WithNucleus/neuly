@@ -7,6 +7,7 @@ use App\Http\Livewire\Traits\WithBulkActions;
 use App\Http\Livewire\Traits\WithCachedRows;
 use App\Http\Livewire\Traits\WithPerPagePagination;
 use App\Http\Livewire\Traits\WithSorting;
+use App\Jobs\AutoTag\TagCourse;
 use App\Models\Course;
 use Livewire\Component;
 
@@ -30,6 +31,20 @@ class CoursesIndex extends Component
 
     public function mount() {
         $this->perPage = 10;
+    }
+
+    public function bulkAutoTag() {
+        $courses = Course::whereKey($this->selected)->get();
+        $count = count($this->selected);
+
+        foreach($courses as $course) {
+            TagCourse::dispatch($course);
+        }
+
+        $this->dispatchBrowserEvent('toast-notification',  ['text' => 'Auto-tagging ' . $count . ' courses!', 'background' => 'bg-success']);
+
+        $this->selected = [];
+        $this->selectPage = false;
     }
 
     public function updatingSearch() {
@@ -69,6 +84,11 @@ class CoursesIndex extends Component
     public function previousPage()
     {
         $this->setPage(max($this->page - 1, 1));
+        $this->emit('gotoTop');
+    }
+
+    public function updatedPerPage() {
+        $this->resetPage();
         $this->emit('gotoTop');
     }
 
