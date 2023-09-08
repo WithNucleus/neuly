@@ -48,4 +48,12 @@ Route::middleware('can:admin login')->prefix('/adminx')->name('adminx.')->group(
             Route::get('/results/{id}', [App\Http\Controllers\Adminx\Import\CourseController::class, 'show'])->name('show');
         });
     });
+
+    // USERS & AUTH
+    Route::middleware('can:edit users')->prefix('/auth')->name('auth.')->group(function () {
+
+        // Roles and Permissions
+        Route::get('/roles-permissions', [App\Http\Controllers\Adminx\Auth\RolesAndPermissionsController::class, 'index'])->name('roles-permissions.index');
+        Route::get('/roles-permissions/{id}', [App\Http\Controllers\Adminx\Auth\RolesAndPermissionsController::class, 'show'])->name('roles-permissions.show');
+    });
 });

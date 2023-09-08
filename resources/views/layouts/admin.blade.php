@@ -49,6 +49,11 @@
                                     <x-sidebar.list-group-item url="{{ route('adminx.courses.index') }}" label="Courses" />
                                 </x-sidebar.list-group>
                             @endcan
+                            @can('edit users')
+                                <x-sidebar.list-group groupRoute="auth" label="Users">
+                                    <x-sidebar.list-group-item url="{{ route('adminx.auth.roles-permissions.index') }}" label="Roles & Permissions" />
+                                </x-sidebar.list-group>
+                            @endcan
                             <ul class="list-unstyled ps-0">
                                 <li class="mb-1">
                                     <button
