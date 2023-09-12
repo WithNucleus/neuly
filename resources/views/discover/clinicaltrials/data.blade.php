@@ -3,7 +3,6 @@ $primary_fields = [
     'study_type' => ['type' => 'text', 'label' => 'Study type', 'type_label' => null],
     'status' => ['type' => 'text', 'label' => 'Status', 'type_label' => null],
     'study_results' => ['type' => 'text', 'label' => 'Study results', 'type_label' => null],
-    // 'phases' => ['type' => 'text', 'label' => 'Phases'],
     'age' => ['type' => 'text', 'label' => 'Age', 'type_label' => null],
     'enrollment' => ['type' => 'text', 'label' => 'Enrollment', 'type_label' => 'enrollment_type'],
     'funded_bys' => ['type' => 'text', 'label' => 'Funded by', 'type_label' => null],
@@ -86,15 +85,12 @@ $dates = [
             </div>
         @endif
         <div>
-            <h3 class="h4 text-primary border-bottom border-2 border-secondary mb-2">Phase</h3>
-            @php
-                $phases = explode('|', $clinicalTrial->phases)
-            @endphp
-            @foreach ($phases as $phase)
-                <ul class="mb-0 list-group list-group-flush">
-                    <li class="list-group-item px-0">{{ $phase }}</li>
-                </ul>
-            @endforeach
+            <h3 class="h4 text-primary border-bottom border-2 border-secondary mb-2">Phase</h3
+            <ul class="mb-0 list-group list-group-flush">
+                @foreach ($clinicalTrial->phases as $phase)
+                    <li class="list-group-item px-0">{{ $phase->pretty_name }}</li>
+                @endforeach
+            </ul>
         </div>
     </div>
 </div>
@@ -131,7 +127,7 @@ $dates = [
                     <td colspan="2">
                         <h4 class="h5 border-bottom mt-3">Masking</h4>
                         @if($clinicalTrial->masking_description)
-                            <p>{{ $clinicalTrial->masking_description }}</p>
+                            <p>{{ ucfirst($clinicalTrial->masking_description) }}</p>
                         @endif
 
                         @if($clinicalTrial->who_masked)

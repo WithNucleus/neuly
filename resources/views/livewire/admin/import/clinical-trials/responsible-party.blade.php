@@ -5,7 +5,7 @@
         </div>
     @else
         <div>
-            <div class="fw-bold text-uppercase mt-2">Assign Responsible Party</div>
+            <div class="fw-bold text-uppercase">Assign Responsible Party</div>
             <input wire:model="search" class="form-control form-control-sm max-width-200 rounded-0" aria-label="Search" placeholder="Search">
 
             @if($this->search)

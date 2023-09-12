@@ -19,6 +19,7 @@ $neulyIndigoBright: #9393CC;
 $neulyGreen: #1d8c6b; // brighter
 $neulyGreenBright: #28b98e;
 $neulyDarkIndigo: #10093D;
+$pear: #C0DF36;
 
 // scss-docs-start gray-color-variables
 $white:    #fff !default;
@@ -102,18 +103,29 @@ $light:         $gray-100 !default;
 $dark:          $gray-900 !default;
 // scss-docs-end theme-color-variables
 
+$google: #36A851;
+$facebook: #4267B2;
+$linkedin: #0077b5;
+$twitter: #26a7de;
+
 // scss-docs-start theme-colors-map
 $theme-colors: (
-  "primary":    $primary,
-  "secondary":  $secondary,
-  "tertiary":   $tertiary,
-  "accent":     $teal,
-  "success":    $success,
-  "info":       $info,
-  "warning":    $warning,
-  "danger":     $danger,
-  "light":      $light,
-  "dark":       $dark
+    "primary": $primary,
+    "primary-light": $neulyIndigoBright,
+    "secondary": $secondary,
+    "tertiary": $tertiary,
+    "accent": $teal,
+    "success": $success,
+    "info": $info,
+    "warning": $warning,
+    "danger": $danger,
+    "light": $light,
+    "dark": $dark,
+    "google": $google,
+    "facebook": $facebook,
+    "linkedin": $linkedin,
+    "twitter": $twitter,
+    "warning-bright": $pear
 );
 // scss-docs-end theme-colors-map
 

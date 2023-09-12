@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Follow;
 use App\Models\FollowList;
 use App\Models\MemberNote;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -26,7 +27,7 @@ class DashboardController extends Controller
     // Member Dashboard Page
     public function index(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        $user = Auth::user();
+        $user = User::with(['teams', 'ownedTeam'])->findOrFail(Auth::id());
         $widgetsOrder = $this->defaultWidgetsOrder;
 
         if ($user->dashboard_widgets_order !== null) {
@@ -68,22 +69,13 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        $team = null;
-
-        if ($user->hasRole('Team owner')) {
-            $team = $user->ownedTeam()->with(['members', 'invitations'])->first();
-        } elseif ($user->hasRole('Team member')) {
-            $team = $user->team()->with(['members', 'owner'])->first();
-        }
-
         return view('members.dashboard', compact(
             'user',
             'notes',
             'recently_viewed',
             'followLists',
             'follows',
-            'widgetsOrder',
-            'team',
+            'widgetsOrder'
         ));
     }
 

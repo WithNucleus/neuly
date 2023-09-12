@@ -57,6 +57,7 @@ class RolesAndPermissions extends Component
     public function getRowsQueryProperty()
     {
         $query = Role::with(['permissions', 'users'])
+                ->withCount(['users'])
                 ->when($this->search, function($query, $search) {
                     return $query
                         ->where('name', 'like', '%' . $search . '%')

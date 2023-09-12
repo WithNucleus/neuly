@@ -64,7 +64,7 @@ class FeedbackController extends Controller
 
         $feedback->save();
 
-        NotificationHelper::sendAdminNotifications(new FeedbackCreated($feedback));
+//        NotificationHelper::sendAdminNotifications(new FeedbackCreated($feedback));
 
         return $feedback;
     }

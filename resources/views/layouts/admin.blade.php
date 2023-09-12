@@ -46,14 +46,26 @@
                             @endcan
                             @can('edit companies')
                                 <x-sidebar.list-group groupRoute="entities" label="Entities">
+                                    <x-sidebar.list-group-item url="{{ route('adminx.clinical-trials.index') }}" label="Clinical Trials" />
                                     <x-sidebar.list-group-item url="{{ route('adminx.courses.index') }}" label="Courses" />
                                 </x-sidebar.list-group>
                             @endcan
                             @can('edit users')
                                 <x-sidebar.list-group groupRoute="auth" label="Users">
+                                    <x-sidebar.list-group-item url="{{ route('adminx.auth.users.index') }}" label="Manage Users" />
                                     <x-sidebar.list-group-item url="{{ route('adminx.auth.roles-permissions.index') }}" label="Roles & Permissions" />
                                 </x-sidebar.list-group>
                             @endcan
+
+                            <x-sidebar.list-group groupRoute="misc" label="Misc">
+                                @can('edit feedback')
+                                    <x-sidebar.list-group-item url="{{ route('adminx.misc.feedback') }}" label="Feedback" />
+                                @endcan
+                                @can('view logs')
+                                    <x-sidebar.list-group-item url="/horizon" label="Horizon" />
+                                @endcan
+                            </x-sidebar.list-group>
+
                             <ul class="list-unstyled ps-0">
                                 <li class="mb-1">
                                     <button
@@ -83,6 +95,7 @@
         </div>
         <div id="toast-container" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
         <script type="text/javascript" src="{{ mix('js/app.js') }}"></script>
+        <script type="text/javascript" src="{{ mix('js/admin.js') }}"></script>
         @yield('after_scripts')
         @livewireScripts
         @yield('livewire_scripts')

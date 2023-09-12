@@ -13,6 +13,7 @@ use App\Models\TeamInvitation;
 use App\Models\UserSocialAuth;
 use App\Traits\CanFollow;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -68,11 +69,7 @@ class User extends Authenticatable implements MustVerifyEmail
         });
     }
 
-    public function getFullnameAttribute(): string
-    {
-        return $this->name.' '.$this->last_name;
-    }
-
+    /* Relationships */
     public function bookableListings(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(BookableListing::class);
@@ -113,7 +110,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(Team::class, 'owner_id');
     }
 
-    public function team(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function teams(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Team::class);
     }
@@ -123,8 +120,14 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Dashboard::class);
     }
 
-    public function locationSearches(): \Illuminate\Database\Eloquent\Relations\HasMany
+    /* Attributes */
+    public function getFullnameAttribute(): string
     {
-        return $this->hasMany(LocationSearch::class);
+        return $this->name.' '.$this->last_name;
+    }
+
+    public function getPrettyCreatedAtAttribute(): string
+    {
+        return Carbon::parse($this->created_at)->format('M d, Y H:i');
     }
 }

@@ -22,9 +22,6 @@
             </li>
             @can('import')
                 <li class="nav-item">
-{{--                    <a class="nav-link" href="{{ route('admin.import.company.serpapi.index') }}">--}}
-{{--                        <span>Import Details</span>--}}
-{{--                    </a>--}}
                     <span class="nav-link">
                         <span>Import Details <span class="badge">disabled</span></span>
                     </span>
@@ -147,32 +144,11 @@
                 <a class='nav-link' href='{{ backpack_url('clinicaltrial') }}'>Clinical Trials List</a>
             </li>
             <li class='nav-item'>
-                <a class='nav-link' href='{{ backpack_url('clinicaltrialphase') }}'>Phases</a>
-            </li>
-            <li class='nav-item'>
                 <a class='nav-link' href='{{ backpack_url('ct_condition') }}'>Conditions</a>
             </li>
             <li class='nav-item'>
                 <a class='nav-link' href='{{ backpack_url('ct_intervention') }}'>Interventions</a>
             </li>
-            <li class='nav-item'>
-                <a class='nav-link' href='{{ backpack_url('ct_outcome_measure') }}'>Outcome Measures</a>
-            </li>
-            <li class='nav-item'>
-                <a class='nav-link' href='{{ backpack_url('ct_study_design') }}'>Study Designs</a>
-            </li>
-            @can('import')
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('admin.import.clinicaltrial.parsing.index') }}">
-                        <span>Import Details</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('admin.import.clinicaltrial.parsing-results.index') }}">
-                        <span>Import Results</span>
-                    </a>
-                </li>
-            @endcan
         </ul>
     </li>
 @endcan
@@ -181,11 +157,6 @@
 	<li class="nav-item nav-dropdown">
 		<a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon la la-cloud-upload-alt"></i> Import</a>
 		<ul class="nav-dropdown-items">
-			<li class="nav-item">
-				<a class="nav-link" href="{{ route('import.clinicaltrials') }}">
-					<i class="nav-icon la la-stethoscope"></i> <span>Clinical Trials</span>
-				</a>
-			</li>
             <li class="nav-item">
                 <a class='nav-link' href='{{ route('import.related-entities.index') }}'>
                     <i class='nav-icon la la-link'></i> Related Entities

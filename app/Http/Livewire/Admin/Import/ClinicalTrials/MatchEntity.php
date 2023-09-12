@@ -5,13 +5,14 @@ namespace App\Http\Livewire\Admin\Import\ClinicalTrials;
 use App\Models\Clinicaltrial;
 use App\Models\ClinicalTrialDetails\CtCondition;
 use App\Models\ClinicalTrialDetails\CtIntervention;
-use App\Models\ClinicaltrialPhase;
+use App\Models\ClinicalTrialDetails\CtPhase;
 use App\Models\Company;
 use App\Models\Focus;
 use App\Models\ImportedEntity;
 use App\Models\Person;
 use Carbon\Carbon;
 use Livewire\Component;
+use Spatie\SlackAlerts\Facades\SlackAlert;
 use Throwable;
 
 class MatchEntity extends Component
@@ -47,43 +48,31 @@ class MatchEntity extends Component
             $this->maskingInfo();
             $this->getArmsGroups();
             $this->getAgeGroups();
+            $this->matchPhaseRelationships();
 
         } catch(Throwable $exception) {
-            dd($exception->getMessage());
+            SlackAlert::to('dev')->message('<@sydney> Exception during Clinical Trial Match Entity **CREATE** ' . $this->clinicalTrial->title . "\n" . $exception->getMessage());
         }
     }
 
     public function updateEntity() {
-        $this->clinicalTrial->update($this->getDataAttributes());
-        $this->clinicalTrial->refresh();
+        try {
+            $this->clinicalTrial->update($this->getDataAttributes());
+            $this->clinicalTrial->refresh();
 
-        $this->matchConditionRelationships();
-        $this->matchInterventionRelationships();
-        $this->matchLeadSponsor();
-        $this->matchResponsibleParty();
-        $this->matchCollaborators();
-        $this->maskingInfo();
-        $this->getArmsGroups();
-        $this->getAgeGroups();
+            $this->matchConditionRelationships();
+            $this->matchInterventionRelationships();
+            $this->matchLeadSponsor();
+            $this->matchResponsibleParty();
+            $this->matchCollaborators();
+            $this->maskingInfo();
+            $this->getArmsGroups();
+            $this->getAgeGroups();
+            $this->matchPhaseRelationships();
 
-//        try {
-//            $this->clinicalTrial->update($this->getDataAttributes());
-//            $this->clinicalTrial->refresh();
-//
-//            $this->matchConditionRelationships();
-//            $this->matchInterventionRelationships();
-//            $this->matchLeadSponsor();
-//            $this->matchResponsibleParty();
-//            $this->matchCollaborators();
-//            $this->maskingInfo();
-//            $this->getArmsGroups();
-//            $this->getAgeGroups();
-//
-//            // TODO: contactsLocationsModule has contact info for who to contact if recrutiing/need info
-//
-//        } catch(Throwable $exception) {
-//            dd($exception->getMessage());
-//        }
+        } catch(Throwable $exception) {
+            SlackAlert::to('dev')->message('<@sydney> Exception during Clinical Trial Match Entity **UPDATE** ' . $this->clinicalTrial->title . "\n" . $exception->getMessage());
+        }
     }
 
     private function getDataAttributes(): array
@@ -170,29 +159,35 @@ class MatchEntity extends Component
     }
 
     private function getArmsGroups() {
-        if (array_key_exists('armGroups', $this->importedEntity->data['protocolSection']['armsInterventionsModule'])) {
-            $armGroups = $this->importedEntity->data['protocolSection']['armsInterventionsModule']['armGroups'];
-            $prettyGroups = [];
+        if (!array_key_exists('armsInterventionsModule', $this->importedEntity->data['protocolSection'])) {
+            return;
+        }
 
-            foreach($armGroups as $armGroup) {
-                $prettyGroup = [];
+        if (!array_key_exists('armGroups', $this->importedEntity->data['protocolSection']['armsInterventionsModule'])) {
+            return;
+        }
 
-                foreach ($armGroup as $key => $value) {
-                    if ($key === 'type') {
-                        $newValue = Clinicaltrial::ARM_GROUP_TYPES[$value];
-                    } else {
-                        $newValue = $value;
-                    }
+        $armGroups = $this->importedEntity->data['protocolSection']['armsInterventionsModule']['armGroups'];
+        $prettyGroups = [];
 
-                    $prettyGroup[$key] = $newValue;
+        foreach($armGroups as $armGroup) {
+            $prettyGroup = [];
+
+            foreach ($armGroup as $key => $value) {
+                if ($key === 'type') {
+                    $newValue = Clinicaltrial::ARM_GROUP_TYPES[$value];
+                } else {
+                    $newValue = $value;
                 }
 
-                $prettyGroups[] = $prettyGroup;
+                $prettyGroup[$key] = $newValue;
             }
 
-            $this->clinicalTrial->arm_groups = $prettyGroups;
-            $this->clinicalTrial->save();
+            $prettyGroups[] = $prettyGroup;
         }
+
+        $this->clinicalTrial->arm_groups = $prettyGroups;
+        $this->clinicalTrial->save();
     }
 
     private function getAgeGroups() {
@@ -261,6 +256,10 @@ class MatchEntity extends Component
     }
 
     private function matchInterventionRelationships() {
+        if (!array_key_exists('armsInterventionsModule', $items = $this->importedEntity->data['protocolSection'])) {
+            return;
+        }
+
         $items = $this->importedEntity->data['protocolSection']['armsInterventionsModule']['interventions'];
         $recordsWithPivots = [];
 
@@ -292,20 +291,25 @@ class MatchEntity extends Component
     }
 
     private function matchPhaseRelationships() {
-        // TODO: not finished
+
+        if(!array_key_exists('phases', $this->importedEntity->data['protocolSection']['designModule'])) {
+            return;
+        }
+
         $items = $this->importedEntity->data['protocolSection']['designModule']['phases'];
         $recordIds = [];
 
         foreach ($items as $item) {
+
             $attributes = [
                 'name' => $item
             ];
 
-            $condition = ClinicaltrialPhase::updateOrCreate($attributes, $attributes);
-            $recordIds[] = $condition->id;
+            $phase = CtPhase::updateOrCreate($attributes, $attributes);
+            $recordIds[] = $phase->id;
         }
 
-        $this->clinicalTrial->conditions()->sync($recordIds);
+        $this->clinicalTrial->phases()->sync($recordIds);
     }
 
     private function matchResponsibleParty() {

@@ -27,8 +27,8 @@ class FeedbackRequest extends FormRequest
     public function rules()
     {
         $generalRules = [
-            'title' => 'string|required',
-            'content' => 'string|required',
+            'title' => 'required|string',
+            'content' => 'required|string',
             'type' => [
                 'required',
                 Rule::in(Feedback::TYPES),
@@ -36,8 +36,8 @@ class FeedbackRequest extends FormRequest
         ];
 
         $unauthedUserRules = [
-            'user_name' => 'string|required',
-            'user_email' => 'email|required',
+            'user_name' => 'required|string',
+            'user_email' => 'required|email',
         ];
 
         $rules = $generalRules;

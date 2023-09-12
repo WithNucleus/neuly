@@ -26,7 +26,7 @@ class ClinicaltrialController extends Controller
         $clinicalTrial = Clinicaltrial::with([
             'conditions',
             'interventions',
-            'outcomeMeasures',
+            'phases',
             'locations',
             'people',
             'companies',

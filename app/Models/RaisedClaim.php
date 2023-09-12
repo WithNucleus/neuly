@@ -14,6 +14,8 @@ class RaisedClaim extends Model
 
     protected $guarded = ['id'];
 
+    const STATUS_APPROVED = 'Approved';
+
     public static function generateToken()
     {
         return sha1(time());
@@ -32,5 +34,14 @@ class RaisedClaim extends Model
     public function getApproveButton()
     {
         return '<a href="'.route('admin.person-claim.approve', $this->id).'" class="btn btn-sm btn-link"><i class="la la-thumbs-up"></i> approve claim</a>';
+    }
+
+    public function getIsApprovedAttribute(): ?string
+    {
+        if ($this->verification_token === NULL) {
+            return self::STATUS_APPROVED;
+        }
+
+        return NULL;
     }
 }

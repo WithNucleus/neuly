@@ -15,6 +15,10 @@ Route::middleware('can:admin login')->prefix('/adminx')->name('adminx.')->group(
         Route::get('/', [App\Http\Controllers\Adminx\Entities\CourseController::class, 'index'])->name('index');
     });
 
+    Route::prefix('/clinical-trials')->name('clinical-trials.')->middleware('permission:edit clinical trials')->group(function () {
+        Route::get('/', [App\Http\Controllers\Adminx\Entities\ClinicalTrialsController::class, 'index'])->name('index');
+    });
+
     // NAV TILES
     Route::prefix('/nav-tiles')->name('nav-tiles.')->middleware('permission:manage navigation tiles')->group(function () {
         Route::get('/', [\App\Http\Controllers\Adminx\NavigationTiles\NavigationTileController::class, 'index'])->name('index');
@@ -52,8 +56,17 @@ Route::middleware('can:admin login')->prefix('/adminx')->name('adminx.')->group(
     // USERS & AUTH
     Route::middleware('can:edit users')->prefix('/auth')->name('auth.')->group(function () {
 
+        // Users
+        Route::get('/users', [App\Http\Controllers\Adminx\Auth\UsersController::class, 'index'])->name('users.index');
+        Route::get('/users/{id}', [App\Http\Controllers\Adminx\Auth\UsersController::class, 'show'])->name('users.show');
+
         // Roles and Permissions
         Route::get('/roles-permissions', [App\Http\Controllers\Adminx\Auth\RolesAndPermissionsController::class, 'index'])->name('roles-permissions.index');
         Route::get('/roles-permissions/{id}', [App\Http\Controllers\Adminx\Auth\RolesAndPermissionsController::class, 'show'])->name('roles-permissions.show');
+    });
+
+    // MISC TOOLS & PAGES - No Group Middleware
+    Route::name('misc.')->group(function() {
+        Route::get('/feedback', [App\Http\Controllers\Adminx\Misc\MiscController::class, 'feedback'])->middleware('can:edit feedback')->name('feedback');
     });
 });

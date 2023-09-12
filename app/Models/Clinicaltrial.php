@@ -5,8 +5,7 @@ namespace App\Models;
 use App\Helpers\Entity\FieldsMapping;
 use App\Models\ClinicalTrialDetails\CtCondition;
 use App\Models\ClinicalTrialDetails\CtIntervention;
-use App\Models\ClinicalTrialDetails\CtOutcomeMeasure;
-use App\Models\ClinicalTrialDetails\CtStudyDesign;
+use App\Models\ClinicalTrialDetails\CtPhase;
 use App\Models\Contracts\EntityContract;
 use App\Models\Traits\CrudShowEntityPageButton;
 use App\Models\Traits\OldSlugRedirectable;
@@ -267,34 +266,14 @@ class Clinicaltrial extends Model implements EntityContract
         return $this->belongsToMany(CtIntervention::class, 'clinicaltrial_intervention')->withPivot(['type', 'description']);
     }
 
-    // TODO: Remove -- no longer in use
-    public function outcomeMeasures(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
-    {
-        return $this->belongsToMany(CtOutcomeMeasure::class, 'clinicaltrial_outcome_measure');
-    }
-
-    // TODO: Remove -- no longer in use
-    public function studyDesigns(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
-    {
-        return $this->belongsToMany(CtStudyDesign::class, 'clinicaltrial_study_design');
-    }
-
     public function parsingResult(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(ClinicaltrialParsingResult::class);
     }
 
-    public function sponsorsAndCollaborators(): \Illuminate\Support\Collection
+    public function phases(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return collect()
-            ->merge($this->companies)
-            ->merge($this->people)
-            ->sortBy('name');
-    }
-
-    public function phase()
-    {
-        return $this->hasMany(\App\Models\ClinicaltrialPhase::class, 'phases');
+        return $this->belongsToMany(CtPhase::class, 'clinicaltrial_phase');
     }
 
     public function imported(): \Illuminate\Database\Eloquent\Relations\MorphOne
@@ -346,13 +325,13 @@ class Clinicaltrial extends Model implements EntityContract
         return $query->where('status', 'Recruiting');
     }
 
-    /**
-     * @param  array  $years
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeStartYear(Builder $query, ...$years)
+    public function scopeStartYear(Builder $query, $years): Builder
     {
         return $query->whereIn(DB::raw('YEAR(start_date)'), $years);
+    }
+
+    public function scopeNotImported($query) {
+        return $query->doesntHave('imported');
     }
 
     /*

@@ -7,8 +7,9 @@
     <table class="table w-auto table-hover align-middle">
         <thead class="text-uppercase fs-6">
             <tr>
-                <th>Role</th>
-                <th>Permissions</th>
+                <th class="text-nowrap">Role</th>
+                <th class="text-nowrap"># Users</th>
+                <th class="text-nowrap">Permissions</th>
             </tr>
         </thead>
         <tbody>
@@ -17,9 +18,10 @@
                     <td class="text-nowrap text-uppercase fw-bold">
                         <a href="{{ route('adminx.auth.roles-permissions.show', $role->id) }}">{{ $role->name }}</a>
                     </td>
+                    <td class="ps-4">{{ $role->users_count }}</td>
                     <td>
                         @foreach($role->permissions as $permission)
-                            <span class="badge text-body me-2 my-1 bg-light fw-normal">{{ $permission->name }}</span>
+                            <span class="badge text-body me-2 my-1 bg-body-secondary fw-normal">{{ $permission->name }}</span>
                         @endforeach
                     </td>
                 </tr>
