@@ -20,11 +20,15 @@ class ImportedEntity extends Model
     const STATUS_NEW = 'New';
     const STATUS_ACCEPTED = 'Accepted';
     const STATUS_DECLINED = 'Declined';
+    const STATUS_WITH_ERRORS = 'With Errors';
+    const STATUS_COMPLETE = 'Complete';
 
     const STATUSES = [
         self::STATUS_NEW,
         self::STATUS_ACCEPTED,
-        self::STATUS_DECLINED
+        self::STATUS_DECLINED,
+        self::STATUS_WITH_ERRORS,
+        self::STATUS_COMPLETE
     ];
 
     const ERROR_LEAD_SPONSOR = 'Lead sponsor';
@@ -51,5 +55,17 @@ class ImportedEntity extends Model
     public function getFormattedUpdatedAtAttribute(): string
     {
         return Carbon::parse($this->updated_at)->format('Y-m-d H:i');
+    }
+
+    public function getStatusColorAttribute(): string
+    {
+        return match($this->status) {
+            self::STATUS_NEW => 'bg-warning-bright text-dark',
+            self::STATUS_ACCEPTED => 'bg-info',
+            self::STATUS_DECLINED => 'bg-secondary',
+            self::STATUS_WITH_ERRORS => 'bg-danger',
+            self::STATUS_COMPLETE => 'bg-accent',
+            default => 'bg-warning'
+        };
     }
 }

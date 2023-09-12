@@ -1,34 +1,26 @@
 @extends('layouts.app')
 
-@section('body-class', 'bg-light')
-
 @section('content')
 
     @include('navbars.primary')
 
-    <div class="container">
-        <main id="show-main" role="main" class="col-12">
-            <div class="row">
-                <div class="col-12 col-xl-10 mx-auto bg-white p-4 shadow-sm text-center">
+    <div class="container my-5">
+        <div class="max-width-780 bg-body-secondary mx-auto text-center p-5">
+            <h1 class="text-primary">You're invited to join</h1>
+            <h2>{{ $team->name }}</h2>
 
-                    <h1 class="page-title-default text-primary">You invited to join team "{{ $team->name }}"!</h1>
+            <form method="post" action="{{ route('invitation.accept') }}">
+                @csrf
+                <input type="hidden" name="team_id" value="{{ $team->id }}">
+                <input type="hidden" name="user_id" value="{{ $userId }}">
+                <input type="hidden" name="invitation_id" value="{{ $invitationId }}">
 
-                    <form method="post" action="{{ route('invitation.accept') }}">
-                        @csrf
-                        <input type="hidden" name="team_id" value="{{ $team->id }}">
-                        <input type="hidden" name="user_id" value="{{ $userId }}">
-                        <input type="hidden" name="invitation_id" value="{{ $invitationId }}">
-
-                        <p class="mt-4 text-center">
-                            <button type="submit" class="btn btn-success">Accept</button>
-                            <a href="{{ route('index') }}" class="btn btn-default">Cancel</a>
-                        </p>
-                    </form>
-
+                <div class="mt-4 text-center">
+                    <button type="submit" class="btn btn-accent rounded-0 btn-lg">Accept</button>
+                    <a href="{{ route('index') }}" class="btn rounded-0 btn-lg">Cancel</a>
                 </div>
-            </div>
-
-        </main>
+            </form>
+        </div>
     </div>
 
     @include('footers.mini')

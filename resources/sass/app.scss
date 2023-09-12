@@ -22,20 +22,6 @@ html {
     padding-top: 2rem;
 }
 
-.faux-select-item {
-    width: 100%;
-    border-radius: 0;
-    text-align: left;
-    font-weight: 400;
-    text-transform: none !important;
-    font-size: $font-size-sm;
-}
-
-.faux-select-item:hover {
-    background-color: $neulyGreen;
-    color: $gray-100;
-}
-
 // Dark Theme Color Overrides
 [data-bs-theme=dark] {
     --bs-success: $neulyGreenBright;
@@ -256,6 +242,26 @@ ul.pagination {
     font-size: $font-size-base * 1.25;
 }
 
+/* Faux Select Item / Button */
+.faux-select-item {
+    width: 100%;
+    border-radius: 0;
+    text-align: left;
+    font-weight: 400;
+    text-transform: none !important;
+    font-size: $font-size-sm;
+}
+
+.faux-select-item:hover {
+    background-color: $neulyGreen;
+    color: $gray-100;
+}
+
+.faux-select-item-hover-gray:hover {
+    background-color: $gray-200;
+    color: $neulyIndigo;
+}
+
 // Links & Text Effects
 .underline-on-hover {
     text-decoration: none;
@@ -298,6 +304,10 @@ h5, .h5 {
 
 .text-small {
     font-size: $font-size-base * .9;
+}
+
+.fs-normal {
+    font-size: $font-size-base;
 }
 
 // Images

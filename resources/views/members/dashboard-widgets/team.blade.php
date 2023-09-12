@@ -1,29 +1,20 @@
-@hasanyrole('Team owner|Team member')
-    @role('Team owner')
-        <h1 class="h2">
-            <a href="{{ route('member.team.index') }}" class="text-decoration-none">
-                <i class="fa-sharp fa-solid fa-users text-accent"></i>
-                <span>Team</span>
-            </a>
-        </h1>
-        <div>
-            @include('members.data.team-owner')
-        </div>
-    @else
-        <h1 class="h2">
-            <i class="fa-sharp fa-solid fa-users text-accent mr-2"></i>
-            <span>Team</span>
-        </h1>
-        <div class="p-4 bg-white shadow-sm">
-            @include('members.data.team-member')
-        </div>
-    @endrole
+<h1 class="h2">
+    <i class="fa-sharp fa-solid fa-users text-accent"></i>
+    <span>Team</span>
+</h1>
+
+@foreach($user->teams as $team)
+    <div class="border p-3 mb-4">
+        @include('members.data.team-member')
+    </div>
+@endforeach
+
+@if($user->ownedTeam)
+    <div class="border p-3 mb-4">
+        @include('members.data.team-owner')
+    </div>
 @else
-    <h1 class="h2">
-        <i class="fa-sharp fa-solid fa-users text-accent"></i>
-        <span>Team</span>
-    </h1>
-    <div>
+    <div class="border p-3 mb-4">
         <p class="lead mb-1">Create your team</p>
         <form action="{{ route('member.team.create') }}" method="post">
             @csrf
@@ -33,4 +24,4 @@
             </div>
         </form>
     </div>
-@endhasanyrole
+@endif

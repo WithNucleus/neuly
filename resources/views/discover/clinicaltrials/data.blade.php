@@ -3,7 +3,6 @@ $primary_fields = [
     'study_type' => ['type' => 'text', 'label' => 'Study type', 'type_label' => null],
     'status' => ['type' => 'text', 'label' => 'Status', 'type_label' => null],
     'study_results' => ['type' => 'text', 'label' => 'Study results', 'type_label' => null],
-    // 'phases' => ['type' => 'text', 'label' => 'Phases'],
     'age' => ['type' => 'text', 'label' => 'Age', 'type_label' => null],
     'enrollment' => ['type' => 'text', 'label' => 'Enrollment', 'type_label' => 'enrollment_type'],
     'funded_bys' => ['type' => 'text', 'label' => 'Funded by', 'type_label' => null],
@@ -86,15 +85,12 @@ $dates = [
             </div>
         @endif
         <div>
-            <h3 class="h4 text-primary border-bottom border-2 border-secondary mb-2">Phase</h3>
-            @php
-                $phases = explode('|', $clinicalTrial->phases)
-            @endphp
-            @foreach ($phases as $phase)
-                <ul class="mb-0 list-group list-group-flush">
-                    <li class="list-group-item px-0">{{ $phase }}</li>
-                </ul>
-            @endforeach
+            <h3 class="h4 text-primary border-bottom border-2 border-secondary mb-2">Phase</h3
+            <ul class="mb-0 list-group list-group-flush">
+                @foreach ($clinicalTrial->phases as $phase)
+                    <li class="list-group-item px-0">{{ $phase->pretty_name }}</li>
+                @endforeach
+            </ul>
         </div>
     </div>
 </div>
@@ -131,7 +127,7 @@ $dates = [
                     <td colspan="2">
                         <h4 class="h5 border-bottom mt-3">Masking</h4>
                         @if($clinicalTrial->masking_description)
-                            <p>{{ $clinicalTrial->masking_description }}</p>
+                            <p>{{ ucfirst($clinicalTrial->masking_description) }}</p>
                         @endif
 
                         @if($clinicalTrial->who_masked)
@@ -171,35 +167,33 @@ $dates = [
 
 <div class="my-4">
     <h2 class="text-primary h4 border-bottom border-2 border-secondary">Sponsors / Collaborators</h2>
-    <div class="row">
-        <div class="col-12 col-md-6">
-            <div class="lead my-2">
-                <strong class="text-uppercase me-1">Lead Sponsor:</strong>
-                @if($clinicalTrial->leadSponsor)
-                    <span>{{ $clinicalTrial->leadSponsor->name }}</span>
-                @else
-                    <span>N/A</span>
-                @endif
-            </div>
-            @if($clinicalTrial->lead_sponsor_notes)
-                <div class="text-muted my-2">
-                    {{ $clinicalTrial->lead_sponsor_notes }}
-                </div>
-            @endif
-            <div class="lead my-2">
-                <strong class="text-uppercase me-1">Responsible Party:</strong>
-                @if($clinicalTrial->responsibleParty)
-                    {{ $clinicalTrial->responsibleParty->name }}
-                @else
-                    <span>N/A</span>
-                @endif
-            </div>
-            @if($clinicalTrial->responsible_party_notes)
-                <div class="text-muted my-2">
-                    {{ $clinicalTrial->responsible_party_notes }}
-                </div>
+    <div>
+        <div class="lead my-2">
+            <strong class="text-uppercase me-1">Lead Sponsor:</strong>
+            @if($clinicalTrial->leadSponsor)
+                <span>{{ $clinicalTrial->leadSponsor->name }}</span>
+            @else
+                <span>N/A</span>
             @endif
         </div>
+        @if($clinicalTrial->lead_sponsor_notes)
+            <div class="text-muted my-2">
+                {{ $clinicalTrial->lead_sponsor_notes }}
+            </div>
+        @endif
+        <div class="lead my-2">
+            <strong class="text-uppercase me-1">Responsible Party:</strong>
+            @if($clinicalTrial->responsibleParty)
+                {{ $clinicalTrial->responsibleParty->name }}
+            @else
+                <span>N/A</span>
+            @endif
+        </div>
+        @if($clinicalTrial->responsible_party_notes)
+            <div class="text-muted my-2">
+                {{ $clinicalTrial->responsible_party_notes }}
+            </div>
+        @endif
     </div>
 </div>
 

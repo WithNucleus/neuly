@@ -30,7 +30,8 @@ mix
     .js('resources/js/metrics/line.js', 'public/js')
     // .js('resources/js/embed-search.js', 'public/js/external')
     .js('resources/js/neuly-care.js', 'public/js')
-    .js('resources/js/search.js', 'public/js');
+    .js('resources/js/search.js', 'public/js')
+    .js('resources/js/admin.js', 'public/js');
 
 // Mix CSS
 mix

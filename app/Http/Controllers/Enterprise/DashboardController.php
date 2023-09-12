@@ -233,7 +233,7 @@ class DashboardController extends Controller
         if ($user->hasRole('Team owner')) {
             $team = $user->ownedTeam()->with(['members', 'invitations'])->first();
         } elseif ($user->hasRole('Team member')) {
-            $team = $user->team()->with(['members', 'owner'])->first();
+            $team = $user->teams()->with(['members', 'owner'])->first();
         }
 
         return View::make('enterprise.widgets.team')

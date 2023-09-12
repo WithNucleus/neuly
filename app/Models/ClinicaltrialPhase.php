@@ -22,26 +22,29 @@ class ClinicaltrialPhase extends Model
 
     public $incrementing = false;
 
+    const PHASES = [
+        'NA' => 'Not Applicable',
+        'EARLY_PHASE1' => 'Early Phase 1',
+        'PHASE1' => 'Phase 1',
+        'PHASE2' => 'Phase 2',
+        'PHASE3' => 'Phase 3',
+        'PHASE4' => 'Phase 4'
+    ];
+
+    const PHASE_NA = 'phase_na';
+    const PHASE_EARLY_1 = 'phase_early_1';
+    const PHASE_1 = 'phase_1';
+    const PHASE_1_2 = 'phase_1_2';
+    const PHASE_2 = 'phase_2';
+    const PHASE_2_3 = 'phase_2_3';
+    const PHASE_3 = 'phase_3';
+    const PHASE_4 = 'phase_4';
+
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
-    const PHASE_NA = 'phase_na';
-
-    const PHASE_EARLY_1 = 'phase_early_1';
-
-    const PHASE_1 = 'phase_1';
-
-    const PHASE_1_2 = 'phase_1_2';
-
-    const PHASE_2 = 'phase_2';
-
-    const PHASE_2_3 = 'phase_2_3';
-
-    const PHASE_3 = 'phase_3';
-
-    const PHASE_4 = 'phase_4';
 
     private static $phases = [
         self::PHASE_NA => [

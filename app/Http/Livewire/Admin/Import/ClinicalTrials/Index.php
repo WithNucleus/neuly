@@ -18,6 +18,11 @@ class Index extends Component
 
     public ?string $search = null;
 
+    public array $filters = [
+        'has-entity' => false,
+        'has-errors' => false
+    ];
+
     public $selectedResult;
 
     public function mount() {
@@ -41,12 +46,24 @@ class Index extends Component
         $this->resetPage();
     }
 
+    public function clearFilters() {
+        $this->reset('search');
+        $this->reset('filters');
+        $this->resetPage();
+    }
+
     public function getRowsQueryProperty()
     {
         $query = ImportedEntity::with(['importable'])
                 ->when($this->search, function($query, $search) {
                     return $query
                         ->where('name', 'like', '%' . $search . '%');
+                })
+                ->when($this->filters['has-entity'], function($query) {
+                    return $query->doesntHave('importable');
+                })
+                ->when($this->filters['has-errors'], function($query) {
+                    return $query->whereNotNull('errors');
                 });
 
         return $this->applySorting($query);

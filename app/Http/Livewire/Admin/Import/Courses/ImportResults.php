@@ -26,7 +26,7 @@ class ImportResults extends Component
             'updated_at' => 'desc'
         ];
 
-        $this->perPage = 20;
+        $this->perPage = 10;
     }
 
     public function updatingSearch() {

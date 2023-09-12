@@ -245,11 +245,6 @@ class Location extends Model implements EntityContract
         return $this->belongsTo(\App\Models\Country::class, 'country', 'name');
     }
 
-    public function locationSearches(): \Illuminate\Database\Eloquent\Relations\HasMany
-    {
-        return $this->hasMany(LocationSearch::class);
-    }
-
     /*
     |--------------------------------------------------------------------------
     | SCOPES

@@ -33,6 +33,13 @@
                     <div class="d-flex">
                         <livewire:admin.import.clinical-trials.lead-sponsor :clinicalTrial="$clinicalTrial" />
                         <livewire:admin.import.clinical-trials.responsible-party :clinicalTrial="$clinicalTrial" />
+                        <div class="ms-5 text-uppercase">
+                            <strong class="me-1 d-block">Sync Status</strong>
+                            <span class="badge {{ $importedEntity->status_color }}">{{ $importedEntity->status }}</span>
+                        </div>
+                        <div class="ms-auto">
+                            <a href="{{ route('adminx.import.clinical-trials.index') }}" class="btn btn-sm">Import HQ</a>
+                        </div>
                     </div>
                 </div>
             @else

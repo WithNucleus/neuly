@@ -11,7 +11,8 @@ class CourseController extends Controller
         View::share('currentRoute', 'entities');
     }
 
-    public function index() {
+    public function index(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    {
         return view('adminx.entities.courses.index');
     }
 }
