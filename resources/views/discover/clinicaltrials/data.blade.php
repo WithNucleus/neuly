@@ -167,35 +167,33 @@ $dates = [
 
 <div class="my-4">
     <h2 class="text-primary h4 border-bottom border-2 border-secondary">Sponsors / Collaborators</h2>
-    <div class="row">
-        <div class="col-12 col-md-6">
-            <div class="lead my-2">
-                <strong class="text-uppercase me-1">Lead Sponsor:</strong>
-                @if($clinicalTrial->leadSponsor)
-                    <span>{{ $clinicalTrial->leadSponsor->name }}</span>
-                @else
-                    <span>N/A</span>
-                @endif
-            </div>
-            @if($clinicalTrial->lead_sponsor_notes)
-                <div class="text-muted my-2">
-                    {{ $clinicalTrial->lead_sponsor_notes }}
-                </div>
-            @endif
-            <div class="lead my-2">
-                <strong class="text-uppercase me-1">Responsible Party:</strong>
-                @if($clinicalTrial->responsibleParty)
-                    {{ $clinicalTrial->responsibleParty->name }}
-                @else
-                    <span>N/A</span>
-                @endif
-            </div>
-            @if($clinicalTrial->responsible_party_notes)
-                <div class="text-muted my-2">
-                    {{ $clinicalTrial->responsible_party_notes }}
-                </div>
+    <div>
+        <div class="lead my-2">
+            <strong class="text-uppercase me-1">Lead Sponsor:</strong>
+            @if($clinicalTrial->leadSponsor)
+                <span>{{ $clinicalTrial->leadSponsor->name }}</span>
+            @else
+                <span>N/A</span>
             @endif
         </div>
+        @if($clinicalTrial->lead_sponsor_notes)
+            <div class="text-muted my-2">
+                {{ $clinicalTrial->lead_sponsor_notes }}
+            </div>
+        @endif
+        <div class="lead my-2">
+            <strong class="text-uppercase me-1">Responsible Party:</strong>
+            @if($clinicalTrial->responsibleParty)
+                {{ $clinicalTrial->responsibleParty->name }}
+            @else
+                <span>N/A</span>
+            @endif
+        </div>
+        @if($clinicalTrial->responsible_party_notes)
+            <div class="text-muted my-2">
+                {{ $clinicalTrial->responsible_party_notes }}
+            </div>
+        @endif
     </div>
 </div>
 

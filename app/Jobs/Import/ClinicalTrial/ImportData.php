@@ -35,12 +35,13 @@ class ImportData implements ShouldQueue
             'data' => $response
         ];
 
-        ImportedEntity::updateOrCreate(
+        $importedEntity = ImportedEntity::updateOrCreate(
             [
                 'name' => $response['protocolSection']['identificationModule']['nctId'],
-                'importable_type' => Clinicaltrial::class
             ],
             $attributes
         );
+
+        ImportProcess::dispatch($importedEntity);
     }
 }
