@@ -63,6 +63,7 @@
                                 @endcan
                                 @can('view logs')
                                     <x-sidebar.list-group-item url="/horizon" label="Horizon" />
+                                    <x-sidebar.list-group-item url="/admin/log" label="Logs" />
                                 @endcan
                             </x-sidebar.list-group>
 
