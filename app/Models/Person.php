@@ -325,6 +325,15 @@ class Person extends Model implements EntityContract, EntityImageContract
         return strip_tags(Str::words($this->bio, 60));
     }
 
+    public function getIsVerifiedAttribute(): bool
+    {
+        if ($this->user_id) {
+            return true;
+        }
+
+        return false;
+    }
+
     /*
     |--------------------------------------------------------------------------
     | MUTATORS

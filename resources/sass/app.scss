@@ -508,7 +508,7 @@ $max-widths: 60 150 200 250 300 400 500 600 740 780 840 1000;
 }
 
 // Min Widths
-$min-widths: 120;
+$min-widths: 100 120;
 
 @each $size in $min-widths {
     .min-width-#{$size} {
@@ -723,7 +723,7 @@ body.home {
 
 @media (min-width: 1024px) {
     .home-hero h1 {
-        font-size: 6.25rem;
+        font-size: 4.8rem;
     }
 
     .home-clinical-research h2,

@@ -9,32 +9,29 @@ use Illuminate\Http\Request;
 
 class LocationMapController extends Controller
 {
-    /**
-     * Show
-     *
-     * @return \Illuminate\View\View
-     */
-    public function showMap(Request $request)
+    public function showMap(Request $request): \Illuminate\Http\RedirectResponse
     {
-        $filter_array = $this->filterRequest($request);
-        $filters_type = $filter_array['filters_type'];
-        $all_filters_type = $filter_array['all_filters_type'];
+        return redirect()->route('discover.locations');
 
-        $locationsQuery = Location::whereNotNull('alpha2code');
-        $locationsQuery = $this->filterQuery($locationsQuery, $filter_array['filter']);
-
-        $locations = $locationsQuery
-            ->orderBy('country')
-            ->get()
-            ->groupBy('alpha2code')
-            ->toArray();
-
-        $countriesByCode = $this->getMappedLocationGroups($locations, 'alpha2code');
-
-        $path = route('discover.locations.maps.global');
-        $sort = $request->has('sort') ? $request->input('sort') : 'organizations';
-
-        return view('discover.locations.maps.global', compact('countriesByCode', 'all_filters_type', 'filters_type', 'path', 'sort'));
+//        $filter_array = $this->filterRequest($request);
+//        $filters_type = $filter_array['filters_type'];
+//        $all_filters_type = $filter_array['all_filters_type'];
+//
+//        $locationsQuery = Location::whereNotNull('alpha2code');
+//        $locationsQuery = $this->filterQuery($locationsQuery, $filter_array['filter']);
+//
+//        $locations = $locationsQuery
+//            ->orderBy('country')
+//            ->get()
+//            ->groupBy('alpha2code')
+//            ->toArray();
+//
+//        $countriesByCode = $this->getMappedLocationGroups($locations, 'alpha2code');
+//
+//        $path = route('discover.locations.maps.global');
+//        $sort = $request->has('sort') ? $request->input('sort') : 'organizations';
+//
+//        return view('discover.locations.maps.global', compact('countriesByCode', 'all_filters_type', 'filters_type', 'path', 'sort'));
     }
 
     /**

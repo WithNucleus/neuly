@@ -14,12 +14,17 @@
     <div class="container py-4">
 
         <x-entities.entity-show-title-meta title="{{ $person->name }}">
-            <div class="me-3">
-                @include('members.follow.button', [
-                    'followable_type' => get_class($person),
-                    'followable_id' => $person->id,
-                    'name' => $person->name
-                ])
+            <div class="d-flex align-items-center">
+                <div class="me-2">
+                    @include('members.follow.button', [
+                        'followable_type' => get_class($person),
+                        'followable_id' => $person->id,
+                        'name' => $person->name
+                    ])
+                </div>
+                @if($person->is_verified)
+                    <span class="badge bg-primary text-uppercase">Verified</span>
+                @endif
             </div>
         </x-entities.entity-show-title-meta>
 

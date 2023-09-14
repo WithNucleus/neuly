@@ -4,7 +4,7 @@
             <h2 class="mb-3 h5 px-1 text-success">{{ $research->name }}</h2>
             <div class="d-flex justify-content-start text-body-secondary my-3">
                 @foreach ($research->focus as $focus)
-                    <span class="badge bg-secondary text-uppercase">{{ $focus->name }}</span>
+                    <span class="badge bg-body-secondary text-body text-uppercase">{{ $focus->name }}</span>
                 @endforeach
             </div>
         </div>

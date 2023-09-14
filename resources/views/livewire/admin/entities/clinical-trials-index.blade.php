@@ -16,9 +16,16 @@
     </div>
     <div class="d-flex justify-content-between align-items-center mb-3">
         <div class="me-3">
-            <div>
-                <strong>{{ count($selected) }}</strong> subscriptions selected
+            <div class="me-3">
+                <strong>{{ number_format($records->total(), 0) }}</strong> total records
             </div>
+            @if (!empty($selected))
+                <div>
+                    <strong>{{ count($selected) }}</strong> selected
+                </div>
+            @else
+                <div>&nbsp;</div>
+            @endif
         </div>
         <div wire:ignore class="dropdown">
             <button class="btn btn-primary rounded-0 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -45,7 +52,6 @@
                     <th>Imported</th>
                     <th>Title</th>
                     <th>Focus</th>
-                    <th>Collaborators</th>
                     <th>Phase</th>
                     <th>Status</th>
                 </tr>
@@ -81,24 +87,6 @@
                             @endforeach
                         </td>
                         <td>
-                            <div>
-                                <span class="fw-bold text-uppercase">Responsible Party</span>
-                                @if($record->responsibleParty)
-                                    <span>{{ $record->responsibleParty->name }}</span>
-                                @else
-                                    <span>N/A</span>
-                                @endif
-                            </div>
-                            <div>
-                                <span class="fw-bold text-uppercase">Lead Sponsor</span>
-                                @if($record->leadSponsor)
-                                    <span>{{ $record->leadSponsor->name }}</span>
-                                @else
-                                    <span>N/A</span>
-                                @endif
-                            </div>
-                        </td>
-                        <td>
                             @foreach ($record->phases as $phase)
                                 <div>{{ $phase->pretty_name }}</div>
                             @endforeach
@@ -107,7 +95,7 @@
                     </tr>
                 @empty
                     <tr wire:key="empty-no-records">
-                        <td>No records match your query</td>
+                        <td colspan="99">No records match your query</td>
                     </tr>
                  @endforelse
             </tbody>

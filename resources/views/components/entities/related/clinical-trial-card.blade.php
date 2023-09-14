@@ -10,7 +10,7 @@
         @endif
         <div class="d-flex justify-content-start text-body-secondary mb-3">
             @foreach ($clinicalTrial->focus as $focus)
-                <span class="badge bg-secondary text-uppercase me-2">{{ $focus->name }}</span>
+                <span class="badge bg-body-secondary text-body text-uppercase me-2">{{ $focus->name }}</span>
             @endforeach
         </div>
         <div class="text-body-secondary d-flex flex-wrap">
