@@ -1,9 +1,23 @@
 <div>
+    <div class="d-md-flex flex-wrap mt-3">
+
+        <div class="me-md-5 mb-3">
+            <x-livewire-filters.search label="Search" placeholder="Search" search="{{ $search }}" tooltip="Search by title, NCT number, summary, etc." />
+        </div>
+
+        <div class="ms-auto mb-3">
+            <button wire:click="clearFilters" class="btn btn-sm btn-dark rounded-0">Clear Filters</button>
+        </div>
+
+    </div>
     <div class="d-flex justify-content-between align-items-center mb-1">
         <div class="me-3">
+            <div class="me-3">
+                <strong>{{ number_format($records->total(), 0) }}</strong> total records
+            </div>
             @if (!empty($selected))
                 <div>
-                    <strong>{{ count($selected) }}</strong> subscriptions selected
+                    <strong>{{ count($selected) }}</strong> selected
                 </div>
             @else
                 <div>&nbsp;</div>
@@ -113,7 +127,7 @@
                     </tr>
                 @empty
                     <tr wire:key="empty-no-records">
-                        <td>No records match your query</td>
+                        <td colspan="99">No records match your query</td>
                     </tr>
                  @endforelse
             </tbody>
