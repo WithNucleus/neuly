@@ -3,7 +3,7 @@
         <p class="fs-6 fw-bold text-uppercase m-0">{{ $research->name }}</p>
         <div class="d-flex justify-content-start text-body-secondary my-2">
             @foreach ($research->focus as $focus)
-                <span class="badge bg-secondary text-uppercase">{{ $focus->name }}</span>
+                <span class="badge bg-body-secondary text-body text-uppercase">{{ $focus->name }}</span>
             @endforeach
         </div>
         @if ($research->publication_info)

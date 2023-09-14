@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Location;
 use App\Repositories\FollowRepository;
 use App\Services\Metas;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -14,53 +14,38 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class LocationController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+
+    public function index(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        $this->middleware('query_filters')->only('index');
-    }
-
-    // Index
-    public function index(Request $request)
-    {
-        // Get Location
-        $locations = QueryBuilder::for(Location::class)
-            ->allowedFilters([
-                'region',
-                AllowedFilter::partial('locations', 'name'),
-                AllowedFilter::partial('countries', 'country'),
-                AllowedFilter::exact('regions', 'region'),
-                AllowedFilter::partial('city', 'name'),
-                AllowedFilter::partial('people', 'people.name'),
-                AllowedFilter::partial('investors', 'investors.name'),
-                AllowedFilter::partial('company', 'company.name'),
-            ])
-            ->defaultSort('name')
-            ->allowedSorts([
-                'name', 'city', 'region', 'country',
-            ])
-            ->paginate(50)
-            ->appends(request()->query());
-
-        // Get Countries
-        $all_locations = Location::all();
-        $countries = $all_locations->pluck('country')->unique()->sort();
-
         $metas = Metas::fromPage($request->path());
 
         // Return View
-        return view('discover.locations.index', compact('locations', 'countries', 'metas'));
+        return view('discover.locations.index', compact('metas'));
     }
 
     // Show
     public function show(Request $request, $slug)
     {
-        // Get Location
-        $location = Location::where('slug', $slug)->firstOrFail();
+        $location = Location::with([
+                'bookableListings',
+                'companies',
+                'people',
+                'investors',
+                'jobs',
+                'events',
+                'clinicaltrials',
+            ])
+            ->withCount([
+                'bookableListings',
+                'companies',
+                'people',
+                'investors',
+                'jobs',
+                'events',
+                'clinicaltrials',
+            ])->where('slug', $slug)->firstOrFail();
+
+        $entity = $location;
 
         $metas = Metas::process([
             'title' => $location->name,
@@ -68,10 +53,6 @@ class LocationController extends Controller
             'image' => '',
         ]);
 
-        $entity = 'locations';
-        $isFollowed = (bool) count(FollowRepository::fromuser(Location::class, $location->id));
-
-        // Log Activity
         activity('pageview')
             ->causedBy(Auth::user())
             ->withProperties([
@@ -85,15 +66,10 @@ class LocationController extends Controller
             })
             ->log($location->name);
 
-        return view('discover.locations.show', compact('location', 'metas', 'entity', 'isFollowed'));
+        return view('discover.locations.show', compact('location', 'metas', 'entity'));
     }
 
-    /**
-     * Gets the city names.
-     *
-     * @return City names in JSON.
-     */
-    public function citynames()
+    public function citynames(): \Illuminate\Http\JsonResponse
     {
         return response()->json(Location::all()->pluck('name'));
     }

@@ -23,31 +23,31 @@
                         <li><a class="dropdown-item" href="{{ route('discover.organizations') }}"><i class="fa-sharp fa-solid fa-building fa-fw"></i> Organizations</a></li>
                         <li><a class="dropdown-item" href="{{ route('discover.people') }}"><i class="fa-sharp fa-solid fa-users fa-fw"></i> People</a></li>
                         <li><a class="dropdown-item" href="{{ route('discover.investors') }}"><i class="fa-sharp fa-solid fa-hands-usd fa-fw"></i> Investors</a></li>
+                        <li><a class="dropdown-item" href="{{ route('discover.jobs') }}"><i class="fa-sharp fa-solid fa-briefcase fa-fw"></i> Jobs</a></li>
                         <li><a class="dropdown-item" href="{{ route('discover.locations.maps.global') }}"><i class="fa-sharp fa-solid fa-map-pin fa-fw"></i> Locations</a></li>
                         <li><a class="dropdown-item" href="{{ route('discover.focus') }}"><i class="fa-sharp fa-solid fa-tags fa-fw"></i> Focus</a></li>
                         <li><a class="dropdown-item" href="{{ route('discover.research') }}"><i class="fa-sharp fa-solid fa-microscope fa-fw"></i> Research</a></li>
                         <li><a class="dropdown-item" href="{{ route('discover.clinicaltrials') }}"><i class="fa-sharp fa-solid fa-stethoscope fa-fw"></i> Clinical Trials</a></li>
-                        <li><a class="dropdown-item" href="{{ route('discover.index') }}"><i class="fa-sharp fa-solid fa-chart-area fa-fw"></i> Pubco Index</a></li>
+                        <li><a class="dropdown-item" href="{{ route('discover.index') }}"><i class="fa-sharp fa-solid fa-chart-area fa-fw"></i> Stock Market</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown me-xl-3">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Community
+                        EDU
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{{ route('discover.events') }}"><i class="fa-sharp fa-solid fa-calendar fa-fw"></i> Events</a></li>
-                        <li><a class="dropdown-item" href="{{ route('discover.jobs') }}"><i class="fa-sharp fa-solid fa-briefcase fa-fw"></i> Jobs</a></li>
-                        <li><a class="dropdown-item" href="{{ route('discover.news') }}"><i class="fa-sharp fa-solid fa-newspaper fa-fw"></i> News</a></li>
-                        <li><a class="dropdown-item" href="{{ route('discover.articles') }}"><i class="fa-sharp fa-solid fa-memo fa-fw"></i> Articles</a></li>
-                        <li><a class="dropdown-item" href="{{ route('discover.books') }}"><i class="fa-sharp fa-solid fa-book fa-fw"></i> Books</a></li>
-                        <li><a class="dropdown-item" href="{{ route('discover.podcasts') }}"><i class="fa-sharp fa-solid fa-podcast fa-fw"></i> Podcasts</a></li>
                         <li><a class="dropdown-item" href="{{ route('discover.courses') }}"><i class="fa-sharp fa-solid fa-book-reader fa-fw"></i> Courses</a></li>
+                        <li><a class="dropdown-item" href="{{ route('discover.podcasts') }}"><i class="fa-sharp fa-solid fa-podcast fa-fw"></i> Podcasts</a></li>
+                        <li><a class="dropdown-item" href="{{ route('discover.books') }}"><i class="fa-sharp fa-solid fa-book fa-fw"></i> Books</a></li>
+                        <li><a class="dropdown-item" href="{{ route('discover.articles') }}"><i class="fa-sharp fa-solid fa-memo fa-fw"></i> Articles</a></li>
+                        <li><a class="dropdown-item" href="{{ route('discover.news') }}"><i class="fa-sharp fa-solid fa-newspaper fa-fw"></i> News</a></li>
+                        <li><a class="dropdown-item" href="{{ route('discover.events') }}"><i class="fa-sharp fa-solid fa-calendar fa-fw"></i> Events</a></li>
                         <li><a class="dropdown-item" href="{{ route('discover.videos') }}"><i class="fa-sharp fa-solid fa-film fa-fw"></i> Videos</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown me-xl-3">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Treatment
+                        Care
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="{{ route('discover.bookable-listing.practitioners') }}"><i class="fa-sharp fa-solid fa-medkit fa-fw"></i> Find a Practitioner</a></li>
@@ -64,7 +64,7 @@
                     </li>
                     <li class="nav-item dropdown me-xl-3">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            {{ Auth::user()->name }}
+                            <i class="fa-sharp fa-solid fa-user"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="{{ route('user.settings') }}" title="Settings">Settings</a></li>

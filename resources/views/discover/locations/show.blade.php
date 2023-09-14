@@ -1,26 +1,41 @@
-@extends('layouts.app')
+@extends('layouts.entity-show')
 
-@section('body-class', 'bg-light')
+@section('breadcrumbs')
+    @include('navbars.breadcrumb', [
+        'items' => [
+            'Locations' => route('discover.locations'),
+            $location->name  => false
+        ]
+    ])
+@endsection
 
 @section('content')
 
-    @include('discover.includes.show-begin', ['full_width' => true])
+    <div class="container py-4">
 
-    	<p class="dashboard-actions-container m-2 float-right">
-            @include('members.follow.button', [
-                'followable_type' => get_class($location),
-                'followable_id' => $location->id,
-                'name' => $location->name,
-            ])
-        </p>
-
-        <h1>{{ $location->name }}</h1>
-
-        @include('discover.includes.status-messages')
+        <x-entities.entity-show-title-meta title="{{ $location->name }}">
+            <div class="me-3">
+                @include('members.follow.button')
+            </div>
+        </x-entities.entity-show-title-meta>
 
         @include('discover.locations.data')
 
-    @include('discover.includes.show-end')
-    @include('discover.includes.limited-access-modal')
+        @auth
+            <div class="d-flex flex-wrap justify-content-between align-items-center text-uppercase small fw-bold text-secondary-emphasis mt-4">
+                <div class="me-4">
+                    First added: {{ Carbon\Carbon::parse($location->created_at)->format('M d, Y') }}
+                </div>
+                @can('edit companies')
+                    <div>
+                        <a href="{{ route('location.edit', $location->id) }}" class="text-secondary-emphasis">Edit location</a>
+                    </div>
+                @endcan
+                <div>
+                    @include('discover.includes.update-listing-form', ['entity' => $location])
+                </div>
+            </div>
+        @endauth
+    </div>
 
 @endsection

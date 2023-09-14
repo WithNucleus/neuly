@@ -102,9 +102,9 @@ Route::middleware('verifiedIfAuthorized')->group(function () {
     // Locations
     Route::get('/locations', [App\Http\Controllers\Index\LocationController::class, 'index'])->name('discover.locations');
     Route::get('/locations/map', [App\Http\Controllers\Index\LocationMapController::class, 'showMap'])->name('discover.locations.maps.global');
-    Route::get('/locations/map/{country}', [App\Http\Controllers\Index\LocationMapController::class, 'showCountry'])->name('discover.locations.maps.country');
-    Route::get('/locations/citynames.json', [App\Http\Controllers\Index\LocationController::class, 'citynames']);
-    Route::get('/locations/countries.json', [App\Http\Controllers\Index\LocationController::class, 'countries']);
+//    Route::get('/locations/map/{country}', [App\Http\Controllers\Index\LocationMapController::class, 'showCountry'])->name('discover.locations.maps.country');
+//    Route::get('/locations/citynames.json', [App\Http\Controllers\Index\LocationController::class, 'citynames']);
+//    Route::get('/locations/countries.json', [App\Http\Controllers\Index\LocationController::class, 'countries']);
     Route::get('/location/{slug}', [App\Http\Controllers\Index\LocationController::class, 'show'])->name('discover.locations.show');
 
     // Focus

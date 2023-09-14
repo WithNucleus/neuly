@@ -1,124 +1,58 @@
-<div class="row">
-	<div class="col-12">
+@if($location->companies_count > 0)
+    <x-entities.collapsable-related-entity collapsableId="companiesList" label="Organizations">
+        @foreach ($location->companies as $company)
+            <x-entities.related.company-card :company="$company" pivot="position" />
+        @endforeach
+    </x-entities.collapsable-related-entity>
+@endif
 
-		@if($location->companies->count() > 0)
-			<div class="card shadow-sm mb-3">
-				<div class="card-header bg-white">
-					<button class="text-dark btn btn-link btn-lg p-0" type="button" data-toggle="collapse" data-target="#organizations" aria-expanded="true" aria-controls="organizations"><i class="fa fa-plus text-info"></i> Organizations ({{ $location->companies->count() }})</button>
-				</div>
-				<div class="border-top border-tertiary card-body collapse show" id="organizations">
-					<div class="d-flex flex-wrap">
-						@foreach ($location->companies as $company)
-							<div class="card col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
-				                <div class="card-body border border-bottom-0 text-center d-flex justify-content-center align-items-center">
-				                    @if($company->entityImageUrl)
-				                        <a href="{{ route('discover.organizations.show', ['slug' => $company->slug]) }}" data-toggle="tooltip" data-placement="top" title="{{$company->name}}">
-				                            <img src="{{ $company->entityImageUrl }}" alt="{{ $company->name }}" class="company-logo mx-auto" alt="{{$company->name}}">
-				                        </a>
-				                    @else
-				                        <a href="{{ route('discover.organizations.show', ['slug' => $company->slug]) }}">{{$company->name}}</a>
-				                    @endif
-				                </div>
-				                <div class="card-footer font-size-small">
-				                    <strong>Focus:</strong>
-				                    @foreach ($company->focus as $focus)
-				                        <a href="{{ route('discover.focus.show', $focus->slug) }}">{{ $focus->name }}</a>@if (!$loop->last),@endif
-				                    @endforeach
-				                </div>
-				            </div>
-						@endforeach
-					</div>
-				</div>
-			</div>
-		@endif
+@if($location->people_count > 0)
+    <x-entities.collapsable-related-entity collapsableId="peopleList" label="People">
+        @foreach ($location->people as $person)
+            <x-entities.related.person-card :person="$person" />
+        @endforeach
+    </x-entities.collapsable-related-entity>
+@endif
 
-		@if($location->people->count() > 0)
-			<div class="card shadow-sm mb-3">
-				<div class="card-header bg-white">
-					<button class="text-dark btn btn-link btn-lg p-0" type="button" data-toggle="collapse" data-target="#people" aria-expanded="true" aria-controls="people"><i class="fa fa-plus text-info"></i> People ({{ $location->people->count() }})</button>
-				</div>
-				<div class="border-top border-tertiary card-body collapse show" id="people">
-					<ul class="list-group list-group-flush">
-						@foreach ($location->people as $person)
-						    <div class="list-group-item">
-						    	<a href="{{ route('discover.people.show', $person->slug) }}">{{ $person->name }}</a>
-						    </div>
-						@endforeach
-					</ul>
-				</div>
-			</div>
-		@endif
+@if($location->investors_count > 0)
+    <x-entities.collapsable-related-entity collapsableId="investorsList" label="Investors">
+        @foreach ($location->investors as $investor)
+            <x-entities.related.investor-card :investor="$investor" />
+        @endforeach
+    </x-entities.collapsable-related-entity>
+@endif
 
-		@if($location->investors->count() > 0)
-			<div class="card shadow-sm mb-3">
-				<div class="card-header bg-white">
-					<button class="text-dark btn btn-link btn-lg p-0" type="button" data-toggle="collapse" data-target="#investors" aria-expanded="true" aria-controls="investors"><i class="fa fa-plus text-info"></i> Investors ({{ $location->investors->count() }})</button>
-				</div>
-				<div class="border-top border-tertiary card-body collapse show" id="investors">
-					<ul class="list-group list-group-flush">
-						@foreach ($location->investors as $investor)
-						    <div class="list-group-item">
-						    	<a href="{{ route('discover.investors.show', $investor->slug) }}">{{ $investor->name }}</a>
-						    </div>
-						@endforeach
-					</ul>
-				</div>
-			</div>
-		@endif
+@if($location->jobs_count > 0)
+    <x-entities.collapsable-related-entity collapsableId="jobsList" label="Jobs">
+        @foreach ($location->jobs as $job)
+            <x-entities.related.job-card :job="$job" withOwner="true" />
+        @endforeach
+    </x-entities.collapsable-related-entity>
+@endif
 
-		@if($location->jobs->count() > 0)
-			<div class="card shadow-sm mb-3">
-				<div class="card-header bg-white">
-					<button class="text-dark btn btn-link btn-lg p-0" type="button" data-toggle="collapse" data-target="#jobs" aria-expanded="true" aria-controls="jobs"><i class="fa fa-plus text-info"></i> Jobs ({{ $location->jobs->count() }})</button>
-				</div>
-				<div class="border-top border-tertiary card-body collapse show" id="jobs">
-					<ul class="list-group list-group-flush">
-						@foreach ($location->jobs as $job)
-						    <div class="list-group-item">
-						    	<a href="{{ route('discover.jobs.show', $job->slug) }}">{{ $job->job_title }}</a>
-						    </div>
-						@endforeach
-					</ul>
-				</div>
-			</div>
-		@endif
+@if($location->events_count > 0)
+    <x-entities.collapsable-related-entity collapsableId="eventsList" label="Events">
+        @foreach ($location->events as $event)
+            <x-entities.related.event-card :event="$event" />
+        @endforeach
+    </x-entities.collapsable-related-entity>
+@endif
 
-		@if($location->events->count() > 0)
-			<div class="card shadow-sm mb-3">
-				<div class="card-header bg-white">
-					<button class="text-dark btn btn-link btn-lg p-0" type="button" data-toggle="collapse" data-target="#events" aria-expanded="true" aria-controls="events"><i class="fa fa-plus text-info"></i> Events ({{ $location->events->count() }})</button>
-				</div>
-				<div class="border-top border-tertiary card-body collapse show" id="events">
-					<ul class="list-group list-group-flush">
-						@foreach ($location->events as $event)
-						    <div class="list-group-item">
-						    	<a href="{{ route('discover.events.show', $event->slug) }}">{{ $event->name }}</a>
-						    </div>
-						@endforeach
-					</ul>
-				</div>
-			</div>
-		@endif
+@if($location->clinicaltrials_count > 0)
+    <x-entities.collapsable-related-entity collapsableId="clinicalTrialsList" label="Clinical Trials">
+        @foreach ($location->clinicaltrials as $clinicalTrial)
+            <x-entities.related.clinical-trial-card :clinicalTrial="$clinicalTrial" />
+        @endforeach
+    </x-entities.collapsable-related-entity>
+@endif
 
-		@if($location->clinicaltrials->count() > 0)
-			<div class="card shadow-sm mb-3">
-				<div class="card-header bg-white">
-					<button class="text-dark btn btn-link btn-lg p-0" type="button" data-toggle="collapse" data-target="#clinicaltrials" aria-expanded="true" aria-controls="clinicaltrials"><i class="fa fa-plus text-info"></i> Clinical Trials ({{ $location->clinicaltrials->count() }})</button>
-				</div>
-				<div class="border-top border-tertiary card-body collapse show" id="clinicaltrials">
-					<ul class="list-group list-group-flush">
-						@foreach ($location->clinicaltrials as $clinicaltrial)
-						    <div class="list-group-item">
-						    	<a href="{{ route('discover.clinicaltrials.show', $clinicaltrial->slug) }}">{{ $clinicaltrial->title }}</a>
-						    </div>
-						@endforeach
-					</ul>
-				</div>
-			</div>
-		@endif
-
-	</div>
-</div>
+@if($location->bookable_listings_count > 0)
+    <x-entities.collapsable-related-entity collapsableId="bookableListingsList" label="Neuly Care Providers">
+        @foreach ($location->bookableListings as $bookableListing)
+            <x-entities.related.bookable-listing-card :bookableListing="$bookableListing" />
+        @endforeach
+    </x-entities.collapsable-related-entity>
+@endif
 
 <script>
 	$(document).ready(function(){
