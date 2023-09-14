@@ -31,7 +31,8 @@ mix
     // .js('resources/js/embed-search.js', 'public/js/external')
     .js('resources/js/neuly-care.js', 'public/js')
     .js('resources/js/search.js', 'public/js')
-    .js('resources/js/admin.js', 'public/js');
+    .js('resources/js/admin.js', 'public/js')
+    .js('resources/js/recruiting-trials.js', 'public/js');
 
 // Mix CSS
 mix

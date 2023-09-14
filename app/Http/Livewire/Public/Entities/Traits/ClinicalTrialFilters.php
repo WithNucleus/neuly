@@ -13,14 +13,15 @@ trait ClinicalTrialFilters {
             $this->conditionSearchResults = CtCondition::whereHas('clinicaltrials')
                 ->withCount(['clinicaltrials'])
                 ->where('value', 'like', '%' . $this->conditionSearch . '%')
-                ->select(['value AS name'])
+                ->select(['value AS name', 'id'])
                 ->withCount(['clinicaltrials AS related_count'])
                 ->orderByDesc('related_count')
+                ->take(5)
                 ->get()
                 ->toArray();
         } else {
             $this->conditionSearchResults = CtCondition::whereHas('clinicaltrials')
-                ->select(['value AS name'])
+                ->select(['value AS name', 'id'])
                 ->withCount(['clinicaltrials AS related_count'])
                 ->orderByDesc('related_count')
                 ->take(5)

@@ -58,10 +58,23 @@ class Clinicaltrial extends Model implements EntityContract
     private $searchableModelName = 'Clinical Trial';
 
     const SEXES = [
-        'FEMALE' => 'Female',
-        'MALE' => 'Male',
-        'ALL' => 'All'
+        'FEMALE' => self::SEX_FEMALE,
+        'MALE' => self::SEX_MALE,
+        'ALL' => self::SEX_ALL
     ];
+
+    const SEX_FEMALE = 'Female';
+    const SEX_MALE = 'Male';
+    const SEX_ALL = 'All';
+
+    const SEX_OPTIONS = [
+        'FEMALE' => self::SEX_FEMALE,
+        'MALE' => self::SEX_MALE,
+        'N/A' => 'Prefer not to disclose'
+    ];
+
+    const HEALTHY_YES = 'Yes';
+    const HEALTHY_NO = 'No';
 
     const STATUSES = [
         'ACTIVE_NOT_RECRUITING' => 'Active, not recruiting',
@@ -304,7 +317,6 @@ class Clinicaltrial extends Model implements EntityContract
     | SCOPES
     |--------------------------------------------------------------------------
     */
-
     public function scopeAvailableForParsing($query)
     {
         return $query
@@ -334,6 +346,14 @@ class Clinicaltrial extends Model implements EntityContract
         return $query->doesntHave('imported');
     }
 
+    public function scopeDistance($query,$from_latitude,$from_longitude,$distance)
+    {
+      // This will calculate the distance in km
+      // if you want in miles use 3959 instead of 6371
+      $raw = DB::raw('ROUND ( ( 3959 * acos( cos( radians('.$from_latitude.') ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians('.$from_longitude.') ) + sin( radians('.$from_latitude.') ) * sin( radians( latitude ) ) ) ) ) AS distance');
+      return $query->select('*')->addSelect($raw)->orderBy( 'distance', 'ASC' )->having('distance', '<=', $distance);
+    }
+
     /*
     |--------------------------------------------------------------------------
     | ACCESSORS
@@ -355,6 +375,40 @@ class Clinicaltrial extends Model implements EntityContract
         } else {
             return null;
         }
+    }
+
+    public function getLeadSponsorUrlAttribute(): ?string
+    {
+        if(get_class($this->leadSponsor) === \App\Models\Company::class) {
+            return route('discover.organizations.show', $this->leadSponsor->slug);
+        }
+
+        if(get_class($this->leadSponsor) === \App\Models\Person::class) {
+            return route('discover.people.show', $this->leadSponsor->slug);
+        }
+
+        return NULL;
+    }
+
+    public function getLeadSponsorImageAttribute(): ?string
+    {
+        if(get_class($this->leadSponsor) === \App\Models\Company::class) {
+            if ($this->leadSponsor->entityImageUrl) {
+                return $this->leadSponsor->entityImageUrl;
+            }
+
+            return '/images/image-placeholder.jpg';
+        }
+
+        if(get_class($this->leadSponsor) === \App\Models\Person::class) {
+            if ($this->leadSponsor->entityImageUrl) {
+                return $this->leadSponsor->entityImageUrl;
+            }
+
+            return '/images/person-blank.png';
+        }
+
+        return NULL;
     }
 
     /*

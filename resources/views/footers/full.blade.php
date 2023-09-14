@@ -1,4 +1,4 @@
-<footer class="container-fluid bg-body">
+<footer class="primary-footer container-fluid">
     <div class="container py-5">
         <div class="d-flex justify-content-between">
             <a class="navbar-brand" href="/">

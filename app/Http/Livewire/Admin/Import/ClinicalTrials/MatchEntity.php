@@ -4,17 +4,8 @@ namespace App\Http\Livewire\Admin\Import\ClinicalTrials;
 
 use App\Jobs\Import\ClinicalTrial\ImportProcess;
 use App\Models\Clinicaltrial;
-use App\Models\ClinicalTrialDetails\CtCondition;
-use App\Models\ClinicalTrialDetails\CtIntervention;
-use App\Models\ClinicalTrialDetails\CtPhase;
-use App\Models\Company;
-use App\Models\Focus;
 use App\Models\ImportedEntity;
-use App\Models\Person;
-use Carbon\Carbon;
 use Livewire\Component;
-use Spatie\SlackAlerts\Facades\SlackAlert;
-use Throwable;
 
 class MatchEntity extends Component
 {
