@@ -1,7 +1,6 @@
 <?php
 namespace App\Http\Livewire\Public\Traits;
 
-use App\Models\ClinicalTrialDetails\CtCondition;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Throwable;

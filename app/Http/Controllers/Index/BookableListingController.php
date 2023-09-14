@@ -18,101 +18,13 @@ use App\Models\Person;
 use App\Notifications\BookableListingNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class BookableListingController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public function index(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-//        $this->middleware('query_filters')->only('index');
-    }
-
-    public function index(Request $request)
-    {
-        // TODO: Validation on LAT/LONG/DISTANCE
-
-        $latitude = $request->input('latitude') ?? null;
-        $longitude = $request->input('longitude') ?? null;
-        $locationName = 'your location';
-        $locationSearch = false;
-        $virtual = false;
-        $filterTypes = [];
-
-        if (isset($request->query('filter')['virtual'])) {
-            $virtual = true;
-        }
-
-        if (isset($request->query('filter')['type'])) {
-            $filterTypes = explode('|', $request->query('filter')['type']);
-        }
-
-        $distance = $request->input('distance') ?? 100;  //(miles - see note)
-
-        $bookableListings = QueryBuilder::for(BookableListing::public()->practitioners());
-
-        if ($latitude !== null and $longitude !== null) {
-            $bookableListings = $bookableListings->selectRaw('(3959 * acos (
-                cos ( radians(?) )
-                * cos( radians( latitude ) )
-                * cos( radians( longitude ) - radians(?) )
-                + sin ( radians(?) )
-                * sin( radians( latitude )))) AS distance', [
-                $latitude,
-                $longitude,
-                $latitude,
-            ])
-                ->havingRaw('distance <= ? OR 0', [$distance])
-                ->orderBy('distance', 'asc');
-
-            try {
-                $locationNameRequest = Http::get('https://api.opencagedata.com/geocode/v1/json?q='.$latitude.'+'.$longitude.'&key='.config('services.opencage.api_key'));
-
-                $locationName = $locationNameRequest['results'][0]['components']['city'].', '.$locationNameRequest['results'][0]['components']['state_code'].', '.$locationNameRequest['results'][0]['components']['ISO_3166-1_alpha-3'];
-            } catch(\Throwable $throwable) {
-                Log::warning('Problem during practitioners search'.$throwable->getMessage());
-            }
-
-            $locationSearch = true;
-        }
-
-        $bookableListings = $bookableListings
-            ->addSelect(['name', 'id', 'slug', 'location_name', 'latitude', 'longitude', 'type', 'address', 'image', 'virtual', 'bookable_type', 'start_date', 'end_date'])
-            ->allowedSorts([
-                'name',
-            ])
-            ->defaultSort('name')
-            ->allowedFilters([
-                AllowedFilter::partial('focus', 'focus.name'),
-                'type',
-                'virtual',
-            ])
-            ->paginate(15)
-            ->appends(request()->query());
-
-        $filterTypeOptions = BookableListing::practitioners()->pluck('type')->unique()->toArray();
-        $filterDistanceOptions = [5, 10, 15, 25, 50, 100, 250, 500];
-
-        return view('discover.bookable-listings.index', [
-            'bookableListings' => $bookableListings,
-            'filterTypeOptions' => $filterTypeOptions,
-            'filterDistanceOptions' => $filterDistanceOptions,
-            'filterLatitude' => $latitude,
-            'filterLongitude' => $longitude,
-            'filterDistance' => $distance,
-            'filterTypes' => $filterTypes,
-            'filterVirtual' => $virtual,
-            'locationName' => $locationName,
-            'locationSearch' => $locationSearch,
-        ]);
+        return view('discover.bookable-listings.index');
     }
 
     public function show($slug)

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('body-class', 'page-recruiting-trials')
+@section('body-class', 'page-recruiting-trials bg-body-secondary')
 
 @section('head')
     @livewireStyles
@@ -13,29 +13,31 @@
     <main role="main" class="main-content-container pt-0">
 
         <div class="py-4 py-xl-5 px-3 text-center">
-            <h1 class="text-accent">Recruting Clinical Trials</h1>
+            <div class="max-width-400 mx-auto mb-4">
+                @include('navbars.neuly-care-logo')
+            </div>
+            <h1 class="purple-on-dark">Recruiting Clinical Trials</h1>
             <p class="lead mb-0 max-width-780 mx-auto">
-                Interested in participating in a clinical trial as a patient or healthy volunteer? Explore the clinical trials that are actively recruiting to find a match for you.
+                Interested in participating in a clinical trial as a patient or healthy volunteer?
+                <span class="d-lg-block">Find clinical trials that are actively recruiting to find a match for you.</span>
             </p>
         </div>
 
-        <div id="neuly-care-listings" class="container">
-            <div class="max-width-600 mb-4 mx-auto">
-                <div id="autocomplete"></div>
+        <div id="recruiting-trials-eligibility pb-5">
+{{--            <div class="max-width-600 mb-5 mx-auto">--}}
+{{--                <div id="autocomplete"></div>--}}
+{{--            </div>--}}
+            <div>
+                <livewire:public.featured.recruiting-trials />
             </div>
-            <livewire:public.featured.recruiting-clinical-trials />
         </div>
 
     </main>
+    <div class="pt-5">
+        @include('footers.full')
+    </div>
 @endsection
 
 @section('livewire_scripts')
-    <script src="https://cdn.jsdelivr.net/npm/@opencage/geosearch-bundle" type="text/javascript"></script>
-    <script src="{{ asset('js/neuly-care.js') }}"></script>
-    <script src="https://unpkg.com/alpinejs" defer></script>
-    <script>
-        Livewire.on('gotoTop', () => {
-            document.querySelector('#neuly-care-listings').scrollIntoView()
-        });
-    </script>
+    <script src="{{ asset('js/recruiting-trials.js') }}"></script>
 @endsection

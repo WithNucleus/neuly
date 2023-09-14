@@ -52,9 +52,9 @@ class NeulyCare extends Component
 
     public function mount(Request $request) {
 
-//         $this->ip = $request->getClientIp(); // PRODUCTION
-        // $this->ip = '207.46.13.74'; // TEST - Chicago
-         $this->ip = "108.92.170.181"; // Sydney
+         $this->ip = $request->getClientIp(); // PRODUCTION
+         // $this->ip = '207.46.13.74'; // TEST - Chicago
+         // $this->ip = "108.92.170.181"; // Sydney
 
         $this->getLocalLocation();
 

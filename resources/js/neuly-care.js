@@ -12,10 +12,6 @@ const handleLocationSearchResult = ({ item }) => {
     let latitude = item.geometry.lat;
     let longitude = item.geometry.lng;
 
-    console.log("locationName: " + locationName);
-    console.log("latitude: " + latitude);
-    console.log("longitude: " + longitude);
-
     locationNameField.value = locationName;
     locationLatitudeField.value = latitude;
     locationLongitudeField.value = longitude;
@@ -36,4 +32,8 @@ opencage.algoliaAutocomplete({
 
 document.querySelector('.aa-ClearButton').addEventListener('click', function() {
     Livewire.emit('clearSearchLocation');
+});
+
+window.addEventListener('go-to-listing', event => {
+    window.location = event.detail.url;
 });

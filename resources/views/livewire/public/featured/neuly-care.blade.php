@@ -180,10 +180,4 @@
         {{ $records->links() }}
     </div>
 
-    <script>
-        window.addEventListener('go-to-listing', event => {
-            window.location = event.detail.url;
-        });
-    </script>
-
 </div>

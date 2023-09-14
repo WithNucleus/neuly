@@ -16,6 +16,11 @@
             </div>
 
             <div class="my-4">
+                <h4 class="h5 text-body-emphasis">Age</h4>
+                <x-livewire-filters.checkbox-multiple wireModel="filters.age" id="filter-age" :options="$ageGroupOptions" :currentFilters="$filters['age']" />
+            </div>
+
+            <div class="my-4">
                 <h4 class="h5 text-body-emphasis">People</h4>
                 <x-livewire-filters.faux-multi-select
                     wireModelSearch="personSearch"
@@ -52,10 +57,6 @@
                     :searchResults="$conditionSearchResults"
                     :currentFilters="$filters['conditions']"
                 />
-            </div>
-
-            <div class="my-4">
-                <x-livewire-filters.checkbox-multiple wireModel="filters.age" id="filter-age" :options="$ageGroupOptions" :currentFilters="$filters['age']" />
             </div>
 
             <div>

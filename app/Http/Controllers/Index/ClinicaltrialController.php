@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Index;
 
 use App\Http\Controllers\Controller;
 use App\Models\Clinicaltrial;
-use App\Repositories\FollowRepository;
 use App\Services\Metas;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
