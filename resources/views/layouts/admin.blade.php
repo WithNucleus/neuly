@@ -38,6 +38,20 @@
                     </div>
                     <div class="offcanvas-body">
                         <div class="w-100 p-2">
+                            <x-sidebar.list-group groupRoute="research" label="Research">
+                                    <x-sidebar.list-group-item url="" label="Paid Subscribers" />
+                                    <x-sidebar.list-group-item url="" label="Research Requests" />
+                                </x-sidebar.list-group>
+                                <x-sidebar.list-group groupRoute="edu" label="EDU">
+                                    <x-sidebar.list-group-item url="" label="Students" />
+                                    <x-sidebar.list-group-item url="" label="Partners" />
+                                    <x-sidebar.list-group-item url="" label="Referrers" />
+                                </x-sidebar.list-group>
+                                <x-sidebar.list-group groupRoute="care" label="Care">
+                                    <x-sidebar.list-group-item url="{{ route('adminx.care.listing-requests') }}" label="Inquiries" />
+                                    <x-sidebar.list-group-item url="" label="Partners" />
+                                    <x-sidebar.list-group-item url="" label="Referrers" />
+                                </x-sidebar.list-group>
                             @can('import')
                                 <x-sidebar.list-group groupRoute="import" label="Import">
                                     <x-sidebar.list-group-item url="{{ route('adminx.import.clinical-trials.index') }}" label="Clinical Trials" />
@@ -48,6 +62,11 @@
                                 <x-sidebar.list-group groupRoute="entities" label="Entities">
                                     <x-sidebar.list-group-item url="{{ route('adminx.clinical-trials.index') }}" label="Clinical Trials" />
                                     <x-sidebar.list-group-item url="{{ route('adminx.courses.index') }}" label="Courses" />
+                                    <x-sidebar.list-group-item url="" label="Organizations" />
+                                    <x-sidebar.list-group-item url="" label="People" />
+                                    <x-sidebar.list-group-item url="" label="Jobs" />
+                                    <x-sidebar.list-group-item url="" label="Events" />
+                                    <x-sidebar.list-group-item url="" label="Research" />
                                 </x-sidebar.list-group>
                             @endcan
                             @can('edit users')

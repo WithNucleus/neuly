@@ -13,7 +13,7 @@
             </div>
             <ul class="navbar-nav ms-auto me-0 align-items-lg-center">
                 <li class="nav-item dropdown me-xl-3">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle text-uppercase" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Research
                     </a>
                     <ul class="dropdown-menu">
@@ -43,7 +43,7 @@
                     </ul>
                 </li>
                 <li class="nav-item dropdown me-xl-3">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle text-uppercase" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Care
                     </a>
                     <ul class="dropdown-menu">
@@ -54,9 +54,9 @@
                 @auth
                     <li class="nav-item me-xl-3 d-lg-none d-xl-block">
                         @can('enterprise demo')
-                            <a href="{{ route('enterprise.dashboard') }}" class="nav-link">Dashboard</a>
+                            <a href="{{ route('enterprise.dashboard') }}" class="nav-link text-uppercase">Dashboard</a>
                         @else
-                            <a href="{{ route('member.dashboard') }}" class="nav-link">Dashboard</a>
+                            <a href="{{ route('member.dashboard') }}" class="nav-link text-uppercase">Dashboard</a>
                         @endcan
                     </li>
                     <li class="nav-item dropdown me-xl-3">
@@ -68,6 +68,9 @@
 
                             @can('admin login')
                                 <a href="/admin" class="dropdown-item">Admin</a>
+                            @endcan
+                            @can('import')
+                                <a href="/adminx" class="dropdown-item">Admin</a>
                             @endcan
 
                             <a class="dropdown-item" href="{{ route('logout') }}" title="Logout"
