@@ -23,6 +23,10 @@ Route::middleware('can:admin login')->prefix('/adminx')->name('adminx.')->group(
         Route::get('/booking-requests', [App\Http\Controllers\Adminx\Care\BookableListingController::class, 'bookableListingRequests'])->name('listing-requests');
     });
 
+    Route::prefix('/edu')->name('edu.')->group(function() {
+        Route::get('/students', [App\Http\Controllers\Adminx\Edu\EduController::class, 'students'])->name('students');
+    });
+
     // NAV TILES
     Route::prefix('/nav-tiles')->name('nav-tiles.')->middleware('permission:manage navigation tiles')->group(function () {
         Route::get('/', [\App\Http\Controllers\Adminx\NavigationTiles\NavigationTileController::class, 'index'])->name('index');

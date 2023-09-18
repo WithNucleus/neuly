@@ -7,7 +7,6 @@ use App\Http\Livewire\Traits\WithCachedRows;
 use App\Http\Livewire\Traits\WithPerPagePagination;
 use App\Http\Livewire\Traits\WithSorting;
 use App\Models\BookableListingRequest;
-use App\Models\Feedback;
 use Livewire\Component;
 
 class RequestsIndex extends Component

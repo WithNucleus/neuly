@@ -14,6 +14,7 @@ class SearchLog extends Model
     const TYPE_RECRUITING_TRIALS_ELIGIBILITY = 'Recruiting Trial Eligibility';
     const TYPE_RECRUITING_TRIALS = 'Recruiting Clinical Trials';
     const TYPE_RECRUITING_CONCIERGE = 'Recruiting Trials Concierge';
+    const TYPE_NEULY_EDU_COURSES = 'Neuly EDU Courses';
 
     /*
     |--------------------------------------------------------------------------

@@ -131,12 +131,21 @@
 
                 <div class="mt-4">
                     <h2 class="h4 text-body-emphasis">Description</h2>
-                        <div class="text-start max-width-1000 text-body-secondary">{!! nl2br($course->summary) !!}</div>
-                    </div>
+                    <div class="text-start max-width-1000 text-body-secondary">{!! nl2br($course->summary) !!}</div>
+                </div>
 
-                    <div class="mt-4">
+                <div class="mt-4">
+                    @if($course->concierge)
+                        <div>
+                            <h2 class="h5 text-primary">Interested in this course?</h2>
+                            <div class="max-width-600">
+                                <livewire:public.opt-ins.edu-request-course :course="$course" />
+                            </div>
+                        </div>
+                    @else
                         <a href="{{ $course->url }}" target="_blank" rel="noopener noreferrer" class="btn btn-lg btn-primary">Register for Course</a>
-                    </div>
+                    @endif
+                </div>
             </div>
         </div>
 

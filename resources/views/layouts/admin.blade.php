@@ -43,7 +43,7 @@
                                     <x-sidebar.list-group-item url="" label="Research Requests" />
                                 </x-sidebar.list-group>
                                 <x-sidebar.list-group groupRoute="edu" label="EDU">
-                                    <x-sidebar.list-group-item url="" label="Students" />
+                                    <x-sidebar.list-group-item url="{{ route('adminx.edu.students') }}" label="Students" />
                                     <x-sidebar.list-group-item url="" label="Partners" />
                                     <x-sidebar.list-group-item url="" label="Referrers" />
                                 </x-sidebar.list-group>
