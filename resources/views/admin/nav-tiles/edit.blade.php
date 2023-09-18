@@ -118,15 +118,16 @@
     #sortable-links {
         margin: 0 0 2rem 0;
         padding: 0;
+        border-radius: 0;
     }
 
     #sortable-links li {
         display: block;
         padding: .5rem .75rem;
         margin: 0;
-        border: 1px solid #ccc;
+        border: 1px solid var(--bs-border-color);
         border-top: 0;
-        background: #fff;
+        background: var(--bs-body-bg);
     }
 
     #sortable-links li:hover {
@@ -140,14 +141,7 @@
     }
 
     #sortable-links li:first-of-type {
-        border-top-right-radius: .25rem;
-        border-top-left-radius: .25rem;
-        border-top: 1px solid #ccc;
-    }
-
-    #sortable-links li:last-of-type {
-        border-bottom-right-radius: .25rem;
-        border-bottom-left-radius: .25rem;
+        border-top: 1px solid var(--bs-border-color);
     }
 </style>
 @endsection

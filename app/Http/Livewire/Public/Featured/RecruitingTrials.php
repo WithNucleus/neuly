@@ -65,9 +65,7 @@ class RecruitingTrials extends Component
 
     public function mount(Request $request) {
 
-//         $this->ip = $request->getClientIp(); // PRODUCTION
-        // TODO: DO NOT LEAVE THIS FOR PRODUCTION
-         $this->ip = "108.92.170.181"; // Sydney
+         $this->ip = $request->getClientIp(); // PRODUCTION
 
         $this->getLocalLocation();
 

@@ -90,12 +90,12 @@ class Feedback extends Model
         return ucfirst($value);
     }
 
-    public function getUserNameAttribute($value): string
+    public function getUserNameAttribute($value): ?string
     {
         return ($this->user !== null) ? $this->user->name : $value;
     }
 
-    public function getUserEmailAttribute($value): string
+    public function getUserEmailAttribute($value): ?string
     {
         return ($this->user !== null) ? $this->user->email : $value;
     }
