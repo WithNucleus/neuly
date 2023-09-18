@@ -5,9 +5,12 @@ namespace App;
 use App\Models\BookableListing;
 use App\Models\BookableListingRequest;
 use App\Models\Dashboard;
+use App\Models\EduRequest;
+use App\Models\Feedback;
 use App\Models\FollowList;
 use App\Models\Person;
 use App\Models\RaisedClaim;
+use App\Models\SearchLog;
 use App\Models\Team;
 use App\Models\TeamInvitation;
 use App\Models\UserSocialAuth;
@@ -118,6 +121,21 @@ class User extends Authenticatable implements MustVerifyEmail
     public function dashboards(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Dashboard::class);
+    }
+
+    public function eduRequests(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(EduRequest::class);
+    }
+
+    public function feedback(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Feedback::class);
+    }
+
+    public function searchLogs(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(SearchLog::class);
     }
 
     /* Attributes */

@@ -129,6 +129,11 @@ class Course extends Model
         return $this->belongsToMany(Focus::class);
     }
 
+    public function eduRequests(): \Illuminate\Database\Eloquent\Relations\MorphOne
+    {
+        return $this->morphOne(EduRequest::class, 'entity');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES

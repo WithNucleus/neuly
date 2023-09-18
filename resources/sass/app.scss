@@ -322,6 +322,10 @@ h5, .h5 {
     font-size: $font-size-base;
 }
 
+.ff-normal {
+    font-family: $font-family-sans-serif;
+}
+
 // Images
 img {
     width: 100%;
@@ -511,7 +515,7 @@ $img-heights: 30 80 120;
 }
 
 // Max Widths
-$max-widths: 60 80 100 150 200 250 300 400 500 600 740 780 840 1000;
+$max-widths: 60 80 100 150 200 250 300 400 500 600 740 780 800 840 1000;
 
 @each $size in $max-widths {
     .max-width-#{$size} {
@@ -529,7 +533,9 @@ $min-widths: 100 120;
 }
 
 // Neuly Care Logo
-svg#neulyCareLogo {
+svg#neulyCareLogo,
+svg#neulyEduLogo,
+svg#neulyResearchLogo {
     .primary-color {
         fill: $neulyGreenBright;
         transition: all .2s ease-in-out;
@@ -542,7 +548,9 @@ svg#neulyCareLogo {
 }
 
 [data-bs-theme=dark] {
-    svg#neulyCareLogo {
+    svg#neulyCareLogo,
+    svg#neulyEduLogo,
+    svg#neulyResearchLogo {
         .secondary-color {
             fill: $white;
         }
@@ -884,4 +892,60 @@ footer {
             margin-right: 2rem;
         }
     }
+}
+
+/* Neuly EDU Courses */
+.neuly-edu-course-item {
+    border: 1px solid var(--bs-border-color);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+
+    .image {
+        width: 250px;
+        flex-shrink: 0;
+        margin-bottom: 1rem;
+
+        img {
+            width: 100%;
+            height: auto;
+        }
+    }
+
+    .text {
+
+    }
+}
+
+@media (min-width: 768px) {
+    .neuly-edu-course-item {
+        flex-direction: row;
+        max-width: 1100px;
+        margin-left: auto;
+        margin-right: auto;
+
+        .image {
+            margin-bottom: 0;
+            margin-right: 1.5rem;
+        }
+
+        .text {
+            flex-grow: 1;
+        }
+    }
+}
+
+@media (min-width: 1200px) {
+    .neuly-edu-course-item {
+        padding: 1.5rem;
+
+        .image {
+            margin-right: 2rem;
+        }
+    }
+}
+
+.neuly-edu-course-item:hover {
+    cursor: pointer;
+    box-shadow: var(--bs-focus-ring-x, 0) var(--bs-focus-ring-y, 0) var(--bs-focus-ring-blur, 0) var(--bs-focus-ring-width) rgba($neulyGreenBright, 25%);
 }
