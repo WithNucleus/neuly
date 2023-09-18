@@ -7,11 +7,11 @@
     @include('navbars.primary')
 
     @include('content.home._hero')
-    @include('content.home._news')
-    @include('content.home._explore')
-    @include('content.home._clinical-research')
     @include('content.home._courses')
     @include('content.home._neuly-care')
+    @include('content.home._explore')
+    @include('content.home._news')
+    @include('content.home._clinical-research')
 
     @include('footers.full')
 
