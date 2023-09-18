@@ -13,7 +13,7 @@
             </div>
         </div>
         <div class="mt-5 pt-5">
-            <h2 class="h1 text-body-emphasis">Explore Our Content</h2>
+            <h2 class="h1 text-body-emphasis">Explore Our Research</h2>
             <div class="d-flex flex-wrap justify-content-center">
                 <div class="max-width-300 bg-body-secondary p-3 rounded text-start m-3">
                     <p class="lead text-body-emphasis mb-2">Revolutionizing Ai: Tackling the...</p>

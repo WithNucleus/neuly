@@ -39,14 +39,14 @@
                         @endif
                     </span>
                     @if ($item->badge != '')
-                        <span class="badge badge-info">{{ $item->badge }}</span>
+                        <span class="badge bg-body-secondary text-body">{{ $item->badge }}</span>
                     @endif
                     <div class="ml-2">
                         <button class="btn btn-sm" data-toggle="modal" data-target="#edit-nav-item-{{ $item->id }}">
-                            <i class="fad fa-edit text-secondarydark"></i>
+                            <i class="fa-strong fa-regular fa-edit text-primary"></i>
                         </button>
                         <button class="btn btn-sm delete-nav-tile-item" data-delete="{{ $item->id }}" data-action="{{ route('adminx.nav-tiles.items.delete', $item->id) }}">
-                            <i class="fad fa-trash-alt text-danger"></i>
+                            <i class="fa-strong fa-regular fa-trash-alt text-danger"></i>
                         </button>
                     </div>
                 </div>

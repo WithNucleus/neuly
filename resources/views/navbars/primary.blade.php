@@ -12,12 +12,9 @@
                 <div id="search-neuly"></div>
             </div>
             <ul class="navbar-nav ms-auto me-0 align-items-lg-center">
-                <li class="nav-item me-xl-3">
-                    <a class="nav-link" href="#">Why Neuly</a>
-                </li>
                 <li class="nav-item dropdown me-xl-3">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Data
+                        Research
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="{{ route('discover.organizations') }}"><i class="fa-sharp fa-solid fa-building fa-fw"></i> Organizations</a></li>
