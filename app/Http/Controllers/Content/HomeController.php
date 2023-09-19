@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Content;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\MediaItem;
+use App\Models\Research;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -41,11 +42,13 @@ class HomeController extends Controller
 
         $articles = MediaItem::articles()->orderByDesc('date')->take(6)->get();
         $courses = Course::whereHas('focus')->take(8)->get();
+        $research = Research::whereNotNull('abstract')->orderByDesc('updated_at')->whereHas('focus')->take(4)->get();
 
         return view('content.home.index', [
             'investors' => $investors,
             'articles' => $articles,
-            'courses' => $courses
+            'courses' => $courses,
+            'research' => $research
         ]);
     }
 }

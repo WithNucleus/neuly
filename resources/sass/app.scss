@@ -643,7 +643,8 @@ body.home {
 
 .home-news,
 .home-explore,
-.home-courses {
+.home-courses,
+.home-pubco-index {
     .container,
     .container-fluid {
         padding-top: 2rem;
@@ -715,14 +716,20 @@ body.home {
         }
     }
 
-    .btn-cta {
+    .btn-light {
         border: 0;
         background-color: $gray-200;
     }
 
-    .btn-cta:hover {
+    .btn-light:hover {
         color: $gray-100;
         background-color: $primary;
+    }
+
+    .research-item {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
     }
 
     @media(min-width: 1024px) {
@@ -749,6 +756,15 @@ body.home {
     .home-clinical-research h2,
     .home-neuly-care h2 {
         font-size: 4.5rem;
+    }
+}
+
+.home-pubco-index {
+    .pubco-image {
+        width: 100%;
+        height: auto;
+        margin-left: auto;
+        margin-right: auto;
     }
 }
 

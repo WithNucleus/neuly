@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
  * TODO: Admin routes without Backpack
  * */
 
-Route::middleware('can:admin login')->prefix('/adminx')->name('adminx.')->group(function () {
+Route::middleware(['auth', 'can:admin login'])->prefix('/adminx')->name('adminx.')->group(function () {
 
     Route::get('/', [App\Http\Controllers\Adminx\DashboardController::class, 'index'])->name('index');
 

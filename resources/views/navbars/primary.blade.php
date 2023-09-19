@@ -53,11 +53,7 @@
                 </li>
                 @auth
                     <li class="nav-item me-xl-3 d-lg-none d-xl-block">
-                        @can('enterprise demo')
-                            <a href="{{ route('enterprise.dashboard') }}" class="nav-link text-uppercase">Dashboard</a>
-                        @else
-                            <a href="{{ route('member.dashboard') }}" class="nav-link text-uppercase">Dashboard</a>
-                        @endcan
+                        <a href="{{ Auth::user()->dashboard_link }}" class="nav-link text-uppercase">Dashboard</a>
                     </li>
                     <li class="nav-item dropdown me-xl-3">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">

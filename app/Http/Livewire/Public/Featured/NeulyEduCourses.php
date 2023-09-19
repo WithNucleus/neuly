@@ -163,7 +163,7 @@ class NeulyEduCourses extends Component
             'name' => $this->name,
             'email' => $this->email,
             'type' => EduRequest::TYPE_COURSE_NO_MATCHES,
-            'status' => EduRequest::STATUS_NEW,
+            'status' => EduRequest::STATUS_OPEN,
             'message' => $this->message,
             'data' => [
                 'search' => $this->search,
@@ -188,7 +188,7 @@ class NeulyEduCourses extends Component
             'name' => $this->name,
             'email' => $this->email,
             'type' => EduRequest::TYPE_COURSE_CONCIERGE,
-            'status' => EduRequest::STATUS_NEW,
+            'status' => EduRequest::STATUS_OPEN,
             'message' => $this->message,
             'data' => [
                 'search' => $this->search,
