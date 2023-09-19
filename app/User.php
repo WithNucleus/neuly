@@ -148,4 +148,13 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return Carbon::parse($this->created_at)->format('M d, Y H:i');
     }
+
+    public function getDashboardLinkAttribute(): string
+    {
+        if($this->can('enterprise demo')) {
+            return route('enterprise.dashboard');
+        }
+
+        return route('member.dashboard');
+    }
 }

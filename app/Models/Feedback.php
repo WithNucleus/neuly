@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Contracts\CrmActionsContract;
 use App\User;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use JetBrains\PhpStorm\ArrayShape;
 
-class Feedback extends Model
+class Feedback extends Model implements CrmActionsContract
 {
     use CrudTrait;
 
@@ -57,6 +59,27 @@ class Feedback extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
+    #[ArrayShape([self::STATUS_CLOSED => "string[]", self::STATUS_AWAITING_RESPONSE => "string[]", self::STATUS_IN_PROGRESS => "string[]", self::STATUS_OPEN => "string[]"])] public static function crmActionItems(): array
+    {
+        return [
+            Feedback::STATUS_CLOSED => [
+                'label' => 'Mark completed',
+                'button' => 'accent'
+            ],
+            Feedback::STATUS_AWAITING_RESPONSE => [
+                'label' => 'Needs response',
+                'button' => 'warning'
+            ],
+            Feedback::STATUS_IN_PROGRESS => [
+                'label' => 'In progress',
+                'button' => 'warning-bright'
+            ],
+            Feedback::STATUS_OPEN => [
+                'label' => 'Re-open',
+                'button' => 'primary'
+            ]
+        ];
+    }
 
     /*
     |--------------------------------------------------------------------------

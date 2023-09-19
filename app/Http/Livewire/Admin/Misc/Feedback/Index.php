@@ -26,30 +26,15 @@ class Index extends Component
     public $selectedFeedback;
     public ?string $assignedUser = NULL;
 
-    public $statusActionOptions = [
-        Feedback::STATUS_CLOSED => [
-            'label' => 'Mark completed',
-            'button' => 'accent'
-        ],
-        Feedback::STATUS_AWAITING_RESPONSE => [
-            'label' => 'Needs response',
-            'button' => 'warning'
-        ],
-        Feedback::STATUS_IN_PROGRESS => [
-            'label' => 'In progress',
-            'button' => 'warning-bright'
-        ],
-        Feedback::STATUS_OPEN => [
-            'label' => 'Re-open',
-            'button' => 'primary'
-        ]
-    ];
+    public array $statusActionOptions = [];
 
     public function mount() {
         $this->perPage = 10;
         $this->sorts = [
             'created_at' => 'desc'
         ];
+
+        $this->statusActionOptions = Feedback::crmActionItems();
     }
 
     public function selectFeedback($id) {

@@ -77,7 +77,7 @@
                                 @else
                                     <div>
                                         <span class="me-1">{{ $record->name }}</span>
-                                        <a href="mailto:{{ $record->email }}">{{ $record->email }}</a>
+                                        <span class="text-lowercase small">{{ $record->email }}</span>
                                     </div>
                                 @endif
                             </button>
@@ -145,8 +145,8 @@
                                         </div>
                                     @else
                                         <div>
-                                            <span class="d-block">{{ $selectedStudent->user_name }}</span>
-                                            <a href="mailto:{{ $selectedStudent->user_email }}">{{ $record->user_email }}</a>
+                                            <span class="d-block">{{ $selectedStudent->name }}</span>
+                                            <a href="mailto:{{ $selectedStudent->email }}">{{ $record->email }}</a>
                                         </div>
                                     @endif
                                 </div>

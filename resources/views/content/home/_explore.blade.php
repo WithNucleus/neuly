@@ -5,7 +5,11 @@
                 <div class="healthy-doctor-text">
                     <h3 class="h2 text-tertiary">Become 'Brain Healthy'</h3>
                     <p class="text-dark">We're creating a world where every human can be more well through stronger access to critical health data.</p>
-                    <a href="{{ route('register') }}" class="btn btn-light btn-cta text-transform-none">Register for Neuly</a>
+                    @auth
+                        <a href="{{ route('member.dashboard') }}" class="btn btn-light btn-cta text-transform-none">View Your Dashboard</a>
+                    @else
+                        <a href="{{ route('register') }}" class="btn btn-light btn-cta text-transform-none">Register for Neuly</a>
+                    @endif
                 </div>
                 <div class="healthy-doctor-image">
                     <img src="{{ asset('images/home/brain-healthy-doctors.png') }}" alt="Become 'brain healthy' with Neuly">
@@ -13,56 +17,31 @@
             </div>
         </div>
         <div class="mt-5 pt-5">
-            <h2 class="h1 text-body-emphasis">Explore Our Research</h2>
+            <div class="max-width-400 mx-auto mb-4">
+                @include('navbars.neuly-research-logo')
+            </div>
+            <h2 class="h1 text-body-emphasis">Explore the Latest Psychedelic Research</h2>
             <div class="d-flex flex-wrap justify-content-center">
-                <div class="max-width-300 bg-body-secondary p-3 rounded text-start m-3">
-                    <p class="lead text-body-emphasis mb-2">Revolutionizing Ai: Tackling the...</p>
-                    <p class="mb-2 text-body-secondary">Adipiscing diam donec adipiscing tristique risus nec feugiat. Volutpat commodo sed egestas egestas fringilla phasellus faucibus.</p>
-                    <p class="text-small text-body-secondary mb-2">
-                        12 days ago &bull; 213 Comments
-                    </p>
-                    <div>
-                        <span class="badge bg-body-tertiary text-body me-1">Category</span>
-                        <span class="badge bg-body-tertiary text-body me-1">Category</span>
-                        <span class="badge bg-body-tertiary text-body me-1">Category</span>
+                @foreach($research as $item)
+                    <div class="max-width-300 bg-body-secondary p-3 rounded text-start m-3">
+                        <a href="{{ route('discover.research.show', $item->slug) }}" class="text-decoration-none research-item h-100">
+                            <div>
+                                <p class="lead text-body-emphasis mb-2">{{ $item->name }}</p>
+                                <p class="mb-2 text-body-secondary">{{ $item->abstract }}</p>
+                            </div>
+                            <div>
+                                <div>
+                                    @foreach($item->focus as $focus)
+                                        <span class="badge bg-body-tertiary text-body me-1">{{ $focus->name }}</span>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </a>
                     </div>
-                </div>
-                <div class="max-width-300 bg-body-secondary p-3 rounded text-start m-3">
-                    <p class="lead text-body-emphasis mb-2">Revolutionizing Ai: Tackling the...</p>
-                    <p class="mb-2 text-body-secondary">Adipiscing diam donec adipiscing tristique risus nec feugiat. Volutpat commodo sed egestas egestas fringilla phasellus faucibus.</p>
-                    <p class="text-small text-body-secondary mb-2">
-                        12 days ago &bull; 213 Comments
-                    </p>
-                    <div>
-                        <span class="badge bg-body-tertiary text-body me-1">Category</span>
-                        <span class="badge bg-body-tertiary text-body me-1">Category</span>
-                        <span class="badge bg-body-tertiary text-body me-1">Category</span>
-                    </div>
-                </div>
-                <div class="max-width-300 bg-body-secondary p-3 rounded text-start m-3">
-                    <p class="lead text-body-emphasis mb-2">Revolutionizing Ai: Tackling the...</p>
-                    <p class="mb-2 text-body-secondary">Adipiscing diam donec adipiscing tristique risus nec feugiat. Volutpat commodo sed egestas egestas fringilla phasellus faucibus.</p>
-                    <p class="text-small text-body-secondary mb-2">
-                        12 days ago &bull; 213 Comments
-                    </p>
-                    <div>
-                        <span class="badge bg-body-tertiary text-body me-1">Category</span>
-                        <span class="badge bg-body-tertiary text-body me-1">Category</span>
-                        <span class="badge bg-body-tertiary text-body me-1">Category</span>
-                    </div>
-                </div>
-                <div class="max-width-300 bg-body-secondary p-3 rounded text-start m-3">
-                    <p class="lead text-body-emphasis mb-2">Revolutionizing Ai: Tackling the...</p>
-                    <p class="mb-2 text-body-secondary">Adipiscing diam donec adipiscing tristique risus nec feugiat. Volutpat commodo sed egestas egestas fringilla phasellus faucibus.</p>
-                    <p class="text-small text-body-secondary mb-2">
-                        12 days ago &bull; 213 Comments
-                    </p>
-                    <div>
-                        <span class="badge bg-body-tertiary text-body me-1">Category</span>
-                        <span class="badge bg-body-tertiary text-body me-1">Category</span>
-                        <span class="badge bg-body-tertiary text-body me-1">Category</span>
-                    </div>
-                </div>
+                @endforeach
+            </div>
+            <div class="mt-4">
+                <a href="{{ route('discover.research') }}" class="btn btn-primary btn-lg btn-cta">View More Research</a>
             </div>
         </div>
     </div>

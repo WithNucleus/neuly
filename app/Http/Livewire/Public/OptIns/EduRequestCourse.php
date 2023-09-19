@@ -59,7 +59,7 @@ class EduRequestCourse extends Component
             'name' => $this->name,
             'email' => $this->email,
             'type' => EduRequest::TYPE_COURSE_REQUEST,
-            'status' => EduRequest::STATUS_NEW,
+            'status' => EduRequest::STATUS_OPEN,
             'message' => $this->message,
             'data' => [
                 'locations' => [

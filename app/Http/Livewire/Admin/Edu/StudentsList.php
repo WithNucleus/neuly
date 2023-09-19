@@ -7,7 +7,6 @@ use App\Http\Livewire\Traits\WithCachedRows;
 use App\Http\Livewire\Traits\WithPerPagePagination;
 use App\Http\Livewire\Traits\WithSorting;
 use App\Models\EduRequest;
-use App\Models\Feedback;
 use App\User;
 use Livewire\Component;
 
@@ -27,24 +26,11 @@ class StudentsList extends Component
     public $selectedStudent;
     public ?string $assignedUser = NULL;
 
-    public $statusActionOptions = [
-        EduRequest::STATUS_COMPLETED => [
-            'label' => 'Mark completed',
-            'button' => 'accent'
-        ],
-        EduRequest::STATUS_AWAITING_RESPONSE => [
-            'label' => 'Needs response',
-            'button' => 'warning'
-        ],
-        EduRequest::STATUS_IN_PROGRESS => [
-            'label' => 'In progress',
-            'button' => 'warning-bright'
-        ],
-        EduRequest::STATUS_NEW => [
-            'label' => 'Re-open',
-            'button' => 'primary'
-        ]
-    ];
+    public array $statusActionOptions = [];
+
+    public function mount() {
+        $this->statusActionOptions = EduRequest::crmActionItems();
+    }
 
     public function selectStudent($id) {
         $this->selectedStudent = EduRequest::findOrFail($id);
