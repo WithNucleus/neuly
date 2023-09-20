@@ -113,6 +113,14 @@
     </div>
 @endif
 
+@if($company->courses->count() > 0)
+    <x-entities.collapsable-related-entity collapsableId="coursesList" label="Courses">
+        @foreach ($company->courses as $course)
+            <x-entities.related.course-card :course="$course" />
+        @endforeach
+    </x-entities.collapsable-related-entity>
+@endif
+
 @if($company->bookableListings->count() > 0)
     <x-entities.collapsable-related-entity collapsableId="bookableList" label="Book with {{ $company->name }}">
         @foreach ($company->bookableListings as $bookableListing)

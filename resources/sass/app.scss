@@ -921,6 +921,9 @@ footer {
         width: 250px;
         flex-shrink: 0;
         margin-bottom: 1rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
 
         img {
             width: 100%;
@@ -929,7 +932,9 @@ footer {
     }
 
     .text {
-
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
     }
 }
 

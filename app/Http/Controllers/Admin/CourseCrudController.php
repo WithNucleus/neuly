@@ -229,6 +229,18 @@ class CourseCrudController extends CrudController
         ]);
 
         $this->crud->addField([
+            'name' => 'concierge',
+            'label' => 'Concierge',
+            'type' => 'boolean',
+        ]);
+
+        $this->crud->addField([
+            'name' => 'referral_link',
+            'label' => 'Referral Link',
+            'type' => 'url',
+        ]);
+
+        $this->crud->addField([
             'label' => 'Image',
             'name' => 'image',
             'type' => 'image',
