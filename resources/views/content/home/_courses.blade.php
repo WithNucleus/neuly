@@ -10,8 +10,8 @@
                 <div class="col-12 col-md-6 col-lg-3 mb-4">
                     <a href="{{ route('discover.courses.show', $course->slug) }}" class="card-hover-drop">
                         <div class="card h-100 border-0 rounded-3">
-                            <div class="bg-body-tertiary p-3 p-xl-4 rounded-top">
-                                <img src="{{ $course->companies()->first()->entityImageUrl ?? asset('images/image-placeholder-course-transparent.png') }}" alt="{{ $course->name }}">
+                            <div class="@isset($course->companies()->first()->entityImageUrl) bg-body-tertiary @else bg-primary @endif p-3 p-xl-4 rounded-top">
+                                <img src="{{ $course->companies()->first()->entityImageUrl ?? asset('images/image-placeholder-edu-transparent.png') }}" alt="{{ $course->name }}">
                             </div>
                             <div class="card-body d-flex flex-column justify-content-between">
                                 <div>

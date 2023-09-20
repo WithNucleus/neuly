@@ -16,22 +16,7 @@
         <x-entities.entity-show-title-meta title="{{ urlencode($course->name) }}" />
 
         <div class="d-lg-flex justify-content-between flex-shrink-1">
-            <div class="order-md-2 mb-3 mb-mb-0">
-                <div class="max-width-500">
-                    @foreach($course->companies as $company)
-                        <div class="text-center">
-                            <a href="{{ route('discover.organizations.show', $company->slug) }}" class="text-decoration-none">
-                                <img src="{{ $company->entityImageUrl ?? asset('images/image-placeholder-course.png') }}" alt="{{ $company->name }}">
-                                <p class="h4 mb-0">{{ $company->name }}</p>
-                                @if($company->summary)
-                                    <p class="text-start mt-2 mb-0 text-body">{{ $company->summary }}</p>
-                                @endif
-                            </a>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-            <div class="order-md-1 pe-md-5 flex-grow-1 max-width-780">
+            <div class="pe-md-5 flex-grow-1 max-width-780">
                 <div class="row lead">
                     <div class="col-12 col-lg-6">
                         <div>
@@ -133,18 +118,35 @@
                     <h2 class="h4 text-body-emphasis">Description</h2>
                     <div class="text-start max-width-1000 text-body-secondary">{!! nl2br($course->summary) !!}</div>
                 </div>
-
-                <div class="mt-4">
-                    @if($course->concierge)
-                        <div>
-                            <h2 class="h5 text-primary">Interested in this course?</h2>
-                            <div class="max-width-600">
-                                <livewire:public.opt-ins.edu-request-course :course="$course" />
-                            </div>
+            </div>
+            <div class="mt-4 mt-mb-0">
+                <div class="max-width-500">
+                    @foreach($course->companies as $company)
+                        <div class="text-center">
+                            <a href="{{ route('discover.organizations.show', $company->slug) }}" class="text-decoration-none">
+                                <img src="{{ $company->entityImageUrl ?? asset('images/image-placeholder-edu.png') }}" alt="{{ $company->name }}">
+                                <p class="h4 mt-3 mb-0">{{ $company->name }}</p>
+                                @if($company->summary)
+                                    <p class="bg-body-tertiary p-2 mt-2 mb-0 text-body text-start">{{ $company->summary }}</p>
+                                @endif
+                            </a>
                         </div>
-                    @else
-                        <a href="{{ $course->url }}" target="_blank" rel="noopener noreferrer" class="btn btn-lg btn-primary">Register for Course</a>
-                    @endif
+                    @endforeach
+
+                    <div class="mt-5">
+                        @if($course->concierge)
+                            <div class="bg-body-secondary p-4 text-body-secondary">
+                                <h2 class="h4 text-success">Interested in this course?</h2>
+                                <div class="max-width-600">
+                                    <livewire:public.opt-ins.edu-request-course :course="$course" />
+                                </div>
+                            </div>
+                        @else
+                            <div class="text-center">
+                                <a href="{{ $course->url }}" target="_blank" rel="noopener noreferrer" class="btn btn-lg btn-accent">Register for Course</a>
+                            </div>
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>

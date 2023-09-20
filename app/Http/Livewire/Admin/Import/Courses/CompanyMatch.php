@@ -64,7 +64,7 @@ class CompanyMatch extends Component
         try {
             $company = Company::create([
                'name' => $this->company_name,
-               'url' => $this->company_url
+               'website' => $this->company_url
             ]);
             $company->courses()->sync($this->courseIds);
 
