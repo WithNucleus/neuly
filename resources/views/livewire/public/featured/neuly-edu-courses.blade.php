@@ -49,6 +49,26 @@
                     </ul>
                 </div>
             </div>
+            <div class="filter-widget me-md-4 mb-3">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-md @if($filters['delivery-method']) btn-accent @else btn-primary @endif btn-primary dropdown-toggle rounded-0" data-bs-toggle="dropdown" aria-expanded="false">
+                        Delivery Method
+                    </button>
+                    <ul class="dropdown-menu" style="min-width: 260px">
+                        @foreach ($deliveryMethodOptions as $optionId => $option)
+                            <li class="px-3">
+                                <div class="form-check form-check-small form-check-inline">
+                                    <input wire:model="filters.delivery-method" class="form-check-input" type="checkbox" value="{{ $option }}"
+                                           id="filter-delivery-method-{{ $optionId }}" @if(in_array($option, $filters['delivery-method'])) checked @endif>
+                                    <label class="form-check-label @if(in_array($option, $filters['delivery-method'])) fw-bold @endif" for="filter-delivery-method-{{ $optionId }}">
+                                        {{ $option }}
+                                    </label>
+                                </div>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
         </div>
         <div class="d-flex align-items-center justify-content-center">
             <div class="filter-widget my-3 me-4">
@@ -67,11 +87,19 @@
                     </label>
                 </div>
             </div>
-            <div class="filter-widget my-3">
+            <div class="filter-widget my-3 me-4">
                 <div class="form-check lead">
                     <input wire:model="filters.self-paced" class="form-check-input" type="checkbox" id="filter-self-paced">
                     <label class="form-check-label" for="filter-self-paced">
                         Self Paced
+                    </label>
+                </div>
+            </div>
+            <div class="filter-widget my-3">
+                <div class="form-check lead">
+                    <input wire:model="filters.education-credits" class="form-check-input" type="checkbox" id="filter-education-credits">
+                    <label class="form-check-label" for="filter-education-credits">
+                        Education Credits
                     </label>
                 </div>
             </div>
@@ -86,17 +114,23 @@
             @foreach($filters['focus'] as $id => $focus)
                 <div class="me-3 mb-3">
                     <span>{{ $focus }}</span>
-                    <button wire:click="clearFilter('focus', '{{ $id }}')" class="btn text-danger px-1 border-0" aria-label="Clear search"><i class="fa-sharp fa-solid fa-circle-xmark"></i></button>
+                    <button wire:click="clearFilter('focus', '{{ $id }}')" class="btn text-danger px-1 border-0" aria-label="Clear filter"><i class="fa-sharp fa-solid fa-circle-xmark"></i></button>
                 </div>
             @endforeach
             @foreach($filters['type'] as $id => $type)
                 <div class="me-3 mb-3">
                     <span>{{ $type }}</span>
-                    <button wire:click="clearFilter('type', '{{ $id }}')" class="btn text-danger px-1 border-0" aria-label="Clear search"><i class="fa-sharp fa-solid fa-circle-xmark"></i></button>
+                    <button wire:click="clearFilter('type', '{{ $id }}')" class="btn text-danger px-1 border-0" aria-label="Clear filter"><i class="fa-sharp fa-solid fa-circle-xmark"></i></button>
+                </div>
+            @endforeach
+            @foreach($filters['delivery-method'] as $id => $type)
+                <div class="me-3 mb-3">
+                    <span>{{ $type }}</span>
+                    <button wire:click="clearFilter('delivery-method', '{{ $id }}')" class="btn text-danger px-1 border-0" aria-label="Clear filter"><i class="fa-sharp fa-solid fa-circle-xmark"></i></button>
                 </div>
             @endforeach
         </div>
-        <div class="d-md-flex align-items-center justify-content-between max-width-1000 mx-auto">
+        <div class="d-md-flex align-items-center justify-content-between mx-auto">
             <div class="me-3">
                 <strong>{{ $records->total() }}</strong><span class="ms-1">results</span>
             </div>
@@ -104,51 +138,10 @@
                 <button wire:click="clearFilters" class="btn btn-sm btn-ghost-primary">Clear Filters</button>
             </div>
         </div>
-        <div class="mt-4">
+        <div class="mt-4 row">
             @forelse($records as $record)
-                <div wire:key="{{ $record->id }}" class="mb-4">
-                    <div wire:click="goListing('{{ $record->id }}')" class="neuly-edu-course-item bg-body">
-                        <div class="image">
-                            <div>
-                                <img src="{{ $record->companies->first()->entityImageUrl ?? asset('images/image-placeholder-edu.png') }}"
-                                    alt="{{ $record->name }}" class="entity-square-image mb-3">
-                                <div class="text-uppercase fw-bold text-body-secondary text-center">{{ $record->companies->first()->name ?? '' }}</div>
-                            </div>
-                            <div>
-                                @if ($record->education_credits)
-                                    <div class="lead mt-3">
-                                        <span class="badge bg-primary-subtle text-primary-emphasis">
-                                            {{ $record->education_credits }}
-                                        </span>
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="text">
-                            <div>
-                                <h2 class="h4 text-success">{{ $record->name }}</h2>
-                                @if($record->next_date)
-                                    <div class="my-2 lead text-uppercase text-body-emphasis">
-                                        <strong>Next
-                                            date:</strong> {{ \Carbon\Carbon::parse($record->next_date)->format('M d, Y') }}
-                                    </div>
-                                @endif
-                                @if($record->focus->count() > 0)
-                                    <p class="fw-bold mb-2 text-body-secondary text-uppercase">
-                                        @foreach ($record->focus as $item)
-                                            {{ $item->name }}
-                                            @if (!$loop->last)/@endif
-                                        @endforeach
-                                    </p>
-                                @endif
-                                <div class="text-start w-100">{{ $record->short_summary }}</div>
-                            </div>
-                            <div class="d-md-flex justify-content-between mt-3 text-primary text-uppercase fw-bold">
-                                <div class="text-start me-4">{{ $record->type }}</div>
-                                <div class="text-end">{{ $record->formattedCost }}</div>
-                            </div>
-                        </div>
-                    </div>
+                <div wire:key="{{ $record->id }}" class="mb-4 col-12 col-md-6 col-lg-4">
+                    @include('discover.courses._card-vertical')
                 </div>
             @empty
                 <div wire:key="empty" class="w-100">
