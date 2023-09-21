@@ -13,7 +13,14 @@
     <main role="main" class="main-content-container">
 
         <div class="container">
-            <h1 class="text-body-emphasis text-center my-4">Explore Psychedelics by Focus &amp; Category</h1>
+
+            <div class="max-width-500 mx-auto">
+                @include('navbars.neuly-research-logo')
+            </div>
+            <h1 class="text-center my-4">
+                <span class="purple-on-dark">Explore Psychedelics</span>
+                <span class="d-block h4 text-body-secondary">by Treatment &amp; Category</span>
+            </h1>
 
             <div class="container row mx-auto">
                 <livewire:public.entities.focus-index />
@@ -21,6 +28,7 @@
         </div>
 
     </main>
+    @include('footers.full')
 @endsection
 
 @section('livewire_scripts')

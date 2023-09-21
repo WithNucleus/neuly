@@ -180,6 +180,21 @@ class Focus extends Model implements EntityContract
         return '<a href="'.route('discover.focus.show', $this->slug).'">'.$this->name.'</a>';
     }
 
+    public function getEduRecordsCountAttribute(): int
+    {
+        return count($this->courses) + count($this->mediaItems) + count($this->events);
+    }
+
+    public function getCareRecordsCountAttribute(): int
+    {
+        return count($this->bookableListings);
+    }
+
+    public function getResearchRecordsCountAttribute(): int
+    {
+        return count($this->clinicaltrials) + count($this->companies) + count($this->jobs) + count($this->people) + count($this->research);
+    }
+
     /*
     |--------------------------------------------------------------------------
     | MUTATORS

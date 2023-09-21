@@ -26,6 +26,8 @@
         </div>
 
     </main>
+
+    @include('footers.full')
 @endsection
 
 @section('livewire_scripts')
