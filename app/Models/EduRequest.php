@@ -39,6 +39,13 @@ class EduRequest extends Model implements CrmActionsContract
         self::STATUS_COMPLETED
     ];
 
+    protected static function booted()
+    {
+        static::created(function ($eduRequest) {
+            // TODO: Send Slack notification
+        });
+    }
+
     /* Relationships */
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {

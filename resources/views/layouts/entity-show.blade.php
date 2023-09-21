@@ -12,6 +12,7 @@
 
 <main class="entity-show-container" role="main">
     @yield('content')
+    @include('footers.full')
 </main>
 
 @include('layouts.includes.public-footer')

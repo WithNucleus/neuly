@@ -112,7 +112,7 @@
 
 
     <div wire:ignore.self class="modal fade" id="admin-dynamic-modal" tabindex="-1" aria-labelledby="admin-dynamic-modal-label" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 @if($selectedStudent)
                     <div class="modal-header align-items-center">
@@ -167,7 +167,81 @@
                             <div class="col-12 col-lg-6 mb-4">
                                 <div class="fw-bold text-uppercase text-primary">Location</div>
                                 @isset($selectedStudent->data['locations'])
-                                    <pre>{{ print_r($selectedStudent->data['locations'], true) }}</pre>
+                                    <div>
+                                        {{ $selectedStudent->data['locations']['local']['name'] }}
+                                    </div>
+                                    <div class="small">
+                                        @isset($selectedStudent->data['locations']['local'])
+                                            <a href="https://www.google.com/maps/search/?api=1&query={{ $selectedStudent->data['locations']['local']['latitude'] }},{{ $selectedStudent->data['locations']['local']['longitude'] }}" target="_blank" rel="noopener noreferrer" class="text-decoration-none">
+                                                {{ $selectedStudent->data['locations']['local']['latitude'] }}, {{ $selectedStudent->data['locations']['local']['longitude'] }}
+                                            </a>
+                                        @endisset
+                                    </div>
+                                @endisset
+                            </div>
+                            <div class="col-12 col-lg-6 mb-4">
+                                @isset($selectedStudent->data['filters'])
+                                    <div class="fw-bold text-uppercase text-primary">Search Intent</div>
+                                    <div class="row">
+                                        @if(!empty($selectedStudent->data['filters']['type']))
+                                            <div class="col-12 col-xl-6 small mb-2">
+                                                <div class="fw-bold text-uppercase">Type</div>
+                                                @foreach($selectedStudent->data['filters']['type'] as $item)
+                                                    <div>{{ $item }}</div>
+                                                @endforeach
+                                            </div>
+                                        @endif
+                                        @if(!empty($selectedStudent->data['filters']['focus']))
+                                            <div class="col-12 col-xl-6 small mb-2">
+                                                <div class="fw-bold text-uppercase">Focus</div>
+                                                @foreach($selectedStudent->data['filters']['focus'] as $item)
+                                                    <div>{{ $item }}</div>
+                                                @endforeach
+                                            </div>
+                                        @endif
+                                        @if(!empty($selectedStudent->data['filters']['delivery-method']))
+                                            <div class="col-12 col-xl-6 small mb-2">
+                                                <div class="fw-bold text-uppercase">Delivery Method</div>
+                                                @foreach($selectedStudent->data['filters']['delivery-method'] as $item)
+                                                    <div>{{ $item }}</div>
+                                                @endforeach
+                                            </div>
+                                        @endif
+                                        @if(!empty($selectedStudent->data['filters']['companies']))
+                                            <div class="col-12 col-xl-6 small mb-2">
+                                                <div class="fw-bold text-uppercase">Companies</div>
+                                                @foreach($selectedStudent->data['filters']['companies'] as $item)
+                                                    <div>{{ $item }}</div>
+                                                @endforeach
+                                            </div>
+                                        @endif
+                                        <div class="col-12 col-xl-6 small mb-2">
+                                            @if($selectedStudent->data['filters']['free'])
+                                                <div>
+                                                    <i class="fa-sharp fa-solid fa-square-check"></i>
+                                                    <span>Free</span>
+                                                </div>
+                                            @endif
+                                            @if($selectedStudent->data['filters']['self-paced'])
+                                                <div>
+                                                    <i class="fa-sharp fa-solid fa-square-check"></i>
+                                                    <span>Self Paced</span>
+                                                </div>
+                                            @endif
+                                            @if($selectedStudent->data['filters']['open-enrollment'])
+                                                <div>
+                                                    <i class="fa-sharp fa-solid fa-square-check"></i>
+                                                    <span>Open Enrollment</span>
+                                                </div>
+                                            @endif
+                                            @if($selectedStudent->data['filters']['education-credits'])
+                                                <div>
+                                                    <i class="fa-sharp fa-solid fa-square-check"></i>
+                                                    <span>Education Credits</span>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
                                 @endisset
                             </div>
                         </div>

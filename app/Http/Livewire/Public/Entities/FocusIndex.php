@@ -12,7 +12,8 @@ class FocusIndex extends Component
     public ?string $search = null;
 
     public array $filters = [
-        'focus' => null,
+        'show-treatments' => null,
+        'show-categories' => null
     ];
 
     public function clearSearch() {
@@ -22,6 +23,21 @@ class FocusIndex extends Component
     public function clearFilters() {
         $this->reset('search');
         $this->reset('filters');
+    }
+
+    public function showAll() {
+        $this->filters['show-categories'] = null;
+        $this->filters['show-treatments'] = null;
+    }
+
+    public function showTreatments() {
+        $this->filters['show-treatments'] = true;
+        $this->filters['show-categories'] = null;
+    }
+
+    public function showCategories() {
+        $this->filters['show-categories'] = true;
+        $this->filters['show-treatments'] = null;
     }
 
     public function render()
@@ -44,8 +60,11 @@ class FocusIndex extends Component
                             $query->where('name', 'like', '%' . $search . '%');
                         });
                 })
-                ->when($this->filters['focus'], function($query) {
+                ->when($this->filters['show-treatments'], function($query) {
                     return $query->where('type', Focus::TYPE_DRUG);
+                })
+                ->when($this->filters['show-categories'], function($query) {
+                    return $query->whereNull('type');
                 })
                 ->orderBy('name')
                 ->get()
