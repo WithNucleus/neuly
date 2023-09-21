@@ -142,14 +142,33 @@
                                         <div>
                                             {{ $selectedStudent->user->fullname }}
                                             <span class="opacity-50">#{{ $selectedStudent->user->id }}</span>
+                                            <div>
+                                                <a href="mailto:{{ $selectedStudent->user->email }}">{{ $selectedStudent->user->email }}</a>
+                                            </div>
                                         </div>
                                     @else
                                         <div>
-                                            <span class="d-block">{{ $selectedStudent->name }}</span>
-                                            <a href="mailto:{{ $selectedStudent->email }}">{{ $record->email }}</a>
+                                            <div>
+                                                <span>{{ $selectedStudent->name }}</span>
+                                                <span class="opacity-50 small">(unregistered)</span>
+                                            </div>
+                                            <div>
+                                                <a href="mailto:{{ $selectedStudent->email }}">{{ $selectedStudent->email }}</a>
+                                            </div>
                                         </div>
                                     @endif
                                 </div>
+                                <div>
+                                    @if($selectedStudent->phone)
+                                        <a href="tel:{{ $selectedStudent->phone }}">{{ $selectedStudent->phone }}</a>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-6 mb-4">
+                                <div class="fw-bold text-uppercase text-primary">Location</div>
+                                @isset($selectedStudent->data['locations'])
+                                    <pre>{{ print_r($selectedStudent->data['locations'], true) }}</pre>
+                                @endisset
                             </div>
                         </div>
                         <div class="fw-bold text-uppercase text-primary">Message</div>

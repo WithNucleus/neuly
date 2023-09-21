@@ -156,7 +156,7 @@ class Course extends Model
 
     public function getVeryShortSummaryAttribute(): ?string
     {
-        return Str::words($this->summary, 15) ?? null;
+        return Str::words($this->summary, 20) ?? null;
     }
 
     public function getShortSummaryAttribute(): ?string

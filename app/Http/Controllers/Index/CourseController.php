@@ -14,6 +14,11 @@ class CourseController extends Controller
         return view('discover.courses.index');
     }
 
+    public function list(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    {
+        return view('discover.courses.index-entity');
+    }
+
     public function show($slug): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         $course = Course::where('slug', $slug)->firstOrFail();
