@@ -11,7 +11,7 @@
     @include('navbars.primary')
 
     <div class="container-fluid pt-4">
-        <h1 class="text-center mb-3">Public Company Index</h1>
+        <h1 class="text-center text-primary mb-3">Public Company Index</h1>
 
         <div id="psych-index" class="container-fluid">
             <div class="row">

@@ -778,8 +778,16 @@ body.home .primary-footer {
 
 // Footer
 footer {
-    a {
+    a,
+    .btn-link{
         text-decoration: none;
+        color: var(--bs-primary);
+    }
+
+    a:hover ,
+    .btn-link:hover {
+        text-decoration: none;
+        color: var(--bs-accent);
     }
 
     svg#neulyLogo {
@@ -797,12 +805,14 @@ footer {
             }
         }
 
-        a {
+        a,
+        .btn-link {
             color: $gray-500;
         }
 
-        a:hover {
-            color: $gray-200;
+        a:hover,
+        .btn-link:hover {
+            color: var(--bs-accent);
         }
     }
 }
