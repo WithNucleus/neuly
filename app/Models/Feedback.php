@@ -32,6 +32,14 @@ class Feedback extends Model implements CrmActionsContract
         self::TYPE_CT_PARTICIPATING
     ];
 
+    const TYPE_NICE_NAMES = [
+        self::TYPE_FEEDBACK =>'General Feedback',
+        self::TYPE_FEATURE => 'Feature Request',
+        self::TYPE_DEMO_REQUEST => 'Demo Request',
+        self::TYPE_ENTERPRISE_REQUEST => 'Enterprise Request',
+        self::TYPE_BUG => 'Bug / Problem',
+    ];
+
     const STATUS_OPEN = 'open';
     const STATUS_CLOSED = 'closed';
     const STATUS_AWAITING_RESPONSE = 'awaiting response';
@@ -42,6 +50,10 @@ class Feedback extends Model implements CrmActionsContract
         self::STATUS_CLOSED,
         self::STATUS_AWAITING_RESPONSE,
         self::STATUS_IN_PROGRESS
+    ];
+
+    protected $casts = [
+        'data' => 'array'
     ];
 
     /*
