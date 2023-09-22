@@ -13,7 +13,7 @@ trait LocalLocationFilter {
             $ipResponse = json_decode($ipRequest->body(), true);
 
             if (array_key_exists('error', $ipResponse)) {
-                Log::info('Error with Neuly Care IP Response', $ipResponse);
+                Log::info('Error with LocalLocationFilter ', $ipResponse);
             } else {
                 $thisLocation = [];
 
@@ -33,10 +33,12 @@ trait LocalLocationFilter {
                     $thisLocation['name'] = $ipResponse['regionName'];
                 }
 
-                $this->savedLocations[] = $thisLocation;
+                if (isset($this->savedLocations)) {
+                    $this->savedLocations[] = $thisLocation;
+                }
             }
         } catch(Throwable $exception) {
-            Log::info('Exception with Neuly Care IP Response ' . $exception->getMessage());
+            Log::info('Exception with LocalLocationFilter ' . $exception->getMessage());
         }
 
     }

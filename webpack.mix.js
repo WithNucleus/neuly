@@ -21,6 +21,7 @@ mix.options({
 // Mix JavaScript
 mix
 	.js('resources/js/app.js', 'public/js')
+    .js('resources/js/insights.js', 'public/js')
 	// .js('resources/js/discovertabs.js', 'public/js')
 	// .js('resources/js/formValidation.js', 'public/js')
     .js('resources/js/appDetailModal.js', 'public/js')
