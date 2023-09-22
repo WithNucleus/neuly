@@ -1,37 +1,10 @@
 @extends('layouts.app')
 
-@section('body-class', 'bg-light')
+@section('body-class', 'bg-white text-dark')
 
 @section('content')
 
     @include('navbars.primary')
-
-    <div class="container-fluid">
-
-        <div class="row">
-            <div class="col-12 navbar-tabs-container">
-                @include('navbars.tabs')
-            </div>
-        </div>
-
-        <div class="row">
-            @include('navbars.tabs-mobile')
-        </div>
-
-        <div class="row">
-            <div class="col-12 breadcrumbs-container bg-white shadow-sm">
-
-                @include('navbars.breadcrumb', [
-                    'items' => [
-                        'Insights' => false,
-                        'Insights' => route('discover.insights'),
-                        'Investment Funds' => false,
-                    ]
-                ])
-
-            </div>
-        </div>
-    </div>
 
     <div class="container-fluid">
         <main id="show-main" role="main" class="col-12">
@@ -55,8 +28,6 @@
 
         </main>
     </div>
-
-    @include('discover.includes.limited-access-modal')
 @endsection
 
 @section('after_scripts')
@@ -66,18 +37,6 @@
     <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
 
     <style>
-        #investmentFundChart {
-            width: 100%;
-            height: 1024px;
-            max-width:100%;
-        }
-
-        @media (min-width: 768px) {
-            #investmentFundChart {
-                height: 75vh;
-            }
-        }
-
         .ampopup-content {
             background: #fff;
             box-shadow: 0 .125rem .25rem rgba(0,0,0,.075);
@@ -162,7 +121,7 @@
                     let modalContent = "<img src='" + event.target.dataItem.dataContext.image + "' alt='' width='140' class='mx-auto mb-2'><br>";
 
                     modalContent += '<p class="lead text-center"><strong>' + event.target.dataItem.dataContext.name + '</strong></p>';
-                    modalContent += '<p class="text-left"><i class="fad fa-building text-quaternary fa-fw"></i> ' + event.target.dataItem.dataContext.ownership + '<br>';
+                    modalContent += '<p class="text-start"><i class="fad fa-building text-quaternary fa-fw"></i> ' + event.target.dataItem.dataContext.ownership + '<br>';
 
                     modalContent += '<i class="fad fa-hands-usd fa-fw text-info"></i> ' + event.target.dataItem.dataContext.investors_count;
 
@@ -175,7 +134,7 @@
                     modalContent += '<br><i class="fad fa-flask text-secondarydark fa-fw"></i> ' + event.target.dataItem.dataContext.focus_list;
 
                     modalContent += '</p><p class="text-center mb-0">';
-                    modalContent += '<a href="' + event.target.dataItem.dataContext.chart_url + '" class="btn btn-sm btn-primary mr-3">View More</a>';
+                    modalContent += '<a href="' + event.target.dataItem.dataContext.chart_url + '" class="btn btn-sm btn-primary me-3">View More</a>';
                     modalContent += '<a href="' + event.target.dataItem.dataContext.listing_url + '" class="btn btn-sm btn-dark">View Listing</a></p>';
 
                     chart.openModal(modalContent);

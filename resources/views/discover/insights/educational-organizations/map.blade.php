@@ -1,47 +1,21 @@
 @extends('layouts.app')
 
-@section('body-class', 'bg-light')
+@section('body-class', 'bg-white text-dark')
 
 @section('content')
 
     @include('navbars.primary')
 
     <div class="container-fluid">
-
-        <div class="row">
-            <div class="col-12 navbar-tabs-container">
-                @include('navbars.tabs')
-            </div>
-        </div>
-
-        <div class="row">
-            @include('navbars.tabs-mobile')
-        </div>
-
-        <div class="row">
-            <div class="col-12 breadcrumbs-container bg-white shadow-sm">
-
-                @include('navbars.breadcrumb', [
-                    'items' => [
-                        'Insights' => false,
-                        'Insights' => route('discover.insights'),
-                        'Educational Institutions' => false,
-                    ]
-                ])
-
-            </div>
-        </div>
-    </div>
-
-    <div class="container-fluid">
         <main id="show-main" role="main" class="col-12">
+            <h1 class="text-primary text-center mt-3 mb-5">
+                Psychedelic Educational Organizations
+            </h1>
             <div class="pr-5">
                 <div id="chart"></div>
             </div>
         </main>
     </div>
-
-    @include('discover.includes.limited-access-modal')
 @endsection
 
 @section('after_scripts')
@@ -186,11 +160,6 @@
             imageSeriesTemplate.isMeasured = true;
             let overlap = chart.plugins.push(new am4plugins_overlapBuster.OverlapBuster());
             overlap.targets.push(imageSeries.mapImages.template);
-
-            let title = chart.titles.create();
-            title.text = "Educational Institutions";
-            title.fontSize = 22;
-            title.marginBottom = 40;
 
             function getModal(event) {
                 let modalContent = '<div style="max-width: 400px;text-align:center">';
