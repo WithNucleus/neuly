@@ -64,7 +64,7 @@
                     </li>
                 @else
                     <li class="nav-item me-xl-3">
-                        <a class="nav-link" href="{{ route('login') }}">Login</a>
+                        <a class="nav-link text-uppercase" href="{{ route('login') }}">Login</a>
                     </li>
                     <li class="nav-item me-xl-3">
                         <a class="btn btn-accent text-white btn-cta" href="{{ route('register') }}">Register</a>

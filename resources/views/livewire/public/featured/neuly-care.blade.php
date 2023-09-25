@@ -55,8 +55,8 @@
         </div>
         <div class="filter-widget mb-3">
             <div class="form-check lead">
-                <input wire:model="virtual" class="form-check-input" type="checkbox" id="filter-virtual">
-                <label class="form-check-label" for="filter-virtual">
+                <input wire:model="telehealth" class="form-check-input" type="checkbox" id="filter-telehealth">
+                <label class="form-check-label" for="filter-telehealth">
                     Telehealth / Virtual
                 </label>
             </div>

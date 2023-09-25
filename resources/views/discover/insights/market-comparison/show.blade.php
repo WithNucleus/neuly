@@ -142,7 +142,6 @@
         </div>
     </div>
 
-    @include('footers.mini')
-    @include('discover.includes.limited-access-modal')
+    @include('footers.full')
 
 @endsection

@@ -61,5 +61,4 @@
 
         </form>
     </div>
-    @include('footers.mini')
 @endsection

@@ -41,7 +41,7 @@
                 @endforeach
             </div>
             <div class="mt-4">
-                <a href="{{ route('discover.research') }}" class="btn btn-primary btn-lg btn-cta">View More Research</a>
+                <a href="{{ route('discover.research') }}" class="btn btn-primary btn-lg btn-cta">Browse Psychedelics Data</a>
             </div>
         </div>
     </div>

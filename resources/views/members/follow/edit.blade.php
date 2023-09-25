@@ -19,5 +19,5 @@
         <livewire:members.follow.follow-entity-widget :entity="$entity" />
     </div>
 
-    @include('footers.mini')
+    @include('footers.full')
 @endsection

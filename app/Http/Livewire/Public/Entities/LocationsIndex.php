@@ -22,6 +22,12 @@ class LocationsIndex extends Component
 
     public array $filters = [
         'companies' => [],
+        'has-companies' => null,
+        'has-people' => null,
+        'has-investors' => null,
+        'has-clinical-trials' => null,
+        'has-jobs' => null,
+        'has-events' => null,
     ];
 
     public function mount() {
@@ -90,6 +96,24 @@ class LocationsIndex extends Component
                     return $query->whereHas('companies', function($query) use ($valueArray) {
                         $query->whereIn('name', $valueArray);
                     });
+                })
+                ->when($this->filters['has-companies'], function($query) {
+                    return $query->whereHas('companies');
+                })
+                ->when($this->filters['has-people'], function($query) {
+                    return $query->whereHas('people');
+                })
+                ->when($this->filters['has-investors'], function($query) {
+                    return $query->whereHas('investors');
+                })
+                ->when($this->filters['has-clinical-trials'], function($query) {
+                    return $query->whereHas('clinicaltrials');
+                })
+                ->when($this->filters['has-jobs'], function($query) {
+                    return $query->whereHas('jobs');
+                })
+                ->when($this->filters['has-events'], function($query) {
+                    return $query->whereHas('events');
                 });
 
         return $this->applySorting($query);

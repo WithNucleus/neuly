@@ -43,6 +43,13 @@ class Course extends Model
     protected static $imageFolderPath = 'courses';
     protected static $imageFilenameAttribute = 'name';
 
+    protected $casts = [
+        'open_enrollment' => 'boolean',
+        'self_paced' => 'boolean',
+        'concierge' => 'boolean',
+        'featured' => 'boolean',
+    ];
+
     const TYPE_ONLINE = 'Online';
     const TYPE_OFFLINE = 'In-Person';
     const TYPE_HYBRID = 'Hybrid';
@@ -139,6 +146,11 @@ class Course extends Model
     | SCOPES
     |--------------------------------------------------------------------------
     */
+    public function scopeFeatured($query)
+    {
+        return $query->where('featured', 1);
+    }
+
     public function scopeFree($query)
     {
         return $query->where('lowest_cost', 0);

@@ -49,7 +49,7 @@
     <div class="col-12 col-md-4 col-lg-5 order-1 order-md-2 mb-3 mb-md-0">
 		<div class="text-center">
             <a href="{{ $job->ownerShowUrl }}" class="text-decoration-none" title="{{ $job->owner->name }}">
-                <div class="logo-is-contained mb-3" style="background-image: url('{{ $job->owner->entityImageUrl ?? asset('images/image-placeholder.jpg') }}')"></div>
+                <div class="logo-is-contained mb-3" style="background-image: url('{{ $job->owner->entityImageUrl ?? asset('images/image-placeholder-research.png') }}')"></div>
             </a>
 
             <div class="d-flex flex-wrap align-items-center justify-content-center">

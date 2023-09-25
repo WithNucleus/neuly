@@ -1,4 +1,5 @@
-<button wire:click="sortBy('{{ $field }}')" :direction="$sorts[{{ $field }}] ?? null" class="btn btn-link {{ array_key_exists($field, $sorts) ? '' : 'text-secondary' }} text-decoration-none fw-bold px-0 me-3">
+<button wire:click="sortBy('{{ $field }}')" :direction="$sorts[{{ $field }}] ?? null"
+        class="btn btn-link text-decoration-none text-uppercase {{ array_key_exists($field, $sorts) ? ($activeClasses ?? 'text-primary') : $inactiveClasses ?? 'text-secondary' }} {{ $buttonClasses ?? 'fw-bold px-0 me-3' }}">
     <span class="me-1">{{ $label }}</span>
     @if(array_key_exists($field, $sorts))
         @if ($sorts[$field] === 'asc')

@@ -92,5 +92,5 @@
     </div>
 </div>
 
-@include('footers.mini')
+@include('footers.full')
 @endsection

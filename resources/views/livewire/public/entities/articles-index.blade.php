@@ -1,7 +1,7 @@
 <div class="d-flex flex-column flex-lg-row w-100">
     <div class="entity-index-sidebar">
         <x-entities.offcanvas-sidebar>
-            <h3 class="d-none d-lg-block mb-4 text-body-emphasis">Filters</h3>
+            <h3 class="h5 d-none d-lg-block mb-4 text-body-emphasis">Narrow Your Search</h3>
 
             <x-livewire-filters.search label="Search articles" placeholder="Search" search="{{ $search }}" tooltip="Search by keyword, organization, person..." />
 
@@ -59,7 +59,7 @@
             <div class="col-12 d-md-flex justify-content-between align-items-end">
                 <h1 class="me-4 mb-md-0 text-body-emphasis">Articles</h1>
                 <div class="lead">
-                    {{ $records->total() }} Articles
+                    {{ number_format($records->total()) }} Articles
                 </div>
             </div>
             <div class="col-12 my-3">

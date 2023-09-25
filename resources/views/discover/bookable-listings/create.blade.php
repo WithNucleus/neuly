@@ -1,127 +1,124 @@
 @extends('layouts.app')
 
-@section('body-class', 'page-practitioners bg-light')
+@section('body-class', 'page-practitioners')
 
 @section('content')
 
     @include('navbars.primary')
 
-    <div class="container-fluid text-center">
+    <div id="practitioners-page" class="mx-auto pt-5 px-lg-5 container text-start">
 
-        <div id="practitioners-page" class="mx-auto px-lg-5 container text-left">
+        <h1 class="mt-3 mb-4 text-center">Add a Care Listing</h1>
 
-            <h1 class="mt-3 mb-4 text-center">Add a Care Listing</h1>
+        <div class="mx-auto" style="max-width: 640px">
+            @include('discover.includes.status-messages')
+            <form action="{{ route('discover.bookable-listing.store') }}" method="post">
+                @csrf
+                <div class="row mb-4">
+                    <div class="col-12 col-lg-8 offset-lg-2">
+                        <label for="bookable_id" class="sr-only">Select a Care Provider {{ old('bookable_id') }}</label>
+                        <select name="bookable_id" id="bookable_id" class="form-select select2" required>
+                            <option selected disabled>Select a provider</option>
+                            @foreach($organizations as $id => $name)
+                                <option value="organization-{{ $id }}" data-type="organization" @if(old('bookable_id') == "organization-" . $id) selected @endif>{{ $name }}</option>
+                            @endforeach
+                            @foreach($people as $id => $name)
+                                <option value="person-{{ $id }}" data-type="person" @if(old('bookable_id') == "person-" . $id) selected @endif>{{ $name }}</option>
+                            @endforeach
+                            @foreach($events as $id => $name)
+                                <option value="event-{{ $id }}" data-type="person" @if(old('bookable_id') == "event-" . $id) selected @endif>{{ $name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
 
-            <div class="mx-auto" style="max-width: 640px">
-                @include('discover.includes.status-messages')
-                <form action="{{ route('discover.bookable-listing.store') }}" method="post">
-                    @csrf
-                    <div class="row mb-4">
-                        <div class="col-12 col-lg-8 offset-lg-2">
-                            <label for="bookable_id" class="sr-only">Select a Care Provider {{ old('bookable_id') }}</label>
-                            <select name="bookable_id" id="bookable_id" class="form-control select2" required>
-                                <option selected disabled>Select a provider</option>
-                                @foreach($organizations as $id => $name)
-                                    <option value="organization-{{ $id }}" data-type="organization" @if(old('bookable_id') == "organization-" . $id) selected @endif>{{ $name }}</option>
-                                @endforeach
-                                @foreach($people as $id => $name)
-                                    <option value="person-{{ $id }}" data-type="person" @if(old('bookable_id') == "person-" . $id) selected @endif>{{ $name }}</option>
-                                @endforeach
-                                @foreach($events as $id => $name)
-                                    <option value="event-{{ $id }}" data-type="person" @if(old('bookable_id') == "event-" . $id) selected @endif>{{ $name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                <div class="row mb-4">
+                    <div class="col-12 col-lg-6">
+                        <label for="name" class="fw-bold text-uppercase">Listing Name</label>
+                        <input type="text" name="name" id="name" class="form-control" value="{{ old('name') }}" required>
+                    </div>
+                    <div class="col-12 col-lg-6">
+                        <label for="type" class="fw-bold text-uppercase">Provider Type</label>
+                        <select id="type" name="type" class="form-select" required>
+                            <option selected disabled></option>
+                            @foreach($types as $type)
+                                <option value="{{ $type }}" @if(old('type') == $type) selected @endif>{{ $type }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-12 col-lg-6">
+                        <label for="url" class="fw-bold text-uppercase">URL</label>
+                        <input type="url" name="url" id="url" class="form-control" value="{{ old('url') }}">
+                    </div>
+                    <div class="col-12 col-lg-6">
+                        <label for="phone" class="fw-bold text-uppercase">Phone</label>
+                        <input type="tel" name="phone" id="phone" class="form-control" value="{{ old('phone') }}">
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <p class="fw-bold text-uppercase mb-0">Location</p>
+                    </div>
+                    <div class="col-12 col-lg-6">
+                        <input type="text" name="address" id="address" class="form-control" value="{{ old('address') }}">
+                        <label for="address" class="d-block text-muted font-size-small">Address</label>
                     </div>
 
-                    <div class="row mb-4">
-                        <div class="col-12 col-lg-6">
-                            <label for="name" class="font-weight-bold">Listing Name</label>
-                            <input type="text" name="name" id="name" class="form-control" value="{{ old('name') }}" required>
-                        </div>
-                        <div class="col-12 col-lg-6">
-                            <label for="type" class="font-weight-bold">Provider Type</label>
-                            <select id="type" name="type" class="custom-select" required>
-                                <option selected disabled></option>
-                                @foreach($types as $type)
-                                    <option value="{{ $type }}" @if(old('type') == $type) selected @endif>{{ $type }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                    <div class="col-12 col-lg-6">
+                        <div id="autocomplete"></div>
+                        <label for="autocomplete" class="d-block text-muted font-size-small">City / Region / Country</label>
                     </div>
+                </div>
 
-                    <div class="row mb-4">
-                        <div class="col-12 col-lg-6">
-                            <label for="url" class="font-weight-bold">URL</label>
-                            <input type="url" name="url" id="url" class="form-control" value="{{ old('url') }}">
-                        </div>
-                        <div class="col-12 col-lg-6">
-                            <label for="phone" class="font-weight-bold">Phone</label>
-                            <input type="tel" name="phone" id="phone" class="form-control" value="{{ old('phone') }}">
-                        </div>
+                <div class="mb-4">
+                    <div class="form-check lead">
+                        <input type="checkbox" class="form-check-input" id="virtual" name="virtual" value="1">
+                        <label class="form-check-label" for="virtual">We offer virtual / remote services</label>
                     </div>
+                </div>
 
-                    <div class="row mb-3">
-                        <div class="col-12">
-                            <p class="font-weight-bold mb-0">Location</p>
-                        </div>
-                        <div class="col-12 col-lg-6">
-                            <input type="text" name="address" id="address" class="form-control" value="{{ old('address') }}">
-                            <label for="address" class="d-block text-muted font-size-small">Address</label>
-                        </div>
-
-                        <div class="col-12 col-lg-6">
-                            <div id="autocomplete"></div>
-                            <label for="autocomplete" class="d-block text-muted font-size-small">City / Region / Country</label>
-                        </div>
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <p class="fw-bold text-uppercase mb-0">Focus</p>
                     </div>
-
-                    <div class="mb-4">
-                        <div class="custom-control custom-checkbox lead">
-                            <input type="checkbox" class="custom-control-input" id="virtual" name="virtual" value="1">
-                            <label class="custom-control-label" for="virtual">We offer virtual / remote services</label>
-                        </div>
-                    </div>
-
-                    <div class="row mb-4">
-                        <div class="col-12">
-                            <p class="font-weight-bold mb-0">Focus</p>
-                        </div>
-                        @foreach($focuses as $focusId => $focusName)
-                            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" name="focus[{{ $focusId }}]" id="focus-{{ $focusId }}">
-                                    <label class="custom-control-label" for="focus-{{ $focusId }}">{{ $focusName }}</label>
-                                </div>
+                    @foreach($focuses as $focusId => $focusName)
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" name="focus[{{ $focusId }}]" id="focus-{{ $focusId }}">
+                                <label class="form-check-label" for="focus-{{ $focusId }}">{{ $focusName }}</label>
                             </div>
-                        @endforeach
-                    </div>
-
-                    <div class="row mb-4">
-                        <div class="col-12">
-                            <label for="description" class="font-weight-bold">Description</label>
-                            <textarea class="form-control" id="description" name="description" rows="5" required></textarea>
                         </div>
+                    @endforeach
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <label for="description" class="fw-bold text-uppercase">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="5" required></textarea>
                     </div>
+                </div>
 
-                    <div>
-                        <input type="hidden" name="location_name" id="location_name" value="{{ old('location_name') }}">
-                        <input type="hidden" name="latitude" id="latitude" value="{{ old('latitude') }}">
-                        <input type="hidden" name="longitude" id="longitude" value="{{ old('longitude') }}">
-                    </div>
+                <div>
+                    <input type="hidden" name="location_name" id="location_name" value="{{ old('location_name') }}">
+                    <input type="hidden" name="latitude" id="latitude" value="{{ old('latitude') }}">
+                    <input type="hidden" name="longitude" id="longitude" value="{{ old('longitude') }}">
+                </div>
 
-                    <div class="text-center">
-                        <button type="submit" class="btn btn-primary btn-lg">Submit</button>
-                    </div>
-                </form>
-            </div>
-
-            @include('discover.includes.discover-footer-content')
-
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+                </div>
+            </form>
         </div>
 
     </div>
 
+    @include('footers.full')
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@opencage/geosearch-bundle/dist/css/autocomplete-theme-classic.min.css"/>
     <script src="https://cdn.jsdelivr.net/npm/@opencage/geosearch-bundle" type="text/javascript"></script>
     {{-- select2 --}}

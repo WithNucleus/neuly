@@ -3,8 +3,8 @@
         <div class="max-width-400 mx-auto mb-4">
             @include('navbars.neuly-edu-logo')
         </div>
-        <h2 class="h1 text-body-emphasis max-width-740 mx-auto">Industry Courses That Can Launch Your Career</h2>
-        <p class="lead max-width-600 mx-auto mb-5">Psychedelic-assisted therapy is slated to help millions. Therapists and sitters are needed.</p>
+        <h2 class="h1 text-body-emphasis max-width-740 mx-auto">Find the Psychedelic Courses That Can Launch Your Career</h2>
+        <p class="lead max-width-600 mx-auto mb-5">Therapists and sitters are needed to lead the growth of the psychedelic-assisted therapy that is slated to help millions.</p>
         <div class="row" data-masonry='{"percentPosition": true }'>
             @foreach($courses as $course)
                 <div class="col-12 col-md-6 col-lg-3 mb-4">

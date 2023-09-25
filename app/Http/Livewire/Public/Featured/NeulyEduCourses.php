@@ -217,6 +217,9 @@ class NeulyEduCourses extends Component
                         ->orWhere('education_credits', 'like', '%' . $search . '%')
                         ->orwhereHas('focus', function($query) use ($search) {
                             $query->where('name', 'like', '%' . $search . '%');
+                        })
+                        ->orwhereHas('companies', function($query) use ($search) {
+                            $query->where('name', 'like', '%' . $search . '%');
                         });
                 })
                 ->when($this->filters['type'], function($query, $valueArray) {

@@ -18,6 +18,6 @@
 
     </x-members.settings>
 
-    @include('footers.mini')
+    @include('footers.full')
 
 @endsection

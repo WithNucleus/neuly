@@ -65,7 +65,7 @@
 
         <p class="text-center">*Note that Neuly adds new data at the company’s sole discretion.</p>
 
-        @include('footers.mini')
+        @include('footers.full')
     </div>
 
 @endsection

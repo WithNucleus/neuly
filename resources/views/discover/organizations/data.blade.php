@@ -62,7 +62,7 @@
 	</div>
 	<div class="col-12 col-md-4 col-lg-5">
 		<div class="text-center">
-            <div class="logo-is-contained mb-3" style="background-image: url('{{ $company->entityImageUrl ?? asset('images/image-placeholder.jpg') }}')"></div>
+            <div class="logo-is-contained mb-3" style="background-image: url('{{ $company->entityImageUrl ?? asset('images/image-placeholder-research.png') }}')"></div>
 
             <div class="d-flex flex-wrap align-items-center justify-content-center">
                 @if ($company->linkedin)
