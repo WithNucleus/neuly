@@ -1,7 +1,7 @@
 <div class="d-flex flex-column flex-lg-row w-100">
     <div class="entity-index-sidebar">
         <x-entities.offcanvas-sidebar>
-            <h3 class="d-none d-lg-block mb-4 text-body-emphasis">Filters</h3>
+            <h3 class="h5 d-none d-lg-block mb-4 text-body-emphasis">Narrow Your Search</h3>
 
             <x-livewire-filters.search label="Search Companies" placeholder="Search" search="{{ $search }}" />
 
@@ -44,7 +44,7 @@
             <div class="col-12 d-md-flex justify-content-between align-items-end">
                 <h1 class="me-4 mb-md-0 text-body-emphasis">Organizations</h1>
                 <div class="lead">
-                    {{ $records->total() }} Organizations
+                    {{ number_format($records->total()) }} Organizations
                 </div>
             </div>
             <div class="col-12 my-3">
@@ -66,7 +66,7 @@
                             </span>
                         @endif
 
-                        <div class="logo-is-contained" style="background-image: url('{{ $company->entityImageUrl ?? asset('images/image-placeholder.jpg') }}')"></div>
+                        <div class="logo-is-contained" style="background-image: url('{{ $company->entityImageUrl ?? asset('images/image-placeholder-research.png') }}')"></div>
                         <p class="my-3 h5 px-1 text-success">{{ $company->name }}</p>
 
                         <div class="text-body-emphasis fw-bold text-uppercase my-3">{{ $company->ownership ?? 'Unknown Type' }}</div>

@@ -158,7 +158,7 @@
             <button type="submit" class="btn btn-primary">Send</button>
         </form>
 
-        @include('footers.mini')
+        @include('footers.full')
     </div>
 
     <script>
@@ -177,6 +177,4 @@
             });
         });
     </script>
-
-    @include('discover.includes.limited-access-modal')
 @endsection

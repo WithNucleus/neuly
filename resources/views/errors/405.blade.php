@@ -1,18 +1,24 @@
 @extends('errors.layout')
 
 @php
-  $error_number = 405;
+    $error_number = 405;
 @endphp
 
 @section('title')
-    OOOOH! {{ $error_number }}, METHOD NOT ALLOWED
+    Method Not Allowed
 @endsection
 
 @section('description')
-  @php
-    $default_error_message = "Sorry about that, but you tried to request this page by an unsupported method.";;
-  @endphp
-  @can('view logs')
-      {!! isset($exception)? ($exception->getMessage()?e($exception->getMessage()):$default_error_message): $default_error_message !!}
-  @endcan
+    @php
+        $default_error_message = "Sorry about that, but you don't have permission to do this.";
+    @endphp
+    @can('view logs')
+        @isset($exception)
+            {{ $exception->getMessage() }}
+        @else
+            {{ $default_error_message }}
+        @endisset
+    @else
+        {{ $default_error_message }}
+    @endcan
 @endsection

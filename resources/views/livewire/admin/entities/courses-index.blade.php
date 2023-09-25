@@ -5,6 +5,34 @@
             <x-livewire-filters.search label="Search" placeholder="Search" search="{{ $search }}" tooltip="Search by title, NCT number, summary, etc." />
         </div>
 
+        <div class="mb-3 me-md-5">
+            <div class="dropdown">
+                <a class="btn btn-outline-primary rounded-0 dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                   aria-expanded="false">
+                    Companies
+                </a>
+
+                <div class="dropdown-menu">
+                    <div style="min-width: 250px;height: 350px" class="px-2 overflow-y-scroll overflow-y-scroll">
+                        <x-livewire-filters.checkbox-multiple wireModel="filters.companies" id="filter-companies" :options="$companyOptions" :currentFilters="$filters['companies']" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-3 me-md-4">
+            <x-livewire-filters.checkbox-single wireModel="filters.featured" id="filter-featured" label="Featured" />
+        </div>
+        <div class="mb-3 me-md-4">
+            <x-livewire-filters.checkbox-single wireModel="filters.education-credits" id="filter-education-credits" label="Education Credits" />
+        </div>
+        <div class="mb-3 me-md-4">
+            <x-livewire-filters.checkbox-single wireModel="filters.free" id="filter-free" label="Free Courses" />
+        </div>
+        <div class="mb-3 me-md-4">
+            <x-livewire-filters.checkbox-single wireModel="filters.open-enrollment" id="filter-open-enrollment" label="Open Enrollment" />
+        </div>
+
         <div class="ms-auto mb-3">
             <button wire:click="clearFilters" class="btn btn-sm btn-dark rounded-0">Clear Filters</button>
         </div>
@@ -33,6 +61,16 @@
                         <i class="fa-sharp fa-solid fa-tags fa-fw me-1"></i>Auto Tag
                     </a>
                 </li>
+                <li>
+                    <a wire:click="bulkAddFeatured" class="dropdown-item" href="#">
+                        <i class="fa-sharp fa-solid fa-star fa-fw me-1"></i>Add Featured
+                    </a>
+                </li>
+                <li>
+                    <a wire:click="bulkRemoveFeatured" class="dropdown-item" href="#">
+                        <i class="fa-sharp fa-solid fa-xmark fa-fw me-1"></i>Remove Featured
+                    </a>
+                </li>
             </ul>
         </div>
     </div>
@@ -46,16 +84,25 @@
                                    id="selectAll" aria-label="Select">
                         </div>
                     </th>
-                    <th>Name</th>
-                    <th>Type</th>
-                    <th>Location</th>
+                    <th>
+                        <x-entities.entity-index-sort-button label="Name" field="name" :sorts="$sorts" buttonClasses="p-0 fw-bold" inactiveClasses="text-body" activeClasses="text-accent" />
+                    </th>
+                    <th>Company</th>
+                    <th>
+                        <x-entities.entity-index-sort-button label="Type" field="type" :sorts="$sorts" buttonClasses="p-0 fw-bold" inactiveClasses="text-body" activeClasses="text-accent" />
+                    </th>
+                    <th>
+                        <x-entities.entity-index-sort-button label="Location" field="location" :sorts="$sorts" buttonClasses="p-0 fw-bold" inactiveClasses="text-body" activeClasses="text-accent" />
+                    </th>
                     <th>Delivery Method</th>
-                    <th>Cost</th>
+                    <th>
+                        <x-entities.entity-index-sort-button label="Cost" field="lowest_cost" :sorts="$sorts" buttonClasses="p-0 fw-bold" inactiveClasses="text-body" activeClasses="text-accent" />
+                    </th>
                     <th>Currency</th>
                     <th>Credits</th>
                     <th>Hours</th>
                     <th>Dates</th>
-                    <th>Open Enrollment</th>
+                    <th>Open</th>
                     <th>Self Paced</th>
                     <th>Length</th>
                     <th>Image</th>
@@ -71,9 +118,23 @@
                             </div>
                         </td>
                         <td>
-                            <div class="truncate-300">
-                                <a href="{{ route('discover.courses.show', $record->slug) }}">{{ $record->name }}</a>
+                            <div class="d-flex justify-content-between">
+                                <div class="truncate-300 me-3">
+                                    <a href="{{ route('discover.courses.show', $record->slug) }}">{{ $record->name }}</a>
+                                </div>
+                                <div>
+                                    @if($record->featured)
+                                        <i class="fa-sharp fa-solid fa-star text-warning-bright"></i>
+                                    @endif
+                                </div>
                             </div>
+                        </td>
+                        <td>
+                            @foreach($record->companies as $company)
+                                <div class="truncate-300">
+                                     <a href="{{ route('discover.organizations.show', $company->slug) }}">{{ $company->name }}</a>
+                                </div>
+                            @endforeach
                         </td>
                         <td class="text-nowrap">{{ $record->type }}</td>
                         <td class="text-nowrap">{{ $record->learning_location }}</td>

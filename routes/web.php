@@ -194,39 +194,42 @@ Route::middleware('verifiedIfAuthorized')->group(function () {
 //    Route::get('/patent-filings', 'Index\DataFeeds\PatentFilingController@index')->name('discover.patents.filings');
 
     //Insights main page
-    Route::prefix('/insights')->name('discover.')->group(function () {
-        Route::get('/', [App\Http\Controllers\Index\InsightsController::class, 'index'])->name('insights');
-        Route::get('/request', [App\Http\Controllers\Index\InsightsController::class, 'request'])->name('insights.request');
-        Route::post('/request', [App\Http\Controllers\Index\InsightsController::class, 'saveRequest'])->name('insights.saveRequest');
-    });
+    // TODO: Temporary admin gate for insights
+    Route::middleware('can:admin login')->group(function() {
+        Route::prefix('/insights')->name('discover.')->group(function () {
+            Route::get('/insights', [App\Http\Controllers\Index\InsightsController::class, 'index'])->name('insights');
+            Route::get('/request', [App\Http\Controllers\Index\InsightsController::class, 'request'])->name('insights.request');
+            Route::post('/request', [App\Http\Controllers\Index\InsightsController::class, 'saveRequest'])->name('insights.saveRequest');
+        });
 
-    //Insights
-    Route::prefix('/insights')->name('insights.')->group(function () {
-        Route::get('/companies-by-type', [App\Http\Controllers\Insights\CompaniesByTypeController::class, 'index'])->name('companies-by-type');
-        Route::get('/top-ten-locations', [App\Http\Controllers\Insights\TopTenLocationsController::class, 'index'])->name('top-ten-locations');
-        Route::get('/companies-by-focus-drug', [App\Http\Controllers\Insights\CompaniesByFocusDrug::class, 'index'])->name('companies-by-focus-drug');
-        Route::get('/clinical-trial-tracker', [App\Http\Controllers\Insights\ClinicalTrialPipelineController::class, 'show'])->name('clinicaltrials.pipeline');
-        Route::get('/market-comparison', [App\Http\Controllers\Insights\CompareMarketController::class, 'show'])->name('compare-market');
-        Route::get('/jobs-by-focus', [App\Http\Controllers\Insights\JobsByFocusController::class, 'index'])->name('jobs-by-focus');
-        Route::get('/jobs-by-type', [App\Http\Controllers\Insights\JobsByTypeController::class, 'index'])->name('jobs-by-type');
-        Route::get('/collaborators', [App\Http\Controllers\Insights\ClinicalTrialCollaboratorsListController::class, 'show'])->name('collaborators.show');
-        Route::post('/collaborators/list', [App\Http\Controllers\Insights\ClinicalTrialCollaboratorsListController::class, 'index'])->name('collaborators');
-        Route::get('/most-interest', [App\Http\Controllers\Insights\ClinicalTrialFocusListController::class, 'show'])->name('most-interest.show');
-        Route::post('/most-interest/list', [App\Http\Controllers\Insights\ClinicalTrialFocusListController::class, 'index'])->name('most-interest');
-        Route::get('/research-authors', [App\Http\Controllers\Insights\ResearchAuthorsController::class, 'index'])->name('research-authors');
-        Route::get('/research-authors/widget', [App\Http\Controllers\Insights\ResearchAuthorsController::class, 'widget'])->name('research-authors.widget');
-        Route::get('/research-organizations', [App\Http\Controllers\Insights\ResearchOrganizationsController::class, 'index'])->name('research-organizations');
-        Route::get('/research-organizations/widget', [App\Http\Controllers\Insights\ResearchOrganizationsController::class, 'widget'])->name('research-organizations.widget');
-        Route::get('/research-by-focus', [App\Http\Controllers\Insights\ResearchByFocus::class, 'index'])->name('research-by-focus');
-        Route::get('/companies-by-focus-industry', [App\Http\Controllers\Insights\CompaniesByFocusIndustry::class, 'index'])->name('companies-by-focus-industry');
-        Route::get('/location-top-by-jobs', [App\Http\Controllers\Insights\LocationTopByJobsController::class, 'index'])->name('location-top-by-jobs');
-        Route::get('/clinical-trials/distribution/countries', [App\Http\Controllers\Insights\ClinicalTrialDistributionController::class, 'show'])->name('distribution.countries.show');
-        Route::get('/clinical-trials/distribution/countries/focus', [App\Http\Controllers\Insights\ClinicalTrialDistributionController::class, 'showWithFocus'])->name('distribution.countries.focus.show');
-        Route::get('/clinical-trials-historic', [App\Http\Controllers\Insights\ClinicalTrialHistoric::class, 'index'])->name('clinical-trials-historic');
-        Route::get('/investment-funds', [App\Http\Controllers\Insights\InvestmentFundController::class, 'index'])->name('investment-funds');
-        Route::get('/investment-funds/organization/{slug}', [App\Http\Controllers\Insights\InvestmentFundController::class, 'organizationChart'])->name('investment-funds.organization');
-        Route::get('/non-profits', [App\Http\Controllers\Insights\NonProfitFocusController::class, 'chart'])->name('nonprofits.focus-chart');
-        Route::get('/educational-organizations', [App\Http\Controllers\Insights\EducationalOrganizationsMapController::class, 'map'])->name('educational-organizations.map');
+        //Insights
+        Route::prefix('/insights')->name('insights.')->group(function () {
+            Route::get('/companies-by-type', [App\Http\Controllers\Insights\CompaniesByTypeController::class, 'index'])->name('companies-by-type');
+            Route::get('/top-ten-locations', [App\Http\Controllers\Insights\TopTenLocationsController::class, 'index'])->name('top-ten-locations');
+            Route::get('/companies-by-focus-drug', [App\Http\Controllers\Insights\CompaniesByFocusDrug::class, 'index'])->name('companies-by-focus-drug');
+            Route::get('/clinical-trial-tracker', [App\Http\Controllers\Insights\ClinicalTrialPipelineController::class, 'show'])->name('clinicaltrials.pipeline');
+            Route::get('/market-comparison', [App\Http\Controllers\Insights\CompareMarketController::class, 'show'])->name('compare-market');
+            Route::get('/jobs-by-focus', [App\Http\Controllers\Insights\JobsByFocusController::class, 'index'])->name('jobs-by-focus');
+            Route::get('/jobs-by-type', [App\Http\Controllers\Insights\JobsByTypeController::class, 'index'])->name('jobs-by-type');
+            Route::get('/collaborators', [App\Http\Controllers\Insights\ClinicalTrialCollaboratorsListController::class, 'show'])->name('collaborators.show');
+            Route::post('/collaborators/list', [App\Http\Controllers\Insights\ClinicalTrialCollaboratorsListController::class, 'index'])->name('collaborators');
+            Route::get('/most-interest', [App\Http\Controllers\Insights\ClinicalTrialFocusListController::class, 'show'])->name('most-interest.show');
+            Route::post('/most-interest/list', [App\Http\Controllers\Insights\ClinicalTrialFocusListController::class, 'index'])->name('most-interest');
+            Route::get('/research-authors', [App\Http\Controllers\Insights\ResearchAuthorsController::class, 'index'])->name('research-authors');
+            Route::get('/research-authors/widget', [App\Http\Controllers\Insights\ResearchAuthorsController::class, 'widget'])->name('research-authors.widget');
+            Route::get('/research-organizations', [App\Http\Controllers\Insights\ResearchOrganizationsController::class, 'index'])->name('research-organizations');
+            Route::get('/research-organizations/widget', [App\Http\Controllers\Insights\ResearchOrganizationsController::class, 'widget'])->name('research-organizations.widget');
+            Route::get('/research-by-focus', [App\Http\Controllers\Insights\ResearchByFocus::class, 'index'])->name('research-by-focus');
+            Route::get('/companies-by-focus-industry', [App\Http\Controllers\Insights\CompaniesByFocusIndustry::class, 'index'])->name('companies-by-focus-industry');
+            Route::get('/location-top-by-jobs', [App\Http\Controllers\Insights\LocationTopByJobsController::class, 'index'])->name('location-top-by-jobs');
+            Route::get('/clinical-trials/distribution/countries', [App\Http\Controllers\Insights\ClinicalTrialDistributionController::class, 'show'])->name('distribution.countries.show');
+            Route::get('/clinical-trials/distribution/countries/focus', [App\Http\Controllers\Insights\ClinicalTrialDistributionController::class, 'showWithFocus'])->name('distribution.countries.focus.show');
+            Route::get('/clinical-trials-historic', [App\Http\Controllers\Insights\ClinicalTrialHistoric::class, 'index'])->name('clinical-trials-historic');
+            Route::get('/investment-funds', [App\Http\Controllers\Insights\InvestmentFundController::class, 'index'])->name('investment-funds');
+            Route::get('/investment-funds/organization/{slug}', [App\Http\Controllers\Insights\InvestmentFundController::class, 'organizationChart'])->name('investment-funds.organization');
+            Route::get('/non-profits', [App\Http\Controllers\Insights\NonProfitFocusController::class, 'chart'])->name('nonprofits.focus-chart');
+            Route::get('/educational-organizations', [App\Http\Controllers\Insights\EducationalOrganizationsMapController::class, 'map'])->name('educational-organizations.map');
+        });
     });
 });
 

@@ -5,14 +5,20 @@
 @endphp
 
 @section('title')
-    OOOOH! {{ $error_number }}, IT IS US NOT YOU!!!!!!!
+    It's us, not you.
 @endsection
 
 @section('description')
 	@php
-	  $default_error_message = "Sorry about that, but there was an error on our side. If this is happening repeatedly please inform us.";
+	  $default_error_message = "Sorry about that, but there was an error on our side. If this is happening repeatedly, please inform us.";
 	@endphp
     @can('view logs')
-        {!! isset($exception)? ($exception->getMessage()?e($exception->getMessage()):$default_error_message): $default_error_message !!}
+        @isset($exception)
+            {{ $exception->getMessage() }}
+        @else
+            {{ $default_error_message }}
+        @endisset
+    @else
+        {{ $default_error_message }}
     @endcan
 @endsection

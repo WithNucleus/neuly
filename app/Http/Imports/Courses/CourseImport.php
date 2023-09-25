@@ -29,7 +29,8 @@ class CourseImport implements ToModel, WithHeadingRow, WithUpserts {
             'open_enrollment' => $row['open_enrollment'],
             'length' => $row['length'],
             'self_paced' => $row['self_paced'],
-            'image' => $row['image']
+            'image' => $row['image'],
+            'featured' => $row['featured'],
         ]);
     }
 
@@ -59,6 +60,7 @@ class CourseImport implements ToModel, WithHeadingRow, WithUpserts {
             'length' => 'string',
             'self_paced' => 'bool',
             'image' => 'string',
+            'featured' => 'bool',
         ];
     }
 }

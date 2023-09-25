@@ -53,9 +53,8 @@
                     </div>
                 </div>
 
-                @include('footers.mini')
+                @include('footers.full')
             </main>
         </div>
     </div>
-    @include('discover.includes.limited-access-modal')
 @endsection

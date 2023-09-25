@@ -41,8 +41,8 @@ class HomeController extends Controller
         ];
 
         $articles = MediaItem::articles()->orderByDesc('date')->take(6)->get();
-        $courses = Course::whereHas('focus')->take(8)->get();
-        $research = Research::whereNotNull('abstract')->orderByDesc('updated_at')->whereHas('focus')->take(4)->get();
+        $courses = Course::featured()->take(8)->get();
+        $research = Research::whereNotNull('abstract')->orderByDesc('created_at')->whereHas('focus')->take(4)->get();
 
         return view('content.home.index', [
             'investors' => $investors,

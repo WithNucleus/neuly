@@ -19,20 +19,24 @@ class NeulyCare extends Component
     use WithPerPagePagination, WithBulkActions, WithCachedRows, WithSorting, LocalLocationFilter;
 
     protected string $paginationTheme = 'bootstrap';
-    protected $queryString = ['search'];
+    protected $queryString = ['search', 'find'];
     protected $listeners = ['neulyCareGeoSearch', 'clearSearchLocation'];
 
     public ?string $search = null;
+    public ?string $find = null;
 
     public array $filters = [
         'focus' => [],
-        'type' => []
+        'type' => [],
+        'entity-state' => []
     ];
 
     public string $ip;
     public ?int $userId = null;
 
-    public bool $virtual = false;
+    public bool $telehealth = false;
+
+    public int $locationDistance = 1500;
 
     public array $localLocation = [
         'latitude' => null,
@@ -52,6 +56,8 @@ class NeulyCare extends Component
 
     public function mount(Request $request) {
 
+        $this->setCustomSearches();
+
          $this->ip = $request->getClientIp(); // PRODUCTION
          // $this->ip = '207.46.13.74'; // TEST - Chicago
          // $this->ip = "108.92.170.181"; // Sydney
@@ -65,6 +71,28 @@ class NeulyCare extends Component
         if (Auth::id()) {
             $this->userId = Auth::id();
         }
+    }
+
+    public function setCustomSearches() {
+        if($this->find === 'retreats') {
+            $this->filters['type'] = [BookableListing::TYPE_RETREAT];
+        }
+
+        if ($this->find === 'telehealth') {
+            $this->telehealth = true;
+        }
+
+        if ($this->find === 'ketamine-clinics') {
+            $this->filters['focus'] = ['Ketamine'];
+            $this->filters['type'] = [BookableListing::TYPE_CLINIC];
+        }
+
+        if ($this->find === 'oregon-psilocybin') {
+            $this->filters['focus'] = ['Psilocybin'];
+            $this->filters['entity-state'] = ['Oregon'];
+        }
+
+        $this->reset('find');
     }
 
     public function updatingSearch() {
@@ -129,7 +157,7 @@ class NeulyCare extends Component
             'location_id' => $this->searchLocation['id'],
             'data' => [
                 'filters' => $this->filters,
-                'virtual' => $this->virtual,
+                'telehealth' => $this->telehealth,
                 'locations' => [
                     'local' => $this->localLocation,
                     'saved' => $this->savedLocations
@@ -194,14 +222,19 @@ class NeulyCare extends Component
                 ->when($this->filters['type'], function($query, $valueArray) {
                     return $query->whereIn('type', $valueArray);
                 })
-                ->when($this->virtual, function($query) {
+                ->when($this->telehealth, function($query) {
                     return $query->where('virtual', 1);
                 })
                 ->when($this->localLocation['latitude'], function($query) {
-                    return $query->distance($this->localLocation['latitude'], $this->localLocation['longitude'], 500);
+                    return $query->distance($this->localLocation['latitude'], $this->localLocation['longitude'], $this->locationDistance);
                 })
                 ->when($this->searchLocation['latitude'], function($query) {
-                    return $query->distance($this->searchLocation['latitude'], $this->searchLocation['longitude'], 500);
+                    return $query->distance($this->searchLocation['latitude'], $this->searchLocation['longitude'], $this->locationDistance);
+                })
+                ->when($this->filters['entity-state'], function($query, $valueArray) {
+                    return $query->whereHas('location', function($query) use ($valueArray) {
+                        $query->whereIn('region', $valueArray);
+                    });
                 });
 
         return $this->applySorting($query);

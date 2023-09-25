@@ -5,7 +5,7 @@
 @endphp
 
 @section('title')
-    OOOOH! {{ $error_number }}, PAGE NOT FOUND
+    Page Not Found
 @endsection
 
 @section('description')
@@ -13,6 +13,12 @@
         $default_error_message = "Sorry about that, but the page you are looking for doesn't exist.";
     @endphp
     @can('view logs')
-        {!! isset($exception)? ($exception->getMessage()?e($exception->getMessage()):$default_error_message): $default_error_message !!}
+        @isset($exception)
+            {{ $exception->getMessage() }}
+        @else
+            {{ $default_error_message }}
+        @endisset
+    @else
+        {{ $default_error_message }}
     @endcan
 @endsection

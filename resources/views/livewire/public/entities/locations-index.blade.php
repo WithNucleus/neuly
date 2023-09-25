@@ -1,9 +1,18 @@
 <div class="d-flex flex-column flex-lg-row w-100">
     <div class="entity-index-sidebar">
         <x-entities.offcanvas-sidebar>
-            <h3 class="d-none d-lg-block mb-4 text-body-emphasis">Filters</h3>
+            <h3 class="h5 d-none d-lg-block mb-4 text-body-emphasis">Narrow Your Search</h3>
 
             <x-livewire-filters.search label="Search locations" placeholder="Search" search="{{ $search }}" />
+
+            <div class="my-4">
+                <x-livewire-filters.checkbox-single wireModel="filters.has-companies" id="filter-has-companies" label="Has Companies" />
+                <x-livewire-filters.checkbox-single wireModel="filters.has-people" id="filter-has-people" label="Has People" />
+                <x-livewire-filters.checkbox-single wireModel="filters.has-investors" id="filter-has-investors" label="Has Investors" />
+                <x-livewire-filters.checkbox-single wireModel="filters.has-clinical-trials" id="filter-has-clinical-trials" label="Has Clinical Trials" />
+                <x-livewire-filters.checkbox-single wireModel="filters.has-jobs" id="filter-has-jobs" label="Has Jobs" />
+                <x-livewire-filters.checkbox-single wireModel="filters.has-events" id="filter-has-events" label="Has Events" />
+            </div>
 
             <div>
                 <button wire:click="clearFilters" class="btn btn-sm btn-secondary">Clear Filters</button>
@@ -15,7 +24,7 @@
             <div class="col-12 d-md-flex justify-content-between align-items-end">
                 <h1 class="me-4 mb-md-0 text-body-emphasis">locations</h1>
                 <div class="lead">
-                    {{ $records->total() }} locations
+                    {{ number_format($records->total()) }} locations
                 </div>
             </div>
             <div class="col-12 my-3">
