@@ -40,6 +40,27 @@ html {
     .white-on-dark {
         color: $white !important;
     }
+
+    .btn-outline-primary {
+        color: $neulyIndigoBright;
+        border-color: $neulyIndigoBright;
+    }
+
+    .btn-outline-primary:hover {
+        background-color: $neulyIndigoBright;
+        color: $neulyDarkIndigo;
+    }
+
+    .btn-outline-tertiary {
+        color: $pear;
+        border-color: $pear;
+    }
+
+    .btn-outline-tertiary:hover {
+        background-color: $pear;
+        color: $neulyDarkIndigo;
+    }
+
 }
 
 // Nav Logo
@@ -252,6 +273,10 @@ ul.pagination {
 .btn-cta.btn-lg {
     padding: .75rem 2rem;
     font-size: $font-size-base * 1.25;
+}
+
+.btn-outline-success:hover {
+    color: $white;
 }
 
 .cursor-pointer:hover {

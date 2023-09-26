@@ -1,20 +1,20 @@
 <div class="widget-controls mb-3">
     <div class="d-flex align-items-stretch">
-            <button class="btn btn-sm has-accordion-arrow filter-control" type="button" data-toggle="collapse"
-                    data-target="#filters-clinical-trials-completed-focus" aria-expanded="false"
+            <button class="btn btn-sm has-accordion-arrow filter-control" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#filters-clinical-trials-completed-focus" aria-expanded="false"
                     aria-controls="filters-clinical-trials-completed-focus">
                 Focus Filter
             </button>
 
-            <div class="filter-checkboxes" data-filter="focus">
+            <div class="filter-checkboxes mt-5" data-filter="focus">
                 <div class="filter-group border shadow-sm px-3 py-2 collapse"
                      id="filters-clinical-trials-completed-focus">
                     @foreach ($filterFocus as $value => $label)
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input"
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input"
                                    id="filters-clinical-trials-completed-focus-{{ $value }}" data-name="{{ $value }}"
                                 {{ $filteredFocus && in_array($value, $filteredFocus) ? 'checked' : '' }}>
-                            <label class="custom-control-label"
+                            <label class="form-check-label"
                                    for="filters-clinical-trials-completed-focus-{{ $value }}">{{ $label }}</label>
                         </div>
                     @endforeach

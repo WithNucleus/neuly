@@ -282,15 +282,13 @@
 }
 
 .has-accordion-arrow[aria-expanded=false]:after {
-    content: "\f055";
-    font-weight: 300;
-    font-family: "Font Awesome 5 Pro";
+    font: var(--fa-font-solid);
+    content: "\f107";
 }
 
 .has-accordion-arrow[aria-expanded=true]:after {
-    content: "\f056";
-    font-weight: 300;
-    font-family: "Font Awesome 5 Pro";
+    font: var(--fa-font-solid);
+    content: "\f106";
 }
 
 #collapse-all-widgets-toggle {
@@ -302,7 +300,7 @@
     .icon:before {
         content: "\f056";
         font-weight: 300;
-        font-family: "Font Awesome 5 Pro";
+        font: var(--fa-font-solid);
     }
     span:before {
         content: "Collapse";
@@ -314,7 +312,7 @@
     .icon:before {
         content: "\f055";
         font-weight: 300;
-        font-family: "Font Awesome 5 Pro";
+        font: var(--fa-font-solid);
     }
     span:before {
         content: "Open";

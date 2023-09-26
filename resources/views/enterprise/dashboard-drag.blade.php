@@ -126,14 +126,16 @@
 
 @section('after_scripts')
 
-    @if(array_key_exists('chart-clinical-trials-locations', $widgets[2]))
-    <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
-    <script src="https://cdn.amcharts.com/lib/4/maps.js"></script>
-    <script src="https://cdn.amcharts.com/lib/4/geodata/worldLow.js"></script>
-    <script src="https://cdn.amcharts.com/lib/4/geodata/data/countries2.js"></script>
-    <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
-    <script src="https://cdn.amcharts.com/lib/4/plugins/overlapBuster.js"></script>
-    @endif
+    @isset($widgets)
+        @if(array_key_exists('chart-clinical-trials-locations', $widgets[2]))
+            <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+            <script src="https://cdn.amcharts.com/lib/4/maps.js"></script>
+            <script src="https://cdn.amcharts.com/lib/4/geodata/worldLow.js"></script>
+            <script src="https://cdn.amcharts.com/lib/4/geodata/data/countries2.js"></script>
+            <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+            <script src="https://cdn.amcharts.com/lib/4/plugins/overlapBuster.js"></script>
+        @endif
+    @endisset
 
     <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js" integrity="sha256-lSjKY0/srUM9BE3dPm+c4fBo1dky2v27Gdjm2uoZaL0=" crossorigin="anonymous"></script>
@@ -273,7 +275,7 @@
                     let filterType = $(this).data('filter');
                     let filterValues = [];
 
-                    $(this).find('.custom-control-input').each(function() {
+                    $(this).find('.form-check-input').each(function() {
                         if ($(this).prop('checked') === true) {
                             filterValues.push($(this).data('name'));
                         }
@@ -288,12 +290,12 @@
             }
 
             // On Checkbox
-            $(document).on("change", ".custom-checkbox" , function() {
+            $(document).on("change", ".form-check" , function() {
                 buildQueryUrl($(this));
             });
 
             // On Select
-            $(document).on("change", ".custom-select", function() {
+            $(document).on("change", ".form-select", function() {
                 buildQueryUrl($(this));
             });
 
