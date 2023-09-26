@@ -77,8 +77,8 @@
                         </div>
                     @else
                         <div class="mt-3">
-                            <div class="mb-1">No matches for your name typed above.</div>
-                            <button wire:click="createNewPerson" class="btn btn-accent">Let's create a new person</button>
+                            <div class="mb-3 text-danger">No matches for your name typed above.</div>
+                            <button wire:click="createNewPerson" class="btn btn-primary">Let's create a new person</button>
                         </div>
                     @endif
                 @endif

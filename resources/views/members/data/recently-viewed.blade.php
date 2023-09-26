@@ -51,6 +51,50 @@
             </li>
         @endif
     @else
-        You haven't viewed anything yet.
+        <div class="fs-6 mb-3">You haven't viewed anything yet. Might we suggest a few things?</div>
+        <div>
+            <div class="neuly-help-logo-item mb-3">
+                <button class="btn" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapse-research" aria-expanded="true"
+                        aria-controls="collapse-research">
+                    @include('navbars.neuly-research-logo')
+                </button>
+                <div class="collapse show" id="collapse-research">
+                    <div>
+                        <ul class="neuly-help-nav-list">
+                            @include('navbars._research')
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="neuly-help-logo-item mb-3">
+                <button class="btn" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapse-edu" aria-expanded="false"
+                        aria-controls="collapse-edu">
+                    @include('navbars.neuly-edu-logo')
+                </button>
+                <div class="collapse" id="collapse-edu">
+                    <div>
+                        <ul class="neuly-help-nav-list">
+                            @include('navbars._edu')
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="neuly-help-logo-item mb-3">
+                <button class="btn" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapse-care" aria-expanded="false"
+                        aria-controls="collapse-care">
+                    @include('navbars.neuly-care-logo')
+                </button>
+                <div class="collapse" id="collapse-care">
+                    <div>
+                        <ul class="neuly-help-nav-list">
+                            @include('navbars._care')
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     @endif
 </ul>

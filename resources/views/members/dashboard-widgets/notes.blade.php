@@ -5,6 +5,6 @@
     </a>
 </h1>
 <div>
-    <p class="lead mb-1">Recent Notes</p>
+    <p class="fs-5 fw-bold mb-1">Recent Notes</p>
     @include('members.data.notes', ['shadow' => false, 'show_more' => true])
 </div>

@@ -27,7 +27,7 @@ class DashboardController extends Controller
     // Member Dashboard Page
     public function index(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        $user = User::with(['teams', 'ownedTeam'])->findOrFail(Auth::id());
+        $user = User::with(['teams', 'ownedTeam', 'relatedPerson'])->findOrFail(Auth::id());
         $widgetsOrder = $this->defaultWidgetsOrder;
 
         if ($user->dashboard_widgets_order !== null) {

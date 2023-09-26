@@ -1,5 +1,9 @@
 @extends('layouts.admin')
 
+@section('head')
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+@endsection
+
 @section('content')
 
     <div class="container my-5">
@@ -8,8 +12,10 @@
         @include('discover.includes.status-messages')
 
         <div class="alert js-ajax-response position-relative" style="display: none;">
-            <span class="message"></span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <div class="d-flex justify-content-between">
+                <span class="message"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
         </div>
 
         <table class="table">
@@ -30,14 +36,17 @@
                             {{ $navigationTile->domain }}
                         </td>
                         <td style="min-width: 270px;">
-                            <a href="{{ route('adminx.nav-tiles.edit', $navigationTile->id) }}" class="btn btn-sm" data-bs-toggle="tooltip" data-placement="top" title="Edit">
-                                <i class="fad fa-edit text-info"></i>
+                            <a href="{{ route('adminx.nav-tiles.edit', $navigationTile->id) }}" class="btn btn-sm btn-outline-primary rounded-0 me-3">
+                                <i class="fa fa-strong fa-edit me-1"></i>
+                                <span>Edit</span>
                             </a>
-                            <button class="btn btn-sm delete-nav-tile" data-delete="{{ $navigationTile->id }}" data-action="{{ route('adminx.nav-tiles.delete', $navigationTile->id) }}" data-bs-toggle="tooltip" data-placement="top" title="Delete">
-                                <i class="fad fa-trash-alt text-danger"></i>
+                            <button class="btn btn-sm btn-outline-danger rounded-0 delete-nav-tile me-3" data-delete="{{ $navigationTile->id }}" data-action="{{ route('adminx.nav-tiles.delete', $navigationTile->id) }}">
+                                <i class="fa fa-strong fa-trash-alt me-1"></i>
+                                <span>Delete</span>
                             </button>
-                            <a href="{{ route('adminx.nav-tiles.clone', $navigationTile->id) }}" class="btn btn-sm" data-bs-toggle="tooltip" data-placement="top" title="Clone">
-                                <i class="fad fa-copy text-secondarydark"></i>
+                            <a href="{{ route('adminx.nav-tiles.clone', $navigationTile->id) }}" class="btn btn-sm btn-outline-success rounded-0 me-3">
+                                <i class="fa fa-strong fa-copy me-1"></i>
+                                <span>Clone</span>
                             </a>
                             @include('admin.nav-tiles._get-code-btn')
                         </td>

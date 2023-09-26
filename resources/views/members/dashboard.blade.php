@@ -28,52 +28,32 @@
 
     <div class="container-fluid p-3">
         @include('members.includes.status-messages')
-
-        <div class="row dashboard-sortable-grid">
-            @foreach($widgetsOrder as $widget)
-                @if($widget == 'following')
-                    <div class="col-12 col-md-6 col-xl-4 mb-5" data-name="following">
-                        <span class="drag-handle pull-right text-secondary"><i class="fa fa-arrows-alt"></i></span>
-                        @include('members.dashboard-widgets.following')
-                    </div>
-                @elseif($widget == 'notes')
-                    <div class="col-12 col-md-6 col-xl-4 mb-5" data-name="notes">
-                        <span class="drag-handle pull-right text-secondary"><i class="fa fa-arrows-alt"></i></span>
-                        @include('members.dashboard-widgets.notes')
-                    </div>
-                @elseif($widget == 'recent')
-                    <div class="col-12 col-md-6 col-xl-4 mb-5" data-name="recent">
-                        <span class="drag-handle pull-right text-secondary"><i class="fa fa-arrows-alt"></i></span>
-                        @include('members.dashboard-widgets.recent')
-                    </div>
-                @elseif($widget == 'team')
-                    <div class="col-12 col-md-6 col-xl-4 mb-5" data-name="team">
-                        <span class="drag-handle pull-right text-secondary"><i class="fa fa-arrows-alt"></i></span>
-                        @include('members.dashboard-widgets.team')
-                    </div>
-                @endif
-            @endforeach
+        <div class="row">
+            <div class="col-12 col-md-6 col-xl-4 px-3">
+                <div class="mb-5">
+                    @include('members.dashboard-widgets.person-listing')
+                </div>
+                <div class="mb-5">
+                    @include('members.dashboard-widgets.notes')
+                </div>
+                <div class="mb-5">
+                    @include('members.dashboard-widgets.team')
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-xl-4 px-3">
+                <div class="mb-5">
+                    @include('members.dashboard-widgets.clinical-trial-participant')
+                </div>
+                <div class="mb-5">
+                    @include('members.dashboard-widgets.following')
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-xl-4 px-3">
+                <div class="mb-5">
+                    @include('members.dashboard-widgets.recent')
+                </div>
+            </div>
         </div>
     </div>
 
-@endsection
-
-@section('after_scripts')
-<script src="{{ asset('js/formValidation.js') }}"></script>
-<script>
-    $( function() {
-        $('.dashboard-sortable-grid').sortable({
-            handle: '.drag-handle',
-            update: function( event, ui ) {
-                let widgetsOrder = [];
-
-                $(this).children().each(function (){
-                    widgetsOrder.push($(this).data('name'));
-                });
-
-                $.post('{{ route('member.dashboard.updateWidgetsOrder') }}', { order: widgetsOrder});
-            }
-        });
-    } );
-</script>
 @endsection

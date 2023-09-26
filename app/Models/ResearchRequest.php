@@ -46,7 +46,7 @@ class ResearchRequest extends Model implements CrmActionsContract
                 '*Phone:* ' . $researchRequest->phone . "\n" .
                 '*Message:*' . "\n" .
                 '```' . $researchRequest->message . '```' . "\n" .
-                '<' . route('adminx.edu.students') .'|View Request>'
+                '<' . route('adminx.research.research-requests') .'|View Request>'
             );
         });
     }

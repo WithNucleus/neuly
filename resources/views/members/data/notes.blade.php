@@ -51,6 +51,5 @@
         @endif
     </ul>
 @else
-    <p>You don't have any notes yet. Do you want to <a href="{{ route('member.notes.create') }}"> add one</a>?</p>
-    {{-- <p><a href="{{ route('member.notes.create') }}" class="btn btn-primary"><i class="fad fa-pencil"></i> Add Note</a></p> --}}
+    <p class="fs-6">You don't have any notes yet. Do you want to <a href="{{ route('member.notes.create') }}"> add one</a>?</p>
 @endif
