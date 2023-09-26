@@ -7,7 +7,7 @@
 {{--    </div>--}}
 {{--</div>--}}
 
-<div class="home-clinical-research bg-primary text-white">
+<div class="home-add-listing bg-primary text-white">
     <div class="container text-center">
         <h2 class="large-title">Add your Listing to Neuly</h2>
         <p class="fs-5 mb-5">Neuly is constantly being updated, and we'd love to add your data!</p>

@@ -221,7 +221,8 @@ class RecruitingTrials extends Component
 
     public function getRowsQueryProperty()
     {
-        $query = Clinicaltrial::with(['focus', 'companies', 'people', 'locations', 'conditions', 'interventions', 'phases'])
+        $query = Clinicaltrial::recruiting()
+            ->with(['focus', 'companies', 'people', 'locations', 'conditions', 'interventions', 'phases'])
             ->withCount(['focus', 'companies', 'people'])
             ->when($this->search, function($query, $search) {
                 return $query

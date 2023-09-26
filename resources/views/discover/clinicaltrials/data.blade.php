@@ -31,13 +31,48 @@ $dates = [
 ];
 ?>
 
-@if($clinicalTrial->focus->count() > 0)
-    <div class="d-flex flex-wrap align-items-center">
-        @foreach ($clinicalTrial->focus as $item)
-            <a href="{{ route('discover.focus.show', $item->slug) }}" class="btn btn-secondary rounded-0 my-2 me-3 fs-6 py-1">{{ $item->name }}</a>
-        @endforeach
-    </div>
-@endif
+<div class="d-md-flex justify-content-between">
+    @if($clinicalTrial->focus->count() > 0)
+        <div class="d-flex flex-wrap align-items-center">
+            @foreach ($clinicalTrial->focus as $item)
+                <a href="{{ route('discover.focus.show', $item->slug) }}" class="btn btn-secondary rounded-0 my-2 me-3 fs-6 py-1">{{ $item->name }}</a>
+            @endforeach
+        </div>
+    @endif
+    @if($clinicalTrial->is_recruiting)
+        <div class="max-width-400 flex-grow-1 flex-shrink-0 fs-6 mt-2 mt-md-0 recruiting-clinical-trial-optin-text">
+            <button type="button" class="btn p-0 rounded-0" data-bs-toggle="modal" data-bs-target="#clinical-trial-participant-modal">
+                <div class="d-flex">
+                <div class="me-2">
+                    <i class="fa-solid fa-diamond-exclamation icon"></i>
+                </div>
+                    <div>
+                        <strong class="text-uppercase d-block">This clinical trial is recruiting</strong>
+                        <span>Interested in participating in this trial?</span>
+                    </div>
+                </div>
+            </button>
+        </div>
+        <div class="modal fade" id="clinical-trial-participant-modal" tabindex="-1" aria-labelledby="clinical-trial-participant-modal-label" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="px-4 pb-5">
+                            <div class="max-width-300 mx-auto mb-4">
+                                @include('navbars.neuly-care-logo')
+                            </div>
+                            <div class="fs-6 mb-4">Interested in participating in <span class="text-primary">{{ $clinicalTrial->name }}</span>? Fill out the form below</div>
+                            <livewire:public.opt-ins.care-requests.clinical-trial-participant :clinicalTrial="$clinicalTrial" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+</div>
 
 @if($clinicalTrial->brief_summary != '' AND $clinicalTrial->brief_summary != 'Not applicable')
     <div class="mt-4 mb-5">

@@ -76,6 +76,8 @@ class Clinicaltrial extends Model implements EntityContract
     const HEALTHY_YES = 'Yes';
     const HEALTHY_NO = 'No';
 
+    const STATUS_RECRUITING = 'Recruiting';
+
     const STATUSES = [
         'ACTIVE_NOT_RECRUITING' => 'Active, not recruiting',
         'COMPLETED' => 'Completed',
@@ -330,11 +332,11 @@ class Clinicaltrial extends Model implements EntityContract
 
     public function scopeActive($query)
     {
-        return $query->whereIn('status', ['Recruiting', 'Active, not recruiting', 'Available']);
+        return $query->whereIn('status', [self::STATUS_RECRUITING, 'Active, not recruiting', 'Available']);
     }
 
     public function scopeRecruiting($query) {
-        return $query->where('status', 'Recruiting');
+        return $query->where('status', self::STATUS_RECRUITING);
     }
 
     public function scopeStartYear(Builder $query, $years): Builder
@@ -409,6 +411,15 @@ class Clinicaltrial extends Model implements EntityContract
         }
 
         return NULL;
+    }
+
+    public function getIsRecruitingAttribute(): bool
+    {
+        if ($this->status === self::STATUS_RECRUITING) {
+            return true;
+        }
+
+        return false;
     }
 
     /*

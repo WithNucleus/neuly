@@ -519,7 +519,7 @@ $img-heights: 30 80 120;
 }
 
 // Max Widths
-$max-widths: 60 80 100 150 200 250 300 400 500 600 740 780 800 840 1000;
+$max-widths: 60 80 100 150 200 250 300 360 400 500 600 740 780 800 840 1000;
 
 @each $size in $max-widths {
     .max-width-#{$size} {
@@ -584,7 +584,9 @@ svg#neulyResearchLogo {
 // Section Spacing
 .home-hero,
 .home-clinical-research,
-.home-neuly-care {
+.home-neuly-care,
+.home-add-listing,
+.home-request-research {
     .container {
         padding-top: 3rem;
         padding-bottom: 3rem;
@@ -605,7 +607,9 @@ svg#neulyResearchLogo {
 
 .home-hero,
 .home-clinical-research,
-.home-neuly-care {
+.home-neuly-care,
+.home-add-listing,
+.home-request-research {
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
@@ -642,7 +646,18 @@ body.home {
 }
 
 .home-neuly-care {
-    background-image: url('../images/home/bg-neuly-care.jpg');
+    background-image: url('../images/home/bg-hero-neurons-alt.jpg');
+}
+
+.home-add-listing {
+    background-image: url('../images/home/bg-hero-molecular-structure.jpg');
+}
+
+.home-request-research {
+    background-color: #000;
+    background-size: contain;
+    background-position: center bottom;
+    background-image: url('../images/home/bg-hero-brain.jpg');
 }
 
 .home-news,
@@ -734,6 +749,11 @@ body.home {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        transition: transform .2s ease-in-out;
+    }
+
+    .research-item:hover {
+        transform: translateY(2px);
     }
 
     @media(min-width: 1024px) {
@@ -757,9 +777,13 @@ body.home {
         font-size: 4.8rem;
     }
 
-    .home-clinical-research .large-title,
-    .home-neuly-care .large-title {
-        font-size: 4.5rem;
+    .home-clinical-research,
+    .home-neuly-care,
+    .home-add-listing,
+    .home-request-research {
+        .large-title {
+            font-size: 4.5rem;
+        }
     }
 }
 
@@ -769,6 +793,28 @@ body.home {
         height: auto;
         margin-left: auto;
         margin-right: auto;
+    }
+}
+
+[data-bs-theme=dark] {
+    .home-pubco-index {
+        .btn-dark {
+            background-color: $gray-100;
+            color: $gray-900;
+        }
+
+        .btn-dark:hover {
+            background-color: $neulyGreen;
+            color: $gray-100;
+        }
+    }
+}
+
+.home-page-neuly-care-cta {
+    svg#neulyCareLogo {
+        .secondary-color {
+            fill: #fff;
+        }
     }
 }
 
@@ -920,6 +966,32 @@ footer {
             padding-right: 2rem;
             padding-left: .5rem;
             margin-right: 2rem;
+        }
+    }
+}
+
+.recruiting-clinical-trial-optin-text {
+    .icon {
+        color: var(--bs-warning-bright);
+        margin-right: .25rem;
+        font-size: 1.5rem;
+        margin-top: .35rem;
+    }
+
+    strong {
+        color: $neulyGreen;
+        font-size: 1.28rem;
+    }
+
+    span {
+        opacity: .8;
+    }
+}
+
+[data-bs-theme=dark] {
+    .recruiting-clinical-trial-optin-text {
+        strong {
+            color: $neulyGreenBright;
         }
     }
 }

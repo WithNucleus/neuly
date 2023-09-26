@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use JetBrains\PhpStorm\ArrayShape;
 use Spatie\SlackAlerts\Facades\SlackAlert;
 
-class EduRequest extends Model implements CrmActionsContract
+class CareRequest extends Model implements CrmActionsContract
 {
     use HasFactory;
 
@@ -18,14 +18,10 @@ class EduRequest extends Model implements CrmActionsContract
         'data' => 'array'
     ];
 
-    const TYPE_COURSE_CONCIERGE = 'Course - Concierge';
-    const TYPE_COURSE_NO_MATCHES = 'Course - No Matches';
-    const TYPE_COURSE_REQUEST = 'Course - Request';
+    const TYPE_CLINICAL_TRIAL_PARTICIPANT = 'Clinical Trial Participant';
 
     const TYPES = [
-        self::TYPE_COURSE_CONCIERGE,
-        self::TYPE_COURSE_NO_MATCHES,
-        self::TYPE_COURSE_REQUEST
+        self::TYPE_CLINICAL_TRIAL_PARTICIPANT
     ];
 
     const STATUS_OPEN = 'Open';
@@ -42,17 +38,38 @@ class EduRequest extends Model implements CrmActionsContract
 
     protected static function booted()
     {
-        static::created(function ($eduRequest) {
-            SlackAlert::to('default')->message('*NeulyEDU Request*' . "\n" .
-                '*Type:* ' . $eduRequest->type . "\n" .
-                '*Name:* ' . $eduRequest->name . "\n" .
-                '*Email:* ' . $eduRequest->email . "\n" .
-                '*Phone:* ' . $eduRequest->phone . "\n" .
+        static::created(function ($careRequest) {
+            SlackAlert::to('default')->message('*NeulyCARE Request*' . "\n" .
+                '*Type:* ' . $careRequest->type . "\n" .
+                '*Name:* ' . $careRequest->name . "\n" .
+                '*Email:* ' . $careRequest->email . "\n" .
+                '*Phone:* ' . $careRequest->phone . "\n" .
                 '*Message:*' . "\n" .
-                '```' . $eduRequest->message . '```' . "\n" .
-                '<' . route('adminx.edu.students') .'|View Request>'
+                "```". $careRequest->message . '```' . "\n" .
+                '<' . route('adminx.care.care-requests') .'|View Request>'
             );
         });
+    }
+
+    /* Accessors */
+    public function getStatusColorAttribute(): string
+    {
+        return match($this->status) {
+            self::STATUS_OPEN => 'bg-danger',
+            self::STATUS_COMPLETED => 'bg-body-secondary text-body-emphasis opacity-50',
+            self::STATUS_AWAITING_RESPONSE => 'bg-warning text-body-emphasis',
+            self::STATUS_IN_PROGRESS => 'bg-warning-bright text-body-emphasis',
+            default => 'text-warning'
+        };
+    }
+
+    public function getEntityLinkAttribute(): ?string
+    {
+        if ($this->entity_type === Research::class) {
+            return route('discover.research.show', $this->entity->slug);
+        }
+
+        return null;
     }
 
     /* Relationships */
@@ -71,29 +88,8 @@ class EduRequest extends Model implements CrmActionsContract
         return $this->morphTo();
     }
 
-    /* Accessors */
-    public function getStatusColorAttribute(): string
+    #[ArrayShape([self::STATUS_COMPLETED => "string[]", self::STATUS_AWAITING_RESPONSE => "string[]", self::STATUS_IN_PROGRESS => "string[]", self::STATUS_OPEN => "string[]"])] public static function crmActionItems(): array
     {
-        return match($this->status) {
-            self::STATUS_OPEN => 'bg-danger',
-            self::STATUS_COMPLETED => 'bg-body-secondary text-body-emphasis opacity-50',
-            self::STATUS_AWAITING_RESPONSE => 'bg-warning text-body-emphasis',
-            self::STATUS_IN_PROGRESS => 'bg-warning-bright text-body-emphasis',
-            default => 'text-warning'
-        };
-    }
-
-    public function getEntityLinkAttribute(): ?string
-    {
-        if ($this->entity_type === Course::class) {
-            return route('discover.courses.show', $this->entity->slug);
-        }
-
-        return null;
-    }
-
-    /* Functions */
-    #[ArrayShape([self::STATUS_COMPLETED => "string[]", self::STATUS_AWAITING_RESPONSE => "string[]", self::STATUS_IN_PROGRESS => "string[]", self::STATUS_OPEN => "string[]"])] public static function crmActionItems(): array {
         return [
             self::STATUS_COMPLETED => [
                 'label' => 'Mark completed',
