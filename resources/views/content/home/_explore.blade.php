@@ -17,22 +17,22 @@
             </div>
         </div>
         <div class="mt-5 pt-5">
-            <div class="max-width-400 mx-auto mb-4">
+            <div class="max-width-500 mx-auto mb-4">
                 @include('navbars.neuly-research-logo')
             </div>
-            <h2 class="h1 text-body-emphasis">Explore the Latest Psychedelic Research</h2>
+            <h2 class="h1 purple-on-dark">Explore the Latest Psychedelic Research</h2>
             <div class="d-flex flex-wrap justify-content-center">
                 @foreach($research as $item)
-                    <div class="max-width-300 bg-body-secondary p-3 rounded text-start m-3">
-                        <a href="{{ route('discover.research.show', $item->slug) }}" class="text-decoration-none research-item h-100">
+                    <div class="max-width-300 text-start m-3">
+                        <a href="{{ route('discover.research.show', $item->slug) }}" class="text-decoration-none research-item p-3 h-100 bg-body-tertiary rounded">
                             <div>
-                                <p class="lead text-body-emphasis mb-2">{{ $item->name }}</p>
-                                <p class="mb-2 text-body-secondary">{{ $item->abstract }}</p>
+                                <p class="h6 text-success mb-2">{{ $item->name }}</p>
+                                <p class="mb-2 text-body">{{ $item->abstract }}</p>
                             </div>
                             <div>
-                                <div>
+                                <div class="fs-6 text-uppercase">
                                     @foreach($item->focus as $focus)
-                                        <span class="badge bg-body-tertiary text-body me-1">{{ $focus->name }}</span>
+                                        <span class="badge bg-body-secondary text-primary me-1">{{ $focus->name }}</span>
                                     @endforeach
                                 </div>
                             </div>

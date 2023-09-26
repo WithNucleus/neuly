@@ -19,11 +19,16 @@ Route::middleware(['auth', 'can:admin login'])->prefix('/adminx')->name('adminx.
         Route::get('/', [App\Http\Controllers\Adminx\Entities\ClinicalTrialsController::class, 'index'])->name('index');
     });
 
-    Route::prefix('/care')->name('care.')->group(function() {
+    Route::prefix('/care')->name('care.')->middleware('permission:edit companies')->group(function() {
+        Route::get('/requests', [App\Http\Controllers\Adminx\Care\CareController::class, 'careRequests'])->name('care-requests');
         Route::get('/booking-requests', [App\Http\Controllers\Adminx\Care\BookableListingController::class, 'bookableListingRequests'])->name('listing-requests');
     });
 
-    Route::prefix('/edu')->name('edu.')->group(function() {
+    Route::prefix('/research')->name('research.')->middleware('permission:edit companies')->group(function() {
+        Route::get('/requests', [App\Http\Controllers\Adminx\Research\ResearchController::class, 'researchRequests'])->name('research-requests');
+    });
+
+    Route::prefix('/edu')->name('edu.')->middleware('permission:edit companies')->group(function() {
         Route::get('/students', [App\Http\Controllers\Adminx\Edu\EduController::class, 'students'])->name('students');
     });
 

@@ -1,6 +1,29 @@
-<div class="home-clinical-research bg-primary text-white">
+<div class="home-request-research">
     <div class="container text-center">
-        <h2 class="large-title mb-5 max-width-1000 mx-auto">Need Psychedelics Research Done for Your Organization?</h2>
-        <a href="MODAL" class="btn btn-accent btn-lg btn-cta">Request a Research Report</a>
+        <h2 class="large-title mb-5 max-width-1000 mx-auto text-white">Need Psychedelics Research Done for Your Organization?</h2>
+        <button data-bs-toggle="modal" data-bs-target="#research-request-modal" class="btn btn-accent btn-lg btn-cta">Request a Research Report</button>
+    </div>
+    <div class="modal fade" id="research-request-modal" tabindex="-1" aria-labelledby="research-request-modal-label" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+{{--                    <div class="modal-title h4" id="research-request-modal-label">Request a Research Report</div>--}}
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="pb-5">
+                        <div class="max-width-300 mx-auto mb-4">
+                            @include('navbars.neuly-research-logo')
+                        </div>
+                        <div class="h2 text-uppercase fw-bold mb-2 text-center text-body-emphasis">
+                            Request a Research Report
+                        </div>
+                        <div class="max-width-500 mx-auto">
+                            <livewire:public.opt-ins.research-requests.research-report />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

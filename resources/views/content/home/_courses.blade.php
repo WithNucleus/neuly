@@ -10,17 +10,17 @@
                 <div class="col-12 col-md-6 col-lg-3 mb-4">
                     <a href="{{ route('discover.courses.show', $course->slug) }}" class="card-hover-drop">
                         <div class="card h-100 border-0 rounded-3">
-                            <div class="@isset($course->companies()->first()->entityImageUrl) bg-body-tertiary @else bg-primary @endif p-3 p-xl-4 rounded-top">
+                            <div class="@isset($course->companies()->first()->entityImageUrl) bg-white @else bg-primary @endif p-3 p-xl-4 rounded-top">
                                 <img src="{{ $course->companies()->first()->entityImageUrl ?? asset('images/image-placeholder-edu-transparent.png') }}" alt="{{ $course->name }}">
                             </div>
                             <div class="card-body d-flex flex-column justify-content-between">
-                                <div>
-                                    <p class="lead text-body-emphasis mb-2">{{ $course->name }}</p>
+                                <div class="text-start">
+                                    <p class="h6 fw-bold text-success mb-3">{{ $course->name }}</p>
                                     <p class="mb-0">{{ $course->very_short_summary }}</p>
                                 </div>
-                                <div>
-                                    @foreach ($course->focus as $item)
-                                        <span class="badge bg-body-tertiary text-body mt-2 mx-1">{{ $item->name }}</span>
+                                <div class="text-start fs-6 text-uppercase">
+                                    @foreach($course->focus as $focus)
+                                        <span class="badge bg-body-secondary text-primary me-1 mt-3">{{ $focus->name }}</span>
                                     @endforeach
                                 </div>
                             </div>

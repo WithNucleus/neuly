@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use JetBrains\PhpStorm\ArrayShape;
 use Spatie\SlackAlerts\Facades\SlackAlert;
 
-class EduRequest extends Model implements CrmActionsContract
+class ResearchRequest extends Model implements CrmActionsContract
 {
     use HasFactory;
 
@@ -18,14 +18,10 @@ class EduRequest extends Model implements CrmActionsContract
         'data' => 'array'
     ];
 
-    const TYPE_COURSE_CONCIERGE = 'Course - Concierge';
-    const TYPE_COURSE_NO_MATCHES = 'Course - No Matches';
-    const TYPE_COURSE_REQUEST = 'Course - Request';
+    const TYPE_REPORT_REQUEST = 'Research Report';
 
     const TYPES = [
-        self::TYPE_COURSE_CONCIERGE,
-        self::TYPE_COURSE_NO_MATCHES,
-        self::TYPE_COURSE_REQUEST
+        self::TYPE_REPORT_REQUEST
     ];
 
     const STATUS_OPEN = 'Open';
@@ -42,14 +38,14 @@ class EduRequest extends Model implements CrmActionsContract
 
     protected static function booted()
     {
-        static::created(function ($eduRequest) {
-            SlackAlert::to('default')->message('*NeulyEDU Request*' . "\n" .
-                '*Type:* ' . $eduRequest->type . "\n" .
-                '*Name:* ' . $eduRequest->name . "\n" .
-                '*Email:* ' . $eduRequest->email . "\n" .
-                '*Phone:* ' . $eduRequest->phone . "\n" .
+        static::created(function ($researchRequest) {
+            SlackAlert::to('default')->message('*NeulyRESEARCH Request*' . "\n" .
+                '*Type:* ' . $researchRequest->type . "\n" .
+                '*Name:* ' . $researchRequest->name . "\n" .
+                '*Email:* ' . $researchRequest->email . "\n" .
+                '*Phone:* ' . $researchRequest->phone . "\n" .
                 '*Message:*' . "\n" .
-                '```' . $eduRequest->message . '```' . "\n" .
+                '```' . $researchRequest->message . '```' . "\n" .
                 '<' . route('adminx.edu.students') .'|View Request>'
             );
         });
@@ -72,6 +68,7 @@ class EduRequest extends Model implements CrmActionsContract
     }
 
     /* Accessors */
+
     public function getStatusColorAttribute(): string
     {
         return match($this->status) {
@@ -85,15 +82,15 @@ class EduRequest extends Model implements CrmActionsContract
 
     public function getEntityLinkAttribute(): ?string
     {
-        if ($this->entity_type === Course::class) {
-            return route('discover.courses.show', $this->entity->slug);
+        if ($this->entity_type === Research::class) {
+            return route('discover.research.show', $this->entity->slug);
         }
 
         return null;
     }
 
-    /* Functions */
-    #[ArrayShape([self::STATUS_COMPLETED => "string[]", self::STATUS_AWAITING_RESPONSE => "string[]", self::STATUS_IN_PROGRESS => "string[]", self::STATUS_OPEN => "string[]"])] public static function crmActionItems(): array {
+    #[ArrayShape([self::STATUS_COMPLETED => "string[]", self::STATUS_AWAITING_RESPONSE => "string[]", self::STATUS_IN_PROGRESS => "string[]", self::STATUS_OPEN => "string[]"])] public static function crmActionItems(): array
+    {
         return [
             self::STATUS_COMPLETED => [
                 'label' => 'Mark completed',
