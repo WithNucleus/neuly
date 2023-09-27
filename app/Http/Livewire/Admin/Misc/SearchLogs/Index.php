@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Http\Livewire\Admin\Edu;
+namespace App\Http\Livewire\Admin\Misc\SearchLogs;
 
 use App\Http\Livewire\Traits\WithBulkActions;
 use App\Http\Livewire\Traits\WithCachedRows;
 use App\Http\Livewire\Traits\WithPerPagePagination;
 use App\Http\Livewire\Traits\WithSorting;
-use App\Models\EduRequest;
-use App\User;
+use App\Models\SearchLog;
 use Livewire\Component;
 
-class StudentsList extends Component
+class Index extends Component
 {
     use WithPerPagePagination, WithBulkActions, WithCachedRows, WithSorting;
 
@@ -20,42 +19,22 @@ class StudentsList extends Component
     public ?string $search = null;
     public array $filters = [
         'type' => [],
-        'status' => []
+        'status' => [],
+        'has-keyword' => null
     ];
 
-    public $selectedStudent;
-    public ?string $assignedUser = NULL;
-
-    public array $statusActionOptions = [];
+    public $selectedRecord;
 
     public function mount() {
-        $this->statusActionOptions = EduRequest::crmActionItems();
+        $this->perPage = 10;
+        $this->sorts = [
+            'created_at' => 'desc'
+        ];
     }
 
-    public function selectStudent($id) {
-        $this->selectedStudent = EduRequest::findOrFail($id);
-        $this->assignedUser = $this->selectedStudent->assignee_id;
+    public function selectRecord($id) {
+        $this->selectedRecord = SearchLog::findOrFail($id);
         $this->dispatchBrowserEvent('show-dynamic-modal');
-    }
-
-    public function assignStudent() {
-
-        if($this->assignedUser) {
-            $this->selectedStudent->assignee_id = $this->assignedUser;
-        } else {
-            $this->selectedStudent->assignee_id = NULL;
-        }
-
-        $this->selectedStudent->save();
-        $this->selectedStudent->refresh();
-        $this->dispatchBrowserEvent('hide-dynamic-modal');
-    }
-
-    public function changeStatus($status) {
-        $this->selectedStudent->status = $status;
-        $this->selectedStudent->save();
-        $this->selectedStudent->refresh();
-        $this->dispatchBrowserEvent('hide-dynamic-modal');
     }
 
     public function updatingSearch() {
@@ -74,7 +53,6 @@ class StudentsList extends Component
     public function clearFilters() {
         $this->reset('search');
         $this->reset('filters');
-        $this->reset('sorts');
         $this->resetPage();
     }
 
@@ -103,26 +81,25 @@ class StudentsList extends Component
 
     public function getRowsQueryProperty()
     {
-        $query = EduRequest::with([
-                'entity',
+        $query = SearchLog::with([
                 'user',
+                'location',
+                'relatable'
             ])
             ->when($this->search, function($query, $search) {
                 return $query
-                    ->where('name', 'like', '%' . $search . '%')
-                    ->where('email', 'like', '%' . $search . '%')
+                    ->where('term', 'like', '%' . $search . '%')
+                    ->orWhere('type', 'like', '%' . $search . '%')
+                    ->orWhere('ip', 'like', '%' . $search . '%')
                     ->orwhereHas('user', function($query) use ($search) {
-                        $query->where('name', 'like', '%' . $search . '%');
-                    })
-                    ->orwhereHas('entity', function($query) use ($search) {
                         $query->where('name', 'like', '%' . $search . '%');
                     });
             })
             ->when($this->filters['type'], function($query, $valueArray) {
                 return $query->whereIn('type', $valueArray);
             })
-            ->when($this->filters['status'], function($query, $valueArray) {
-                return $query->whereIn('status', $valueArray);
+            ->when($this->filters['has-keyword'], function($query) {
+                return $query->where('term', '!=', 'empty');
             });
 
         return $this->applySorting($query);
@@ -137,13 +114,9 @@ class StudentsList extends Component
 
     public function render()
     {
-        return view('livewire.admin.edu.students-list', [
+        return view('livewire.admin.misc.search-logs.index', [
             'records' => $this->rows,
-            'typeOptions' => EduRequest::TYPES,
-            'statusOptions' => EduRequest::STATUSES,
-            'internalUsers' => User::whereHas('roles', function($query) {
-                    $query->whereIn('name', ['Admin', 'Editor']);
-                })->get()
+            'typeOptions' => SearchLog::pluck('type')->unique()->toArray(),
         ]);
     }
 }

@@ -87,6 +87,12 @@ window.addEventListener('redirect-to-url', event => {
     location.href = event.detail.url;
 });
 
+window.addEventListener('redirect-to-url-delay', event => {
+    setTimeout(function() {
+        location.href = event.detail.url;
+    }, 1500);
+});
+
 // $(document).ready(function() {
 //
 // 	// Confirm Action

@@ -1,13 +1,14 @@
-@extends('layouts.plain')
-
-@section('body-class', 'plain-layout')
+@extends('layouts.app')
 
 @section('content')
 
-@include('navbars.auth')
+@include('navbars.primary')
 
-<div class="container">
-    <div class="max-width-780 mx-auto bg-body-secondary p-4 p-lg-5 text-center ">
+<div class="container py-5">
+    <div class="max-width-780 mx-auto bg-body-secondary p-4 p-lg-5 text-center">
+        <div class="display-1">
+            <i class="fa-sharp fa-solid fa-envelope-circle-check text-accent mb-2"></i>
+        </div>
         <h1 class="h2 text-transform-none mb-3">Verify Your Email Address</h1>
         @if (session('resent'))
             <div class="alert alert-success" role="alert">
@@ -25,11 +26,12 @@
             Sorry for any inconvenience, and thanks for using Neuly!
 
         @else
-            {{ __('Before proceeding, please check your email for a verification link.') }}<br>
-            {{ __('If you did not receive the email') }},
-            <form class="d-inline" method="POST" action="{{ route('verification.resend') }}">
+            <p class="fs-5 px-lg-4 mb-4 mx-auto">We sent an email with a link to verify your address. We know it's annoying, and we're sorry, but spam.</p>
+
+            <p>If you didn't get an email from us, please request a new one.</p>
+            <form method="POST" action="{{ route('verification.resend') }}">
                 @csrf
-                <button type="submit" class="btn btn-link p-0 m-0 align-baseline">{{ __('click here to request another') }}</button>.
+                <button type="submit" class="btn btn-primary">Send Verification Email</button>
             </form>
         @endif
         <p class="mt-4 mb-0"><a href="/">Back to Neuly</a></p>

@@ -17,7 +17,7 @@ $entityId = $entity->getKey();
         <input type="hidden" name="preview_request" value="{{$preview}}"/>
         <button type="submit" class="btn btn-info">Approve &amp; Update This Listing</button>
     @else
-        <button type="submit" class="btn btn-link text-secondary-emphasis fw-bold btn-sm p-0">Update this listing</button>
+        <button type="submit" class="btn btn-link text-secondary-emphasis fw-bold btn-sm p-0 text-uppercase">Update this listing</button>
     @endisset
 </form>
 

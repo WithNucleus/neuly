@@ -74,6 +74,7 @@ class ResearchRequestsList extends Component
     public function clearFilters() {
         $this->reset('search');
         $this->reset('filters');
+        $this->reset('sorts');
         $this->resetPage();
     }
 

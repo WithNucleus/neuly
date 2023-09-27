@@ -1,27 +1,27 @@
 <?php
 
-namespace App\Http\Controllers\Adminx\Auth;
+namespace App\Http\Controllers\Adminx\Users;
 
 use App\Http\Controllers\Controller;
+use App\User;
 use Illuminate\Support\Facades\View;
-use Spatie\Permission\Models\Role;
 
-class RolesAndPermissionsController extends Controller
+class UsersController extends Controller
 {
     public function __construct() {
-        View::share('currentRoute', 'auth');
+        View::share('currentRoute', 'users');
     }
 
     public function index(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        return view('adminx.auth.roles-permissions.index');
+        return view('adminx.auth.users.index');
     }
 
     public function show($id): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        $role = Role::findOrFail($id);
-        return view('adminx.auth.roles-permissions.show', [
-            'role' => $role
+        $user = User::findOrFail($id);
+        return view('adminx.auth.users.show', [
+            'user' => $user
         ]);
     }
 }

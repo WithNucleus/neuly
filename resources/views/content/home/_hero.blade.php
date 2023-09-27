@@ -9,7 +9,7 @@
         @else
             <p class="fs-6 my-4">Gain access to the psychedelic industry’s most robust platform for free.</p>
             <div class="email-optin mx-auto my-4 py-3">
-                <livewire:public.opt-ins.email-opt-in form="{{ \App\Models\OptIn::FORM_HOMEPAGE_HERO }}" redirect="{{ route('register') }}" />
+                <livewire:public.opt-ins.email-signup />
             </div>
             <p class="fs-6 my-4">Join over 3,000 community members</p>
         @endif

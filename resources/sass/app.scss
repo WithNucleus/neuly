@@ -905,7 +905,7 @@ footer {
     border-radius: 0;
     background-color: var(--bs-body-bg);
     color: var(--bs-body-color);
-    border: var(--bs-border-width) solid var(--bs-border-color);
+    border: 0;
 }
 
 [data-bs-theme=dark] {

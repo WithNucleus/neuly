@@ -55,10 +55,18 @@
         <table class="table table-sm small table-hover align-middle">
             <thead class="text-uppercase fs-6 text-nowrap">
                 <tr>
-                    <th>Date</th>
-                    <th>Name</th>
-                    <th>Type</th>
-                    <th>Status</th>
+                    <th>
+                        <x-entities.entity-index-sort-button label="Date" field="created_at" :sorts="$sorts" buttonClasses="fs-6 fw-bold p-0" inactiveClasses="text-body" activeClasses="text-accent" />
+                    </th>
+                    <th>
+                        <x-entities.entity-index-sort-button label="Name" field="name" :sorts="$sorts" buttonClasses="fs-6 fw-bold p-0" inactiveClasses="text-body" activeClasses="text-accent" />
+                    </th>
+                    <th>
+                        <x-entities.entity-index-sort-button label="Type" field="type" :sorts="$sorts" buttonClasses="fs-6 fw-bold p-0" inactiveClasses="text-body" activeClasses="text-accent" />
+                    </th>
+                    <th>
+                        <x-entities.entity-index-sort-button label="Status" field="status" :sorts="$sorts" buttonClasses="fs-6 fw-bold p-0" inactiveClasses="text-body" activeClasses="text-accent" />
+                    </th>
                     <th>CARE Record</th>
                     <th>Assigned</th>
                 </tr>

@@ -67,17 +67,19 @@
                                     <x-sidebar.list-group-item url="" label="Research" />
                                 </x-sidebar.list-group>
                             @endcan
+
                             @can('edit users')
-                                <x-sidebar.list-group groupRoute="auth" label="Users">
+                                <x-sidebar.list-group groupRoute="users" label="Users">
                                     <x-sidebar.list-group-item url="{{ route('adminx.auth.users.index') }}" label="Manage Users" />
                                     <x-sidebar.list-group-item url="{{ route('adminx.auth.roles-permissions.index') }}" label="Roles & Permissions" />
+                                    @can('edit feedback')
+                                        <x-sidebar.list-group-item url="{{ route('adminx.misc.feedback') }}" label="Feedback" />
+                                        <x-sidebar.list-group-item url="{{ route('adminx.misc.search-logs') }}" label="Search Logs" />
+                                    @endcan
                                 </x-sidebar.list-group>
                             @endcan
 
                             <x-sidebar.list-group groupRoute="misc" label="Misc">
-                                @can('edit feedback')
-                                    <x-sidebar.list-group-item url="{{ route('adminx.misc.feedback') }}" label="Feedback" />
-                                @endcan
                                 @can('view logs')
                                     <x-sidebar.list-group-item url="/horizon" label="Horizon" />
                                     <x-sidebar.list-group-item url="/admin/log" label="Logs" />
