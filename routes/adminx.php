@@ -70,16 +70,17 @@ Route::middleware(['auth', 'can:admin login'])->prefix('/adminx')->name('adminx.
     Route::middleware('can:edit users')->prefix('/auth')->name('auth.')->group(function () {
 
         // Users
-        Route::get('/users', [App\Http\Controllers\Adminx\Auth\UsersController::class, 'index'])->name('users.index');
-        Route::get('/users/{id}', [App\Http\Controllers\Adminx\Auth\UsersController::class, 'show'])->name('users.show');
+        Route::get('/users', [App\Http\Controllers\Adminx\Users\UsersController::class, 'index'])->name('users.index');
+        Route::get('/users/{id}', [App\Http\Controllers\Adminx\Users\UsersController::class, 'show'])->name('users.show');
 
         // Roles and Permissions
-        Route::get('/roles-permissions', [App\Http\Controllers\Adminx\Auth\RolesAndPermissionsController::class, 'index'])->name('roles-permissions.index');
-        Route::get('/roles-permissions/{id}', [App\Http\Controllers\Adminx\Auth\RolesAndPermissionsController::class, 'show'])->name('roles-permissions.show');
+        Route::get('/roles-permissions', [App\Http\Controllers\Adminx\Users\RolesAndPermissionsController::class, 'index'])->name('roles-permissions.index');
+        Route::get('/roles-permissions/{id}', [App\Http\Controllers\Adminx\Users\RolesAndPermissionsController::class, 'show'])->name('roles-permissions.show');
     });
 
-    // MISC TOOLS & PAGES - No Group Middleware
-    Route::name('misc.')->group(function() {
-        Route::get('/feedback', [App\Http\Controllers\Adminx\Misc\MiscController::class, 'feedback'])->middleware('can:edit feedback')->name('feedback');
+    // MISC TOOLS & PAGES - TEMP Middleware
+    Route::middleware('can:edit companies')->name('misc.')->group(function() {
+        Route::get('/feedback', [\App\Http\Controllers\Adminx\Users\UserActivityController::class, 'feedback'])->middleware('can:edit feedback')->name('feedback');
+        Route::get('/search-logs', [\App\Http\Controllers\Adminx\Users\UserActivityController::class, 'searchLogs'])->middleware('can:edit feedback')->name('search-logs');
     });
 });
