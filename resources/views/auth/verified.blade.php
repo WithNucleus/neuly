@@ -1,16 +1,21 @@
-@extends('layouts.plain')
-
-@section('body-class', 'plain-layout')
+@extends('layouts.app')
 
 @section('content')
 
-@include('navbars.auth')
+@include('navbars.primary')
 
-<div class="container">
+@section('content')
+
+<div class="container py-5">
     <div class="max-width-780 mx-auto bg-body-secondary p-4 p-lg-5 text-center ">
-        <h1 class="h2 text-transform-none mb-3">Thanks for verifying your email!</h1>
-        <p class="mt-4 text-accent fw-bold">Email "{{ $email }}" verified successfully.</p>
-        <p class="mt-4 mb-0"><a href="/">Back to Neuly</a></p>
+         <div class="display-1">
+            <i class="fa-sharp fa-solid fa-envelope-circle-check text-accent mb-2"></i>
+        </div>
+        <h1 class="h2 text-transform-none">Thanks for verifying your email!</h1>
+        <p class="fs-6 my-4 text-success"><strong>{{ $email }}</strong> verified successfully</p>
+        <div>
+            <a href="{{ route('member.dashboard') }}" class="btn btn-primary btn-lg btn-cta">Neuly Dashboard</a>
+        </div>
     </div>
 </div>
 

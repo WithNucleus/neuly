@@ -44,6 +44,12 @@
                 <div>
                     <a href="{{ route('person.edit', $person->id) }}" class="text-secondary-emphasis">Edit Person</a>
                 </div>
+            @else
+                <div>
+                    @if(!$person->is_verified)
+                        <a href="{{ route('discover.people.requestDeletion', $person->slug) }}" class="text-secondary-emphasis">Request Deletion</a>
+                    @endif
+                </div>
             @endcan
             <div>
                 @include('discover.includes.update-listing-form', ['entity' => $person])
