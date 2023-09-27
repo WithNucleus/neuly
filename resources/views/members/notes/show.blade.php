@@ -40,7 +40,7 @@
 
             @include('members.includes.status-messages')
 
-            <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 pb-2 border-bottom border-tertiary">
+            <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-3 border-bottom">
 
                 <div class="left-side mb-0 font-size-small mr-3">
                     <i class="fad fa-clock"></i> Created {{ \Carbon\Carbon::parse($note->created_at)->format('M d, Y') }}
