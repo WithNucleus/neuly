@@ -46,7 +46,13 @@ class PersonController extends Controller
             ])
             ->firstOrFail();
 
-        $userIsPerson = (Auth::id() === $person->user_id);
+        $userIsPerson = false;
+
+        if ($person->user_id) {
+            if (Auth::id() === $person->user_id) {
+                $userIsPerson = true;
+            }
+        }
 
         $preview = $request->input('preview');
         // Check Visibility

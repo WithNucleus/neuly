@@ -8,6 +8,7 @@ use App\Models\Dashboard;
 use App\Models\EduRequest;
 use App\Models\Feedback;
 use App\Models\FollowList;
+use App\Models\Notification;
 use App\Models\Person;
 use App\Models\RaisedClaim;
 use App\Models\SearchLog;
@@ -136,6 +137,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function searchLogs(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(SearchLog::class);
+    }
+
+    public function notifications(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Notification::class);
     }
 
     /* Attributes */

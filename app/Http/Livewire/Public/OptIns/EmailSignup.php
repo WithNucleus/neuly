@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Public\OptIns;
 
+use App\Models\Role;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -46,10 +47,12 @@ class EmailSignup extends Component
                     'password' => Hash::make($password)
                 ]);
 
+                $user->assignRole(Role::ROLE_SUBSCRIBER);
+
                 $user->sendEmailVerificationNotification();
 
                 if (Auth::attempt(['email' => $this->email, 'password' => $password], true)) {
-                    $this->success = "Success! Your Neuly account has been created. Please check your email for a verification link.";
+                    $this->success = "Welcome to Neuly! Please check your email for a verification link.";
                     $this->reset('error');
 //                    $this->dispatchBrowserEvent('redirect-to-url-delay', ['url' => route('member.dashboard')]);
                 } else {
