@@ -43,20 +43,9 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=Heebo:wght@800&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
-{{--    <link rel="stylesheet" href="{{ asset('assets/fontawesome.css') }}">--}}
     <script src="https://kit.fontawesome.com/88643155ec.js" crossorigin="anonymous"></script>
 
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/favicons/apple-touch-icon.png') }}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/favicons/favicon-32x32.png') }}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/favicons/favicon-16x16.png') }}">
-    <link rel="manifest" href="{{ asset('images/favicons/site.webmanifest') }}">
-    <link rel="mask-icon" href="{{ asset('images/favicons/safari-pinned-tab.svg') }}" color="#5bbad5">
-    <link rel="shortcut icon" href="{{ asset('images/favicons/favicon.ico') }}">
-    <meta name="apple-mobile-web-app-title" content="Neuly">
-    <meta name="application-name" content="Neuly">
-    <meta name="msapplication-TileColor" content="#73fbd3">
-    <meta name="msapplication-config" content="{{ asset('images/favicons/browserconfig.xml') }}">
-    <meta name="theme-color" content="#ffffff">
+    @include('layouts.includes._favicons')
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-171437771-1"></script>
     <script>
