@@ -28,17 +28,45 @@
         </div>
 
         <div class="filter-widget me-md-5 mb-3">
-            <div class="form-check">
-                <input wire:model="filters.has-bookable-listings" class="form-check-input" type="checkbox" id="has-bookable-listings">
-                <label class="form-check-label" for="has-bookable-listings">
-                    <span>Has Bookable Listings</span>
-                </label>
+            <div class="btn-group">
+                <button type="button" class="btn btn-md @if($filters['interests']) btn-accent @else btn-primary @endif btn-primary dropdown-toggle rounded-0" data-bs-toggle="dropdown" aria-expanded="false">
+                    Filter by Interest
+                </button>
+                <ul class="dropdown-menu" style="min-width: 220px">
+                    @foreach ($interestOptions as $option)
+                        <li class="px-3">
+                            <div class="form-check form-check-small form-check-inline">
+                                <input wire:model="filters.interests" class="form-check-input" type="checkbox" value="{{ $option }}"
+                                       id="filter-roles-{{ $option }}" @if(in_array($option, $filters['roles'])) checked @endif>
+                                <label class="form-check-label @if(in_array($option, $filters['roles'])) fw-bold @endif" for="filter-roles-{{ $option }}">
+                                    <span>{{ $option }}</span>
+                                </label>
+                            </div>
+                        </li>
+                    @endforeach
+                </ul>
             </div>
+        </div>
+
+        <div class="me-md-4 mb-3">
+            <x-livewire-filters.checkbox-single wireModel="filters.has-bookable-listings" id="filter-has-bookable-listings" label="Has Bookable Listings" />
+        </div>
+        <div class="me-md-4 mb-3">
+            <x-livewire-filters.checkbox-single wireModel="filters.has-person" id="filter-has-person" label="Has Person" />
+        </div>
+        <div class="me-md-4 mb-3">
+            <x-livewire-filters.checkbox-single wireModel="filters.team-owner" id="filter-team-owner" label="Team Owner" />
+        </div>
+        <div class="me-md-4 mb-3">
+            <x-livewire-filters.checkbox-single wireModel="filters.team-member" id="filter-team-member" label="Team Member" />
         </div>
 
         <div class="filter-widget ms-auto">
             <button wire:click="clearFilters" class="btn btn-sm btn-dark rounded-0">Clear Filters</button>
         </div>
+    </div>
+    <div class="mb-3">
+        Showing <strong>{{ $records->count() }}</strong> of <strong>{{ $records->total() }}</strong> users
     </div>
     <div class="table-responsive">
         <table class="table table-sm small table-hover align-middle">
@@ -50,8 +78,8 @@
                     <th>Roles</th>
                     <th>Directory</th>
                     <th>Social Auth</th>
-                    <th>Teams</th>
-                    <th>Dashboards</th>
+                    <th>Activity</th>
+                    <th>Interests</th>
                     <th>Created</th>
                 </tr>
             </thead>
@@ -148,14 +176,25 @@
                                     </div>
                                 @endforeach
                             </div>
+                            <div>
+                                @foreach($user->dashboards as $dashboard)
+                                    <div>
+                                        <i class="fa-sharp fa-strong fa-lightbulb-gear {{ ($dashboard->widget_names) ? 'text-accent' : 'text-secondary opacity-50' }}"></i>
+                                        <span>{{ $dashboard->name }}</span>
+                                    </div>
+                                @endforeach
+                            </div>
                         </td>
                         <td>
-                            @foreach($user->dashboards as $dashboard)
+                            @if($user->interests)
                                 <div>
-                                    <i class="fa-sharp fa-strong fa-lightbulb-gear {{ ($dashboard->widget_names) ? 'text-accent' : 'text-secondary opacity-50' }}"></i>
-                                    <span>{{ $dashboard->name }}</span>
+                                    @foreach($user->interests as $interest)
+                                        <div>
+                                            {{ $interest }}
+                                        </div>
+                                    @endforeach
                                 </div>
-                            @endforeach
+                            @endif
                         </td>
                         <td>{{ $user->pretty_created_at }}</td>
                     </tr>
