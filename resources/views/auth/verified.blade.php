@@ -12,10 +12,12 @@
             <i class="fa-sharp fa-solid fa-envelope-circle-check text-accent mb-2"></i>
         </div>
         <h1 class="h2 text-transform-none">Thanks for verifying your email!</h1>
-        <p class="fs-6 my-4 text-success"><strong>{{ $email }}</strong> verified successfully</p>
         <div>
-            <a href="{{ route('member.dashboard') }}" class="btn btn-primary btn-lg btn-cta">Neuly Dashboard</a>
+            <livewire:members.onboarding.user-details />
         </div>
+{{--        <div>--}}
+{{--            <a href="{{ route('member.dashboard') }}" class="btn btn-primary btn-lg btn-cta">Neuly Dashboard</a>--}}
+{{--        </div>--}}
     </div>
 </div>
 

@@ -725,27 +725,32 @@ body.home {
 }
 
 .home-hero {
-    .email-optin {
-        max-width: 400px;
-
-        @media (min-width: 1024px) {
-            max-width: 480px;
-        }
+    .email-optin,
+    .login-widget {
+        width: 100%;
+        text-align: center;
 
         .form-control {
             border-radius: 2.75rem;
             padding: .5rem 1.5rem;
             font-size: $font-size-base * 1.1;
             background: none;
+            width: 100%;
+        }
+
+        form {
+            max-width: 480px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .btn {
             border-radius: 2.75rem;
-            margin-left: -2.75rem;
             padding: .5rem 1.5rem;
             text-transform: none;
             font-weight: 500;
             color: $gray-100;
+            margin-left: -2.75rem;
         }
     }
 }

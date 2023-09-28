@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/verify', function () {
+    return view('auth.verified');
+});
+
 Route::middleware('firewall.all')->group(function () {
     Auth::routes(['verify' => true]);
     Route::get('login/{provider}', [App\Http\Controllers\Auth\LoginController::class, 'redirectToProvider'])->name('login.social');
