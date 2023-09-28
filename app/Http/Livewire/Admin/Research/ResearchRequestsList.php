@@ -30,6 +30,9 @@ class ResearchRequestsList extends Component
 
     public function mount() {
         $this->statusActionOptions = ResearchRequest::crmActionItems();
+        $this->sorts = [
+            'created_at' => 'desc'
+        ];
     }
 
     public function selectRecord($id) {

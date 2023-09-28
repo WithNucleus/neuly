@@ -40,22 +40,47 @@
                     <li class="nav-item me-xl-3 d-lg-none d-xl-block">
                         <a href="{{ Auth::user()->dashboard_link }}" class="nav-link text-uppercase">Dashboard</a>
                     </li>
-                    <li class="nav-item dropdown me-xl-3">
+                    <li class="nav-item dropdown dropdown-menu-end me-xl-3">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fa-sharp fa-solid fa-user"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="{{ route('user.settings') }}" title="Settings">Settings</a></li>
+                            <li>
+                                <a class="dropdown-item" href="{{ route('dashboard.notifications.index') }}">
+                                    <i class="fa-sharp fa-solid fa-bell fa-fw me-1"></i>
+                                    <span class="me-1">Notifications</span>
+                                    <livewire:members.notifications.notification-badge :user="Auth::user()" />
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ route('user.settings') }}" title="Settings">
+                                    <i class="fa-sharp fa-solid fa-folder-gear fa-fw me-1"></i>
+                                    <span>Settings</span>
+                                </a>
+                            </li>
 
                             @can('admin login')
-                                <a href="/admin" class="dropdown-item">Admin</a>
+                                <li>
+                                    <a href="/admin" class="dropdown-item">
+                                        <i class="fa-sharp fa-solid fa-toolbox fa-fw me-1"></i>
+                                        <span>Admin</span>
+                                    </a>
+                                </li>
                             @endcan
                             @can('import')
-                                <a href="/adminx" class="dropdown-item">Admin</a>
+                                <li>
+                                    <a href="/adminx" class="dropdown-item">
+                                        <i class="fa-sharp fa-solid fa-screwdriver-wrench fa-fw me-1"></i>
+                                        <span>Admin</span>
+                                    </a>
+                                </li>
                             @endcan
 
                             <a class="dropdown-item" href="{{ route('logout') }}" title="Logout"
-                               onclick="event.preventDefault();document.getElementById('logout-form').submit();">Logout</a>
+                               onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+                                <i class="fa-sharp fa-solid fa-right-from-bracket fa-fw me-1"></i>
+                                <span>Logout</span>
+                            </a>
 
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                 @csrf

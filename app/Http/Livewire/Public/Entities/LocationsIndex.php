@@ -7,7 +7,6 @@ use App\Http\Livewire\Traits\WithBulkActions;
 use App\Http\Livewire\Traits\WithCachedRows;
 use App\Http\Livewire\Traits\WithPerPagePagination;
 use App\Http\Livewire\Traits\WithSorting;
-use App\Models\Focus;
 use App\Models\Location;
 use Livewire\Component;
 

@@ -19,9 +19,13 @@ class ResearchRequest extends Model implements CrmActionsContract
     ];
 
     const TYPE_REPORT_REQUEST = 'Research Report';
+    const TYPE_API_REQUEST = 'API Request';
+    const TYPE_ENTERPRISE_REQUEST = 'Enterprise';
 
     const TYPES = [
-        self::TYPE_REPORT_REQUEST
+        self::TYPE_REPORT_REQUEST,
+        self::TYPE_API_REQUEST,
+        self::TYPE_ENTERPRISE_REQUEST
     ];
 
     const STATUS_OPEN = 'Open';

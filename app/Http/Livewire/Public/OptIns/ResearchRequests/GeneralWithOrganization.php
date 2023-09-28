@@ -3,23 +3,28 @@
 namespace App\Http\Livewire\Public\OptIns\ResearchRequests;
 
 use App\Http\Livewire\Public\Traits\LocalLocationFilter;
-use App\Models\Course;
 use App\Models\ResearchRequest;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
-class ResearchReport extends Component
+class GeneralWithOrganization extends Component
 {
     use LocalLocationFilter;
 
-    public Course $course;
+    public string $requestType;
+    public ?string $titleMessage;
+    public ?string $titleClasses;
+    public ?string $messageLabel;
+    public bool $showSuccessActions = false;
 
     public $first_name;
     public $last_name;
     public $email;
     public $phone;
+    public $organization;
+    public $website;
     public $message;
 
     public bool $success = false;
@@ -53,6 +58,8 @@ class ResearchReport extends Component
             'last_name' => 'required',
             'email' => 'required|email',
             'phone' => 'nullable',
+            'organization' => 'required',
+            'website' => 'required',
             'message' => 'required',
         ];
     }
@@ -64,13 +71,15 @@ class ResearchReport extends Component
             'name' => $this->first_name . ' ' . $this->last_name,
             'email' => $this->email,
             'phone' => $this->phone,
-            'type' => ResearchRequest::TYPE_REPORT_REQUEST,
+            'type' => $this->requestType,
             'status' => ResearchRequest::STATUS_OPEN,
             'message' => $this->message,
             'data' => [
                 'locations' => [
                     'local' => $this->localLocation,
-                ]
+                ],
+                'organization' => $this->organization,
+                'website' => $this->website
             ],
             'user_id' => $this->userId,
             'ip' => $this->ip,
@@ -81,6 +90,6 @@ class ResearchReport extends Component
 
     public function render()
     {
-        return view('livewire.public.opt-ins.research-requests.research-report');
+        return view('livewire.public.opt-ins.research-requests.general-with-organization');
     }
 }

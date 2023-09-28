@@ -14,10 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/verify', function () {
-    return view('auth.verified');
-});
-
 Route::middleware('firewall.all')->group(function () {
     Auth::routes(['verify' => true]);
     Route::get('login/{provider}', [App\Http\Controllers\Auth\LoginController::class, 'redirectToProvider'])->name('login.social');
@@ -32,6 +28,8 @@ Route::post('/invitation', [App\Http\Controllers\InvitationController::class, 'a
 
 Route::get('/', [App\Http\Controllers\Content\HomeController::class, 'index'])->name('index');
 Route::get('/about', [App\Http\Controllers\Content\AboutController::class, 'index'])->name('about');
+Route::get('/api', [App\Http\Controllers\Content\MiscContentController::class, 'api'])->name('content.api');
+Route::get('/enterprise', [App\Http\Controllers\Content\MiscContentController::class, 'enterprise'])->name('content.enterprise');
 
 // Search Suggestions
 Route::prefix('/searchassets')->name('searchassets.')->group(function () {
@@ -75,7 +73,7 @@ Route::get('/listing/request/getEntityListJson', [App\Http\Controllers\Index\Lis
 
 //Global group for registered and verified users only
 Route::middleware('verifiedIfAuthorized')->group(function () {
-    Route::get('/psychedelic-index', [App\Http\Controllers\Content\IndexController::class, 'index'])->name('discover.index');
+    Route::get('/psychedelic-index', [App\Http\Controllers\Content\MiscContentController::class, 'index'])->name('discover.index');
 
     // Companies
     Route::get('/organizations', [App\Http\Controllers\Index\CompanyController::class, 'index'])->name('discover.organizations');

@@ -1,18 +1,20 @@
 <div>
-    <div class="d-flex flex-wrap justify-content-between align-items-end">
-        <h1 class="my-2">Notifications</h1>
-        <div class="my-2">
-            <span class="me-3">Showing {{ $records->total() }} Notifications ({{ $unreadCount }} new)</span>
+    @if(!$dashboard)
+        <div class="d-flex flex-wrap justify-content-between align-items-end">
+            <h1 class="my-2">Notifications</h1>
+            <div class="my-2">
+                <span class="me-3">Showing {{ $records->total() }} Notifications ({{ $unreadCount }} new)</span>
+            </div>
         </div>
-    </div>
-    <div class="my-3 d-flex">
-        <div class="me-5">
-            <x-livewire-filters.search label="Search" placeholder="Search" search="{{ $search }}" tooltip="Search by keyword" />
+        <div class="my-3 d-flex">
+            <div class="me-5">
+                <x-livewire-filters.search label="Search" placeholder="Search" search="{{ $search }}" tooltip="Search by keyword" />
+            </div>
+            <div>
+                <x-livewire-filters.checkbox-single wireModel="hideRead" id="filter-featured" label="Hide read notifications" />
+            </div>
         </div>
-        <div>
-            <x-livewire-filters.checkbox-single wireModel="hideRead" id="filter-featured" label="Hide read notifications" />
-        </div>
-    </div>
+    @endif
     <div class="d-md-flex align-items-center mt-3">
         <div class="pb-4 ps-3 d-flex align-items-center">
             <div class="form-check lead me-4">
@@ -93,9 +95,12 @@
         @endforelse
     </div>
 
-    <div class="d-flex flex-wrap align-items-center justify-content-between mt-5">
-        <div class="d-flex align-items-center me-4">
+    <div class="d-flex flex-wrap align-items-center justify-content-between">
+        <div class="d-flex align-items-center me-4 mt-4">
             <select wire:model="perPage" id="perPage" class="form-select">
+                @if($dashboard)
+                    <option value="5">5</option>
+                @endif
                 <option value="10">10</option>
                 <option value="25">25</option>
                 <option value="50">50</option>
@@ -104,7 +109,7 @@
             </select>
             <label for="perPage" class="d-block fw-bold ms-2 flex-shrink-0">Per Page</label>
         </div>
-        <div>
+        <div class="mt-4">
             {{ $records->links() }}
         </div>
     </div>
