@@ -8,8 +8,13 @@
             </div>
         @else
             <p class="fs-6 my-4">Gain access to the psychedelic industry’s most robust platform for free.</p>
-            <div class="email-optin mx-auto my-4 py-3">
-                <livewire:public.opt-ins.email-signup />
+            <div class="my-4 d-flex flex-column justify-content-center" style="min-height: 100px">
+                <div class="email-optin mx-auto d-flex flex-column justify-content-center h-100">
+                    <livewire:public.opt-ins.email-signup />
+                </div>
+                <div class="login-widget h-100 mx-auto">
+                    <livewire:public.auth.login />
+                </div>
             </div>
             <p class="fs-6 my-4">Join over 3,000 community members</p>
         @endif
