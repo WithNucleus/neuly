@@ -30,6 +30,9 @@ class StudentsList extends Component
 
     public function mount() {
         $this->statusActionOptions = EduRequest::crmActionItems();
+        $this->sorts = [
+            'created_at' => 'desc'
+        ];
     }
 
     public function selectStudent($id) {

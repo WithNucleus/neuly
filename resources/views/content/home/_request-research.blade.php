@@ -19,7 +19,7 @@
                             Request a Research Report
                         </div>
                         <div class="max-width-500 mx-auto">
-                            <livewire:public.opt-ins.research-requests.research-report />
+                            <livewire:public.opt-ins.research-requests.general requestType="{{ \App\Models\ResearchRequest::TYPE_REPORT_REQUEST }}" titleMessage="Fill out the form below with your request for psychedelics research and/or data." />
                         </div>
                     </div>
                 </div>

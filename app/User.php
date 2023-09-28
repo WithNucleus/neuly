@@ -59,6 +59,18 @@ class User extends Authenticatable implements MustVerifyEmail
         });
     }
 
+    const INTEREST_CARE = 'Care';
+    const INTEREST_EDU = 'Education';
+    const INTEREST_RESEARCH = 'Research';
+    const INTEREST_ENTERPRISE = 'Enterprise';
+
+    const INTERESTS = [
+        self::INTEREST_CARE,
+        self::INTEREST_EDU,
+        self::INTEREST_RESEARCH,
+        self::INTEREST_ENTERPRISE
+    ];
+
     /* Relationships */
     public function bookableListings(): \Illuminate\Database\Eloquent\Relations\HasMany
     {

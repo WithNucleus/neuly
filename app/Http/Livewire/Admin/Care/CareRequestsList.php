@@ -31,6 +31,9 @@ class CareRequestsList extends Component
 
     public function mount() {
         $this->statusActionOptions = CareRequest::crmActionItems();
+        $this->sorts = [
+            'created_at' => 'desc'
+        ];
     }
 
     public function selectRecord($id) {

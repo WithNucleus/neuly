@@ -22,8 +22,16 @@ class NotificationsList extends Component
     public ?string $search = null;
     public bool $hideRead = false;
 
+    public bool $dashboard = false;
+
     public function mount() {
-        $this->perPage = 10;
+
+        if ($this->dashboard) {
+            $this->perPage = 5;
+        } else {
+            $this->perPage = 10;
+        }
+
         $this->updateUnreadCount();
         $this->sorts = [
             'was_read' => 'asc',

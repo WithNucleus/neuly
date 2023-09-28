@@ -7,10 +7,26 @@
             <div class="fs-6">
                 We'll be in touch soon.
             </div>
+            @if($showSuccessActions)
+                <div class="mt-5 d-flex align-items-center justify-content-center">
+                    <div class="me-3">
+                        @auth
+                            <a href="{{ Auth::user()->dashboard_link }}" class="btn btn-primary btn-lg btn-cta">Go to Your Dashboard</a>
+                        @else
+                            <a href="{{ route('login') }}" class="btn btn-primary btn-lg btn-cta">Login to Neuly</a>
+                        @endauth
+                    </div>
+                    <div>
+                        <a href="/" class="btn btn-lg">Back Home</a>
+                    </div>
+                </div>
+            @endif
         </div>
     @else
         <div>
-            <p class="fs-6 text-center">Fill out the form below with your request for psychedelics research and/or data. </p>
+            @if($titleMessage)
+                <p class="{{ $titleClasses ?? 'fs-6 text-center' }}">{{ $titleMessage }}</p>
+            @endif
             <form wire:submit.prevent="submit">
                 <div class="row">
                     <div class="col-12 col-md-6 mb-3">
@@ -35,7 +51,7 @@
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label for="message" class="fw-bold text-uppercase">Tell us the details</label>
+                    <label for="message" class="fw-bold text-uppercase">{{ $messageLabel ?? 'Tell us the details' }}</label>
                     <textarea wire:model="message" name="message" id="message" rows="4" class="form-control"></textarea>
                     @error('message') <div class="text-danger small">{{ $message }}</div> @enderror
                 </div>

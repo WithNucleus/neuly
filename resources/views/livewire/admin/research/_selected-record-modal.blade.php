@@ -18,6 +18,20 @@
             <div class="col-12 col-lg-6 mb-4">
                 <div class="fw-bold text-uppercase text-primary">Type</div>
                 <div>{{ $selectedRecord->type }}</div>
+                @isset($selectedRecord->data['organization'])
+                   <div class="mt-1 small d-flex align-items-center">
+                       <i class="fa-sharp fa-solid fa-buildings fa-fw me-2"></i>
+                       <span>{{ $selectedRecord->data['organization'] }}</span>
+                   </div>
+                @endisset
+                @isset($selectedRecord->data['website'])
+                   <div class="mt-1 small d-flex align-items-center">
+                       <i class="fa-sharp fa-solid fa-link fa-fw me-2"></i>
+                       <a href="{{ $selectedRecord->data['website'] }}" target="_blank" rel="noopener noreferrer">
+                           <span class="truncate-300">{{ $selectedRecord->data['website'] }}</span>
+                       </a>
+                   </div>
+                @endisset
             </div>
             <div class="col-12 col-lg-6 mb-4">
                 <div class="fw-bold text-uppercase text-primary">User</div>

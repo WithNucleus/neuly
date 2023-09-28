@@ -27,10 +27,28 @@
                     {{ number_format($records->total()) }} locations
                 </div>
             </div>
-            <div class="col-12 my-3">
+            <div class="col-12 my-3 d-lg-none">
                 <x-entities.offcanvas-sidebar-toggle />
-                <div>
-                </div>
+            </div>
+            <div>
+                @if($sorts)
+                    <div class="text-uppercase d-flex mt-3">
+                        <div class="fw-bold me-2">Sorting:</div>
+                        @foreach($sorts as $name => $direction)
+                            <div class="d-flex">
+                                <div class="me-1">{{ str_replace('_count', '', $name) }}</div>
+                                <div>
+                                    @if($direction === 'asc')
+                                        <i class="fa-sharp fa-solid fa-arrow-up"></i>
+                                    @else
+                                        <i class="fa-sharp fa-solid fa-arrow-down"></i>
+                                    @endif
+                                </div>
+                                @if(!$loop->last) <span class="mx-2"><i class="fa-sharp fa-light fa-angle-right"></i></span> @endif
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
             </div>
             <table class="table align-middle table-hover">
                 <thead>

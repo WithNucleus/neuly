@@ -8,6 +8,8 @@
 
     <a href="/terms-of-use" class="me-4">Terms</a>
     <a href="/privacy-policy" class="me-4">Privacy</a>
+    <a href="{{ route('content.api') }}" class="me-4">API</a>
+    <a href="{{ route('content.enterprise') }}" class="me-4">Enterprise</a>
     <button type="button" class="btn btn-link p-0 text-decoration-none" data-bs-toggle="modal" data-bs-target="#helpModal">
         Help
     </button>

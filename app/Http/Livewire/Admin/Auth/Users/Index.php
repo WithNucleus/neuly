@@ -20,7 +20,11 @@ class Index extends Component
     public ?string $search = null;
     public array $filters = [
         'roles' => [],
-        'has-bookable-listings' => false
+        'has-bookable-listings' => false,
+        'has-person' => false,
+        'team-owner' => false,
+        'team-member' => false,
+        'interests' => []
     ];
 
     public function mount() {
@@ -101,6 +105,18 @@ class Index extends Component
             })
             ->when($this->filters['has-bookable-listings'], function($query) {
                 return $query->whereHas('bookableListings');
+            })
+            ->when($this->filters['has-person'], function($query) {
+                return $query->whereHas('relatedPerson');
+            })
+            ->when($this->filters['team-owner'], function($query) {
+                return $query->whereHas('ownedTeam');
+            })
+            ->when($this->filters['team-member'], function($query) {
+                return $query->whereHas('teams');
+            })
+            ->when($this->filters['interests'], function($query, $valueArray) {
+                return $query->whereJsonContains('interests', $valueArray);
             });
 
         return $this->applySorting($query);
@@ -117,7 +133,8 @@ class Index extends Component
     {
         return view('livewire.admin.auth.users.index', [
             'records' => $this->rows,
-            'roleOptions' => Role::whereHas('users')->withCount('users')->get()->toArray()
+            'roleOptions' => Role::whereHas('users')->withCount('users')->get()->toArray(),
+            'interestOptions' => User::INTERESTS
         ]);
     }
 }
