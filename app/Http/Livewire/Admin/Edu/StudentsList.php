@@ -20,7 +20,8 @@ class StudentsList extends Component
     public ?string $search = null;
     public array $filters = [
         'type' => [],
-        'status' => []
+        'status' => [],
+        'certifications' => false
     ];
 
     public $selectedStudent;
@@ -126,6 +127,9 @@ class StudentsList extends Component
             })
             ->when($this->filters['status'], function($query, $valueArray) {
                 return $query->whereIn('status', $valueArray);
+            })
+            ->when($this->filters['certifications'], function($query) {
+                return $query->whereJsonContains('data->certifications', true);
             });
 
         return $this->applySorting($query);

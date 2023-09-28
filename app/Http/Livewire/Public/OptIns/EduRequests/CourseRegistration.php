@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Public\OptIns;
+namespace App\Http\Livewire\Public\OptIns\EduRequests;
 
 use App\Http\Livewire\Public\Traits\LocalLocationFilter;
 use App\Models\Course;
@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
-class EduRequestCourse extends Component
+class CourseRegistration extends Component
 {
     use LocalLocationFilter;
 
@@ -20,6 +20,9 @@ class EduRequestCourse extends Component
     public $last_name;
     public $email;
     public $phone;
+    public $zip_code;
+    public $budget;
+    public bool $certifications = false;
     public $message;
 
     public bool $success = false;
@@ -54,6 +57,9 @@ class EduRequestCourse extends Component
             'email' => 'required|email',
             'phone' => 'required',
             'message' => 'nullable',
+            'zip_code' => 'required',
+            'budget' => 'required',
+            'certifications' => 'nullable',
         ];
     }
 
@@ -70,7 +76,10 @@ class EduRequestCourse extends Component
             'data' => [
                 'locations' => [
                     'local' => $this->localLocation,
-                ]
+                ],
+                'zip_code' => $this->zip_code,
+                'budget' => $this->budget,
+                'certifications' => $this->certifications
             ],
             'user_id' => $this->userId,
             'ip' => $this->ip,
@@ -83,6 +92,6 @@ class EduRequestCourse extends Component
 
     public function render()
     {
-        return view('livewire.public.opt-ins.edu-request-course');
+        return view('livewire.public.opt-ins.edu-requests.course-registration');
     }
 }

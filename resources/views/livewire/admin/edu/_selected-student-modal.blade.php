@@ -21,7 +21,7 @@
             </div>
             <div class="col-12 col-lg-6 mb-4">
                 <div class="fw-bold text-uppercase text-primary">User</div>
-                <table class="table table-sm table-borderless w-auto align-middle">
+                <table class="table table-sm table-borderless w-auto align-middle mb-0">
                     <tbody>
                         <tr>
                             <th class="ps-0 text-uppercase small">Name:</th>
@@ -59,8 +59,24 @@
                                 <td>{{ $selectedStudent->ip }}</td>
                             </tr>
                         @endisset
+
+                        @isset($selectedStudent->data['budget'])
+                            <tr>
+                                <th class="ps-0 text-uppercase small">Budget:</th>
+                                <td>${{ number_format($selectedStudent->data['budget']) }}</td>
+                            </tr>
+                        @endisset
                     </tbody>
                 </table>
+                @isset($selectedStudent->data['certifications'])
+                    <div class="small text-uppercase">
+                        @if($selectedStudent->data['certifications'] === true)
+                            <span class="text-success fw-bold">Interested in Certifications / CE</span>
+                        @else
+                            <span class="text-body-secondary">Not Interested in Certifications / CE</span>
+                        @endif
+                    </div>
+                @endisset
             </div>
             <div class="col-12 col-lg-6 mb-4">
                 <div class="fw-bold text-uppercase text-primary">Location</div>
@@ -74,6 +90,13 @@
                                 {{ $selectedStudent->data['locations']['local']['latitude'] }}, {{ $selectedStudent->data['locations']['local']['longitude'] }}
                             </a>
                         @endisset
+                    </div>
+                @endisset
+
+                @isset($selectedStudent->data['zip_code'])
+                    <div class="small">
+                        <strong class="text-uppercase me-1">Zip Code:</strong>
+                        <span>{{ $selectedStudent->data['zip_code'] }}</span>
                     </div>
                 @endisset
             </div>

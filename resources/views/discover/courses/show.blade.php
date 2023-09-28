@@ -136,9 +136,9 @@
                     <div class="mt-5">
                         @if($course->concierge)
                             <div class="bg-body-secondary p-4 text-body-secondary">
-                                <h2 class="h4 text-success">Interested in this course?</h2>
+                                <h2 class="h4 text-success text-center">Interested in this course?</h2>
                                 <div class="max-width-600">
-                                    <livewire:public.opt-ins.edu-request-course :course="$course" />
+                                    <livewire:public.opt-ins.edu-requests.course-registration :course="$course" />
                                 </div>
                             </div>
                         @else
