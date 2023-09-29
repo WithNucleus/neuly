@@ -56,7 +56,6 @@ class VerificationController extends Controller
 
         if ($user->markEmailAsVerified()) {
             event(new Verified($user));
-            Mail::to($user)->send(new WelcomeMail($user->name));
         }
 
         return view('auth.verified', ['email' => $user->email]);

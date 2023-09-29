@@ -2,9 +2,11 @@
 
 namespace App\Http\Livewire\Members\Onboarding;
 
+use App\Mail\WelcomeMail;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 
 class UserDetails extends Component
@@ -53,6 +55,8 @@ class UserDetails extends Component
             'interests' => $this->interests,
             'registration_code' => $this->registration_code
         ]);
+
+        Mail::to($this->user)->send(new WelcomeMail($this->user->name));
 
         $this->success = true;
     }

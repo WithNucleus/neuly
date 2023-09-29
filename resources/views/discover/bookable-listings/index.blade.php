@@ -28,6 +28,16 @@
             <livewire:public.featured.neuly-care />
         </div>
 
+        <div class="mt-5 join-neuly-care-banner text-center container py-5 px-4">
+            <div class="max-width-300 mx-auto mb-4">
+                @include('navbars.neuly-care-logo')
+            </div>
+            <h2 class="h1">Would you like to be listed here?</h2>
+            <div class="mt-4">
+                <a href="{{ route('discover.bookable-listing.create') }}" class="btn btn-lg btn-cta btn-accent">Join Our Care Directory</a>
+            </div>
+        </div>
+
     </main>
     @include('footers.full')
 @endsection
