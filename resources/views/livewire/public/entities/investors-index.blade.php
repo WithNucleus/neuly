@@ -83,7 +83,7 @@
                             </span>
                         @endif
 
-                        <div class="logo-is-contained" style="background-image: url('{{ $investor->entityImageUrl ?? asset('images/image-placeholder.jpg') }}')"></div>
+                        <div class="logo-is-contained" style="background-image: url('{{ $investor->entityImageUrl ?? asset('images/image-placeholder-investor.png') }}')"></div>
                         <p class="my-3 h5 px-1 text-success">{{ $investor->name }}</p>
 
                         <div class="text-body-emphasis fw-bold text-uppercase my-3">{{ $investor->type ?? 'Unknown Type' }}</div>

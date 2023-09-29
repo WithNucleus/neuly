@@ -17,7 +17,7 @@
                 @include('navbars.neuly-edu-logo')
             </div>
             <h1 class="text-transform-none text-center mb-0 max-width-780 mx-auto">
-                All the educational content on psychedelics, etc. heading
+                Find the Psychedelic Courses That Can Launch Your Career
             </h1>
         </div>
 
