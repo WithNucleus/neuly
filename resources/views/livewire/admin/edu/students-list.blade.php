@@ -1,7 +1,7 @@
 <div>
     <div class="d-md-flex flex-wrap mt-4">
 
-        <div class=" me-md-5 mb-3">
+        <div class="me-md-5 mb-3">
             <x-livewire-filters.search label="Search" placeholder="Search" search="{{ $search }}" tooltip="Search by name, email, entity, etc." />
         </div>
 
@@ -45,6 +45,10 @@
                     @endforeach
                 </ul>
             </div>
+        </div>
+
+        <div class="me-md-4 mb-3">
+            <x-livewire-filters.checkbox-single wireModel="filters.certifications" id="filter-certifications" label="Interested in CE" />
         </div>
 
         <div class="filter-widget ms-auto">

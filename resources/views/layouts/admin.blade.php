@@ -15,6 +15,8 @@
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
         <script src="https://kit.fontawesome.com/88643155ec.js" crossorigin="anonymous"></script>
 
+        @include('layouts.includes._favicons')
+
         @yield('head')
     </head>
     <body class="@yield('body-class', '')">

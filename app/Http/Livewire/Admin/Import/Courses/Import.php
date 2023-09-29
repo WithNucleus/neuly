@@ -23,8 +23,8 @@ class Import extends Component
         'type' => 'string',
         'learning_location' => 'string',
         'delivery_method' => 'string',
-        'lowest_cost' => 'number',
-        'highest_cost' => 'number',
+        'lowest_cost' => 'integer',
+        'highest_cost' => 'integer',
         'currency' => 'string',
         'education_credits' => 'string',
         'hours' => 'number',
@@ -36,12 +36,14 @@ class Import extends Component
         'length' => 'string',
         'self_paced' => 'boolean (true = 1; false = 0)',
         'image' => 'string',
+        'featured' => 'boolean (true = 1; false = 0)',
+        'concierge' => 'boolean (true = 1; false = 0)',
     ];
 
     public function upload()
     {
         $this->validate([
-            'file' => 'required|mimes:csv,application/vnd.ms-excel'
+            'file' => 'required|mimes:csv,xls,xlsx,application/vnd.ms-excel'
         ]);
 
         try {
