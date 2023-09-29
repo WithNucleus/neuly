@@ -20,4 +20,9 @@ class MiscContentController extends Controller
     {
         return view('content.enterprise.index');
     }
+
+    public function requestResearch(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    {
+        return view('content.research.request');
+    }
 }

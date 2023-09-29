@@ -35,6 +35,6 @@ class WelcomeMail extends Mailable
             ->with([
                 'name' => $this->name,
             ])
-            ->subject("{$this->name}, you’re Neuly’s newest member");
+            ->subject("{$this->name}, Welcome to Neuly!");
     }
 }

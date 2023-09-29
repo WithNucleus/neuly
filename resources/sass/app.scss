@@ -602,6 +602,23 @@ svg#neulyResearchLogo {
     }
 }
 
+.join-neuly-care-banner {
+    background: $primary;
+    color: $gray-100;
+
+    svg#neulyCareLogo {
+        .primary-color {
+            fill: $neulyGreenBright;
+            transition: all .2s ease-in-out;
+        }
+
+        .secondary-color {
+            fill: $white;
+            transition: all .2s ease-in-out;
+        }
+    }
+}
+
 .bookable-form-container {
     background: $gray-100;
     padding: 1.5rem 1rem;

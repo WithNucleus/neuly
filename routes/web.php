@@ -30,6 +30,7 @@ Route::get('/', [App\Http\Controllers\Content\HomeController::class, 'index'])->
 Route::get('/about', [App\Http\Controllers\Content\AboutController::class, 'index'])->name('about');
 Route::get('/api', [App\Http\Controllers\Content\MiscContentController::class, 'api'])->name('content.api');
 Route::get('/enterprise', [App\Http\Controllers\Content\MiscContentController::class, 'enterprise'])->name('content.enterprise');
+Route::get('/research/request', [App\Http\Controllers\Content\MiscContentController::class, 'requestResearch'])->name('content.research.request');
 
 // Search Suggestions
 Route::prefix('/searchassets')->name('searchassets.')->group(function () {

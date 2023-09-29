@@ -1,25 +1,16 @@
 @component('mail::welcome-message')
 Hi {{ $name }},
 
-Thanks for becoming our newest Neuly member!
+Thanks so much for joining the growing Neuly community!
 
-You've probably already explored our database, which is the most comprehensive collection of information about the psychedelics industry - that we know of!
+I'm hoping you already clicked around and explored our vast database on the psychedelic industry. It's your curiosity that is fueling all the excitement around everything that psychedelic medicines can offer to humanity.
 
-**Here are some features you might not have discovered:**
+At Neuly, our mission is simple. To offer a platform that delivers the highest quality information in the most efficient way. We know this is an insatiable mission that can only improve with your feedback and participation.
 
-- You can share information, for free, to anywhere you want. Just use your dashboard to follow entities, write notes, and then share your findings where you want.
+Please let me know if you need any assistance at all during your Neuly journey. Myself, and the entire Neuly team, are here to help any way we can.
 
-- Need an insight we're not providing yet? [Let us know here](https://neuly.test/insights/request). We'll get on it!
-
-- Want to add something to our database? Easy - just [fill this out](https://neuly.test/listing/request).
-
-{{--Want to see other cool stuff you can do with Neuly? Check out our list of Neuly-hacks here.--}}
-
-Have a great week!
-
-Neuly
-
-P.S. Share Neuly with your friends to help us build better transparency and perspective about psychedelics!
+Logan<br>
+On behalf of the Neuly team
 @endcomponent
 
 

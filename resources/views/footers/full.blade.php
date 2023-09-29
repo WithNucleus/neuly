@@ -16,8 +16,8 @@
             </div>
         </div>
         <div class="border-top mt-4 pt-4">
-            <div class="d-flex flex-column flex-md-row align-items-start justify-content-between">
-                <div class="order-2 order-md-1 me-3">&copy; <?php echo date('Y'); ?> Neuly, LLC. <span class="d-block d-lg-inline">All Rights Reserved.</span></div>
+            <div class="d-flex flex-column flex-lg-row align-items-start justify-content-between">
+                <div class="order-2 order-lg-1 me-3">&copy; <?php echo date('Y'); ?> Neuly, LLC. <span class="d-lg-block d-xl-inline">All Rights Reserved.</span></div>
                 @include('navbars.footer')
             </div>
         </div>
