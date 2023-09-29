@@ -46,7 +46,7 @@ class ClinicalTrialsIndex extends Component
 
     public function importTrials() {
         $count = $this->selectedRowsQuery->count();
-        $trials = $this->selectedRowsQuery;
+        $trials = $this->selectedRowsQuery->get();
 
         foreach($trials as $trial) {
             ImportData::dispatch($trial);

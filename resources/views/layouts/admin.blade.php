@@ -121,5 +121,12 @@
         @yield('after_scripts')
         @livewireScripts
         @yield('livewire_scripts')
+        <script>
+            let directoryElement = document.querySelector('.adminx-content');
+            let directoryTop = directoryElement.offsetTop - 100;
+            Livewire.on('gotoTop', () => {
+                directoryElement.scrollTop = directoryTop;
+            });
+        </script>
     </body>
 </html>
