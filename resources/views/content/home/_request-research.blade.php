@@ -7,7 +7,6 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-{{--                    <div class="modal-title h4" id="research-request-modal-label">Request a Research Report</div>--}}
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
