@@ -117,17 +117,20 @@ class ImportProcess implements ShouldQueue
 
         $attributes['study_type'] = $this->getField('studyType', $this->importedEntity->data['protocolSection']['designModule']);
 
-        $attributes['enrollment'] = $this->getField('count', $this->importedEntity->data['protocolSection']['designModule']['enrollmentInfo']);
-        $attributes['enrollment_type'] = $this->getField('type', $this->importedEntity->data['protocolSection']['designModule']['enrollmentInfo']);
+        if(array_key_exists('enrollmentInfo', $this->importedEntity->data['protocolSection']['designModule'])) {
+            $attributes['enrollment'] = $this->getField('count', $this->importedEntity->data['protocolSection']['designModule']['enrollmentInfo']);
+            $attributes['enrollment_type'] = $this->getField('type', $this->importedEntity->data['protocolSection']['designModule']['enrollmentInfo']);
+        }
 
         $attributes['gender'] = Clinicaltrial::SEXES[$this->getField('sex', $this->importedEntity->data['protocolSection']['eligibilityModule'])];
 
-        $attributes['allocation'] = $this->matchConst('allocation', $this->getField('allocation', $this->importedEntity->data['protocolSection']['designModule']['designInfo']));
-        $attributes['primary_purpose'] = $this->matchConst('primary_purpose', $this->getField('primaryPurpose', $this->importedEntity->data['protocolSection']['designModule']['designInfo']));
-        $attributes['time_perspective'] = $this->matchConst('time_perspective', $this->getField('timePerspective', $this->importedEntity->data['protocolSection']['designModule']['designInfo']));
-        $attributes['observational_model'] = $this->matchConst('observational_model', $this->getField('observationalModel', $this->importedEntity->data['protocolSection']['designModule']['designInfo']));
-
-        $attributes['intervention_model_description'] = $this->getField('interventionModelDescription', $this->importedEntity->data['protocolSection']['designModule']['designInfo']);
+        if(array_key_exists('designInfo', $this->importedEntity->data['protocolSection']['designModule'])) {
+            $attributes['allocation'] = $this->matchConst('allocation', $this->getField('allocation', $this->importedEntity->data['protocolSection']['designModule']['designInfo']));
+            $attributes['primary_purpose'] = $this->matchConst('primary_purpose', $this->getField('primaryPurpose', $this->importedEntity->data['protocolSection']['designModule']['designInfo']));
+            $attributes['time_perspective'] = $this->matchConst('time_perspective', $this->getField('timePerspective', $this->importedEntity->data['protocolSection']['designModule']['designInfo']));
+            $attributes['observational_model'] = $this->matchConst('observational_model', $this->getField('observationalModel', $this->importedEntity->data['protocolSection']['designModule']['designInfo']));
+            $attributes['intervention_model_description'] = $this->getField('interventionModelDescription', $this->importedEntity->data['protocolSection']['designModule']['designInfo']);
+        }
 
         $attributes['min_age'] = $this->getAgeField('minimumAge', $this->importedEntity->data['protocolSection']['eligibilityModule']);
         $attributes['max_age'] = $this->getAgeField('maximumAge', $this->importedEntity->data['protocolSection']['eligibilityModule']);
@@ -137,16 +140,18 @@ class ImportProcess implements ShouldQueue
                 $this->importedEntity->data['protocolSection']['eligibilityModule']['maximumAge'];
         }
 
-        if (array_key_exists('primaryOutcomes', $this->importedEntity->data['protocolSection']['outcomesModule'])) {
-            $attributes['primary_outcomes'] = $this->importedEntity->data['protocolSection']['outcomesModule']['primaryOutcomes'];
-        }
+        if (array_key_exists('outcomesModule', $this->importedEntity->data['protocolSection'])) {
+            if (array_key_exists('primaryOutcomes', $this->importedEntity->data['protocolSection']['outcomesModule'])) {
+                $attributes['primary_outcomes'] = $this->importedEntity->data['protocolSection']['outcomesModule']['primaryOutcomes'];
+            }
 
-        if (array_key_exists('secondaryOutcomes', $this->importedEntity->data['protocolSection']['outcomesModule'])) {
-            $attributes['secondary_outcomes'] = $this->importedEntity->data['protocolSection']['outcomesModule']['secondaryOutcomes'];
-        }
+            if (array_key_exists('secondaryOutcomes', $this->importedEntity->data['protocolSection']['outcomesModule'])) {
+                $attributes['secondary_outcomes'] = $this->importedEntity->data['protocolSection']['outcomesModule']['secondaryOutcomes'];
+            }
 
-        if (array_key_exists('otherOutcomes', $this->importedEntity->data['protocolSection']['outcomesModule'])) {
-            $attributes['other_outcomes'] = $this->importedEntity->data['protocolSection']['outcomesModule']['otherOutcomes'];
+            if (array_key_exists('otherOutcomes', $this->importedEntity->data['protocolSection']['outcomesModule'])) {
+                $attributes['other_outcomes'] = $this->importedEntity->data['protocolSection']['outcomesModule']['otherOutcomes'];
+            }
         }
 
         return $attributes;
@@ -227,7 +232,20 @@ class ImportProcess implements ShouldQueue
     private function getAgeField($field, $parent): ?string
     {
         if (array_key_exists($field, $parent)) {
-            return str_replace(' Years', '', $parent[$field]);
+
+            $ageText = $parent[$field];
+            $ageNumber = str_replace(['Years', 'Months', 'Month', 'Year'], '', $ageText);
+            $ageNumber = trim($ageNumber);
+
+            if(str_contains($ageText, 'Day')) {
+                return 0;
+            }
+
+            if(str_contains($ageText, 'Months') OR str_contains($ageText, 'Month')) {
+                return $ageNumber / 12;
+            }
+
+            return $ageNumber;
         }
 
         return NULL;
@@ -250,7 +268,7 @@ class ImportProcess implements ShouldQueue
     }
 
     private function matchInterventionRelationships($clinicalTrial) {
-        if (!array_key_exists('armsInterventionsModule', $items = $this->importedEntity->data['protocolSection'])) {
+        if (!array_key_exists('armsInterventionsModule', $this->importedEntity->data['protocolSection'])) {
             return;
         }
 

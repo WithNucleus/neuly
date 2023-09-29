@@ -86,7 +86,7 @@
                     <x-entities.entity-logo-card url="{{ route('discover.events.show', $event->slug) }}" linkClasses="py-2 d-flex flex-column justify-content-between">
                         <div>
                             <div class="text-primary h6 mb-3 text-uppercase">{{ $event->pretty_start_date }}</div>
-                            <div class="logo-is-contained" style="background-image: url('{{ $event->entityImageUrl ?? asset('images/image-placeholder.jpg') }}')"></div>
+                            <div class="logo-is-contained" style="background-image: url('{{ $event->entityImageUrl ?? asset('images/image-placeholder-event.png') }}')"></div>
                             <p class="my-3 h5 px-2 text-success">{{ $event->name }}</p>
                         </div>
                         <div>
