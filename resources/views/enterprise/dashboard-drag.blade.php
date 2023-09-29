@@ -428,7 +428,6 @@
                 saveDashboardToast.show();
             });
 
-            // TODO: Add toast notifications for adding/removing widgets
             // TODO: save category/focus filters and # of items in prefs
 
         });

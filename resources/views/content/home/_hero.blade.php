@@ -20,10 +20,9 @@
         @endif
         <div class="d-flex flex-wrap justify-content-center">
             @foreach($investors as $investor)
-                <div class="my-3 mx-4">
+                <div class="my-3 mx-4 px-xl-2">
                     <img src="{{ asset('/images/home/' . $investor['image']) }}" alt="{{ $investor['name'] }}" class="img-height-80 rounded-circle" />
                     <div class="fs-6 mt-1">{{ $investor['name'] }}</div>
-                    <div>{{ $investor['title'] }}</div>
                 </div>
             @endforeach
         </div>
