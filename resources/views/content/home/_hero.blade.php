@@ -1,6 +1,6 @@
 <div class="home-hero">
     <div class="container text-center">
-        <h1 class="text-accent">Your guide to psychedelics.</h1>
+        <h1 class="text-accent">Your Guide to Psychedelics</h1>
         @auth
             <p class="fs-4 my-4">Welcome back, {{ Auth::user()->name }}!</p>
             <div class="text-center mb-5">

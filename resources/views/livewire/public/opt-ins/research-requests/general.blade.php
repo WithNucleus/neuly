@@ -46,7 +46,7 @@
                     </div>
                     <div class="col-12 col-md-6 mb-3">
                         <label for="phone" class="fw-bold text-uppercase">Phone</label>
-                        <input wire:model="phone" type="text" class="form-control" id="email">
+                        <input wire:model="phone" type="text" class="form-control" id="phone">
                         @error('phone') <div class="text-danger small">{{ $message }}</div> @enderror
                     </div>
                 </div>
