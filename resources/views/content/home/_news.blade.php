@@ -4,7 +4,7 @@
         <div class="row" data-masonry='{"percentPosition": true }'>
             @foreach($articles as  $article)
                 <div class="col-12 col-md-6 text-start my-3">
-                    <a href="" class="card-hover-drop">
+                    <a href="{{ $article->url }}" target="_blank" rel="noopener noreferrer" class="card-hover-drop">
                         <div class="bg-body h-100 p-3 d-flex flex-column justify-content-between">
                             <div>
                                 <div class="d-flex">

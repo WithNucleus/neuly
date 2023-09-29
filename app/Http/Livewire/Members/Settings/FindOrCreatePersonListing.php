@@ -19,7 +19,7 @@ class FindOrCreatePersonListing extends Component
 
     public ?string $personLink = null;
 
-    public bool $showCreateForm = false; // TODO: TEMP TRUE FOR DEV
+    public bool $showCreateForm = false;
 
     public ?string $name = null;
     public ?string $email = null;

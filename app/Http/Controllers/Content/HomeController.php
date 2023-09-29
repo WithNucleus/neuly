@@ -14,29 +14,24 @@ class HomeController extends Controller
     {
         $investors = [
             [
-                'name' => 'Dustin Robinson',
-                'title' => 'Investor',
-                'image' => 'dustin-robinson.jpg'
+                'name' => 'Researchers',
+                'image' => 'researchers.jpg'
             ],
             [
-                'name' => 'Michelle Weiner',
-                'title' => 'Therapist',
-                'image' => 'michelle-weiner.jpg'
+                'name' => 'Founders',
+                'image' => 'founders.jpg'
             ],
             [
-                'name' => 'Josh Hardman',
-                'title' => 'Researcher',
-                'image' => 'josh-hardman.jpg'
+                'name' => 'Investors',
+                'image' => 'investors.jpg'
             ],
             [
-                'name' => 'Damien Kettlewell',
-                'title' => 'Founder',
-                'image' => 'damien-kettlewell.jpg'
+                'name' => 'Therapists',
+                'image' => 'therapists.jpg'
             ],
             [
-                'name' => 'Christian Gray',
-                'title' => 'Consultant',
-                'image' => 'christian-gray.jpg'
+                'name' => 'Activists',
+                'image' => 'activists.jpg'
             ]
         ];
 

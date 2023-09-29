@@ -34,7 +34,7 @@
                     <button type="button" class="btn btn-md @if($filters['type']) btn-accent @else btn-primary @endif btn-primary dropdown-toggle rounded-0" data-bs-toggle="dropdown" aria-expanded="false">
                         I'm looking for
                     </button>
-                    <ul class="dropdown-menu" style="min-width: 260px">
+                    <ul class="dropdown-menu" style="min-width: 240px">
                         @foreach ($typeOptions as $optionId => $option)
                             <li class="px-3">
                                 <div class="form-check form-check-small form-check-inline">
@@ -51,16 +51,16 @@
             </div>
             <div class="filter-widget me-md-4 mb-3">
                 <div class="btn-group">
-                    <button type="button" class="btn btn-md @if($filters['delivery-method']) btn-accent @else btn-primary @endif btn-primary dropdown-toggle rounded-0" data-bs-toggle="dropdown" aria-expanded="false">
-                        Delivery Method
+                    <button type="button" class="btn btn-md @if($filters['program']) btn-accent @else btn-primary @endif btn-primary dropdown-toggle rounded-0" data-bs-toggle="dropdown" aria-expanded="false">
+                        Program
                     </button>
-                    <ul class="dropdown-menu" style="min-width: 260px">
-                        @foreach ($deliveryMethodOptions as $optionId => $option)
+                    <ul class="dropdown-menu" style="min-width: 300px">
+                        @foreach ($programOptions as $optionId => $option)
                             <li class="px-3">
                                 <div class="form-check form-check-small form-check-inline">
-                                    <input wire:model="filters.delivery-method" class="form-check-input" type="checkbox" value="{{ $option }}"
-                                           id="filter-delivery-method-{{ $optionId }}" @if(in_array($option, $filters['delivery-method'])) checked @endif>
-                                    <label class="form-check-label @if(in_array($option, $filters['delivery-method'])) fw-bold @endif" for="filter-delivery-method-{{ $optionId }}">
+                                    <input wire:model="filters.program" class="form-check-input" type="checkbox" value="{{ $option }}"
+                                           id="filter-program-{{ $optionId }}" @if(in_array($option, $filters['program'])) checked @endif>
+                                    <label class="form-check-label @if(in_array($option, $filters['program'])) fw-bold @endif" for="filter-program-{{ $optionId }}">
                                         {{ $option }}
                                     </label>
                                 </div>
@@ -123,10 +123,10 @@
                     <button wire:click="clearFilter('type', '{{ $id }}')" class="btn text-danger px-1 border-0" aria-label="Clear filter"><i class="fa-sharp fa-solid fa-circle-xmark"></i></button>
                 </div>
             @endforeach
-            @foreach($filters['delivery-method'] as $id => $type)
+            @foreach($filters['program'] as $id => $type)
                 <div class="me-3 mb-3">
                     <span>{{ $type }}</span>
-                    <button wire:click="clearFilter('delivery-method', '{{ $id }}')" class="btn text-danger px-1 border-0" aria-label="Clear filter"><i class="fa-sharp fa-solid fa-circle-xmark"></i></button>
+                    <button wire:click="clearFilter('program', '{{ $id }}')" class="btn text-danger px-1 border-0" aria-label="Clear filter"><i class="fa-sharp fa-solid fa-circle-xmark"></i></button>
                 </div>
             @endforeach
         </div>
