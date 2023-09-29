@@ -35,7 +35,8 @@ class NeulyEduCourses extends Component
         'free' => null,
         'open-enrollment' => null,
         'self-paced' => null,
-        'delivery-method' => []
+        'delivery-method' => [],
+        'program' => [],
     ];
 
     public string $ip;
@@ -231,6 +232,9 @@ class NeulyEduCourses extends Component
                 ->when($this->filters['delivery-method'], function($query, $valueArray) {
                     $query->whereIn('delivery_method', $valueArray);
                 })
+                ->when($this->filters['program'], function($query, $valueArray) {
+                    $query->whereIn('program', $valueArray);
+                })
                 ->when($this->filters['focus'], function($query, $valueArray) {
                     return $query->whereHas('focus', function($query) use ($valueArray) {
                         $query->whereIn('name', $valueArray);
@@ -270,7 +274,7 @@ class NeulyEduCourses extends Component
             'records' => $this->rows,
             'focusOptions' => Focus::whereHas('courses')->withCount('courses')->orderByDesc('courses_count')->get()->toArray(),
             'typeOptions' => Course::whereNotNull('type')->orderBy('type')->pluck('type')->unique()->toArray(),
-            'deliveryMethodOptions' => Course::whereNotNull('delivery_method')->orderBy('delivery_method')->pluck('delivery_method')->unique()->toArray(),
+            'programOptions' => Course::whereNotNull('program')->orderBy('program')->pluck('program')->unique()->toArray(),
             'educationOptions' => Course::whereNotNull('education_credits')->pluck('education_credits')->unique()->sort()->toArray()
         ]);
     }

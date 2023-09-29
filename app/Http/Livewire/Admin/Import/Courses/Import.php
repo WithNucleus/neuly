@@ -23,6 +23,7 @@ class Import extends Component
         'type' => 'string',
         'learning_location' => 'string',
         'delivery_method' => 'string',
+        'program' => 'string',
         'lowest_cost' => 'integer',
         'highest_cost' => 'integer',
         'currency' => 'string',
