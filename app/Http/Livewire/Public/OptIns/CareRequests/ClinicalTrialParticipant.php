@@ -24,6 +24,7 @@ class ClinicalTrialParticipant extends Component
     public $message;
     public $age;
     public $sex;
+    public bool $open_to_trials = true;
 
     public bool $success = false;
 
@@ -59,6 +60,7 @@ class ClinicalTrialParticipant extends Component
             'message' => 'required',
             'age' => 'required',
             'sex' => 'required',
+            'open_to_trials' => 'nullable'
         ];
     }
 
@@ -75,7 +77,10 @@ class ClinicalTrialParticipant extends Component
             'data' => [
                 'locations' => [
                     'local' => $this->localLocation,
-                ]
+                ],
+                'age' => $this->age,
+                'sex' => $this->sex,
+                'open_to_trials' => $this->open_to_trials
             ],
             'user_id' => $this->userId,
             'ip' => $this->ip,

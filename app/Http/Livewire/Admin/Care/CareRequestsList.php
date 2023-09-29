@@ -21,7 +21,8 @@ class CareRequestsList extends Component
     public ?string $search = null;
     public array $filters = [
         'type' => [],
-        'status' => []
+        'status' => [],
+        'open_to_trials' => false
     ];
 
     public $selectedRecord;
@@ -127,6 +128,9 @@ class CareRequestsList extends Component
             })
             ->when($this->filters['status'], function($query, $valueArray) {
                 return $query->whereIn('status', $valueArray);
+            })
+            ->when($this->filters['open_to_trials'], function($query) {
+                return $query->whereJsonContains('data->open_to_trials', true);
             });
 
         return $this->applySorting($query);

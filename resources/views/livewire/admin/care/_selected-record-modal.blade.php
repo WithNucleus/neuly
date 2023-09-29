@@ -59,8 +59,29 @@
                                 <td>{{ $selectedRecord->ip }}</td>
                             </tr>
                         @endisset
+                        @isset($selectedRecord->data['age'])
+                            <tr>
+                                <th class="ps-0 text-uppercase small">Age:</th>
+                                <td>{{ $selectedRecord->data['age'] }}</td>
+                            </tr>
+                        @endisset
+                        @isset($selectedRecord->data['age'])
+                            <tr>
+                                <th class="ps-0 text-uppercase small">Sex:</th>
+                                <td>{{ $selectedRecord->data['sex'] }}</td>
+                            </tr>
+                        @endisset
                     </tbody>
                 </table>
+                @isset($selectedRecord->data['open_to_trials'])
+                    <div class="small text-uppercase">
+                        @if($selectedRecord->data['open_to_trials'] === true)
+                            <span class="text-success fw-bold">Interested in other trials</span>
+                        @else
+                            <span class="text-danger fw-bold">Only interested in this trial</span>
+                        @endif
+                    </div>
+                @endisset
             </div>
             <div class="col-12 col-lg-6 mb-4">
                 <div class="fw-bold text-uppercase text-primary">Location</div>
