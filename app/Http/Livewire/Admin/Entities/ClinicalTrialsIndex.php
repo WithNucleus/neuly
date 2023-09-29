@@ -7,6 +7,7 @@ use App\Http\Livewire\Traits\WithBulkActions;
 use App\Http\Livewire\Traits\WithCachedRows;
 use App\Http\Livewire\Traits\WithPerPagePagination;
 use App\Http\Livewire\Traits\WithSorting;
+use App\Jobs\AutoTag\TagClinicalTrial;
 use App\Jobs\Import\ClinicalTrial\ImportData;
 use App\Models\Clinicaltrial;
 use Livewire\Component;
@@ -21,21 +22,40 @@ class ClinicalTrialsIndex extends Component
     public ?string $search = null;
 
     public array $filters = [
-        'not-imported' => null
+        'not-imported' => null,
+        'missing-focus' => null
     ];
 
     public function mount() {
         $this->perPage = 10;
     }
 
+    public function bulkAutoTag() {
+        $count = $this->selectedRowsQuery->count();
+        $trials = $this->selectedRowsQuery->get();
+
+        foreach($trials as $trial) {
+            TagClinicalTrial::dispatch($trial);
+        }
+
+        $this->dispatchBrowserEvent('toast-notification',  ['text' => 'Auto-tagging ' . $count . ' clinical trials!', 'background' => 'bg-success']);
+        $this->reset('selected');
+        $this->reset('selectAll');
+        $this->reset('selectPage');
+    }
+
     public function importTrials() {
-        $trials = Clinicaltrial::whereKey($this->selected)->notImported()->get();
+        $count = $this->selectedRowsQuery->count();
+        $trials = $this->selectedRowsQuery;
 
         foreach($trials as $trial) {
             ImportData::dispatch($trial);
         }
 
-        $this->dispatchBrowserEvent('toast-notification',  ['text' => $trials->count() . ' clinical trials imported!', 'background' => 'bg-success']);
+        $this->dispatchBrowserEvent('toast-notification',  ['text' => $count . ' clinical trials imported!', 'background' => 'bg-success']);
+        $this->reset('selected');
+        $this->reset('selectAll');
+        $this->reset('selectPage');
     }
 
     public function updatingSearch() {
@@ -105,6 +125,9 @@ class ClinicalTrialsIndex extends Component
                 })
                 ->when($this->filters['not-imported'], function($query) {
                     return $query->notImported();
+                })
+                ->when($this->filters['missing-focus'], function($query) {
+                    return $query->whereDoesntHave('focus');
                 });
 
         return $this->applySorting($query);

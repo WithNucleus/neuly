@@ -11,6 +11,10 @@
         <div>
             <x-livewire-filters.checkbox-single class="lead" wireModel="filters.has-errors" id="filters.has-errors" label="Has Errors" />
         </div>
+
+        <div class="ms-auto">
+            <button wire:click="clearFilters" class="btn btn-sm btn-dark rounded-0">Clear Filters</button>
+        </div>
     </div>
     <div class="mb-3">
         Showing {{ $records->count() }} of {{ $records->total() }} records
@@ -18,6 +22,7 @@
     <table class="table table-striped">
         <thead>
             <tr>
+                <th>ID</th>
                 <th>First Imported</th>
                 <th>Last Updated</th>
                 <th>Identifier/Name</th>
@@ -29,6 +34,7 @@
         </thead>
         @forelse($records as $record)
             <tr wire:key="record-{{ $record->id }}">
+                <td>{{ $record->id }}</td>
                 <td class="text-nowrap">
                     {{ $record->formatted_created_at }}
                 </td>
