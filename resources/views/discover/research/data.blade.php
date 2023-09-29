@@ -1,91 +1,80 @@
 <div class="row">
-	<div class="col-12">
-
-		<h1 class="h3 font-normal">{{ $research->name }}</h1>
-
-		@if($research->publication_info != '')
-			<p class="lead text-success mb-2">
+    <div class="col-12 col-lg-7">
+        @if($research->publication_info)
+			<h2 class="h5 text-body-emphasis mb-3">
 				{{ $research->publication_info }}
-			</p>
+			</h2>
 		@endif
 
-		@if($research->companies->count() > 0)
-			<p class="mb-2">
-				<strong>Publisher / Journal:</strong>
+        @if($research->focus->count() > 0)
+            <div class="d-flex flex-wrap align-items-center my-4">
+                @foreach ($research->focus as $item)
+                    <a href="{{ route('discover.focus.show', $item->slug) }}" class="btn btn-secondary rounded-0 my-2 me-3 fs-6 py-1">{{ $item->name }}</a>
+                @endforeach
+            </div>
+        @endif
 
-				@foreach ($research->companies as $company)
-				    <a href="{{ route('discover.organizations.show', $company->slug ) }}">{{ $company->name }}</a> @if (!$loop->last)<br>@endif
-				@endforeach
-			</p>
-		@endif
+        @if($research->abstract)
+            <div>
+                <h3>Abstract</h3>
+                <p class="lead">
+                    {{ $research->abstract }}
+                </p>
+            </div>
+        @endif
 
-		@if($research->people->count() > 0)
-			<p class="mb-2">
-				<strong>Author(s):</strong>
-			
-				@foreach ($research->people as $person)
-				    <a href="{{ route('discover.people.show', $person->slug) }}">{{ $person->name }}</a>
-				    
-				    @if (!$loop->last),@endif
-				@endforeach
-			</p>
-		@endif
+        @if($research->link)
+            <div class="mt-4 text-end">
+                <a href="{{ $research->link }}" class="btn btn-lg btn-primary d-inline-flex align-items-center" target="_blank" rel="noopener noreferrer">
+                    <span class="me-2">View Research</span><i class="fa-sharp fa-regular fa-arrow-up-right-from-square"></i>
+                </a>
+            </div>
+        @endif
 
-		@if($research->focus->count() > 0)
-			<p class="mb-2">
-				<strong>Focus:</strong>
+        @if($research->companies->count() > 0)
+            <div>
+                <h3 class="h4">{{ ($research->people->count() > 1) ? 'Publishers / Journals' : 'Publisher / Journal' }}</h3>
+                <div class="row">
+                    @foreach ($research->companies as $company)
+                        <x-entities.related.company-card :company="$company" classes="col-12 col-md-6 mb-4" />
+                    @endforeach
+                </div>
+            </div>
+        @endif
+    </div>
+    <div class="col-12 col-lg-5 col-xl-4 offset-xl-1">
+        @isset($resources)
+            <div class="h6 mb-3">
+                @foreach ($resources as $resource)
+                    <div class="my-2">
+                        <a href="{{ $resource->link }}" target="_blank" rel="noopener noreferrer" class="d-flex align-items-center justify-content-end text-decoration-none">
+                            @isset($resource->file_format)
+                                <span class="h4 d-block mb-0 me-2">
+                                    @if($resource->file_format == 'PDF')
+                                        <i class="fa-sharp fa-solid fa-file-pdf"></i>
+                                    @elseif($resource->file_format == 'HTML')
+                                        <i class="fa-sharp fa-regular fa-link"></i>
+                                    @else
+                                        [{{ $resource->file_format }}]
+                                    @endif
+                                </span>
+                            @endisset
+                            <span>{{ $resource->title }}</span>
+                        </a>
+                    </div>
+                @endforeach
+            </div>
+        @endisset
 
-				@foreach ($research->focus as $item)
-				    <a href="{{ route('discover.focus.show', $item->slug) }}">{{ $item->name }}</a>@if (!$loop->last),@endif
-				@endforeach
-			</p>
-		@endif
-
-		@if($research->abstract != '')
-			<p class="mb-1">
-				<strong>Abstract:</strong><br>
-			</p>
-			<p class="mb-2 border-bottom pb-2">
-				{{ $research->abstract }}
-			</p>
-			{{-- <div class="bg-light p-2">
-				{{ $research->abstract }}
-			</div> --}}
-		@endif
-
-		<div class="d-flex align-items-center mt-3">
-			<div class="mr-3">
-				@if($research->link != '')
-					{{-- <p class="mb-3 mt-3"> --}}
-						<a href="{{ $research->link }}" class="btn btn-primary" target="_blank" rel="noopener noreferrer">
-							View <i class="fad fa-external-link fa-xs"></i>
-						</a>
-					{{-- </p> --}}
-				@endif
-			</div>
-			<div>
-				@isset($resources)
-					<p class="mb-0 font-large d-inline-flex align-items-center">
-						@foreach ($resources as $resource)
-							<span class="mr-3">
-								<a href="{{ $resource->link }}" target="_blank" rel="noopener noreferrer" class="d-inline-flex align-items-center">
-									@isset($resource->file_format)
-										@if($resource->file_format == 'PDF')
-											<i class="fad fa-file-pdf fa-2x mr-1"></i>
-										@elseif($resource->file_format == 'HTML')
-											<i class="fad fa-link fa-2x mr-1"></i>
-										@else
-											[{{ $resource->file_format }}]
-										@endif
-									@endisset
-									{{ $resource->title }}
-								</a>
-							</span>
-						@endforeach
-					</p>
-				@endisset
-			</div>
-		</div>
-
-	</div>
+        @if($research->people->count() > 0)
+            <div>
+                <h3 class="h4">{{ ($research->people->count() > 1) ? 'Authors' : 'Author' }}</h3>
+                <div class="row">
+                    @foreach ($research->people as $person)
+                        <x-entities.related.person-card :person="$person"  classes="col-12 small-square-card mb-4" />
+                    @endforeach
+                </div>
+            </div>
+        @endif
+    </div>
 </div>

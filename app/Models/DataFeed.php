@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\EntityImage;
 use App\Models\Traits\HasMediaTypes;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -13,7 +14,8 @@ class DataFeed extends Model
 {
     use CrudTrait,
         HasMediaTypes,
-        LogsActivity;
+        LogsActivity,
+        EntityImage;
 
     /*
     |--------------------------------------------------------------------------
@@ -29,6 +31,10 @@ class DataFeed extends Model
 
     protected static $logName = 'entities';
 
+    protected static $imageAttribute = 'image';
+    protected static $imageFolderPath = 'datafeeds';
+    protected static $imageFilenameAttribute = 'name';
+
     const FEED_TYPE_RSS = 'RSS';
 
     const FEED_TYPES = [
@@ -36,6 +42,7 @@ class DataFeed extends Model
     ];
 
     const SOURCE_GOOGLE_ALERT = 'Google Alert';
+    const SOURCE_PODCAST = 'Podcast';
 
     const SOURCE_CATEGORIES = [
         'Media Outlet',
@@ -45,7 +52,7 @@ class DataFeed extends Model
         'Video',
         'Mindfulness',
         self::SOURCE_GOOGLE_ALERT,
-        'Podcast',
+        self::SOURCE_PODCAST,
     ];
 
     const STATUS_ACTIVE = 'Active';
@@ -92,6 +99,16 @@ class DataFeed extends Model
         return $this->morphMany(MediaItem::class, 'source')->orderBy('date', 'desc');
     }
 
+    public function podcasts(): \Illuminate\Database\Eloquent\Relations\MorphMany
+    {
+        return $this->morphMany(MediaItem::class, 'source')->podcasts()->orderBy('date', 'desc');
+    }
+
+    public function articles(): \Illuminate\Database\Eloquent\Relations\MorphMany
+    {
+        return $this->morphMany(MediaItem::class, 'source')->articles()->orderBy('date', 'desc');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES
@@ -112,6 +129,10 @@ class DataFeed extends Model
         $query->where('source_category', self::SOURCE_GOOGLE_ALERT);
     }
 
+    public function scopePodcasts($query) {
+        $query->where('source_catgeory', self::SOURCE_PODCAST);
+    }
+
     /*
     |--------------------------------------------------------------------------
     | ACCESSORS
@@ -127,6 +148,11 @@ class DataFeed extends Model
     {
         $this->attributes['name'] = $name;
         $this->attributes['slug'] = Str::slug($name);
+    }
+
+    public function setImageAttribute($value)
+    {
+        $this->updateImageAttribute($value);
     }
 
     public function getActivitylogOptions(): LogOptions

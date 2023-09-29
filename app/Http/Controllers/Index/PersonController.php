@@ -6,102 +6,32 @@ use App\Helpers\ClaimPersonHelper;
 use App\Helpers\NotificationHelper;
 use App\Helpers\PagePreviewHelper;
 use App\Http\Controllers\Controller;
-use App\Http\Filters\PeopleCompanyFocusFilter;
 use App\Mail\VerifyClaimedPersonMail;
-use App\Models\Company;
-use App\Models\Location;
 use App\Models\Person;
 use App\Models\RaisedClaim;
 use App\Notifications\PersonDeletionRequested;
 use App\Notifications\RaisedClaimCreated;
 use App\Repositories\FollowRepository;
 use App\Services\Metas;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Spatie\Activitylog\Models\Activity;
-use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\AllowedSort;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class PersonController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('query_filters')->only('index');
-    }
 
-    // Public / Private Index for Homepage
-    public function index(Request $request)
+    public function index(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         $metas = Metas::fromPage($request->path());
 
-        $people = QueryBuilder::for(Person::class)
-            ->public()
-            ->with('companies')
-            ->allowedFilters([
-                'name',
-                AllowedFilter::partial('locations', 'locations.name'),
-                AllowedFilter::partial('company', 'companies.name'),
-                AllowedFilter::scope('is_investor', 'hasInvestors'),
-                AllowedFilter::callback('with_email', function (Builder $query, $value) {
-                    $query->whereNotNull('email');
-                }),
-                AllowedFilter::custom('focus', new PeopleCompanyFocusFilter),
-            ])
-            ->defaultSort('-created_at')
-            ->allowedSorts([
-                'name',
-                AllowedSort::field('date', 'created_at'),
-            ])
-            ->paginate(25)
-            ->appends(request()->query());
-
-        $locations = Location::has('people')->with('people')->get()->pluck('country')->unique()->sort()->toArray();
-        $companiesWithFocus = Company::has('people')->has('focus')->with('focus')->get();
-        $focuses = [];
-
-        foreach ($companiesWithFocus as $company) {
-            foreach ($company->focus as $focus) {
-                $focuses[] = $focus->name;
-            }
-        }
-
-        $focuses = array_unique($focuses);
-        sort($focuses);
-
-        if ($request->has('filter')) {
-            $filterInput = $request->input('filter');
-
-            $filter = array_map(function ($entity) {
-                return explode('|', $entity);
-            }, $filterInput);
-        }
-
-        $filters_companies = $filter['company'] ?? [];
-        $filters_focuses = $filter['focus'] ?? [];
-
-        // Return View
-        return view('discover.people.index', compact(
-            'people',
-            'metas',
-            'locations',
-            'focuses',
-            'filters_companies',
-            'filters_focuses',
-        ));
+        return view('discover.people.index', [
+            'metas' => $metas
+        ]);
     }
 
-    // Show More Info -- Full Layout
-    public function show(Request $request, $slug)
+    public function show(Request $request, $slug): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Contracts\Foundation\Application
     {
-        // Get Person
         $person = Person::where('slug', $slug)
             ->with([
                 'content',
@@ -112,8 +42,17 @@ class PersonController extends Controller
                 'research',
                 'events',
                 'clinicaltrials',
+                'mediaItems'
             ])
             ->firstOrFail();
+
+        $userIsPerson = false;
+
+        if ($person->user_id) {
+            if (Auth::id() === $person->user_id) {
+                $userIsPerson = true;
+            }
+        }
 
         $preview = $request->input('preview');
         // Check Visibility
@@ -133,8 +72,7 @@ class PersonController extends Controller
             'image' => $person->entityImageUrl,
         ]);
 
-        $entity = 'people';
-        $isFollowed = (bool) count(FollowRepository::fromuser(Person::class, $person->id));
+        $entity = $person;
         $isVerified = $person->user_id !== null;
 
         // Log Activity
@@ -151,7 +89,7 @@ class PersonController extends Controller
             })
             ->log($person->name);
 
-        return view('discover.people.show', compact('person', 'metas', 'entity', 'isFollowed', 'isVerified', 'preview'));
+        return view('discover.people.show', compact('person', 'metas', 'entity', 'isVerified', 'preview', 'userIsPerson'));
     }
 
     public function namesJson()

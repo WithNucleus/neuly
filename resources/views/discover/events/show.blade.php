@@ -1,36 +1,43 @@
-@extends('layouts.app')
+@extends('layouts.entity-show')
 
-@section('body-class', 'bg-light')
+@section('breadcrumbs')
+    @include('navbars.breadcrumb', [
+        'items' => [
+            'Events' => route('discover.events'),
+            $event->name  => false
+        ]
+    ])
+@endsection
 
 @section('content')
 
-    @include('discover.includes.show-begin', ['full_width' => false])
+    <div class="container py-4">
 
-    <p class="dashboard-actions-container m-2 float-right">
-        @include('members.follow.button', [
-            'followable_type' => get_class($event),
-            'followable_id' => $event->id,
-            'name' => $event->name,
-        ])
-    </p>
+        <x-entities.entity-show-title-meta title="{{ $event->name }}" headingClasses="max-width-780 text-success mb-2">
+            <div class="me-3">
+                @include('members.follow.button', [
+                    'followable_type' => get_class($event),
+                    'followable_id' => $event->id,
+                    'name' => $event->name
+                ])
+            </div>
+        </x-entities.entity-show-title-meta>
 
-    <h1>{{ $event->name }}</h1>
+        @include('discover.events.data')
 
-    @include('discover.includes.status-messages')
-
-    @include('discover.events.data')
-
-    @auth
-    <div class="row">
-        <div class="col-sm-6">
-            <small>Last updated: {{ Carbon\Carbon::parse($event->updated_at)->format('M d, Y') }}</small>
-        </div>
-        <div class="col-sm-6 text-right">
-            @include('discover.includes.update-listing-form', ['entity' => $event])
+        <div class="d-flex flex-wrap justify-content-between align-items-center text-uppercase small fw-bold text-secondary-emphasis mt-4">
+            <div class="me-4">
+                Last updated: {{ Carbon\Carbon::parse($event->updated_at)->format('M d, Y') }}
+            </div>
+            @can('edit events')
+                <div>
+                    <a href="{{ route('event.edit', $event->id) }}" class="text-secondary-emphasis">Edit Event</a>
+                </div>
+            @endcan
+            <div>
+                @include('discover.includes.update-listing-form', ['entity' => $event])
+            </div>
         </div>
     </div>
-    @endauth
 
-    @include('discover.includes.show-end')
-    @include('discover.includes.limited-access-modal')
 @endsection

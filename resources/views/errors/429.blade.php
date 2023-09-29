@@ -1,18 +1,24 @@
 @extends('errors.layout')
 
 @php
-  $error_number = 429;
+    $error_number = 429;
 @endphp
 
 @section('title')
-    OOOOH! {{ $error_number }}, TO MANY REQUESTS
+    Too Many Requests
 @endsection
 
 @section('description')
-  @php
-    $default_error_message = "Sorry about that, but there were to many requests to handle them all at the same time.<br /><br />Please try again later.";
-  @endphp
-  @can('view logs')
-      {!! isset($exception)? ($exception->getMessage()?e($exception->getMessage()):$default_error_message): $default_error_message !!}
-  @endcan
+    @php
+        $default_error_message = "Sorry about that, but there were too many requests. If you know what caused this, slow down or try later.";
+    @endphp
+    @can('view logs')
+        @isset($exception)
+            {{ $exception->getMessage() }}
+        @else
+            {{ $default_error_message }}
+        @endisset
+    @else
+        {{ $default_error_message }}
+    @endcan
 @endsection

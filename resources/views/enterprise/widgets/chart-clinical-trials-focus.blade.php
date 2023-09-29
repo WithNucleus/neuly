@@ -1,7 +1,7 @@
 <div class="widget-controls mb-3">
     <div class="d-flex align-items-stretch">
-        <button class="btn btn-sm has-accordion-arrow filter-control" type="button" data-toggle="collapse"
-                data-target="#filters-chart-clinical-trials-focus-phases" aria-expanded="false"
+        <button class="btn btn-sm has-accordion-arrow filter-control" type="button" data-bs-toggle="collapse"
+                data-bs-target="#filters-chart-clinical-trials-focus-phases" aria-expanded="false"
                 aria-controls="filters-chart-clinical-trials-focus-phases">
             Phase Filter
         </button>
@@ -11,11 +11,11 @@
         <div class="filter-group border shadow-sm px-3 py-2 collapse"
              id="filters-chart-clinical-trials-focus-phases">
             @foreach ($phases as $key => $label)
-                <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input"
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input"
                            id="filters-chart-clinical-trials-focus-phases-{{ $key }}" data-name="{{ $key }}"
                         {{ $filteredPhases && in_array($key, $filteredPhases) ? 'checked' : '' }}>
-                    <label class="custom-control-label"
+                    <label class="form-check-label"
                            for="filters-chart-clinical-trials-focus-phases-{{ $key }}">{{ $label }}</label>
                 </div>
             @endforeach

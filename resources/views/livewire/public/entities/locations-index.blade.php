@@ -1,0 +1,110 @@
+<div class="d-flex flex-column flex-lg-row w-100">
+    <div class="entity-index-sidebar">
+        <x-entities.offcanvas-sidebar>
+            <h3 class="h5 d-none d-lg-block mb-4 text-body-emphasis">Narrow Your Search</h3>
+
+            <x-livewire-filters.search label="Search locations" placeholder="Search" search="{{ $search }}" />
+
+            <div class="my-4">
+                <x-livewire-filters.checkbox-single wireModel="filters.has-companies" id="filter-has-companies" label="Has Companies" />
+                <x-livewire-filters.checkbox-single wireModel="filters.has-people" id="filter-has-people" label="Has People" />
+                <x-livewire-filters.checkbox-single wireModel="filters.has-investors" id="filter-has-investors" label="Has Investors" />
+                <x-livewire-filters.checkbox-single wireModel="filters.has-clinical-trials" id="filter-has-clinical-trials" label="Has Clinical Trials" />
+                <x-livewire-filters.checkbox-single wireModel="filters.has-jobs" id="filter-has-jobs" label="Has Jobs" />
+                <x-livewire-filters.checkbox-single wireModel="filters.has-events" id="filter-has-events" label="Has Events" />
+            </div>
+
+            <div>
+                <button wire:click="clearFilters" class="btn btn-sm btn-secondary">Clear Filters</button>
+            </div>
+        </x-entities.offcanvas-sidebar>
+    </div>
+    <div class="entity-index-listings w-100">
+        <div class="row">
+            <div class="col-12 d-md-flex justify-content-between align-items-end">
+                <h1 class="me-4 mb-md-0 text-body-emphasis">locations</h1>
+                <div class="lead">
+                    {{ number_format($records->total()) }} locations
+                </div>
+            </div>
+            <div class="col-12 my-3 d-lg-none">
+                <x-entities.offcanvas-sidebar-toggle />
+            </div>
+            <div>
+                @if($sorts)
+                    <div class="text-uppercase d-flex mt-3">
+                        <div class="fw-bold me-2">Sorting:</div>
+                        @foreach($sorts as $name => $direction)
+                            <div class="d-flex">
+                                <div class="me-1">{{ str_replace('_count', '', $name) }}</div>
+                                <div>
+                                    @if($direction === 'asc')
+                                        <i class="fa-sharp fa-solid fa-arrow-up"></i>
+                                    @else
+                                        <i class="fa-sharp fa-solid fa-arrow-down"></i>
+                                    @endif
+                                </div>
+                                @if(!$loop->last) <span class="mx-2"><i class="fa-sharp fa-light fa-angle-right"></i></span> @endif
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
+            </div>
+            <table class="table align-middle table-hover">
+                <thead>
+                    <tr>
+                        <th>
+                            <x-entities.entity-index-sort-button label="Name" field="name" :sorts="$sorts" />
+                        </th>
+                        <th>
+                            <x-entities.entity-index-sort-button label="Companies" field="companies_count" :sorts="$sorts" />
+                        </th>
+                        <th>
+                            <x-entities.entity-index-sort-button label="People" field="people_count" :sorts="$sorts" />
+                        </th>
+                        <th>
+                            <x-entities.entity-index-sort-button label="Investors" field="investors_count" :sorts="$sorts" />
+                        </th>
+                        <th>
+                            <x-entities.entity-index-sort-button label="Clinical Trials" field="clinicaltrials_count" :sorts="$sorts" />
+                        </th>
+                        <th>
+                            <x-entities.entity-index-sort-button label="Jobs" field="jobs_count" :sorts="$sorts" />
+                        </th>
+                        <th>
+                            <x-entities.entity-index-sort-button label="Events" field="events_count" :sorts="$sorts" />
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($records as $location)
+                        <tr wire:key="{{ $location->slug }}" class="fs-6">
+                            <td class="fs-normal">
+                                <a href="{{ route('discover.locations.show', $location->slug) }}">
+                                    {{ $location->name }}
+                                </a>
+                            </td>
+                            <td>{{ $location->companies_count }}</td>
+                            <td>{{ $location->people_count }}</td>
+                            <td>{{ $location->investors_count }}</td>
+                            <td>{{ $location->clinicaltrials_count }}</td>
+                            <td>{{ $location->jobs_count }}</td>
+                            <td>{{ $location->events_count }}</td>
+                        </tr>
+                    @empty
+                        <tr wire:key="empty">
+                            <td class="lead" colspan="99">
+                                No locations match your search criteria.
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
+        <div class="d-flex justify-content-center mb-5">
+            {{ $records->links() }}
+        </div>
+    </div>
+
+</div>

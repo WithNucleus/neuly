@@ -15,13 +15,10 @@
                 @foreach ($bookableListing->bookable->people as $person)
                     <div class="col-6 col-lg-4 text-center">
                         <a href="{{ route('discover.people.show', $person->slug) }}" class="text-decoration-none">
-                            @if($person->entityImageUrl)
-                                <div class="person-photo-small shadow-sm" style="background-image: url('{{ $person->entityImageUrl }}');">
-                                    <span class="sr-only">{{ $person->name }}</span>
-                                </div>
-                            @else
-                                <img src="{{ asset('images/person-blank.png') }}" class="person-photo-small shadow-sm" alt="{{ $person->name }}">
-                            @endif
+                            <div class="logo-square-is-contained rounded-circle"
+                                         style="background-image: url('{{ $person->entityImageUrl ?? asset('images/person-blank.png') }}');">
+
+                            </div>
                             <p>
                                 <span class="d-block lead">{{ $person->name }}</span>
                                 <span class="d-block text-muted">{{ $person->pivot->position }}</span>

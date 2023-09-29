@@ -20,36 +20,20 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class JobController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public function index(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        $this->middleware('query_filters')->only('index', 'archive', 'embedIndex');
-    }
-
-    public function index(Request $request)
-    {
-        $data = $this->getIndexData($request, 'open');
         $data['metas'] = Metas::fromPage($request->path());
 
         return view('discover.jobs.index', $data);
     }
 
-    public function archive(Request $request)
+    public function archive(): \Illuminate\Http\RedirectResponse
     {
-        $data = $this->getIndexData($request, 'archived');
-        $data['metas'] = Metas::fromPage($request->path());
-
-        return view('discover.jobs.index', $data);
+        return redirect()->route('discover.jobs');
     }
 
-    // Show
-    public function show(Request $request, $slug)
+    public function show(Request $request, $slug): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        // Get Job
         $job = Job::where('slug', $slug)->firstOrFail();
 
         EmbedLogHelper::add($request, $job);
@@ -62,7 +46,7 @@ class JobController extends Controller
 
         $related = $this->getReltaedEntities($job);
 
-        $entity = 'jobs';
+        $entity = $job;
 
         // Log Activity
         activity('pageview')
@@ -78,7 +62,12 @@ class JobController extends Controller
             })
             ->log($job->job_title);
 
-        return view('discover.jobs.show', compact('job', 'related', 'metas', 'entity'));
+        return view('discover.jobs.show', [
+            'job' => $job,
+            'related' => $related,
+            'metas' => $metas,
+            'entity' => $entity
+        ]);
     }
 
     public function embedWidget()

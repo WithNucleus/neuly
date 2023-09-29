@@ -1,7 +1,10 @@
 <h1 class="h2">
-    <a href="{{ route('member.follow-lists.index') }}" class="text-dark"><i class="fad fa-star text-secondary mr-2"></i>Following</a>
+    <a href="{{ route('member.follow-lists.index') }}" class="text-decoration-none">
+        <i class="fa-sharp fa-solid fa-star text-accent"></i>
+        <span>Following</span>
+    </a>
 </h1>
-<div class="p-4 bg-white shadow-sm">
+<div>
     <p class="lead mb-1">Lists</p>
     @include('members.data.follow-lists', ['lists' => $followLists, 'show_more' => true, 'shadow' => false])
 

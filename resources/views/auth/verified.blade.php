@@ -1,23 +1,19 @@
-@extends('layouts.plain')
+@extends('layouts.app')
 
 @section('content')
 
-@include('navbars.auth')
+    @include('navbars.primary')
 
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow-sm">
-                <div class="card-body text-center">
-
-                    <h1 class="h2 text-center border-bottom border-color-tertiary text-primary mb-4">Thanks for verifying your email!</h1>
-
-                    <p class="mt-4 text-success">Email "{{ $email }}" verified successfully.</p>
-
-                    <p class="mt-4 mb-0"><a href="{{ route('index') }}">Return to home page</a></p>
-                </div>
+    <div class="container py-5">
+        <div class="max-width-780 mx-auto bg-body-secondary p-4 p-lg-5 text-center ">
+             <div class="display-1">
+                <i class="fa-sharp fa-solid fa-envelope-circle-check text-accent mb-2"></i>
+            </div>
+            <h1 class="h2 text-transform-none">Thanks for verifying your email!</h1>
+            <div>
+                <livewire:members.onboarding.user-details />
             </div>
         </div>
     </div>
-</div>
+
 @endsection

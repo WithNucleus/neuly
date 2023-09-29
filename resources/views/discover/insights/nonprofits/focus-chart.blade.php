@@ -1,37 +1,10 @@
 @extends('layouts.app')
 
-@section('body-class', 'bg-light')
+@section('body-class', 'bg-white text-dark')
 
 @section('content')
 
     @include('navbars.primary')
-
-    <div class="container-fluid">
-
-        <div class="row">
-            <div class="col-12 navbar-tabs-container">
-                @include('navbars.tabs')
-            </div>
-        </div>
-
-        <div class="row">
-            @include('navbars.tabs-mobile')
-        </div>
-
-        <div class="row">
-            <div class="col-12 breadcrumbs-container bg-white shadow-sm">
-
-                @include('navbars.breadcrumb', [
-                    'items' => [
-                        'Insights' => false,
-                        'Insights' => route('discover.insights'),
-                        'Non-Profits' => false,
-                    ]
-                ])
-
-            </div>
-        </div>
-    </div>
 
     <div class="container-fluid">
         <main id="show-main" role="main" class="col-12">
@@ -52,18 +25,6 @@
     <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
 
     <style>
-        #nonProfitFocusChart {
-            width: 100%;
-            height: 1024px;
-            max-width:100%;
-        }
-
-        @media (min-width: 768px) {
-            #nonProfitFocusChart {
-                height: 75vh;
-            }
-        }
-
         .ampopup-content {
             background: #fff;
             box-shadow: 0 .125rem .25rem rgba(0,0,0,.075);

@@ -3,62 +3,27 @@
 namespace App\Http\Controllers\Index;
 
 use App\Http\Controllers\Controller;
-use App\Models\Focus;
 use App\Models\Research;
 use App\Repositories\FollowRepository;
 use App\Services\Metas;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Models\Activity;
-use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\AllowedSort;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class ResearchController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public function index(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        $this->middleware('query_filters')->only('index');
-    }
-
-    // Index
-    public function index(Request $request)
-    {
-        $research_items = QueryBuilder::for(Research::class)
-            ->allowedFilters([
-                'name',
-                'publication_info',
-                'abstract',
-                'companies.name',
-                AllowedFilter::exact('focus', 'focus.name'),
-                AllowedFilter::exact('people', 'people.name'),
-            ])
-            ->defaultSort('-created_at')
-            ->allowedSorts([
-                AllowedSort::field('title', 'name'),
-                AllowedSort::field('date', 'created_at'),
-            ])
-            ->paginate(10)
-            ->appends(request()->query());
-
-        $focus_cats = Focus::drugs()->orderBy('name')->get()->pluck('name');
-
         $metas = Metas::fromPage($request->path());
 
-        // Return View
-        return view('discover.research.index', compact('research_items', 'focus_cats', 'metas'));
+        return view('discover.research.index', [
+            'metas' => $metas
+        ]);
     }
 
-    // Show
-    public function show(Request $request, $slug)
+    public function show(Request $request, $slug): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        // Get Research
         $research = Research::where('slug', $slug)->firstOrFail();
 
         $metas = Metas::process([
@@ -69,8 +34,7 @@ class ResearchController extends Controller
 
         $related = $this->getReltaedEntities($research);
 
-        $entity = 'research';
-        $isFollowed = (bool) count(FollowRepository::fromuser(Research::class, $research->id));
+        $entity = $research;
 
         $resources = json_decode($research->resources);
 
@@ -88,7 +52,13 @@ class ResearchController extends Controller
             })
             ->log($research->name);
 
-        return view('discover.research.show', compact('research', 'related', 'metas', 'entity', 'resources', 'isFollowed'));
+        return view('discover.research.show', [
+            'research' => $research,
+            'related' => $related,
+            'metas' => $metas,
+            'entity' => $entity,
+            'resources' => $resources
+        ]);
     }
 
     public function namesJson()

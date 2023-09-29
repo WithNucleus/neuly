@@ -3,92 +3,1214 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
-@import 'utilities';
-@import 'navbars';
-@import 'sidebar';
-@import 'tables';
-@import 'discover-menus';
-@import 'homepage';
-@import 'footer';
-@import 'search-forms';
-@import 'trix';
-@import 'images';
-@import 'practitioners';
 
-/*
- * Content
- */
-#index-main,
-#content-main {
-	padding: 1rem 2rem 2rem 2rem;
+// TODO: Split out this file into new includes after getting rid of old stuff
+
+body {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    display: flex;
+    align-items: stretch;
+    flex-direction: column;
 }
 
-#content-main {
-	padding-top: 5.5rem
+html {
+    min-height: -webkit-fill-available;
 }
 
-#show-main {
-	padding-top: 2rem;
+.main-content-container {
+    padding-top: 2rem;
 }
 
-#home-main {
-	padding-top: 3rem;
+// Dark Theme Color Overrides
+[data-bs-theme=dark] {
+    --bs-success: $neulyGreenBright;
+    --bs-success-rgb: 40, 185, 142;
+    --bs-secondary: $gray-300;
+    --bs-secondary-rgb: 222, 226, 230;
+
+    .text-primary {
+        color: $neulyIndigoBright !important;
+    }
+
+    .purple-on-dark {
+        color: $neulyIndigoBright;
+    }
+
+    .white-on-dark {
+        color: $white !important;
+    }
+
+    .btn-outline-primary {
+        color: $neulyIndigoBright;
+        border-color: $neulyIndigoBright;
+    }
+
+    .btn-outline-primary:hover {
+        background-color: $neulyIndigoBright;
+        color: $neulyDarkIndigo;
+    }
+
+    .btn-outline-tertiary {
+        color: $pear;
+        border-color: $pear;
+    }
+
+    .btn-outline-tertiary:hover {
+        background-color: $pear;
+        color: $neulyDarkIndigo;
+    }
+
+}
+
+// Nav Logo
+svg#neulyLogo {
+    .icon {
+        fill: $neulyGreenBright;
+        transition: all .2s ease-in-out;
+    }
+
+    .text {
+        fill: $white;
+        transition: all .2s ease-in-out;
+    }
+}
+
+.plain-layout {
+    svg#neulyLogo {
+        .text {
+            fill: $gray-900;
+        }
+    }
+}
+
+[data-bs-theme=dark] {
+    .plain-layout {
+        svg#neulyLogo {
+            .text {
+                fill: $white;
+            }
+        }
+    }
+}
+
+.navbar.bg-primary {
+    .navbar-nav>li {
+        color: $gray-300;
+
+        >a {
+            color: $gray-300;
+        }
+
+        >a:hover {
+            color: $gray-100;
+        }
+    }
+}
+
+#primary-navbar.bg-primary {
+    .aa-Form {
+        border-color: lighten(#454a91, 20%);
+    }
+}
+
+// Breadcrumbs with Primary Background
+.breadcrumb {
+    text-transform: uppercase;
+    font-family: $headings-font-family;
+    margin-left: 0;
+
+    a {
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    .breadcrumb-item.active {
+        font-weight: 600;
+    }
+}
+
+// TODO: Only keep if navbar is not primary
+.bg-primary {
+    .breadcrumb {
+        text-transform: uppercase;
+
+        a {
+            color: $gray-200;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb-item.active {
+            font-weight: bold;
+            color: $gray-100;
+        }
+
+        .breadcrumb-item + .breadcrumb-item::before {
+            color: $gray-400;
+        }
+    }
+}
+
+// Entity Index & Admin Containers -- Scrollable Sidebars
+.entity-index-container,
+.adminx-page-container {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    display: flex;
+    align-self: stretch;
+
+    @media (min-width: 992px) {
+        max-height: 100vh;
+        height: calc(100vh - $nav-height);
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+}
+
+.entity-index-container,
+.adminx-page-container {
+    --sidebar-width-sm: 300px;
+    --sidebar-width-lg: 350px;
+
+    .entity-index-sidebar,
+    .adminx-sidebar {
+        flex-shrink: 0;
+        padding: 1rem;
+    }
+
+    .entity-index-listings,
+    .adminx-content {
+        padding: 1rem;
+    }
+
+    @media (min-width: 992px) {
+        .entity-index-sidebar,
+        .adminx-sidebar {
+            width: var(--sidebar-width-sm);
+            max-height: calc(100vh - $nav-height);
+            overflow-y: auto;
+        }
+
+        .entity-index-listings,
+        .adminx-content{
+            max-height: calc(100vh - $nav-height);
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+    }
+
+    @media(min-width: 1500px) {
+        .entity-index-sidebar,
+        .adminx-sidebar{
+            width: var(--sidebar-width-lg);
+        }
+
+        .entity-index-listings,
+        .adminx-content{
+            padding: 1rem 2rem;
+        }
+    }
+}
+
+// Hiring Badge
+.position-top-left {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+// Absolute Positioned Badges
+.position-top-right {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+// Cards
+.card-hover:hover {
+    box-shadow: var(--bs-focus-ring-x, 0) var(--bs-focus-ring-y, 0) var(--bs-focus-ring-blur, 0) var(--bs-focus-ring-width) var(--bs-focus-ring-color);
+    cursor: pointer;
+}
+
+.card-hover-drop {
+    display: block;
+    text-decoration: none;
+    transition: transform .2s ease-in-out;
+}
+
+.card-hover-drop:hover {
+    transform: translateY(2px);
+}
+
+// Pagination
+ul.pagination {
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+// Buttons
+.btn {
+    text-transform: uppercase;
+}
+
+.btn-link {
+    text-transform: none;
+}
+
+.btn-cta {
+    border-radius: 2.75rem;
+    padding: .25rem 1.5rem;
+    font-size: $font-size-base * 1.1;
+}
+
+.btn-cta.btn-lg {
+    padding: .75rem 2rem;
+    font-size: $font-size-base * 1.25;
+}
+
+.btn-outline-success:hover {
+    color: $white;
+}
+
+.cursor-pointer:hover {
+    cursor: pointer;
+}
+
+/* Faux Select Item / Button */
+.faux-select-item {
+    width: 100%;
+    border-radius: 0;
+    text-align: left;
+    font-weight: 400;
+    text-transform: none !important;
+    font-size: $font-size-sm;
+}
+
+.faux-select-item:hover {
+    background-color: $neulyGreen;
+    color: $gray-100;
+}
+
+.faux-select-item-hover-gray:hover {
+    background-color: $gray-200;
+    color: $neulyIndigo;
+}
+
+// Links & Text Effects
+.underline-on-hover {
+    text-decoration: none;
+}
+
+.underline-on-hover:hover {
+    text-decoration: underline;
+}
+
+$truncate-sizes: 100 200 300 600;
+
+@each $size in $truncate-sizes {
+    .truncate-#{$size} {
+        max-width: #{$size}px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        display: block;
+    }
+}
+
+// Headings
+h1, .h1,
+h2, .h2,
+h3, .h3,
+h4, .h4,
+h5, .h5 {
+    text-transform: uppercase;
+}
+
+.lead {
+    strong {
+        font-weight: bold;
+    }
+}
+
+.text-transform-none {
+    text-transform: none;
+}
+
+.text-small {
+    font-size: $font-size-base * .9;
+}
+
+.fs-normal {
+    font-size: $font-size-base;
+}
+
+.ff-normal {
+    font-family: $font-family-sans-serif;
+}
+
+// Images
+img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+}
+
+.logo-is-contained,
+.logo-square-is-contained {
+    height: 150px;
+    margin-left: auto;
+    margin-right: auto;
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.logo-is-contained {
+    width: 100%;
+    max-width: 280px;
+
+    img {
+        margin: 0 auto;
+        width: 70px;
+        height: auto;
+    }
+}
+
+.logo-square-is-contained {
+    width: 100%;
+    max-width: 150px;
+    max-height: 150px;
+	height: auto;
+    aspect-ratio: 1;
+    background-size: cover;
+}
+
+.small-square-card {
+    max-width: 200px;
+
+    .logo-square-is-contained {
+        width: 100px;
+    }
+}
+
+$img-heights: 30 80 120;
+
+@each $size in $img-heights {
+    .img-height-#{$size} {
+        height: #{$size}px;
+        width: auto;
+    }
+}
+
+.book-image {
+    width: 150px;
+    height: auto;
+}
+
+.entity-square-image {
+    width: 50px;
+    height: auto;
+
+    @media (min-width: 768px) {
+        width: 100px;
+    }
+
+    @media (min-width: 1200px) {
+        width: 200px;
+    }
+}
+
+.recently-viewed-image {
+	width: 60px;
+	height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	img {
+		width: 32px;
+		height: 32px;
+	}
+
+	img.logo {
+		width: 50px;
+		height: auto;
+	}
+}
+
+.bookmark-image {
+	background-size: contain;
+	background-position: center center;
+	background-repeat: no-repeat;
+	width: 50px;
+	height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	img {
+		width: 32px;
+		height: 32px;
+	}
+}
+
+// Collapse Heading - Flip Icon
+.collapse-heading {
+    .btn {
+        font-size: inherit;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        line-height: 1.2;
+        outline: 0;
+        border: 0;
+        border-radius: 0;
+    }
+
+    .btn:focus {
+        outline: 0;
+        border: 0;
+        border-radius: 0;
+    }
+
+    .btn[aria-expanded="false"] {
+        i {
+            transform: rotate(180deg);
+        }
+    }
+}
+
+// Btn Toggle
+.btn-toggle {
+    padding: .25rem .5rem;
+    font-weight: 600;
+    color: var(--bs-emphasis-color);
+    background-color: transparent;
+}
+
+.btn-toggle:hover,
+.btn-toggle:focus {
+    color: rgba(var(--bs-emphasis-color-rgb), .85);
+    background-color: var(--bs-tertiary-bg);
+}
+
+.btn-toggle::before {
+    width: 1.25em;
+    line-height: 0;
+    content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba%280,0,0,.5%29' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
+    transition: transform .35s ease;
+    transform-origin: .5em 50%;
+}
+
+[data-bs-theme="dark"] .btn-toggle::before {
+    content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba%28255,255,255,.5%29' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
+}
+
+.btn-toggle[aria-expanded="true"] {
+    color: rgba(var(--bs-emphasis-color-rgb), .85);
+}
+
+.btn-toggle[aria-expanded="true"]::before {
+    transform: rotate(90deg);
+}
+
+.btn-toggle.active {
+    color: var(--bs-primary);
+}
+
+.btn-toggle-nav a {
+    padding: .1875rem .5rem;
+    margin-top: .125rem;
+    margin-left: 1.25rem;
+}
+
+.btn-toggle-tall {
+    text-align: left;
+    position: relative;
+    padding-left: 1.5rem;
+    width: 100%;
+}
+
+.btn-toggle-tall::before {
+    position: absolute;
+    left: 0;
+    top: .5rem;
+}
+
+.btn-toggle-nav a:hover,
+.btn-toggle-nav a:focus {
+    background-color: var(--bs-tertiary-bg);
+}
+
+// Alerts
+.alert *:last-of-type {
+    margin-bottom: 0;
+}
+
+// Max Widths
+$max-widths: 60 80 100 150 200 250 300 360 400 500 600 740 780 800 840 1000;
+
+@each $size in $max-widths {
+    .max-width-#{$size} {
+        max-width: #{$size}px;
+    }
+}
+
+// Min Widths
+$min-widths: 100 120;
+
+@each $size in $min-widths {
+    .min-width-#{$size} {
+        min-width: #{$size}px;
+    }
+}
+
+// Neuly Care Logo
+svg#neulyCareLogo,
+svg#neulyEduLogo,
+svg#neulyResearchLogo {
+    .primary-color {
+        fill: $neulyGreenBright;
+        transition: all .2s ease-in-out;
+    }
+
+    .secondary-color {
+        fill: $primary;
+        transition: all .2s ease-in-out;
+    }
+}
+
+[data-bs-theme=dark] {
+    svg#neulyCareLogo,
+    svg#neulyEduLogo,
+    svg#neulyResearchLogo {
+        .secondary-color {
+            fill: $white;
+        }
+    }
+}
+
+.join-neuly-care-banner {
+    background: $primary;
+    color: $gray-100;
+
+    svg#neulyCareLogo {
+        .primary-color {
+            fill: $neulyGreenBright;
+            transition: all .2s ease-in-out;
+        }
+
+        .secondary-color {
+            fill: $white;
+            transition: all .2s ease-in-out;
+        }
+    }
+}
+
+.bookable-form-container {
+    background: $gray-100;
+    padding: 1.5rem 1rem;
+    text-align: center;
+    max-width: 460px;
+    margin-left: auto;
+    margin-right: auto;
+
+    input[type="date"] {
+        max-width: 180px;
+    }
+
+    input[type="number"] {
+        max-width: 100px;
+    }
+}
+
+/* ----------
+    Homepage
+------------- */
+// Section Spacing
+.home-hero,
+.home-clinical-research,
+.home-neuly-care,
+.home-add-listing,
+.home-request-research {
+    .container {
+        padding-top: 3rem;
+        padding-bottom: 3rem;
+    }
+
+    h1,
+    h2 {
+        text-transform: none;
+    }
+
+    @media (min-width: 1024px) {
+        .container {
+            padding-top: 8rem;
+            padding-bottom: 8rem;
+        }
+    }
+}
+
+.home-hero,
+.home-clinical-research,
+.home-neuly-care,
+.home-add-listing,
+.home-request-research {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+}
+
+body.home {
+    background-image: url('../images/home/home-hero.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+
+    #primary-navbar {
+        a.nav-link {
+            color: $gray-500;
+        }
+
+        a.nav-link:hover {
+            color: $gray-300;
+        }
+    }
+
+    .home-hero {
+        color: $gray-300;
+
+        .form-control,
+        .form-control::placeholder {
+            color: $gray-300;
+        }
+    }
+}
+
+.home-clinical-research {
+    background-image: url('../images/home/bg-clinical-research.jpg');
+}
+
+.home-neuly-care {
+    background-image: url('../images/home/bg-hero-neurons-alt.jpg');
+}
+
+.home-add-listing {
+    background-image: url('../images/home/bg-hero-molecular-structure.jpg');
+}
+
+.home-request-research {
+    background-color: #000;
+    background-size: contain;
+    background-position: center bottom;
+    background-image: url('../images/home/bg-hero-brain.jpg');
+}
+
+.home-news,
+.home-explore,
+.home-courses,
+.home-pubco-index {
+    .container,
+    .container-fluid {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+
+    h1 {
+        text-transform: none;
+    }
+
+    @media (min-width: 1024px) {
+        .container,
+        .container-fluid {
+            padding-top: 4rem;
+            padding-bottom: 4rem;
+        }
+    }
+}
+
+.home-hero {
+    .email-optin,
+    .login-widget {
+        width: 100%;
+        text-align: center;
+
+        .form-control {
+            border-radius: 2.75rem;
+            padding: .5rem 1.5rem;
+            font-size: $font-size-base * 1.1;
+            background: none;
+            width: 100%;
+        }
+
+        form {
+            max-width: 480px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn {
+            border-radius: 2.75rem;
+            padding: .5rem 1.5rem;
+            text-transform: none;
+            font-weight: 500;
+            color: $gray-100;
+            margin-left: -2.75rem;
+        }
+    }
+}
+
+[data-bs-theme=dark] {
+    .home-hero .email-optin .form-control {
+        border-color: $gray-300;
+        color: $gray-100;
+    }
+}
+
+.home-explore {
+
+    .healthy-doctor-image {
+        max-width: 350px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .healthy-doctor-text {
+        max-width: 420px;
+        margin-left: auto;
+        margin-right: auto;
+        padding-bottom: 1.5rem;
+
+        h3 {
+            text-transform: none;
+        }
+    }
+
+    .btn-light {
+        border: 0;
+        background-color: $gray-200;
+    }
+
+    .btn-light:hover {
+        color: $gray-100;
+        background-color: $primary;
+    }
+
+    .research-item {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: transform .2s ease-in-out;
+    }
+
+    .research-item:hover {
+        transform: translateY(2px);
+    }
+
+    @media(min-width: 1024px) {
+        padding-top: 4rem;
+
+        .healthy-doctor-image {
+            max-width: 480px;
+            position: absolute;
+            right: 2rem;
+            bottom: 0;
+        }
+
+        .healthy-doctor-text {
+            margin-left: 2.5rem;
+        }
+    }
+}
+
+@media (min-width: 1024px) {
+    .home-hero h1 {
+        font-size: 4.8rem;
+    }
+
+    .home-clinical-research,
+    .home-neuly-care,
+    .home-add-listing,
+    .home-request-research {
+        .large-title {
+            font-size: 4.5rem;
+        }
+    }
+}
+
+.home-pubco-index {
+    .pubco-image {
+        width: 100%;
+        height: auto;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+[data-bs-theme=dark] {
+    .home-pubco-index {
+        .btn-dark {
+            background-color: $gray-100;
+            color: $gray-900;
+        }
+
+        .btn-dark:hover {
+            background-color: $neulyGreen;
+            color: $gray-100;
+        }
+    }
+}
+
+.home-page-neuly-care-cta {
+    svg#neulyCareLogo {
+        .secondary-color {
+            fill: #fff;
+        }
+    }
+}
+
+body.home .primary-footer {
+    background: var(--bs-body-bg);
+}
+
+// Footer
+footer {
+    a,
+    .btn-link{
+        text-decoration: none;
+        color: var(--bs-primary);
+    }
+
+    a:hover ,
+    .btn-link:hover {
+        text-decoration: none;
+        color: var(--bs-accent);
+    }
+
+    svg#neulyLogo {
+        .text {
+            fill: $gray-900;
+        }
+    }
+}
+
+[data-bs-theme=dark] {
+    footer {
+        svg#neulyLogo {
+            .text {
+                fill: $white;
+            }
+        }
+
+        a,
+        .btn-link {
+            color: $gray-500;
+        }
+
+        a:hover,
+        .btn-link:hover {
+            color: var(--bs-accent);
+        }
+    }
+}
+
+/* Trix Editor */
+.trix-button-row {
+    .trix-button-group {
+        border-radius: 0;
+        border: var(--bs-border-width) solid var(--bs-border-color);
+
+        .trix-button {
+            border-radius: 0;
+            border: 0;
+        }
+    }
+}
+
+.trix-content {
+    border-radius: 0;
+    background-color: var(--bs-body-bg);
+    color: var(--bs-body-color);
+    border: 0;
+}
+
+[data-bs-theme=dark] {
+    .trix-button-row {
+        .trix-button-group {
+            .trix-button {
+                background-color: transparent;
+                filter: invert(100%);
+            }
+        }
+    }
+}
+
+// Algolia Borders
+#neuly-care-listings .aa-Form {
+    border-color: var(--bs-border-color);
+}
+
+// Scrollable Full-screen Code Content
+.scrollable-fullscreen-code {
+    height: calc(100vh - 150px);
+    width: 100%;
+    overflow: scroll;
+    text-align: left;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+}
+
+// Faux Search Box with Dropdown
+.faux-search-box-container {
+    position: relative;
+    padding-top: .25rem;
+
+    .faux-search-box-results {
+        position: absolute;
+        top: .25rem;
+        width: 200px;
+        background: var(--bs-body-bg);
+        border: 1px solid var(--bs-border-color);
+        z-index: 999;
+        font-size: $font-size-sm;
+
+        @media (min-width: 992px) {
+            width: 350px;
+        }
+    }
+}
+
+// Recruiting Clinical Trials
+.recruiting-trial-item {
+    .sponsor {
+        width: 300px;
+        padding-right: 1.5rem;
+        margin-right: 1.5rem;
+        flex-shrink: 0;
+        border-right: 1px solid var(--bs-border-color);
+
+        img {
+            max-width: 100%;
+            width: auto;
+            height: 80px;
+        }
+    }
+}
+
+.recruiting-trial-item:hover {
+    cursor: pointer;
+    box-shadow: var(--bs-focus-ring-x, 0) var(--bs-focus-ring-y, 0) var(--bs-focus-ring-blur, 0) var(--bs-focus-ring-width) rgba($neulyGreenBright, 25%);
 }
 
 @media (min-width: 768px) {
-	#index-main {
-		padding-top: 2rem; /* space underneath filters */
-	}
+    .recruiting-trial-item {
+        .sponsor {
+            width: 240px;
+        }
+    }
 }
 
 @media (min-width: 992px) {
-	#index-main {
-		padding-top: 12rem; /* Space for fixed navbar + discovertabs + breadcrumbs */
-	}
-
-	#show-main {
-		padding-top: 12rem; /* Space for fixed navbar + discovertabs + breadcrumbs */
-	}
+    .recruiting-trial-item {
+        .sponsor {
+            width: 300px;
+            padding-right: 2rem;
+            padding-left: .5rem;
+            margin-right: 2rem;
+        }
+    }
 }
 
-.full-width-show-view {
-	max-width: 1280px;
+.recruiting-clinical-trial-optin-text {
+    .icon {
+        color: var(--bs-warning-bright);
+        margin-right: .25rem;
+        font-size: 1.5rem;
+        margin-top: .35rem;
+    }
+
+    strong {
+        color: $neulyGreen;
+        font-size: 1.28rem;
+    }
+
+    span {
+        opacity: .8;
+    }
 }
 
-// Breadcrumbs Container
-.breadcrumbs-container {
-	padding-top: 1rem;
-	width: 100%;
-	position: relative;
-	z-index: 100;
-
-	.breadcrumb {
-		margin-bottom: 1rem;
-		width: 100%;
-	}
+[data-bs-theme=dark] {
+    .recruiting-clinical-trial-optin-text {
+        strong {
+            color: $neulyGreenBright;
+        }
+    }
 }
 
-	@media (min-width: 992px) {
-		.breadcrumbs-container {
-			padding-top: 9rem;
-			font-size: .85rem;
-			position: fixed;
-			z-index: 100;
+/* Neuly EDU Courses */
+.neuly-edu-course-item {
+    border: 1px solid var(--bs-border-color);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
 
-			.breadcrumb {
-				margin-bottom: .5rem;
-			}
-		}
-	}
+    .image {
+        width: 250px;
+        flex-shrink: 0;
+        margin-bottom: 1rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
 
-.tt-menu {
-	text-align: left;
+        img {
+            width: 100%;
+            height: auto;
+        }
+    }
+
+    .text {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
 }
 
-.notification-badge {
-    display: none;
+@media (min-width: 768px) {
+    .neuly-edu-course-item {
+        flex-direction: row;
+        max-width: 1100px;
+        margin-left: auto;
+        margin-right: auto;
 
-    &.has-content {
-        display: inline-block;
+        .image {
+            margin-bottom: 0;
+            margin-right: 1.5rem;
+        }
+
+        .text {
+            flex-grow: 1;
+        }
+    }
+}
+
+@media (min-width: 1200px) {
+    .neuly-edu-course-item {
+        padding: 1.5rem;
+
+        .image {
+            margin-right: 2rem;
+        }
+    }
+}
+
+.neuly-edu-course-item:hover,
+.neuly-edu-course-item-vertical:hover {
+    cursor: pointer;
+    box-shadow: var(--bs-focus-ring-x, 0) var(--bs-focus-ring-y, 0) var(--bs-focus-ring-blur, 0) var(--bs-focus-ring-width) rgba($neulyGreenBright, 25%);
+}
+
+.neuly-edu-course-item-vertical {
+    height: 100%;
+    border: 1px solid var(--bs-border-color);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+
+    .image {
+        width: 100%;
+        height: 200px;
+        margin-bottom: 1rem;
+        background-size: contain;
+        background-position: center center;
+        background-repeat: no-repeat;
+
+        img {
+            width: 100%;
+            height: auto;
+        }
+    }
+}
+
+
+/* Neuly Help Modal */
+.neuly-help-logo-item {
+    svg {
+        height: 2rem;
+        width: auto;
+    }
+}
+
+.neuly-help-nav-list {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 1.5rem;
+
+    li {
+        padding: 0;
+        margin: 0;
+    }
+
+    li:last-of-type {
+        margin-bottom: 0;
+    }
+
+    a {
+        padding: .25rem .5rem;
+    }
+
+    a:hover {
+        background-color: $neulyGreenBright;
+        color: $white;
+    }
+}
+
+[data-bs-theme=dark] {
+    .neuly-help-nav-list {
+        a:hover {
+            background-color: $neulyIndigo;
+        }
+    }
+}
+
+/* Insights */
+[data-bs-theme=dark] {
+    .page-insights {
+        .card-body {
+            background-color: $white;
+            color: $gray-800;
+        }
+    }
+}
+
+#investmentFundChart,
+#nonProfitFocusChart {
+    width: 100%;
+    height: 1024px;
+    max-width: 100%;
+}
+
+@media (min-width: 768px) {
+    #investmentFundChart,
+    #nonProfitFocusChart {
+        height: calc(100vh - 7.5rem);
+    }
+}
+
+.single-notification.unread {
+   .title {
+        font-weight: bold;
+        color: var(--bs-success);
     }
 }

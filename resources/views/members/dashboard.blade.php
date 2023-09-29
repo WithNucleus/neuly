@@ -1,12 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.entity-show')
 
-@section('body-class', 'bg-light')
-
-@section('content')
-
-    @include('members.includes.dashboard-begin')
-
-    @include('members.includes.status-messages')
+@section('head')
     <style>
         .dashboard-sortable-grid .drag-handle {
             position: absolute;
@@ -20,54 +14,49 @@
             visibility: visible;
         }
     </style>
-
-    <div class="row dashboard-sortable-grid">
-        @foreach($widgetsOrder as $widget)
-            @if($widget == 'following')
-                <div class="col-12 col-md-6 col-xl-4 mb-5" data-name="following">
-                    <span class="drag-handle pull-right text-secondary"><i class="fa fa-arrows-alt"></i></span>
-                    @include('members.dashboard-widgets.following')
-                </div>
-            @elseif($widget == 'notes')
-                <div class="col-12 col-md-6 col-xl-4 mb-5" data-name="notes">
-                    <span class="drag-handle pull-right text-secondary"><i class="fa fa-arrows-alt"></i></span>
-                    @include('members.dashboard-widgets.notes')
-                </div>
-            @elseif($widget == 'recent')
-                <div class="col-12 col-md-6 col-xl-4 mb-5" data-name="recent">
-                    <span class="drag-handle pull-right text-secondary"><i class="fa fa-arrows-alt"></i></span>
-                    @include('members.dashboard-widgets.recent')
-                </div>
-            @elseif($widget == 'team')
-                <div class="col-12 col-md-6 col-xl-4 mb-5" data-name="team">
-                    <span class="drag-handle pull-right text-secondary"><i class="fa fa-arrows-alt"></i></span>
-                    @include('members.dashboard-widgets.team')
-                </div>
-            @endif
-        @endforeach
-    </div>
-
-    @include('members.includes.dashboard-end')
-
-    <script src="{{ asset('js/formValidation.js') }}"></script>
-
 @endsection
 
-@section('after_scripts')
-<script>
-    $( function() {
-        $('.dashboard-sortable-grid').sortable({
-            handle: '.drag-handle',
-            update: function( event, ui ) {
-                let widgetsOrder = [];
+@section('breadcrumbs')
+    @include('navbars.breadcrumb', [
+        'items' => [
+            'Dashboard'  => false
+        ]
+    ])
+@endsection
 
-                $(this).children().each(function (){
-                    widgetsOrder.push($(this).data('name'));
-                });
+@section('content')
 
-                $.post('{{ route('member.dashboard.updateWidgetsOrder') }}', { order: widgetsOrder});
-            }
-        });
-    } );
-</script>
+    <div class="container-fluid p-3">
+        @include('members.includes.status-messages')
+        <div class="row">
+            <div class="col-12 col-md-6 col-xl-4 px-3">
+                <div class="mb-5">
+                    @include('members.dashboard-widgets.person-listing')
+                </div>
+                <div class="mb-5">
+                    @include('members.dashboard-widgets.notes')
+                </div>
+                <div class="mb-5">
+                    @include('members.dashboard-widgets.team')
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-xl-4 px-3">
+                <div class="mb-5">
+                    @include('members.dashboard-widgets.clinical-trial-participant')
+                </div>
+                <div class="mb-5">
+                    @include('members.dashboard-widgets.following')
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-xl-4 px-3">
+                <div class="mb-5">
+                    @include('members.dashboard-widgets.notifications')
+                </div>
+                <div class="mb-5">
+                    @include('members.dashboard-widgets.recent')
+                </div>
+            </div>
+        </div>
+    </div>
+
 @endsection

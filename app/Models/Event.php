@@ -141,6 +141,10 @@ class Event extends Model implements EntityContract, EntityImageContract
     | ACCESSORS
     |--------------------------------------------------------------------------
     */
+    public function getPrettyStartDateAttribute(): string
+    {
+        return Carbon::parse($this->start_date)->format('M d, Y');
+    }
 
     /*
     |--------------------------------------------------------------------------

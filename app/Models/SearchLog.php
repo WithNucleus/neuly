@@ -2,12 +2,20 @@
 
 namespace App\Models;
 
+use App\User;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 
 class SearchLog extends Model
 {
     use CrudTrait;
+
+    const TYPE_SEARCH = 'Search';
+    const TYPE_NEULY_CARE = 'Neuly Care';
+    const TYPE_RECRUITING_TRIALS_ELIGIBILITY = 'Recruiting Trial Eligibility';
+    const TYPE_RECRUITING_TRIALS = 'Recruiting Clinical Trials';
+    const TYPE_RECRUITING_CONCIERGE = 'Recruiting Trials Concierge';
+    const TYPE_NEULY_EDU_COURSES = 'Neuly EDU Courses';
 
     /*
     |--------------------------------------------------------------------------
@@ -18,6 +26,9 @@ class SearchLog extends Model
     protected $table = 'search_log';
 
     protected $guarded = ['id'];
+    protected $casts = [
+        'data' => 'array'
+    ];
 
     /*
     |--------------------------------------------------------------------------
@@ -30,6 +41,21 @@ class SearchLog extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+    /* RELATIONSHIPS */
+    public function location(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Location::class);
+    }
+
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function relatable(): \Illuminate\Database\Eloquent\Relations\MorphTo
+    {
+        return $this->morphTo();
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -42,6 +68,9 @@ class SearchLog extends Model
     | ACCESSORS
     |--------------------------------------------------------------------------
     */
+    public function getEntityShowLinkAttribute() {
+
+    }
 
     /*
     |--------------------------------------------------------------------------

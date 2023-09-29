@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enum\MediaTypes;
 use App\Helpers\Entity\FieldsMapping;
 use App\Models\Contracts\EntityContract;
 use App\Models\Traits\CrudShowEntityPageButton;
@@ -51,12 +52,17 @@ class Focus extends Model implements EntityContract
     */
     public function bookableListings(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(BookableListing::class, 'bookable_listing_focus', 'bookable_listing_id', 'focus_id')->withTimestamps();
+        return $this->belongsToMany(BookableListing::class, 'bookable_listing_focus', 'focus_id', 'bookable_listing_id')->withTimestamps();
     }
 
     public function clinicaltrials(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(\App\Models\Clinicaltrial::class, 'clinicaltrial_focus', 'focus_id', 'clinicaltrial_id')->withTimestamps();
+    }
+
+    public function recruitingClinicalTrials(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(\App\Models\Clinicaltrial::class, 'clinicaltrial_focus', 'focus_id', 'clinicaltrial_id')->where('status', 'Recruiting')->withTimestamps();
     }
 
     public function companies(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
@@ -89,6 +95,31 @@ class Focus extends Model implements EntityContract
         return $this->belongsToMany(\App\Models\MediaItem::class, 'focus_media_item', 'focus_id', 'media_item_id');
     }
 
+    public function news(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(\App\Models\MediaItem::class, 'focus_media_item', 'focus_id', 'media_item_id')->where('media_type', MediaTypes::MEDIA_TYPE_NEWS);
+    }
+
+    public function articles(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(\App\Models\MediaItem::class, 'focus_media_item', 'focus_id', 'media_item_id')->where('media_type', MediaTypes::MEDIA_TYPE_ARTICLE);
+    }
+
+    public function books(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(\App\Models\MediaItem::class, 'focus_media_item', 'focus_id', 'media_item_id')->where('media_type', MediaTypes::MEDIA_TYPE_BOOK);
+    }
+
+    public function podcasts(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(\App\Models\MediaItem::class, 'focus_media_item', 'focus_id', 'media_item_id')->where('media_type', MediaTypes::MEDIA_TYPE_PODCAST);
+    }
+
+    public function videos(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(\App\Models\MediaItem::class, 'focus_media_item', 'focus_id', 'media_item_id')->where('media_type', MediaTypes::MEDIA_TYPE_VIDEO);
+    }
+
     public function patents(): \Illuminate\Database\Eloquent\Relations\MorphToMany
     {
         return $this->morphToMany(Patent::class, 'entity', 'patent_relationships')->withTimestamps();
@@ -101,7 +132,7 @@ class Focus extends Model implements EntityContract
 
     public function research(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(\App\Models\Research::class, 'focus_research', 'focus_id', 'research_id')->withTimestamps();
+        return $this->belongsToMany(Research::class, 'focus_research', 'focus_id', 'research_id');
     }
 
     /*
@@ -110,12 +141,13 @@ class Focus extends Model implements EntityContract
     |--------------------------------------------------------------------------
     */
 
-    /**
-     * @return mixed
-     */
     public function scopeDrugs($query)
     {
         return $query->where('type', self::TYPE_DRUG);
+    }
+
+    public function scopeOther($query) {
+        return $query->whereNull('type');
     }
 
     public function scopeHasCompanies($query)
@@ -146,6 +178,21 @@ class Focus extends Model implements EntityContract
     public function getShowLink()
     {
         return '<a href="'.route('discover.focus.show', $this->slug).'">'.$this->name.'</a>';
+    }
+
+    public function getEduRecordsCountAttribute(): int
+    {
+        return count($this->courses) + count($this->mediaItems) + count($this->events);
+    }
+
+    public function getCareRecordsCountAttribute(): int
+    {
+        return count($this->bookableListings);
+    }
+
+    public function getResearchRecordsCountAttribute(): int
+    {
+        return count($this->clinicaltrials) + count($this->companies) + count($this->jobs) + count($this->people) + count($this->research);
     }
 
     /*

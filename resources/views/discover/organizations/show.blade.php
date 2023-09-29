@@ -1,57 +1,59 @@
-@extends('layouts.app')
+@extends('layouts.entity-show')
 
-@section('body-class', 'bg-light')
+@section('breadcrumbs')
+    @include('navbars.breadcrumb', [
+        'items' => [
+            'Organizations' => route('discover.organizations'),
+            $company->name  => false
+        ]
+    ])
+@endsection
 
 @section('content')
 
-    @include('discover.includes.show-begin', ['full_width' => false])
+    <div class="container py-4">
 
-    <p class="dashboard-actions-container m-2 float-right">
-		@include('members.follow.button', [
-            'followable_type' => get_class($company),
-            'followable_id' => $company->id,
-            'name' => $company->name
-        ])
-    </p>
+        <x-entities.entity-show-title-meta title="{{ $company->name }}">
+            <div class="me-3">
+                @include('members.follow.button')
+            </div>
 
-    @if($company->jobs->count() > 0 OR $company->events->count() > 0)
-    	<p class="text-uppercase m-2 float-right font-weight-bold">
             @if ($company->jobs->count() > 0)
-        		<a href="{{ route('discover.organizations.jobs', $company->slug) }}" class="text-decoration-none mr-2 text-danger">
+                <a href="{{ route('discover.organizations.jobs', $company->slug) }}" class="text-decoration-none text-uppercase me-3 text-danger">
                     <i class="fad fa-briefcase"></i> Hiring
                 </a>
             @endif
 
             @if($company->events->count() > 0)
-                <a href="{{ route('discover.organizations.events', $company->slug) }}" class="text-decoration-none text-secondarydark">
+                <a href="{{ route('discover.organizations.events', $company->slug) }}" class="text-decoration-none text-uppercase text-secondarydark">
                     <i class="fad fa-calendar-alt"></i> Events
                 </a>
             @endif
-    	</p>
-    @endif
+        </x-entities.entity-show-title-meta>
 
-	<h1>{{ $company->name }}</h1>
+        @include('discover.organizations.data')
 
-    @include('discover.includes.status-messages')
+        @include('discover.includes.related.organization')
 
-	@include('discover.organizations.data')
-
-    @isset($preview)
-        @include('discover.includes.update-listing-form', ['entity' => $company])
-    @else
-        @auth
-            <div class="row">
-                <div class="col-sm-6">
-                    <small>Last updated: {{ Carbon\Carbon::parse($company->updated_at)->format('M d, Y') }}</small>
+        @isset($preview)
+            @include('discover.includes.update-listing-form', ['entity' => $company])
+        @else
+            @auth
+                <div class="d-flex flex-wrap justify-content-between align-items-center text-uppercase small fw-bold text-secondary-emphasis mt-4">
+                    <div class="me-4">
+                        Last updated: {{ Carbon\Carbon::parse($company->updated_at)->format('M d, Y') }}
+                    </div>
+                    @can('edit companies')
+                        <div>
+                            <a href="{{ route('company.edit', $company->id) }}" class="text-secondary-emphasis">Edit Company</a>
+                        </div>
+                    @endcan
+                    <div>
+                        @include('discover.includes.update-listing-form', ['entity' => $company])
+                    </div>
                 </div>
-                <div class="col-sm-6 text-right">
-                    @include('discover.includes.update-listing-form', ['entity' => $company])
-                </div>
-            </div>
-        @endauth
-    @endisset
-
-	@include('discover.includes.show-end')
-    @include('discover.includes.limited-access-modal')
+            @endauth
+        @endisset
+    </div>
 
 @endsection

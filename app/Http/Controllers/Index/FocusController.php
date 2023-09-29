@@ -6,55 +6,55 @@ use App\Http\Controllers\Controller;
 use App\Models\Focus;
 use App\Repositories\FollowRepository;
 use App\Services\Metas;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Spatie\Activitylog\Models\Activity;
-use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class FocusController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public function index(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        $this->middleware('query_filters')->only('index', 'past');
+        $focusDrugs = Focus::drugs()->orderBy('name')->get();
+        $focusOther = Focus::other()->orderBy('name')->get();
+
+        return view('discover.focus.index', [
+            'focusDrugs' => $focusDrugs,
+            'focusOther' => $focusOther
+        ]);
     }
 
-    // Index
-    public function index(Request $request)
+    public function show(Request $request, $slug): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        // Get Focus
-        // $focus_items = Focus::with('companies')->orderBy('name')->get();
-        $focus_items = QueryBuilder::for(Focus::class)
-            ->allowedFilters([
-                AllowedFilter::partial('company', 'companies.name'),
-                AllowedFilter::partial('focus', 'name'),
+        $focus = Focus::where('slug', $slug)
+            ->with([
+                'bookableListings',
+                'clinicaltrials',
+                'companies',
+                'courses',
+                'events',
+                'jobs',
+                'news',
+                'books',
+                'podcasts',
+                'videos',
+                'people',
+                'research'
             ])
-            ->defaultSort('name')
-            ->allowedSorts([
-                'name',
+            ->withCount([
+                'bookableListings',
+                'clinicaltrials',
+                'companies',
+                'courses',
+                'events',
+                'jobs',
+                'news',
+                'books',
+                'podcasts',
+                'videos',
+                'people',
+                'research'
             ])
-            ->paginate(10)
-            ->appends(request()->query());
-
-        $focusCats = Focus::drugs()->orderBy('name')->get();
-        $metas = Metas::fromPage($request->path());
-
-        return view('discover.focus.index', compact('focus_items', 'focusCats', 'metas'));
-    }
-
-    // Show
-    public function show(Request $request, $slug)
-    {
-        // Get Focus
-        $focus = Focus::where('slug', $slug)->firstOrFail();
-        $focus = Focus::where('slug', $slug)->with(['companies', 'jobs', 'research', 'events', 'clinicaltrials'])->firstOrFail();
-
-        $focusCats = Focus::drugs()->orderBy('name')->get();
+            ->firstOrFail();
 
         $metas = Metas::process([
             'title' => $focus->name,
@@ -62,8 +62,7 @@ class FocusController extends Controller
             'image' => '',
         ]);
 
-        $entity = 'focus';
-        $isFollowed = (bool) count(FollowRepository::fromuser(Focus::class, $focus->id));
+        $entity = $focus;
 
         // Log Activity
         activity('pageview')
@@ -79,6 +78,10 @@ class FocusController extends Controller
             })
             ->log($focus->name);
 
-        return view('discover.focus.show', compact('focus', 'focusCats', 'metas', 'entity', 'isFollowed'));
+        return view('discover.focus.show', [
+            'focus' => $focus,
+            'metas' => $metas,
+            'entity' => $entity,
+        ]);
     }
 }

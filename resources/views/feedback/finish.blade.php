@@ -1,30 +1,15 @@
 @extends('layouts.app')
 
-@section('body-class', 'page-events bg-light')
-
 @section('content')
 
     @include('navbars.primary')
 
-    <div class="container-fluid">
-
-        {{-- Sidebar and Content Area --}}
-        <div class="row">
-            <main id="content-main" role="main" class="col-md-8 col-lg-6 col-xl-5 mx-auto">
-                <div class="row">
-
-                    <div class="col-12">
-                        <div class="card mt-3 shadow-sm">
-                            <div class="card-body">
-                                <h1 class="text-center text-primary">Thank you!</h1>
-                                @include('discover.includes.status-messages')
-
-                                <p class="text-center">We appreciate your feedback.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </main>
+    <div class="container text-center my-5">
+        <h1 class="text-center text-primary">Thank you!</h1>
+        @include('discover.includes.status-messages')
+        <p class="text-center fs-6">We appreciate your feedback.</p>
+        <div>
+            <a href="/" class="btn btn-dark rounded-0">Return to Neuly</a>
         </div>
     </div>
 @endsection

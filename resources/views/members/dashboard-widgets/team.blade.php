@@ -1,32 +1,27 @@
-@hasanyrole('Team owner|Team member')
-    @role('Team owner')
-        <h1 class="h2">
-            <a href="{{ route('member.team.index') }}" class="text-dark">
-                <i class="fad fa-users text-secondary mr-2"></i>Team
-            </a>
-        </h1>
-        <div class="p-4 bg-white shadow-sm">
-            @include('members.data.team-owner')
-        </div>
-    @else
-        <h1 class="h2"><i class="fad fa-users text-secondary mr-2"></i>Team</h1>
-        <div class="p-4 bg-white shadow-sm">
-            @include('members.data.team-member')
-        </div>
-    @endrole
+<h1 class="h2">
+    <i class="fa-sharp fa-solid fa-users text-accent"></i>
+    <span>Team</span>
+</h1>
+
+@foreach($user->teams as $team)
+    <div class="border p-3 mb-4">
+        @include('members.data.team-member')
+    </div>
+@endforeach
+
+@if($user->ownedTeam)
+    <div class="border p-3 mb-4">
+        @include('members.data.team-owner')
+    </div>
 @else
-    <h1 class="h2"><i class="fad fa-users text-secondary mr-2"></i>Team</h1>
-    <div class="p-4 bg-white shadow-sm">
+    <div class="border p-3 mb-4">
         <p class="lead mb-1">Create your team</p>
         <form action="{{ route('member.team.create') }}" method="post">
             @csrf
-            <div class="input-group mb-2">
-                <input type="text" name="name" class="form-control" placeholder="Team Name" aria-label="Name"
-                       aria-describedby="basic-addon2" required>
-                <div class="input-group-append">
-                    <button class="btn btn-primary" type="submit">Create</button>
-                </div>
+            <div class="d-flex mb-2 max-width-400">
+                <input type="text" name="name" class="form-control me-1" placeholder="Team Name" aria-label="Team Name" required>
+                <button class="btn btn-primary rounded-0" type="submit">Create</button>
             </div>
         </form>
     </div>
-@endhasanyrole
+@endif

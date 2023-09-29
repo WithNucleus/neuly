@@ -1,7 +1,8 @@
-<button class="btn btn-sm copy-nav-tile" data-toggle="tooltip" data-placement="top" title="Get code" data-clipboard-text='<script src="{{ route('nav-tiles.script', $navigationTile->slug) }}" type="text/javascript"></script>'>
-    <i class="fad fa-code text-tertiary"></i>
+<button class="btn btn-sm btn-outline-tertiary copy-nav-tile rounded-0" data-clipboard-text='<script src="{{ route('nav-tiles.script', $navigationTile->slug) }}" type="text/javascript"></script>'>
+    <i class="fa fa-strong fa-code me-1"></i>
+    <span>Get Code</span>
 </button>
-<span class="badge badge-info copied" style="display: none">Copied!</span>
+<span class="badge bg-primary copied" style="display: none">Copied!</span>
 
 <script type="text/javascript" src="{{ asset('assets/clipboard.min.js') }}"></script>
 <script>

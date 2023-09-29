@@ -4,39 +4,46 @@ namespace App\Http\Controllers\Index;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
-use App\Models\Focus;
-use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\AllowedSort;
-use Spatie\QueryBuilder\QueryBuilder;
+use Illuminate\Support\Facades\DB;
 
 class CourseController extends Controller
 {
-    public function __construct()
+
+    public function index(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        $this->middleware('query_filters')->only('index');
+        return view('discover.courses.index');
     }
 
-    public function index()
+    public function list(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        $courses = QueryBuilder::for(Course::class)
-            ->where('schedule', '!=', Course::SCHEDULE_PAST)
-            ->with(['focus'])
-            ->allowedSorts([
-                'name',
-                AllowedSort::field('price', 'lowest_cost'),
-            ])
-            ->defaultSort('name')
-            ->allowedFilters([
-                AllowedFilter::partial('focus', 'focus.name'),
-                AllowedFilter::exact('type', 'type'),
-                AllowedFilter::partial('education_credits'),
-            ])
-            ->paginate(15)
-            ->appends(request()->query());
+        return view('discover.courses.index-entity');
+    }
 
-        $focus_cats = Focus::whereHas('courses')->orderBy('name')->pluck('name')->toArray();
-        $types = Course::TYPES;
+    public function show($slug): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    {
+        $course = Course::where('slug', $slug)->firstOrFail();
 
-        return view('discover.courses.index', compact('courses', 'focus_cats', 'types'));
+        $related = $this->getRelatedEntities($course);
+
+        return view('discover.courses.show', [
+           'course' => $course,
+            'related' => $related
+        ]);
+    }
+
+    private function getRelatedEntities(Course $course)
+    {
+        $focuses = $course->focus->pluck('id');
+
+        $relatedIds = DB::table('course_focus')
+                        ->select(['course_id', DB::raw('COUNT(course_id) as accurance')])
+                        ->whereIn('focus_id', $focuses)
+                        ->where('course_id', '!=', $course->id)
+                        ->groupBy('course_id')
+                        ->orderBy('accurance', 'desc')
+                        ->take(6)
+                        ->get()->pluck('course_id');
+
+        return Course::whereIn('id', $relatedIds)->get();
     }
 }

@@ -1,0 +1,36 @@
+<div class="home-courses bg-body-secondary">
+    <div class="container text-center">
+        <div class="max-width-400 mx-auto mb-4">
+            @include('navbars.neuly-edu-logo')
+        </div>
+        <h2 class="h1 text-body-emphasis max-width-740 mx-auto">Find the Psychedelic Courses That Can Launch Your Career</h2>
+        <p class="lead max-width-600 mx-auto mb-5">Therapists and sitters are needed to lead the growth of the psychedelic-assisted therapy that is slated to help millions.</p>
+        <div class="row" data-masonry='{"percentPosition": true }'>
+            @foreach($courses as $course)
+                <div class="col-12 col-md-6 col-lg-3 mb-4">
+                    <a href="{{ route('discover.courses.show', $course->slug) }}" class="card-hover-drop">
+                        <div class="card h-100 border-0 rounded-3">
+                            <div class="@isset($course->companies()->first()->entityImageUrl) bg-white @else bg-primary @endif p-3 p-xl-4 rounded-top">
+                                <img src="{{ $course->companies()->first()->entityImageUrl ?? asset('images/image-placeholder-edu-transparent.png') }}" alt="{{ $course->name }}">
+                            </div>
+                            <div class="card-body d-flex flex-column justify-content-between">
+                                <div class="text-start">
+                                    <p class="h6 fw-bold text-success mb-3">{{ $course->name }}</p>
+                                    <p class="mb-0">{{ $course->very_short_summary }}</p>
+                                </div>
+                                <div class="text-start fs-6 text-uppercase">
+                                    @foreach($course->focus as $focus)
+                                        <span class="badge bg-body-secondary text-primary me-1 mt-3">{{ $focus->name }}</span>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            @endforeach
+        </div>
+        <div class="mt-4 text-center">
+            <a href="{{ route('discover.courses') }}" class="btn btn-cta btn-primary btn-lg">View All Courses</a>
+        </div>
+    </div>
+</div>

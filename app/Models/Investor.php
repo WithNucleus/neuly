@@ -88,10 +88,7 @@ class Investor extends Model implements EntityContract, EntityImageContract
         }
     }
 
-    /**
-     * @return array
-     */
-    public static function getTypeValues()
+    public static function getTypeValues(): array
     {
         return array_combine(self::TYPE, self::TYPE);
     }
@@ -102,31 +99,31 @@ class Investor extends Model implements EntityContract, EntityImageContract
     |--------------------------------------------------------------------------
     */
 
-    public function locations()
+    public function locations(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Location::class, 'investor_location', 'investor_id', 'location_id')
             ->withTimestamps();
     }
 
-    public function companies()
+    public function companies(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Company::class, 'company_investor', 'investor_id', 'company_id')
             ->withTimestamps();
     }
 
-    public function people()
+    public function people(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Person::class, 'investor_person', 'investor_id', 'person_id')
             ->withPivot(['role'])
             ->withTimestamps();
     }
 
-    public function companyValuations()
+    public function companyValuations(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(CompanyValuation::class);
     }
 
-    public function jobs()
+    public function jobs(): \Illuminate\Database\Eloquent\Relations\MorphMany
     {
         return $this->morphMany(Job::class, 'owner');
     }

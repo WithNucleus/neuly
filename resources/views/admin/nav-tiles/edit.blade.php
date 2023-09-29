@@ -1,8 +1,10 @@
 @extends('layouts.admin')
 
-@section('content')
+@section('head')
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+@endsection
 
-    @include('admin.nav-tiles._menu')
+@section('content')
 
     <div class="container my-5">
         <h1 class="h2 mb-4">Editing {{ $navigationTile->name }}</h1>
@@ -120,15 +122,16 @@
     #sortable-links {
         margin: 0 0 2rem 0;
         padding: 0;
+        border-radius: 0;
     }
 
     #sortable-links li {
         display: block;
         padding: .5rem .75rem;
         margin: 0;
-        border: 1px solid #ccc;
+        border: 1px solid var(--bs-border-color);
         border-top: 0;
-        background: #fff;
+        background: var(--bs-body-bg);
     }
 
     #sortable-links li:hover {
@@ -142,14 +145,7 @@
     }
 
     #sortable-links li:first-of-type {
-        border-top-right-radius: .25rem;
-        border-top-left-radius: .25rem;
-        border-top: 1px solid #ccc;
-    }
-
-    #sortable-links li:last-of-type {
-        border-bottom-right-radius: .25rem;
-        border-bottom-left-radius: .25rem;
+        border-top: 1px solid var(--bs-border-color);
     }
 </style>
 @endsection

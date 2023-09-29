@@ -5,20 +5,21 @@ namespace App\Models;
 use App\Helpers\Entity\FieldsMapping;
 use App\Models\ClinicalTrialDetails\CtCondition;
 use App\Models\ClinicalTrialDetails\CtIntervention;
-use App\Models\ClinicalTrialDetails\CtOutcomeMeasure;
-use App\Models\ClinicalTrialDetails\CtStudyDesign;
+use App\Models\ClinicalTrialDetails\CtPhase;
 use App\Models\Contracts\EntityContract;
 use App\Models\Traits\CrudShowEntityPageButton;
 use App\Models\Traits\OldSlugRedirectable;
 use App\Models\Traits\SearchableEntity;
 use App\Traits\HasFollowers;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
+use App\Models\ImportedEntity;
 
 class Clinicaltrial extends Model implements EntityContract
 {
@@ -56,6 +57,166 @@ class Clinicaltrial extends Model implements EntityContract
 
     private $searchableModelName = 'Clinical Trial';
 
+    const SEXES = [
+        'FEMALE' => self::SEX_FEMALE,
+        'MALE' => self::SEX_MALE,
+        'ALL' => self::SEX_ALL
+    ];
+
+    const SEX_FEMALE = 'Female';
+    const SEX_MALE = 'Male';
+    const SEX_ALL = 'All';
+
+    const SEX_OPTIONS = [
+        'FEMALE' => self::SEX_FEMALE,
+        'MALE' => self::SEX_MALE,
+        'N/A' => 'Prefer not to disclose'
+    ];
+
+    const HEALTHY_YES = 'Yes';
+    const HEALTHY_NO = 'No';
+
+    const STATUS_RECRUITING = 'Recruiting';
+
+    const STATUSES = [
+        'ACTIVE_NOT_RECRUITING' => 'Active, not recruiting',
+        'COMPLETED' => 'Completed',
+        'ENROLLING_BY_INVITATION' => 'Enrolling by invitation',
+        'NOT_YET_RECRUITING' => 'Not yet recruiting',
+        'RECRUITING' => 'Recruiting',
+        'SUSPENDED' => 'Suspended',
+        'TERMINATED' => 'Terminated',
+        'WITHDRAWN' => 'Withdrawn',
+        'AVAILABLE' => 'Available',
+        'NO_LONGER_AVAILABLE' => 'No longer available',
+        'TEMPORARILY_NOT_AVAILABLE' => 'Temporarily not available',
+        'APPROVED_FOR_MARKETING' => 'Approved for marketing',
+        'WITHHELD' => 'Withheld',
+        'UNKNOWN' => 'Unknown status'
+    ];
+
+    const AGENCY_CLASSES = [
+        'NIH',
+        'FED',
+        'OTHER_GOV',
+        'INDIV',
+        'INDUSTRY',
+        'NETWORK',
+        'AMBIG',
+        'OTHER',
+        'UNKNOWN'
+    ];
+
+    const AGENCY_CLASSES_ORGANIZATION = [
+        'NIH',
+        'FED',
+        'OTHER_GOV',
+        'INDUSTRY',
+        'NETWORK',
+    ];
+
+    const DESIGN_MASKING = [
+        'NONE' => 'None (Open Label)',
+        'SINGLE' => 'Single',
+        'DOUBLE' => 'Double',
+        'TRIPLE' => 'Triple',
+        'QUADRUPLE' => 'Quadruple'
+    ];
+
+    const WHO_MASKED = [
+        'PARTICIPANT' => 'Participant',
+        'CARE_PROVIDER' => 'Care Provider',
+        'INVESTIGATOR' => 'Investigator',
+        'OUTCOMES_ASSESSOR' => 'Outcomes Assessor'
+    ];
+
+    const RESPONSIBLE_PARTY_TYPES = [
+        'SPONSOR' => 'Sponsor',
+        'PRINCIPAL_INVESTIGATOR' => 'Principal Investigator',
+        'SPONSOR_INVESTIGATOR' => 'Sponsor-Investigator'
+    ];
+
+    const PRIMARY_PURPOSES = [
+        'TREATMENT' => 'Treatment',
+        'PREVENTION' => 'Prevention',
+        'DIAGNOSTIC' => 'Diagnostic',
+        'ECT' => 'Educational/Counseling/Training',
+        'SUPPORTIVE_CARE' => 'Supportive Care',
+        'SCREENING' => 'Screening',
+        'HEALTH_SERVICES_RESEARCH' => 'Health Services Research',
+        'BASIC_SCIENCE' => 'Basic Science',
+        'DEVICE_FEASIBILITY' => 'Device Feasibility',
+        'OTHER' => 'Other'
+    ];
+
+    const INTERVENTIONAL_ASSIGNMENTS = [
+        'SINGLE_GROUP' => 'Single Group Assignment',
+        'PARALLEL' => 'Parallel Assignment',
+        'CROSSOVER' => 'Crossover Assignment',
+        'FACTORIAL' => 'Factorial Assignment',
+        'SEQUENTIAL' => 'Sequential Assignment'
+    ];
+
+    const DESIGN_ALLOCATIONS = [
+        'RANDOMIZED' => 'Randomized',
+        'NON_RANDOMIZED' => 'Non-Randomized',
+        'NA' => 'N/A'
+    ];
+
+    const COLLABORATOR = 'Collaborator';
+
+    const ARM_GROUP_TYPES = [
+        'EXPERIMENTAL' => 'Experimental',
+        'ACTIVE_COMPARATOR' => 'Active Comparator',
+        'PLACEBO_COMPARATOR' => 'Placebo Comparator',
+        'SHAM_COMPARATOR' => 'Sham Comparator',
+        'NO_INTERVENTION' => 'No Intervention',
+        'OTHER' => 'Other'
+    ];
+
+    const STANDARD_AGES = [
+        'CHILD' => 'Child',
+        'ADULT' => 'Adult',
+        'OLDER_ADULT' => 'Older Adult'
+    ];
+
+    const DESIGN_TIME_PERSPECTIVE = [
+        'RETROSPECTIVE' => 'Retrospective',
+        'PROSPECTIVE' => 'Prospective',
+        'CROSS_SECTIONAL' => 'Cross-Sectional',
+        'OTHER' => 'Other'
+    ];
+
+    const OBSERVATIONAL_MODELS = [
+        'COHORT' => 'Cohort',
+        'CASE_CONTROL' => 'Case-Control',
+        'CASE_ONLY' => 'Case-Only',
+        'CASE_CROSSOVER' => 'Case-Crossover',
+        'ECOLOGIC_OR_COMMUNITY' => 'Ecologic or Community',
+        'FAMILY_BASED' => 'Family-Based',
+        'DEFINED_POPULATION' => 'Defined Population',
+        'NATURAL_HISTORY' => 'Natural History',
+        'OTHER' => 'Other'
+    ];
+
+    const PHASES = [
+        'NA' => 'Not Applicable',
+        'EARLY_PHASE1' => 'Early Phase 1',
+        'PHASE1' => 'Phase 1',
+        'PHASE2' => 'Phase 2',
+        'PHASE3' => 'Phase 3',
+        'PHASE4' => 'Phase 4'
+    ];
+
+    protected $casts = [
+        'primary_outcomes' => 'array',
+        'secondary_outcomes' => 'array',
+        'other_outcomes' => 'array',
+        'arm_groups' => 'array',
+        'who_masked' => 'array',
+        'age_groups' => 'array'
+    ];
+
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS
@@ -84,71 +245,73 @@ class Clinicaltrial extends Model implements EntityContract
     |--------------------------------------------------------------------------
     */
 
-    public function locations()
+    public function locations(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Location::class, 'clinicaltrial_location', 'clinicaltrial_id', 'location_id')
-                    ->withTimestamps();
+            ->withTimestamps();
     }
 
-    public function companies()
+    public function companies(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Company::class, 'clinicaltrial_company', 'clinicaltrial_id', 'company_id')
-                    ->withTimestamps();
+            ->withPivot(['type', 'class'])
+            ->withTimestamps();
     }
 
-    public function people()
+    public function people(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Person::class, 'clinicaltrial_person', 'clinicaltrial_id', 'person_id')
-                    ->withTimestamps();
+            ->withPivot(['type', 'class'])
+            ->withTimestamps();
     }
 
-    public function focus()
+    public function focus(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Focus::class, 'clinicaltrial_focus', 'clinicaltrial_id', 'focus_id')
-                    ->withTimestamps();
+            ->withTimestamps();
     }
 
-    public function conditions()
+    public function conditions(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(CtCondition::class, 'clinicaltrial_condition');
     }
 
-    public function interventions()
+    public function interventions(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(CtIntervention::class, 'clinicaltrial_intervention');
+        return $this->belongsToMany(CtIntervention::class, 'clinicaltrial_intervention')->withPivot(['type', 'description']);
     }
 
-    public function outcomeMeasures()
-    {
-        return $this->belongsToMany(CtOutcomeMeasure::class, 'clinicaltrial_outcome_measure');
-    }
-
-    public function studyDesigns()
-    {
-        return $this->belongsToMany(CtStudyDesign::class, 'clinicaltrial_study_design');
-    }
-
-    public function parsingResult()
+    public function parsingResult(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(ClinicaltrialParsingResult::class);
     }
 
-    /**
-     * Get all Sponsors and Collaborators combined together.
-     *
-     * @return \Illuminate\Support\Collection
-     */
-    public function sponsorsAndCollaborators()
+    public function phases(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return collect()
-            ->merge($this->companies)
-            ->merge($this->people)
-            ->sortBy('name');
+        return $this->belongsToMany(CtPhase::class, 'clinicaltrial_phase');
     }
 
-    public function phase()
+    public function imported(): \Illuminate\Database\Eloquent\Relations\MorphOne
     {
-        return $this->hasMany(\App\Models\ClinicaltrialPhase::class, 'phases');
+        return $this->morphOne(ImportedEntity::class, 'importable');
+    }
+
+    public function leadSponsor(): \Illuminate\Database\Eloquent\Relations\MorphTo
+    {
+        return $this->morphTo('lead_sponsor', 'lead_sponsor_type', 'lead_sponsor_id');
+    }
+
+    public function responsibleParty(): \Illuminate\Database\Eloquent\Relations\MorphTo
+    {
+        return $this->morphTo('responsible_party');
+    }
+
+    public function collaborators(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Company::class, 'clinicaltrial_company', 'clinicaltrial_id', 'company_id')
+            ->withPivot(['type', 'class'])
+            ->wherePivot('type', self::COLLABORATOR)
+            ->withTimestamps();
     }
 
     /*
@@ -156,7 +319,6 @@ class Clinicaltrial extends Model implements EntityContract
     | SCOPES
     |--------------------------------------------------------------------------
     */
-
     public function scopeAvailableForParsing($query)
     {
         return $query
@@ -170,16 +332,28 @@ class Clinicaltrial extends Model implements EntityContract
 
     public function scopeActive($query)
     {
-        return $query->whereIn('status', ['Recruiting', 'Active, not recruiting', 'Available']);
+        return $query->whereIn('status', [self::STATUS_RECRUITING, 'Active, not recruiting', 'Available']);
     }
 
-    /**
-     * @param  array  $years
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeStartYear(Builder $query, ...$years)
+    public function scopeRecruiting($query) {
+        return $query->where('status', self::STATUS_RECRUITING);
+    }
+
+    public function scopeStartYear(Builder $query, $years): Builder
     {
         return $query->whereIn(DB::raw('YEAR(start_date)'), $years);
+    }
+
+    public function scopeNotImported($query) {
+        return $query->doesntHave('imported');
+    }
+
+    public function scopeDistance($query,$from_latitude,$from_longitude,$distance)
+    {
+      // This will calculate the distance in km
+      // if you want in miles use 3959 instead of 6371
+      $raw = DB::raw('ROUND ( ( 3959 * acos( cos( radians('.$from_latitude.') ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians('.$from_longitude.') ) + sin( radians('.$from_latitude.') ) * sin( radians( latitude ) ) ) ) ) AS distance');
+      return $query->select('*')->addSelect($raw)->orderBy( 'distance', 'ASC' )->having('distance', '<=', $distance);
     }
 
     /*
@@ -187,6 +361,66 @@ class Clinicaltrial extends Model implements EntityContract
     | ACCESSORS
     |--------------------------------------------------------------------------
     */
+    public function getPrettyStartDateAttribute(): ?string
+    {
+        if ($this->start_date) {
+            return Carbon::parse($this->start_date)->format('M Y');
+        } else {
+            return null;
+        }
+    }
+
+    public function getPrettyLastUpdatePostedAttribute(): ?string
+    {
+        if ($this->last_update_posted) {
+            return Carbon::parse($this->last_update_posted)->format('M Y');
+        } else {
+            return null;
+        }
+    }
+
+    public function getLeadSponsorUrlAttribute(): ?string
+    {
+        if(get_class($this->leadSponsor) === \App\Models\Company::class) {
+            return route('discover.organizations.show', $this->leadSponsor->slug);
+        }
+
+        if(get_class($this->leadSponsor) === \App\Models\Person::class) {
+            return route('discover.people.show', $this->leadSponsor->slug);
+        }
+
+        return NULL;
+    }
+
+    public function getLeadSponsorImageAttribute(): ?string
+    {
+        if(get_class($this->leadSponsor) === \App\Models\Company::class) {
+            if ($this->leadSponsor->entityImageUrl) {
+                return $this->leadSponsor->entityImageUrl;
+            }
+
+            return '/images/image-placeholder.jpg';
+        }
+
+        if(get_class($this->leadSponsor) === \App\Models\Person::class) {
+            if ($this->leadSponsor->entityImageUrl) {
+                return $this->leadSponsor->entityImageUrl;
+            }
+
+            return '/images/person-blank.png';
+        }
+
+        return NULL;
+    }
+
+    public function getIsRecruitingAttribute(): bool
+    {
+        if ($this->status === self::STATUS_RECRUITING) {
+            return true;
+        }
+
+        return false;
+    }
 
     /*
     |--------------------------------------------------------------------------

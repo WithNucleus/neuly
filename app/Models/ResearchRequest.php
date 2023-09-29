@@ -1,0 +1,117 @@
+<?php
+
+namespace App\Models;
+
+use App\Models\Contracts\CrmActionsContract;
+use App\User;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use JetBrains\PhpStorm\ArrayShape;
+use Spatie\SlackAlerts\Facades\SlackAlert;
+
+class ResearchRequest extends Model implements CrmActionsContract
+{
+    use HasFactory;
+
+    protected $guarded = ['id'];
+    protected $casts = [
+        'data' => 'array'
+    ];
+
+    const TYPE_REPORT_REQUEST = 'Research Report';
+    const TYPE_API_REQUEST = 'API Request';
+    const TYPE_ENTERPRISE_REQUEST = 'Enterprise';
+
+    const TYPES = [
+        self::TYPE_REPORT_REQUEST,
+        self::TYPE_API_REQUEST,
+        self::TYPE_ENTERPRISE_REQUEST
+    ];
+
+    const STATUS_OPEN = 'Open';
+    const STATUS_IN_PROGRESS = 'In Progress';
+    const STATUS_AWAITING_RESPONSE = 'Awaiting Response';
+    const STATUS_COMPLETED = 'Completed';
+
+    const STATUSES = [
+        self::STATUS_OPEN,
+        self::STATUS_IN_PROGRESS,
+        self::STATUS_AWAITING_RESPONSE,
+        self::STATUS_COMPLETED
+    ];
+
+    protected static function booted()
+    {
+        static::created(function ($researchRequest) {
+            SlackAlert::to('default')->message('*NeulyRESEARCH Request*' . "\n" .
+                '*Type:* ' . $researchRequest->type . "\n" .
+                '*Name:* ' . $researchRequest->name . "\n" .
+                '*Email:* ' . $researchRequest->email . "\n" .
+                '*Phone:* ' . $researchRequest->phone . "\n" .
+                '*Message:*' . "\n" .
+                '```' . $researchRequest->message . '```' . "\n" .
+                '<' . route('adminx.research.research-requests') .'|View Request>'
+            );
+        });
+    }
+
+    /* Relationships */
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function assignee(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(User::class, 'assignee_id');
+    }
+
+    public function entity(): \Illuminate\Database\Eloquent\Relations\MorphTo
+    {
+        return $this->morphTo();
+    }
+
+    /* Accessors */
+
+    public function getStatusColorAttribute(): string
+    {
+        return match($this->status) {
+            self::STATUS_OPEN => 'bg-danger',
+            self::STATUS_COMPLETED => 'bg-body-secondary text-body-emphasis opacity-50',
+            self::STATUS_AWAITING_RESPONSE => 'bg-warning text-body-emphasis',
+            self::STATUS_IN_PROGRESS => 'bg-warning-bright text-body-emphasis',
+            default => 'text-warning'
+        };
+    }
+
+    public function getEntityLinkAttribute(): ?string
+    {
+        if ($this->entity_type === Research::class) {
+            return route('discover.research.show', $this->entity->slug);
+        }
+
+        return null;
+    }
+
+    #[ArrayShape([self::STATUS_COMPLETED => "string[]", self::STATUS_AWAITING_RESPONSE => "string[]", self::STATUS_IN_PROGRESS => "string[]", self::STATUS_OPEN => "string[]"])] public static function crmActionItems(): array
+    {
+        return [
+            self::STATUS_COMPLETED => [
+                'label' => 'Mark completed',
+                'button' => 'accent'
+            ],
+            self::STATUS_AWAITING_RESPONSE => [
+                'label' => 'Needs response',
+                'button' => 'warning'
+            ],
+            self::STATUS_IN_PROGRESS => [
+                'label' => 'In progress',
+                'button' => 'warning-bright'
+            ],
+            self::STATUS_OPEN => [
+                'label' => 'Re-open',
+                'button' => 'primary'
+            ]
+        ];
+    }
+}

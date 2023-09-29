@@ -1,26 +1,18 @@
 @extends('layouts.app')
 
-@section('body-class', 'bg-light')
+@section('body-class', 'bg-body-secondary')
 
 @section('content')
 
     @include('navbars.primary')
 
-    <div class="container">
-        <main id="content-main" role="main" class="col-12">
-            <div class="row">
-                <div class="col-12 col-xl-10 mx-auto bg-white p-4 shadow-sm">
-
-                    <h1 class="page-title-default text-primary">{{ $page->title }}</h1>
-
-                    {!! $page->content !!}
-
-                </div>
-            </div>
-
-        </main>
+    <div class="container my-5 text-center">
+        <h1>{{ $page->title }}</h1>
+        <div class="text-start max-width-1000 mx-auto bg-body p-4">
+            {!! $page->content !!}
+        </div>
     </div>
 
-    @include('footers.mini')
+    @include('footers.full')
 
 @endsection

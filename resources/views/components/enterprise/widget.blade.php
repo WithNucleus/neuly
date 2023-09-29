@@ -10,15 +10,20 @@
     <h2 class="widget-title">
         {{ $heading }}
         <div class="dropdown">
-            <button class="btn settings" type="button" id="widget-settings-{{ $name }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button class="btn settings" id="widget-settings-{{ $name }}" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Widget Settings">
                 <i class="fal fa-ellipsis-v"></i>
             </button>
-            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="widget-settings-{{ $name }}">
-                <a class="dropdown-item widget-collapse-label" href="#" data-toggle="collapse" data-target="#widget-collapse-{{ $name }}" aria-expanded="true" aria-controls="widget-collapse-{{ $name }}">
-                    <span>Widget</span>
-                </a>
-                <a class="dropdown-item remove-widget" href="#" data-widget="#{{ $name }}">Remove Widget</a>
-            </div>
+            <ul class="dropdown-menu">
+                <li>
+                    <a class="dropdown-item widget-collapse-label" data-bs-toggle="collapse" href="#widget-collapse-{{ $name }}"
+                       role="button" aria-expanded="true" aria-controls="widget-collapse-{{ $name }}">
+                        <span>Widget</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item remove-widget" data-widget="#{{ $name }}" href="#">Remove Widget</a>
+                </li>
+            </ul>
         </div>
     </h2>
     <div id="widget-collapse-{{ $name }}" class="widget-collapsable-content collapse show">

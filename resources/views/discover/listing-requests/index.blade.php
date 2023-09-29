@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('body-class', 'bg-light')
+@section('body-class', 'listing-requests')
 
 @section('content')
     @include('navbars.primary')
@@ -27,7 +27,7 @@
                     </div>
                 </div>
 
-                @include('footers.mini')
+                @include('footers.full')
 
             </main>
 

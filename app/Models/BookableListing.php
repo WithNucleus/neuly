@@ -3,18 +3,21 @@
 namespace App\Models;
 
 use App\Models\Scopes\PublicStatusScope;
+use App\Models\Traits\EntityImage;
 use App\Models\Traits\HasEntityContent;
 use App\Models\Traits\SearchableEntity;
 use App\User;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class BookableListing extends Model
 {
     use CrudTrait,
         SearchableEntity,
-        HasEntityContent;
+        HasEntityContent,
+        EntityImage;
 
     /*
     |--------------------------------------------------------------------------
@@ -22,17 +25,12 @@ class BookableListing extends Model
     |--------------------------------------------------------------------------
     */
     const TYPE_CLINIC = 'Clinic';
-
     const TYPE_COACH = 'Coach';
-
     const TYPE_COURSE = 'Course';
-
     const TYPE_RETREAT = 'Retreat';
-
     const TYPE_THERAPIST = 'Therapist';
 
     const STATUS_PENDING = 'Pending';
-
     const STATUS_PUBLIC = 'Public';
 
     const TYPES_CARE = [
@@ -54,6 +52,10 @@ class BookableListing extends Model
         self::STATUS_PENDING,
         self::STATUS_PUBLIC,
     ];
+
+    protected static $imageAttribute = 'image';
+    protected static $imageFolderPath = 'bookables';
+    protected static $imageFilenameAttribute = 'name';
 
     private array $searchableRelationships = [
         'focus' => 'name',
@@ -130,6 +132,11 @@ class BookableListing extends Model
         return $this->belongsToMany(Focus::class, 'bookable_listing_focus', 'bookable_listing_id', 'focus_id')->withTimestamps();
     }
 
+    public function focusDrugs(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Focus::class, 'bookable_listing_focus', 'bookable_listing_id', 'focus_id')->drugs()->withTimestamps();
+    }
+
     public function location(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Location::class);
@@ -145,6 +152,14 @@ class BookableListing extends Model
     | SCOPES
     |--------------------------------------------------------------------------
     */
+    public function scopeDistance($query,$from_latitude,$from_longitude,$distance)
+    {
+      // This will calculate the distance in km
+      // if you want in miles use 3959 instead of 6371
+      $raw = DB::raw('ROUND ( ( 3959 * acos( cos( radians('.$from_latitude.') ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians('.$from_longitude.') ) + sin( radians('.$from_latitude.') ) * sin( radians( latitude ) ) ) ) ) AS distance');
+      return $query->select('*')->addSelect($raw)->orderBy( 'distance', 'ASC' )->having('distance', '<=', $distance);
+    }
+
     public function scopePractitioners($query)
     {
         return $query->whereIn('type', self::TYPES_CARE);
@@ -255,5 +270,10 @@ class BookableListing extends Model
             $this->attributes['latitude'] = $location->latitude;
             $this->attributes['longitude'] = $location->longitude;
         }
+    }
+
+    public function setImageAttribute($value)
+    {
+        $this->updateImageAttribute($value);
     }
 }

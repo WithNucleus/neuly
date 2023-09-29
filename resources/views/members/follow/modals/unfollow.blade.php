@@ -1,11 +1,9 @@
-<div class="modal fade" id="unfollow-modal-{{ $followable_id }}" tabindex="-1" role="dialog">
+<div class="modal fade" id="unfollow-modal-{{ $followable_id }}" tabindex="-1" aria-labelledby="#unfollow-modal-{{ $followable_id }}-label">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title m-0">Unfollow {{ $name }}</h1>
-                <button type="button" class="close closeDetailModal" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h3 class="h5 modal-title m-0" id="unfollow-modal-{{ $followable_id }}-label">Unfollow {{ $name }}</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="row">

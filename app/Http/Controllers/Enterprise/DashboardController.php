@@ -73,14 +73,24 @@ class DashboardController extends Controller
 
     public function index(): \Illuminate\Contracts\View\View
     {
-        $dashboard = $this->getUserDashboard();
-        $widgets = $this->getUserWidgets($dashboard);
         $allWidgets = $this->defaultWidgets;
         $widgetColumns = $this->defaultWidgetColumns;
 
-        if (count($widgets) !== count($widgetColumns)) {
-            echo 'Houston, there was a problem. Please email <a href="mailto:sydney@withnucleus.com">sydney@withnucleus.com</a>';
-            exit();
+        try {
+            $dashboard = $this->getUserDashboard();
+            $widgets = $this->getUserWidgets($dashboard);
+
+            if (count($widgets) !== count($widgetColumns)) {
+                $dashboard->widget_names = NULL;
+                $dashboard->widget_labels = NULL;
+                $dashboard->save();
+            }
+        } catch(\Throwable $exception) {
+            // TODO: Log and notify Sydney
+            $dashboard->widget_names = NULL;
+            $dashboard->widget_labels = NULL;
+            $dashboard->save();
+            $widgets = $allWidgets;
         }
 
         return view('enterprise.dashboard-drag', compact('widgets', 'dashboard', 'allWidgets', 'widgetColumns'));
@@ -223,7 +233,7 @@ class DashboardController extends Controller
         if ($user->hasRole('Team owner')) {
             $team = $user->ownedTeam()->with(['members', 'invitations'])->first();
         } elseif ($user->hasRole('Team member')) {
-            $team = $user->team()->with(['members', 'owner'])->first();
+            $team = $user->teams()->with(['members', 'owner'])->first();
         }
 
         return View::make('enterprise.widgets.team')

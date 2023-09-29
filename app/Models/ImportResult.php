@@ -2,17 +2,20 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class ImportResult extends Model
 {
     const TYPE_CLINICAL_TRIALS = 'clinical_trials';
-
     const TYPE_RELATED_ENTITIES_LOCATION = 'related_entities_locations';
-
     const TYPE_RELATED_ENTITIES_PEOPLE_ORGANIZATION = 'related_entities_people_organisation';
-
     const TYPE_BATCH_IMAGES_UPLOAD = 'batch_images_upload';
+    const TYPE_COURSES_WITH_RELATIONSHIPS = 'Courses with Relationships';
+
+    const STATUS_SUCCESS = 'Success';
+    const STATUS_SUCCESS_WITH_ERRORS = 'Success with Errors';
+    const STATUS_FAILED = 'Failed';
 
     /*
     |--------------------------------------------------------------------------
@@ -26,6 +29,11 @@ class ImportResult extends Model
 
     protected $casts = [
         'options' => 'array',
+        'data' => 'array',
+        'errors' => 'array',
+        'location_messages' => 'array',
+        'people_messages' => 'array',
+        'company_messages' => 'array'
     ];
 
     /*
@@ -68,5 +76,18 @@ class ImportResult extends Model
     public function scopeBatchImagesUpload($query)
     {
         return $query->where('type', self::TYPE_BATCH_IMAGES_UPLOAD);
+    }
+
+    /**
+     * Accessors
+     */
+    public function getFormattedCreatedAtAttribute(): string
+    {
+        return Carbon::parse($this->created_at)->format('Y-m-d H:i');
+    }
+
+    public function getFormattedUpdatedAtAttribute(): string
+    {
+        return Carbon::parse($this->updated_at)->format('Y-m-d H:i');
     }
 }

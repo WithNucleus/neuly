@@ -1,6 +1,6 @@
 <div class="widget-controls mb-3">
     <div class="d-flex align-items-stretch">
-        <button class="btn btn-sm has-accordion-arrow filter-control" type="button" data-toggle="collapse" data-target="#clinical-trial-focus" aria-expanded="false" aria-controls="clinical-trial-focus">
+        <button class="btn btn-sm has-accordion-arrow filter-control" type="button" data-bs-toggle="collapse" data-bs-target="#clinical-trial-focus" aria-expanded="false" aria-controls="clinical-trial-focus">
             Focus Filter
         </button>
         <x-enterprise.widgets.controls.page-size widgetName="clinical-trials" />

@@ -7,7 +7,7 @@
 <ul class="list-group">
     @if ($recently_viewed->count() > 0)
         @foreach ($recently_viewed as $item)
-            <?php
+            @php
             if ($item->properties['entity'] == 'clinicaltrials') :
                 $entity_name = 'Clinical Trials';
             elseif ($item->properties['entity'] == 'member-notes') :
@@ -17,42 +17,84 @@
             endif;
 
             $route = 'discover.' . $item->properties['entity'] . '.show';
-            ?>
+            @endphp
             <li class="list-group-item d-flex">
-
-                {{-- Image --}}
-                <div class="recently-viewed-image mr-3 widget-expandable-details">
+                <div class="recently-viewed-image me-3 widget-expandable-details">
                     @if (!empty($item->properties['image']) && file_exists('storage/' . $item->properties['image']))
                         <img src="storage/{{ $item->properties['image'] }}" alt="{{ $item->description }}" class="logo">
                     @else
                         <img src="{{ asset('images/icons/' . $item->properties['entity'] . '.svg') }}" alt="{{ $item->description }}">
                     @endif
                 </div>
-
-                {{-- Content --}}
                 <div class="content d-flex w-100 flex-wrap">
                     <div class="w-100">
-                        <a href="{{ route($route, $item->properties['slug']) }}" class="font-weight-bold">{{ $item->description }}</a>
+                        <a href="{{ route($route, $item->properties['slug']) }}" class="lead fw-bold">{{ $item->description }}</a>
                     </div>
 
-                    <span class="mr-4 font-size-small widget-expandable-details">
-                        <i class="fad fa-clock text-black-50"></i> {{ Carbon\Carbon::parse($item->created_at)->diffForHumans() }}
+                    <span class="me-4 widget-expandable-details">
+                        <i class="fa-strong far fa-clock"></i>
+                        <span>{{ Carbon\Carbon::parse($item->created_at)->diffForHumans() }}</span>
                     </span>
 
-                    <span class="mr-4 font-size-small widget-expandable-details">
-                        <i class="fad fa-tags text-secondarydark"></i> {{ $entity_name }}
+                    <span class="me-4 widget-expandable-details text-success">
+                        <i class="fa-strong far fa-tags"></i>
+                        <span>{{ $entity_name }}</span>
                     </span>
                 </div>
             </li>
         @endforeach
         @if($show_more == true AND $recently_viewed->count() > 3)
             <li class="list-group-item">
-                <small><a href="" class="text-dark text-decoration-none font-weight-bold">
-                    See More History <i class="fad fa-chevron-double-right text-danger"></i>
+                <small><a href="" class="text-dark text-decoration-none fw-bold">
+                    See More History <i class="fa-strong far fa-chevron-double-right text-danger"></i>
                 </a></small>
             </li>
         @endif
     @else
-        You haven't viewed anything yet.
+        <div class="fs-6 mb-3">You haven't viewed anything yet. Might we suggest a few things?</div>
+        <div>
+            <div class="neuly-help-logo-item mb-3">
+                <button class="btn" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapse-research" aria-expanded="true"
+                        aria-controls="collapse-research">
+                    @include('navbars.neuly-research-logo')
+                </button>
+                <div class="collapse show" id="collapse-research">
+                    <div>
+                        <ul class="neuly-help-nav-list">
+                            @include('navbars._research')
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="neuly-help-logo-item mb-3">
+                <button class="btn" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapse-edu" aria-expanded="false"
+                        aria-controls="collapse-edu">
+                    @include('navbars.neuly-edu-logo')
+                </button>
+                <div class="collapse" id="collapse-edu">
+                    <div>
+                        <ul class="neuly-help-nav-list">
+                            @include('navbars._edu')
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="neuly-help-logo-item mb-3">
+                <button class="btn" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapse-care" aria-expanded="false"
+                        aria-controls="collapse-care">
+                    @include('navbars.neuly-care-logo')
+                </button>
+                <div class="collapse" id="collapse-care">
+                    <div>
+                        <ul class="neuly-help-nav-list">
+                            @include('navbars._care')
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     @endif
 </ul>

@@ -89,26 +89,6 @@ class ClinicaltrialCrudController extends CrudController
             }),
         ]);
 
-        $this->crud->addColumn([
-            'type' => 'relationship',
-            'name' => 'outcomeMeasures',
-            'label' => 'Outcome Measures',
-            'attribute' => 'value',
-            'options' => (function ($query) {
-                return $query->orderBy('value', 'ASC')->get();
-            }),
-        ]);
-
-        $this->crud->addColumn([
-            'type' => 'relationship',
-            'name' => 'studyDesigns',
-            'label' => 'Study Designs',
-            'attribute' => 'value',
-            'options' => (function ($query) {
-                return $query->orderBy('value', 'ASC')->get();
-            }),
-        ]);
-
         CRUD::setFromDb();
 
         $this->crud->addButtonFromModelFunction('line', 'show_entity', 'getShowEntityPageButton', 'beginning');
@@ -236,7 +216,7 @@ class ClinicaltrialCrudController extends CrudController
             'attribute' => 'value',
         ]);
     }
-    
+
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();

@@ -5,18 +5,20 @@ namespace App\Http\Controllers\Index;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ChangeUserSettingsRequest;
 use App\User;
-use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Validator;
 
 class UserProfileController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        $user = User::find(Auth::user()->id);
+        $user = User::find(Auth::id());
 
-        return view('members.settings.profile', compact('user'));
+        return view('members.settings.profile', [
+            'user' => $user
+        ]);
     }
 
     public function update(ChangeUserSettingsRequest $request)

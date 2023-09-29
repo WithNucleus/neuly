@@ -11,7 +11,7 @@ use App\Models\Focus;
 use App\Models\Location;
 use App\Repositories\FollowRepository;
 use App\Services\Metas;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -23,76 +23,16 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class EventController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public function index(Request $request): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        $this->middleware('query_filters')->only('index', 'past', 'embedIndex');
-    }
-
-    // Upcoming Events
-    public function index(Request $request)
-    {
-        $data = $this->getIndexData($request);
         $data['metas'] = Metas::fromPage($request->path());
 
         return view('discover.events.index', $data);
     }
 
-    // Past Events
-    public function past(Request $request)
+    public function past(Request $request): \Illuminate\Http\RedirectResponse
     {
-        // Get Events
-        $events = QueryBuilder::for(Event::class)
-            ->where('start_date', '<=', Carbon::now('America/Chicago'))
-            ->with(['companies', 'eventTypes', 'locations', 'focus', 'eventTypes'])
-            ->allowedFilters([
-                'name',
-                AllowedFilter::partial('type', 'eventTypes.name'),
-                AllowedFilter::partial('company', 'companies.name'),
-                AllowedFilter::partial('locations', 'locations.name'),
-                AllowedFilter::partial('focus', 'focus.name'),
-            ])
-            ->defaultSort('-start_date')
-            ->allowedSorts([
-                'name',
-                AllowedSort::field('date', 'start_date'),
-            ])
-            ->paginate(10)
-            ->appends(request()->query());
-
-        // Get Focus Values
-        $focus_cats = Focus::whereHas('events', function (Builder $query) {
-            $query->where('start_date', '<=', Carbon::now('America/Chicago'));
-        })
-                ->get()
-                ->pluck('name');
-
-        // Event Types
-        $event_types = EventType::has('events', '>', 0)->with('events')->get()->pluck('name');
-
-        // Organizations
-        $event_organizations = Company::whereHas('events', function (Builder $query) {
-            $query->where('start_date', '<=', Carbon::now('America/Chicago'));
-        })
-                ->get()
-                ->pluck('name');
-
-        // Locations
-        $locations = Location::whereHas('events', function (Builder $query) {
-            $query->where('start_date', '<=', Carbon::now('America/Chicago'));
-        })
-                ->get()
-                ->pluck('country')->unique()->sort();
-
-        // Metas
-        $metas = Metas::fromPage($request->path());
-
-        // Return View
-        return view('discover.events.index', compact('events', 'focus_cats', 'event_types', 'metas', 'locations', 'event_organizations'));
+        return redirect()->route('discover.events');
     }
 
     public function show(Request $request, $slug)
@@ -109,8 +49,7 @@ class EventController extends Controller
 
         $related = $this->getRelatedEntities($event);
 
-        $entity = 'events';
-        $isFollowed = (bool) count(FollowRepository::fromuser(Event::class, $event->id));
+        $entity = $event;
 
         activity('pageview')
             ->causedBy(Auth::user())
@@ -126,7 +65,12 @@ class EventController extends Controller
             })
             ->log($event->name);
 
-        return view('discover.events.show', compact('event', 'related', 'metas', 'entity', 'isFollowed'));
+        return view('discover.events.show', [
+            'event' => $event,
+            'related' => $related,
+            'metas' => $metas,
+            'entity' => $entity
+        ]);
     }
 
     public function embedWidget()

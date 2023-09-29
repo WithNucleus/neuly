@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('body-class', 'bg-dark text-light enterprise-dashboard-page')
+@section('body-class', 'enterprise-dashboard-page')
 
 @section('content')
 
@@ -16,40 +16,46 @@
                 <span class="label">Rearrange Widgets</span>
             </button>
 
-            <button id="show-details-toggle" class="enterprise-toggle-switch btn btn-sm ml-4" data-drag="true">
+            <button id="show-details-toggle" class="enterprise-toggle-switch btn btn-sm ms-4" data-drag="true">
                 <span class="on">On</span>
                 <span class="off">Off</span>
                 <span class="label">Detailed View</span>
             </button>
 
-            <button id="collapse-all-widgets-toggle" class="btn btn-sm btn-info ml-4" data-collapsed="false">
+            <button id="collapse-all-widgets-toggle" class="btn btn-sm btn-info ms-4" data-collapsed="false">
                 <span class="icon"></span><span class="label">Widgets</span>
             </button>
 
-            <button id="add-widget-column" class="btn btn-sm btn-info ml-4">
-                <i class="fas fa-line-columns mr-2"></i>Add Widget Space
+            <button id="add-widget-column" class="btn btn-sm btn-info ms-4">
+                <i class="fas fa-line-columns me-2"></i>Add Widget Space
             </button>
 
-            <div class="dropdown">
-                <button id="add-widgets" class="btn btn-sm btn-info ml-4" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-th-large mr-2"></i>Add Widget
-                </button>
-                <div class="dropdown-menu" aria-labelledby="add-widgets">
+            <div class="dropdown ms-4">
+              <button class="btn btn-sm btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="fas fa-th-large me-2"></i>Add Widget
+              </button>
+                <ul class="dropdown-menu">
                     @foreach ($allWidgets as $widgetGroup)
                         @foreach ($widgetGroup as $widgetName => $widgetLabel)
-                            <button class="dropdown-item add-widget-link"
-                                    data-widget="{{ $widgetName }}"
-                                    data-template="{{ route('enterprise.dashboard.template') }}?name={{ $widgetName }}&label={{ $widgetLabel }}"
-                                    data-url="{{ Route::has('enterprise.dashboard.' . $widgetName) ? route('enterprise.dashboard.' . $widgetName) : '' }}">
-                                {{ $widgetLabel }}
-                            </button>
+                            <li>
+                                <button class="dropdown-item add-widget-link"
+                                        data-widget="{{ $widgetName }}"
+                                        data-template="{{ route('enterprise.dashboard.template') }}?name={{ $widgetName }}&label={{ $widgetLabel }}"
+                                        data-url="{{ Route::has('enterprise.dashboard.' . $widgetName) ? route('enterprise.dashboard.' . $widgetName) : '' }}">
+                                    {{ $widgetLabel }}
+                                </button>
+                            </li>
                         @endforeach
                     @endforeach
-                </div>
+                </ul>
             </div>
 
-            <button type="button" class="btn btn-sm btn-info ml-4" data-toggle="modal" data-target="#requestWidget">
-                <i class="fad fa-question-square mr-2"></i>Request Widget
+            <button type="button" class="btn btn-sm btn-info ms-4" data-bs-toggle="modal" data-bs-target="#requestWidget">
+                <i class="fad fa-question-square me-2"></i>Request Widget
+            </button>
+
+            <button id="saveDashboard" type="button" class="btn btn-sm btn-info ms-4">
+                <i class="fa-duotone fa-floppy-disk me-2"></i>Save
             </button>
         </div>
 
@@ -66,21 +72,17 @@
     </div>
 <div class="filter-backdrop" style="display: none"></div>
 
-<div class="modal fade" id="requestWidget" tabindex="-1" role="dialog" aria-labelledby="requestWidgetLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content bg-dark text-white">
+<div class="modal fade" id="requestWidget" tabindex="-1" aria-labelledby="requestWidgetLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-light">
             <div class="modal-header">
-                <h5 class="modal-title text-info" id="requestWidgetLabel">Request a Widget</h5>
-                <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h1 class="modal-title fs-5" id="requestWidgetLabel">Request a Widget</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="js-ajax-response alert position-relative" style="display: none;">
                     <span class="message"></span>
-                    <button type="button" class="close close-ajax-response" data-hide="alert" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form method="post" action="" class="max-width-450">
                     @if ($errors->any())
@@ -96,7 +98,7 @@
                         </div>
                     @endif
                     @csrf
-                    <div class="form-group">
+                    <div class="form-group mb-3">
                         <label for="request-widget-content" class="font-weight-bold">What data / info would you like to see?</label>
                         <textarea class="form-control" name="request-widget-content" id="request-widget-content" rows="10"></textarea>
                     </div>
@@ -108,18 +110,39 @@
         </div>
     </div>
 </div>
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="liveToast" class="toast align-items-center text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                Dashboard saved!
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @section('after_scripts')
 
-    @if(array_key_exists('chart-clinical-trials-locations', $widgets[2]))
-    <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
-    <script src="https://cdn.amcharts.com/lib/4/maps.js"></script>
-    <script src="https://cdn.amcharts.com/lib/4/geodata/worldLow.js"></script>
-    <script src="https://cdn.amcharts.com/lib/4/geodata/data/countries2.js"></script>
-    <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
-    <script src="https://cdn.amcharts.com/lib/4/plugins/overlapBuster.js"></script>
-    @endif
+    @isset($widgets)
+        @if(array_key_exists('chart-clinical-trials-locations', $widgets[2]))
+            <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+            <script src="https://cdn.amcharts.com/lib/4/maps.js"></script>
+            <script src="https://cdn.amcharts.com/lib/4/geodata/worldLow.js"></script>
+            <script src="https://cdn.amcharts.com/lib/4/geodata/data/countries2.js"></script>
+            <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+            <script src="https://cdn.amcharts.com/lib/4/plugins/overlapBuster.js"></script>
+        @endif
+    @endisset
+
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js" integrity="sha256-lSjKY0/srUM9BE3dPm+c4fBo1dky2v27Gdjm2uoZaL0=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{{ mix('css/enterprise-dashboard.css') }}">
+    <script src="https://unpkg.com/packery@2/dist/packery.pkgd.js"></script>
+    <script src="https://unpkg.com/draggabilly@2/dist/draggabilly.pkgd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha256-t9UJPrESBeG2ojKTIcFLPGF7nHi2vEc7f5A2KpH/UBU=" crossorigin="anonymous"></script>
 
     <script>
         $(document).ready(function() {
@@ -252,7 +275,7 @@
                     let filterType = $(this).data('filter');
                     let filterValues = [];
 
-                    $(this).find('.custom-control-input').each(function() {
+                    $(this).find('.form-check-input').each(function() {
                         if ($(this).prop('checked') === true) {
                             filterValues.push($(this).data('name'));
                         }
@@ -267,12 +290,12 @@
             }
 
             // On Checkbox
-            $(document).on("change", ".custom-checkbox" , function() {
+            $(document).on("change", ".form-check" , function() {
                 buildQueryUrl($(this));
             });
 
             // On Select
-            $(document).on("change", ".custom-select", function() {
+            $(document).on("change", ".form-select", function() {
                 buildQueryUrl($(this));
             });
 
@@ -397,6 +420,16 @@
             $('button.close-ajax-response').on('click', function() {
                 $(this).parent().hide();
             });
+
+            const saveDashboardToast = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToast'));
+
+            $('#saveDashboard').on('click', function() {
+                saveWidgetData();
+                saveDashboardToast.show();
+            });
+
+            // TODO: save category/focus filters and # of items in prefs
+
         });
     </script>
 @endsection

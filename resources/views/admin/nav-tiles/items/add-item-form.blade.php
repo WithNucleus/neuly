@@ -17,10 +17,10 @@
     </div>
 @endif
 
-<form action="{{ route('admin.nav-tiles.items.store', $navigationTile->id) }}" method="post">
+<form action="{{ route('adminx.nav-tiles.items.store', $navigationTile->id) }}" method="post">
     @csrf
 
-    <div class="form-group">
+    <div class="form-group mb-3">
         <label for="type" class="sr-only">Type</label>
         <div class="form-check form-check-inline">
             <input class="form-check-input js-link-type-radio" type="radio" name="type" id="addLinkRadio" value="link" checked>
@@ -36,7 +36,7 @@
         </div>
     </div>
 
-    <div class="form-group">
+    <div class="form-group mb-3">
         <label for="name" class="sr-only">Name</label>
         <div class="input-group">
             <div class="input-group-prepend">
@@ -46,7 +46,7 @@
         </div>
     </div>
 
-    <div class="form-group for-link-type">
+    <div class="form-group mb-3 for-link-type">
         <label for="name" class="sr-only">URL</label>
         <div class="input-group">
             <div class="input-group-prepend">
@@ -56,7 +56,7 @@
         </div>
     </div>
 
-    <div class="form-group for-link-type">
+    <div class="form-group mb-3 for-link-type">
         <label for="name" class="sr-only">Badge (optional)</label>
         <div class="input-group">
             <div class="input-group-prepend">
@@ -66,7 +66,7 @@
         </div>
     </div>
 
-    <div class="form-group mt-3">
-        <button type="submit" class="btn btn-secondarydark">Save</button>
+    <div class="form-group mb-3 mt-3">
+        <button type="submit" class="btn btn-primary">Save</button>
     </div>
 </form>

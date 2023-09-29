@@ -1,75 +1,80 @@
-@extends('layouts.app')
+@extends('layouts.entity-show')
 
-@section('body-class', 'bg-light')
+@section('breadcrumbs')
+    @include('navbars.breadcrumb', [
+        'items' => [
+            'Dashboard' => route('member.dashboard'),
+            'Notes'  => route('member.notes.index'),
+            $note->title => false
+        ]
+    ])
+@endsection
 
 @section('content')
 
-    @include('members.includes.dashboard-begin')
+    <div class="container my-4">
+        <div class="d-flex flex-wrap align-items-baseline justify-content-between">
 
-    <div class="container">
-        <div class="d-flex align-items-baseline justify-content-between">
+            <h1 class="h2">{{ $note->title }}</h1>
 
-            <h1 class="h2 float-left">
-                <i class="fad fa-clipboard-list text-info"></i> {{ $note->title }}
-            </h1>
-
-            <div class="mb-0 d-inline-block ml-2">
+            <div class="mb-2">
                 @if($member->member_url == '')
-                    <a href="{{ route('user.settings') }}" class="btn btn-link p-0 ml-2 text-secondary" data-toggle="tooltip" data-placement="top" title="Set your Neuly member URL before sharing">
-                        <i class="fad fa-share-square fa-lg"></i>
+                    <a href="{{ route('user.settings') }}" class="btn btn-success h5 btn-cta text-white" data-bs-toggle="tooltip" data-bs-placement="top" title="Set your Neuly member URL before sharing">
+                        <i class="fad fa-share-square fa-lg"></i> SHARE
                     </a>
                 @else
                     @if($note->visibility == 'public')
-                        <button data-toggle="modal" data-target="#share-note" class="btn btn-link lead-smaller p-0 ml-2 text-secondary font-weight-bold text-decoration-none">
+                        <button data-bs-toggle="modal" data-bs-target="#share-note" class="btn btn-success h5 btn-cta text-white">
                             <i class="fad fa-share-square"></i> SHARE
                         </button>
                     @else
-                        <a href="{{ route('member.notes.edit', $note->slug) }}" class="btn btn-link lead-smaller p-0 ml-2 text-secondary font-weight-bold text-decoration-none" data-toggle="tooltip" data-placement="top" title="Make this note public to share it">
+                        <a href="{{ route('member.notes.edit', $note->slug) }}" class="btn btn-success h5 btn-cta text-white" data-bs-toggle="tooltip" data-bs-placement="top" title="Make this note public to share it">
                             <i class="fad fa-share-square"></i> SHARE
                         </a>
                     @endif
                 @endif
             </div>
         </div>
-        <div class="row">
-            <div class="col-12">
-                <div class="p-4 bg-white shadow-sm">
 
-                    @include('members.includes.status-messages')
+        <div>
 
-                    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 pb-2 border-bottom border-tertiary">
+            @include('members.includes.status-messages')
 
-                        <div class="left-side mb-0 font-size-small mr-3">
-                            <i class="fad fa-clock"></i> Created {{ \Carbon\Carbon::parse($note->created_at)->format('M d, Y') }}
-                                and last updated {{ \Carbon\Carbon::parse($note->updated_at)->diffForHumans() }}
+            <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-3 border-bottom">
 
-                            @if($note->visibility == 'private')
-                                <span class="text-muted ml-3"><i class="fad fa-lock-alt"></i> Private</span>
-                            @elseif($note->visibility == 'public')
-                                <span class="text-success ml-3"><i class="fad fa-eye"></i> Public</span>
-                                @if($member->member_url == '')
-                                    <a href="{{ route('user.settings') }}"><span class="ml-1 font-size-small badge badge-warning">Set your Neuly URL</span></a>
-                                @endif
-                            @endif
+                <div class="left-side mb-0 font-size-small mr-3">
+                    <i class="fad fa-clock"></i> Created {{ \Carbon\Carbon::parse($note->created_at)->format('M d, Y') }}
+                        and last updated {{ \Carbon\Carbon::parse($note->updated_at)->diffForHumans() }}
 
-                        </div>
-
-                        <div class="right-side">
-                            <a href="{{ route('member.notes.edit', $note->slug) }}" class="font-size-small text-primary text-decoration-none mr-2"><i class="fad fa-edit"></i> Edit</a>
-                            <a href="{{ route('member.notes.destroy', $note->id) }}" class="font-size-small text-danger confirm-action text-decoration-none mr-4"><i class="fad fa-trash-alt"></i> Delete</a>
-                        </div>
-                    </div>
-
-                    <div class="trix-content">
-                        {!! $note->trixRender("content") !!}
-                    </div>
+                    @if($note->visibility == 'private')
+                        <span class="text-muted ms-3"><i class="fad fa-lock-alt"></i> Private</span>
+                    @elseif($note->visibility == 'public')
+                        <span class="text-success ms-3"><i class="fad fa-eye"></i> Public</span>
+                        @if($member->member_url == '')
+                            <a href="{{ route('user.settings') }}"><span class="ml-1 font-size-small badge badge-warning">Set your Neuly URL</span></a>
+                        @endif
+                    @endif
 
                 </div>
+
+                <div class="right-side">
+                    <a href="{{ route('member.notes.edit', $note->slug) }}" class="btn btn-sm btn-primary me-2">
+                        <i class="fa-strong far fa-edit"></i>
+                        <span>Edit Note</span>
+                    </a>
+                    <a href="{{ route('member.notes.destroy', $note->id) }}" class="btn btn-sm btn-danger confirm-action">
+                        <i class="fa-strong far fa-edit"></i>
+                        <span>Delete Note</span>
+                    </a>
+                </div>
             </div>
+
+            <div class="trix-content">
+                {!! $note->trixRender("content") !!}
+            </div>
+
         </div>
     </div>
-
-    @include('members.includes.dashboard-end')
 
     @include('members.notes.share-modal')
 

@@ -28,6 +28,9 @@ Route::post('/invitation', [App\Http\Controllers\InvitationController::class, 'a
 
 Route::get('/', [App\Http\Controllers\Content\HomeController::class, 'index'])->name('index');
 Route::get('/about', [App\Http\Controllers\Content\AboutController::class, 'index'])->name('about');
+Route::get('/api', [App\Http\Controllers\Content\MiscContentController::class, 'api'])->name('content.api');
+Route::get('/enterprise', [App\Http\Controllers\Content\MiscContentController::class, 'enterprise'])->name('content.enterprise');
+Route::get('/research/request', [App\Http\Controllers\Content\MiscContentController::class, 'requestResearch'])->name('content.research.request');
 
 // Search Suggestions
 Route::prefix('/searchassets')->name('searchassets.')->group(function () {
@@ -59,6 +62,8 @@ Route::get('/podcasts', [App\Http\Controllers\Index\DataFeeds\PodcastController:
 Route::get('/podcasts/{slug}', [App\Http\Controllers\Index\DataFeeds\PodcastController::class, 'show'])->name('discover.podcasts.show');
 Route::get('/books', [App\Http\Controllers\Index\DataFeeds\BookController::class, 'index'])->name('discover.books');
 Route::get('/courses', [App\Http\Controllers\Index\CourseController::class, 'index'])->name('discover.courses');
+Route::get('/courses-list', [App\Http\Controllers\Index\CourseController::class, 'list'])->name('discover.courses.list');
+Route::get('/courses/{slug}', [App\Http\Controllers\Index\CourseController::class, 'show'])->name('discover.courses.show');
 
 // Listing Requests
 Route::get('/listing', [App\Http\Controllers\Index\ListingRequestController::class, 'index'])->name('listing');
@@ -69,7 +74,7 @@ Route::get('/listing/request/getEntityListJson', [App\Http\Controllers\Index\Lis
 
 //Global group for registered and verified users only
 Route::middleware('verifiedIfAuthorized')->group(function () {
-    Route::get('/psychedelic-index', [App\Http\Controllers\Content\IndexController::class, 'index'])->name('discover.index');
+    Route::get('/psychedelic-index', [App\Http\Controllers\Content\MiscContentController::class, 'index'])->name('discover.index');
 
     // Companies
     Route::get('/organizations', [App\Http\Controllers\Index\CompanyController::class, 'index'])->name('discover.organizations');
@@ -101,9 +106,9 @@ Route::middleware('verifiedIfAuthorized')->group(function () {
     // Locations
     Route::get('/locations', [App\Http\Controllers\Index\LocationController::class, 'index'])->name('discover.locations');
     Route::get('/locations/map', [App\Http\Controllers\Index\LocationMapController::class, 'showMap'])->name('discover.locations.maps.global');
-    Route::get('/locations/map/{country}', [App\Http\Controllers\Index\LocationMapController::class, 'showCountry'])->name('discover.locations.maps.country');
-    Route::get('/locations/citynames.json', [App\Http\Controllers\Index\LocationController::class, 'citynames']);
-    Route::get('/locations/countries.json', [App\Http\Controllers\Index\LocationController::class, 'countries']);
+//    Route::get('/locations/map/{country}', [App\Http\Controllers\Index\LocationMapController::class, 'showCountry'])->name('discover.locations.maps.country');
+//    Route::get('/locations/citynames.json', [App\Http\Controllers\Index\LocationController::class, 'citynames']);
+//    Route::get('/locations/countries.json', [App\Http\Controllers\Index\LocationController::class, 'countries']);
     Route::get('/location/{slug}', [App\Http\Controllers\Index\LocationController::class, 'show'])->name('discover.locations.show');
 
     // Focus
@@ -137,6 +142,7 @@ Route::middleware('verifiedIfAuthorized')->group(function () {
 
     // News Articles
     Route::get('/news', [App\Http\Controllers\Index\DataFeeds\NewsController::class, 'index'])->name('discover.news');
+    Route::get('/articles', [App\Http\Controllers\Index\DataFeeds\NewsController::class, 'articles'])->name('discover.articles');
 
     // Listing Requests
     Route::get('/listing', [App\Http\Controllers\Index\ListingRequestController::class, 'index'])->name('listing');
@@ -191,39 +197,42 @@ Route::middleware('verifiedIfAuthorized')->group(function () {
 //    Route::get('/patent-filings', 'Index\DataFeeds\PatentFilingController@index')->name('discover.patents.filings');
 
     //Insights main page
-    Route::prefix('/insights')->name('discover.')->group(function () {
-        Route::get('/', [App\Http\Controllers\Index\InsightsController::class, 'index'])->name('insights');
-        Route::get('/request', [App\Http\Controllers\Index\InsightsController::class, 'request'])->name('insights.request');
-        Route::post('/request', [App\Http\Controllers\Index\InsightsController::class, 'saveRequest'])->name('insights.saveRequest');
-    });
+    // TODO: Temporary admin gate for insights
+    Route::middleware('can:admin login')->group(function() {
+        Route::prefix('/insights')->name('discover.')->group(function () {
+            Route::get('/insights', [App\Http\Controllers\Index\InsightsController::class, 'index'])->name('insights');
+            Route::get('/request', [App\Http\Controllers\Index\InsightsController::class, 'request'])->name('insights.request');
+            Route::post('/request', [App\Http\Controllers\Index\InsightsController::class, 'saveRequest'])->name('insights.saveRequest');
+        });
 
-    //Insights
-    Route::prefix('/insights')->name('insights.')->group(function () {
-        Route::get('/companies-by-type', [App\Http\Controllers\Insights\CompaniesByTypeController::class, 'index'])->name('companies-by-type');
-        Route::get('/top-ten-locations', [App\Http\Controllers\Insights\TopTenLocationsController::class, 'index'])->name('top-ten-locations');
-        Route::get('/companies-by-focus-drug', [App\Http\Controllers\Insights\CompaniesByFocusDrug::class, 'index'])->name('companies-by-focus-drug');
-        Route::get('/clinical-trial-tracker', [App\Http\Controllers\Insights\ClinicalTrialPipelineController::class, 'show'])->name('clinicaltrials.pipeline');
-        Route::get('/market-comparison', [App\Http\Controllers\Insights\CompareMarketController::class, 'show'])->name('compare-market');
-        Route::get('/jobs-by-focus', [App\Http\Controllers\Insights\JobsByFocusController::class, 'index'])->name('jobs-by-focus');
-        Route::get('/jobs-by-type', [App\Http\Controllers\Insights\JobsByTypeController::class, 'index'])->name('jobs-by-type');
-        Route::get('/collaborators', [App\Http\Controllers\Insights\ClinicalTrialCollaboratorsListController::class, 'show'])->name('collaborators.show');
-        Route::post('/collaborators/list', [App\Http\Controllers\Insights\ClinicalTrialCollaboratorsListController::class, 'index'])->name('collaborators');
-        Route::get('/most-interest', [App\Http\Controllers\Insights\ClinicalTrialFocusListController::class, 'show'])->name('most-interest.show');
-        Route::post('/most-interest/list', [App\Http\Controllers\Insights\ClinicalTrialFocusListController::class, 'index'])->name('most-interest');
-        Route::get('/research-authors', [App\Http\Controllers\Insights\ResearchAuthorsController::class, 'index'])->name('research-authors');
-        Route::get('/research-authors/widget', [App\Http\Controllers\Insights\ResearchAuthorsController::class, 'widget'])->name('research-authors.widget');
-        Route::get('/research-organizations', [App\Http\Controllers\Insights\ResearchOrganizationsController::class, 'index'])->name('research-organizations');
-        Route::get('/research-organizations/widget', [App\Http\Controllers\Insights\ResearchOrganizationsController::class, 'widget'])->name('research-organizations.widget');
-        Route::get('/research-by-focus', [App\Http\Controllers\Insights\ResearchByFocus::class, 'index'])->name('research-by-focus');
-        Route::get('/companies-by-focus-industry', [App\Http\Controllers\Insights\CompaniesByFocusIndustry::class, 'index'])->name('companies-by-focus-industry');
-        Route::get('/location-top-by-jobs', [App\Http\Controllers\Insights\LocationTopByJobsController::class, 'index'])->name('location-top-by-jobs');
-        Route::get('/clinical-trials/distribution/countries', [App\Http\Controllers\Insights\ClinicalTrialDistributionController::class, 'show'])->name('distribution.countries.show');
-        Route::get('/clinical-trials/distribution/countries/focus', [App\Http\Controllers\Insights\ClinicalTrialDistributionController::class, 'showWithFocus'])->name('distribution.countries.focus.show');
-        Route::get('/clinical-trials-historic', [App\Http\Controllers\Insights\ClinicalTrialHistoric::class, 'index'])->name('clinical-trials-historic');
-        Route::get('/investment-funds', [App\Http\Controllers\Insights\InvestmentFundController::class, 'index'])->name('investment-funds');
-        Route::get('/investment-funds/organization/{slug}', [App\Http\Controllers\Insights\InvestmentFundController::class, 'organizationChart'])->name('investment-funds.organization');
-        Route::get('/non-profits', [App\Http\Controllers\Insights\NonProfitFocusController::class, 'chart'])->name('nonprofits.focus-chart');
-        Route::get('/educational-organizations', [App\Http\Controllers\Insights\EducationalOrganizationsMapController::class, 'map'])->name('educational-organizations.map');
+        //Insights
+        Route::prefix('/insights')->name('insights.')->group(function () {
+            Route::get('/companies-by-type', [App\Http\Controllers\Insights\CompaniesByTypeController::class, 'index'])->name('companies-by-type');
+            Route::get('/top-ten-locations', [App\Http\Controllers\Insights\TopTenLocationsController::class, 'index'])->name('top-ten-locations');
+            Route::get('/companies-by-focus-drug', [App\Http\Controllers\Insights\CompaniesByFocusDrug::class, 'index'])->name('companies-by-focus-drug');
+            Route::get('/clinical-trial-tracker', [App\Http\Controllers\Insights\ClinicalTrialPipelineController::class, 'show'])->name('clinicaltrials.pipeline');
+            Route::get('/market-comparison', [App\Http\Controllers\Insights\CompareMarketController::class, 'show'])->name('compare-market');
+            Route::get('/jobs-by-focus', [App\Http\Controllers\Insights\JobsByFocusController::class, 'index'])->name('jobs-by-focus');
+            Route::get('/jobs-by-type', [App\Http\Controllers\Insights\JobsByTypeController::class, 'index'])->name('jobs-by-type');
+            Route::get('/collaborators', [App\Http\Controllers\Insights\ClinicalTrialCollaboratorsListController::class, 'show'])->name('collaborators.show');
+            Route::post('/collaborators/list', [App\Http\Controllers\Insights\ClinicalTrialCollaboratorsListController::class, 'index'])->name('collaborators');
+            Route::get('/most-interest', [App\Http\Controllers\Insights\ClinicalTrialFocusListController::class, 'show'])->name('most-interest.show');
+            Route::post('/most-interest/list', [App\Http\Controllers\Insights\ClinicalTrialFocusListController::class, 'index'])->name('most-interest');
+            Route::get('/research-authors', [App\Http\Controllers\Insights\ResearchAuthorsController::class, 'index'])->name('research-authors');
+            Route::get('/research-authors/widget', [App\Http\Controllers\Insights\ResearchAuthorsController::class, 'widget'])->name('research-authors.widget');
+            Route::get('/research-organizations', [App\Http\Controllers\Insights\ResearchOrganizationsController::class, 'index'])->name('research-organizations');
+            Route::get('/research-organizations/widget', [App\Http\Controllers\Insights\ResearchOrganizationsController::class, 'widget'])->name('research-organizations.widget');
+            Route::get('/research-by-focus', [App\Http\Controllers\Insights\ResearchByFocus::class, 'index'])->name('research-by-focus');
+            Route::get('/companies-by-focus-industry', [App\Http\Controllers\Insights\CompaniesByFocusIndustry::class, 'index'])->name('companies-by-focus-industry');
+            Route::get('/location-top-by-jobs', [App\Http\Controllers\Insights\LocationTopByJobsController::class, 'index'])->name('location-top-by-jobs');
+            Route::get('/clinical-trials/distribution/countries', [App\Http\Controllers\Insights\ClinicalTrialDistributionController::class, 'show'])->name('distribution.countries.show');
+            Route::get('/clinical-trials/distribution/countries/focus', [App\Http\Controllers\Insights\ClinicalTrialDistributionController::class, 'showWithFocus'])->name('distribution.countries.focus.show');
+            Route::get('/clinical-trials-historic', [App\Http\Controllers\Insights\ClinicalTrialHistoric::class, 'index'])->name('clinical-trials-historic');
+            Route::get('/investment-funds', [App\Http\Controllers\Insights\InvestmentFundController::class, 'index'])->name('investment-funds');
+            Route::get('/investment-funds/organization/{slug}', [App\Http\Controllers\Insights\InvestmentFundController::class, 'organizationChart'])->name('investment-funds.organization');
+            Route::get('/non-profits', [App\Http\Controllers\Insights\NonProfitFocusController::class, 'chart'])->name('nonprofits.focus-chart');
+            Route::get('/educational-organizations', [App\Http\Controllers\Insights\EducationalOrganizationsMapController::class, 'map'])->name('educational-organizations.map');
+        });
     });
 });
 
@@ -281,7 +290,7 @@ Route::middleware('auth', 'verifiedIfAuthorized')->group(function () {
         // Follow
         Route::resource('/follow', App\Http\Controllers\Dashboard\FollowController::class, [
             'as' => 'member', ]);
-        Route::get('/follow//get-modal/{id}/{type}', [App\Http\Controllers\Dashboard\FollowController::class, 'getModal'])->name('member.follow.getModal');
+        Route::get('/follow/get-modal/{id}/{type}', [App\Http\Controllers\Dashboard\FollowController::class, 'getModal'])->name('member.follow.getModal');
         Route::post('/follow/attach', [App\Http\Controllers\Dashboard\FollowController::class, 'attach'])->name('member.follow.attach');
         Route::post('/follow/detach', [App\Http\Controllers\Dashboard\FollowController::class, 'detach'])->name('member.follow.detach');
 
@@ -320,26 +329,26 @@ Route::middleware('auth', 'verifiedIfAuthorized')->group(function () {
     Route::get('/user/settings/oauth', [App\Http\Controllers\Index\UserOauthController::class, 'index'])->name('user.settings.oauth');
     Route::post('/user/settings/oauth/{clientId}/disconnect', [App\Http\Controllers\Index\UserOauthController::class, 'disconnectClient'])->name('user.settings.oauth.disconnectClient');
 
-    Route::get('/user/person/status', [App\Http\Controllers\Index\UserClaimPersonController::class, 'status'])->name('user.person.status');
-    Route::get('/user/person/verify/email', [App\Http\Controllers\Index\UserClaimPersonController::class, 'verifyEmail'])->name('user.person.verify.email');
-    Route::get('/user/person/verify/email/send', [App\Http\Controllers\Index\UserClaimPersonController::class, 'sendVerificationMail'])->name('user.person.verify.email.send');
-    Route::get('/user/person/verify/email/{token}', [App\Http\Controllers\Index\UserClaimPersonController::class, 'verifyClaimByEmail'])->name('user.person.verify.email.check');
-    Route::get('/user/person/verify/social', [App\Http\Controllers\Index\UserClaimPersonController::class, 'verifySocial'])->name('user.person.verify.social');
-    Route::get('/user/person/verify/social/check', [App\Http\Controllers\Index\UserClaimPersonController::class, 'verifyClaimBySocial'])->name('user.person.verify.social.check');
-
-    Route::get('/user/person', [App\Http\Controllers\Index\UserPersonController::class, 'index'])->name('user.person.index');
-    Route::post('/user/person', [App\Http\Controllers\Index\UserPersonController::class, 'savePersonal'])->name('user.person.personal.save');
-    Route::get('/user/person/email', [App\Http\Controllers\Index\UserPersonController::class, 'email'])->name('user.person.email');
-    Route::post('/user/person/email', [App\Http\Controllers\Index\UserPersonController::class, 'saveEmail'])->name('user.person.email.save');
-    Route::get('/user/person/social', [App\Http\Controllers\Index\UserPersonController::class, 'social'])->name('user.person.social');
-    Route::post('/user/person/social', [App\Http\Controllers\Index\UserPersonController::class, 'saveSocial'])->name('user.person.social.save');
-
-    Route::get('/user/person/create', [App\Http\Controllers\Index\UserPersonController::class, 'create'])->name('user.person.create');
-    Route::post('/user/person/create/email', [App\Http\Controllers\Index\UserPersonController::class, 'storeBasicInformationShowEmailStep'])->name('user.person.email.store');
-    Route::post('/user/person/create/social', [App\Http\Controllers\Index\UserPersonController::class, 'storeEmailShowSocialStep'])->name('user.person.social.store');
-    Route::post('/user/person/create/finish', [App\Http\Controllers\Index\UserPersonController::class, 'storeSocialShowFinishStep'])->name('user.person.finish.store');
-
-    Route::get('/user/person/search', [App\Http\Controllers\Index\UserPersonController::class, 'search'])->name('user.person.search');
+//    Route::get('/user/person/status', [App\Http\Controllers\Index\UserClaimPersonController::class, 'status'])->name('user.person.status');
+//    Route::get('/user/person/verify/email', [App\Http\Controllers\Index\UserClaimPersonController::class, 'verifyEmail'])->name('user.person.verify.email');
+//    Route::get('/user/person/verify/email/send', [App\Http\Controllers\Index\UserClaimPersonController::class, 'sendVerificationMail'])->name('user.person.verify.email.send');
+//    Route::get('/user/person/verify/email/{token}', [App\Http\Controllers\Index\UserClaimPersonController::class, 'verifyClaimByEmail'])->name('user.person.verify.email.check');
+//    Route::get('/user/person/verify/social', [App\Http\Controllers\Index\UserClaimPersonController::class, 'verifySocial'])->name('user.person.verify.social');
+//    Route::get('/user/person/verify/social/check', [App\Http\Controllers\Index\UserClaimPersonController::class, 'verifyClaimBySocial'])->name('user.person.verify.social.check');
+//
+//    Route::get('/user/person', [App\Http\Controllers\Index\UserPersonController::class, 'index'])->name('user.person.index');
+//    Route::post('/user/person', [App\Http\Controllers\Index\UserPersonController::class, 'savePersonal'])->name('user.person.personal.save');
+//    Route::get('/user/person/email', [App\Http\Controllers\Index\UserPersonController::class, 'email'])->name('user.person.email');
+//    Route::post('/user/person/email', [App\Http\Controllers\Index\UserPersonController::class, 'saveEmail'])->name('user.person.email.save');
+//    Route::get('/user/person/social', [App\Http\Controllers\Index\UserPersonController::class, 'social'])->name('user.person.social');
+//    Route::post('/user/person/social', [App\Http\Controllers\Index\UserPersonController::class, 'saveSocial'])->name('user.person.social.save');
+//
+//    Route::get('/user/person/create', [App\Http\Controllers\Index\UserPersonController::class, 'create'])->name('user.person.create');
+//    Route::post('/user/person/create/email', [App\Http\Controllers\Index\UserPersonController::class, 'storeBasicInformationShowEmailStep'])->name('user.person.email.store');
+//    Route::post('/user/person/create/social', [App\Http\Controllers\Index\UserPersonController::class, 'storeEmailShowSocialStep'])->name('user.person.social.store');
+//    Route::post('/user/person/create/finish', [App\Http\Controllers\Index\UserPersonController::class, 'storeSocialShowFinishStep'])->name('user.person.finish.store');
+//
+//    Route::get('/user/person/search', [App\Http\Controllers\Index\UserPersonController::class, 'search'])->name('user.person.search');
 });
 
 // Enterprise Dashboard
@@ -392,6 +401,7 @@ Route::get('/js/external/embedSearch/template/{code}', [App\Http\Controllers\Ext
 
 //SPECIAL ADMIN ROUTES
 require __DIR__.'/admin.php';
+require __DIR__.'/adminx.php';
 
 /* CATCH-ALL ROUTE for Backpack/PageManager - needs to be at the end of your routes.php file  **/
 Route::get('{page}', [\App\Http\Controllers\PageController::class, 'index'])

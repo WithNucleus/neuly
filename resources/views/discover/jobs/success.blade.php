@@ -1,22 +1,15 @@
-@extends('layouts.plain')
+@extends('layouts.app')
 
 @section('content')
 
-@include('navbars.auth')
+@include('navbars.primary')
 
-<div class="container">
-    <div class="row justify-content-center mt-5">
-        <div class="col-md-8">
-            <div class="bg-white shadow-sm p-4">
-
-                    <h1 class="h2 text-center text-primary page-title-default mb-4">Application Received</h1>
-
-                    <p class="lead">Hi {{ $user->name }}! We have received your application for <strong>{{ $job->job_title }}</strong> and will forward it to <strong>{{ $job->owner->name }}</strong>.</p>
-
-                    <p class="text-center mb-0">
-                        <a href="{{ route('discover.jobs') }}" class="btn btn-dark">Return to Database</a>
-                    </p>
-            </div>
+<div class="container text-center mt-5 py-5">
+     <h1 class="text-accent mb-4">Application Received</h1>
+    <div class="max-width-780 mx-auto">
+        <p class="fs-6 mb-5">Hi {{ $user->name }}! We have received your application for <strong>{{ $job->job_title }}</strong> and will forward it to <strong>{{ $job->owner->name }}</strong>.</p>
+        <div>
+            <a href="{{ route('discover.jobs') }}" class="btn btn-lg btn-primary">Return to Neuly</a>
         </div>
     </div>
 </div>

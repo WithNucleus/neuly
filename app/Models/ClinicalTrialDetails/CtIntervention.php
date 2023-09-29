@@ -12,12 +12,12 @@ class CtIntervention extends Model
 
     protected $table = 'ct_interventions';
 
-    public $fillable = ['value'];
+    public $fillable = ['value', 'type', 'description'];
 
     public $timestamps = false;
 
     public function clinicalTrials()
     {
-        return $this->belongsToMany(Clinicaltrial::class, 'clinicaltrial_intervention');
+        return $this->belongsToMany(Clinicaltrial::class, 'clinicaltrial_intervention')->withPivot(['type', 'description']);
     }
 }

@@ -1,7 +1,7 @@
 @if ($navigationTile->navItems->count() > 0)
     <div class="d-flex align-items-center justify-content-between mb-2">
         <h2 class="h5 mb-0">Nav Items <small class="ml-2">(drag to reorder)</small></h2>
-        <button class="btn btn-sm btn-primary js-save-link-order" data-action="{{ route('admin.nav-tiles.items.reorder', $navigationTile->id) }}">Save Order</button>
+        <button class="btn btn-sm btn-primary js-save-link-order" data-action="{{ route('adminx.nav-tiles.items.reorder', $navigationTile->id) }}">Save Order</button>
     </div>
 
     @if(Session::has('navItemsSuccess'))
@@ -39,14 +39,14 @@
                         @endif
                     </span>
                     @if ($item->badge != '')
-                        <span class="badge badge-info">{{ $item->badge }}</span>
+                        <span class="badge bg-body-secondary text-body">{{ $item->badge }}</span>
                     @endif
                     <div class="ml-2">
                         <button class="btn btn-sm" data-toggle="modal" data-target="#edit-nav-item-{{ $item->id }}">
-                            <i class="fad fa-edit text-secondarydark"></i>
+                            <i class="fa-strong fa-regular fa-edit text-primary"></i>
                         </button>
-                        <button class="btn btn-sm delete-nav-tile-item" data-delete="{{ $item->id }}" data-action="{{ route('admin.nav-tiles.items.delete', $item->id) }}">
-                            <i class="fad fa-trash-alt text-danger"></i>
+                        <button class="btn btn-sm delete-nav-tile-item" data-delete="{{ $item->id }}" data-action="{{ route('adminx.nav-tiles.items.delete', $item->id) }}">
+                            <i class="fa-strong fa-regular fa-trash-alt text-danger"></i>
                         </button>
                     </div>
                 </div>

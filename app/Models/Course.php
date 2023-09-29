@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Helpers\Entity\FieldsMapping;
+use App\Jobs\AutoTag\TagCourse;
+use App\Models\Traits\EntityImage;
 use App\Models\Traits\SearchableEntity;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -12,9 +14,12 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Course extends Model
 {
-    use CrudTrait;
-    use SearchableEntity;
-    use LogsActivity;
+    use CrudTrait,
+        SearchableEntity,
+        LogsActivity,
+        EntityImage;
+
+    const CURRENCY_USD = 'USD';
 
     /*
     |--------------------------------------------------------------------------
@@ -32,31 +37,53 @@ class Course extends Model
     // protected $dates = [];
 
     protected static $logUnguarded = true;
-
     protected static $logName = 'entities';
 
+    protected static $imageAttribute = 'image';
+    protected static $imageFolderPath = 'courses';
+    protected static $imageFilenameAttribute = 'name';
+
+    protected $casts = [
+        'open_enrollment' => 'boolean',
+        'self_paced' => 'boolean',
+        'concierge' => 'boolean',
+        'featured' => 'boolean',
+    ];
+
     const TYPE_ONLINE = 'Online';
-
     const TYPE_OFFLINE = 'In-Person';
-
     const TYPE_HYBRID = 'Hybrid';
 
     const TYPES = [
         self::TYPE_ONLINE,
         self::TYPE_OFFLINE,
-        self::TYPE_HYBRID,
+        self::TYPE_HYBRID
     ];
 
     const SCHEDULE_RECURRING = 'Recurring';
-
     const SCHEDULE_UPCOMING = 'Upcoming';
-
     const SCHEDULE_PAST = 'Past';
 
     const SCHEDULE = [
         self::SCHEDULE_RECURRING,
         self::SCHEDULE_UPCOMING,
-        self::SCHEDULE_PAST,
+        self::SCHEDULE_PAST
+    ];
+
+    const EDUCATION_CREDIT_CE = 'CE';
+    const EDUCATION_CREDIT_CEU = 'CEU';
+    const EDUCATION_CREDIT_CPD = 'CPD';
+    const EDUCATION_CREDIT_CME = 'CME';
+    const EDUCATION_CREDIT_CPE = 'CPE';
+    const EDUCATION_CREDIT_ECTP = 'ECTP';
+
+    const EDUCATION_CREDITS = [
+        self::EDUCATION_CREDIT_CE,
+        self::EDUCATION_CREDIT_CEU,
+        self::EDUCATION_CREDIT_CPD,
+        self::EDUCATION_CREDIT_CME,
+        self::EDUCATION_CREDIT_CPE,
+        self::EDUCATION_CREDIT_ECTP
     ];
 
     private $searchableRelationships = [
@@ -73,6 +100,17 @@ class Course extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
+    protected static function booted()
+    {
+        static::created(function ($course) {
+            TagCourse::dispatch($course);
+        });
+
+        static::updated(function ($course) {
+            TagCourse::dispatch($course);
+        });
+    }
+
     public static function getTypes(): array
     {
         return array_combine(self::TYPES, self::TYPES);
@@ -98,11 +136,21 @@ class Course extends Model
         return $this->belongsToMany(Focus::class);
     }
 
+    public function eduRequests(): \Illuminate\Database\Eloquent\Relations\MorphOne
+    {
+        return $this->morphOne(EduRequest::class, 'entity');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES
     |--------------------------------------------------------------------------
     */
+    public function scopeFeatured($query)
+    {
+        return $query->where('featured', 1);
+    }
+
     public function scopeFree($query)
     {
         return $query->where('lowest_cost', 0);
@@ -118,12 +166,26 @@ class Course extends Model
         return nl2br(e($this->summary));
     }
 
-    public function getFormattedCostAttribute(): string
+    public function getVeryShortSummaryAttribute(): ?string
+    {
+        return Str::words($this->summary, 20) ?? null;
+    }
+
+    public function getShortSummaryAttribute(): ?string
+    {
+        return Str::words($this->summary, 40) ?? null;
+    }
+
+    public function getFormattedCostAttribute(): ?string
     {
         $lowestCost = $this->lowest_cost;
         $highestCost = $this->highest_cost;
 
-        $cost = '';
+        if ($lowestCost == '') {
+            return null;
+        }
+
+        $cost = null;
 
         if ($lowestCost === 0 and $highestCost == '') {
             $cost = 'Free';
@@ -147,6 +209,11 @@ class Course extends Model
     {
         $this->attributes['name'] = $name;
         $this->attributes['slug'] = Str::slug($name);
+    }
+
+    public function setImageAttribute($value)
+    {
+        $this->updateImageAttribute($value);
     }
 
     /**

@@ -10,7 +10,7 @@
         @foreach ($lists as $list)
             <li class="list-group-item d-flex justify-content-between">
                 <div class="left-side">
-                    <a href="{{ route('member.follow-lists.show', $list->slug) }}" class="font-weight-bold">{{ $list->name }}</a>
+                    <a href="{{ route('member.follow-lists.show', $list->slug) }}" class="lead fw-bold">{{ $list->name }}</a>
 
                     @if ($list->followItems->count() > 0)
                         <span class="font-size-small">({{ $list->followItems->count() }})</span>
@@ -22,19 +22,19 @@
 
                     <p class="mt-2 mb-0 widget-expandable-details">
                         @if($list->is_public)
-                            <span class="text-success"><i class="fad fa-eye"></i> Public</span>
+                            <span class="text-success"><i class="fa-strong far fa-eye"></i> Public</span>
                         @else
-                            <span class="text-muted"><i class="fad fa-lock-alt"></i> Private</span>
+                            <span class="text-muted"><i class="fa-strong far fa-lock-alt"></i> Private</span>
                         @endif
                     </p>
                 </div>
 
                 @if($show_more == false)
                     <div class="right-side font-size-small align-self-end">
-                        <a href="{{ route('member.follow-lists.edit', $list->slug) }}" class="text-primary text-decoration-none mr-2"><i class="fad fa-edit"></i> Edit</a>
+                        <a href="{{ route('member.follow-lists.edit', $list->slug) }}" class="text-primary text-decoration-none me-2"><i class="fa-strong far fa-edit"></i> Edit</a>
 
-                        <button type="button" class="btn btn-link btn-sm p-0 text-danger text-decoration-none" data-toggle="modal" data-target="#delete-list-{{$list->id}}">
-                            <i class="fad fa-trash-alt"></i> Delete
+                        <button type="button" class="btn btn-link btn-sm p-0 text-danger text-decoration-none" data-bs-toggle="modal" data-bs-target="#delete-list-{{$list->id}}">
+                            <i class="fa-strong far fa-trash-alt"></i> Delete
                         </button>
                     </div>
                     @include('members.follow-lists.modals.delete')
@@ -45,9 +45,10 @@
 
         @if($show_more == true)
             <li class="list-group-item">
-                <small><a href="{{ route('member.follow-lists.index') }}" class="text-dark text-decoration-none font-weight-bold">
-                    See All Lists <i class="fad fa-chevron-double-right text-danger"></i>
-                </a></small>
+                <a href="{{ route('member.follow-lists.index') }}" class="text-small text-body-emphasis text-uppercase text-decoration-none fw-bold">
+                    <span class="me-1">See All Lists</span>
+                    <i class="fa-strong far fa-chevron-double-right text-danger"></i>
+                </a>
             </li>
         @endif
     </ul>
