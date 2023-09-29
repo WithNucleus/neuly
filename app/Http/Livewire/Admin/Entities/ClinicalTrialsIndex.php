@@ -90,7 +90,7 @@ class ClinicalTrialsIndex extends Component
     public function nextPage()
     {
         $this->setPage($this->page + 1);
-        $this->dispatchBrowserEvent('gotoTop');
+        $this->emit('gotoTop');
     }
 
     public function previousPage()
