@@ -93,6 +93,12 @@
                 <button wire:click="clearSearchLocation" class="btn text-danger px-1 border-0" aria-label="Clear location"><i class="fa-sharp fa-solid fa-circle-xmark"></i></button>
             </div>
         @endif
+        @foreach($filters['entity-state'] as $id => $entityState)
+            <div class="me-3 mb-3">
+                <span>{{ $entityState }}</span>
+                <button wire:click="clearFilter('entity-state', '{{ $id }}')" class="btn text-danger px-1 border-0" aria-label="Clear location"><i class="fa-sharp fa-solid fa-circle-xmark"></i></button>
+            </div>
+        @endforeach
         <div class="filter-widget ms-auto mt-3">
             <button wire:click="clearFilters" class="btn btn-sm btn-ghost-primary">Clear Filters</button>
         </div>

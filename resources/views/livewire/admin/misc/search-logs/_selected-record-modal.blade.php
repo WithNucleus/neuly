@@ -15,8 +15,8 @@
                 <span class="opacity-50">#{{ $selectedRecord->user->id }}</span>
             </div>
         @endif
-        <div class="mt-4">
-            <pre>{{ print_r($selectedRecord->data['filters'], true) }}</pre>
+        <div class="mt-4 small">
+            <pre>{{ print_r($selectedRecord->data, true) }}</pre>
         </div>
     </div>
 @endif

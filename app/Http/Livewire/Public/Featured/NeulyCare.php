@@ -56,13 +56,12 @@ class NeulyCare extends Component
 
     public function mount(Request $request) {
 
+        $this->getLocalLocation();
         $this->setCustomSearches();
 
          $this->ip = $request->getClientIp(); // PRODUCTION
          // $this->ip = '207.46.13.74'; // TEST - Chicago
          // $this->ip = "108.92.170.181"; // Sydney
-
-        $this->getLocalLocation();
 
         $this->sorts = [
             'updated_at' => 'desc'
@@ -90,6 +89,12 @@ class NeulyCare extends Component
         if ($this->find === 'oregon-psilocybin') {
             $this->filters['focus'] = ['Psilocybin'];
             $this->filters['entity-state'] = ['Oregon'];
+            $this->localLocation = [
+                'latitude' => null,
+                'longitude' => null,
+                'name' => null,
+                'id' => null
+            ];
         }
 
         $this->reset('find');
