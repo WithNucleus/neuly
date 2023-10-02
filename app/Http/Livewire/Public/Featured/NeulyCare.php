@@ -8,8 +8,11 @@ use App\Http\Livewire\Traits\WithCachedRows;
 use App\Http\Livewire\Traits\WithPerPagePagination;
 use App\Http\Livewire\Traits\WithSorting;
 use App\Models\BookableListing;
+use App\Models\CareRequest;
+use App\Models\EduRequest;
 use App\Models\Focus;
 use App\Models\SearchLog;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -54,22 +57,29 @@ class NeulyCare extends Component
 
     public array $savedLocations = [];
 
+    public $name;
+    public $email;
+    public $message;
+    public bool $conciergeSuccess = false;
+
     public function mount(Request $request) {
 
+        $this->getLocalLocation();
         $this->setCustomSearches();
 
          $this->ip = $request->getClientIp(); // PRODUCTION
          // $this->ip = '207.46.13.74'; // TEST - Chicago
          // $this->ip = "108.92.170.181"; // Sydney
 
-        $this->getLocalLocation();
-
         $this->sorts = [
             'updated_at' => 'desc'
         ];
 
         if (Auth::id()) {
-            $this->userId = Auth::id();
+            $user = User::findOrFail(Auth::id());
+            $this->userId = $user->id;
+            $this->name = $user->full_name;
+            $this->email = $user->email;
         }
     }
 
@@ -90,6 +100,12 @@ class NeulyCare extends Component
         if ($this->find === 'oregon-psilocybin') {
             $this->filters['focus'] = ['Psilocybin'];
             $this->filters['entity-state'] = ['Oregon'];
+            $this->localLocation = [
+                'latitude' => null,
+                'longitude' => null,
+                'name' => null,
+                'id' => null
+            ];
         }
 
         $this->reset('find');
@@ -170,6 +186,38 @@ class NeulyCare extends Component
 
         $this->dispatchBrowserEvent('go-to-listing', ['url' => $listing->bookable_url]);
 
+    }
+
+    public function rules() {
+        return [
+            'name' => 'required',
+            'email' => 'required|email',
+            'message' => 'required',
+        ];
+    }
+
+    public function submit() {
+        $this->validate();
+
+        CareRequest::create([
+            'name' => $this->name,
+            'email' => $this->email,
+            'type' => CareRequest::TYPE_PRACTITIONER_NO_MATCHES,
+            'status' => CareRequest::STATUS_OPEN,
+            'message' => $this->message,
+            'data' => [
+                'search' => $this->search,
+                'filters' => $this->filters,
+                'locations' => [
+                    'local' => $this->localLocation,
+                ]
+            ],
+            'user_id' => $this->userId,
+            'ip' => $this->ip,
+        ]);
+
+        $this->conciergeSuccess = true;
+        $this->reset('message');
     }
 
     public function gotoPage($page)

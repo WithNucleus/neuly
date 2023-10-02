@@ -93,6 +93,12 @@
                 <button wire:click="clearSearchLocation" class="btn text-danger px-1 border-0" aria-label="Clear location"><i class="fa-sharp fa-solid fa-circle-xmark"></i></button>
             </div>
         @endif
+        @foreach($filters['entity-state'] as $id => $entityState)
+            <div class="me-3 mb-3">
+                <span>{{ $entityState }}</span>
+                <button wire:click="clearFilter('entity-state', '{{ $id }}')" class="btn text-danger px-1 border-0" aria-label="Clear location"><i class="fa-sharp fa-solid fa-circle-xmark"></i></button>
+            </div>
+        @endforeach
         <div class="filter-widget ms-auto mt-3">
             <button wire:click="clearFilters" class="btn btn-sm btn-ghost-primary">Clear Filters</button>
         </div>
@@ -169,8 +175,40 @@
             </div>
         @empty
             <div wire:key="empty" class="w-100">
-                <div class="h4 text-transform-none text-center">
-                    No care practitioners match your search criteria.
+                <div class="border p-4 max-width-780 bg-body mx-auto">
+                    <p class="h3 text-primary text-transform-none">
+                        <i class="fa-duotone fa-kit-medical text-accent"></i>
+                        No practitioners match your search criteria.
+                    </p>
+                    @if($conciergeSuccess)
+                        <div class="lead">Thanks for your interest in Neuly Care! We'll be in touch soon.</div>
+                    @else
+                        <div>
+                            <p class="lead">We're adding new care providers every day, and we'd love to help. Let us know what you're looking for and we'll find the best ones for your needs.</p>
+                            <form wire:submit.prevent="submit">
+                                <div class="row">
+                                    <div class="col-12 col-md-6 mb-3">
+                                        <label for="name" class="fw-bold text-uppercase">Your name</label>
+                                        <input wire:model="name" type="text" class="form-control" id="name">
+                                        @error('name') <div class="text-danger small">{{ $message }}</div> @enderror
+                                    </div>
+                                    <div class="col-12 col-md-6 mb-3">
+                                        <label for="email" class="fw-bold text-uppercase">Email</label>
+                                        <input wire:model="email" type="email" class="form-control" id="email">
+                                        @error('email') <div class="text-danger small">{{ $message }}</div> @enderror
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="message" class="fw-bold text-uppercase">Tell us what you're interested in</label>
+                                    <textarea wire:model="message" name="message" id="message" rows="4" class="form-control"></textarea>
+                                    @error('message') <div class="text-danger small">{{ $message }}</div> @enderror
+                                </div>
+                                <div>
+                                    <button type="submit" class="btn btn-accent">Send</button>
+                                </div>
+                            </form>
+                        </div>
+                    @endif
                 </div>
             </div>
         @endforelse

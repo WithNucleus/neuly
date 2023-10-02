@@ -199,6 +199,12 @@ class CourseCrudController extends CrudController
         ]);
 
         $this->crud->addField([
+            'name' => 'program',
+            'label' => 'Program',
+            'type' => 'text',
+        ]);
+
+        $this->crud->addField([
             'name' => 'hours',
             'label' => 'Hours',
             'type' => 'number',
