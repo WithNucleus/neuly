@@ -19,9 +19,11 @@ class CareRequest extends Model implements CrmActionsContract
     ];
 
     const TYPE_CLINICAL_TRIAL_PARTICIPANT = 'Clinical Trial Participant';
+    const TYPE_PRACTITIONER_NO_MATCHES = 'Practitioner - No Matches';
 
     const TYPES = [
-        self::TYPE_CLINICAL_TRIAL_PARTICIPANT
+        self::TYPE_CLINICAL_TRIAL_PARTICIPANT,
+        self::TYPE_PRACTITIONER_NO_MATCHES
     ];
 
     const STATUS_OPEN = 'Open';
