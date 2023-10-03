@@ -13,7 +13,7 @@
 
     <div class="container py-4">
 
-        <x-entities.entity-show-title-meta title="{{ $person->name }}">
+        <x-entities.entity-show-title-meta title="{{ urlencode($person->name) }}">
             <div class="d-flex align-items-center">
                 <div class="me-2">
                     @include('members.follow.button', [

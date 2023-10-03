@@ -13,7 +13,7 @@
 
     <div class="container py-4">
 
-        <x-entities.entity-show-title-meta title="{{ $event->name }}" headingClasses="max-width-780 text-success mb-2">
+        <x-entities.entity-show-title-meta title="{{ urlencode($event->name) }}" headingClasses="max-width-780 text-success mb-2">
             <div class="me-3">
                 @include('members.follow.button', [
                     'followable_type' => get_class($event),

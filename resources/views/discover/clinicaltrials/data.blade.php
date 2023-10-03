@@ -206,7 +206,7 @@ $dates = [
         <div class="lead my-2">
             <strong class="text-uppercase me-1">Lead Sponsor:</strong>
             @if($clinicalTrial->leadSponsor)
-                <span>{{ $clinicalTrial->leadSponsor->name }}</span>
+                <a href="{{ $clinicalTrial->lead_sponsor_url }}">{{ $clinicalTrial->leadSponsor->name }}</a>
             @else
                 <span>N/A</span>
             @endif
@@ -219,7 +219,7 @@ $dates = [
         <div class="lead my-2">
             <strong class="text-uppercase me-1">Responsible Party:</strong>
             @if($clinicalTrial->responsibleParty)
-                {{ $clinicalTrial->responsibleParty->name }}
+                <a href="{{ $clinicalTrial->responsible_party_url }}">{{ $clinicalTrial->responsibleParty->name }}</a>
             @else
                 <span>N/A</span>
             @endif
