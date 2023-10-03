@@ -13,7 +13,7 @@
 
     <div class="container py-4">
 
-        <x-entities.entity-show-title-meta title="{{ $investor->name }}">
+        <x-entities.entity-show-title-meta title="{{ urlencode($investor->name) }}">
             <div class="me-3">
                 @include('members.follow.button', [
                     'followable_type' => get_class($investor),

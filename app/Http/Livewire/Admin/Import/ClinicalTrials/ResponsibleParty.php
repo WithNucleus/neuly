@@ -3,7 +3,6 @@
 namespace App\Http\Livewire\Admin\Import\ClinicalTrials;
 
 use App\Models\Clinicaltrial;
-use App\Models\Company;
 use App\Models\ImportedEntity;
 use App\Models\Person;
 use Livewire\Component;
