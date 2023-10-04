@@ -38,6 +38,13 @@
                 <button type="submit" class="btn btn-lg btn-primary">Save</button>
             </div>
         </form>
+
+        <hr class="my-5">
+
+        <div class="mt-5">
+            <h2 class="h4">Email Preferences</h2>
+            <livewire:members.settings.email-preferences :emailPreference="$user->emailPreference" />
+        </div>
     </x-members.settings>
 
     @include('footers.mini')

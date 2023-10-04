@@ -81,6 +81,15 @@
                                 </x-sidebar.list-group>
                             @endcan
 
+                            @can('email marketing')
+                                <x-sidebar.list-group groupRoute="emails" label="Email Marketing">
+                                    <x-sidebar.list-group-item url="{{ route('adminx.emails.templates') }}" label="Email Templates" />
+                                    <x-sidebar.list-group-item url="{{ route('adminx.emails.campaigns') }}" label="Email Campaigns" />
+                                    <x-sidebar.list-group-item url="{{ route('adminx.emails.emails') }}" label="Emails" />
+{{--                                    <x-sidebar.list-group-item url="{{ route('adminx.emails.drips') }}" label="Email Drips" />--}}
+                                </x-sidebar.list-group>
+                            @endcan
+
                             <x-sidebar.list-group groupRoute="misc" label="Misc">
                                 @can('view logs')
                                     <x-sidebar.list-group-item url="/horizon" label="Horizon" />

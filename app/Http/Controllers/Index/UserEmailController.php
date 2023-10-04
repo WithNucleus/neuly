@@ -20,8 +20,12 @@ class UserEmailController extends Controller
     public function index(Request $request)
     {
         $currentEmail = Auth::user()->email;
+        $user = Auth::user();
 
-        return view('members.settings.email', compact('currentEmail'));
+        return view('members.settings.email', [
+            'currentEmail' => $currentEmail,
+            'user' => $user
+        ]);
     }
 
     public function update(ChangeMailRequest $request, ValidateUserHandler $validateUserHandler)
