@@ -37,9 +37,9 @@
             <div class="me-4">
                 Last updated: {{ Carbon\Carbon::parse($clinicalTrial->updated_at)->format('M d, Y') }}
             </div>
-            @can('edit clinicaltrials')
+            @can('edit clinical trials')
                 <div>
-                    <a href="{{ route('investor.edit', $clinicalTrial->id) }}" class="text-secondary-emphasis">Edit Clinical Trial</a>
+                    <a href="{{ route('clinicaltrial.edit', $clinicalTrial->id) }}" class="text-secondary-emphasis">Edit Clinical Trial</a>
                 </div>
             @endcan
             <div>

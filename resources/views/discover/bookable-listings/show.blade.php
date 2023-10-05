@@ -20,6 +20,19 @@
         @endif
 
         @include('discover.bookable-listings.show.' . $bookableEntity)
+
+        @can('edit companies')
+            <div class="d-flex flex-wrap justify-content-between align-items-center text-uppercase small fw-bold text-secondary-emphasis mt-4">
+                <div class="me-4">
+                    Last updated: {{ Carbon\Carbon::parse($bookableListing->updated_at)->format('M d, Y') }}
+                </div>
+                @can('edit companies')
+                    <div>
+                        <a href="{{ route('bookable-listing.edit', $bookableListing->id) }}" class="text-secondary-emphasis">Edit Bookable Listing</a>
+                    </div>
+                @endcan
+            </div>
+        @endcan
     </div>
 
 @endsection

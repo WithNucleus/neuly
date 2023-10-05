@@ -256,7 +256,7 @@ class BookableListing extends Model
     public function setNameAttribute($value)
     {
         $this->attributes['name'] = $value;
-        $this->attributes['slug'] = self::generateUniqueSlug($value);
+        $this->attributes['slug'] = Str::slug($value);
     }
 
     public function setLocationIdAttribute($value)
