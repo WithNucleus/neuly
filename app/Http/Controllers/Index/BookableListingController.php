@@ -99,8 +99,6 @@ class BookableListingController extends Controller
 
         $bookableListing = BookableListing::create($attributes);
 
-        $bookableListing->image = $bookableListing->bookable->entityImageUrl;
-
         // TODO: Create New Locations if no match
         $locationName = $attributes['location_name'];
 

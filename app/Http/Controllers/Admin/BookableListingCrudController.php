@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\BookableListingCrudRequest;
+use App\Models\BookableListing;
+use App\Models\Company;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -60,6 +62,12 @@ class BookableListingCrudController extends CrudController
             'attribute' => 'name',
             'model' => \App\Models\Directory::class,
         ]);
+        $this->crud->addColumn([
+            'label' => 'Image',
+            'name' => 'image',
+            'type' => 'image',
+            'prefix' => BookableListing::getImageUrlPrefix(),
+        ]);
         CRUD::column('bookable_type');
         CRUD::column('created_at');
         CRUD::column('updated_at');
@@ -83,6 +91,15 @@ class BookableListingCrudController extends CrudController
     protected function setupCreateOperation()
     {
         CRUD::setValidation(BookableListingCrudRequest::class);
+
+        $this->crud->addField([
+            'label' => 'Image',
+            'name' => 'image',
+            'type' => 'image',
+            'upload' => true,
+            'crop' => true,
+            'prefix' => BookableListing::getImageUrlPrefix(),
+        ]);
 
         CRUD::field('name');
         CRUD::field('type');

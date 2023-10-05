@@ -118,12 +118,12 @@
                                     @endif
                                     @if ($record->bookable_type == \App\Models\Person::class)
                                         <div class="logo-square-is-contained rounded-circle"
-                                         style="background-image: url('{{ $record->image ?? asset('images/person-blank.png') }}');">
+                                         style="background-image: url('{{ $bookableListing->entityImageUrl ?? asset('images/image-placeholder-care-square.png') }}');">
                                             <span class="visually-hidden">{{ $record->name }}</span>
                                         </div>
                                     @else
                                         <div class="logo-is-contained"
-                                         style="background-image: url('{{ $record->image ?? asset('images/image-placeholder.jpg') }}');">
+                                         style="background-image: url('{{ $bookableListing->entityImageUrl ?? asset('images/image-placeholder-care.png') }}');">
                                             <span class="visually-hidden">{{ $record->name }}</span>
                                         </div>
                                     @endif
