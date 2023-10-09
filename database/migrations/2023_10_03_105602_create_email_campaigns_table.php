@@ -21,10 +21,10 @@ return new class extends Migration
             $table->string('type');
             $table->string('description')->nullable();
             $table->string('trigger')->nullable();
-            $table->string('from_name')->default(config('mail.from.name'));
-            $table->string('from_email')->default(config('mail.from.address'));
-            $table->string('subject')->nullable()->index();
-            $table->longText('body')->nullable();
+//            $table->string('from_name')->default(config('mail.from.name'));
+//            $table->string('from_email')->default(config('mail.from.address'));
+//            $table->string('subject')->nullable()->index();
+//            $table->longText('body')->nullable();
             $table->timestamps();
         });
     }

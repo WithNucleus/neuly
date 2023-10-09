@@ -20,10 +20,10 @@ return new class extends Migration
             $table->string('delay');
             $table->foreignId('email_campaign_id')->nullable()->references('id')->on('email_campaigns')->nullOnDelete();
             $table->foreignId('email_template_id')->nullable()->references('id')->on('email_templates')->nullOnDelete();
-            $table->string('from_name')->default(config('mail.from.name'));
-            $table->string('from_email')->default(config('mail.from.address'));
-            $table->string('subject')->index();
-            $table->longText('body');
+//            $table->string('from_name')->default(config('mail.from.name'));
+//            $table->string('from_email')->default(config('mail.from.address'));
+//            $table->string('subject')->index();
+//            $table->longText('body');
             $table->timestamps();
         });
     }
