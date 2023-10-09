@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Adminx\Emails;
 
 use App\Http\Controllers\Controller;
 use App\Models\Email;
-use App\Models\EmailCampaign;
+use App\Models\EmailJourney;
 use App\Models\EmailTemplate;
 use Illuminate\Support\Facades\View;
 
@@ -16,31 +16,36 @@ class EmailController extends Controller
 
     public function emails(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        return view('adminx.emails.emails');
+        return view('adminx.emails.emails.index');
     }
 
     public function templates(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        return view('adminx.emails.email-templates');
+        return view('adminx.emails.templates.index');
     }
 
-    public function campaigns(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    public function journeys(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        return view('adminx.emails.email-campaigns');
+        return view('adminx.emails.journeys.index');
     }
 
-    public function campaignShow($id): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    public function triggers(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        $campaign = EmailCampaign::findOrFail($id);
-        return view('adminx.emails.email-campaign-show', [
-            'campaign' => $campaign
+        return view('adminx.emails.triggers.index');
+    }
+
+    public function journeyShow($id): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    {
+        $journey = EmailJourney::findOrFail($id);
+        return view('adminx.emails.journeys.show', [
+            'journey' => $journey
         ]);
     }
 
     public function templateShow($id): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         $template = EmailTemplate::findOrFail($id);
-        return view('adminx.emails.email-template-show', [
+        return view('adminx.emails.templates.show', [
             'template' => $template
         ]);
     }
@@ -48,13 +53,8 @@ class EmailController extends Controller
     public function emailShow($id): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         $email = Email::findOrFail($id);
-        return view('adminx.emails.email-show', [
+        return view('adminx.emails.emails.show', [
             'email' => $email
         ]);
-    }
-
-    public function drips(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
-    {
-        return view('adminx.emails.email-drips');
     }
 }

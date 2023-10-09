@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Http\Livewire\Admin\Emails;
+namespace App\Http\Livewire\Admin\Emails\Triggers;
 
 use App\Http\Livewire\Traits\WithBulkActions;
 use App\Http\Livewire\Traits\WithCachedRows;
 use App\Http\Livewire\Traits\WithPerPagePagination;
 use App\Http\Livewire\Traits\WithSorting;
-use App\Models\Email;
-use App\Models\EmailJourney;
+use App\Models\EmailTrigger;
 use Livewire\Component;
 
-class EmailIndex extends Component
+class Index extends Component
 {
     use WithPerPagePagination, WithBulkActions, WithCachedRows, WithSorting;
 
@@ -19,7 +18,6 @@ class EmailIndex extends Component
 
     public ?string $search = null;
     public array $filters = [
-        'type' => [],
         'status' => [],
     ];
 
@@ -68,30 +66,19 @@ class EmailIndex extends Component
 
     public function getRowsQueryProperty()
     {
-        $query = Email::with([
-                'emailCampaign',
-                'emailSequence',
-                'emailTemplate',
-                'user',
+        $query = EmailTrigger::with([
+                'autoResponse',
+                'emailJourney',
             ])
             ->when($this->search, function($query, $search) {
                 return $query
-                    ->whereJsonContains('to', $search)
-                    ->orwhereHas('emailCampaign', function($query) use ($search) {
+
+                    ->orwhereHas('autoResponse', function($query) use ($search) {
                         $query->where('name', 'like', '%' . $search . '%');
                     })
-                    ->orwhereHas('emailSequence', function($query) use ($search) {
-                        $query->where('name', 'like', '%' . $search . '%');
-                    })
-                    ->orwhereHas('emailTemplate', function($query) use ($search) {
-                        $query->where('name', 'like', '%' . $search . '%');
-                    })
-                    ->orwhereHas('user', function($query) use ($search) {
+                    ->orwhereHas('emailJourney', function($query) use ($search) {
                         $query->where('name', 'like', '%' . $search . '%');
                     });
-            })
-            ->when($this->filters['type'], function($query, $valueArray) {
-                return $query->whereIn('type', $valueArray);
             })
             ->when($this->filters['status'], function($query, $valueArray) {
                 return $query->whereIn('status', $valueArray);
@@ -109,9 +96,9 @@ class EmailIndex extends Component
 
     public function render()
     {
-        return view('livewire.admin.emails.email-index', [
+        return view('livewire.admin.emails.triggers.index', [
             'records' => $this->rows,
-            'statusOptions' => Email::orderBy('status')->pluck('status')->unique()->toArray()
+            'statusOptions' => EmailTrigger::STATUES
         ]);
     }
 }

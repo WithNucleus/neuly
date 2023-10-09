@@ -54,7 +54,7 @@ class ResearchRequest extends Model implements CrmActionsContract
                 '<' . route('adminx.research.research-requests') .'|View Request>'
             );
 
-            CreateCampaignEmails::dispatch(EmailCampaign::TRIGGER_ENTERPRISE_RESEARCH_REQUEST, $researchRequest->name, $researchRequest->email, $researchRequest->user_id);
+            CreateCampaignEmails::dispatch(EmailJourney::TRIGGER_ENTERPRISE_RESEARCH_REQUEST, $researchRequest->name, $researchRequest->email, $researchRequest->user_id);
         });
     }
 

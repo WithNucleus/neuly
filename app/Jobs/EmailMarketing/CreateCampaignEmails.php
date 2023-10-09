@@ -3,8 +3,8 @@
 namespace App\Jobs\EmailMarketing;
 
 use App\Models\Email;
-use App\Models\EmailCampaign;
-use App\Models\EmailDrip;
+use App\Models\EmailJourney;
+use App\Models\EmailSequence;
 use App\User;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
@@ -35,7 +35,7 @@ class CreateCampaignEmails implements ShouldQueue
 
     public function handle()
     {
-        $campaign = EmailCampaign::with('emailDrips')->where('trigger', $this->trigger)->first();
+        $campaign = EmailJourney::with('emailSequences')->where('trigger', $this->trigger)->first();
 
         if(!$campaign) {
             SlackAlert::to('dev')->message("<@sydney> Problem creating emails for `{$this->trigger}`" . "\n" . "Campaign not found!");
@@ -45,7 +45,7 @@ class CreateCampaignEmails implements ShouldQueue
         foreach($campaign->emailDrips as $drip) {
             $sendAt = Carbon::now();
 
-            if ($drip->delay !== EmailDrip::DELAY_NONE) {
+            if ($drip->delay !== EmailSequence::DELAY_NONE) {
                 $interval = CarbonInterval::make($drip->delay);
                 $sendAt->add($interval);
             }
@@ -53,15 +53,15 @@ class CreateCampaignEmails implements ShouldQueue
             Email::create([
                 'email_template_id' => $drip->email_template_id,
                 'user_id' => $this->user_id,
-                'email_campaign_id' => $drip->email_campaign_id,
-                'email_drip_id' => $drip->id,
+                'email_journey_id' => $drip->email_journey_id,
+                'email_sequence_id' => $drip->id,
                 'status' => Email::STATUS_NEW,
-                'from_name' => $drip->from_name,
-                'from_email' => $drip->from_email,
-                'subject' => $drip->subject,
+                'from_name' => $drip->emailTemplate->from_name,
+                'from_email' => $drip->emailTemplate->from_email,
+                'subject' => $drip->emailTemplate->subject,
                 'to_name' => $this->name,
                 'to_email' => $this->email,
-                'body' => $drip->body,
+                'body' => $drip->emailTemplate->body,
                 'send_at' => $sendAt,
             ]);
         }

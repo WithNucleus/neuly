@@ -68,17 +68,13 @@ class Index extends Component
     {
         $query = EmailTemplate::with([
                 'emails',
-                'emailCampaigns',
-                'emailDrips'
+                'emailSequences'
             ])
             ->when($this->search, function($query, $search) {
                 return $query
                     ->where('name', 'like', '%' . $search . '%')
                     ->where('email', 'like', '%' . $search . '%')
-                    ->orwhereHas('emailCampaigns', function($query) use ($search) {
-                        $query->where('name', 'like', '%' . $search . '%');
-                    })
-                    ->orwhereHas('emailDrips', function($query) use ($search) {
+                    ->orwhereHas('emailSequences', function($query) use ($search) {
                         $query->where('name', 'like', '%' . $search . '%');
                     });
             })

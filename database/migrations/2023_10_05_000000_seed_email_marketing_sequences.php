@@ -1,9 +1,10 @@
 <?php
 
 use App\Models\Email;
-use App\Models\EmailCampaign;
-use App\Models\EmailDrip;
+use App\Models\EmailJourney;
+use App\Models\EmailSequence;
 use App\Models\EmailTemplate;
+use App\Models\EmailTrigger;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
@@ -83,11 +84,160 @@ return new class extends Migration
         /**
          * Auto-Response Campaigns
          */
-        $autoResponseWelcomeCampaign = EmailCampaign::create([
-            'name' => 'Welcome',
-            'type' => EmailCampaign::TYPE_DRIP,
-            'description' => 'Auto response to user registration',
-            'trigger' => EmailCampaign::TRIGGER_ONBOARDING_USER_DETAILS_COMPLETE,
+        $firstImpressionJourney = EmailJourney::create([
+            'name' => 'First Impression',
+            'description' => 'After user registration',
+        ]);
+
+        $enterpriseJourney = EmailJourney::create([
+            'name' => 'Enterprise',
+            'description' => 'After enterprise or research requests',
+        ]);
+
+        $partnerJourney = EmailJourney::create([
+            'name' => 'Partner',
+            'description' => 'After API or partner requests',
+        ]);
+
+        $careJourney = EmailJourney::create([
+            'name' => 'Care',
+            'description' => 'After care requests',
+        ]);
+
+        $eduJourney = EmailJourney::create([
+            'name' => 'EDU',
+            'description' => 'After edu requests',
+        ]);
+
+        /**
+         * Sequences
+         */
+        // Welcome
+        EmailSequence::create([
+            'order' => 1,
+            'delay' => \Carbon\CarbonInterval::day(),
+            'email_journey_id' => $firstImpressionJourney->id,
+            'email_template_id' => $neulyJourneyTemplate->id
+        ]);
+
+        EmailSequence::create([
+            'order' => 2,
+            'delay' => \Carbon\CarbonInterval::days(2),
+            'email_journey_id' => $firstImpressionJourney->id,
+            'email_template_id' => $neulyNeedsYouTemplate->id
+        ]);
+
+        EmailSequence::create([
+            'order' => 3,
+            'delay' => \Carbon\CarbonInterval::days(3),
+            'email_journey_id' => $firstImpressionJourney->id,
+            'email_template_id' => $feedbackTemplate->id
+        ]);
+
+        // Enterprise Request
+        EmailSequence::create([
+            'order' => 1,
+            'delay' => \Carbon\CarbonInterval::day(),
+            'email_journey_id' => $enterpriseJourney->id,
+            'email_template_id' => $neulyJourneyTemplate->id
+        ]);
+
+        // Partner Request
+        EmailSequence::create([
+            'order' => 1,
+            'delay' => \Carbon\CarbonInterval::day(),
+            'email_journey_id' => $partnerJourney->id,
+            'email_template_id' => $neulyJourneyTemplate->id
+        ]);
+
+        // Care Request
+        EmailSequence::create([
+            'order' => 1,
+            'delay' => \Carbon\CarbonInterval::day(),
+            'email_journey_id' => $careJourney->id,
+            'email_template_id' => $neulyJourneyTemplate->id
+        ]);
+
+        // EDU Request
+        EmailSequence::create([
+            'order' => 1,
+            'delay' => \Carbon\CarbonInterval::day(),
+            'email_journey_id' => $eduJourney->id,
+            'email_template_id' => $neulyJourneyTemplate->id
+        ]);
+
+        /**
+         * Triggers
+         */
+        EmailTrigger::create([
+            'name' => 'Registration',
+            'description' => 'Sends welcome email and starts First Impression journey',
+            'trigger' => EmailTrigger::TRIGGER_USER_ONBOARDING_DETAILS,
+            'status' => EmailTrigger::STATUS_ACTIVE,
+            'auto_response_id' => $welcomeIntroTemplate->id,
+            'email_journey_id' => $firstImpressionJourney->id
+        ]);
+
+        EmailTrigger::create([
+            'name' => 'Research Request',
+            'description' => 'Sends research request auto-response and starts Enterprise journey',
+            'trigger' => EmailTrigger::TRIGGER_RESEARCH_REQUEST,
+            'status' => EmailTrigger::STATUS_ACTIVE,
+            'auto_response_id' => $researchRequestTemplate->id,
+            'email_journey_id' => $enterpriseJourney->id
+        ]);
+
+        EmailTrigger::create([
+            'name' => 'New Listing Request',
+            'description' => 'Sends listing request auto-response',
+            'trigger' => EmailTrigger::TRIGGER_NEW_LISTING_REQUEST,
+            'status' => EmailTrigger::STATUS_ACTIVE,
+            'auto_response_id' => $listingRequestTemplate->id,
+        ]);
+
+        EmailTrigger::create([
+            'name' => 'API Request',
+            'description' => 'Sends API request auto-response and starts Partner journey',
+            'trigger' => EmailTrigger::TRIGGER_API_REQUEST,
+            'status' => EmailTrigger::STATUS_ACTIVE,
+            'auto_response_id' => $apiRequestTemplate->id,
+            'email_journey_id' => $partnerJourney->id
+        ]);
+
+        EmailTrigger::create([
+            'name' => 'Enterprise Request',
+            'description' => 'Sends enterprise request auto-response and starts Partner journey',
+            'trigger' => EmailTrigger::TRIGGER_ENTERPRISE_REQUEST,
+            'status' => EmailTrigger::STATUS_ACTIVE,
+            'auto_response_id' => $enterpriseRequestTemplate->id,
+            'email_journey_id' => $enterpriseJourney->id
+        ]);
+
+        EmailTrigger::create([
+            'name' => 'Recruiting Trials Request',
+            'description' => 'Sends recruiting trials request auto-response and starts Care journey',
+            'trigger' => EmailTrigger::TRIGGER_RECRUITING_CLINICAL_TRIALS_REQUEST,
+            'status' => EmailTrigger::STATUS_ACTIVE,
+            'auto_response_id' => $recruitingTrialsTemplate->id,
+            'email_journey_id' => $careJourney->id
+        ]);
+
+        EmailTrigger::create([
+            'name' => 'Care Request',
+            'description' => 'Sends care request auto-response and starts Care journey',
+            'trigger' => EmailTrigger::TRIGGER_CARE_REQUEST,
+            'status' => EmailTrigger::STATUS_ACTIVE,
+            'auto_response_id' => $neulyCareRequestTemplate->id,
+            'email_journey_id' => $careJourney->id
+        ]);
+
+        EmailTrigger::create([
+            'name' => 'EDU Request',
+            'description' => 'Sends care request auto-response and starts Care journey',
+            'trigger' => EmailTrigger::TRIGGER_EDU_REQUEST,
+            'status' => EmailTrigger::STATUS_ACTIVE,
+            'auto_response_id' => $neulyEduRequestTemplate->id,
+            'email_journey_id' => $eduJourney->id
         ]);
     }
 
@@ -95,8 +245,9 @@ return new class extends Migration
     {
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         EmailTemplate::truncate();
-        EmailCampaign::truncate();
-        EmailDrip::truncate();
+        EmailJourney::truncate();
+        EmailSequence::truncate();
+        EmailTrigger::truncate();
         Email::truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }

@@ -83,9 +83,10 @@
 
                             @can('email marketing')
                                 <x-sidebar.list-group groupRoute="emails" label="Email Marketing">
-                                    <x-sidebar.list-group-item url="{{ route('adminx.emails.templates') }}" label="Email Templates" />
-                                    <x-sidebar.list-group-item url="{{ route('adminx.emails.campaigns') }}" label="Email Campaigns" />
-                                    <x-sidebar.list-group-item url="{{ route('adminx.emails.emails') }}" label="Emails" />
+                                    <x-sidebar.list-group-item url="{{ route('adminx.emails.templates.index') }}" label="Email Templates" />
+                                    <x-sidebar.list-group-item url="{{ route('adminx.emails.journeys.index') }}" label="Email Journeys" />
+                                    <x-sidebar.list-group-item url="{{ route('adminx.emails.triggers.index') }}" label="Email Triggers" />
+                                    <x-sidebar.list-group-item url="{{ route('adminx.emails.emails.index') }}" label="Email History" />
 {{--                                    <x-sidebar.list-group-item url="{{ route('adminx.emails.drips') }}" label="Email Drips" />--}}
                                 </x-sidebar.list-group>
                             @endcan

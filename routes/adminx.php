@@ -33,12 +33,13 @@ Route::middleware(['auth', 'can:admin login'])->prefix('/adminx')->name('adminx.
     });
 
     Route::prefix('/emails')->name('emails.')->middleware('permission:email marketing')->group(function() {
-        Route::get('/emails', [App\Http\Controllers\Adminx\Emails\EmailController::class, 'emails'])->name('emails');
+        Route::get('/emails', [App\Http\Controllers\Adminx\Emails\EmailController::class, 'emails'])->name('emails.index');
         Route::get('/emails/{id}', [App\Http\Controllers\Adminx\Emails\EmailController::class, 'emailShow'])->name('emails.show');
-        Route::get('/templates', [App\Http\Controllers\Adminx\Emails\EmailController::class, 'templates'])->name('templates');
+        Route::get('/templates', [App\Http\Controllers\Adminx\Emails\EmailController::class, 'templates'])->name('templates.index');
         Route::get('/templates/{id}', [App\Http\Controllers\Adminx\Emails\EmailController::class, 'templateShow'])->name('templates.show');
-        Route::get('/campaigns', [App\Http\Controllers\Adminx\Emails\EmailController::class, 'campaigns'])->name('campaigns');
-        Route::get('/campaigns/{id}', [App\Http\Controllers\Adminx\Emails\EmailController::class, 'campaignShow'])->name('campaigns.show');
+        Route::get('/journeys', [App\Http\Controllers\Adminx\Emails\EmailController::class, 'journeys'])->name('journeys.index');
+        Route::get('/journeys/{id}', [App\Http\Controllers\Adminx\Emails\EmailController::class, 'journeyShow'])->name('journeys.show');
+        Route::get('/triggers', [App\Http\Controllers\Adminx\Emails\EmailController::class, 'triggers'])->name('triggers.index');
 //        Route::get('/drips', [App\Http\Controllers\Adminx\Emails\EmailController::class, 'drips'])->name('drips');
     });
 

@@ -13,17 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('email_drips', function (Blueprint $table) {
+        Schema::create('email_sequences', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique()->index();
             $table->integer('order');
-            $table->string('delay');
-            $table->foreignId('email_campaign_id')->nullable()->references('id')->on('email_campaigns')->nullOnDelete();
+            $table->string('delay')->nullable();
+            $table->foreignId('email_journey_id')->nullable()->references('id')->on('email_journeys')->nullOnDelete();
             $table->foreignId('email_template_id')->nullable()->references('id')->on('email_templates')->nullOnDelete();
-//            $table->string('from_name')->default(config('mail.from.name'));
-//            $table->string('from_email')->default(config('mail.from.address'));
-//            $table->string('subject')->index();
-//            $table->longText('body');
             $table->timestamps();
         });
     }
@@ -35,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('email_drips');
+        Schema::dropIfExists('email_sequences');
     }
 };

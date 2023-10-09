@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class EmailDrip extends Model
+class EmailSequence extends Model
 {
     use HasFactory;
 
@@ -16,11 +16,16 @@ class EmailDrip extends Model
     /* Relationships */
     public function emailCampaign(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(EmailCampaign::class);
+        return $this->belongsTo(EmailJourney::class);
     }
 
     public function emailTemplate(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(EmailTemplate::class);
+    }
+
+    /* Accessors */
+    public function getNameAttribute() {
+        return $this->emailTemplate->name;
     }
 }

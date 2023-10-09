@@ -41,11 +41,9 @@
                         <x-entities.entity-index-sort-button label="Name" field="name" :sorts="$sorts" buttonClasses="fs-6 fw-bold p-0" inactiveClasses="text-body" activeClasses="text-accent" />
                     </th>
                     <th>
-                        <x-entities.entity-index-sort-button label="Type" field="type" :sorts="$sorts" buttonClasses="fs-6 fw-bold p-0" inactiveClasses="text-body" activeClasses="text-accent" />
+                        Auto Response Template
                     </th>
-                    <th>
-                        <x-entities.entity-index-sort-button label="Trigger" field="trigger" :sorts="$sorts" buttonClasses="fs-6 fw-bold p-0" inactiveClasses="text-body" activeClasses="text-accent" />
-                    </th>
+                    <th>Email Journey</th>
                     <th>
                         <x-entities.entity-index-sort-button label="Status" field="status" :sorts="$sorts" buttonClasses="fs-6 fw-bold p-0" inactiveClasses="text-body" activeClasses="text-accent" />
                     </th>
@@ -56,10 +54,22 @@
                     <tr wire:key="record-{{ $record->id }}">
                         <td class="text-nowrap">{{ $record->created_at }}</td>
                         <td class="text-nowrap">
-                            <a href="{{ route('adminx.emails.campaigns.show', $record->id) }}">{{ $record->name }}</a>
+                            {{ $record->name }}
                         </td>
-                        <td class="text-nowrap">{{ $record->type }}</td>
-                        <td>{{ $record->trigger }}</td>
+                        <td>
+                            @if($record->autoResponse)
+                                <div>
+                                    <a href="{{ route('adminx.emails.templates.show', $record->autoResponse->id) }}">{{ $record->autoResponse->name }}</a>
+                                </div>
+                            @endif
+                        </td>
+                        <td>
+                            @if($record->emailJourney)
+                                <div>
+                                    <a href="{{ route('adminx.emails.journeys.show', $record->emailJourney->id) }}">{{ $record->emailJourney->name }}</a>
+                                </div>
+                            @endif
+                        </td>
                         <td class="text-nowrap">{{ $record->status }}</td>
                     </tr>
                 @empty

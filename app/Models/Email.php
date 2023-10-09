@@ -56,12 +56,12 @@ class Email extends Model
     /* Relationships */
     public function emailCampaign(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(EmailCampaign::class);
+        return $this->belongsTo(EmailJourney::class);
     }
 
-    public function emailDrip(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function emailSequence(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(EmailDrip::class);
+        return $this->belongsTo(EmailSequence::class);
     }
 
     public function emailTemplate(): \Illuminate\Database\Eloquent\Relations\BelongsTo

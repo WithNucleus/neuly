@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Livewire\Admin\Emails\EmailCampaigns;
+namespace App\Http\Livewire\Admin\Emails\EmailJourneys;
 
 use App\Http\Livewire\Traits\WithBulkActions;
 use App\Http\Livewire\Traits\WithCachedRows;
 use App\Http\Livewire\Traits\WithPerPagePagination;
 use App\Http\Livewire\Traits\WithSorting;
-use App\Models\EmailCampaign;
+use App\Models\EmailJourney;
 use Livewire\Component;
 
 class Index extends Component
@@ -67,10 +67,9 @@ class Index extends Component
 
     public function getRowsQueryProperty()
     {
-        $query = EmailCampaign::with([
+        $query = EmailJourney::with([
                 'emails',
-                'emailDrips',
-                'emailTemplates'
+                'emailSequences',
             ])
             ->when($this->search, function($query, $search) {
                 return $query
@@ -79,7 +78,7 @@ class Index extends Component
                     ->orwhereHas('emailCampaigns', function($query) use ($search) {
                         $query->where('name', 'like', '%' . $search . '%');
                     })
-                    ->orwhereHas('emailDrips', function($query) use ($search) {
+                    ->orwhereHas('emailSequences', function($query) use ($search) {
                         $query->where('name', 'like', '%' . $search . '%');
                     });
             })
@@ -102,9 +101,9 @@ class Index extends Component
 
     public function render()
     {
-        return view('livewire.admin.emails.email-campaigns.index', [
+        return view('livewire.admin.emails.email-journeys.index', [
             'records' => $this->rows,
-            'statusOptions' => EmailCampaign::STATUES
+            'statusOptions' => EmailJourney::STATUES
         ]);
     }
 }

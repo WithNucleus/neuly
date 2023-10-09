@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class EmailCampaign extends Model
+class EmailJourney extends Model
 {
     use HasFactory;
 
@@ -31,13 +31,13 @@ class EmailCampaign extends Model
         return $this->hasMany(Email::class);
     }
 
-    public function emailDrips(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function emailSequences(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(EmailDrip::class)->orderBy('order');
+        return $this->hasMany(EmailSequence::class)->orderBy('order');
     }
 
-    public function emailTemplates(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function emailTriggers(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->belongsTo(EmailTemplate::class);
+        return $this->hasMany(EmailTrigger::class);
     }
 }

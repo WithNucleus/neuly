@@ -25,13 +25,13 @@ class EmailTemplate extends Model
         return $this->hasMany(Email::class);
     }
 
-    public function emailCampaigns(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function emailJourneys(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(EmailCampaign::class);
+        return $this->hasMany(EmailJourney::class);
     }
 
-    public function emailDrips(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function emailSequences(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(EmailDrip::class);
+        return $this->hasMany(EmailSequence::class);
     }
 }
