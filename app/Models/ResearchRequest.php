@@ -44,7 +44,8 @@ class ResearchRequest extends Model implements CrmActionsContract
     protected static function booted()
     {
         static::created(function ($researchRequest) {
-            SlackAlert::to('default')->message('*NeulyRESEARCH Request*' . "\n" .
+            // todo: change back to default
+            SlackAlert::to('dev')->message('*NeulyRESEARCH Request*' . "\n" .
                 '*Type:* ' . $researchRequest->type . "\n" .
                 '*Name:* ' . $researchRequest->name . "\n" .
                 '*Email:* ' . $researchRequest->email . "\n" .
@@ -54,7 +55,17 @@ class ResearchRequest extends Model implements CrmActionsContract
                 '<' . route('adminx.research.research-requests') .'|View Request>'
             );
 
-            CreateCampaignEmails::dispatch(EmailJourney::TRIGGER_ENTERPRISE_RESEARCH_REQUEST, $researchRequest->name, $researchRequest->email, $researchRequest->user_id);
+            if($researchRequest->type === ResearchRequest::TYPE_API_REQUEST) {
+                CreateCampaignEmails::dispatch(EmailTrigger::TRIGGER_API_REQUEST, $researchRequest->name, $researchRequest->email, $researchRequest->user_id);
+            }
+
+            if($researchRequest->type === ResearchRequest::TYPE_ENTERPRISE_REQUEST) {
+                CreateCampaignEmails::dispatch(EmailTrigger::TRIGGER_ENTERPRISE_REQUEST, $researchRequest->name, $researchRequest->email, $researchRequest->user_id);
+            }
+
+            if($researchRequest->type === ResearchRequest::TYPE_REPORT_REQUEST) {
+                CreateCampaignEmails::dispatch(EmailTrigger::TRIGGER_RESEARCH_REQUEST, $researchRequest->name, $researchRequest->email, $researchRequest->user_id);
+            }
         });
     }
 

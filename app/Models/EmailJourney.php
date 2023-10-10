@@ -19,12 +19,6 @@ class EmailJourney extends Model
         self::STATUS_INACTIVE
     ];
 
-    const TYPE_REGULAR = 'Regular';
-    const TYPE_DRIP = 'Drip';
-
-    const TRIGGER_ONBOARDING_USER_DETAILS_COMPLETE = 'Onboarding User Details Complete';
-    const TRIGGER_ENTERPRISE_RESEARCH_REQUEST = 'Enterprise Research Request';
-
     /* Relationships */
     public function emails(): \Illuminate\Database\Eloquent\Relations\HasMany
     {

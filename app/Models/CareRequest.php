@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Jobs\EmailMarketing\CreateCampaignEmails;
 use App\Models\Contracts\CrmActionsContract;
 use App\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -41,7 +42,8 @@ class CareRequest extends Model implements CrmActionsContract
     protected static function booted()
     {
         static::created(function ($careRequest) {
-            SlackAlert::to('default')->message('*NeulyCARE Request*' . "\n" .
+            // todo: change back to default
+            SlackAlert::to('dev')->message('*NeulyCARE Request*' . "\n" .
                 '*Type:* ' . $careRequest->type . "\n" .
                 '*Name:* ' . $careRequest->name . "\n" .
                 '*Email:* ' . $careRequest->email . "\n" .
@@ -50,6 +52,12 @@ class CareRequest extends Model implements CrmActionsContract
                 "```". $careRequest->message . '```' . "\n" .
                 '<' . route('adminx.care.care-requests') .'|View Request>'
             );
+
+            if ($careRequest->type === self::TYPE_CLINICAL_TRIAL_PARTICIPANT) {
+                CreateCampaignEmails::dispatch(EmailTrigger::TRIGGER_RECRUITING_CLINICAL_TRIALS_REQUEST, $careRequest->name, $careRequest->email, $careRequest->user_id);
+            } else {
+                CreateCampaignEmails::dispatch(EmailTrigger::TRIGGER_CARE_REQUEST, $careRequest->name, $careRequest->email, $careRequest->user_id);
+            }
         });
     }
 

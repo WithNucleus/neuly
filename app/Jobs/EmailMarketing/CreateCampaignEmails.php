@@ -3,13 +3,11 @@
 namespace App\Jobs\EmailMarketing;
 
 use App\Models\Email;
-use App\Models\EmailJourney;
 use App\Models\EmailSequence;
-use App\User;
+use App\Models\EmailTrigger;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -35,35 +33,56 @@ class CreateCampaignEmails implements ShouldQueue
 
     public function handle()
     {
-        $campaign = EmailJourney::with('emailSequences')->where('trigger', $this->trigger)->first();
+        $emailTrigger = EmailTrigger::active()->where('trigger', $this->trigger)->first();
 
-        if(!$campaign) {
-            SlackAlert::to('dev')->message("<@sydney> Problem creating emails for `{$this->trigger}`" . "\n" . "Campaign not found!");
+        if(!$emailTrigger) {
+            SlackAlert::to('dev')->message("<@sydney> Problem creating emails for `{$this->trigger}`" . "\n" . "Email Trigger not found!");
             return;
         }
 
-        foreach($campaign->emailDrips as $drip) {
-            $sendAt = Carbon::now();
-
-            if ($drip->delay !== EmailSequence::DELAY_NONE) {
-                $interval = CarbonInterval::make($drip->delay);
-                $sendAt->add($interval);
-            }
-
+        if ($emailTrigger->autoResponse) {
             Email::create([
-                'email_template_id' => $drip->email_template_id,
+                'email_template_id' => $emailTrigger->autoResponse->id,
                 'user_id' => $this->user_id,
-                'email_journey_id' => $drip->email_journey_id,
-                'email_sequence_id' => $drip->id,
+                'email_trigger_id' => $emailTrigger->id,
                 'status' => Email::STATUS_NEW,
-                'from_name' => $drip->emailTemplate->from_name,
-                'from_email' => $drip->emailTemplate->from_email,
-                'subject' => $drip->emailTemplate->subject,
+                'from_name' => $emailTrigger->autoResponse->from_name,
+                'from_email' => $emailTrigger->autoResponse->from_email,
+                'subject' => $emailTrigger->autoResponse->subject,
                 'to_name' => $this->name,
                 'to_email' => $this->email,
-                'body' => $drip->emailTemplate->body,
-                'send_at' => $sendAt,
+                'body' => $emailTrigger->autoResponse->body,
+                'send_at' => Carbon::now(),
             ]);
+        }
+
+        if ($emailTrigger->emailJourney) {
+
+            foreach($emailTrigger->emailJourney->emailSequences as $sequence) {
+
+                $sendAt = Carbon::now();
+
+                if ($sequence->delay !== EmailSequence::DELAY_NONE) {
+                    $interval = CarbonInterval::make($sequence->delay);
+                    $sendAt->add($interval);
+                }
+
+                Email::create([
+                    'email_template_id' => $sequence->email_template_id,
+                    'user_id' => $this->user_id,
+                    'email_journey_id' => $sequence->email_journey_id,
+                    'email_sequence_id' => $sequence->id,
+                    'email_trigger_id' => $emailTrigger->id,
+                    'status' => Email::STATUS_NEW,
+                    'from_name' => $sequence->emailTemplate->from_name,
+                    'from_email' => $sequence->emailTemplate->from_email,
+                    'subject' => $sequence->emailTemplate->subject,
+                    'to_name' => $this->name,
+                    'to_email' => $this->email,
+                    'body' => $sequence->emailTemplate->body,
+                    'send_at' => $sendAt,
+                ]);
+            }
         }
     }
 }

@@ -19,7 +19,6 @@ class EmailIndex extends Component
 
     public ?string $search = null;
     public array $filters = [
-        'type' => [],
         'status' => [],
     ];
 
@@ -69,18 +68,16 @@ class EmailIndex extends Component
     public function getRowsQueryProperty()
     {
         $query = Email::with([
-                'emailCampaign',
+                'emailJourney',
                 'emailSequence',
                 'emailTemplate',
                 'user',
             ])
             ->when($this->search, function($query, $search) {
                 return $query
-                    ->whereJsonContains('to', $search)
-                    ->orwhereHas('emailCampaign', function($query) use ($search) {
-                        $query->where('name', 'like', '%' . $search . '%');
-                    })
-                    ->orwhereHas('emailSequence', function($query) use ($search) {
+                    ->where('to_name', 'like', '%' . $search . '%')
+                    ->orWhere('to_email', 'like', '%' . $search . '%')
+                    ->orwhereHas('emailJourney', function($query) use ($search) {
                         $query->where('name', 'like', '%' . $search . '%');
                     })
                     ->orwhereHas('emailTemplate', function($query) use ($search) {
@@ -89,9 +86,6 @@ class EmailIndex extends Component
                     ->orwhereHas('user', function($query) use ($search) {
                         $query->where('name', 'like', '%' . $search . '%');
                     });
-            })
-            ->when($this->filters['type'], function($query, $valueArray) {
-                return $query->whereIn('type', $valueArray);
             })
             ->when($this->filters['status'], function($query, $valueArray) {
                 return $query->whereIn('status', $valueArray);

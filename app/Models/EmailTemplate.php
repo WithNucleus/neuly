@@ -19,6 +19,11 @@ class EmailTemplate extends Model
         self::STATUS_INACTIVE
     ];
 
+    /* Scopes  */
+    public function scopeActive($query) {
+        return $query->where('status', self::STATUS_ACTIVE);
+    }
+
     /* Relationships */
     public function emails(): \Illuminate\Database\Eloquent\Relations\HasMany
     {

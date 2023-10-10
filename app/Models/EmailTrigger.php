@@ -28,6 +28,11 @@ class EmailTrigger extends Model
     CONST TRIGGER_CARE_REQUEST = 'Neuly Care Forms';
     CONST TRIGGER_EDU_REQUEST = 'Neuly EDU Forms';
 
+    /* Scopes  */
+    public function scopeActive($query) {
+        return $query->where('status', self::STATUS_ACTIVE);
+    }
+
     /* Relationships */
     public function autoResponse(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
@@ -37,5 +42,10 @@ class EmailTrigger extends Model
     public function emailJourney(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(EmailJourney::class);
+    }
+
+    public function emails(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Email::class);
     }
 }

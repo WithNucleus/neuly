@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Jobs\EmailMarketing\CreateCampaignEmails;
 use App\Models\Contracts\CrmActionsContract;
 use App\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -43,7 +44,8 @@ class EduRequest extends Model implements CrmActionsContract
     protected static function booted()
     {
         static::created(function ($eduRequest) {
-            SlackAlert::to('default')->message('*NeulyEDU Request*' . "\n" .
+            // todo: change back to default
+            SlackAlert::to('dev')->message('*NeulyEDU Request*' . "\n" .
                 '*Type:* ' . $eduRequest->type . "\n" .
                 '*Name:* ' . $eduRequest->name . "\n" .
                 '*Email:* ' . $eduRequest->email . "\n" .
@@ -52,6 +54,8 @@ class EduRequest extends Model implements CrmActionsContract
                 '```' . $eduRequest->message . '```' . "\n" .
                 '<' . route('adminx.edu.students') .'|View Request>'
             );
+
+            CreateCampaignEmails::dispatch(EmailTrigger::TRIGGER_EDU_REQUEST, $eduRequest->name, $eduRequest->email, $eduRequest->user_id);
         });
     }
 

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->references('id')->on('users')->nullOnDelete();
             $table->foreignId('email_journey_id')->nullable()->references('id')->on('email_journeys')->nullOnDelete();
             $table->foreignId('email_sequence_id')->nullable()->references('id')->on('email_sequences')->nullOnDelete();
+            $table->foreignId('email_trigger_id')->nullable()->references('id')->on('email_triggers')->nullOnDelete();
             $table->string('status')->default(\App\Models\Email::STATUS_NEW);
             $table->string('from_name')->default(config('mail.from.name'));
             $table->string('from_email')->default(config('mail.from.address'));

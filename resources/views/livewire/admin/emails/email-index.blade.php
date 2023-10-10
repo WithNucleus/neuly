@@ -44,10 +44,16 @@
                         <x-entities.entity-index-sort-button label="Status" field="status" :sorts="$sorts" buttonClasses="fs-6 fw-bold p-0" inactiveClasses="text-body" activeClasses="text-accent" />
                     </th>
                     <th>
-                        <span class="fs-6 fw-bold">Campaign</span>
+                        <span class="fs-6 fw-bold">Template</span>
                     </th>
                     <th>
-                        <span class="fs-6 fw-bold">Template</span>
+                        <span class="fs-6 fw-bold">Trigger</span>
+                    </th>
+                    <th>
+                        <span class="fs-6 fw-bold">Journey</span>
+                    </th>
+                    <th>
+                        <span class="fs-6 fw-bold">Sequence</span>
                     </th>
                     <th>
                         <span class="fs-6 fw-bold">To</span>
@@ -71,11 +77,23 @@
                             <span class="badge text-uppercase {{ $record->status_color }}">{{ $record->status }}</span>
                         </td>
                         <td>
-                            <span class="me-1">{{ $record->emailCampaign->name }}</span>
-                            <span class="text-body-tertiary text-uppercase">({{ $record->emailCampaign->type }})</span>
+                            {{ $record->emailTemplate->name }}
                         </td>
                         <td>
-                            {{ $record->emailTemplate->name }}
+                            @if($record->emailTrigger)
+                                <span>{{ $record->emailTrigger->name }}</span>
+                            @endif
+                        </td>
+                        <td>
+                            @if($record->emailJourney)
+                                <span>{{ $record->emailJourney->name }}</span>
+                            @endif
+                        </td>
+                        <td>
+                            @if($record->emailSequence)
+                                <span class="me-2">#{{ $record->emailSequence->order }}</span>
+                                <span class="text-body-tertiary">{{ $record->emailSequence->delay }}</span>
+                            @endif
                         </td>
                         <td>
                             <span>{{ $record->to_name }}</span>

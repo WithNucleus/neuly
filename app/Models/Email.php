@@ -54,7 +54,7 @@ class Email extends Model
     }
 
     /* Relationships */
-    public function emailCampaign(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function emailJourney(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(EmailJourney::class);
     }
@@ -67,6 +67,11 @@ class Email extends Model
     public function emailTemplate(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(EmailTemplate::class);
+    }
+
+    public function emailTrigger(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(EmailTrigger::class);
     }
 
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
