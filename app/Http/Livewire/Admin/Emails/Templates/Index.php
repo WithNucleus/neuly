@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Admin\Emails\EmailTemplates;
+namespace App\Http\Livewire\Admin\Emails\Templates;
 
 use App\Http\Livewire\Traits\WithBulkActions;
 use App\Http\Livewire\Traits\WithCachedRows;
@@ -94,7 +94,7 @@ class Index extends Component
 
     public function render()
     {
-        return view('livewire.admin.emails.email-templates.index', [
+        return view('livewire.admin.emails.templates.index', [
             'records' => $this->rows,
             'statusOptions' => EmailTemplate::STATUES
         ]);

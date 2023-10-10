@@ -43,6 +43,9 @@
                     <th>
                         <x-entities.entity-index-sort-button label="Status" field="status" :sorts="$sorts" buttonClasses="fs-6 fw-bold p-0" inactiveClasses="text-body" activeClasses="text-accent" />
                     </th>
+                    <th>
+                        Journeys
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -53,6 +56,13 @@
                             <a href="{{ route('adminx.emails.templates.show', $record->id) }}">{{ $record->name }}</a>
                         </td>
                         <td class="text-nowrap">{{ $record->status }}</td>
+                        <td>
+                            @foreach($record->emailSequences as $item)
+                                <div class="small">
+                                    <a href="{{ route('adminx.emails.journeys.show', $item->id) }}">{{ $item->emailJourney->name }}</a>
+                                </div>
+                            @endforeach
+                        </td>
                     </tr>
                 @empty
                     <tr>

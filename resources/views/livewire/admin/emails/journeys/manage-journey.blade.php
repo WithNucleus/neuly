@@ -24,18 +24,16 @@
                 <tr class="text-uppercase">
                     <th>Name</th>
                     <th>Delay</th>
-                    <th>Subject</th>
                     <th>Template</th>
                 </tr>
                 </thead>
                 <tbody>
-                @foreach($emailJourney->emailSequences as $drip)
+                @foreach($emailJourney->emailSequences as $sequence)
                     <tr>
-                        <td>{{ $drip->name }}</td>
-                        <td>{{ $drip->delay }}</td>
-                        <td>{{ $drip->subject }}</td>
+                        <td>{{ $sequence->name }}</td>
+                        <td>{{ $sequence->delay }}</td>
                         <td>
-                            <a href="{{ route('adminx.emails.templates.show', $drip->emailTemplate->id) }}">{{ $drip->emailTemplate->name }}</a>
+                            <a href="{{ route('adminx.emails.templates.show', $sequence->emailTemplate->id) }}">{{ $sequence->emailTemplate->name }}</a>
                         </td>
                     </tr>
                 @endforeach

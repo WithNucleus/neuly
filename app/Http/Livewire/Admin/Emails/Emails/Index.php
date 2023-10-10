@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Http\Livewire\Admin\Emails;
+namespace App\Http\Livewire\Admin\Emails\Emails;
 
 use App\Http\Livewire\Traits\WithBulkActions;
 use App\Http\Livewire\Traits\WithCachedRows;
 use App\Http\Livewire\Traits\WithPerPagePagination;
 use App\Http\Livewire\Traits\WithSorting;
 use App\Models\Email;
-use App\Models\EmailJourney;
 use Livewire\Component;
 
-class EmailIndex extends Component
+class Index extends Component
 {
     use WithPerPagePagination, WithBulkActions, WithCachedRows, WithSorting;
 
@@ -121,7 +120,7 @@ class EmailIndex extends Component
 
     public function render()
     {
-        return view('livewire.admin.emails.email-index', [
+        return view('livewire.admin.emails.emails.index', [
             'records' => $this->rows,
             'statusOptions' => Email::orderBy('status')->pluck('status')->unique()->toArray()
         ]);

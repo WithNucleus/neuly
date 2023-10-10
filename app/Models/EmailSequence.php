@@ -19,6 +19,11 @@ class EmailSequence extends Model
         return $this->belongsTo(EmailJourney::class);
     }
 
+    public function emailJourney(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(EmailJourney::class);
+    }
+
     public function emailTemplate(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(EmailTemplate::class);

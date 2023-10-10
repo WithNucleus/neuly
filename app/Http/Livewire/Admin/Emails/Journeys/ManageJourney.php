@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Admin\Emails\EmailJourneys;
+namespace App\Http\Livewire\Admin\Emails\Journeys;
 
 use App\Models\EmailJourney;
 use Livewire\Component;
@@ -11,6 +11,6 @@ class ManageJourney extends Component
 
     public function render()
     {
-        return view('livewire.admin.emails.email-journeys.manage-journey');
+        return view('livewire.admin.emails.journeys.manage-journey');
     }
 }

@@ -30,11 +30,6 @@ class EmailTemplate extends Model
         return $this->hasMany(Email::class);
     }
 
-    public function emailJourneys(): \Illuminate\Database\Eloquent\Relations\HasMany
-    {
-        return $this->hasMany(EmailJourney::class);
-    }
-
     public function emailSequences(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(EmailSequence::class);

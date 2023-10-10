@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Admin\Emails\EmailJourneys;
+namespace App\Http\Livewire\Admin\Emails\Journeys;
 
 use App\Http\Livewire\Traits\WithBulkActions;
 use App\Http\Livewire\Traits\WithCachedRows;
@@ -101,7 +101,7 @@ class Index extends Component
 
     public function render()
     {
-        return view('livewire.admin.emails.email-journeys.index', [
+        return view('livewire.admin.emails.journeys.index', [
             'records' => $this->rows,
             'statusOptions' => EmailJourney::STATUES
         ]);
