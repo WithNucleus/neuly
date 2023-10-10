@@ -58,13 +58,13 @@ class User extends Authenticatable implements MustVerifyEmail
                 'user_id' => $user->id,
             ]);
 
-            EmailPreference::create([
-                'email' => $user->email,
-                'user_id' => $user->id,
-                'marketing' => 1,
-                'created_at' => $user->created_at,
-                'updated_at' => $user->updated_at,
-            ]);
+            EmailPreference::firstOrCreate(
+                ['email' => $user->email],
+                [
+                    'email' => $user->email,
+                    'user_id' => $user->id,
+                ]
+            );
         });
     }
 

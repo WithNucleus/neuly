@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Adminx\Emails;
 use App\Http\Controllers\Controller;
 use App\Models\Email;
 use App\Models\EmailJourney;
+use App\Models\EmailPreference;
 use App\Models\EmailTemplate;
 use Illuminate\Support\Facades\View;
 
@@ -34,6 +35,11 @@ class EmailController extends Controller
         return view('adminx.emails.triggers.index');
     }
 
+    public function preferences(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    {
+        return view('adminx.emails.preferences.index');
+    }
+
     public function journeyShow($id): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         $journey = EmailJourney::findOrFail($id);
@@ -55,6 +61,14 @@ class EmailController extends Controller
         $email = Email::findOrFail($id);
         return view('adminx.emails.emails.show', [
             'email' => $email
+        ]);
+    }
+
+    public function preferenceShow($email): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    {
+        $preference = EmailPreference::with(['user', 'emails'])->findOrFail($email);
+        return view('adminx.emails.preferences.show', [
+            'preference' => $preference
         ]);
     }
 }

@@ -38,6 +38,18 @@ class Email extends Model
         'response' => 'array'
     ];
 
+    protected static function booted()
+    {
+        static::created(function ($model) {
+            $preference = EmailPreference::firstOrCreate([
+                'email' => $model->to_email
+            ]);
+
+            $model->email_preference_email = $preference->email;
+            $model->save();
+        });
+    }
+
     /* Scopes  */
     public function scopeDeletable($query) {
         return $query->whereIn('status', [
@@ -76,6 +88,11 @@ class Email extends Model
     public function emailJourney(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(EmailJourney::class);
+    }
+
+    public function emailPreference(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(EmailPreference::class);
     }
 
     public function emailSequence(): \Illuminate\Database\Eloquent\Relations\BelongsTo

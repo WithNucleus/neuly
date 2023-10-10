@@ -40,7 +40,8 @@ Route::middleware(['auth', 'can:admin login'])->prefix('/adminx')->name('adminx.
         Route::get('/journeys', [App\Http\Controllers\Adminx\Emails\EmailController::class, 'journeys'])->name('journeys.index');
         Route::get('/journeys/{id}', [App\Http\Controllers\Adminx\Emails\EmailController::class, 'journeyShow'])->name('journeys.show');
         Route::get('/triggers', [App\Http\Controllers\Adminx\Emails\EmailController::class, 'triggers'])->name('triggers.index');
-//        Route::get('/drips', [App\Http\Controllers\Adminx\Emails\EmailController::class, 'drips'])->name('drips');
+        Route::get('/preferences', [App\Http\Controllers\Adminx\Emails\EmailController::class, 'preferences'])->name('preferences.index');
+        Route::get('/preferences/{email}', [App\Http\Controllers\Adminx\Emails\EmailController::class, 'preferenceShow'])->name('preferences.show');
     });
 
     // NAV TILES

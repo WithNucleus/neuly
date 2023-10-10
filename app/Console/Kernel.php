@@ -2,10 +2,13 @@
 
 namespace App\Console;
 
+use App\Jobs\EmailMarketing\PrepEmails;
+use App\Jobs\EmailMarketing\SendEmails;
 use App\Jobs\SendEmailNotifications;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\Log;
+use Spatie\SlackAlerts\Facades\SlackAlert;
 
 class Kernel extends ConsoleKernel
 {
@@ -117,8 +120,23 @@ class Kernel extends ConsoleKernel
         $schedule
             ->command('activitylog:clean')
             ->monthlyOn(1, '23:00')
-            ->onFailure(function () {
+            ->onFailure(function() {
                 Log::critical('Activity log clean command failed');
+            });
+
+        // Email Marketing
+        $schedule
+            ->job(new PrepEmails())
+            ->everyMinute()
+            ->onFailure(function() {
+                SlackAlert::to('dev')->message('<@sydney> Failure during PrepEmails scheduled task');
+            });
+
+        $schedule
+            ->job(new SendEmails())
+            ->everyMinute()
+            ->onFailure(function() {
+                SlackAlert::to('dev')->message('<@sydney> Failure during SendEmails scheduled task');
             });
     }
 

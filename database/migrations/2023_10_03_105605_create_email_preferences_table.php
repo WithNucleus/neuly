@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('email_preferences', function (Blueprint $table) {
             $table->string('email')->unique()->primary();
             $table->foreignId('user_id')->nullable()->references('id')->on('users')->nullOnDelete();
-            $table->boolean('marketing');
+            $table->boolean('marketing')->default(1);
             $table->boolean('do_not_email')->default(0);
             $table->string('opt_in_ip')->nullable();
             $table->dateTime('opt_out')->nullable();
