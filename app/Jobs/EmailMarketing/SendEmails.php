@@ -25,26 +25,27 @@ class SendEmails implements ShouldQueue
     {
         $now = Carbon::now();
         $blackList = EmailPreference::blacklist()->pluck('email')->toArray();
-        $emails = Email::pending()->where('send_at', '<=', $now)->get();
+        $emails = Email::ready()->where('send_at', '<=', $now)->get();
 
         foreach($emails as $email) {
-            foreach($email->to as $recipient) {
-                if (in_array($recipient, $blackList)) {
-                    $email->status = Email::STATUS_DECLINED;
-                    $email->response = ['decline_reason' => 'Email in blacklist'];
-                } else {
-                    Mail::to($recipient)->queue(new EmailMarketingMail($email));
-                    $email->status = Email::STATUS_SENT;
-                }
-
-                $email->save();
+            if (in_array($email->to_email, $blackList)) {
+                $email->status = Email::STATUS_DECLINED;
+                $email->response = [
+                    Email::DECLINE_REASON_LABEL => Email::DECLINE_REASON_BLACKLIST
+                ];
+            } else {
+                Mail::to($email->to_email)->queue(new EmailMarketingMail($email));
+                $email->status = Email::STATUS_SENT;
+                $email->sent_at = Carbon::now();
             }
+
+            $email->save();
         }
     }
 
     public function failed(Throwable $exception)
     {
-        $message = 'Failed Job EmailMarketing/SendEmails' . "\n" . $exception->getMessage();
+        $message = 'Failed Job EmailMarketing/SendEmails' . "\n" . "```{$exception->getMessage()}```";
         Log::warning($message);
         SlackAlert::to('dev')->message('<@sydney> ' . $message);
     }

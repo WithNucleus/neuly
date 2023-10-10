@@ -12,6 +12,19 @@
                     <span class="badge text-uppercase {{ $email->status_color }}">{{ $email->status }}</span>
                 </td>
             </tr>
+            @if($email->response)
+                <tr>
+                    <th class="min-width-110 text-uppercase ps-0 pe-3 text-end pb-2">Response:</th>
+                    <td>
+                        @foreach($email->response as $label => $reason)
+                            <div class="small mb-2">
+                                <span>{{ $label }} &ndash;</span>
+                                <span>{{ $reason }}</span>
+                            </div>
+                        @endforeach
+                    </td>
+                </tr>
+            @endif
             <tr>
                 <th class="min-width-110 text-uppercase ps-0 pe-3 text-end pb-2">Date:</th>
                 <td class="pb-2">

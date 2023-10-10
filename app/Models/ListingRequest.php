@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Helpers\NotificationHelper;
+use App\Jobs\EmailMarketing\CreateCampaignEmails;
 use App\Notifications\ListingRequestCreated;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -39,6 +40,7 @@ class ListingRequest extends Model
     {
         static::created(function ($model) {
             NotificationHelper::sendAdminNotifications(new ListingRequestCreated($model));
+            CreateCampaignEmails::dispatch(EmailTrigger::TRIGGER_NEW_LISTING_REQUEST, $model->name, $model->email, $model->user_id);
         });
     }
 

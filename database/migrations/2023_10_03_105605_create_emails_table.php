@@ -30,6 +30,7 @@ return new class extends Migration
             $table->json('response')->nullable();
             $table->dateTime('send_at')->nullable();
             $table->dateTime('sent_at')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

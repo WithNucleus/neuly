@@ -30,10 +30,51 @@
             <button wire:click="clearFilters" class="btn btn-sm btn-dark rounded-0">Clear Filters</button>
         </div>
     </div>
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <div>
+            <div class="mb-3">
+                <strong>{{ number_format($records->total(), 0) }}</strong> total records
+            </div>
+            <div class="ps-2 d-flex align-items-center">
+                <div class="form-check me-4">
+                    <input wire:model="selectPage" class="form-check-input" type="checkbox" id="select-page" aria-label="Select">
+                    @if($selectAll)
+                        <label for="select-page" class="ps-2"><strong>{{ $records->total() }}</strong> selected</label>
+                    @else
+                        <label for="select-page" class="ps-2"><strong>{{ count($selected) }}</strong> selected</label>
+                    @endif
+                </div>
+                <div class="me-4">
+                    @if ($selectPage)
+                        @unless ($selectAll)
+                            <div>
+                                <button wire:click="selectAll" class="btn btn-link p-0">Select everything?</button>
+                            </div>
+                        @else
+
+                        @endif
+                    @endif
+                </div>
+            </div>
+        </div>
+        <div wire:ignore class="dropdown">
+            <button class="btn btn-primary rounded-0 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Bulk Actions
+            </button>
+            <ul class="dropdown-menu">
+                <li>
+                    <a wire:click="deleteRecords" class="dropdown-item" href="#">
+                        <i class="fa-sharp fa-solid fa-trash fa-fw me-1"></i>Delete un-sent emails
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
     <div class="table-responsive">
         <table class="table table-hover small align-middle">
             <thead class="text-uppercase fs-6 text-nowrap">
                 <tr>
+                    <th style="width: 32px"></th>
                     <th>
                         <x-entities.entity-index-sort-button label="Created" field="created_at" :sorts="$sorts" buttonClasses="fs-6 fw-bold p-0" inactiveClasses="text-body" activeClasses="text-accent" />
                     </th>
@@ -69,6 +110,11 @@
             <tbody>
                 @forelse($records as $record)
                     <tr wire:key="record-{{ $record->id }}">
+                        <td>
+                            <div class="form-check">
+                                <input wire:model="selected" class="form-check-input" type="checkbox" value="{{ $record->id }}" id="select-{{ $record->id }}" aria-label="Select">
+                            </div>
+                        </td>
                         <td class="text-nowrap">{{ $record->created_at }}</td>
                         <td class="text-nowrap">
                             <a href="{{ route('adminx.emails.emails.show', $record->id) }}">{{ $record->subject }}</a>

@@ -5,15 +5,17 @@ namespace App\Models;
 use App\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Email extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $guarded = ['id'];
 
     const STATUS_NEW = 'New';
     const STATUS_PENDING = 'Pending';
+    const STATUS_READY = 'Ready';
     const STATUS_SENT = 'Sent';
     const STATUS_OPENED = 'Opened';
     const STATUS_FAILED = 'Failed';
@@ -22,23 +24,40 @@ class Email extends Model
     const STATUES = [
         self::STATUS_NEW,
         self::STATUS_PENDING,
+        self::STATUS_READY,
         self::STATUS_SENT,
         self::STATUS_OPENED,
         self::STATUS_FAILED,
         self::STATUS_DECLINED
     ];
 
+    const DECLINE_REASON_LABEL = 'Decline';
+    const DECLINE_REASON_BLACKLIST = 'Email in blacklist';
+
     protected $casts = [
         'response' => 'array'
     ];
 
     /* Scopes  */
+    public function scopeDeletable($query) {
+        return $query->whereIn('status', [
+            self::STATUS_NEW,
+            self::STATUS_PENDING,
+            self::STATUS_READY,
+            self::STATUS_DECLINED
+        ]);
+    }
+
     public function scopeNew($query) {
         return $query->where('status', self::STATUS_NEW);
     }
 
     public function scopePending($query) {
         return $query->where('status', self::STATUS_PENDING);
+    }
+
+    public function scopeReady($query) {
+        return $query->where('status', self::STATUS_READY);
     }
 
     public function scopeSent($query) {
@@ -83,8 +102,8 @@ class Email extends Model
     public function getStatusColorAttribute(): string
     {
         return match($this->status) {
-            self::STATUS_NEW => 'bg-warning-bright text-dark',
-            self::STATUS_PENDING => 'bg-primary',
+            self::STATUS_NEW, self::STATUS_PENDING => 'bg-warning-bright text-dark',
+            self::STATUS_READY => 'bg-primary',
             self::STATUS_SENT => 'bg-success',
             self::STATUS_FAILED => 'bg-danger',
             self::STATUS_DECLINED => 'bg-body-secondary text-body-emphasis opacity-75',

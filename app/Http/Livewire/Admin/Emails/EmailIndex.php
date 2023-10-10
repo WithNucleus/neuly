@@ -22,6 +22,20 @@ class EmailIndex extends Component
         'status' => [],
     ];
 
+    public function mount() {
+        $this->perPage = 10;
+    }
+
+    public function deleteRecords() {
+        $count = $this->selectedRowsQuery->deletable()->count();
+        $this->selectedRowsQuery->deletable()->delete();
+
+        $this->dispatchBrowserEvent('toast-notification',  ['text' => 'Deleted ' . $count . ' emails', 'background' => 'bg-success']);
+        $this->reset('selected');
+        $this->reset('selectAll');
+        $this->reset('selectPage');
+    }
+
     public function updatingSearch() {
         $this->resetPage();
     }
@@ -39,6 +53,9 @@ class EmailIndex extends Component
         $this->reset('search');
         $this->reset('filters');
         $this->reset('sorts');
+        $this->reset('selected');
+        $this->reset('selectAll');
+        $this->reset('selectPage');
         $this->resetPage();
     }
 
@@ -77,6 +94,7 @@ class EmailIndex extends Component
                 return $query
                     ->where('to_name', 'like', '%' . $search . '%')
                     ->orWhere('to_email', 'like', '%' . $search . '%')
+                    ->orWhere('subject', 'like', '%' . $search . '%')
                     ->orwhereHas('emailJourney', function($query) use ($search) {
                         $query->where('name', 'like', '%' . $search . '%');
                     })

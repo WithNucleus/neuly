@@ -16,7 +16,7 @@ class PrepEmails implements ShouldQueue
 
     public function handle()
     {
-        $emails = Email::new()->get();
+        $emails = Email::new()->orderByDesc('id')->get();
 
         foreach($emails as $email) {
             // Fields
@@ -34,6 +34,8 @@ class PrepEmails implements ShouldQueue
             $email->subject = $subject;
             $email->status = Email::STATUS_PENDING;
             $email->save();
+
+            RemoveDuplicates::dispatch($email);
         }
     }
 }
