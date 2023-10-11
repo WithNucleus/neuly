@@ -7,6 +7,7 @@ use App\Models\Email;
 use App\Models\EmailJourney;
 use App\Models\EmailPreference;
 use App\Models\EmailTemplate;
+use App\Models\EmailTrigger;
 use Illuminate\Support\Facades\View;
 
 class EmailController extends Controller
@@ -69,6 +70,14 @@ class EmailController extends Controller
         $preference = EmailPreference::with(['user', 'emails'])->findOrFail($email);
         return view('adminx.emails.preferences.show', [
             'preference' => $preference
+        ]);
+    }
+
+    public function triggerShow($id): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    {
+        $trigger = EmailTrigger::with(['autoResponse', 'emailJourney', 'emails'])->findOrFail($id);
+        return view('adminx.emails.triggers.show', [
+            'trigger' => $trigger
         ]);
     }
 }

@@ -54,7 +54,7 @@
                     <tr wire:key="record-{{ $record->id }}">
                         <td class="text-nowrap">{{ $record->created_at }}</td>
                         <td class="text-nowrap">
-                            {{ $record->name }}
+                            <a href="{{ route('adminx.emails.triggers.show', $record->id) }}">{{ $record->name }}</a>
                         </td>
                         <td>
                             @if($record->autoResponse)

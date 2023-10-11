@@ -21,6 +21,7 @@ class Index extends Component
     public ?string $search = null;
     public array $filters = [
         'blacklist' => null,
+        'unregistered' => null,
     ];
 
     public ?string $ip;
@@ -123,6 +124,9 @@ class Index extends Component
             })
             ->when($this->filters['blacklist'], function($query) {
                 return $query->blacklist();
+            })
+            ->when($this->filters['unregistered'], function($query) {
+                return $query->unregistered();
             });
 
         return $this->applySorting($query);

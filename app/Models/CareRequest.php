@@ -53,10 +53,16 @@ class CareRequest extends Model implements CrmActionsContract
                 '<' . route('adminx.care.care-requests') .'|View Request>'
             );
 
+            $mergeFields = [];
+
+            if ($careRequest->entity) {
+                $mergeFields['entity_name'] = $careRequest->entity->name;
+            }
+
             if ($careRequest->type === self::TYPE_CLINICAL_TRIAL_PARTICIPANT) {
-                CreateCampaignEmails::dispatch(EmailTrigger::TRIGGER_RECRUITING_CLINICAL_TRIALS_REQUEST, $careRequest->name, $careRequest->email, $careRequest->user_id);
+                CreateCampaignEmails::dispatch(EmailTrigger::TRIGGER_RECRUITING_CLINICAL_TRIALS_REQUEST, $careRequest->name, $careRequest->email, $careRequest->user_id, $mergeFields);
             } else {
-                CreateCampaignEmails::dispatch(EmailTrigger::TRIGGER_CARE_REQUEST, $careRequest->name, $careRequest->email, $careRequest->user_id);
+                CreateCampaignEmails::dispatch(EmailTrigger::TRIGGER_CARE_REQUEST, $careRequest->name, $careRequest->email, $careRequest->user_id, $mergeFields);
             }
         });
     }

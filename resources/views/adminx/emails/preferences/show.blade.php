@@ -2,10 +2,11 @@
 
 @section('content')
     <div class="container-fluid my-4">
-        <h1 class="h3 mb-4">{{ $preference->email }}</h1>
+        <h1 class="mb-4">{{ $preference->email }}</h1>
         <div class="mb-3 fs-6">
             @if($preference->user)
                 <div>
+                    <strong class="text-uppercase">User:</strong>
                     <span>#{{ $preference->user->id }}</span>
                     <span>{{ $preference->user->fullname }}</span>
                 </div>

@@ -9,6 +9,10 @@
             <x-livewire-filters.checkbox-single wireModel="filters.blacklist" id="filter-blacklist" label="Blacklist" />
         </div>
 
+        <div class="me-md-4 mb-3">
+            <x-livewire-filters.checkbox-single wireModel="filters.unregistered" id="filter-unregistered" label="Unregistered" />
+        </div>
+
         <div class="filter-widget ms-auto">
             <button wire:click="clearFilters" class="btn btn-sm btn-dark rounded-0">Clear Filters</button>
         </div>
@@ -86,8 +90,14 @@
                         </td>
                         <td>
                             @if($record->user)
-                                <span>{{ $record->user->full_name }}</span>
-                                <span class="text-body-tertiary">#{{ $record->user->id }}</span>
+                                <div>
+                                    <span>{{ $record->user->full_name }}</span>
+                                    <span class="text-body-tertiary">#{{ $record->user->id }}</span>
+                                </div>
+                            @else
+                                <div>
+                                    Unregistered
+                                </div>
                             @endif
                         </td>
                         <td>

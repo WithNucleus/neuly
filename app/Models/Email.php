@@ -35,6 +35,7 @@ class Email extends Model
     const DECLINE_REASON_BLACKLIST = 'Email in blacklist';
 
     protected $casts = [
+        'merge_fields' => 'array',
         'response' => 'array'
     ];
 

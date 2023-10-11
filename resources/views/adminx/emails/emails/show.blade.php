@@ -3,7 +3,7 @@
 @section('content')
     <div class="container-fluid my-4">
 
-        <h1 class="h3 mb-5">Email Template: {{ $email->emailTemplate->name }}</h1>
+        <h1 class="mb-5">Email Template: {{ $email->emailTemplate->name }}</h1>
 
         <table class="table-borderless w-auto fs-6 align-top">
             <tr>

@@ -19,16 +19,17 @@ class PrepEmails implements ShouldQueue
         $emails = Email::new()->orderByDesc('id')->get();
 
         foreach($emails as $email) {
-            // Fields
             $body = $email->body;
             $subject = $email->subject;
 
-            // New Values
-            $name = $email->user->name ?? 'there';
-
-            // Replacements
+            // Replace Name
+            $name = $email->user->name ?? $email->to_name;
             $body = str_replace(['{first_name}', '{first name}'], $name, $body);
             $subject = str_replace(['{first_name}', '{first name}'], $name, $subject);
+
+            if(!empty($email->merge_fields)) {
+                $body = $this->mergeValues($email->merge_fields, $body);
+            }
 
             $email->body = $body;
             $email->subject = $subject;
@@ -37,5 +38,13 @@ class PrepEmails implements ShouldQueue
 
             RemoveDuplicates::dispatch($email);
         }
+    }
+
+    private function mergeValues($mergeFields, $body) {
+        foreach($mergeFields as $needle => $replacement) {
+            $body = str_replace("{{$needle}}", $replacement, $body);
+        }
+
+        return $body;
     }
 }

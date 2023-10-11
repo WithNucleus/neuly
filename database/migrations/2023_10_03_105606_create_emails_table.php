@@ -28,6 +28,7 @@ return new class extends Migration
             $table->string('to_name');
             $table->string('to_email');
             $table->longText('body');
+            $table->json('merge_fields')->nullable();
             $table->json('response')->nullable();
             $table->dateTime('send_at')->nullable();
             $table->dateTime('sent_at')->nullable();

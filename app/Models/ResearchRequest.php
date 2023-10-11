@@ -55,16 +55,22 @@ class ResearchRequest extends Model implements CrmActionsContract
                 '<' . route('adminx.research.research-requests') .'|View Request>'
             );
 
+            $mergeFields = [];
+
+            if ($researchRequest->entity) {
+                $mergeFields['entity_name'] = $researchRequest->entity->name;
+            }
+
             if($researchRequest->type === ResearchRequest::TYPE_API_REQUEST) {
-                CreateCampaignEmails::dispatch(EmailTrigger::TRIGGER_API_REQUEST, $researchRequest->name, $researchRequest->email, $researchRequest->user_id);
+                CreateCampaignEmails::dispatch(EmailTrigger::TRIGGER_API_REQUEST, $researchRequest->name, $researchRequest->email, $researchRequest->user_id, $mergeFields);
             }
 
             if($researchRequest->type === ResearchRequest::TYPE_ENTERPRISE_REQUEST) {
-                CreateCampaignEmails::dispatch(EmailTrigger::TRIGGER_ENTERPRISE_REQUEST, $researchRequest->name, $researchRequest->email, $researchRequest->user_id);
+                CreateCampaignEmails::dispatch(EmailTrigger::TRIGGER_ENTERPRISE_REQUEST, $researchRequest->name, $researchRequest->email, $researchRequest->user_id, $mergeFields);
             }
 
             if($researchRequest->type === ResearchRequest::TYPE_REPORT_REQUEST) {
-                CreateCampaignEmails::dispatch(EmailTrigger::TRIGGER_RESEARCH_REQUEST, $researchRequest->name, $researchRequest->email, $researchRequest->user_id);
+                CreateCampaignEmails::dispatch(EmailTrigger::TRIGGER_RESEARCH_REQUEST, $researchRequest->name, $researchRequest->email, $researchRequest->user_id, $mergeFields);
             }
         });
     }

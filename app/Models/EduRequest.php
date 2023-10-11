@@ -55,7 +55,13 @@ class EduRequest extends Model implements CrmActionsContract
                 '<' . route('adminx.edu.students') .'|View Request>'
             );
 
-            CreateCampaignEmails::dispatch(EmailTrigger::TRIGGER_EDU_REQUEST, $eduRequest->name, $eduRequest->email, $eduRequest->user_id);
+            $mergeFields = [];
+
+            if ($eduRequest->entity) {
+                $mergeFields['entity_name'] = $eduRequest->entity->name;
+            }
+
+            CreateCampaignEmails::dispatch(EmailTrigger::TRIGGER_EDU_REQUEST, $eduRequest->name, $eduRequest->email, $eduRequest->user_id, $mergeFields);
         });
     }
 

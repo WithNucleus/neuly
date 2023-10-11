@@ -24,6 +24,10 @@ class EmailPreference extends Model
         return $query->where('do_not_email', true);
     }
 
+    public function scopeUnregistered($query) {
+        return $query->whereNull('user_id');
+    }
+
     /* Relationships */
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {

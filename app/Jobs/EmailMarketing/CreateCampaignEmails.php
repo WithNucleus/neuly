@@ -22,13 +22,15 @@ class CreateCampaignEmails implements ShouldQueue
     public string $name;
     public string $email;
     public ?int $user_id;
+    public ?array $mergeFields;
 
-    public function __construct(string $trigger, string $name, string $email, ?int $user_id)
+    public function __construct(string $trigger, string $name, string $email, ?int $user_id, ?array $mergeFields)
     {
         $this->trigger = $trigger;
         $this->name = $name;
         $this->email = $email;
         $this->user_id = $user_id;
+        $this->mergeFields = $mergeFields;
     }
 
     public function handle()
@@ -52,6 +54,7 @@ class CreateCampaignEmails implements ShouldQueue
                 'to_name' => $this->name,
                 'to_email' => $this->email,
                 'body' => $emailTrigger->autoResponse->body,
+                'merge_fields' => $this->mergeFields,
                 'send_at' => Carbon::now(),
             ]);
         }

@@ -34,4 +34,9 @@ class EmailTemplate extends Model
     {
         return $this->hasMany(EmailSequence::class);
     }
+
+    public function emailTriggers(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(EmailTrigger::class, 'auto_response_id');
+    }
 }

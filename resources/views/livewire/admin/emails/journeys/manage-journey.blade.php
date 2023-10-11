@@ -1,6 +1,6 @@
 <div>
     <div>
-        <h1>{{ $emailJourney->name }} Email Journey</h1>
+        <h1>Email Journey: {{ $emailJourney->name }}</h1>
         <p class="fs-6 mb-2 text-body-secondary">{{ $emailJourney->description }}</p>
         <table class="table table-sm table-borderless w-auto mb-5">
             <tr>
