@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Jobs\EmailMarketing\CreateAdminEmailsFromTrigger;
 use App\Jobs\EmailMarketing\CreateCampaignEmails;
 use App\Models\Contracts\CrmActionsContract;
 use App\User;
@@ -44,15 +45,15 @@ class EduRequest extends Model implements CrmActionsContract
     protected static function booted()
     {
         static::created(function ($eduRequest) {
-            // todo: change back to default
-            SlackAlert::to('dev')->message('*NeulyEDU Request*' . "\n" .
+
+            SlackAlert::to('default')->message('*NeulyEDU Request*' . "\n" .
                 '*Type:* ' . $eduRequest->type . "\n" .
                 '*Name:* ' . $eduRequest->name . "\n" .
                 '*Email:* ' . $eduRequest->email . "\n" .
                 '*Phone:* ' . $eduRequest->phone . "\n" .
                 '*Message:*' . "\n" .
                 '```' . $eduRequest->message . '```' . "\n" .
-                '<' . route('adminx.edu.students') .'|View Request>'
+                '<' . route('adminx.edu.students', ['find' => $eduRequest->id]) .'|View Request>'
             );
 
             $mergeFields = [];
@@ -62,6 +63,7 @@ class EduRequest extends Model implements CrmActionsContract
             }
 
             CreateCampaignEmails::dispatch(EmailTrigger::TRIGGER_EDU_REQUEST, $eduRequest->name, $eduRequest->email, $eduRequest->user_id, $mergeFields);
+            CreateAdminEmailsFromTrigger::dispatch(EmailTrigger::TRIGGER_EDU_REQUEST, ['url' => route('adminx.edu.students', ['find' => $eduRequest->id])]);
         });
     }
 

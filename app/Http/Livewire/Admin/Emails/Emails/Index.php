@@ -6,6 +6,7 @@ use App\Http\Livewire\Traits\WithBulkActions;
 use App\Http\Livewire\Traits\WithCachedRows;
 use App\Http\Livewire\Traits\WithPerPagePagination;
 use App\Http\Livewire\Traits\WithSorting;
+use App\Jobs\EmailMarketing\ReplaceMergeValues;
 use App\Models\Email;
 use Livewire\Component;
 
@@ -23,6 +24,9 @@ class Index extends Component
 
     public function mount() {
         $this->perPage = 10;
+        $this->sorts = [
+            'created_at' => 'desc'
+        ];
     }
 
     public function deleteRecords() {
@@ -30,6 +34,20 @@ class Index extends Component
         $this->selectedRowsQuery->deletable()->delete();
 
         $this->dispatchBrowserEvent('toast-notification',  ['text' => 'Deleted ' . $count . ' emails', 'background' => 'bg-success']);
+        $this->reset('selected');
+        $this->reset('selectAll');
+        $this->reset('selectPage');
+    }
+
+    public function replaceMergeValues() {
+        $count = $this->selectedRowsQuery->canReplaceMergeValues()->count();
+        $emails =$this->selectedRowsQuery->canReplaceMergeValues()->get();
+
+        foreach($emails as $email) {
+            ReplaceMergeValues::dispatch($email);
+        }
+
+        $this->dispatchBrowserEvent('toast-notification',  ['text' => 'Replacing merge values for ' . $count . ' emails', 'background' => 'bg-success']);
         $this->reset('selected');
         $this->reset('selectAll');
         $this->reset('selectPage');

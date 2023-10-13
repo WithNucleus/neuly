@@ -22,6 +22,10 @@ class Index extends Component
         'status' => [],
     ];
 
+    public function mount() {
+        $this->perPage = 10;
+    }
+
     public function updatingSearch() {
         $this->resetPage();
     }

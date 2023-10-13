@@ -19,7 +19,12 @@ class Index extends Component
     public ?string $search = null;
     public array $filters = [
         'status' => [],
+        'type' => []
     ];
+
+    public function mount() {
+        $this->perPage = 10;
+    }
 
     public function updatingSearch() {
         $this->resetPage();
@@ -68,18 +73,24 @@ class Index extends Component
     {
         $query = EmailTemplate::with([
                 'emails',
-                'emailSequences'
+                'emailSequences',
+                'emailTriggers'
             ])
             ->when($this->search, function($query, $search) {
                 return $query
                     ->where('name', 'like', '%' . $search . '%')
-                    ->where('email', 'like', '%' . $search . '%')
                     ->orwhereHas('emailSequences', function($query) use ($search) {
+                        $query->where('name', 'like', '%' . $search . '%');
+                    })
+                    ->orwhereHas('emailTriggers', function($query) use ($search) {
                         $query->where('name', 'like', '%' . $search . '%');
                     });
             })
             ->when($this->filters['status'], function($query, $valueArray) {
                 return $query->whereIn('status', $valueArray);
+            })
+            ->when($this->filters['type'], function($query, $valueArray) {
+                return $query->whereIn('type', $valueArray);
             });
 
         return $this->applySorting($query);
@@ -96,7 +107,8 @@ class Index extends Component
     {
         return view('livewire.admin.emails.templates.index', [
             'records' => $this->rows,
-            'statusOptions' => EmailTemplate::STATUES
+            'statusOptions' => EmailTemplate::STATUES,
+            'typeOptions' => EmailTemplate::TYPES
         ]);
     }
 }

@@ -30,6 +30,11 @@
             <button wire:click="clearFilters" class="btn btn-sm btn-dark rounded-0">Clear Filters</button>
         </div>
     </div>
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <div class="mb-3">
+            <strong>{{ number_format($records->total(), 0) }}</strong> total records
+        </div>
+    </div>
     <div class="table-responsive">
         <table class="table table-hover align-middle">
             <thead class="text-uppercase fs-6 text-nowrap">
@@ -40,10 +45,10 @@
                     <th>
                         <x-entities.entity-index-sort-button label="Name" field="name" :sorts="$sorts" buttonClasses="fs-6 fw-bold p-0" inactiveClasses="text-body" activeClasses="text-accent" />
                     </th>
-                    <th>
-                        Auto Response Template
-                    </th>
                     <th>Email Journey</th>
+                    <th>Auto Response</th>
+                    <th>Admin Response</th>
+                    <th>Partner Response</th>
                     <th>
                         <x-entities.entity-index-sort-button label="Status" field="status" :sorts="$sorts" buttonClasses="fs-6 fw-bold p-0" inactiveClasses="text-body" activeClasses="text-accent" />
                     </th>
@@ -55,6 +60,14 @@
                         <td class="text-nowrap">{{ $record->created_at }}</td>
                         <td class="text-nowrap">
                             <a href="{{ route('adminx.emails.triggers.show', $record->id) }}">{{ $record->name }}</a>
+                            <div class="small text-body-secondary">{{ $record->description }}</div>
+                        </td>
+                        <td>
+                            @if($record->emailJourney)
+                                <div>
+                                    <a href="{{ route('adminx.emails.journeys.show', $record->emailJourney->id) }}">{{ $record->emailJourney->name }}</a>
+                                </div>
+                            @endif
                         </td>
                         <td>
                             @if($record->autoResponse)
@@ -64,9 +77,19 @@
                             @endif
                         </td>
                         <td>
-                            @if($record->emailJourney)
+                            @if($record->adminResponse)
                                 <div>
-                                    <a href="{{ route('adminx.emails.journeys.show', $record->emailJourney->id) }}">{{ $record->emailJourney->name }}</a>
+                                    <a href="{{ route('adminx.emails.templates.show', $record->adminResponse->id) }}">{{ $record->adminResponse->name }}</a>
+                                </div>
+                            @endif
+                            @if($record->admin_users_count > 0)
+                                <div class="small text-body-secondary">{{ $record->admin_users_count }} admin users</div>
+                            @endif
+                        </td>
+                        <td>
+                            @if($record->partnerResponse)
+                                <div>
+                                    <a href="{{ route('adminx.emails.templates.show', $record->partnerResponse->id) }}">{{ $record->partnerResponse->name }}</a>
                                 </div>
                             @endif
                         </td>

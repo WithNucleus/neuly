@@ -7,6 +7,7 @@ use App\Models\BookableListingRequest;
 use App\Models\Dashboard;
 use App\Models\EduRequest;
 use App\Models\EmailPreference;
+use App\Models\EmailTrigger;
 use App\Models\Feedback;
 use App\Models\FollowList;
 use App\Models\Notification;
@@ -58,7 +59,7 @@ class User extends Authenticatable implements MustVerifyEmail
                 'user_id' => $user->id,
             ]);
 
-            EmailPreference::firstOrCreate(
+            EmailPreference::updateOrCreate(
                 ['email' => $user->email],
                 [
                     'email' => $user->email,
@@ -154,6 +155,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function emailPreference(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(EmailPreference::class);
+    }
+
+    public function emailTriggers(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(EmailTrigger::class, 'email_trigger_user')->withTimestamps();
     }
 
     /* Attributes */

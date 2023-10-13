@@ -19,6 +19,16 @@ class EmailTemplate extends Model
         self::STATUS_INACTIVE
     ];
 
+    const TYPE_USER = 'User';
+    const TYPE_ADMIN = 'Admin';
+    const TYPE_PARTNER = 'Partner';
+
+    const TYPES = [
+        self::TYPE_USER,
+        self::TYPE_ADMIN,
+        self::TYPE_PARTNER
+    ];
+
     /* Scopes  */
     public function scopeActive($query) {
         return $query->where('status', self::STATUS_ACTIVE);

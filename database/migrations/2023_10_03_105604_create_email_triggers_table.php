@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('status')->default(\App\Models\EmailTrigger::STATUS_ACTIVE);
             $table->foreignId('auto_response_id')->nullable()->references('id')->on('email_templates')->nullOnDelete();
             $table->foreignId('email_journey_id')->nullable()->references('id')->on('email_journeys')->nullOnDelete();
+            $table->foreignId('admin_response_id')->nullable()->references('id')->on('email_templates')->nullOnDelete();
+            $table->foreignId('partner_response_id')->nullable()->references('id')->on('email_templates')->nullOnDelete();
             $table->timestamps();
         });
     }

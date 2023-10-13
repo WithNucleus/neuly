@@ -81,6 +81,92 @@ return new class extends Migration
             'body' => "Hi {first_name},<br><br>Thanks for your interest in {entity_name}. We've relayed your information to the appropriate NeulyEDU partner and will follow-up with you shortly to gather more information from you or connect you directly with course enrollment.<br><br>If you have any questions before then, please don't hesitate to reach out to the Neuly Concierge team. We are always happy to help!<br><br>&ndash;The Neuly Team"
         ]);
 
+        // Admin Templates
+        $adminEnterpriseRequestTemplate = EmailTemplate::create([
+            'name' => 'System: Enterprise Request',
+            'subject' => 'Neuly Enterprise Request',
+            'type' => EmailTemplate::TYPE_ADMIN,
+            'body' => "A user just submitted a Neuly Enterprise Request. Please {click here} to follow-up."
+        ]);
+
+        $adminListingRequestTemplate = EmailTemplate::create([
+            'name' => 'System: Listing Request',
+            'subject' => 'Neuly Listing Request',
+            'type' => EmailTemplate::TYPE_ADMIN,
+            'body' => "A user just submitted a Neuly Listing Request. Please {click here} to follow-up."
+        ]);
+
+        $adminNewUserTemplate = EmailTemplate::create([
+            'name' => 'System: New User Registered',
+            'subject' => 'New User Registered',
+            'type' => EmailTemplate::TYPE_ADMIN,
+            'body' => "A new user just signed up for Neuly. Please {click here} to view their information."
+        ]);
+
+        $adminApiRequestTemplate = EmailTemplate::create([
+            'name' => 'System: API Request',
+            'subject' => 'Neuly API Request',
+            'type' => EmailTemplate::TYPE_ADMIN,
+            'body' => "A user just submitted a Neuly API Request. Please {click here} to follow-up."
+        ]);
+
+        $adminResearchRequestTemplate = EmailTemplate::create([
+            'name' => 'System: Research Request',
+            'subject' => 'Neuly Research Request',
+            'type' => EmailTemplate::TYPE_ADMIN,
+            'body' => "A user just submitted a Neuly Research Request. Please {click here} to follow-up."
+        ]);
+
+        $adminCareRequestTemplate = EmailTemplate::create([
+            'name' => 'System: Care Request',
+            'subject' => 'Neuly Care Request',
+            'type' => EmailTemplate::TYPE_ADMIN,
+            'body' => "A user just submitted a Neuly Care Request. Please {click here} to follow-up."
+        ]);
+
+        $adminEduRequestTemplate = EmailTemplate::create([
+            'name' => 'System: EDU Request',
+            'subject' => 'Neuly EDU Request',
+            'type' => EmailTemplate::TYPE_ADMIN,
+            'body' => "A user just submitted a Neuly EDU Request. Please {click here} to follow-up."
+        ]);
+
+        $adminRecruitingTrialsTemplate = EmailTemplate::create([
+            'name' => 'System: Recruiting Trials Request',
+            'subject' => 'Neuly Recruiting Trials Request',
+            'type' => EmailTemplate::TYPE_ADMIN,
+            'body' => "A user just submitted a Neuly Recruiting Trials Request. Please {click here} to follow-up."
+        ]);
+
+        $adminTaskAssignedTemplate = EmailTemplate::create([
+            'name' => 'System: Neuly Task Assigned',
+            'subject' => 'Neuly Task Assigned',
+            'type' => EmailTemplate::TYPE_ADMIN,
+            'body' => "A new task has been assigned to your Neuly account. Please {click here} to take action."
+        ]);
+
+        $adminFollowUpNeededTemplate = EmailTemplate::create([
+            'name' => 'System: Follow-Up Needed',
+            'subject' => 'Neuly: Follow-Up Needed',
+            'type' => EmailTemplate::TYPE_ADMIN,
+            'body' => "A Neuly contact requires follow-up. Please {click here} to take action."
+        ]);
+
+        // Partner Templates
+        $partnerCareRequestTemplate = EmailTemplate::create([
+            'name' => 'Partner: Care Listing Inquiry',
+            'subject' => 'Neuly Listing Inquiry',
+            'type' => EmailTemplate::TYPE_PARTNER,
+            'body' => "Howdy partner,<br><br>A Neuly user just submitted an inquiry for your services.<br><br>Please {click here} and/or use the information below to follow-up:<br><br>{Name}<br>{Email}<br>{Phone}<br>{Date Requested}<br>{Message}"
+        ]);
+
+        $partnerEduRequestTemplate = EmailTemplate::create([
+            'name' => 'Partner: EDU Listing Inquiry',
+            'subject' => 'Neuly Listing Inquiry',
+            'type' => EmailTemplate::TYPE_PARTNER,
+            'body' => "Howdy partner,<br><br>A Neuly user wants more information on your course.<br><br>Please {click here} and/or use the information below to follow-up:<br><br>{Name}<br>{Email}<br>{Phone}<br>{Location}<br>{Budget}<br>{Certification}<br>{Message}"
+        ]);
+
         /**
          * Auto-Response Campaigns
          */
@@ -169,76 +255,118 @@ return new class extends Migration
         /**
          * Triggers
          */
-        EmailTrigger::create([
+        $registrationTrigger = EmailTrigger::create([
             'name' => 'Registration',
             'description' => 'Sends welcome email and starts First Impression journey',
             'trigger' => EmailTrigger::TRIGGER_USER_ONBOARDING_DETAILS,
             'status' => EmailTrigger::STATUS_ACTIVE,
             'auto_response_id' => $welcomeIntroTemplate->id,
-            'email_journey_id' => $firstImpressionJourney->id
+            'email_journey_id' => $firstImpressionJourney->id,
+            'admin_response_id' => $adminNewUserTemplate->id
         ]);
 
-        EmailTrigger::create([
+        $researchTrigger = EmailTrigger::create([
             'name' => 'Research Request',
             'description' => 'Sends research request auto-response and starts Enterprise journey',
             'trigger' => EmailTrigger::TRIGGER_RESEARCH_REQUEST,
             'status' => EmailTrigger::STATUS_ACTIVE,
             'auto_response_id' => $researchRequestTemplate->id,
-            'email_journey_id' => $enterpriseJourney->id
+            'email_journey_id' => $enterpriseJourney->id,
+            'admin_response_id' => $adminResearchRequestTemplate->id
         ]);
 
-        EmailTrigger::create([
+        $listingRequestTrigger = EmailTrigger::create([
             'name' => 'New Listing Request',
             'description' => 'Sends listing request auto-response',
             'trigger' => EmailTrigger::TRIGGER_NEW_LISTING_REQUEST,
             'status' => EmailTrigger::STATUS_ACTIVE,
             'auto_response_id' => $listingRequestTemplate->id,
+            'admin_response_id' => $adminListingRequestTemplate->id
         ]);
 
-        EmailTrigger::create([
+        $apiRequestTrigger = EmailTrigger::create([
             'name' => 'API Request',
             'description' => 'Sends API request auto-response and starts Partner journey',
             'trigger' => EmailTrigger::TRIGGER_API_REQUEST,
             'status' => EmailTrigger::STATUS_ACTIVE,
             'auto_response_id' => $apiRequestTemplate->id,
-            'email_journey_id' => $partnerJourney->id
+            'email_journey_id' => $partnerJourney->id,
+            'admin_response_id' => $adminApiRequestTemplate->id
         ]);
 
-        EmailTrigger::create([
+        $enterpriseTrigger = EmailTrigger::create([
             'name' => 'Enterprise Request',
             'description' => 'Sends enterprise request auto-response and starts Partner journey',
             'trigger' => EmailTrigger::TRIGGER_ENTERPRISE_REQUEST,
             'status' => EmailTrigger::STATUS_ACTIVE,
             'auto_response_id' => $enterpriseRequestTemplate->id,
-            'email_journey_id' => $enterpriseJourney->id
+            'email_journey_id' => $enterpriseJourney->id,
+            'admin_response_id' => $adminEnterpriseRequestTemplate->id
         ]);
 
-        EmailTrigger::create([
+        $recruitingTrialsTrigger = EmailTrigger::create([
             'name' => 'Recruiting Trials Request',
             'description' => 'Sends recruiting trials request auto-response and starts Care journey',
             'trigger' => EmailTrigger::TRIGGER_RECRUITING_CLINICAL_TRIALS_REQUEST,
             'status' => EmailTrigger::STATUS_ACTIVE,
             'auto_response_id' => $recruitingTrialsTemplate->id,
-            'email_journey_id' => $careJourney->id
+            'email_journey_id' => $careJourney->id,
+            'admin_response_id' => $adminRecruitingTrialsTemplate->id
         ]);
 
-        EmailTrigger::create([
+        $careTrigger = EmailTrigger::create([
             'name' => 'Care Request',
             'description' => 'Sends care request auto-response and starts Care journey',
             'trigger' => EmailTrigger::TRIGGER_CARE_REQUEST,
             'status' => EmailTrigger::STATUS_ACTIVE,
             'auto_response_id' => $neulyCareRequestTemplate->id,
-            'email_journey_id' => $careJourney->id
+            'email_journey_id' => $careJourney->id,
+            'partner_response_id' => $partnerCareRequestTemplate->id,
+            'admin_response_id' => $adminCareRequestTemplate->id
         ]);
 
-        EmailTrigger::create([
+        $eduTrigger = EmailTrigger::create([
             'name' => 'EDU Request',
             'description' => 'Sends care request auto-response and starts Care journey',
             'trigger' => EmailTrigger::TRIGGER_EDU_REQUEST,
             'status' => EmailTrigger::STATUS_ACTIVE,
             'auto_response_id' => $neulyEduRequestTemplate->id,
-            'email_journey_id' => $eduJourney->id
+            'email_journey_id' => $eduJourney->id,
+            'partner_response_id' => $partnerEduRequestTemplate->id,
+            'admin_response_id' => $adminEduRequestTemplate->id
         ]);
+
+        EmailTrigger::create([
+            'name' => 'Task Assigned',
+            'description' => 'Sends internal notifications to user when a task is assigned',
+            'trigger' => EmailTrigger::TRIGGER_CRM_ASSIGNED,
+            'status' => EmailTrigger::STATUS_ACTIVE,
+            'admin_response_id' => $adminTaskAssignedTemplate->id
+        ]);
+
+        EmailTrigger::create([
+            'name' => 'Follow-Up Needed',
+            'description' => 'Sends internal notifications to user when a follow-up is needed',
+            'trigger' => EmailTrigger::TRIGGER_CRM_FOLLOW_UP,
+            'status' => EmailTrigger::STATUS_ACTIVE,
+            'admin_response_id' => $adminFollowUpNeededTemplate->id
+        ]);
+
+        $adminEmails = [
+            'sydney@gotsmith.com',
+            'logan@nucleus.center',
+            'brittany@atlasconsultinginc.com'
+        ];
+
+        $userIds = \App\User::whereIn('email', $adminEmails)->pluck('id')->toArray();
+        $registrationTrigger->adminUsers()->sync($userIds);
+        $listingRequestTrigger->adminUsers()->sync($userIds);
+        $enterpriseTrigger->adminUsers()->sync($userIds);
+        $apiRequestTrigger->adminUsers()->sync($userIds);
+        $researchTrigger->adminUsers()->sync($userIds);
+        $careTrigger->adminUsers()->sync($userIds);
+        $eduTrigger->adminUsers()->sync($userIds);
+        $recruitingTrialsTrigger->adminUsers()->sync($userIds);
     }
 
     public function down()

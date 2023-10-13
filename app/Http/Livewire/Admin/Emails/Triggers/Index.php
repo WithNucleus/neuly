@@ -21,6 +21,10 @@ class Index extends Component
         'status' => [],
     ];
 
+    public function mount() {
+        $this->perPage = 10;
+    }
+
     public function updatingSearch() {
         $this->resetPage();
     }
@@ -68,12 +72,17 @@ class Index extends Component
     {
         $query = EmailTrigger::with([
                 'autoResponse',
+                'adminResponse',
                 'emailJourney',
             ])
+            ->withCount(['adminUsers'])
             ->when($this->search, function($query, $search) {
                 return $query
 
                     ->orwhereHas('autoResponse', function($query) use ($search) {
+                        $query->where('name', 'like', '%' . $search . '%');
+                    })
+                    ->orwhereHas('adminResponse', function($query) use ($search) {
                         $query->where('name', 'like', '%' . $search . '%');
                     })
                     ->orwhereHas('emailJourney', function($query) use ($search) {

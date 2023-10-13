@@ -1,11 +1,11 @@
 <div>
     <div class="d-md-flex flex-wrap mt-4">
 
-        <div class=" me-md-5 mb-3">
-            <x-livewire-filters.search label="Search" placeholder="Search" search="{{ $search }}" tooltip="Search by name, email, etc." />
+        <div class="me-md-5 mb-3">
+            <x-livewire-filters.search label="Search" placeholder="Search" search="{{ $search }}" tooltip="Search by name, trigger, etc." />
         </div>
 
-        <div class="filter-widget me-md-5 mb-3">
+        <div class="filter-widget me-md-4 mb-3">
             <div class="btn-group">
                 <button type="button" class="btn btn-md @if($filters['status']) btn-accent @else btn-primary @endif btn-primary dropdown-toggle rounded-0" data-bs-toggle="dropdown" aria-expanded="false">
                     Filter by Status
@@ -26,8 +26,34 @@
             </div>
         </div>
 
+        <div class="filter-widget me-md-4 mb-3">
+            <div class="btn-group">
+                <button type="button" class="btn btn-md @if($filters['type']) btn-accent @else btn-primary @endif btn-primary dropdown-toggle rounded-0" data-bs-toggle="dropdown" aria-expanded="false">
+                    Filter by Type
+                </button>
+                <ul class="dropdown-menu" style="min-width: 220px">
+                    @foreach ($typeOptions as $optionId => $optionName)
+                        <li class="px-3">
+                            <div class="form-check form-check-small form-check-inline">
+                                <input wire:model="filters.type" class="form-check-input" type="checkbox" value="{{ $optionName }}"
+                                       id="filter-type-{{ $optionId }}" @if(in_array($optionName, $filters['type'])) checked @endif>
+                                <label class="form-check-label @if(in_array($optionName, $filters['type'])) fw-bold @endif" for="filter-type-{{ $optionId }}">
+                                    <span>{{ ucwords($optionName) }}</span>
+                                </label>
+                            </div>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+
         <div class="filter-widget ms-auto">
             <button wire:click="clearFilters" class="btn btn-sm btn-dark rounded-0">Clear Filters</button>
+        </div>
+    </div>
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <div class="mb-3">
+            <strong>{{ number_format($records->total(), 0) }}</strong> total records
         </div>
     </div>
     <div class="table-responsive">
@@ -38,10 +64,16 @@
                         <x-entities.entity-index-sort-button label="Created" field="created_at" :sorts="$sorts" buttonClasses="fs-6 fw-bold p-0" inactiveClasses="text-body" activeClasses="text-accent" />
                     </th>
                     <th>
-                        <x-entities.entity-index-sort-button label="Name" field="name" :sorts="$sorts" buttonClasses="fs-6 fw-bold p-0" inactiveClasses="text-body" activeClasses="text-accent" />
+                        <x-entities.entity-index-sort-button label="Template Name" field="name" :sorts="$sorts" buttonClasses="fs-6 fw-bold p-0" inactiveClasses="text-body" activeClasses="text-accent" />
+                    </th>
+                    <th>
+                        <x-entities.entity-index-sort-button label="Subject" field="subject" :sorts="$sorts" buttonClasses="fs-6 fw-bold p-0" inactiveClasses="text-body" activeClasses="text-accent" />
                     </th>
                     <th>
                         <x-entities.entity-index-sort-button label="Status" field="status" :sorts="$sorts" buttonClasses="fs-6 fw-bold p-0" inactiveClasses="text-body" activeClasses="text-accent" />
+                    </th>
+                    <th>
+                        <x-entities.entity-index-sort-button label="Type" field="type" :sorts="$sorts" buttonClasses="fs-6 fw-bold p-0" inactiveClasses="text-body" activeClasses="text-accent" />
                     </th>
                     <th>Journey</th>
                     <th>Trigger</th>
@@ -54,17 +86,21 @@
                         <td class="text-nowrap">
                             <a href="{{ route('adminx.emails.templates.show', $record->id) }}">{{ $record->name }}</a>
                         </td>
+                        <td class="text-nowrap">
+                            {{ $record->subject }}
+                        </td>
                         <td class="text-nowrap">{{ $record->status }}</td>
+                        <td class="text-nowrap">{{ $record->type }}</td>
                         <td>
                             @foreach($record->emailSequences as $item)
-                                <div class="small">
+                                <div class="text-nowrap">
                                     <a href="{{ route('adminx.emails.journeys.show', $item->id) }}">{{ $item->emailJourney->name }}</a>
                                 </div>
                             @endforeach
                         </td>
                         <td>
                             @foreach($record->emailTriggers as $trigger)
-                                <div class="small">
+                                <div class="text-nowrap">
                                     <a href="{{ route('adminx.emails.triggers.show', $trigger->id) }}">{{ $trigger->name }}</a>
                                 </div>
                             @endforeach

@@ -15,6 +15,10 @@
                     <td class="ps-0"><code>{entity_name}</code></td>
                     <td>Name of the entity associated with the request</td>
                 </tr>
+                <tr>
+                    <td class="ps-0"><code>{click here}</code></td>
+                    <td>Replaced with a link from system-generated {url} merge field</td>
+                </tr>
             </table>
         </div>
     </div>

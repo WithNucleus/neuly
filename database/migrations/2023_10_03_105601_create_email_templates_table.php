@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name')->unique()->index();
             $table->string('status')->default(\App\Models\EmailTemplate::STATUS_ACTIVE);
+            $table->string('type')->default(\App\Models\EmailTemplate::TYPE_USER);
             $table->string('from_name')->default(config('mail.from.name'));
             $table->string('from_email')->default(config('mail.from.address'));
             $table->string('subject')->index();

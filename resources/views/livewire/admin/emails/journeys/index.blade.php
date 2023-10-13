@@ -30,6 +30,11 @@
             <button wire:click="clearFilters" class="btn btn-sm btn-dark rounded-0">Clear Filters</button>
         </div>
     </div>
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <div class="mb-3">
+            <strong>{{ number_format($records->total(), 0) }}</strong> total records
+        </div>
+    </div>
     <div class="table-responsive">
         <table class="table table-hover align-middle">
             <thead class="text-uppercase fs-6 text-nowrap">

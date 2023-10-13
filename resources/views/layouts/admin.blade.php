@@ -47,7 +47,6 @@
                                     <x-sidebar.list-group-item url="" label="Referrers" />
                                 </x-sidebar.list-group>
                                 <x-sidebar.list-group groupRoute="care" label="Care">
-                                    <x-sidebar.list-group-item url="{{ route('adminx.care.listing-requests') }}" label="Bookable Inquiries" />
                                     <x-sidebar.list-group-item url="{{ route('adminx.care.care-requests') }}" label="Care Inquiries" />
                                     <x-sidebar.list-group-item url="" label="Partners" />
                                     <x-sidebar.list-group-item url="" label="Referrers" />

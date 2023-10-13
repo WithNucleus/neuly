@@ -63,6 +63,11 @@
             </button>
             <ul class="dropdown-menu">
                 <li>
+                    <a wire:click="replaceMergeValues" class="dropdown-item" href="#">
+                        <i class="fa-sharp fa-solid fa-code fa-fw me-1"></i>Replace merge values
+                    </a>
+                </li>
+                <li>
                     <a wire:click="deleteRecords" class="dropdown-item" href="#">
                         <i class="fa-sharp fa-solid fa-trash fa-fw me-1"></i>Delete un-sent emails
                     </a>
@@ -123,11 +128,11 @@
                             <span class="badge text-uppercase {{ $record->status_color }}">{{ $record->status }}</span>
                         </td>
                         <td>
-                            {{ $record->emailTemplate->name }}
+                            <a href="{{ route('adminx.emails.templates.show', $record->emailTemplate->id) }}">{{ $record->emailTemplate->name }}</a>
                         </td>
                         <td>
                             @if($record->emailTrigger)
-                                <span>{{ $record->emailTrigger->name }}</span>
+                                <a href="{{ route('adminx.emails.triggers.show', $record->emailTrigger->id) }}">{{ $record->emailTrigger->name }}</a>
                             @endif
                         </td>
                         <td>

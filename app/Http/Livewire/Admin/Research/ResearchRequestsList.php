@@ -6,6 +6,8 @@ use App\Http\Livewire\Traits\WithBulkActions;
 use App\Http\Livewire\Traits\WithCachedRows;
 use App\Http\Livewire\Traits\WithPerPagePagination;
 use App\Http\Livewire\Traits\WithSorting;
+use App\Jobs\EmailMarketing\CreateAdminEmailsFromArray;
+use App\Models\EmailTrigger;
 use App\Models\ResearchRequest;
 use App\User;
 use Livewire\Component;
@@ -15,13 +17,15 @@ class ResearchRequestsList extends Component
     use WithPerPagePagination, WithBulkActions, WithCachedRows, WithSorting;
 
     protected string $paginationTheme = 'bootstrap';
-    protected $queryString = ['search'];
+    protected $queryString = ['search', 'find'];
 
     public ?string $search = null;
     public array $filters = [
         'type' => [],
         'status' => []
     ];
+
+    public ?int $find = null;
 
     public $selectedRecord;
     public ?string $assignedUser = NULL;
@@ -45,6 +49,8 @@ class ResearchRequestsList extends Component
 
         if($this->assignedUser) {
             $this->selectedRecord->assignee_id = $this->assignedUser;
+            CreateAdminEmailsFromArray::dispatch(EmailTrigger::TRIGGER_CRM_ASSIGNED, [$this->assignedUser], ['url' => route('adminx.research.research-requests', ['find' => $this->selectedRecord->id])]);
+            $this->dispatchBrowserEvent('toast-notification',  ['text' => 'Email notification sent!', 'background' => 'bg-success']);
         } else {
             $this->selectedRecord->assignee_id = NULL;
         }
@@ -58,6 +64,16 @@ class ResearchRequestsList extends Component
         $this->selectedRecord->status = $status;
         $this->selectedRecord->save();
         $this->selectedRecord->refresh();
+
+        if ($status === ResearchRequest::STATUS_AWAITING_RESPONSE) {
+            if($this->selectedRecord->assignee_id) {
+                CreateAdminEmailsFromArray::dispatch(EmailTrigger::TRIGGER_CRM_FOLLOW_UP, [$this->selectedRecord->assignee_id], ['url' => route('adminx.research.research-requests', ['find' => $this->selectedRecord->id])]);
+                $this->dispatchBrowserEvent('toast-notification',  ['text' => 'Email notification sent!', 'background' => 'bg-success']);
+            } else {
+                $this->dispatchBrowserEvent('toast-notification',  ['text' => 'There is no assigned user to be notified!', 'background' => 'bg-danger']);
+            }
+        }
+
         $this->dispatchBrowserEvent('hide-dynamic-modal');
     }
 
@@ -78,6 +94,7 @@ class ResearchRequestsList extends Component
         $this->reset('search');
         $this->reset('filters');
         $this->reset('sorts');
+        $this->reset('find');
         $this->resetPage();
     }
 
@@ -126,6 +143,9 @@ class ResearchRequestsList extends Component
             })
             ->when($this->filters['status'], function($query, $valueArray) {
                 return $query->whereIn('status', $valueArray);
+            })
+            ->when($this->find, function($query, $id) {
+                return $query->where('id', $id);
             });
 
         return $this->applySorting($query);

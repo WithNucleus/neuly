@@ -34,6 +34,8 @@ class Email extends Model
     const DECLINE_REASON_LABEL = 'Decline';
     const DECLINE_REASON_BLACKLIST = 'Email in blacklist';
 
+    const MERGE_FIELD_URL = 'url';
+
     protected $casts = [
         'merge_fields' => 'array',
         'response' => 'array'
@@ -52,6 +54,16 @@ class Email extends Model
     }
 
     /* Scopes  */
+    public function scopeCanReplaceMergeValues($query) {
+        return $query->whereIn('status', [
+            self::STATUS_NEW,
+            self::STATUS_PENDING,
+            self::STATUS_READY,
+            self::STATUS_FAILED,
+            self::STATUS_DECLINED
+        ]);
+    }
+
     public function scopeDeletable($query) {
         return $query->whereIn('status', [
             self::STATUS_NEW,
