@@ -32,6 +32,19 @@ Route::middleware(['auth', 'can:admin login'])->prefix('/adminx')->name('adminx.
         Route::get('/students', [App\Http\Controllers\Adminx\Edu\EduController::class, 'students'])->name('students');
     });
 
+    Route::prefix('/emails')->name('emails.')->middleware('permission:email marketing')->group(function() {
+        Route::get('/emails', [App\Http\Controllers\Adminx\Emails\EmailController::class, 'emails'])->name('emails.index');
+        Route::get('/emails/{id}', [App\Http\Controllers\Adminx\Emails\EmailController::class, 'emailShow'])->name('emails.show');
+        Route::get('/templates', [App\Http\Controllers\Adminx\Emails\EmailController::class, 'templates'])->name('templates.index');
+        Route::get('/templates/{id}', [App\Http\Controllers\Adminx\Emails\EmailController::class, 'templateShow'])->name('templates.show');
+        Route::get('/journeys', [App\Http\Controllers\Adminx\Emails\EmailController::class, 'journeys'])->name('journeys.index');
+        Route::get('/journeys/{id}', [App\Http\Controllers\Adminx\Emails\EmailController::class, 'journeyShow'])->name('journeys.show');
+        Route::get('/triggers', [App\Http\Controllers\Adminx\Emails\EmailController::class, 'triggers'])->name('triggers.index');
+        Route::get('/triggers/{id}', [App\Http\Controllers\Adminx\Emails\EmailController::class, 'triggerShow'])->name('triggers.show');
+        Route::get('/preferences', [App\Http\Controllers\Adminx\Emails\EmailController::class, 'preferences'])->name('preferences.index');
+        Route::get('/preferences/{email}', [App\Http\Controllers\Adminx\Emails\EmailController::class, 'preferenceShow'])->name('preferences.show');
+    });
+
     // NAV TILES
     Route::prefix('/nav-tiles')->name('nav-tiles.')->middleware('permission:manage navigation tiles')->group(function () {
         Route::get('/', [\App\Http\Controllers\Adminx\NavigationTiles\NavigationTileController::class, 'index'])->name('index');

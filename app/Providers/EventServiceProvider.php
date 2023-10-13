@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Events\SendNotification;
+use App\Events\UserOnboardingDetailsCompleted;
 use App\Listeners\CreateAppNotification;
 use App\Listeners\CreateMailNotification;
 use App\Listeners\RevokeOldOauthTokens;
+use App\Listeners\StartUserOnboardingEmails;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -25,6 +27,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         Registered::class => [
             SendEmailVerificationNotification::class,
+        ],
+        UserOnboardingDetailsCompleted::class => [
+            StartUserOnboardingEmails::class
         ],
         AccessTokenCreated::class => [
             RevokeOldOauthTokens::class,

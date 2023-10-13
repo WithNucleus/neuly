@@ -47,7 +47,6 @@
                                     <x-sidebar.list-group-item url="" label="Referrers" />
                                 </x-sidebar.list-group>
                                 <x-sidebar.list-group groupRoute="care" label="Care">
-                                    <x-sidebar.list-group-item url="{{ route('adminx.care.listing-requests') }}" label="Bookable Inquiries" />
                                     <x-sidebar.list-group-item url="{{ route('adminx.care.care-requests') }}" label="Care Inquiries" />
                                     <x-sidebar.list-group-item url="" label="Partners" />
                                     <x-sidebar.list-group-item url="" label="Referrers" />
@@ -78,6 +77,17 @@
                                         <x-sidebar.list-group-item url="{{ route('adminx.misc.feedback') }}" label="Feedback" />
                                         <x-sidebar.list-group-item url="{{ route('adminx.misc.search-logs') }}" label="Search Logs" />
                                     @endcan
+                                </x-sidebar.list-group>
+                            @endcan
+
+                            @can('email marketing')
+                                <x-sidebar.list-group groupRoute="emails" label="Email Marketing">
+                                    <x-sidebar.list-group-item url="{{ route('adminx.emails.templates.index') }}" label="Email Templates" />
+                                    <x-sidebar.list-group-item url="{{ route('adminx.emails.journeys.index') }}" label="Email Journeys" />
+                                    <x-sidebar.list-group-item url="{{ route('adminx.emails.triggers.index') }}" label="Email Triggers" />
+                                    <x-sidebar.list-group-item url="{{ route('adminx.emails.emails.index') }}" label="Email History" />
+                                    <x-sidebar.list-group-item url="{{ route('adminx.emails.preferences.index') }}" label="Email Preferences" />
+{{--                                    <x-sidebar.list-group-item url="{{ route('adminx.emails.drips') }}" label="Email Drips" />--}}
                                 </x-sidebar.list-group>
                             @endcan
 
@@ -121,5 +131,12 @@
         @yield('after_scripts')
         @livewireScripts
         @yield('livewire_scripts')
+        <script>
+            let directoryElement = document.querySelector('.adminx-content');
+            let directoryTop = directoryElement.offsetTop - 100;
+            Livewire.on('gotoTop', () => {
+                directoryElement.scrollTop = directoryTop;
+            });
+        </script>
     </body>
 </html>

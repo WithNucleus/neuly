@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Events\RegisteredAndVerified;
+use App\Events\UserOnboardingDetailsCompleted;
 use App\Http\Controllers\Controller;
 use App\Models\UserSocialAuth;
 use App\User;
@@ -135,7 +135,7 @@ class LoginController extends Controller
                     'email_verified_at' => Carbon::now(),
                 ])->assignRole('Subscriber');
 
-                event(new RegisteredAndVerified($user));
+                event(new UserOnboardingDetailsCompleted($user));
 
                 $socialAuth = new UserSocialAuth();
                 $socialAuth->user_id = $user->id;

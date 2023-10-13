@@ -8,6 +8,8 @@ use App\Http\Livewire\Traits\WithBulkActions;
 use App\Http\Livewire\Traits\WithCachedRows;
 use App\Http\Livewire\Traits\WithPerPagePagination;
 use App\Http\Livewire\Traits\WithSorting;
+use App\Models\BookableListing;
+use App\Models\CareRequest;
 use App\Models\Clinicaltrial;
 use App\Models\ClinicalTrialDetails\CtCondition;
 use App\Models\Focus;
@@ -90,6 +92,25 @@ class RecruitingTrials extends Component
     public function submit() {
         $this->validate();
 
+        CareRequest::create([
+            'name' => $this->first_name . ' ' . $this->last_name,
+            'email' => $this->email,
+            'phone' => $this->phone,
+            'type' => CareRequest::TYPE_CLINICAL_TRIAL_PARTICIPANT,
+            'status' => CareRequest::STATUS_OPEN,
+            'message' => $this->message,
+            'data' => [
+                'filters' => $this->filters,
+                'age' => $this->age,
+                'sex' => $this->sex,
+                'healthy' => $this->healthy,
+                'conditions' => $this->conditions,
+                'treatments' => $this->treatments,
+            ],
+            'user_id' => $this->userId,
+            'ip' => $this->ip,
+        ]);
+
         SearchLog::create([
             'term' => $this->search ?? 'empty',
             'type' => SearchLog::TYPE_RECRUITING_CONCIERGE,
@@ -102,8 +123,6 @@ class RecruitingTrials extends Component
             ],
             'user_id' => $this->userId,
         ]);
-
-        SlackAlert::to('dev')->message("**Recruiting Trials Concierge Request**" . "\n" . 'Name: ' . $this->name . "\n" . "Email: " . $this->email);
 
         $this->conciergeSuccess = "Great! We've received your info and will be in touch soon.";
     }

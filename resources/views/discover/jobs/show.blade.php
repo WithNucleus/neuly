@@ -13,7 +13,7 @@
 
     <div class="container py-4">
 
-        <x-entities.entity-show-title-meta title="{{ $job->name }}" headingClasses="text-success h2 text-transform-none mb-2 max-width-780">
+        <x-entities.entity-show-title-meta title="{{ urlencode($job->name) }}" headingClasses="text-success h2 text-transform-none mb-2 max-width-780">
             <div class="me-3">
                 @include('members.follow.button', [
                     'followable_type' => get_class($job),

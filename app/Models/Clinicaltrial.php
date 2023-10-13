@@ -413,6 +413,15 @@ class Clinicaltrial extends Model implements EntityContract
         return NULL;
     }
 
+    public function getResponsiblePartyUrlAttribute(): ?string
+    {
+        if(get_class($this->responsibleParty) === \App\Models\Person::class) {
+            return route('discover.people.show', $this->responsibleParty->slug);
+        }
+
+        return NULL;
+    }
+
     public function getIsRecruitingAttribute(): bool
     {
         if ($this->status === self::STATUS_RECRUITING) {

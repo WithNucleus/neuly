@@ -53,6 +53,14 @@
                     <textarea wire:model="message" name="message" id="message" rows="4" class="form-control"></textarea>
                     @error('message') <div class="text-danger small">{{ $message }}</div> @enderror
                 </div>
+                <div class="col-12 mb-3">
+                    <div class="form-check">
+                        <input wire:model="open_to_trials" class="form-check-input" value="false" type="checkbox" id="open_to_trials">
+                        <label class="form-check-label" for="other_trials">
+                            I'm interested to learn more about other clinical trials that I may be eligible for
+                        </label>
+                    </div>
+                </div>
                 <div>
                     <button type="submit" class="btn btn-accent">Send</button>
                 </div>

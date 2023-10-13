@@ -206,7 +206,7 @@ $dates = [
         <div class="lead my-2">
             <strong class="text-uppercase me-1">Lead Sponsor:</strong>
             @if($clinicalTrial->leadSponsor)
-                <span>{{ $clinicalTrial->leadSponsor->name }}</span>
+                <a href="{{ $clinicalTrial->lead_sponsor_url }}">{{ $clinicalTrial->leadSponsor->name }}</a>
             @else
                 <span>N/A</span>
             @endif
@@ -219,7 +219,7 @@ $dates = [
         <div class="lead my-2">
             <strong class="text-uppercase me-1">Responsible Party:</strong>
             @if($clinicalTrial->responsibleParty)
-                {{ $clinicalTrial->responsibleParty->name }}
+                <a href="{{ $clinicalTrial->responsible_party_url }}">{{ $clinicalTrial->responsibleParty->name }}</a>
             @else
                 <span>N/A</span>
             @endif
@@ -284,60 +284,73 @@ $dates = [
     </div>
 @endif
 
-<div class="my-5 max-width-780">
-    <h3 class="text-primary h4 border-bottom border-2 border-secondary">Eligibility Criteria</h3>
-    <table class="table table-sm table-borderless w-auto">
-        @if($clinicalTrial->gender)
-            <tr>
-                <th class="text-end text-uppercase">Sex:</th>
-                <td>{{ $clinicalTrial->gender }}</td>
-            </tr>
-        @endif
-        @if($clinicalTrial->min_age)
-            <tr>
-                <th class="text-end text-uppercase border-top-0">Minimum Age:</th>
-                <td>{{ $clinicalTrial->min_age }}</td>
-            </tr>
-        @endif
-        @if($clinicalTrial->max_age)
-            <tr>
-                <th class="text-end text-uppercase">Maximum Age:</th>
-                <td>{{ $clinicalTrial->max_age }}</td>
-            </tr>
-        @endif
-        @if($clinicalTrial->age_groups)
-            <tr>
-                <th class="text-end text-uppercase">Age Groups:</th>
-                <td>
-                    @foreach($clinicalTrial->age_groups as $group)
-                        <span>{{ $group }}</span>
-                        @if(!$loop->last) <span class="text-muted">/</span> @endif
-                    @endforeach
-                </td>
-            </tr>
-        @endif
-        @if($clinicalTrial->healthy_volunteers !== NULL)
-            <tr>
-                <th class="text-end text-uppercase">Healthy Volunteers:</th>
-                <td>{{ ($clinicalTrial->healthy_volunteers === 1) ? 'Yes' : 'No' }}</td>
-            </tr>
-        @endif
-    </table>
-    @if($clinicalTrial->eligibility_criteria)
-        <div class="mt-2">
-            <h3 class="h5 collapse-heading border-bottom">
-                <button data-bs-toggle="collapse" href="#detailedEligibilityCriteria" aria-expanded="false" aria-controls="detailedEligibilityCriteria" class="btn px-0">
-                    <span class="d-block mt-1">Detailed Eligibility Criteria</span>
-                    <i class="fa-sharp fa-solid fa-angle-down"></i>
-                </button>
-            </h3>
-            <div class="collapse" id="detailedEligibilityCriteria">
-                <div class="pt-2">
-                    {!! $clinicalTrial->eligibility_criteria !!}
+<div class="d-lg-flex my-5">
+    <div class="max-width-780 flex-grow-1">
+        <h3 class="text-primary h4 border-bottom border-2 border-secondary">Eligibility Criteria</h3>
+        <table class="table table-sm table-borderless w-auto">
+            @if($clinicalTrial->gender)
+                <tr>
+                    <th class="text-end text-uppercase">Sex:</th>
+                    <td>{{ $clinicalTrial->gender }}</td>
+                </tr>
+            @endif
+            @if($clinicalTrial->min_age)
+                <tr>
+                    <th class="text-end text-uppercase border-top-0">Minimum Age:</th>
+                    <td>{{ $clinicalTrial->min_age }}</td>
+                </tr>
+            @endif
+            @if($clinicalTrial->max_age)
+                <tr>
+                    <th class="text-end text-uppercase">Maximum Age:</th>
+                    <td>{{ $clinicalTrial->max_age }}</td>
+                </tr>
+            @endif
+            @if($clinicalTrial->age_groups)
+                <tr>
+                    <th class="text-end text-uppercase">Age Groups:</th>
+                    <td>
+                        @foreach($clinicalTrial->age_groups as $group)
+                            <span>{{ $group }}</span>
+                            @if(!$loop->last) <span class="text-muted">/</span> @endif
+                        @endforeach
+                    </td>
+                </tr>
+            @endif
+            @if($clinicalTrial->healthy_volunteers !== NULL)
+                <tr>
+                    <th class="text-end text-uppercase">Healthy Volunteers:</th>
+                    <td>{{ ($clinicalTrial->healthy_volunteers === 1) ? 'Yes' : 'No' }}</td>
+                </tr>
+            @endif
+        </table>
+        @if($clinicalTrial->eligibility_criteria)
+            <div class="mt-2">
+                <h3 class="h5 collapse-heading border-bottom">
+                    <button data-bs-toggle="collapse" href="#detailedEligibilityCriteria" aria-expanded="false" aria-controls="detailedEligibilityCriteria" class="btn px-0">
+                        <span class="d-block mt-1">Detailed Eligibility Criteria</span>
+                        <i class="fa-sharp fa-solid fa-angle-down"></i>
+                    </button>
+                </h3>
+                <div class="collapse" id="detailedEligibilityCriteria">
+                    <div class="pt-2">
+                        {!! $clinicalTrial->eligibility_criteria !!}
+                    </div>
                 </div>
             </div>
-        </div>
-    @endif
+        @endif
+    </div>
+    <div>
+        @if($clinicalTrial->is_recruiting)
+            <div class="ms-lg-5 max-width-400 border border-2 border-accent p-4 mt-5">
+                <p class="h4 text-success">This clinical trial is recruiting</p>
+                <p class="fs-6">Are you interested in participating in this trial or others? We'd love to help.</p>
+                <button type="button" class="btn btn-lg btn-cta btn-primary" data-bs-toggle="modal" data-bs-target="#clinical-trial-participant-modal">
+                    Yes, I'm Interested
+                </button>
+            </div>
+        @endif
+    </div>
 </div>
 
 @if($clinicalTrial->primary_outcomes OR $clinicalTrial->secondary_outcomes OR $clinicalTrial->other_outcomes)

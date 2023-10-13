@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Jobs\EmailMarketing\CreateAdminEmailsFromArray;
+use App\Jobs\EmailMarketing\CreateAdminEmailsFromTrigger;
+use App\Jobs\EmailMarketing\CreateCampaignEmails;
 use App\Models\Contracts\CrmActionsContract;
 use App\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -43,6 +46,7 @@ class ResearchRequest extends Model implements CrmActionsContract
     protected static function booted()
     {
         static::created(function ($researchRequest) {
+
             SlackAlert::to('default')->message('*NeulyRESEARCH Request*' . "\n" .
                 '*Type:* ' . $researchRequest->type . "\n" .
                 '*Name:* ' . $researchRequest->name . "\n" .
@@ -50,8 +54,29 @@ class ResearchRequest extends Model implements CrmActionsContract
                 '*Phone:* ' . $researchRequest->phone . "\n" .
                 '*Message:*' . "\n" .
                 '```' . $researchRequest->message . '```' . "\n" .
-                '<' . route('adminx.research.research-requests') .'|View Request>'
+                '<' . route('adminx.research.research-requests', ['find' => $researchRequest->id]) .'|View Request>'
             );
+
+            $mergeFields = [];
+
+            if ($researchRequest->entity) {
+                $mergeFields['entity_name'] = $researchRequest->entity->name;
+            }
+
+            if($researchRequest->type === ResearchRequest::TYPE_API_REQUEST) {
+                CreateCampaignEmails::dispatch(EmailTrigger::TRIGGER_API_REQUEST, $researchRequest->name, $researchRequest->email, $researchRequest->user_id, $mergeFields);
+                CreateAdminEmailsFromTrigger::dispatch(EmailTrigger::TRIGGER_API_REQUEST, ['url' => route('adminx.research.research-requests', ['find' => $researchRequest->id])]);
+            }
+
+            if($researchRequest->type === ResearchRequest::TYPE_ENTERPRISE_REQUEST) {
+                CreateCampaignEmails::dispatch(EmailTrigger::TRIGGER_ENTERPRISE_REQUEST, $researchRequest->name, $researchRequest->email, $researchRequest->user_id, $mergeFields);
+                CreateAdminEmailsFromTrigger::dispatch(EmailTrigger::TRIGGER_ENTERPRISE_REQUEST, ['url' => route('adminx.research.research-requests', ['find' => $researchRequest->id])]);
+            }
+
+            if($researchRequest->type === ResearchRequest::TYPE_REPORT_REQUEST) {
+                CreateCampaignEmails::dispatch(EmailTrigger::TRIGGER_RESEARCH_REQUEST, $researchRequest->name, $researchRequest->email, $researchRequest->user_id, $mergeFields);
+                CreateAdminEmailsFromTrigger::dispatch(EmailTrigger::TRIGGER_RESEARCH_REQUEST, ['url' => route('adminx.research.research-requests', ['find' => $researchRequest->id])]);
+            }
         });
     }
 

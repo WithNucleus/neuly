@@ -3,7 +3,8 @@
 namespace App\Models;
 
 use App\Helpers\NotificationHelper;
-use App\Notifications\ListingRequestCreated;
+use App\Jobs\EmailMarketing\CreateAdminEmailsFromTrigger;
+use App\Jobs\EmailMarketing\CreateCampaignEmails;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 
@@ -38,7 +39,9 @@ class ListingRequest extends Model
     protected static function booted()
     {
         static::created(function ($model) {
-            NotificationHelper::sendAdminNotifications(new ListingRequestCreated($model));
+//            NotificationHelper::sendAdminNotifications(new ListingRequestCreated($model));
+            CreateCampaignEmails::dispatch(EmailTrigger::TRIGGER_NEW_LISTING_REQUEST, $model->name, $model->email, $model->user_id);
+            CreateAdminEmailsFromTrigger::dispatch(EmailTrigger::TRIGGER_NEW_LISTING_REQUEST, ['url' => route('admin.listingrequest.show', $model->id)]);
         });
     }
 

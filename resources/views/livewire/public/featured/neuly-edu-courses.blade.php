@@ -70,8 +70,8 @@
                 </div>
             </div>
         </div>
-        <div class="d-flex align-items-center justify-content-center">
-            <div class="filter-widget my-3 me-4">
+        <div class="d-flex flex-wrap align-items-center justify-content-center my-3">
+            <div class="filter-widget me-4">
                 <div class="form-check lead">
                     <input wire:model="filters.free" class="form-check-input" type="checkbox" id="filter-free">
                     <label class="form-check-label" for="filter-free">
@@ -79,7 +79,7 @@
                     </label>
                 </div>
             </div>
-            <div class="filter-widget my-3 me-4">
+            <div class="filter-widget me-4">
                 <div class="form-check lead">
                     <input wire:model="filters.open-enrollment" class="form-check-input" type="checkbox" id="filter-open-enrollment">
                     <label class="form-check-label" for="filter-open-enrollment">
@@ -87,7 +87,7 @@
                     </label>
                 </div>
             </div>
-            <div class="filter-widget my-3 me-4">
+            <div class="filter-widget me-4">
                 <div class="form-check lead">
                     <input wire:model="filters.self-paced" class="form-check-input" type="checkbox" id="filter-self-paced">
                     <label class="form-check-label" for="filter-self-paced">
@@ -95,7 +95,7 @@
                     </label>
                 </div>
             </div>
-            <div class="filter-widget my-3">
+            <div class="filter-widget">
                 <div class="form-check lead">
                     <input wire:model="filters.education-credits" class="form-check-input" type="checkbox" id="filter-education-credits">
                     <label class="form-check-label" for="filter-education-credits">

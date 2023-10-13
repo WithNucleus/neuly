@@ -14,7 +14,7 @@
     <div class="container py-4">
 
         <div class="max-width-1000 mx-auto">
-            <x-entities.entity-show-title-meta title="{{ $feed->name }}">
+            <x-entities.entity-show-title-meta title="{{ urlencode($feed->name) }}">
                 <div class="me-3">
                     @include('members.follow.button')
                 </div>

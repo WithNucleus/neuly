@@ -264,11 +264,16 @@ Route::middleware('spamprotection')->group(function () {
     });
 });
 
-/* MEMBER DASHBOARD */
+/* Onboarding */
+Route::middleware(['auth', 'verifiedIfAuthorized'])->group(function () {
+    Route::get('/welcome', [App\Http\Controllers\Dashboard\OnboardingController::class, 'welcome'])->name('member.onboarding.welcome');
+});
 
-Route::middleware('auth', 'verifiedIfAuthorized')->group(function () {
+/* MEMBER DASHBOARD */
+Route::middleware(['auth', 'verifiedIfAuthorized', 'userOnboarding'])->group(function () {
     Route::prefix('/dashboard')->group(function () {
         Route::get('/', [App\Http\Controllers\Dashboard\DashboardController::class, 'index'])->name('member.dashboard');
+
         Route::post('/updateWidgetsOrder', [App\Http\Controllers\Dashboard\DashboardController::class, 'updateWidgetsOrder'])->name('member.dashboard.updateWidgetsOrder');
 
         // Notes
@@ -352,7 +357,7 @@ Route::middleware('auth', 'verifiedIfAuthorized')->group(function () {
 });
 
 // Enterprise Dashboard
-Route::middleware('auth', 'enterprise.demo')->group(function () {
+Route::middleware(['auth', 'enterprise.demo', 'verifiedIfAuthorized', 'userOnboarding'])->group(function () {
     Route::name('enterprise.')->prefix('/enterprise')->group(function () {
         Route::get('/dashboard', [App\Http\Controllers\Enterprise\DashboardController::class, 'index'])->name('dashboard');
         Route::get('/dashboard/combined-feed', [App\Http\Controllers\Enterprise\DashboardController::class, 'combinedFeedWidget'])->name('dashboard.combined-feed');

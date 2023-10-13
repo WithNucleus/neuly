@@ -47,6 +47,10 @@
             </div>
         </div>
 
+        <div class="me-md-4 mb-3">
+            <x-livewire-filters.checkbox-single wireModel="filters.open_to_trials" id="filter-open_to_trials" label="Open to Trials" />
+        </div>
+
         <div class="filter-widget ms-auto">
             <button wire:click="clearFilters" class="btn btn-sm btn-dark rounded-0">Clear Filters</button>
         </div>

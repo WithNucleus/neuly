@@ -57,7 +57,8 @@ class Index extends Component
         $query = ImportedEntity::with(['importable'])
                 ->when($this->search, function($query, $search) {
                     return $query
-                        ->where('name', 'like', '%' . $search . '%');
+                        ->where('name', 'like', '%' . $search . '%')
+                        ->orWhere('ID', $search);
                 })
                 ->when($this->filters['has-entity'], function($query) {
                     return $query->doesntHave('importable');

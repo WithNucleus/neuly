@@ -1,11 +1,11 @@
 <div>
     <div class="d-md-flex flex-wrap">
 
-        <div class=" me-md-5 mb-3">
+        <div class="me-md-4 mb-3">
             <x-livewire-filters.search label="Search" placeholder="Search" search="{{ $search }}" tooltip="Search by name, email, role, etc." />
         </div>
 
-        <div class="filter-widget me-md-5 mb-3">
+        <div class="filter-widget me-md-4 mb-3">
             <div class="btn-group">
                 <button type="button" class="btn btn-md @if($filters['roles']) btn-accent @else btn-primary @endif btn-primary dropdown-toggle rounded-0" data-bs-toggle="dropdown" aria-expanded="false">
                     Filter by Role
@@ -27,7 +27,7 @@
             </div>
         </div>
 
-        <div class="filter-widget me-md-5 mb-3">
+        <div class="filter-widget me-md-4 mb-3">
             <div class="btn-group">
                 <button type="button" class="btn btn-md @if($filters['interests']) btn-accent @else btn-primary @endif btn-primary dropdown-toggle rounded-0" data-bs-toggle="dropdown" aria-expanded="false">
                     Filter by Interest
@@ -61,6 +61,10 @@
             <x-livewire-filters.checkbox-single wireModel="filters.team-member" id="filter-team-member" label="Team Member" />
         </div>
 
+        <div class="me-md-4 mb-3">
+            <x-livewire-filters.checkbox-single wireModel="filters.email-triggers" id="filter-email-triggers" label="Email Triggers" />
+        </div>
+
         <div class="filter-widget ms-auto">
             <button wire:click="clearFilters" class="btn btn-sm btn-dark rounded-0">Clear Filters</button>
         </div>
@@ -76,6 +80,7 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>Roles</th>
+                    <th>Email</th>
                     <th>Directory</th>
                     <th>Social Auth</th>
                     <th>Activity</th>
@@ -90,7 +95,9 @@
                             {{ $user->id }}
                         </td>
                         <td>
-                            <span class="truncate-300">{{ $user->full_name }}</span>
+                            <a href="{{ route('adminx.auth.users.show', $user->id) }}">
+                                <span class="truncate-300">{{ $user->full_name }}</span>
+                            </a>
                         </td>
                         <td>
                             <div class="d-flex align-items center">
@@ -108,6 +115,28 @@
                             @foreach($user->roles as $role)
                                 <span class="badge {{ $role->color }} mb-1 me-1">{{ $role->name }}</span>
                             @endforeach
+                        </td>
+                        <td>
+                            @if($user->emailPreference)
+                                <div>
+                                    <i class="{{ $user->emailPreference->marketing_icon }}"></i>
+                                    <a href="{{ route('adminx.emails.preferences.show', $user->emailPreference->id) }}">{{ $user->emailPreference->marketing_label }}</a>
+                                </div>
+                                @if($user->emailPreference->do_not_email)
+                                    <div>
+                                        <i class="{{ $user->emailPreference->blacklist_icon }}"></i>
+                                        <span>{{ $user->emailPreference->blacklist_label }}</span>
+                                    </div>
+                                @endif
+                            @endif
+                            <div>
+                                @foreach($user->emailTriggers as $trigger)
+                                    <div>
+                                        <i class="fa-kit fa-sharp-solid-bolt-lightning-at me-1 text-accent"></i>
+                                        <a href="{{ route('adminx.emails.triggers.show', $trigger->id) }}">{{ $trigger->name }}</a>
+                                    </div>
+                                @endforeach
+                            </div>
                         </td>
                         <td>
                             <div>
@@ -280,6 +309,11 @@
                 <div class="mb-2 me-4">
                     <i class="fa-sharp fa-solid fa-shield-exclamation fw-fw text-warning-bright"></i>
                     <span>Raised Claim - Needs Attention</span>
+                </div>
+
+                <div class="mb-2 me-4">
+                    <i class="fa-kit fa-sharp-solid-bolt-lightning-at me-1 text-accent"></i>
+                    <span>Email Trigger</span>
                 </div>
             </div>
         </div>
