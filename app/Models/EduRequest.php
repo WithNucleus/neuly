@@ -46,15 +46,15 @@ class EduRequest extends Model implements CrmActionsContract
     {
         static::created(function ($eduRequest) {
 
-//            SlackAlert::to('default')->message('*NeulyEDU Request*' . "\n" .
-//                '*Type:* ' . $eduRequest->type . "\n" .
-//                '*Name:* ' . $eduRequest->name . "\n" .
-//                '*Email:* ' . $eduRequest->email . "\n" .
-//                '*Phone:* ' . $eduRequest->phone . "\n" .
-//                '*Message:*' . "\n" .
-//                '```' . $eduRequest->message . '```' . "\n" .
-//                '<' . route('adminx.edu.students', ['find' => $eduRequest->id]) .'|View Request>'
-//            );
+            SlackAlert::to('default')->message('*NeulyEDU Request*' . "\n" .
+                '*Type:* ' . $eduRequest->type . "\n" .
+                '*Name:* ' . $eduRequest->name . "\n" .
+                '*Email:* ' . $eduRequest->email . "\n" .
+                '*Phone:* ' . $eduRequest->phone . "\n" .
+                '*Message:*' . "\n" .
+                '```' . $eduRequest->message . '```' . "\n" .
+                '<' . route('adminx.edu.students', ['find' => $eduRequest->id]) .'|View Request>'
+            );
 
             $mergeFields = [];
 
