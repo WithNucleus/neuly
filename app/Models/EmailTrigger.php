@@ -26,8 +26,10 @@ class EmailTrigger extends Model
     const TRIGGER_API_REQUEST = 'API Request';
     const TRIGGER_ENTERPRISE_REQUEST = 'Enterprise Request';
     const TRIGGER_RECRUITING_CLINICAL_TRIALS_REQUEST = 'Recruiting Clinical Trials';
-    const TRIGGER_CARE_REQUEST = 'Neuly Care Forms';
-    const TRIGGER_EDU_REQUEST = 'Neuly EDU Forms';
+    const TRIGGER_CARE_GENERIC_REQUEST = 'Neuly Care Generic';
+    const TRIGGER_CARE_REQUEST = 'Neuly Care Entity';
+    const TRIGGER_EDU_GENERIC_REQUEST = 'Neuly EDU Generic';
+    const TRIGGER_EDU_REQUEST = 'Neuly EDU Entity';
     const TRIGGER_CRM_ASSIGNED = 'Task Assigned';
     const TRIGGER_CRM_FOLLOW_UP = 'Follow-Up Needed';
 

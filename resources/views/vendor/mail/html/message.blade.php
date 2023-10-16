@@ -21,7 +21,8 @@
 {{-- Footer --}}
 <x-slot:footer>
 <x-mail::footer>
-© {{ date('Y') }} Neuly, LLC. All rights reserved. You're receiving this email because you signed up for Neuly. <a href="{{ route('user.settings') }}">Manage your preferences</a>
+© {{ date('Y') }} Neuly, LLC. All rights reserved. You're receiving this email because you signed up for Neuly or requested information.<br>
+<a href="{{ route('user.settings.email') }}">Manage Email Preferences</a> | <a href="{{ route('member.dashboard') }}">Visit Neuly Dashboard</a>
 </x-mail::footer>
 </x-slot:footer>
 </x-mail::layout>
