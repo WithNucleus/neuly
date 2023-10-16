@@ -177,12 +177,12 @@ li {
     color: #fff;
     font-size: 12px;
     text-align: center;
-    font-weight: bold;
 }
 
 .footer a {
     color: #fff;
     text-decoration: underline;
+    font-weight: bold;
 }
 
 /* Tables */

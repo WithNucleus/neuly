@@ -6,7 +6,9 @@ use App\Http\Livewire\Traits\WithBulkActions;
 use App\Http\Livewire\Traits\WithCachedRows;
 use App\Http\Livewire\Traits\WithPerPagePagination;
 use App\Http\Livewire\Traits\WithSorting;
+use App\Jobs\EmailMarketing\CreateAdminEmailsFromArray;
 use App\Models\EduRequest;
+use App\Models\EmailTrigger;
 use App\User;
 use Livewire\Component;
 
@@ -15,7 +17,7 @@ class StudentsList extends Component
     use WithPerPagePagination, WithBulkActions, WithCachedRows, WithSorting;
 
     protected string $paginationTheme = 'bootstrap';
-    protected $queryString = ['search'];
+    protected $queryString = ['search', 'find'];
 
     public ?string $search = null;
     public array $filters = [
@@ -24,8 +26,10 @@ class StudentsList extends Component
         'certifications' => false
     ];
 
+    public ?int $find = null;
+
     public $selectedStudent;
-    public ?string $assignedUser = NULL;
+    public ?int $assignedUser = NULL;
 
     public array $statusActionOptions = [];
 
@@ -46,6 +50,8 @@ class StudentsList extends Component
 
         if($this->assignedUser) {
             $this->selectedStudent->assignee_id = $this->assignedUser;
+            CreateAdminEmailsFromArray::dispatch(EmailTrigger::TRIGGER_CRM_ASSIGNED, [$this->assignedUser], ['url' => route('adminx.edu.students', ['find' => $this->selectedStudent->id])]);
+            $this->dispatchBrowserEvent('toast-notification',  ['text' => 'Email notification sent!', 'background' => 'bg-success']);
         } else {
             $this->selectedStudent->assignee_id = NULL;
         }
@@ -59,6 +65,16 @@ class StudentsList extends Component
         $this->selectedStudent->status = $status;
         $this->selectedStudent->save();
         $this->selectedStudent->refresh();
+
+        if ($status === EduRequest::STATUS_AWAITING_RESPONSE) {
+            if($this->selectedStudent->assignee_id) {
+                CreateAdminEmailsFromArray::dispatch(EmailTrigger::TRIGGER_CRM_FOLLOW_UP, [$this->selectedStudent->assignee_id], ['url' => route('adminx.edu.students', ['find' => $this->selectedStudent->id])]);
+                $this->dispatchBrowserEvent('toast-notification',  ['text' => 'Email notification sent!', 'background' => 'bg-success']);
+            } else {
+                $this->dispatchBrowserEvent('toast-notification',  ['text' => 'There is no assigned user to be notified!', 'background' => 'bg-danger']);
+            }
+        }
+
         $this->dispatchBrowserEvent('hide-dynamic-modal');
     }
 
@@ -79,6 +95,7 @@ class StudentsList extends Component
         $this->reset('search');
         $this->reset('filters');
         $this->reset('sorts');
+        $this->reset('find');
         $this->resetPage();
     }
 
@@ -130,6 +147,9 @@ class StudentsList extends Component
             })
             ->when($this->filters['certifications'], function($query) {
                 return $query->whereJsonContains('data->certifications', true);
+            })
+            ->when($this->find, function($query, $id) {
+                return $query->where('id', $id);
             });
 
         return $this->applySorting($query);

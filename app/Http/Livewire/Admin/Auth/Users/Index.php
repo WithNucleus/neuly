@@ -24,6 +24,7 @@ class Index extends Component
         'has-person' => false,
         'team-owner' => false,
         'team-member' => false,
+        'email-triggers' => false,
         'interests' => []
     ];
 
@@ -88,6 +89,7 @@ class Index extends Component
                 'ownedTeam',
                 'teams',
                 'dashboards',
+                'emailTriggers'
             ])
             ->when($this->search, function($query, $search) {
                 return $query
@@ -117,6 +119,9 @@ class Index extends Component
             })
             ->when($this->filters['interests'], function($query, $valueArray) {
                 return $query->whereJsonContains('interests', $valueArray);
+            })
+            ->when($this->filters['email-triggers'], function($query, $valueArray) {
+                return $query->whereHas('emailTriggers');
             });
 
         return $this->applySorting($query);

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Jobs\EmailMarketing\CreateAdminEmailsFromTrigger;
+use App\Jobs\EmailMarketing\CreateCampaignEmails;
 use App\Models\Contracts\CrmActionsContract;
 use App\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -20,10 +22,12 @@ class CareRequest extends Model implements CrmActionsContract
 
     const TYPE_CLINICAL_TRIAL_PARTICIPANT = 'Clinical Trial Participant';
     const TYPE_PRACTITIONER_NO_MATCHES = 'Practitioner - No Matches';
+    const TYPE_BOOKABLE_LISTING_RESERVATION = 'Bookable Listing Reservation';
 
     const TYPES = [
         self::TYPE_CLINICAL_TRIAL_PARTICIPANT,
-        self::TYPE_PRACTITIONER_NO_MATCHES
+        self::TYPE_PRACTITIONER_NO_MATCHES,
+        self::TYPE_BOOKABLE_LISTING_RESERVATION
     ];
 
     const STATUS_OPEN = 'Open';
@@ -41,6 +45,7 @@ class CareRequest extends Model implements CrmActionsContract
     protected static function booted()
     {
         static::created(function ($careRequest) {
+
             SlackAlert::to('default')->message('*NeulyCARE Request*' . "\n" .
                 '*Type:* ' . $careRequest->type . "\n" .
                 '*Name:* ' . $careRequest->name . "\n" .
@@ -48,8 +53,31 @@ class CareRequest extends Model implements CrmActionsContract
                 '*Phone:* ' . $careRequest->phone . "\n" .
                 '*Message:*' . "\n" .
                 "```". $careRequest->message . '```' . "\n" .
-                '<' . route('adminx.care.care-requests') .'|View Request>'
+                '<' . route('adminx.care.care-requests', ['find' => $careRequest->id]) .'|View Request>'
             );
+
+            $mergeFields = [];
+
+            if ($careRequest->entity) {
+                $mergeFields['entity_name'] = $careRequest->entity->name;
+            }
+
+            $adminUrl = ['url' => route('adminx.care.care-requests', ['find' => $careRequest->id])];
+
+            if ($careRequest->type === self::TYPE_CLINICAL_TRIAL_PARTICIPANT) {
+                CreateCampaignEmails::dispatch(EmailTrigger::TRIGGER_RECRUITING_CLINICAL_TRIALS_REQUEST, $careRequest->name, $careRequest->email, $careRequest->user_id, $mergeFields);
+                CreateAdminEmailsFromTrigger::dispatch(EmailTrigger::TRIGGER_RECRUITING_CLINICAL_TRIALS_REQUEST, $adminUrl);
+            }
+
+            if ($careRequest->type === self::TYPE_PRACTITIONER_NO_MATCHES) {
+                CreateCampaignEmails::dispatch(EmailTrigger::TRIGGER_CARE_GENERIC_REQUEST, $careRequest->name, $careRequest->email, $careRequest->user_id, $mergeFields);
+                CreateAdminEmailsFromTrigger::dispatch(EmailTrigger::TRIGGER_CARE_GENERIC_REQUEST, $adminUrl);
+            }
+
+            if ($careRequest->type === self::TYPE_BOOKABLE_LISTING_RESERVATION) {
+                CreateCampaignEmails::dispatch(EmailTrigger::TRIGGER_CARE_REQUEST, $careRequest->name, $careRequest->email, $careRequest->user_id, $mergeFields);
+                CreateAdminEmailsFromTrigger::dispatch(EmailTrigger::TRIGGER_CARE_REQUEST, $adminUrl);
+            }
         });
     }
 

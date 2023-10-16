@@ -9,7 +9,6 @@ use App\Http\Livewire\Traits\WithPerPagePagination;
 use App\Http\Livewire\Traits\WithSorting;
 use App\Models\BookableListing;
 use App\Models\CareRequest;
-use App\Models\EduRequest;
 use App\Models\Focus;
 use App\Models\SearchLog;
 use App\User;

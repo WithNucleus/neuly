@@ -6,6 +6,8 @@ use App\Models\BookableListing;
 use App\Models\BookableListingRequest;
 use App\Models\Dashboard;
 use App\Models\EduRequest;
+use App\Models\EmailPreference;
+use App\Models\EmailTrigger;
 use App\Models\Feedback;
 use App\Models\FollowList;
 use App\Models\Notification;
@@ -56,6 +58,14 @@ class User extends Authenticatable implements MustVerifyEmail
                 'slug' => 'favorites',
                 'user_id' => $user->id,
             ]);
+
+            EmailPreference::updateOrCreate(
+                ['email' => $user->email],
+                [
+                    'email' => $user->email,
+                    'user_id' => $user->id,
+                ]
+            );
         });
     }
 
@@ -142,6 +152,16 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Notification::class);
     }
 
+    public function emailPreference(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(EmailPreference::class);
+    }
+
+    public function emailTriggers(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(EmailTrigger::class, 'email_trigger_user')->withTimestamps();
+    }
+
     /* Attributes */
     public function getFullnameAttribute(): string
     {
@@ -160,5 +180,14 @@ class User extends Authenticatable implements MustVerifyEmail
         }
 
         return route('member.dashboard');
+    }
+
+    public function getNeedsOnboardingAttribute(): bool
+    {
+        if($this->last_name) {
+            return false;
+        }
+
+        return true;
     }
 }

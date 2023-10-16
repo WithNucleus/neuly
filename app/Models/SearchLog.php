@@ -10,25 +10,25 @@ class SearchLog extends Model
 {
     use CrudTrait;
 
-    const TYPE_SEARCH = 'Search';
-    const TYPE_NEULY_CARE = 'Neuly Care';
-    const TYPE_RECRUITING_TRIALS_ELIGIBILITY = 'Recruiting Trial Eligibility';
-    const TYPE_RECRUITING_TRIALS = 'Recruiting Clinical Trials';
-    const TYPE_RECRUITING_CONCIERGE = 'Recruiting Trials Concierge';
-    const TYPE_NEULY_EDU_COURSES = 'Neuly EDU Courses';
-
     /*
     |--------------------------------------------------------------------------
     | GLOBAL VARIABLES
     |--------------------------------------------------------------------------
     */
-
     protected $table = 'search_log';
 
     protected $guarded = ['id'];
     protected $casts = [
         'data' => 'array'
     ];
+
+    const TYPE_SEARCH = 'Search';
+    const TYPE_NEULY_CARE = 'Neuly Care';
+    const TYPE_RECRUITING_TRIALS_ELIGIBILITY = 'Recruiting Trial Eligibility';
+    const TYPE_RECRUITING_TRIALS = 'Recruiting Clinical Trials';
+    const TYPE_RECRUITING_CONCIERGE = 'Recruiting Trials Concierge';
+    const TYPE_NEULY_EDU_COURSES = 'Neuly EDU Courses';
+    const TYPE_CARE_BOOK_LISTING = 'Bookable Listing Request';
 
     /*
     |--------------------------------------------------------------------------

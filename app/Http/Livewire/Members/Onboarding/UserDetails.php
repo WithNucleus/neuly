@@ -2,16 +2,16 @@
 
 namespace App\Http\Livewire\Members\Onboarding;
 
-use App\Mail\WelcomeMail;
-use App\User;
+use App\Events\UserOnboardingDetailsCompleted;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 
 class UserDetails extends Component
 {
     public $user;
+
+    public bool $showLongForm = true;
 
     public $first_name;
     public $last_name;
@@ -25,6 +25,10 @@ class UserDetails extends Component
 
     public function mount() {
         $this->user = Auth::user();
+
+        if ($this->user->last_name) {
+            $this->showLongForm = false;
+        }
     }
 
     public function rules() {
@@ -56,7 +60,7 @@ class UserDetails extends Component
             'registration_code' => $this->registration_code
         ]);
 
-        Mail::to($this->user)->send(new WelcomeMail($this->user->name));
+        event(new UserOnboardingDetailsCompleted($this->user));
 
         $this->success = true;
     }
