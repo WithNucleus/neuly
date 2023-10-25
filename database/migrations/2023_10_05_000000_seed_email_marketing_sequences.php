@@ -5,6 +5,7 @@ use App\Models\EmailJourney;
 use App\Models\EmailSequence;
 use App\Models\EmailTemplate;
 use App\Models\EmailTrigger;
+use App\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
@@ -69,14 +70,26 @@ return new class extends Migration
             'body' => "Hi {first_name},<br><br>Thanks for your interest in {entity_name}. We've relayed your information to the facilitator and will notify you if and when a spot becomes available for you to participate.<br><br>If you have any questions before then, please don't hesitate to reach out to the Neuly Concierge team. We are always happy to help!<br><br>&ndash;The Neuly Team"
         ]);
 
-        $neulyCareRequestTemplate = EmailTemplate::create([
-            'name' => 'Auto-Response: Neuly Care Request',
+        $neulyCareRequestGenericTemplate = EmailTemplate::create([
+            'name' => 'Auto-Response: Care Generic Request',
             'subject' => 'Your Interest in Psychedelic Treatments',
-            'body' => "Hi {first_name},<br><br>Thanks for your interest in psychedelic-assisted therapy. We've relayed your information to the facilitator and will notify you if and when a spot becomes available for you to participate.<br><br>If you have any questions before then, please don't hesitate to reach out to the Neuly Concierge team. We are always happy to help!<br><br>&ndash;The Neuly Team"
+            'body' => "Hi {first_name},<br><br>Thanks for your interest in psychedelic-assisted therapy. If your request requires a response, you can expect to receive one within 48 hours.<br><br>If you have any questions before then, please don't hesitate to reach out to the Neuly Concierge team. We are always happy to help!<br><br>&ndash;The Neuly Team"
         ]);
 
-        $neulyEduRequestTemplate = EmailTemplate::create([
-            'name' => 'Auto-Response: Neuly EDU Request',
+        $neulyCareRequestEntityTemplate = EmailTemplate::create([
+            'name' => 'Auto-Response: Care Entity Request',
+            'subject' => 'Your Interest in Psychedelic Treatments',
+            'body' => "Hi {first_name},<br><br>Thanks for your interest in {entity_name}. We've relayed your information to the facilitator and will notify you if and when a spot becomes available for you to participate.<br><br>If you have any questions before then, please don't hesitate to reach out to the Neuly Concierge team. We are always happy to help!<br><br>&ndash;The Neuly Team"
+        ]);
+
+        $neulyEduRequestGenericTemplate = EmailTemplate::create([
+            'name' => 'Auto-Response: EDU Generic Request',
+            'subject' => 'Your Interest in Psychedelic Education',
+            'body' => "Hi {first_name},<br><br>Thanks for your interest in psychedelic education. If your request requires a response, you can expect to receive one within 48 hours.<br><br>If you have any questions before then, please don't hesitate to reach out to the Neuly Concierge team. We are always happy to help!<br><br>&ndash;The Neuly Team"
+        ]);
+
+        $neulyEduRequestEntityTemplate = EmailTemplate::create([
+            'name' => 'Auto-Response: EDU Entity Request',
             'subject' => 'Your Interest in Psychedelic Education',
             'body' => "Hi {first_name},<br><br>Thanks for your interest in {entity_name}. We've relayed your information to the appropriate NeulyEDU partner and will follow-up with you shortly to gather more information from you or connect you directly with course enrollment.<br><br>If you have any questions before then, please don't hesitate to reach out to the Neuly Concierge team. We are always happy to help!<br><br>&ndash;The Neuly Team"
         ]);
@@ -257,7 +270,7 @@ return new class extends Migration
          */
         $registrationTrigger = EmailTrigger::create([
             'name' => 'Registration',
-            'description' => 'Sends welcome email and starts First Impression journey',
+            'description' => 'Verified email and complete basic onboarding',
             'trigger' => EmailTrigger::TRIGGER_USER_ONBOARDING_DETAILS,
             'status' => EmailTrigger::STATUS_ACTIVE,
             'auto_response_id' => $welcomeIntroTemplate->id,
@@ -267,7 +280,7 @@ return new class extends Migration
 
         $researchTrigger = EmailTrigger::create([
             'name' => 'Research Request',
-            'description' => 'Sends research request auto-response and starts Enterprise journey',
+            'description' => 'Fills out a Neuly Research form',
             'trigger' => EmailTrigger::TRIGGER_RESEARCH_REQUEST,
             'status' => EmailTrigger::STATUS_ACTIVE,
             'auto_response_id' => $researchRequestTemplate->id,
@@ -277,7 +290,7 @@ return new class extends Migration
 
         $listingRequestTrigger = EmailTrigger::create([
             'name' => 'New Listing Request',
-            'description' => 'Sends listing request auto-response',
+            'description' => 'Creates or updates a record via listing request',
             'trigger' => EmailTrigger::TRIGGER_NEW_LISTING_REQUEST,
             'status' => EmailTrigger::STATUS_ACTIVE,
             'auto_response_id' => $listingRequestTemplate->id,
@@ -286,7 +299,7 @@ return new class extends Migration
 
         $apiRequestTrigger = EmailTrigger::create([
             'name' => 'API Request',
-            'description' => 'Sends API request auto-response and starts Partner journey',
+            'description' => 'Fills out API request form',
             'trigger' => EmailTrigger::TRIGGER_API_REQUEST,
             'status' => EmailTrigger::STATUS_ACTIVE,
             'auto_response_id' => $apiRequestTemplate->id,
@@ -296,7 +309,7 @@ return new class extends Migration
 
         $enterpriseTrigger = EmailTrigger::create([
             'name' => 'Enterprise Request',
-            'description' => 'Sends enterprise request auto-response and starts Partner journey',
+            'description' => 'Fills out enterprise request form',
             'trigger' => EmailTrigger::TRIGGER_ENTERPRISE_REQUEST,
             'status' => EmailTrigger::STATUS_ACTIVE,
             'auto_response_id' => $enterpriseRequestTemplate->id,
@@ -315,22 +328,44 @@ return new class extends Migration
         ]);
 
         $careTrigger = EmailTrigger::create([
-            'name' => 'Care Request',
-            'description' => 'Sends care request auto-response and starts Care journey',
+            'name' => 'Care Request - Generic',
+            'description' => 'Fills out a generic / concierge Neuly Care form',
+            'trigger' => EmailTrigger::TRIGGER_CARE_GENERIC_REQUEST,
+            'status' => EmailTrigger::STATUS_ACTIVE,
+            'auto_response_id' => $neulyCareRequestGenericTemplate->id,
+            'email_journey_id' => $careJourney->id,
+            'partner_response_id' => $partnerCareRequestTemplate->id,
+            'admin_response_id' => $adminCareRequestTemplate->id
+        ]);
+
+        $careTriggerWithEntity = EmailTrigger::create([
+            'name' => 'Care Request - Entity',
+            'description' => 'Fills out a Neuly Care form with an entity attached',
             'trigger' => EmailTrigger::TRIGGER_CARE_REQUEST,
             'status' => EmailTrigger::STATUS_ACTIVE,
-            'auto_response_id' => $neulyCareRequestTemplate->id,
+            'auto_response_id' => $neulyCareRequestEntityTemplate->id,
             'email_journey_id' => $careJourney->id,
             'partner_response_id' => $partnerCareRequestTemplate->id,
             'admin_response_id' => $adminCareRequestTemplate->id
         ]);
 
         $eduTrigger = EmailTrigger::create([
-            'name' => 'EDU Request',
-            'description' => 'Sends care request auto-response and starts Care journey',
+            'name' => 'EDU Request - Generic',
+            'description' => 'Fills out a generic / concierge Neuly EDU form',
+            'trigger' => EmailTrigger::TRIGGER_EDU_GENERIC_REQUEST,
+            'status' => EmailTrigger::STATUS_ACTIVE,
+            'auto_response_id' => $neulyEduRequestGenericTemplate->id,
+            'email_journey_id' => $eduJourney->id,
+            'partner_response_id' => $partnerEduRequestTemplate->id,
+            'admin_response_id' => $adminEduRequestTemplate->id
+        ]);
+
+        $eduTriggerWithEntity = EmailTrigger::create([
+            'name' => 'EDU Request - Entity',
+            'description' => 'Fills out a Neuly EDU form with an entity attached',
             'trigger' => EmailTrigger::TRIGGER_EDU_REQUEST,
             'status' => EmailTrigger::STATUS_ACTIVE,
-            'auto_response_id' => $neulyEduRequestTemplate->id,
+            'auto_response_id' => $neulyEduRequestEntityTemplate->id,
             'email_journey_id' => $eduJourney->id,
             'partner_response_id' => $partnerEduRequestTemplate->id,
             'admin_response_id' => $adminEduRequestTemplate->id
@@ -358,14 +393,16 @@ return new class extends Migration
             'brittany@atlasconsultinginc.com'
         ];
 
-        $userIds = \App\User::whereIn('email', $adminEmails)->pluck('id')->toArray();
+        $userIds = User::whereIn('email', $adminEmails)->pluck('id')->toArray();
         $registrationTrigger->adminUsers()->sync($userIds);
         $listingRequestTrigger->adminUsers()->sync($userIds);
         $enterpriseTrigger->adminUsers()->sync($userIds);
         $apiRequestTrigger->adminUsers()->sync($userIds);
         $researchTrigger->adminUsers()->sync($userIds);
         $careTrigger->adminUsers()->sync($userIds);
+        $careTriggerWithEntity->adminUsers()->sync($userIds);
         $eduTrigger->adminUsers()->sync($userIds);
+        $eduTriggerWithEntity->adminUsers()->sync($userIds);
         $recruitingTrialsTrigger->adminUsers()->sync($userIds);
     }
 

@@ -62,12 +62,21 @@ class CareRequest extends Model implements CrmActionsContract
                 $mergeFields['entity_name'] = $careRequest->entity->name;
             }
 
+            $adminUrl = ['url' => route('adminx.care.care-requests', ['find' => $careRequest->id])];
+
             if ($careRequest->type === self::TYPE_CLINICAL_TRIAL_PARTICIPANT) {
                 CreateCampaignEmails::dispatch(EmailTrigger::TRIGGER_RECRUITING_CLINICAL_TRIALS_REQUEST, $careRequest->name, $careRequest->email, $careRequest->user_id, $mergeFields);
-                CreateAdminEmailsFromTrigger::dispatch(EmailTrigger::TRIGGER_RECRUITING_CLINICAL_TRIALS_REQUEST, ['url' => route('adminx.care.care-requests', ['find' => $careRequest->id])]);
-            } else {
+                CreateAdminEmailsFromTrigger::dispatch(EmailTrigger::TRIGGER_RECRUITING_CLINICAL_TRIALS_REQUEST, $adminUrl);
+            }
+
+            if ($careRequest->type === self::TYPE_PRACTITIONER_NO_MATCHES) {
+                CreateCampaignEmails::dispatch(EmailTrigger::TRIGGER_CARE_GENERIC_REQUEST, $careRequest->name, $careRequest->email, $careRequest->user_id, $mergeFields);
+                CreateAdminEmailsFromTrigger::dispatch(EmailTrigger::TRIGGER_CARE_GENERIC_REQUEST, $adminUrl);
+            }
+
+            if ($careRequest->type === self::TYPE_BOOKABLE_LISTING_RESERVATION) {
                 CreateCampaignEmails::dispatch(EmailTrigger::TRIGGER_CARE_REQUEST, $careRequest->name, $careRequest->email, $careRequest->user_id, $mergeFields);
-                CreateAdminEmailsFromTrigger::dispatch(EmailTrigger::TRIGGER_CARE_REQUEST, ['url' => route('adminx.care.care-requests', ['find' => $careRequest->id])]);
+                CreateAdminEmailsFromTrigger::dispatch(EmailTrigger::TRIGGER_CARE_REQUEST, $adminUrl);
             }
         });
     }

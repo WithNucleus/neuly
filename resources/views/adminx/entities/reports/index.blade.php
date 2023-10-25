@@ -2,6 +2,7 @@
 
 @section('content')
     <div class="container-fluid my-4">
-        <livewire:admin.emails.templates.manage-template :template="$template" />
+        <h1>Industry Reports</h1>
+        <livewire:admin.entities.reports-index />
     </div>
 @endsection

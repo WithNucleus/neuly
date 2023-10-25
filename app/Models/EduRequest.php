@@ -62,8 +62,15 @@ class EduRequest extends Model implements CrmActionsContract
                 $mergeFields['entity_name'] = $eduRequest->entity->name;
             }
 
-            CreateCampaignEmails::dispatch(EmailTrigger::TRIGGER_EDU_REQUEST, $eduRequest->name, $eduRequest->email, $eduRequest->user_id, $mergeFields);
-            CreateAdminEmailsFromTrigger::dispatch(EmailTrigger::TRIGGER_EDU_REQUEST, ['url' => route('adminx.edu.students', ['find' => $eduRequest->id])]);
+            $adminUrl = ['url' => route('adminx.edu.students', ['find' => $eduRequest->id])];
+
+            if ($eduRequest->type === self::TYPE_COURSE_REQUEST) {
+                CreateCampaignEmails::dispatch(EmailTrigger::TRIGGER_EDU_REQUEST, $eduRequest->name, $eduRequest->email, $eduRequest->user_id, $mergeFields);
+                CreateAdminEmailsFromTrigger::dispatch(EmailTrigger::TRIGGER_EDU_REQUEST, $adminUrl);
+            } else {
+                CreateCampaignEmails::dispatch(EmailTrigger::TRIGGER_EDU_GENERIC_REQUEST, $eduRequest->name, $eduRequest->email, $eduRequest->user_id, $mergeFields);
+                CreateAdminEmailsFromTrigger::dispatch(EmailTrigger::TRIGGER_EDU_GENERIC_REQUEST, $adminUrl);
+            }
         });
     }
 

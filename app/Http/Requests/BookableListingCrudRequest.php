@@ -24,7 +24,7 @@ class BookableListingCrudRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
+            'name' => 'required|max:255|unique:bookable_listings,name,'.$this->get('id'),
             'type' => 'required',
             'status' => 'required',
             'phone' => 'nullable',
