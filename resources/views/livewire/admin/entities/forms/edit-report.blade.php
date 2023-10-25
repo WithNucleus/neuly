@@ -32,7 +32,10 @@
                 </div>
             </div>
             <div class="mb-3">
-                <label for="excerpt" class="fw-bold text-uppercase">Excerpt</label>
+                <label for="excerpt">
+                    <span class="fw-bold text-uppercase me-3">Excerpt</span>
+                    <span class="small text-body-secondary">{{ strlen($report->excerpt) }} characters / 250 max</span>
+                </label>
                 <textarea wire:model="report.excerpt" id="excerpt" rows="6" class="form-control"></textarea>
             </div>
             <div class="mb-3">
