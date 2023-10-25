@@ -24,7 +24,7 @@ class EditReport extends Component
                 Rule::unique('reports', 'slug')->ignore($this->report)
             ],
             'report.status' => 'required',
-            'report.excerpt' => 'nullable',
+            'report.excerpt' => 'nullable|max:250',
             'report.preview' => 'nullable',
             'report.aside' => 'nullable',
             'report.image' => 'nullable',
