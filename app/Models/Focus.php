@@ -135,6 +135,11 @@ class Focus extends Model implements EntityContract
         return $this->belongsToMany(Research::class, 'focus_research', 'focus_id', 'research_id');
     }
 
+    public function reports(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Report::class);
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES
