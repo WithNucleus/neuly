@@ -10,7 +10,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -48,19 +47,22 @@ class GetWordPressPosts implements ShouldQueue
         foreach ($results as $wpPost) {
 
             try {
-                $attributes = [
-                    'date' => Carbon::parse($wpPost['date'])->format('Y-m-d H:i:s'),
-                    'name' => html_entity_decode($wpPost['title']['rendered']),
-                    'slug' => $wpPost['slug'],
-                    'status' => $wpPost['status'],
-                    'content' => html_entity_decode($wpPost['content']['rendered']),
-                    'sticky' => $wpPost['sticky'],
-                ];
+                $report = Report::find($wpPost['id']);
 
-                $report = Report::updateOrCreate(
-                    ['id' => $wpPost['id']],
-                    $attributes
-                );
+                if ($report) {
+                    $report->update([
+                        'content' => html_entity_decode($wpPost['content']['rendered']),
+                    ]);
+                    $report->refresh();
+                } else {
+                    $report = Report::create([
+                        'date' => Carbon::parse($wpPost['date'])->format('Y-m-d H:i:s'),
+                        'name' => html_entity_decode($wpPost['title']['rendered']),
+                        'slug' => $wpPost['slug'],
+                        'status' => $wpPost['status'],
+                        'sticky' => $wpPost['sticky'],
+                    ]);
+                }
 
                 if ($report->excerpt === NULL) {
                     $excerpt = strip_tags(html_entity_decode($wpPost['content']['rendered']));
@@ -68,14 +70,16 @@ class GetWordPressPosts implements ShouldQueue
                     $report->save();
                 }
 
-                if ($wpPost['featured_image_url'] != '') {
-                    $fileUrl = $wpPost['featured_image_url'];
-                    $extension = pathinfo(parse_url($fileUrl, PHP_URL_PATH), PATHINFO_EXTENSION);
-                    $filename = 'report-' . $report->id . '.' . $extension;
-                    $file = file_get_contents($fileUrl);
-                    Storage::disk('local')->put('public/reports/' . $filename, $file);
-                    $report->image = $filename;
-                    $report->save();
+                if ($report->image === NULL) {
+                    if ($wpPost['featured_image_url'] != '') {
+                        $fileUrl = $wpPost['featured_image_url'];
+                        $extension = pathinfo(parse_url($fileUrl, PHP_URL_PATH), PATHINFO_EXTENSION);
+                        $filename = 'report-' . $report->id . '.' . $extension;
+                        $file = file_get_contents($fileUrl);
+                        Storage::disk('local')->put('public/reports/' . $filename, $file);
+                        $report->image = $filename;
+                        $report->save();
+                    }
                 }
 
                 TagReport::dispatch($report);
