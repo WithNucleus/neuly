@@ -19,6 +19,11 @@ Route::middleware(['auth', 'can:admin login'])->prefix('/adminx')->name('adminx.
         Route::get('/', [App\Http\Controllers\Adminx\Entities\ClinicalTrialsController::class, 'index'])->name('index');
     });
 
+    Route::prefix('/reports')->name('reports.')->middleware('permission:edit companies')->group(function () {
+        Route::get('/', [App\Http\Controllers\Adminx\Entities\ReportController::class, 'index'])->name('index');
+        Route::get('/{id}', [App\Http\Controllers\Adminx\Entities\ReportController::class, 'edit'])->name('edit');
+    });
+
     Route::prefix('/care')->name('care.')->middleware('permission:edit companies')->group(function() {
         Route::get('/requests', [App\Http\Controllers\Adminx\Care\CareController::class, 'careRequests'])->name('care-requests');
         Route::get('/booking-requests', [App\Http\Controllers\Adminx\Care\BookableListingController::class, 'bookableListingRequests'])->name('listing-requests');

@@ -196,6 +196,10 @@ Route::middleware('verifiedIfAuthorized')->group(function () {
 //    Route::get('/patent-tracker', 'Index\PatentController@index')->name('discover.patents.tracker');
 //    Route::get('/patent-filings', 'Index\DataFeeds\PatentFilingController@index')->name('discover.patents.filings');
 
+    // Industry Reports
+    Route::get('/industry-reports', [App\Http\Controllers\Index\ReportController::class, 'index'])->name('discover.industry-reports');
+    Route::get('/industry-reports/{slug}', [App\Http\Controllers\Index\ReportController::class, 'show'])->name('discover.industry-reports.show');
+
     //Insights main page
     // TODO: Temporary admin gate for insights
     Route::middleware('can:admin login')->group(function() {

@@ -75,4 +75,10 @@ return [
         'requests_per_day' => env('OPENCAGE_REQUESTS_PER_DAY', 2500),
     ],
 
+    'wordpress' => [
+        'url' => env('WORDPRESS_URL'),
+        'username' => env('WORDPRESS_USERNAME'),
+        'password' => env('WORDPRESS_PASSWORD'),
+    ],
+
 ];

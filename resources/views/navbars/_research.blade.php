@@ -6,3 +6,4 @@
 <li><a class="dropdown-item" href="{{ route('discover.research') }}"><i class="fa-sharp fa-solid fa-microscope fa-fw"></i> Papers</a></li>
 <li><a class="dropdown-item" href="{{ route('discover.clinicaltrials') }}"><i class="fa-sharp fa-solid fa-stethoscope fa-fw"></i> Clinical Trials</a></li>
 <li><a class="dropdown-item" href="{{ route('discover.index') }}"><i class="fa-sharp fa-solid fa-chart-area fa-fw"></i> Stock Market</a></li>
+<li><a class="dropdown-item" href="{{ route('discover.industry-reports') }}"><i class="fa-sharp fa-solid fa-file-chart-column fa-fw"></i> Industry Reports</a></li>
