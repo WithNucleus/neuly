@@ -3,6 +3,7 @@
 namespace App\Jobs\EmailMarketing;
 
 use App\Models\Email;
+use App\Models\EmailJourney;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -22,6 +23,8 @@ class DeleteInvitationEmails implements ShouldQueue
 
     public function handle()
     {
-        Email::deletable()->where('email_preference_email', $this->email)->orWhere('to_email', $this->email)->delete();
+        $emailJourney = EmailJourney::where('name', EmailJourney::JOURNEY_INVITED_USERS)->firstOrFail();
+
+        Email::deletable()->where('email_preference_email', $this->email)->where('email_journey_id', $emailJourney->id)->delete();
     }
 }
