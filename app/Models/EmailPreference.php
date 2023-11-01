@@ -44,6 +44,15 @@ class EmailPreference extends Model
         return $this->email;
     }
 
+    public function getFullNameAttribute(): ?string
+    {
+        if ($this->first_name AND $this->last_name) {
+            return $this->first_name . ' ' . $this->last_name;
+        }
+
+        return $this->first_name ?? NULL;
+    }
+
     public function getMarketingIconAttribute(): string
     {
         if ($this->marketing === true) {

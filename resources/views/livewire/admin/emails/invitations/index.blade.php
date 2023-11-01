@@ -6,11 +6,7 @@
         </div>
 
         <div class="me-md-4 mb-3">
-            <x-livewire-filters.checkbox-single wireModel="filters.blacklist" id="filter-blacklist" label="Blacklist" />
-        </div>
-
-        <div class="me-md-4 mb-3">
-            <x-livewire-filters.checkbox-single wireModel="filters.unregistered" id="filter-unregistered" label="Unregistered" />
+            <x-livewire-filters.checkbox-single wireModel="filters.registered" id="filter-registered" label="Registered" />
         </div>
 
         <div class="filter-widget ms-auto">
@@ -31,6 +27,17 @@
                         <label for="select-page" class="ps-2"><strong>{{ count($selected) }}</strong> selected</label>
                     @endif
                 </div>
+                <div class="me-4">
+                    @if ($selectPage)
+                        @unless ($selectAll)
+                            <div>
+                                <button wire:click="selectAll" class="btn btn-link p-0">Select everything?</button>
+                            </div>
+                        @else
+
+                        @endif
+                    @endif
+                </div>
             </div>
         </div>
         <div wire:ignore class="dropdown">
@@ -39,13 +46,13 @@
             </button>
             <ul class="dropdown-menu">
                 <li>
-                    <a wire:click="addToBlacklist" class="dropdown-item" href="#">
-                        <i class="fa-sharp fa-solid fa-siren-on fa-fw me-1 text-danger"></i>Add to Blacklist
+                    <a wire:click="replaceMergeValues" class="dropdown-item" href="#">
+                        <i class="fa-sharp fa-solid fa-code fa-fw me-1"></i>Replace merge values
                     </a>
                 </li>
                 <li>
-                    <a wire:click="optOutMarketing" class="dropdown-item" href="#">
-                        <i class="fa-sharp fa-solid fa-subtitles-slash fa-fw me-1 text-danger"></i>Marketing opt-out
+                    <a wire:click="deleteRecords" class="dropdown-item" href="#">
+                        <i class="fa-sharp fa-solid fa-trash fa-fw me-1"></i>Delete un-sent emails
                     </a>
                 </li>
             </ul>
@@ -59,68 +66,51 @@
                     <th>
                         <x-entities.entity-index-sort-button label="Created" field="created_at" :sorts="$sorts" buttonClasses="fs-6 fw-bold p-0" inactiveClasses="text-body" activeClasses="text-accent" />
                     </th>
-                    <td>
-                        <x-entities.entity-index-sort-button label="Email" field="email" :sorts="$sorts" buttonClasses="fs-6 fw-bold p-0" inactiveClasses="text-body" activeClasses="text-accent" />
-                    </td>
+                    <th>Name</th>
                     <th>
-                        <span class="fs-6 fw-bold">User</span>
+                        <x-entities.entity-index-sort-button label="Email" field="email_preference_email" :sorts="$sorts" buttonClasses="fs-6 fw-bold p-0" inactiveClasses="text-body" activeClasses="text-accent" />
                     </th>
                     <th>
-                        <x-entities.entity-index-sort-button label="Marketing" field="marketing" :sorts="$sorts" buttonClasses="fs-6 fw-bold p-0" inactiveClasses="text-body" activeClasses="text-accent" />
+                        <span class="fs-6 fw-bold">Inviter</span>
                     </th>
                     <th>
-                        <x-entities.entity-index-sort-button label="Blacklist" field="do_not_email" :sorts="$sorts" buttonClasses="fs-6 fw-bold p-0" inactiveClasses="text-body" activeClasses="text-accent" />
+                        <span class="fs-6 fw-bold">Invitee</span>
                     </th>
                     <th>
-                        <x-entities.entity-index-sort-button label="# Emails" field="emails_count" :sorts="$sorts" buttonClasses="fs-6 fw-bold p-0" inactiveClasses="text-body" activeClasses="text-accent" />
-                    </th>
-                    <th>
-                        <x-entities.entity-index-sort-button label="Source" field="source" :sorts="$sorts" buttonClasses="fs-6 fw-bold p-0" inactiveClasses="text-body" activeClasses="text-accent" />
+                        <span class="fs-6 fw-bold">Journey</span>
                     </th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($records as $record)
-                    <tr wire:key="record-{{ $record->email }}">
+                    <tr wire:key="record-{{ $record->id }}">
                         <td>
                             <div class="form-check">
                                 <input wire:model="selected" class="form-check-input" type="checkbox" value="{{ $record->id }}" id="select-{{ $record->id }}" aria-label="Select">
                             </div>
                         </td>
                         <td class="text-nowrap">{{ $record->created_at }}</td>
-                        <td>
-                            <a href="{{ route('adminx.emails.preferences.show', $record->email) }}">{{ $record->email }}</a>
+                        <td class="text-nowrap">{{ $record->emailPreference->full_name }}</td>
+                        <td class="text-nowrap">
+                            <a href="{{ route('adminx.emails.preferences.show', $record->email_preference_email) }}">{{ $record->email_preference_email }}</a>
                         </td>
-                        <td>
-                            @if($record->user)
-                                <div>
-                                    <span>{{ $record->user->full_name }}</span>
-                                    <span class="text-body-tertiary">#{{ $record->user->id }}</span>
-                                </div>
-                            @else
-                                <div>
-                                    Unregistered
-                                </div>
+                        <td class="text-nowrap">
+                            @if($record->inviter)
+                                <span class="text-body-tertiary">#{{ $record->inviter->id }}</span>
+                                <span>{{ $record->inviter->full_name }}</span>
                             @endif
                         </td>
                         <td>
-                            <i class="{{ $record->marketing_icon }} me-1"></i>
-                            <span>{{ $record->marketing_label }}</span>
-                            <span class="text-body-tertiary me-2">{{ $record->opt_in }}</span>
-                            <span class="text-body-tertiary">{{ $record->opt_in_ip }}</span>
-                        </td>
-                        <td>
-                            @if($record->do_not_email)
-                                <div>
-                                    <i class="{{ $record->blacklist_icon }} me-1"></i>
-                                    <span class="me-2">{{ $record->blacklist_label }}</span>
-                                    <span class="text-body-tertiary me-2">{{ $record->opt_out }}</span>
-                                    <span class="text-body-tertiary">{{ $record->opt_out_ip }}</span>
-                                </div>
+                            @if($record->invitee)
+                                <span class="text-body-tertiary">#{{ $record->invitee->id }}</span>
+                                <span>{{ $record->invitee->full_name }}</span>
                             @endif
                         </td>
-                        <td>{{ $record->emails_count }}</td>
-                        <td>{{ $record->source }}</td>
+                        <td>
+                            @if($record->emailJourney)
+                                <span>{{ $record->emailJourney->name }}</span>
+                            @endif
+                        </td>
                     </tr>
                 @empty
                     <tr>

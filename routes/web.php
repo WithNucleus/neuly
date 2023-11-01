@@ -24,7 +24,8 @@ Route::middleware('firewall.all')->group(function () {
 Route::get('/register/success', [App\Http\Controllers\Auth\MessagesController::class, 'registerSuccess'])->name('register.success');
 
 Route::get('/invitation', [App\Http\Controllers\InvitationController::class, 'show'])->name('invitation.show');
-Route::post('/invitation', [App\Http\Controllers\InvitationController::class, 'accept'])->name('invitation.accept');
+Route::post('/invitation', [App\Http\Controllers\InvitationController::class, 'accept'])->name('invitation.accept-team-invite');
+Route::get('/invited', [App\Http\Controllers\InvitationController::class, 'acceptUserInvitation'])->name('invitation.accept-user-invite');
 
 Route::get('/', [App\Http\Controllers\Content\HomeController::class, 'index'])->name('index');
 Route::get('/about', [App\Http\Controllers\Content\AboutController::class, 'index'])->name('about');

@@ -59,6 +59,7 @@
                         <td class="text-nowrap">{{ $record->created_at }}</td>
                         <td class="text-nowrap">
                             <a href="{{ route('adminx.emails.journeys.show', $record->id) }}">{{ $record->name }}</a>
+                            <div class="text-body-secondary">{{ $record->description }}</div>
                         </td>
                         <td>
                             @foreach($record->emailSequences as $sequence)

@@ -9,7 +9,7 @@
             <h1 class="text-primary">You're invited to join</h1>
             <h2>{{ $team->name }}</h2>
 
-            <form method="post" action="{{ route('invitation.accept') }}">
+            <form method="post" action="{{ route('invitation.accept-team-invite') }}">
                 @csrf
                 <input type="hidden" name="team_id" value="{{ $team->id }}">
                 <input type="hidden" name="user_id" value="{{ $userId }}">
