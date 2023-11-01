@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Members\Onboarding;
 
 use App\Events\UserOnboardingDetailsCompleted;
 use App\Jobs\EmailMarketing\DeleteInvitationEmails;
+use App\Models\Role;
 use App\Models\UserInvitation;
 use App\User;
 use Carbon\Carbon;
@@ -52,7 +53,7 @@ class AcceptInvitation extends Component
                 'password' => Hash::make($this->password),
                 'interests' => $this->interests,
                 'email_verified_at' => Carbon::now()
-            ]);
+            ])->assignRole(Role::ROLE_SUBSCRIBER);
 
             $this->invitation->invitee_id = $user->id;
             $this->invitation->save();
