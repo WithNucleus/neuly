@@ -39,6 +39,9 @@
                 <div class="mb-5">
                     @include('members.dashboard-widgets.team')
                 </div>
+                <div class="mb-5">
+                    @include('members.dashboard-widgets.invite-user')
+                </div>
             </div>
             <div class="col-12 col-md-6 col-xl-4 px-3">
                 <div class="mb-5">

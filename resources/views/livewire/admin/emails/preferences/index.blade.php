@@ -74,6 +74,9 @@
                     <th>
                         <x-entities.entity-index-sort-button label="# Emails" field="emails_count" :sorts="$sorts" buttonClasses="fs-6 fw-bold p-0" inactiveClasses="text-body" activeClasses="text-accent" />
                     </th>
+                    <th>
+                        <x-entities.entity-index-sort-button label="Source" field="source" :sorts="$sorts" buttonClasses="fs-6 fw-bold p-0" inactiveClasses="text-body" activeClasses="text-accent" />
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -117,6 +120,7 @@
                             @endif
                         </td>
                         <td>{{ $record->emails_count }}</td>
+                        <td>{{ $record->source }}</td>
                     </tr>
                 @empty
                     <tr>
