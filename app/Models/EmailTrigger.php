@@ -32,6 +32,7 @@ class EmailTrigger extends Model
     const TRIGGER_EDU_REQUEST = 'Neuly EDU Entity';
     const TRIGGER_CRM_ASSIGNED = 'Task Assigned';
     const TRIGGER_CRM_FOLLOW_UP = 'Follow-Up Needed';
+    const TRIGGER_USER_INVITED = 'Invited User';
 
     /* Scopes  */
     public function scopeActive($query) {

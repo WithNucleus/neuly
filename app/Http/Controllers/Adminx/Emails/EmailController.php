@@ -41,6 +41,11 @@ class EmailController extends Controller
         return view('adminx.emails.preferences.index');
     }
 
+    public function invitations(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    {
+        return view('adminx.emails.invitations.index');
+    }
+
     public function journeyShow($id): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         $journey = EmailJourney::findOrFail($id);

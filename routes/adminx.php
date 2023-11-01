@@ -43,6 +43,7 @@ Route::middleware(['auth', 'can:admin login'])->prefix('/adminx')->name('adminx.
         Route::get('/triggers/{id}', [App\Http\Controllers\Adminx\Emails\EmailController::class, 'triggerShow'])->name('triggers.show');
         Route::get('/preferences', [App\Http\Controllers\Adminx\Emails\EmailController::class, 'preferences'])->name('preferences.index');
         Route::get('/preferences/{email}', [App\Http\Controllers\Adminx\Emails\EmailController::class, 'preferenceShow'])->name('preferences.show');
+        Route::get('/invitations', [App\Http\Controllers\Adminx\Emails\EmailController::class, 'invitations'])->name('invitations.index');
     });
 
     // NAV TILES
@@ -76,6 +77,12 @@ Route::middleware(['auth', 'can:admin login'])->prefix('/adminx')->name('adminx.
             Route::get('/', [App\Http\Controllers\Adminx\Import\CourseController::class, 'index'])->name('index');
             Route::get('/results', [App\Http\Controllers\Adminx\Import\CourseController::class, 'results'])->name('results');
             Route::get('/results/{id}', [App\Http\Controllers\Adminx\Import\CourseController::class, 'show'])->name('show');
+        });
+
+        // Users
+        Route::prefix('/users')->name('users.')->group(function() {
+            Route::get('/', [App\Http\Controllers\Adminx\Import\ImportUsersController::class, 'index'])->name('index');
+            Route::get('/create', [App\Http\Controllers\Adminx\Import\ImportUsersController::class, 'create'])->name('create');
         });
     });
 

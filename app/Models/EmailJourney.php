@@ -19,6 +19,12 @@ class EmailJourney extends Model
         self::STATUS_INACTIVE
     ];
 
+    const JOURNEY_INVITED_USERS = 'Invited User';
+
+    const JOURNEYS_WITH_AUTOMATION = [
+        self::JOURNEY_INVITED_USERS
+    ];
+
     /* Relationships */
     public function emails(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
