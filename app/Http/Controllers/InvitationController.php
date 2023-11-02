@@ -8,6 +8,7 @@ use App\Models\TeamInvitation;
 use App\Models\UserInvitation;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class InvitationController extends Controller
 {
@@ -47,8 +48,15 @@ class InvitationController extends Controller
 
     public function acceptUserInvitation(Request $request): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Contracts\Foundation\Application
     {
+        if (Auth::user()) {
+            return redirect()->route('member.dashboard');
+        }
 
         $invitation = UserInvitation::where('token', $request->input('token'))->first();
+
+        if (!$invitation) {
+            return view('members.onboarding.lost-invitation');
+        }
 
         if ($invitation->invitee_id) {
             return redirect()->route('member.dashboard');
