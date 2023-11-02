@@ -76,6 +76,9 @@ class ReplaceMergeValues implements ShouldQueue, ShouldBeUnique
             if($needle === Email::MERGE_FIELD_URL) {
                 $link = '<a href="' . $replacement . '">click here</a>';
                 $body = str_replace("{click here}", $link, $body);
+            } elseif($needle === Email::MERGE_FIELD_BUTTON) {
+                $link = '<a href="' . $replacement . '" class="button button-primary" target="_blank" rel="noopener" style="box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, Helvetica, Arial, sans-serif, \'Apple Color Emoji\', \'Segoe UI Emoji\', \'Segoe UI Symbol\'; position: relative; -webkit-text-size-adjust: none; border-radius: 4px; color: #fff; display: inline-block; overflow: hidden; text-decoration: none; background-color: #1d8c6b; border-bottom: 8px solid #1d8c6b; border-left: 18px solid #1d8c6b; border-right: 18px solid #1d8c6b; border-top: 8px solid #1d8c6b;">Accept Invitation</a>';
+                $body = str_replace("{button}", $link, $body);
             } else {
                 $body = str_replace("{{$needle}}", $replacement, $body);
             }

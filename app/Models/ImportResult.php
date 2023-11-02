@@ -12,6 +12,7 @@ class ImportResult extends Model
     const TYPE_RELATED_ENTITIES_PEOPLE_ORGANIZATION = 'related_entities_people_organisation';
     const TYPE_BATCH_IMAGES_UPLOAD = 'batch_images_upload';
     const TYPE_COURSES_WITH_RELATIONSHIPS = 'Courses with Relationships';
+    const TYPE_USER_INVITES = 'User Invites';
 
     const STATUS_SUCCESS = 'Success';
     const STATUS_SUCCESS_WITH_ERRORS = 'Success with Errors';
@@ -76,6 +77,11 @@ class ImportResult extends Model
     public function scopeBatchImagesUpload($query)
     {
         return $query->where('type', self::TYPE_BATCH_IMAGES_UPLOAD);
+    }
+
+    public function scopeUsers($query)
+    {
+        return $query->where('type', self::TYPE_USER_INVITES);
     }
 
     /**

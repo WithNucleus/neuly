@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\Admin\Import\Courses;
 
-use App\Http\Imports\Courses\CompanyRelationshipImport;
+use App\Imports\Courses\CompanyRelationshipImport;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Maatwebsite\Excel\Facades\Excel;

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\EmailMarketing\DeleteInvitationEmails;
 use App\Models\Team;
 use App\Models\TeamInvitation;
+use App\Models\UserInvitation;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -41,5 +43,19 @@ class InvitationController extends Controller
         TeamInvitation::destroy($invitationId);
 
         return redirect()->route('member.dashboard')->with('success', 'Invitation accepted!');
+    }
+
+    public function acceptUserInvitation(Request $request): \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Contracts\Foundation\Application
+    {
+
+        $invitation = UserInvitation::where('token', $request->input('token'))->first();
+
+        if ($invitation->invitee_id) {
+            return redirect()->route('member.dashboard');
+        }
+
+        return view('members.onboarding.accept-invitation', [
+            'invitation' => $invitation
+        ]);
     }
 }

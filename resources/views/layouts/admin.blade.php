@@ -55,6 +55,7 @@
                                 <x-sidebar.list-group groupRoute="import" label="Import">
                                     <x-sidebar.list-group-item url="{{ route('adminx.import.clinical-trials.index') }}" label="Clinical Trials" />
                                     <x-sidebar.list-group-item url="{{ route('adminx.import.courses.index') }}" label="Courses" />
+                                    <x-sidebar.list-group-item url="{{ route('adminx.import.users.index') }}" label="Users" />
                                 </x-sidebar.list-group>
                             @endcan
                             @can('edit companies')
@@ -88,7 +89,7 @@
                                     <x-sidebar.list-group-item url="{{ route('adminx.emails.triggers.index') }}" label="Email Triggers" />
                                     <x-sidebar.list-group-item url="{{ route('adminx.emails.emails.index') }}" label="Email History" />
                                     <x-sidebar.list-group-item url="{{ route('adminx.emails.preferences.index') }}" label="Email Preferences" />
-{{--                                    <x-sidebar.list-group-item url="{{ route('adminx.emails.drips') }}" label="Email Drips" />--}}
+                                    <x-sidebar.list-group-item url="{{ route('adminx.emails.invitations.index') }}" label="User Invitations" />
                                 </x-sidebar.list-group>
                             @endcan
 

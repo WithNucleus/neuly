@@ -83,6 +83,7 @@ class CreateCampaignEmails implements ShouldQueue
                     'to_name' => $this->name,
                     'to_email' => $this->email,
                     'body' => $sequence->emailTemplate->body,
+                    'merge_fields' => $this->mergeFields,
                     'send_at' => $sendAt,
                 ]);
             }
