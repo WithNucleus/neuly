@@ -42,13 +42,17 @@ class VerificationController extends Controller
     public function __construct()
     {
         $this->middleware('auth')->except('verify');
-        $this->middleware('signed')->only('verify');
         $this->middleware('throttle:6,1')->only('verify', 'resend');
     }
 
     public function verify(Request $request)
     {
         $user = User::findOrFail($request->route('id'));
+
+        if (! $request->hasValidSignature()) {
+            $user->sendEmailVerificationNotification();
+            return view('auth.verification-expired');
+        }
 
         if (! hash_equals((string) $request->route('hash'), sha1($user->getEmailForVerification()))) {
             throw new AuthorizationException;
