@@ -93,9 +93,8 @@ class RecruitingTrials extends Component
         $this->validate();
 
         CareRequest::create([
-            'name' => $this->first_name . ' ' . $this->last_name,
+            'name' => $this->name,
             'email' => $this->email,
-            'phone' => $this->phone,
             'type' => CareRequest::TYPE_CLINICAL_TRIAL_PARTICIPANT,
             'status' => CareRequest::STATUS_OPEN,
             'message' => $this->message,
