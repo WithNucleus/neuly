@@ -7,6 +7,7 @@ use App\User;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use JetBrains\PhpStorm\ArrayShape;
+use Spatie\SlackAlerts\Facades\SlackAlert;
 
 class Feedback extends Model implements CrmActionsContract
 {
@@ -71,6 +72,21 @@ class Feedback extends Model implements CrmActionsContract
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
+    protected static function booted()
+    {
+        static::created(function ($feedback) {
+
+            SlackAlert::to('default')->message('*FEEDBACK: ' . $feedback->title . '*' . "\n" .
+                '*Type:* ' . $feedback->type . "\n" .
+                '*Name:* ' . $feedback->user_name . "\n" .
+                '*Email:* ' . $feedback->user_email . "\n" .
+                '*Message:*' . "\n" .
+                '```' . $feedback->content . '```' . "\n" .
+                '<' . route('adminx.misc.feedback', ['find' => $feedback->id]) .'|View Feedback>'
+            );
+        });
+    }
+
     #[ArrayShape([self::STATUS_CLOSED => "string[]", self::STATUS_AWAITING_RESPONSE => "string[]", self::STATUS_IN_PROGRESS => "string[]", self::STATUS_OPEN => "string[]"])] public static function crmActionItems(): array
     {
         return [
