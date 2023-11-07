@@ -3,13 +3,15 @@
 namespace App\Http\Livewire\Members\Onboarding;
 
 use App\Events\UserOnboardingDetailsCompleted;
+use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
+use Spatie\SlackAlerts\Facades\SlackAlert;
 
 class UserDetails extends Component
 {
-    public $user;
+    public User $user;
 
     public bool $showLongForm = true;
 
@@ -24,8 +26,6 @@ class UserDetails extends Component
     public bool $success = false;
 
     public function mount() {
-        $this->user = Auth::user();
-
         if ($this->user->last_name) {
             $this->showLongForm = false;
         }
@@ -62,7 +62,11 @@ class UserDetails extends Component
 
         event(new UserOnboardingDetailsCompleted($this->user));
 
-        $this->success = true;
+        if (Auth::attempt(['email' => $this->user->email, 'password' => $this->password], true)) {
+            $this->success = true;
+        } else {
+            SlackAlert::to('dev')->message('<@sydney> Problem during onboarding - unsuccessful auth for ' . $this->user->id);
+        }
     }
 
     public function render()
