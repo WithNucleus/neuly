@@ -48,8 +48,10 @@ class NeulyEduCourses extends Component
         'id' => null
     ];
 
-    public $name;
+    public $first_name;
+    public $last_name;
     public $email;
+    public $phone;
     public $message;
 
     public bool $noCoursesConcierge = false;
@@ -69,7 +71,8 @@ class NeulyEduCourses extends Component
         if (Auth::id()) {
             $user = User::findOrFail(Auth::id());
             $this->userId = $user->id;
-            $this->name = $user->full_name;
+            $this->first_name = $user->name;
+            $this->last_name = $user->last_name;
             $this->email = $user->email;
         }
     }
@@ -151,8 +154,10 @@ class NeulyEduCourses extends Component
 
     public function rules() {
         return [
-            'name' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
             'email' => 'required|email',
+            'phone' => 'required',
             'message' => 'required',
         ];
     }
@@ -161,8 +166,9 @@ class NeulyEduCourses extends Component
         $this->validate();
 
         EduRequest::create([
-            'name' => $this->name,
+            'name' => $this->first_name . ' ' . $this->last_name,
             'email' => $this->email,
+            'phone' => $this->phone,
             'type' => EduRequest::TYPE_COURSE_NO_MATCHES,
             'status' => EduRequest::STATUS_OPEN,
             'message' => $this->message,
@@ -186,8 +192,9 @@ class NeulyEduCourses extends Component
         $this->validate();
 
         EduRequest::create([
-            'name' => $this->name,
+            'name' => $this->first_name . ' ' . $this->last_name,
             'email' => $this->email,
+            'phone' => $this->phone,
             'type' => EduRequest::TYPE_COURSE_CONCIERGE,
             'status' => EduRequest::STATUS_OPEN,
             'message' => $this->message,
