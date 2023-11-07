@@ -15,13 +15,15 @@ class Index extends Component
     use WithPerPagePagination, WithBulkActions, WithCachedRows, WithSorting;
 
     protected string $paginationTheme = 'bootstrap';
-    protected $queryString = ['search'];
+    protected $queryString = ['search', 'find'];
 
     public ?string $search = null;
     public array $filters = [
         'type' => [],
         'status' => [],
     ];
+
+    public ?int $find = null;
 
     public $selectedFeedback;
     public ?string $assignedUser = NULL;
@@ -79,6 +81,7 @@ class Index extends Component
     public function clearFilters() {
         $this->reset('search');
         $this->reset('filters');
+        $this->reset('find');
         $this->resetPage();
     }
 
@@ -130,6 +133,9 @@ class Index extends Component
             })
             ->when($this->filters['status'], function($query, $valueArray) {
                 return $query->whereIn('status', $valueArray);
+            })
+            ->when($this->find, function($query, $id) {
+                return $query->where('id', $id);
             });
 
         return $this->applySorting($query);
