@@ -158,19 +158,29 @@
                                 <form wire:submit.prevent="submit">
                                     <div class="row">
                                         <div class="col-12 col-md-6 mb-3">
-                                            <label for="name" class="fw-bold text-uppercase">Your name</label>
-                                            <input wire:model="name" type="text" class="form-control" id="name">
-                                            @error('name') <div class="text-danger small">{{ $message }}</div> @enderror
+                                            <label for="first_name" class="fw-bold text-uppercase">First Name</label>
+                                            <input wire:model="first_name" type="text" class="form-control @error('first_name') is-invalid @enderror" id="first_name">
+                                            @error('first_name') <div class="text-danger small">{{ $message }}</div> @enderror
+                                        </div>
+                                        <div class="col-12 col-md-6 mb-3">
+                                            <label for="last_name" class="fw-bold text-uppercase">Last Name</label>
+                                            <input wire:model="last_name" type="text" class="form-control @error('last_name') is-invalid @enderror" id="last_name">
+                                            @error('last_name') <div class="text-danger small">{{ $message }}</div> @enderror
                                         </div>
                                         <div class="col-12 col-md-6 mb-3">
                                             <label for="email" class="fw-bold text-uppercase">Email</label>
-                                            <input wire:model="email" type="email" class="form-control" id="email">
+                                            <input wire:model="email" type="email" class="form-control @error('email') is-invalid @enderror" id="email">
                                             @error('email') <div class="text-danger small">{{ $message }}</div> @enderror
+                                        </div>
+                                        <div class="col-12 col-md-6 mb-3">
+                                            <label for="phone" class="fw-bold text-uppercase">Phone</label>
+                                            <input wire:model="phone" type="text" class="form-control @error('phone') is-invalid @enderror" id="phone">
+                                            @error('phone') <div class="text-danger small">{{ $message }}</div> @enderror
                                         </div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="message" class="fw-bold text-uppercase">Tell us what you're interested in</label>
-                                        <textarea wire:model="message" name="message" id="message" rows="4" class="form-control"></textarea>
+                                        <textarea wire:model="message" name="message" id="message" rows="4" class="form-control @error('message') is-invalid @enderror"></textarea>
                                         @error('message') <div class="text-danger small">{{ $message }}</div> @enderror
                                     </div>
                                     <div>
@@ -206,19 +216,29 @@
                                 <form wire:submit.prevent="submitConcierge">
                                     <div class="row">
                                         <div class="col-12 col-md-6 mb-3">
-                                            <label for="name" class="fw-bold text-uppercase">Your name</label>
-                                            <input wire:model="name" type="text" class="form-control" id="name">
-                                            @error('name') <div class="text-danger small">{{ $message }}</div> @enderror
+                                            <label for="first_name" class="fw-bold text-uppercase">First Name</label>
+                                            <input wire:model="first_name" type="text" class="form-control @error('first_name') is-invalid @enderror" id="first_name">
+                                            @error('first_name') <div class="text-danger small">{{ $message }}</div> @enderror
+                                        </div>
+                                        <div class="col-12 col-md-6 mb-3">
+                                            <label for="last_name" class="fw-bold text-uppercase">Last Name</label>
+                                            <input wire:model="last_name" type="text" class="form-control @error('last_name') is-invalid @enderror" id="last_name">
+                                            @error('last_name') <div class="text-danger small">{{ $message }}</div> @enderror
                                         </div>
                                         <div class="col-12 col-md-6 mb-3">
                                             <label for="email" class="fw-bold text-uppercase">Email</label>
-                                            <input wire:model="email" type="email" class="form-control" id="email">
+                                            <input wire:model="email" type="email" class="form-control @error('email') is-invalid @enderror" id="email">
                                             @error('email') <div class="text-danger small">{{ $message }}</div> @enderror
+                                        </div>
+                                        <div class="col-12 col-md-6 mb-3">
+                                            <label for="phone" class="fw-bold text-uppercase">Phone</label>
+                                            <input wire:model="phone" type="text" class="form-control @error('phone') is-invalid @enderror" id="phone">
+                                            @error('phone') <div class="text-danger small">{{ $message }}</div> @enderror
                                         </div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="message" class="fw-bold text-uppercase">Tell us what you're interested in</label>
-                                        <textarea wire:model="message" name="message" id="message" rows="4" class="form-control"></textarea>
+                                        <textarea wire:model="message" name="message" id="message" rows="4" class="form-control @error('message') is-invalid @enderror"></textarea>
                                         @error('message') <div class="text-danger small">{{ $message }}</div> @enderror
                                     </div>
                                     <div>
