@@ -26,8 +26,10 @@ class UserDetails extends Component
     public function mount() {
         $this->user = Auth::user();
 
-        if ($this->user->last_name) {
-            $this->showLongForm = false;
+        if ($this->user) {
+            if ($this->user->last_name) {
+                $this->showLongForm = false;
+            }
         }
     }
 
