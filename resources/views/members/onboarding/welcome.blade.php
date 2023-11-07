@@ -11,7 +11,7 @@
             </div>
             <h1 class="h2 text-transform-none">Welcome to Neuly!</h1>
             <div>
-                <livewire:members.onboarding.user-details />
+                <livewire:members.onboarding.user-details :user="\Illuminate\Support\Facades\Auth::user()" />
             </div>
         </div>
     </div>

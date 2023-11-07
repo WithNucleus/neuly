@@ -3,7 +3,7 @@
         <div>
             <p class="fs-5 text-success">Your account's been created! Now you can start exploring.</p>
             <div class="mt-4">
-                <a href="{{ Auth::user()->dashboard_link }}" class="btn btn-primary btn-lg btn-cta">Go to Your Dashboard</a>
+                <a href="{{ $user->dashboard_link }}" class="btn btn-primary btn-lg btn-cta">Go to Your Dashboard</a>
             </div>
         </div>
     @else
@@ -23,6 +23,7 @@
                         <div class="col-12 mb-3">
                             <label for="password" class="text-primary fw-bold text-uppercase">Password</label>
                             <input wire:model="password" type="password" class="form-control @error('password') is-invalid @enderror" id="password" placeholder="************">
+                            @error('password') <div class="text-danger small">{{ $message }}</div> @enderror
                         </div>
                         <div class="col-12 col-md-6 mb-3">
                             <label for="referred_by" class="text-primary fw-bold text-uppercase">How did you hear about us?</label>

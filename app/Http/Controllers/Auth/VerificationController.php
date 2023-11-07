@@ -62,6 +62,9 @@ class VerificationController extends Controller
             event(new Verified($user));
         }
 
-        return view('auth.verified', ['email' => $user->email]);
+        return view('auth.verified', [
+            'email' => $user->email,
+            'user' => $user
+        ]);
     }
 }
