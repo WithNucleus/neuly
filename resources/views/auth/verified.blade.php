@@ -11,7 +11,7 @@
             </div>
             <h1 class="h2 text-transform-none">Thanks for verifying your email!</h1>
             <div>
-                <livewire:members.onboarding.user-details />
+                <livewire:members.onboarding.user-details :user="$user" />
             </div>
         </div>
     </div>
