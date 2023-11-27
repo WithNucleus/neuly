@@ -8,11 +8,15 @@ class EntityLogoCard extends Component
 {
     public string $url;
     public string $linkClasses;
+    public ?string $cardClasses;
+    public ?string $cardBodyClasses;
 
-    public function __construct(string $url, string $linkClasses = 'py-4')
+    public function __construct(string $url, string $linkClasses = 'py-4', string $cardClasses = null, string $cardBodyClasses = null)
     {
         $this->url = $url;
         $this->linkClasses = $linkClasses;
+        $this->cardClasses = $cardClasses;
+        $this->cardBodyClasses = $cardBodyClasses;
     }
 
     /**

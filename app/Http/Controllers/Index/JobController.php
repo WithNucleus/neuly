@@ -9,6 +9,7 @@ use App\Models\Investor;
 use App\Models\Job;
 use App\Models\Location;
 use App\Services\Metas;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -44,7 +45,7 @@ class JobController extends Controller
             'image' => '',
         ]);
 
-        $related = $this->getReltaedEntities($job);
+        $related = $this->getRelatedEntities($job);
 
         $entity = $job;
 
@@ -126,21 +127,16 @@ class JobController extends Controller
         ];
     }
 
-    private function getReltaedEntities(Job $job)
+    private function getRelatedEntities(Job $job)
     {
         $focuses = $job->focus->pluck('id');
 
-        $relatedIds = DB::table('focus_job')
-            ->select(['job_id', DB::raw('COUNT(job_id) as accurance')])
-            ->whereIn('focus_id', $focuses)
-            ->where('job_id', '!=', $job->id)
-            ->groupBy('job_id')
-            ->orderBy('accurance', 'desc')
-            ->take(6)
-            ->get()->pluck('job_id');
-
-        $entities = Job::whereIn('id', $relatedIds)->get();
-
-        return $entities;
+        return Job::open()
+            ->orderByDesc('posted_date')
+            ->where('id', '!=', $job->id)
+            ->whereHas('focus', function(Builder $query) use ($focuses) {
+                $query->whereIn('id', $focuses);
+            })
+            ->take(4)->get();
     }
 }

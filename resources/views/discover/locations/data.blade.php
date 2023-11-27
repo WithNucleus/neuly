@@ -25,7 +25,7 @@
 @if($location->jobs_count > 0)
     <x-entities.collapsable-related-entity collapsableId="jobsList" label="Jobs">
         @foreach ($location->jobs as $job)
-            <x-entities.related.job-card :job="$job" withOwner="true" />
+            <x-entities.related.job-card :job="$job" />
         @endforeach
     </x-entities.collapsable-related-entity>
 @endif
