@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\JobRequest;
+use App\Models\EmploymentType;
 use App\Models\Job;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
@@ -38,20 +39,20 @@ class JobCrudController extends CrudController
         $this->crud->addColumn(['name' => 'owner', 'type' => 'relationship', 'label' => 'Owner', 'attribute' => 'name']);
         $this->crud->addColumn(['name' => 'status', 'type' => 'text', 'label' => 'Status']);
         $this->crud->addColumn(['name' => 'posted_date', 'type' => 'date', 'label' => 'Posted Date']);
-        $this->crud->addColumn(['name' => 'employment_type', 'type' => 'text', 'label' => 'Employment Type']);
+        $this->crud->addColumn([
+            'label' => 'Employment Type',
+            'type' => 'relationship',
+            'name' => 'employmentTypes',
+            'attribute' => 'name',
+        ]);
         $this->crud->addColumn(['name' => 'salary', 'label' => 'Salary', 'type' => 'number', 'prefix' => '$']);
+        $this->crud->addColumn(['name' => 'salary_max', 'label' => 'Salary (Max)', 'type' => 'number', 'prefix' => '$']);
         $this->crud->addColumn(['name' => 'hourly_rate', 'label' => 'Hourly Rate', 'type' => 'number', 'prefix' => '$', 'decimals' => 2]);
     }
 
     protected function setupShowOperation()
     {
         $this->setupListOperation();
-
-        $this->crud->addColumn([
-            'name' => 'employment_type',
-            'type' => 'text',
-            'label' => 'Employment Type',
-        ]);
 
         $this->crud->addColumn([
             'label' => 'Focus',
@@ -101,6 +102,12 @@ class JobCrudController extends CrudController
         ]);
 
         $this->crud->addField([
+            'name' => 'url',
+            'type' => 'url',
+            'label' => 'URL / Apply Link',
+        ]);
+
+        $this->crud->addField([
             'name' => 'status',
             'type' => 'select_from_array',
             'label' => 'Status',
@@ -115,6 +122,13 @@ class JobCrudController extends CrudController
         ]);
 
         $this->crud->addField([
+            'name' => 'salary_max',
+            'label' => 'Salary (Max)',
+            'type' => 'number',
+            'prefix' => '$',
+        ]);
+
+        $this->crud->addField([
             'name' => 'hourly_rate',
             'label' => 'Hourly Rate',
             'type' => 'number',
@@ -122,44 +136,21 @@ class JobCrudController extends CrudController
             'attributes' => ['step' => '.01'],
         ]);
 
-//        $this->crud->addField([
-//            'name' => 'owner',
-//            'type' => 'relationship',
-//            'morphOptions' => [
-//                Company::class,
-//                Investor::class
-//            ]
-//        ]);
         CRUD::field('owner')
             ->addMorphOption('App\Models\Company')
             ->addMorphOption('App\Models\Investor');
 
-//        $this->crud->addField([
-//            'name' => 'owner',
-//            'type' => 'relationship',
-//            'label' => 'Owner',
-//            'showAsterisk' => true,
-//            'model' => '', //hack for backpack's handle of polymorphic 1-n relations
-//            'data' => [
-//                'companies' => [
-//                    'label' => 'Company',
-//                    'type' => Company::class,
-//                    'options' => Company::orderBy('name')->pluck('name', 'id'),
-//                ],
-//                'investors' => [
-//                    'label' => 'Investor',
-//                    'type' => Investor::class,
-//                    'options' => Investor::orderBy('name')->pluck('name', 'id'),
-//                ],
-//            ],
-//        ]);
-
         $this->crud->addField([
-            'name' => 'employment_type',
-            'type' => 'radio',
             'label' => 'Employment Type',
-            'options' => Job::getEmploymentTypeValues(),
-            'inline' => true,
+            'type' => 'select2_multiple',
+            'name' => 'employmentTypes',
+            'entity' => 'employmentTypes',
+            'attribute' => 'name',
+            'pivot' => true,
+            'options' => (function ($query) {
+                return $query->orderBy('name', 'ASC')->get();
+            }),
+            'model' => \App\Models\EmploymentType::class,
         ]);
 
         $this->crud->addField([

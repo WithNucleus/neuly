@@ -408,6 +408,18 @@ img {
     }
 }
 
+.medium-square-card {
+    width: 100%;
+    max-width: 200px;
+
+    .logo-is-contained {
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+        background-size: contain;
+    }
+}
+
 $img-heights: 30 80 120;
 
 @each $size in $img-heights {
@@ -564,7 +576,7 @@ $img-heights: 30 80 120;
 }
 
 // Max Widths
-$max-widths: 60 80 100 150 200 250 300 360 400 500 600 740 780 800 840 1000;
+$max-widths: 60 80 100 150 200 250 300 360 400 500 600 740 780 800 840 1000 1300;
 
 @each $size in $max-widths {
     .max-width-#{$size} {
@@ -1338,4 +1350,39 @@ footer {
     position: fixed;
     top: 4rem;
     z-index: 999;
+}
+
+.job-details-table {
+    margin-bottom: 0;
+
+    tr, th, td {
+        background: none;
+    }
+
+    th {
+        width: 210px;
+    }
+
+    tr:last-of-type {
+        th, td {
+            border-bottom: 0;
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    .job-details-table {
+        font-size: 1rem;
+
+        tr {
+            display: flex;
+            flex-direction: column;
+        }
+
+        th {
+            width: 100%;
+            border-bottom: 0;
+            padding-bottom: 0;
+        }
+    }
 }

@@ -35,7 +35,6 @@ class Job extends Model implements EntityContract
     ];
 
     const STATUS_OPEN = 'open';
-
     const STATUS_ARCHIVED = 'archived';
 
     const STATUS_VALUES = [
@@ -59,14 +58,18 @@ class Job extends Model implements EntityContract
         'owner_type',
         'job_description',
         'employment_type',
+        'employment_types',
         'posted_date',
         'salary',
+        'salary_max',
         'hourly_rate',
         'status',
+        'url'
     ];
 
     protected $casts = [
         'posted_date' => 'date',
+        'employment_types' => 'array'
     ];
 
     // log activity for all attributes, which not listed in $guarded array
@@ -127,6 +130,11 @@ class Job extends Model implements EntityContract
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+
+    public function employmentTypes(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(EmploymentType::class)->withTimestamps();
+    }
 
     public function owner()
     {
@@ -230,6 +238,15 @@ class Job extends Model implements EntityContract
     public function getPrettyPostedDateAttribute(): string
     {
         return Carbon::parse($this->posted_date)->format('M d, Y');
+    }
+
+    public function getApplicationUrlAttribute(): ?string
+    {
+        if ($this->url) {
+            return $this->url . '?utm_source=neuly&utm_medium=website&utm_campaign=job_listing';
+        }
+
+        return route('discover.jobs.apply', $this->slug);
     }
 
     /*
