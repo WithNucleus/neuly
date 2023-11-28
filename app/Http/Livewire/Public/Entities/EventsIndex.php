@@ -6,17 +6,18 @@ use App\Http\Livewire\Traits\WithBulkActions;
 use App\Http\Livewire\Traits\WithCachedRows;
 use App\Http\Livewire\Traits\WithPerPagePagination;
 use App\Http\Livewire\Traits\WithSorting;
-use App\Http\Livewire\Public\Entities\Traits\HasCompanyFilter;
-use App\Http\Livewire\Public\Entities\Traits\HasLocationFilter;
-use App\Http\Livewire\Public\Entities\Traits\HasPersonFilter;
+use App\Http\Livewire\Public\Entities\Traits\HasCompanyFilterWithQuery;
+use App\Http\Livewire\Public\Entities\Traits\HasPersonFilterWithQuery;
+use App\Http\Livewire\Public\Entities\Traits\HasLocationFilterWithQuery;
 use App\Models\Event;
 use App\Models\EventType;
 use App\Models\Focus;
+use Carbon\Carbon;
 use Livewire\Component;
 
 class EventsIndex extends Component
 {
-    use WithPerPagePagination, WithBulkActions, WithCachedRows, WithSorting, HasCompanyFilter, HasLocationFilter, HasPersonFilter;
+    use WithPerPagePagination, WithBulkActions, WithCachedRows, WithSorting, HasCompanyFilterWithQuery, HasLocationFilterWithQuery, HasPersonFilterWithQuery;
 
     protected string $paginationTheme = 'bootstrap';
     protected $queryString = ['search'];
@@ -30,13 +31,52 @@ class EventsIndex extends Component
         'locations' => [],
         'people' => [],
         'companies' => [],
-        'upcoming' => false
+        'upcoming' => false,
+        'start_date' => null,
+        'end_date' => null
     ];
+
+    public array $typeOptions = [];
+    public array $focusDrugOptions = [];
+    public array $focusOtherOptions = [];
 
     public function mount() {
         $this->sorts = [
-            'start_date' => 'desc'
+            'start_date' => 'asc'
         ];
+
+        $this->setStartDate();
+        $this->setCheckboxes();
+    }
+
+    private function setCheckboxes() {
+        $focusOptions = Focus::whereRelation('events', 'start_date', '>=', $this->filters['start_date'])
+            ->withCount(["events" => function($query) {
+                $query->where('start_date', '>=', $this->filters['start_date']);
+            }])
+            ->orderBy('type')
+            ->orderByDesc('events_count')
+            ->get()
+            ->groupBy('type')
+            ->toArray();
+
+        $focusDrugOptions = $focusOptions['drug'];
+        $focusOtherOptions = $focusOptions[''];
+        $focusOtherOptions = array_slice($focusOtherOptions, 0, 10);
+
+        $this->focusDrugOptions = $focusDrugOptions;
+        $this->focusOtherOptions = $focusOtherOptions;
+
+        $this->typeOptions = EventType::whereRelation('events', 'start_date', '>=', $this->filters['start_date'])
+            ->withCount(["events" => function($query) {
+                $query->where('start_date', '>=', $this->filters['start_date']);
+            }])
+            ->get()
+            ->toArray();
+    }
+
+    private function setStartDate() {
+        $this->filters['start_date'] = Carbon::now()->format('Y-m-d');
     }
 
     public function updatingSearch() {
@@ -45,6 +85,10 @@ class EventsIndex extends Component
 
     public function updatingFilters() {
         $this->resetPage();
+    }
+
+    public function updatedFiltersStartDate() {
+        $this->setCheckboxes();
     }
 
     public function clearSearch() {
@@ -63,6 +107,12 @@ class EventsIndex extends Component
         $this->reset('companySearch');
         $this->reset('companySearchResults');
         $this->resetPage();
+        $this->setStartDate();
+        $this->setCheckboxes();
+
+        $this->sorts = [
+            'start_date' => 'asc'
+        ];
     }
 
     public function gotoPage($page)
@@ -84,15 +134,15 @@ class EventsIndex extends Component
     }
 
     public function updatedCompanySearch() {
-        $this->returnCompanySearch('events');
+        $this->returnCompanySearch('events', 'start_date', '>=', $this->filters['start_date']);
     }
 
     public function updatedPersonSearch() {
-        $this->returnPersonSearch('events');
+        $this->returnPersonSearch('events', 'start_date', '>=', $this->filters['start_date']);
     }
 
     public function updatedLocationSearch() {
-        $this->returnLocationSearch('events');
+        $this->returnLocationSearch('events', 'start_date', '>=', $this->filters['start_date']);
     }
 
     public function getRowsQueryProperty()
@@ -140,6 +190,16 @@ class EventsIndex extends Component
                     return $query->whereHas('focus', function($query) use ($valueArray) {
                         $query->whereIn('name', $valueArray);
                     });
+                })
+                ->when($this->filters['start_date'], function($query, $value) {
+                    return $query->whereHas('focus', function($query) use ($value) {
+                        $query->where('start_date', '>=', $value);
+                    });
+                })
+                ->when($this->filters['end_date'], function($query, $value) {
+                    return $query->whereHas('focus', function($query) use ($value) {
+                        $query->where('end_date', '<=', $value);
+                    });
                 });
 
         return $this->applySorting($query);
@@ -154,16 +214,8 @@ class EventsIndex extends Component
 
     public function render()
     {
-        $focusOptions = Focus::whereHas('events')->withCount('events')->orderBy('type')->orderByDesc('events_count')->get()->groupBy('type')->toArray();
-        $focusDrugOptions = $focusOptions['drug'];
-        $focusOtherOptions = $focusOptions[''];
-        $focusOtherOptions = array_slice($focusOtherOptions, 0, 10);
-
         return view('livewire.public.entities.events-index', [
-            'records' => $this->rows,
-            'typeOptions' => EventType::whereHas('events')->pluck('name')->toArray(),
-            'focusDrugOptions' => $focusDrugOptions,
-            'focusOtherOptions' => $focusOtherOptions
+            'records' => $this->rows
         ]);
     }
 }

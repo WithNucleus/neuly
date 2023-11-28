@@ -9,20 +9,20 @@ trait HasLocationFilterWithQuery {
     public ?string $locationSearch = null;
     public array $locationSearchResults = [];
 
-    public function returnLocationSearch($entity) {
+    public function returnLocationSearch($entity, $queryField, $queryComparison, $queryValue) {
         if($this->locationSearch) {
-            $this->locationSearchResults = Location::whereHas($entity)
-                ->withCount(["{$entity} AS related_count" => function($query) {
-                    $query->where('status', $this->filters['status']);
+            $this->locationSearchResults = Location::whereRelation("{$entity}", $queryField, $queryComparison, $queryValue)
+                ->withCount(["{$entity} AS related_count" => function($query) use ($queryField, $queryComparison, $queryValue) {
+                    $query->where($queryField, $queryComparison, $queryValue);
                 }])
                 ->where('name', 'like', '%' . $this->locationSearch . '%')
                 ->orderByDesc('related_count')
                 ->get()
                 ->toArray();
         } else {
-            $this->locationSearchResults = Location::whereHas($entity)
-                ->withCount(["{$entity} as related_count" => function($query) {
-                    $query->where('status', $this->filters['status']);
+            $this->locationSearchResults = Location::whereRelation("{$entity}", $queryField, $queryComparison, $queryValue)
+                ->withCount(["{$entity} as related_count" => function($query) use ($queryField, $queryComparison, $queryValue) {
+                    $query->where($queryField, $queryComparison, $queryValue);
                 }])
                 ->orderByDesc('related_count')
                 ->take(5)
