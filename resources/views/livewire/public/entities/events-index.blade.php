@@ -6,12 +6,17 @@
             <x-livewire-filters.search label="Search events" placeholder="Search" search="{{ $search }}" tooltip="Search by name, keyword, location, person..." />
 
             <div class="my-4">
-                <x-livewire-filters.checkbox-single wireModel="filters.upcoming" id="filter-upcoming" label="Hide Past Events" />
+                <h4 class="h5 text-body-emphasis">Date</h4>
+                <div class="d-xl-flex align-items-center">
+                    <input wire:model="filters.start_date" type="date" class="form-control form-control-sm rounded-0">
+                    <span class="px-1">to</span>
+                    <input wire:model="filters.end_date" type="date" class="form-control form-control-sm rounded-0">
+                </div>
             </div>
 
             <div class="my-4">
                 <h4 class="h5 text-body-emphasis">Type</h4>
-                <x-livewire-filters.checkbox-multiple wireModel="filters.type" id="filter-type" :options="$typeOptions" :currentFilters="$filters['type']" />
+                <x-livewire-filters.checkbox-multiple-with-count wireModel="filters.type" id="filter-type" :options="$typeOptions" :currentFilters="$filters['type']" countName="events_count" />
             </div>
 
             <div class="my-4">
@@ -81,40 +86,60 @@
                     <x-entities.entity-index-sort-button label="Date" field="start_date" :sorts="$sorts" />
                 </div>
             </div>
-            @forelse($records as $event)
-                <div wire:key="{{ $event->slug }}" class="col-12 col-md-6 col-xl-4 col-xxl-3 mb-4">
-                    <x-entities.entity-logo-card url="{{ route('discover.events.show', $event->slug) }}" linkClasses="py-2 d-flex flex-column justify-content-between">
-                        <div>
-                            <div class="text-primary h6 mb-3 text-uppercase">{{ $event->pretty_start_date }}</div>
-                            <div class="logo-is-contained" style="background-image: url('{{ $event->entityImageUrl ?? asset('images/image-placeholder-event.png') }}')"></div>
-                            <p class="my-3 h5 px-2 text-success">{{ $event->name }}</p>
-                        </div>
-                        <div>
-                            @if($event->focus->count() > 0)
-                                <div class="d-flex flex-wrap justify-content-center align-items-center lead">
-                                    @foreach($event->focus as $focus)
-                                        <span class="mx-2 mt-3 badge bg-body-tertiary text-body-emphasis">{{ $focus->name }}</span>
-                                    @endforeach
+            <div class="col-12">
+                @forelse($records as $event)
+                    <div wire:key="{{ $event->slug }}" class="mb-4 max-width-1000">
+                        <x-entities.entity-logo-card url="{{ route('discover.events.show', $event->slug) }}" linkClasses="py-2 text-start" cardClasses="border-0" cardBodyClasses="bg-body-tertiary border-0">
+                            <div class="d-lg-flex align-items-start">
+                                <div class="flex-shrink-0 me-lg-4 mb-3 mb-lg-0 text-lg-center event-index-image-container">
+                                    <div class="medium-square-card bg-white border">
+                                        <div class="logo-is-contained" style="background-image: url('{{ $event->entityImageUrl ?? asset('images/image-placeholder-event.png') }}')"></div>
+                                    </div>
+                                    <div class="h6 text-uppercase fw-bold mt-2">
+                                        {{ $event->pretty_start_date }}
+                                    </div>
                                 </div>
-                            @endif
-                            @if($event->eventTypes->count() > 0)
-                                <div class="d-flex flex-wrap justify-content-center align-items-center lead">
-                                    @foreach($event->eventTypes as $eventType)
-                                        <span class="mx-2 mt-3">{{ $eventType->name }}</span>
-                                    @endforeach
-                                </div>
-                            @endif
-                        </div>
-                    </x-entities.entity-logo-card>
-                </div>
+                                <div class="text-content flex-grow-1 d-flex flex-column justify-content-between">
+                                    <div class="h4 text-success">{{ $event->name }}</div>
 
-            @empty
-                <div wire:key="empty" class="w-100">
-                    <p class="lead mb-0">
-                        No events match your search criteria.
-                    </p>
-                </div>
-            @endforelse
+                                    @if($event->eventTypes->count() > 0)
+                                        <div class="fs-6">
+                                            @foreach($event->eventTypes as $eventType)
+                                                <span class="text-primary">{{ $eventType->name }}</span>
+                                                @if(!$loop->last) <span class="mx-1">/</span> @endif
+                                            @endforeach
+                                        </div>
+                                    @endif
+
+                                    @if($event->locations->count() > 0)
+                                        <div class="mt-2 text-body-emphasis">
+                                            <span>{{ $event->locations->first()->name }}</span>
+                                            @if($event->locations->count() > 1)
+                                                <span class="text-body-secondary small">(and more)</span>
+                                            @endif
+                                        </div>
+                                    @endif
+
+                                    @if($event->focus->count() > 0)
+                                        <div class="d-flex flex-wrap lead">
+                                            @foreach($event->focus as $focus)
+                                                <span class="mt-3 badge bg-body-secondary text-body me-3">{{ $focus->name }}</span>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </x-entities.entity-logo-card>
+                    </div>
+
+                @empty
+                    <div wire:key="empty" class="w-100">
+                        <p class="lead mb-0">
+                            No events match your search criteria.
+                        </p>
+                    </div>
+                @endforelse
+            </div>
         </div>
 
         <div class="d-flex justify-content-center mb-5">

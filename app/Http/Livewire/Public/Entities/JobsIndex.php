@@ -164,7 +164,7 @@ class JobsIndex extends Component
     }
 
     public function updatedLocationSearch() {
-        $this->returnLocationSearch('jobs');
+        $this->returnLocationSearch('jobs', 'status', '=', $this->filters['status']);
     }
 
     public function getRowsQueryProperty()
