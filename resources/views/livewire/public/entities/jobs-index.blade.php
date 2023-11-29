@@ -66,10 +66,19 @@
     </div>
     <div class="entity-index-listings w-100">
         <div class="row">
-            <div class="col-12 d-md-flex justify-content-between align-items-end">
-                <h1 class="me-4 mb-md-0 text-body-emphasis">Jobs</h1>
-                <div class="lead">
-                    {{ $records->total() }} Jobs
+            <div class="col-12">
+                <h1 class="me-4 mb-md-0 text-body-emphasis">{{ $filters['status'] }} Jobs</h1>
+                <div class="d-md-flex justify-content-between align-items-end">
+                    <div class="lead">
+                        @if($filters['status'] === \App\Models\Job::STATUS_OPEN)
+                            <span>Jobs that are currently accepting applications</span>
+                        @else
+                            <span>These jobs have been archived and are no longer accepting applications.</span>
+                        @endif
+                    </div>
+                    <div class="lead">
+                        {{ $records->total() }} Jobs
+                    </div>
                 </div>
             </div>
             <div class="col-12 my-3">
