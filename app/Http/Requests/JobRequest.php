@@ -29,7 +29,7 @@ class JobRequest extends FormRequest
             'slug' => 'required|min:3|max:255|unique:jobs,slug,'.$this->get('id'),
             'posted_date' => 'required',
             'owner' => 'required',
-            'employment_type' => 'required',
+            'employmentTypes' => 'required',
             'job_description' => 'required',
         ];
     }

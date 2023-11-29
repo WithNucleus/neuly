@@ -1,18 +1,27 @@
-@extends('layouts.app')
+@extends('layouts.entity-show')
+
+@section('breadcrumbs')
+    @include('navbars.breadcrumb', [
+        'items' => [
+            'Jobs' => route('discover.jobs'),
+            $job->name  => route('discover.jobs.show', $job->slug),
+            'Apply' => false
+        ]
+    ])
+@endsection
 
 @section('content')
-    @include('navbars.primary')
 
     <div class="container py-5">
-        <div class="d-md-flex align-items-end justify-content-between mb-2">
+        <div class="d-md-flex align-items-end justify-content-between mb-4">
             <h1 class="mb-0 text-accent">Apply Now</h1>
-            <a href="{{ route('discover.jobs.show', $job->slug) }}">
+            <a href="{{ route('discover.jobs.show', $job->slug) }}" class="text-decoration-none text-uppercase fw-bold">
                 <i class="fal fa-long-arrow-left me-1"></i><span>Back to Job Listing</span>
             </a>
         </div>
 
         <div class="h4">
-            {{ $job->job_title }} at <a href="{{ $job->ownerShowUrl }}">{{ $job->owner->name }}</a>
+            {{ $job->job_title }}<br>at <a href="{{ $job->ownerShowUrl }}">{{ $job->owner->name }}</a>
         </div>
 
         <div class="fs-6 my-3">
@@ -37,7 +46,7 @@
                     @error('cover_letter') <div class="text-danger small">Your cover letter is required</div> @enderror
                 </div>
                 <div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-primary rounded-0">Submit</button>
                 </div>
             </form>
         </div>

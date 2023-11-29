@@ -2,20 +2,21 @@
 
 namespace App\Http\Livewire\Public\Entities;
 
+use App\Http\Livewire\Public\Entities\Traits\HasLocationFilterWithQuery;
 use App\Http\Livewire\Traits\WithBulkActions;
 use App\Http\Livewire\Traits\WithCachedRows;
 use App\Http\Livewire\Traits\WithPerPagePagination;
 use App\Http\Livewire\Traits\WithSorting;
-use App\Http\Livewire\Public\Entities\Traits\HasLocationFilter;
 use App\Models\Company;
+use App\Models\EmploymentType;
 use App\Models\Focus;
+use App\Models\Investor;
 use App\Models\Job;
-use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 
 class JobsIndex extends Component
 {
-    use WithPerPagePagination, WithBulkActions, WithCachedRows, WithSorting, HasLocationFilter;
+    use WithPerPagePagination, WithBulkActions, WithCachedRows, WithSorting, HasLocationFilterWithQuery;
 
     protected string $paginationTheme = 'bootstrap';
     protected $queryString = ['search'];
@@ -27,14 +28,96 @@ class JobsIndex extends Component
         'focus' => [],
         'industry' => [],
         'locations' => [],
-        'now-hiring' => false,
-        'upcoming-events' => false
+        'owners' => [],
+        'remote' => false,
+        'status' => Job::STATUS_OPEN
     ];
+
+    public array $typeOptions = [];
+    public array $focusDrugOptions = [];
+    public array $focusOtherOptions = [];
+
+    public ?string $ownerSearch = null;
+    public array $ownerSearchResults = [];
 
     public function mount() {
         $this->sorts = [
-            'updated_at' => 'desc'
+            'posted_date' => 'desc'
         ];
+
+        $this->setCheckboxes();
+    }
+
+    private function setCheckboxes() {
+        $focusOptions = Focus::whereRelation('jobs', 'status', $this->filters['status'])
+            ->withCount(["jobs" => function($query) {
+                $query->where('status', $this->filters['status']);
+            }])
+            ->orderBy('type')
+            ->orderByDesc('jobs_count')
+            ->get()
+            ->groupBy('type')
+            ->toArray();
+
+        $focusDrugOptions = $focusOptions['drug'];
+        $focusOtherOptions = $focusOptions[''];
+        $focusOtherOptions = array_slice($focusOtherOptions, 0, 10);
+
+        $this->focusDrugOptions = $focusDrugOptions;
+        $this->focusOtherOptions = $focusOtherOptions;
+
+        $this->typeOptions = EmploymentType::whereRelation('jobs', 'status', $this->filters['status'])
+            ->withCount(["jobs" => function($query) {
+                $query->where('status', $this->filters['status']);
+            }])
+            ->get()
+            ->toArray();
+    }
+
+    public function updatedFiltersStatus() {
+        $this->setCheckboxes();
+    }
+
+    public function returnOwnerSearch() {
+        if($this->ownerSearch) {
+            $companies = Company::whereRelation('jobs', 'status', $this->filters['status'])
+                ->withCount(["jobs AS related_count" => function($query) {
+                    $query->where('status', $this->filters['status']);
+                }])
+                ->where('name', 'like', '%' . $this->ownerSearch . '%')
+                ->orderByDesc('related_count')
+                ->get()
+                ->toArray();
+            $investors = Investor::whereRelation('jobs', 'status', $this->filters['status'])
+                ->withCount(["jobs AS related_count" => function($query) {
+                    $query->where('status', $this->filters['status']);
+                }])
+                ->where('name', 'like', '%' . $this->ownerSearch . '%')
+                ->orderByDesc('related_count')
+                ->get()
+                ->toArray();
+
+            $this->ownerSearchResults = array_merge($companies, $investors);
+        } else {
+            $this->ownerSearchResults = Company::whereRelation('jobs', 'status', $this->filters['status'])
+                ->withCount(["jobs AS related_count" => function($query) {
+                    $query->where('status', $this->filters['status']);
+                }])
+                ->orderByDesc('related_count')
+                ->take(5)
+                ->get()
+                ->toArray();
+        }
+    }
+
+    public function setOwnerFilter($value) {
+        $this->filters['owners'][] = $value;
+        $this->reset('ownerSearch');
+        $this->reset('ownerSearchResults');
+    }
+
+    public function updatedOwnerSearch() {
+        $this->returnOwnerSearch();
     }
 
     public function updatingSearch() {
@@ -53,10 +136,13 @@ class JobsIndex extends Component
     public function clearFilters() {
         $this->reset('search');
         $this->reset('filters');
-        $this->reset('sorts');
         $this->reset('locationSearch');
         $this->reset('locationSearchResults');
+        $this->sorts = [
+            'posted_date' => 'desc'
+        ];
         $this->resetPage();
+        $this->setCheckboxes();
     }
 
     public function gotoPage($page)
@@ -114,11 +200,18 @@ class JobsIndex extends Component
                         $query->whereIn('name', $valueArray);
                     });
                 })
-                ->when($this->filters['now-hiring'], function($query, $value) {
-                    return $query->hasJobs();
+                ->when($this->filters['owners'], function($query, $valueArray) {
+                    return $query->whereHas('owner', function($query) use ($valueArray) {
+                        $query->whereIn('name', $valueArray);
+                    });
                 })
-                ->when($this->filters['upcoming-events'], function($query, $value) {
-                    return $query->hasUpcomingEvents();
+                ->when($this->filters['remote'], function($query) {
+                    return $query->whereHas('locations', function($query) {
+                        $query->whereIn('name', ['Remote', 'Virtual']);
+                    });
+                })
+                ->when($this->filters['status'], function($query, $value) {
+                    return $query->where('status', $value);
                 });
 
         return $this->applySorting($query);
@@ -133,16 +226,9 @@ class JobsIndex extends Component
 
     public function render(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
-        $focusOptions = Focus::whereHas('jobs')->withCount('jobs')->orderBy('type')->orderByDesc('jobs_count')->get()->groupBy('type')->toArray();
-        $focusDrugOptions = $focusOptions['drug'];
-        $focusOtherOptions = $focusOptions[''];
-        $focusOtherOptions = array_slice($focusOtherOptions, 0, 10);
-
         return view('livewire.public.entities.jobs-index', [
             'records' => $this->rows,
-            'typeOptions' => Job::EMPLOYMENT_TYPE,
-            'focusDrugOptions' => $focusDrugOptions,
-            'focusOtherOptions' => $focusOtherOptions
+            'statusOptions' => Job::STATUS_VALUES
         ]);
     }
 }

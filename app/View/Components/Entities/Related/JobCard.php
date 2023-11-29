@@ -10,7 +10,7 @@ class JobCard extends Component
     public Job $job;
     public bool $withOwner;
 
-    public function __construct(Job $job, bool $withOwner = false)
+    public function __construct(Job $job, bool $withOwner = true)
     {
         $this->job = $job;
         $this->withOwner = $withOwner;
