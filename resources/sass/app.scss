@@ -1386,3 +1386,12 @@ footer {
         }
     }
 }
+
+.event-index-image-container {
+    width: 100%;
+    max-width: 360px;
+
+    @media (min-width: 992px) {
+        max-width: 200px;
+    }
+}
