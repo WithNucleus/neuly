@@ -13,6 +13,7 @@ Route::middleware(['auth', 'can:admin login'])->prefix('/adminx')->name('adminx.
     // TODO: Do not have proper permissions for all entities
     Route::prefix('/courses')->name('courses.')->middleware('permission:edit companies')->group(function () {
         Route::get('/', [App\Http\Controllers\Adminx\Entities\CourseController::class, 'index'])->name('index');
+        Route::get('/programs', [App\Http\Controllers\Adminx\Entities\CourseController::class, 'programs'])->name('programs');
     });
 
     Route::prefix('/clinical-trials')->name('clinical-trials.')->middleware('permission:edit clinical trials')->group(function () {

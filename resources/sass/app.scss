@@ -1159,6 +1159,11 @@ footer {
     }
 }
 
+@media (min-width: 992px) {
+    .course-program-filter-menu {
+        min-width: 380px;
+    }
+}
 
 /* Neuly Help Modal */
 .neuly-help-logo-item {

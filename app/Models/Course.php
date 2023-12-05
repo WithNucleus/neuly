@@ -50,14 +50,20 @@ class Course extends Model
         'featured' => 'boolean',
     ];
 
-    const TYPE_ONLINE = 'Online';
-    const TYPE_OFFLINE = 'In-Person';
-    const TYPE_HYBRID = 'Hybrid';
+    const TYPE_CERTIFICATION = 'Certification';
+    const TYPE_CONTINUING_EDUCATION = 'Continuing Education';
+    const TYPE_HIGHER_EDUCATION = 'Higher Education';
+    const TYPE_MASTERCLASS = 'Masterclass';
+    const TYPE_OPEN_LEARNING = 'Open Learning';
+    const TYPE_TRAINING_PROGRAM = 'Training Program';
 
     const TYPES = [
-        self::TYPE_ONLINE,
-        self::TYPE_OFFLINE,
-        self::TYPE_HYBRID
+        self::TYPE_CERTIFICATION,
+        self::TYPE_CONTINUING_EDUCATION,
+        self::TYPE_HIGHER_EDUCATION,
+        self::TYPE_MASTERCLASS,
+        self::TYPE_OPEN_LEARNING,
+        self::TYPE_TRAINING_PROGRAM
     ];
 
     const SCHEDULE_RECURRING = 'Recurring';
@@ -129,6 +135,11 @@ class Course extends Model
     public function companies(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Company::class);
+    }
+
+    public function programs(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(CourseProgram::class)->withTimestamps();
     }
 
     public function focus(): \Illuminate\Database\Eloquent\Relations\BelongsToMany

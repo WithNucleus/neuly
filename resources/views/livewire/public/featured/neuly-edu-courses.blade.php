@@ -54,7 +54,7 @@
                     <button type="button" class="btn btn-md @if($filters['program']) btn-accent @else btn-primary @endif btn-primary dropdown-toggle rounded-0" data-bs-toggle="dropdown" aria-expanded="false">
                         Program
                     </button>
-                    <ul class="dropdown-menu" style="min-width: 300px">
+                    <ul class="dropdown-menu course-program-filter-menu">
                         @foreach ($programOptions as $optionId => $option)
                             <li class="px-3">
                                 <div class="form-check form-check-small form-check-inline">
