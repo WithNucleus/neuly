@@ -62,6 +62,7 @@
                                 <x-sidebar.list-group groupRoute="entities" label="Entities">
                                     <x-sidebar.list-group-item url="{{ route('adminx.clinical-trials.index') }}" label="Clinical Trials" />
                                     <x-sidebar.list-group-item url="{{ route('adminx.courses.index') }}" label="Courses" />
+                                    <x-sidebar.list-group-item url="{{ route('adminx.courses.programs') }}" label="Course Programs" />
                                     <x-sidebar.list-group-item url="{{ route('adminx.reports.index') }}" label="Industry Reports" />
                                     <x-sidebar.list-group-item url="" label="Organizations" />
                                     <x-sidebar.list-group-item url="" label="People" />
