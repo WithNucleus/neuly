@@ -15,4 +15,9 @@ class CourseController extends Controller
     {
         return view('adminx.entities.courses.index');
     }
+
+    public function programs(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    {
+        return view('adminx.entities.courses.programs');
+    }
 }

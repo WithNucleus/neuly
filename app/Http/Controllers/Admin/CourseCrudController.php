@@ -137,6 +137,19 @@ class CourseCrudController extends CrudController
         ]);
 
         $this->crud->addField([
+            'label' => 'Program',
+            'type' => 'select2_multiple',
+            'name' => 'programs',
+            'entity' => 'programs',
+            'attribute' => 'name',
+            'pivot' => true,
+            'options' => (function ($query) {
+                return $query->orderBy('name', 'ASC')->get();
+            }),
+            'model' => \App\Models\CourseProgram::class,
+        ]);
+
+        $this->crud->addField([
             'name' => 'name',
             'label' => 'Name',
             'type' => 'text',

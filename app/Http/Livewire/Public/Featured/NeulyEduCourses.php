@@ -9,6 +9,7 @@ use App\Http\Livewire\Traits\WithCachedRows;
 use App\Http\Livewire\Traits\WithPerPagePagination;
 use App\Http\Livewire\Traits\WithSorting;
 use App\Models\Course;
+use App\Models\CourseProgram;
 use App\Models\EduRequest;
 use App\Models\Focus;
 use App\Models\SearchLog;
@@ -240,7 +241,9 @@ class NeulyEduCourses extends Component
                     $query->whereIn('delivery_method', $valueArray);
                 })
                 ->when($this->filters['program'], function($query, $valueArray) {
-                    $query->whereIn('program', $valueArray);
+                    return $query->whereHas('programs', function($query) use ($valueArray) {
+                        $query->whereIn('name', $valueArray);
+                    });
                 })
                 ->when($this->filters['focus'], function($query, $valueArray) {
                     return $query->whereHas('focus', function($query) use ($valueArray) {
@@ -281,7 +284,7 @@ class NeulyEduCourses extends Component
             'records' => $this->rows,
             'focusOptions' => Focus::whereHas('courses')->withCount('courses')->orderByDesc('courses_count')->get()->toArray(),
             'typeOptions' => Course::whereNotNull('type')->orderBy('type')->pluck('type')->unique()->toArray(),
-            'programOptions' => Course::whereNotNull('program')->orderBy('program')->pluck('program')->unique()->toArray(),
+            'programOptions' => CourseProgram::orderBy('name')->pluck('name')->unique()->toArray(),
             'educationOptions' => Course::whereNotNull('education_credits')->pluck('education_credits')->unique()->sort()->toArray()
         ]);
     }
