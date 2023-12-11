@@ -111,6 +111,12 @@ class CourseCrudController extends CrudController
         CRUD::setValidation(CourseRequest::class);
 
         $this->crud->addField([
+            'name' => 'name',
+            'label' => 'Name',
+            'type' => 'text',
+        ]);
+
+        $this->crud->addField([
             'label' => 'Focus',
             'type' => 'select2_multiple',
             'name' => 'focus',
@@ -147,12 +153,6 @@ class CourseCrudController extends CrudController
                 return $query->orderBy('name', 'ASC')->get();
             }),
             'model' => \App\Models\CourseProgram::class,
-        ]);
-
-        $this->crud->addField([
-            'name' => 'name',
-            'label' => 'Name',
-            'type' => 'text',
         ]);
 
         $this->crud->addField([
@@ -231,20 +231,38 @@ class CourseCrudController extends CrudController
 
         $this->crud->addField([
             'name' => 'next_date',
-            'label' => 'Next Date (optional)',
+            'label' => 'Next Date',
             'type' => 'date',
         ]);
 
         $this->crud->addField([
             'name' => 'finish_date',
-            'label' => 'Finish Date (optional)',
+            'label' => 'Finish Date',
             'type' => 'date',
+        ]);
+
+        $this->crud->addField([
+            'name' => 'next_date_string',
+            'label' => 'Next Date (words)',
+            'type' => 'text',
         ]);
 
         $this->crud->addField([
             'name' => 'awarded',
             'label' => 'Awarded',
             'type' => 'text',
+        ]);
+
+        $this->crud->addField([
+            'name' => 'open_enrollment',
+            'label' => 'Open Enrollment',
+            'type' => 'boolean',
+        ]);
+
+        $this->crud->addField([
+            'name' => 'featured',
+            'label' => 'Featured',
+            'type' => 'boolean',
         ]);
 
         $this->crud->addField([
