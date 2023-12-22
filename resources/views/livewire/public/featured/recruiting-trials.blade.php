@@ -45,6 +45,14 @@
                  </select>
              </div>
         </div>
+        <div class="my-3">
+             <div class="mb-1">
+                 <label for="healthy" class="h5 text-primary white-on-dark mb-0">Search by location</label>
+             </div>
+             <div>
+                 <input wire:model="location_search" type="text" class="form-control form-control-lg" placeholder="City or postal code">
+             </div>
+        </div>
         <div>
             @if($healthy === 'No')
                 <div class="my-3">
@@ -152,7 +160,7 @@
                                                 @endforeach
                                             </div>
 
-                                            @if($record->conditions->count() > 0)
+                                            @if($record->conditions_count > 0)
                                                 <div class="mt-2 mb-3 text-body">
                                                     <strong class="me-1 text-uppercase">Conditions:</strong>
                                                     @foreach ($record->conditions as $item)
@@ -173,6 +181,24 @@
                                                 <div class="mt-3">
                                                     <strong class="text-uppercase me-1">Responsible Party:</strong>
                                                     <span>{{ $record->responsibleParty->name }}</span>
+                                                </div>
+                                            @endif
+                                            @if($record->locations_count > 0)
+                                                <div class="mt-3 text-body">
+                                                    <strong class="text-uppercase">Location:</strong>
+                                                    @foreach ($record->locations as $location)
+                                                        <span>
+                                                            <span>{{ $location->name }}</span>
+                                                            @if (!$loop->last)
+                                                                @if ($loop->iteration == 3)
+                                                                    <span>and {{ $record->locations->count() - $loop->iteration }} more</span>
+                                                                    @break
+                                                                @else
+                                                                    <span class="mx-1 text-body-tertiary">/</span>
+                                                                @endif
+                                                            @endif
+                                                        </span>
+                                                    @endforeach
                                                 </div>
                                             @endif
                                         </div>
