@@ -26,6 +26,4 @@
         @include('discover.focus.data')
     </div>
 
-    @include('footers.full')
-
 @endsection
