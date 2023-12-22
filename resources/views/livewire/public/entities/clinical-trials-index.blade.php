@@ -59,6 +59,19 @@
                 />
             </div>
 
+            <div class="my-4">
+                <h4 class="h5 text-body-emphasis">Location</h4>
+                <x-livewire-filters.faux-multi-select
+                    wireModelSearch="locationSearch"
+                    wireModelFilter="filters.locations"
+                    label="Search locations"
+                    checkboxIdPrefix="filter-location"
+                    setFilterFunction="setLocationFilter"
+                    :searchResults="$locationSearchResults"
+                    :currentFilters="$filters['locations']"
+                />
+            </div>
+
             <div>
                 <button wire:click="clearFilters" class="btn btn-sm btn-secondary">Clear Filters</button>
             </div>

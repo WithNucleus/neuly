@@ -17,8 +17,11 @@ use App\Models\SearchLog;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 use Spatie\SlackAlerts\Facades\SlackAlert;
+use Throwable;
 
 class RecruitingTrials extends Component
 {
@@ -34,8 +37,16 @@ class RecruitingTrials extends Component
     public $age;
     public $sex;
     public $healthy;
+    public $location_search;
     public $conditions = [];
     public $treatments = [];
+
+    public $locationResult = [
+        'city' => null,
+        'state' => null,
+        'latitude' => null,
+        'longitude' => null
+    ];
 
     public bool $showClinicalTrials = false;
 
@@ -45,7 +56,7 @@ class RecruitingTrials extends Component
 
     public array $filters = [
         'focus' => [],
-        'locations' => [],
+        'location' => null,
         'conditions' => [],
         'min_age' => null,
         'max_age' => null,
@@ -199,7 +210,7 @@ class RecruitingTrials extends Component
 
     public function showTrials() {
 
-        if ($this->age OR $this->sex OR $this->treatments OR $this->healthy) {
+        if ($this->age OR $this->sex OR $this->treatments OR $this->healthy OR $this->location_search) {
             $this->reset('showTrialsError');
         } else {
             $this->showTrialsError = "Please enter some criteria to show results";
@@ -209,6 +220,40 @@ class RecruitingTrials extends Component
         if($this->healthy === Clinicaltrial::HEALTHY_YES) {
             $this->filters['healthy_volunteers'] = 1;
             $this->reset('conditions');
+        }
+
+        if ($this->location_search) {
+            $url = "https://api.geoapify.com/v1/geocode/autocomplete?text={$this->location_search}&type=locality&apiKey=" . config('services.geoapify.key');
+
+            try {
+                $request = Http::get($url);
+                $response = json_decode($request->body(), true);
+
+                if (array_key_exists('features', $response)) {
+
+                    $firstLocation = $response['features'][0];
+                    $this->locationResult['city'] = $firstLocation['properties']['city'] ?? $firstLocation['properties']['suburb'] ?? NULL;
+                    $this->locationResult['state'] = $firstLocation['properties']['state'] ?? NULL;
+                    $this->locationResult['longitude'] = $firstLocation['properties']['lon'];
+                    $this->locationResult['latitude'] = $firstLocation['properties']['lat'];
+
+                    if ($this->locationResult['city']) {
+                        $this->filters['location'] = $this->locationResult['city'];
+                    } elseif($this->locationResult['state']) {
+                        $this->filters['location'] = $this->locationResult['state'];
+                    } else {
+                        $this->filters['location'] = null;
+                    }
+
+                }
+
+            } catch(Throwable $exception) {
+                $message = 'Problem during Recruiting Trials location geocoding ' . $exception->getMessage();
+                SlackAlert::to('dev')->message($message);
+                Log::warning($message);
+
+                $this->filters['location'] = null;
+            }
         }
 
         $this->filters['min_age'] = $this->age;
@@ -241,7 +286,7 @@ class RecruitingTrials extends Component
     {
         $query = Clinicaltrial::recruiting()
             ->with(['focus', 'companies', 'people', 'locations', 'conditions', 'interventions', 'phases'])
-            ->withCount(['focus', 'companies', 'people'])
+            ->withCount(['focus', 'companies', 'people', 'locations', 'conditions'])
             ->when($this->search, function($query, $search) {
                 return $query
                     ->where('title', 'like', '%' . $search . '%')
@@ -252,9 +297,9 @@ class RecruitingTrials extends Component
                     $query->whereIn('name', $value);
                 });
             })
-            ->when($this->filters['locations'], function($query, $value) {
+            ->when($this->filters['location'], function($query, $value) {
                 return $query->whereHas('locations', function($query) use ($value) {
-                    $query->whereIn('name', $value);
+                    $query->where('name', 'like', '%' . $value . '%');
                 });
             })
             ->when($this->filters['conditions'], function($query, $value) {
