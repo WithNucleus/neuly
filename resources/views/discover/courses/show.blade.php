@@ -133,6 +133,12 @@
                         </div>
                     @endforeach
 
+                    @if($course->referral_link)
+                        <div class="mt-5 text-center">
+                            <a href="{{ $course->referral_link }}" target="_blank" rel="noopener noreferrer" class="btn btn-lg btn-primary">Register for Course</a>
+                        </div>
+                    @endif
+
                     <div class="mt-5">
                         @if($course->concierge)
                             <div class="bg-body-secondary p-4 text-body-secondary">
@@ -142,9 +148,11 @@
                                 </div>
                             </div>
                         @else
-                            <div class="text-center">
-                                <a href="{{ $course->url }}" target="_blank" rel="noopener noreferrer" class="btn btn-lg btn-accent">Register for Course</a>
-                            </div>
+                            @if(!$course->referral_link)
+                                <div class="text-center">
+                                    <a href="{{ $course->url }}" target="_blank" rel="noopener noreferrer" class="btn btn-lg btn-accent">Register for Course</a>
+                                </div>
+                            @endif
                         @endif
                     </div>
                 </div>
