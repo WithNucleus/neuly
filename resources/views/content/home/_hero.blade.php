@@ -1,22 +1,23 @@
 <div class="home-hero">
     <div class="container text-center">
-        <h1 class="text-accent">Your Guide to Psychedelics</h1>
+        <h1 class="text-accent">Participate in Psychedelic Clinical Trials</h1>
         @auth
             <p class="fs-4 my-4">Welcome back, {{ Auth::user()->name }}!</p>
             <div class="text-center mb-5">
                 <a href="{{ Auth::user()->dashboard_link }}" class="btn btn-primary btn-lg btn-cta">Go to Your Dashboard</a>
             </div>
         @else
-            <p class="fs-6 my-4">Gain access to the psychedelic industry’s most robust platform for free.</p>
+            <p class="fs-6 my-4">You'll also gain access to the psychedelic industry’s most robust platform for free.</p>
             <div class="my-4 d-flex flex-column justify-content-center" style="min-height: 100px">
                 <div class="email-optin mx-auto d-flex flex-column justify-content-center h-100">
+                    <iframe src="https://app.happyml.com/bots/664642a09535f101e4751bf1/embedchat2?isIframe=true" width="10%" height="10%" frameborder="0"></iframe>
                     <livewire:public.opt-ins.email-signup />
                 </div>
                 <div class="login-widget h-100 mx-auto">
                     <livewire:public.auth.login />
                 </div>
             </div>
-            <p class="fs-6 my-4">Join over 3,000 community members</p>
+            <p class="fs-6 my-4">Join over 4,000 community members</p>
         @endif
         <div class="d-flex flex-wrap justify-content-center">
             @foreach($investors as $investor)
