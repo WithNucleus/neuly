@@ -11,6 +11,7 @@
             <div class="my-4 d-flex flex-column justify-content-center" style="min-height: 100px">
                 <div class="email-optin mx-auto d-flex flex-column justify-content-center h-100">
                     <iframe src="https://app.happyml.com/bots/664642a09535f101e4751bf1/embedchat2?isIframe=true" width="100%" height="100%" frameborder="0"></iframe>
+                    <br />
                     <livewire:public.opt-ins.email-signup />
                 </div>
                 <div class="login-widget h-100 mx-auto">
