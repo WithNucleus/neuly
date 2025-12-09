@@ -35,6 +35,7 @@ class FeedbackApiRequest extends FormRequest
                 'required',
                 Rule::in(['problem', 'feedback', 'bug', 'suggestion', 'feature request']),
             ],
+            'g-recaptcha-response' => 'required|recaptcha',
         ];
 
         $unauthedUserRules = [
@@ -67,6 +68,8 @@ class FeedbackApiRequest extends FormRequest
             'content.required' => 'Message is required',
             'title.string' => 'Your title is not formatted correctly',
             'content.string' => 'Your message is not formatted correctly',
+            'g-recaptcha-response.required' => 'Please complete the reCAPTCHA verification',
+            'g-recaptcha-response.recaptcha' => 'reCAPTCHA verification failed',
         ];
     }
 
