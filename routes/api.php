@@ -29,7 +29,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/api/entities/list/{alias}', [EntityDataController::class, 'getEntitiesListByAlias'])->name('api.entities.list.byAlias');
 
-Route::post('/feedback', [FeedbackController::class, 'apiStore'])->name('feedback.api.store');
+Route::post('/feedback', [FeedbackController::class, 'apiStore'])->middleware('throttle:10,1')->name('feedback.api.store');
 
 Route::middleware('auth:api-users')->group(function () {
     Route::get('/user', [OauthController::class, 'getUser']);

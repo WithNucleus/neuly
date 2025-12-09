@@ -35,6 +35,7 @@ class FeedbackApiRequest extends FormRequest
                 'required',
                 Rule::in(['problem', 'feedback', 'bug', 'suggestion', 'feature request']),
             ],
+            'g-recaptcha-response' => 'required|recaptcha',
         ];
 
         $unauthedUserRules = [

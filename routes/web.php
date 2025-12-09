@@ -43,11 +43,9 @@ Route::get('/courses', [App\Http\Controllers\Index\CourseController::class, 'ind
 Route::get('/courses-list', [App\Http\Controllers\Index\CourseController::class, 'list'])->name('discover.courses.list');
 Route::get('/courses/{slug}', [App\Http\Controllers\Index\CourseController::class, 'show'])->name('discover.courses.show');
 
-// Listing Requests
+// Listing Requests (GET routes without spam protection)
 Route::get('/listing', [App\Http\Controllers\Index\ListingRequestController::class, 'index'])->name('listing');
 Route::get('/listing/request', [App\Http\Controllers\Index\ListingRequestController::class, 'request'])->name('listing.request');
-Route::post('/listing/request', [App\Http\Controllers\Index\ListingRequestController::class, 'submitRequest']);
-Route::post('/listing/request/finish', [App\Http\Controllers\Index\ListingRequestController::class, 'finishRequest'])->name('listing.request.finish');
 Route::get('/listing/request/getEntityListJson', [App\Http\Controllers\Index\ListingRequestController::class, 'getEntityListJson'])->name('listing.request.getEntityListJson');
 
 //Global group for registered and verified users only
@@ -163,9 +161,12 @@ Route::middleware('verifiedIfAuthorized')->group(function () {
 // show entity routes with preview feature
 Route::get('/organization/{slug}', [App\Http\Controllers\Index\CompanyController::class, 'show'])->name('discover.organizations.show');
 Route::get('/person/{slug}', [App\Http\Controllers\Index\PersonController::class, 'show'])->name('discover.people.show');
-// listing request routes with preview check
-Route::post('/listing/request', [App\Http\Controllers\Index\ListingRequestController::class, 'submitRequest']);
-Route::post('/listing/request/finish', [App\Http\Controllers\Index\ListingRequestController::class, 'finishRequest'])->name('listing.request.finish');
+
+// listing request POST routes with spam protection
+Route::middleware('spamprotection')->group(function () {
+    Route::post('/listing/request', [App\Http\Controllers\Index\ListingRequestController::class, 'submitRequest']);
+    Route::post('/listing/request/finish', [App\Http\Controllers\Index\ListingRequestController::class, 'finishRequest'])->name('listing.request.finish');
+});
 
 // Feedback
 Route::middleware('spamprotection')->group(function () {

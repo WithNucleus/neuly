@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Index;
 use App\Helpers\Entity\FieldsMapping;
 use App\Helpers\ListingRequestHelper;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ListingRequestSubmitRequest;
+use App\Http\Requests\ListingRequestFinishRequest;
 use App\Models\Job;
 use App\Models\ListingRequest;
 use Carbon\Carbon;
@@ -27,7 +29,7 @@ class ListingRequestController extends Controller
         ]);
     }
 
-    public function submitRequest(Request $request)
+    public function submitRequest(ListingRequestSubmitRequest $request)
     {
         $entityType = $request->input('entity_type');
         $isUpdate = $request->input('is_update');
@@ -54,7 +56,7 @@ class ListingRequestController extends Controller
         return view('discover.listing-requests.entity', $data);
     }
 
-    public function finishRequest(Request $request)
+    public function finishRequest(ListingRequestFinishRequest $request)
     {
         $entityType = $request->input('entity_type');
         $entityTypes = ListingRequestHelper::getAllowedEntities();
