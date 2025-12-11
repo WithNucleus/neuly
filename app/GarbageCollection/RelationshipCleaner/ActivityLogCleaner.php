@@ -10,7 +10,7 @@ class ActivityLogCleaner
 
     public function __construct()
     {
-        $this->retentionDays = config('activitylog.delete_records_older_than_days', 90);
+        $this->retentionDays = env('ACTIVITY_LOG_RETENTION_DAYS', config('activitylog.delete_records_older_than_days', 90));
     }
 
     public function cleanActivityLogRelation()
@@ -39,43 +39,35 @@ class ActivityLogCleaner
 
     public function cleanOrphanedActivityLogs()
     {
-        // Clean activity logs where the subject no longer exists
-        $orphanedSubjects = DB::table('activity_log')
-            ->whereNotNull('subject_type')
-            ->whereNotNull('subject_id')
-            ->get()
-            ->filter(function ($log) {
-                $model = $log->subject_type;
-                if (!class_exists($model)) {
-                    return true;
-                }
-                return !DB::table((new $model)->getTable())
-                    ->where('id', $log->subject_id)
-                    ->exists();
-            })
+        $totalOrphaned = 0;
+
+        // Clean activity logs where the subject is a User that no longer exists
+        $orphanedUsers = DB::table('activity_log')
+            ->select('activity_log.id')
+            ->where('activity_log.subject_type', '=', 'App\\User')
+            ->leftJoin('users', 'activity_log.subject_id', '=', 'users.id')
+            ->whereNull('users.id')
             ->pluck('id');
 
-        DB::table('activity_log')->whereIn('id', $orphanedSubjects)->delete();
+        $count = $orphanedUsers->count();
+        if ($count > 0) {
+            DB::table('activity_log')->whereIn('id', $orphanedUsers)->delete();
+            $totalOrphaned += $count;
+        }
 
-        // Clean activity logs where the causer no longer exists
+        // Clean activity logs where the causer is a User that no longer exists
         $orphanedCausers = DB::table('activity_log')
-            ->whereNotNull('causer_type')
-            ->whereNotNull('causer_id')
-            ->get()
-            ->filter(function ($log) {
-                $model = $log->causer_type;
-                if (!class_exists($model)) {
-                    return true;
-                }
-                return !DB::table((new $model)->getTable())
-                    ->where('id', $log->causer_id)
-                    ->exists();
-            })
+            ->select('activity_log.id')
+            ->where('activity_log.causer_type', '=', 'App\\User')
+            ->leftJoin('users', 'activity_log.causer_id', '=', 'users.id')
+            ->whereNull('users.id')
             ->pluck('id');
 
-        DB::table('activity_log')->whereIn('id', $orphanedCausers)->delete();
-
-        $totalOrphaned = $orphanedSubjects->count() + $orphanedCausers->count();
+        $count = $orphanedCausers->count();
+        if ($count > 0) {
+            DB::table('activity_log')->whereIn('id', $orphanedCausers)->delete();
+            $totalOrphaned += $count;
+        }
 
         return 'Cleaned '.$totalOrphaned.' orphaned Activity Log entries.';
     }
