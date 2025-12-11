@@ -110,33 +110,43 @@ class CleanAll extends Command
 
         $allMessages = [];
 
-        // Wrap in transaction for dry-run
-        DB::beginTransaction();
-
         try {
             foreach ($cleanersToRun as $name => $cleanerClass) {
                 $this->info("Running {$name} cleaner...");
                 
-                $cleaner = new $cleanerClass();
-                $messages = $this->getCleanerMessages($cleaner, $name);
-                
-                foreach ($messages as $message) {
-                    $this->line("  ✓ {$message}");
-                    $allMessages[] = $message;
+                // Use individual transactions for each cleaner to avoid long-running transactions
+                if ($isDryRun) {
+                    DB::beginTransaction();
+                }
+
+                try {
+                    $cleaner = new $cleanerClass();
+                    $messages = $this->getCleanerMessages($cleaner, $name);
+                    
+                    foreach ($messages as $message) {
+                        $this->line("  ✓ {$message}");
+                        $allMessages[] = $message;
+                    }
+                    
+                    if ($isDryRun) {
+                        DB::rollBack();
+                    }
+                } catch (\Exception $e) {
+                    if ($isDryRun) {
+                        DB::rollBack();
+                    }
+                    $this->warn("  ⚠ Error in {$name}: " . $e->getMessage());
                 }
                 
                 $this->newLine();
             }
 
             if ($isDryRun) {
-                DB::rollBack();
                 $this->warn('🔍 Dry run completed - No changes were made to the database');
             } else {
-                DB::commit();
                 $this->info('✅ Garbage collection completed successfully!');
             }
         } catch (\Exception $e) {
-            DB::rollBack();
             $this->error('❌ Error during garbage collection: ' . $e->getMessage());
             return 1;
         }

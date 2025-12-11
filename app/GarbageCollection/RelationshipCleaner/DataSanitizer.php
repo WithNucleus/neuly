@@ -52,29 +52,31 @@ class DataSanitizer
             return 'No columns to sanitize in '.$tableName.' table.';
         }
 
-        $records = DB::table($tableName)->get();
+        // Process records in chunks to avoid memory issues
+        DB::table($tableName)->orderBy('id')->chunk(100, function ($records) use ($columnsToCheck, $tableName, &$sanitizedCount) {
+            foreach ($records as $record) {
+                $needsUpdate = false;
+                $updates = [];
 
-        foreach ($records as $record) {
-            $needsUpdate = false;
-            $updates = [];
-
-            foreach ($columnsToCheck as $column) {
-                if (isset($record->$column) && is_string($record->$column)) {
-                    $cleaned = $this->detectAndClean($record->$column);
-                    if ($cleaned !== $record->$column) {
-                        $updates[$column] = $cleaned;
-                        $needsUpdate = true;
+                foreach ($columnsToCheck as $column) {
+                    if (isset($record->$column) && is_string($record->$column)) {
+                        $cleaned = $this->detectAndClean($record->$column);
+                        if ($cleaned !== $record->$column) {
+                            $updates[$column] = $cleaned;
+                            $needsUpdate = true;
+                        }
                     }
                 }
-            }
 
-            if ($needsUpdate) {
-                DB::table($tableName)
-                    ->where('id', $record->id)
-                    ->update($updates);
-                $sanitizedCount++;
+                if ($needsUpdate) {
+                    // Individual updates are safer than batching complex sanitization
+                    DB::table($tableName)
+                        ->where('id', $record->id)
+                        ->update($updates);
+                    $sanitizedCount++;
+                }
             }
-        }
+        });
 
         return 'Sanitized '.$sanitizedCount.' records in '.$tableName.' table.';
     }
